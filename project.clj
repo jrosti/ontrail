@@ -1,4 +1,4 @@
-(defproject shouter "0.0.1"
+(defproject ontrail "0.0.1"
   :description "Logs on my trails"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [postgresql/postgresql "8.4-702.jdbc4"]

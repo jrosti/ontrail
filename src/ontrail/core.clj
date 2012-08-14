@@ -2,6 +2,8 @@
   (:use [compojure.core :only [defroutes GET]])
   (:require [ring.adapter.jetty :as ring]))
 
+(def db (System/getenv "DATABASE_URL"))
+
 (defroutes routes
   (GET "/" [] "<h2>Hello World</h2>"))
 

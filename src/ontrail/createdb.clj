@@ -7,9 +7,9 @@
 (def create-exs (sql/with-connection db
 		(sql/create-table :exs
 			[:id :serial "PRIMARY KEY"]
-			[:date :timestamp "NOT NULL"] 
+			[:date :timestamp] 
 			[:uid :integer]
-			[:sports :integer]
+			[:sport :integer]
 			[:duration :integer]
 			[:distance :integer]
 			[:avghr :integer]
@@ -25,8 +25,9 @@
 			[:id :serial]
 			[:name "varchar(30) unique" "PRIMARY KEY"] 
 			[:description :text])
-		   (sql/insert-values :sport [:name] ["Juoksu"])
-		   (sql/insert-values :sport [:name] ["Pyöräily"])])))
+			(sql/insert-values :sport [:id :name] [0 "Muu laji"])
+			(sql/insert-values :sport [:name] ["Juoksu"])
+			(sql/insert-values :sport [:name] ["Pyöräily"])])))
 		
 (def create-users (sql/with-connection db
 	(doall	[(sql/create-table :onuser

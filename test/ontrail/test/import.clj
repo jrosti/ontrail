@@ -1,5 +1,5 @@
-(ns traillog.test.core
-  (:use [traillog.core])
+(ns ontrail.test.import
+  (:use [ontrail.import])
   (:use [clojure.test]))
 
 (deftest replace-me ;; FIXME: write
