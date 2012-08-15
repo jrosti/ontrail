@@ -47,7 +47,7 @@
     "Input format: 14 400,12 is 14400.12 minutes"
     (let [duration-dotted (clojure.string/replace duration-string #"," ".")
           minutes (read-string (clojure.string/replace duration-dotted " " ""))]
-          (int (* 6000 (read-string duration-string)))))
+          (int (* 6000 minutes))))
 
 (defn get-duration [ex]
     "Unit: 1/100 seconds integer"
