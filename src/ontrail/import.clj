@@ -4,14 +4,16 @@
 (require '[clojure.java.jdbc :as sql])
 (require '[net.cgrand.enlive-html :as html])
 
-(def import-html (html/html-resource (java.io.FileReader. "peppi-trainlog.html")))
+(defn import-html [filename] (html/html-resource (java.io.FileReader. filename)))
 
-(def exs (rest (html/select import-html [:tr])))
+(defn exs [imported-html] (rest (html/select imported-html [:tr])))
 
 (defn is-ex? [ex-html]
+	"Hackish way to select <tr> elements, which are actual exercises."
     (= 10 (count (get ex-html :content))))
 
 (defn get-ex [ex-html]
+	"Array of <TD></TD> -elements is the content."
     (get ex-html :content))
 
 (defn convert-to-timestamp [date-string]
@@ -36,10 +38,12 @@
              (if (> (count results) 0) (get (first results) :id) 0)))))
 
 
-(defn get-report [ex] (html/text (nth ex 3)))
+(defn get-report [ex] 
+	"Emits the html in report and joins all strings in it."
+	(reduce #(str %1 %2) (html/emit* (nth ex 3))))
 
 (defn get-distance [ex]
-    "Returns meters. Input: 42,195km"
+    "Returns meters. Input: 42,195, output 41295"
     (let [distance-string (html/text (nth ex 5))]
         (int (* 1000 (read-string (clojure.string/replace distance-string #"," "."))))))
 
@@ -80,8 +84,10 @@
             (catch Exception e 
                 (prn uid e excercise)))]))
 
-(defn -main []
-    (let [uid (get-uid "peppi")]
+(defn -main [& args]
+	"First arg is an username, and second Lenkkari's export filename."
+    (let [uid (get-uid (first args))
+          imported-html (import-html (second args))]
         (try
-            (doall (map #(if (is-ex? %) (insert uid (get-ex %))) exs))
+            (doall (map #(if (is-ex? %) (insert uid (get-ex %))) (exs imported-html)))
         (catch Exception e (prn e)))))
