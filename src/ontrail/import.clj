@@ -15,6 +15,7 @@
 	(get ex-html :content))
 
 (defn convert-to-timestamp [date-string]
+	"Input format: 12.08.2012"
 	(let [date-array (map #(read-string (str "10r" %)) (clojure.string/split date-string #"\."))]
 		(java.sql.Timestamp. (.getTime (java.util.Date. (- (nth date-array 2) 1900) 
 														(+ 1 (second date-array)) 
@@ -38,16 +39,18 @@
 (defn get-report [ex] (html/text (nth ex 3)))
 
 (defn get-distance [ex]
+	"Returns meters. Input: 42,195km"
 	(let [distance-string (html/text (nth ex 5))]
 		(int (* 1000 (read-string (clojure.string/replace distance-string #"," "."))))))
 
 (defn to-duration [duration-string]
-	(try
-		(int (* 6000 (read-string duration-string)))
-	(catch Exception e 
-		(0))))
+	"Input format: 14 400,12 is 14400.12 minutes"
+	(let [duration-dotted (clojure.string/replace duration-string #"," ".")
+		  minutes (read-string (clojure.string/replace duration-dotted " " ""))]
+		  (int (* 6000 (read-string duration-string)))))
 
 (defn get-duration [ex]
+	"Unit: 1/100 seconds integer"
 	(let [duration-string (html/text (nth ex 4))]
 		(to-duration duration-string)))
 
@@ -78,6 +81,7 @@
 				(prn uid e excercise)))]))
 
 (defn -main []
-	(try
-		(map #(if (is-ex? %) (insert (get-uid "peppi") (get-ex %))) exs)
-	(catch Exception e (prn e))))
+	(let [uid (get-uid "peppi")]
+		(try
+			(doall (map #(if (is-ex? %) (insert uid (get-ex %))) exs))
+		(catch Exception e (prn e)))))
