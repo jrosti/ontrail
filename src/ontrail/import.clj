@@ -12,6 +12,7 @@
   (html/html-resource (java.io.FileReader. filename)))
 
 (defn get-exercises [imported-html]
+  "First one is a heading, so choose rest of TR-elements."
   (rest (html/select imported-html [:tr])))
 
 (defn is-ex? [ex-html]
@@ -28,12 +29,22 @@
     (.getTime (java.util.Date. (- (nth date-array 2) 1900) 
                                (+ 1 (second date-array)) 
                                (first date-array) 12 0))))
-(defn get-uid [name] 1)
+(defn get-or-create-login-id [login-id]
+    (let [_login-id (mc/find-one "onuser" {:_id login-id})]
+      (if (= nil _login-id) (mc/insert "onuser" {:_id login-id}))
+      login-id))
 
 (defn get-timestamp [exercise]
   (convert-to-timestamp (html/text (nth exercise 0))))
 
 (defn get-heading [exercise] (html/text (nth exercise 1)))
+
+(defn get-or-create-sport [exercise]
+  "XXX: not thread safe!??"
+  (let [sport-id (html/text (nth exercise 2))
+        _sport-id (mc/find-one "onsport" {:_id sport-id})]
+    (if (= nil _sport-id) (mc/insert "onsport" {:_id sport-id}))
+    sport-id))
 
 (defn get-report [exercise] 
   "Emits the html in report and joins all strings in it."
@@ -61,11 +72,11 @@
 (defn get-tags [exercise]
   (html/text (nth exercise 8)))
 
-(defn insert [uid exercise]
+(defn insert [login-id exercise]
   (mc/insert "exercise"
                   {:date (get-timestamp exercise),
-                   :user uid,
-                   :sport 1,
+                   :user login-id,
+                   :sport (get-or-create-sport exercise),
                    :duration (get-duration exercise),
                    :distance (get-distance exercise),
                    :avghr (get-avghr exercise),
@@ -75,10 +86,17 @@
                    :tags (get-tags exercise)
                    }))
 
+(defn import-user-and-file [login-id filename]
+  (let [login-id (get-or-create-login-id login-id)
+        imported-html (import-html filename)]
+    (try
+      (doall
+       (map #(if (is-ex? %)
+               (insert login-id (get-exercise %))
+               -1)
+            (get-exercises imported-html)))
+      (catch Exception e (prn e)))))
+
 (defn -main [& args]
   "First arg is an username, and the second export filename."
-  (let [uid (get-uid (first args))
-        imported-html (import-html (second args))]
-    (try
-      (doall (map #(if (is-ex? %) (insert uid (get-exercise %))) (get-exercises imported-html)))
-      (catch Exception e (prn e)))))
+  (import-user-and-file (first args) (second args)))
