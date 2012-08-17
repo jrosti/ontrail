@@ -1,6 +1,5 @@
 (ns ontrail.import)
 
-(require '[monger.core :as mg])
 (require '[monger.collection :as mc])
 
 (require '[net.cgrand.enlive-html :as html])
