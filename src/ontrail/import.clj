@@ -89,13 +89,10 @@
 (defn import-user-and-file [login-id filename]
   (let [login-id (get-or-create-login-id login-id)
         imported-html (import-html filename)]
-    (try
-      (doall
-       (map #(if (is-ex? %)
-               (insert login-id (get-exercise %))
-               -1)
-            (get-exercises imported-html)))
-      (catch Exception e (prn e)))))
+    (map #(if (is-ex? %)
+            (insert login-id (get-exercise %))
+            -1)
+         (get-exercises imported-html))))
 
 (defn -main [& args]
   "First arg is an username, and the second export filename."

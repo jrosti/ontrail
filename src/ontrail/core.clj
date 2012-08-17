@@ -1,14 +1,20 @@
-(ns ontrail.core
-  (:use [compojure.core :only [defroutes GET]])
-  (:require [ring.adapter.jetty :as ring]))
+(ns ontrail.core)
 
-(def db (System/getenv "DATABASE_URL"))
+(use 'aleph.http)
+(use 'net.cgrand.moustache)
+(use 'ontrail.mongodb)
+(use 'lamina.core)
 
-(defroutes routes
-  (GET "/" [] "<h2>Hello World</h2>"))
+(defn async-handler [response-channel request]
+  (enqueue response-channel
+    {:status 200
+     :headers {"content-type" "text/plain"}
+     :body "async response"}))
 
-(defn start []
-  (ring/run-jetty #'routes {:port 8080 :join? false}))
+(def handler 
+  (app 
+    ["sync"] {:get "response"}
+    ["async"] {:get (wrap-aleph-handler async-handler)}))
 
 (defn -main []
-	(start))
+  (start-http-server (wrap-ring-handler handler) {:port 8080}))
