@@ -5,6 +5,9 @@
 (require '[net.cgrand.enlive-html :as html])
 (require '[clojure.string])
 
+(require '[clj-time.core :as time])
+(require '[monger.joda-time])
+
 (use 'ontrail.mongodb)
 
 (defn import-html [filename]
@@ -25,9 +28,8 @@
 (defn convert-to-timestamp [date-string]
   "Input format: 12.08.2012"
   (let [date-array (map #(read-string (str "10r" %)) (clojure.string/split date-string #"\."))]
-    (.getTime (java.util.Date. (- (nth date-array 2) 1900) 
-                               (+ 1 (second date-array)) 
-                               (first date-array) 12 0))))
+    (time/date-time (nth date-array 2) (second date-array) (first date-array))))
+
 (defn get-or-create-login-id [login-id]
     (let [_login-id (mc/find-one "onuser" {:_id login-id})]
       (if (= nil _login-id) (mc/insert "onuser" {:_id login-id}))
@@ -45,9 +47,11 @@
     (if (= nil _sport-id) (mc/insert "onsport" {:_id sport-id}))
     sport-id))
 
-(defn get-report [exercise] 
+(defn get-report [exercise]
   "Emits the html in report and joins all strings in it."
-  (reduce #(str %1 %2) (html/emit* (nth exercise 3))))
+  (let [as-html (reduce #(str %1 %2) (html/emit* (nth exercise 3)))
+        as-html-wotd (clojure.string/replace as-html #"^<td>" "")]
+    (clojure.string/replace as-html #"</td>$" "")))
 
 (defn get-distance [exercise]
   "Returns meters. Input: 42,195, output 41295"

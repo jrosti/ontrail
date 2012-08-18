@@ -6,6 +6,7 @@
                  [ring "1.1.0-beta2"]
                  [hiccup "1.0.0-beta1"]
                  [lein-swank "1.4.4"]
+                 [clj-time "0.4.4"]
                  [enlive "1.0.0"]
                  [org.clojure/data.json "0.1.3"]
                  [com.novemberain/monger "1.1.2"]]
