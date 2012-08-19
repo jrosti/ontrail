@@ -6,35 +6,49 @@
 (require '[clj-time.core :as time])
 (require '[monger.joda-time])
 
+(require '[monger.collection :as mc])
+
 (use 'ontrail.mongodb)
 
 (defn to-human-distance [distance]
   (let [km (int (/ distance 1000))
         m (mod distance 1000)]
-    (str km "," m "km")))
+    (if (> km 0)
+      (str km "," m "km")
+      (str m "m"))))
 
 (defn to-human-time [duration]
   (let [hundreds (mod duration 100)
         seconds (mod (int (/ duration 100)) 60)
         minutes (mod (int (/ duration 6000)) 60)
         hours (int (/ duration 360000))]
-    (str hours "h " minutes "min")))       
+    (str hours "h" minutes "m")))
 
 (defn to-human-pace [pace]
-  (let [secs (int (+ 0.5 (* 60.0 (- pace (int pace)))))]
-    (str (int pace) ":" secs "min/km")))
+  (let [secs (int (+ 0.49 (* 60.0 (- pace (int pace)))))]
+    (str (int pace) ":" (format "%02d" secs) "min/km")))
 
 (defn pace [db-retmap]
-  (/ (/ (get db-retmap :tdur) 6000) (/ (get db-retmap :tdist) 1000)))
+  (let [distance (get db-retmap :tdist)]
+    (if (> distance 0)
+      (/ (/ (get db-retmap :tdur) 6000) (/ distance 1000))
+      0)))
 
-(defn to-summary [db-object]
+(defn avghr [db-retmap]
+  (let [hrcount (get db-retmap :hrcount)]
+    (if (> hrcount 0)
+      (/ (get db-retmap :tavghr) hrcount)
+      0)))
+
+(defn to-summary [db-object sport]
   (let [db-retmap (first (get db-object :retval))
         count (int (get db-object :count))]
     {:duration (to-human-time (int (get db-retmap :dur)))
      :distance (to-human-distance (int (get db-retmap :dist)))
      :pace (to-human-pace (pace db-retmap))
-     :avghr (/ (get db-retmap :tavghr) (get db-retmap :hrcount))
-     :count count}))
+     :avghr (avghr db-retmap)
+     :count count
+     :sport sport}))
 
 ;; Example of db.group -command in mongodb format.
 ;; db.exercise.group({cond: {user: "username"}, reduce: function(obj, prev) { prev.csum += obj.distance }, initial: {csum: 0 }});
@@ -63,15 +77,19 @@
                                                 :tdur 0}}})
                     true)))
   
-(defn get-summary [condition]
-  (to-summary (get-db-summary condition)))
+(defn get-summary [condition sport]
+  (to-summary (get-db-summary condition) sport))
 
 (defn get-year-summary [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (get-summary {:user user :date {:$gte first-day :$lte last-day}})))
+    (get-summary {:user user :date {:$gte first-day :$lte last-day}}) "Kaikki"))
 
 (defn get-year-summary-sport [user year sport]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (get-summary {:sport sport :user user :date {:$gte first-day :$lte last-day}})))
+    (get-summary {:sport sport :user user :date {:$gte first-day :$lte last-day}} sport)))
+
+(defn get-overall-summary [user]
+  (let [all-sports (mc/distinct "exercise" "sport" {:user user})]
+    (map #(get-summary {:user user :sport %} %) all-sports)))

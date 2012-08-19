@@ -73,7 +73,11 @@
   (int (read-string (html/text (nth exercise 6)))))
 
 (defn get-tags [exercise]
-  (html/text (nth exercise 8)))
+  "Current implementation stores either empty string or one tag per ex. Now tag is a list of strings."
+  (let [one-tag (clojure.string/trim (html/text (nth exercise 8)))]
+    (if (= "" one-tag)
+      '()
+      '(one-tag))))
 
 (defn insert [login-id exercise]
   (mc/insert "exercise"
