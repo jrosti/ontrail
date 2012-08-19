@@ -1,12 +1,11 @@
 (ns ontrail.import)
 
-(require '[monger.collection :as mc])
-
-(require '[net.cgrand.enlive-html :as html])
-(require '[clojure.string])
-
-(require '[clj-time.core :as time])
-(require '[monger.joda-time])
+(require '[monger.collection :as mc]
+         '[net.cgrand.enlive-html :as html]
+         '[clojure.string :as string]
+         '[clj-time.core :as time]
+         ;; for date serialization to mongo.
+         '[monger.joda-time])
 
 (use 'ontrail.mongodb)
 
@@ -27,12 +26,12 @@
 
 (defn convert-to-timestamp [date-string]
   "Input format: 12.08.2012"
-  (let [date-array (map #(read-string (str "10r" %)) (clojure.string/split date-string #"\."))]
+  (let [date-array (map #(read-string (str "10r" %)) (string/split date-string #"\."))]
     (time/date-time (nth date-array 2) (second date-array) (first date-array))))
 
 (defn get-or-create-login-id [login-id]
-    (let [_login-id (mc/find-one "onuser" {:_id login-id})]
-      (if (= nil _login-id) (mc/insert "onuser" {:_id login-id}))
+    (let [_login-id (mc/find-one ONUSER {:_id login-id})]
+      (if (= nil _login-id) (mc/insert ONUSER {:_id login-id}))
       login-id))
 
 (defn get-timestamp [exercise]
@@ -41,27 +40,27 @@
 (defn get-heading [exercise] (html/text (nth exercise 1)))
 
 (defn get-or-create-sport [exercise]
-  "XXX: not thread safe!??"
+  ;; XXX: todo this properly.
   (let [sport-id (html/text (nth exercise 2))
-        _sport-id (mc/find-one "onsport" {:_id sport-id})]
-    (if (= nil _sport-id) (mc/insert "onsport" {:_id sport-id}))
+        _sport-id (mc/find-one ONSPORT {:_id sport-id})]
+    (if (= nil _sport-id) (mc/insert ONSPORT {:_id sport-id}))
     sport-id))
 
 (defn get-report [exercise]
   "Emits the html in report and joins all strings in it."
   (let [as-html (reduce #(str %1 %2) (html/emit* (nth exercise 3)))
-        as-html-wotd (clojure.string/replace as-html #"^<td>" "")]
-    (clojure.string/replace as-html #"</td>$" "")))
+        as-html-wotd (string/replace as-html #"^<td>" "")]
+    (string/replace as-html #"</td>$" "")))
 
 (defn get-distance [exercise]
   "Returns meters. Input: 42,195, output 41295"
   (let [distance-string (html/text (nth exercise 5))]
-    (int (* 1000 (read-string (clojure.string/replace distance-string #"," "."))))))
+    (int (* 1000 (read-string (string/replace distance-string #"," "."))))))
 
 (defn to-duration [duration-string]
   "Input format: 14 400,12 is 14400.12 minutes"
-  (let [duration-dotted (clojure.string/replace duration-string #"," ".")
-        minutes (read-string (clojure.string/replace duration-dotted " " ""))]
+  (let [duration-dotted (string/replace duration-string #"," ".")
+        minutes (read-string (string/replace duration-dotted " " ""))]
     (int (* 6000 minutes))))
 
 (defn get-duration [exercise]
@@ -74,13 +73,13 @@
 
 (defn get-tags [exercise]
   "Current implementation stores either empty string or one tag per ex. Now tag is a list of strings."
-  (let [one-tag (clojure.string/trim (html/text (nth exercise 8)))]
+  (let [one-tag (string/trim (html/text (nth exercise 8)))]
     (if (= "" one-tag)
       '()
       (list one-tag))))
 
 (defn insert [login-id exercise]
-  (mc/insert "exercise"
+  (mc/insert EXERCISE
                   {:date (get-timestamp exercise),
                    :user login-id,
                    :sport (get-or-create-sport exercise),

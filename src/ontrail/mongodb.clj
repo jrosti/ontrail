@@ -1,6 +1,13 @@
 (ns ontrail.mongodb (:require [monger.core :as mg]))
 
-;; localhost, default port
+(def DB "ontrail")
+
+;; Table names
+(def ONUSER "onuser")
+(def EXERCISE "exercise")
+(def ONSPORT "onsport")
+
+;; Connect to localhost, default port
 (mg/connect!)
-(mg/set-db! (mg/get-db "ontrail"))
+(mg/set-db! (mg/get-db DB))
 

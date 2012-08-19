@@ -1,12 +1,10 @@
-(ns ontrail.queries
-  (:use [monger.core :only [command]]
-        [monger.result :only [ok?]]
-        [monger.conversion :only [from-db-object]]))
+(ns ontrail.queries)
 
-(require '[clj-time.core :as time])
-(require '[monger.joda-time])
-
-(require '[monger.collection :as mc])
+(require '[monger.core]
+         '[monger.conversion]
+         '[clj-time.core :as time]
+         '[monger.joda-time]
+         '[monger.collection :as mc])
 
 (use 'ontrail.mongodb)
 
@@ -66,16 +64,16 @@
                       }
                       prev.dist += exercise.distance;
                       prev.dur += exercise.duration }"]
-    (from-db-object (command {:group {:ns "exercise"
-                                      :cond condition 
-                                      :$reduce js-reduce
-                                      :initial {:tavghr 0
-                                                :hrcount 0
-                                                :dist 0
-                                                :dur 0
-                                                :tdist 0
-                                                :tdur 0}}})
-                    true)))
+    (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
+                                                                    :cond condition 
+                                                                    :$reduce js-reduce
+                                                                    :initial {:tavghr 0
+                                                                              :hrcount 0
+                                                                              :dist 0
+                                                                              :dur 0
+                                                                              :tdist 0
+                                                                              :tdur 0}}})
+                                      true)))
   
 (defn get-summary [condition sport]
   (to-summary (get-db-summary condition) sport))
@@ -91,5 +89,5 @@
     (get-summary {:sport sport :user user :date {:$gte first-day :$lte last-day}} sport)))
 
 (defn get-overall-summary [user]
-  (let [all-sports (mc/distinct "exercise" "sport" {:user user})]
+  (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
     (map #(get-summary {:user user :sport %} %) all-sports)))
