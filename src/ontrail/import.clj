@@ -77,7 +77,7 @@
   (let [one-tag (clojure.string/trim (html/text (nth exercise 8)))]
     (if (= "" one-tag)
       '()
-      '(one-tag))))
+      (list one-tag))))
 
 (defn insert [login-id exercise]
   (mc/insert "exercise"
