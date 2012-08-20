@@ -42,6 +42,9 @@
     (include-js "/static/javascripts/web_socket.js")
     (include-js "/static/javascripts/app.js")]))
 
+;; XXX: Following is take from  https://github.com/alexkehayias/clojure-aleph-chat and related blog post
+;; for a seed for creating channels.
+
 (defn sync-app [request]
   "Rendered response of the chat page"
   {:status 200

@@ -101,5 +101,5 @@
          (get-exercises imported-html))))
 
 (defn -main [& args]
-  "First arg is an username, and the second export filename."
+  "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (import-user-and-file (first args) (second args)))

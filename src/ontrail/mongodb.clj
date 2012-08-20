@@ -2,7 +2,7 @@
 
 (def DB "ontrail")
 
-;; Table names
+;; Mongo collection names
 (def ONUSER "onuser")
 (def EXERCISE "exercise")
 (def ONSPORT "onsport")
