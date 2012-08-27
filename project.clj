@@ -4,7 +4,6 @@
                  [aleph "0.3.0-alpha2"]
                  [compojure "1.1.1"]
                  [ring "1.1.0-beta2"]
-                 [hiccup "1.0.0-beta1"]
                  [lein-swank "1.4.4"]
                  [clj-time "0.4.4"]
                  [enlive "1.0.0"]
