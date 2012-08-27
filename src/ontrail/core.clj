@@ -7,14 +7,15 @@
 
 (require '[monger.collection :as mc])
 (use 'ring.middleware.file)
-
+(use 'ring.middleware.cookies)
 (use '[clojure.data.json :only (read-json json-str)])
 
 (use '[ontrail.summary])
 
-(defn json-response [data & [status]]
+(defn json-response [data & [status authToken]]
   {:status (or status 200)
    :headers {"Content-Type" "application/json"}
+   :cookies (if authToken {"authToken" authToken} {})
    :body (json-str data)})
 
 (defroutes app-routes
@@ -26,5 +27,7 @@
 (defn -main [& args]
   "Main thread for the server which starts an async server with
   all the routes we specified and is websocket ready."
-  (start-http-server (wrap-ring-handler app-routes)
+  (start-http-server (-> app-routes
+                       wrap-cookies
+                       wrap-ring-handler)
                      {:host "localhost" :port 8080 :websocket true}))
