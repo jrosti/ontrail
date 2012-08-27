@@ -2,11 +2,11 @@
   (:use lamina.core
         aleph.http
         compojure.core)
-  (:gen-class))
+  (:gen-class)
+  (:require [compojure.route :as route]))
 
 (require '[monger.collection :as mc])
-(require '[clojure.string])
-
+(use 'ring.middleware.file)
 
 (use '[clojure.data.json :only (read-json json-str)])
 
@@ -19,7 +19,9 @@
 
 (defroutes app-routes
   "Routes requests to their handler function. Captures dynamic variables."
-  (GET "/summary/:user" [user] (json-response (get-overall-summary user))))
+  (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
+  (route/resources "/")
+  (route/not-found "Page not found"))
 
 (defn -main [& args]
   "Main thread for the server which starts an async server with
