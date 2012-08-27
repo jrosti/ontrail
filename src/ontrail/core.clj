@@ -6,12 +6,23 @@
         (ring.middleware resource file-info)
         (hiccup core page))
   (:require [compojure.route :as route])
-  (:gen-class))
+  (:gen-class)
+  (:use ring.middleware.json-params)
+  (:require [clj-json.core :as json]))
 
 (require '[monger.collection :as mc])
 (require '[clojure.string])
 
+
 (use '[clojure.data.json :only (read-json json-str)])
+
+(use '[ontrail.summary])
+
+(defn json-response [data & [status]]
+  {:status (or status 200)
+   :headers {"Content-Type" "application/json"}
+   :body (json/generate-string data)})
+
 
 (defn chat-init [ch]
   "Initialize a new chat channel"
@@ -74,13 +85,15 @@
 
 (defroutes app-routes
   "Routes requests to their handler function. Captures dynamic variables."
-  (GET ["/chat/:room", :room #"[a-zA-Z]+"] {}
-       (wrap-aleph-handler chat))
-  (GET ["/"] {} user-handler)
+  (GET "/" [] (json-response (get-overall-summary "peppi"))))
+  
+;  (GET ["/chat/:room", :room #"[a-zA-Z]+"] {}
+;       (wrap-aleph-handler chat))
+;  (GET ["/"] {} user-handler)
   ;;Route our public resources like css and js to the static url
-  (route/resources "/static")
+;  (route/resources "/static")
   ;;Any url without a route handler will be served this response
-  (route/not-found "Page not found"))
+;  (route/not-found "Page not found"))
 
 (defn -main [& args]
   "Main thread for the server which starts an async server with
