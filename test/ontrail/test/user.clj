@@ -5,4 +5,4 @@
 (deftest user-has-password-as-username
   (let [test-account (get-user "esko")]
     (is (= "esko" (:username test-account)))
-    (is (password-match "esko" (:passwordHash test-account)))))
+    (is (password-match? "esko" (:passwordHash test-account)))))
