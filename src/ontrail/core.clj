@@ -1,9 +1,8 @@
 (ns ontrail.core
   (:use
         aleph.http
-        compojure.core
-        ontrail.summary
-        ontrail.auth)
+        compojure.core)
+  (:use [ontrail summary auth crypto user])
   (:gen-class)
   (:require [compojure.route :as route]))
 
@@ -31,7 +30,7 @@
   (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
   (POST "/login" [username password]
       (if (authenticate username password)
-        (json-response {"token" (auth-token username password) "user" username} 200)
+        (json-response {"token" (auth-token (get-user username)) "user" username} 200)
         (json-response {"error" "Authentication failed"} 401)))
   (GET "/secret" [] (is-authenticated? (json-response {"secret" "ken sent me"})))
 

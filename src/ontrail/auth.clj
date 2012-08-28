@@ -6,8 +6,8 @@
 (defn authenticate [user password]
   (= (password-match? password (:password-hash (get-user user)))))
 
-(defn auth-token [user passwordHash]
-  (str (base64-encode user) ":" (base64-encode passwordHash)))
+(defn auth-token [user]
+  (str (base64-encode (:username user)) ":" (base64-encode (:passwordHash user))))
 
 (defn valid-auth-token? [token]
   (let [[usernameBase64, passwordHashBase64] (split token #":")
