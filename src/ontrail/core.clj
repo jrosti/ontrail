@@ -1,5 +1,5 @@
 (ns ontrail.core
-  (:use lamina.core
+  (:use
         aleph.http
         compojure.core)
   (:gen-class)
@@ -10,8 +10,14 @@
 (use 'ring.middleware.cookies)
 (use '[ring.middleware.params :only (wrap-params)])
 (use '[clojure.data.json :only (read-json json-str)])
+(use '[clojure.string :only (split)])
 
 (use '[ontrail.summary])
+
+(defn json-response [data & [status]]
+  {:status (or status 200)
+   :headers {"Content-Type" "application/json"}
+   :body (json-str data)})
 
 (defn authenticate [user password]
   (and (= user "esko") (= password "morko")))
@@ -19,19 +25,21 @@
 (defn auth-token [user password]
   (str user ":" password))
 
-(defn json-response [data & [status authToken]]
-  {:status (or status 200)
-   :headers {"Content-Type" "application/json"}
-   :cookies (if authToken {"authToken" authToken} {})
-   :body (json-str data)})
+(defn is-authenticated? [cookies action]
+  (let [auth-token (:value (cookies "authToken"))
+        [user, password] (split auth-token #":")]
+    (if (authenticate user password)
+      action
+      (json-response {"error" "Authentication required"} 401))))
 
 (defroutes app-routes
   "Routes requests to their handler function. Captures dynamic variables."
   (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
-  (POST "/login" [user password]
-    (if (authenticate user password)
-      (json-response {"success" "Authentication successful"} 200 (auth-token user password))
-      (json-response {"error" "Authentication failed"} 401)))
+  (POST "/login" [username password]
+      (if (authenticate username password)
+        (json-response {"token" (auth-token username password) "user" username} 200)
+        (json-response {"error" "Authentication failed"} 401)))
+  (GET "/secret" [] (is-authenticated? (json-response {"secret" "ken sent me"})))
 
   (route/resources "/")
   (route/not-found "Page not found"))
