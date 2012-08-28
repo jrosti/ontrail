@@ -1,7 +1,9 @@
 (ns ontrail.core
   (:use
         aleph.http
-        compojure.core)
+        compojure.core
+        ontrail.summary
+        ontrail.auth)
   (:gen-class)
   (:require [compojure.route :as route]))
 
@@ -12,18 +14,10 @@
 (use '[clojure.data.json :only (read-json json-str)])
 (use '[clojure.string :only (split)])
 
-(use '[ontrail.summary])
-
 (defn json-response [data & [status]]
   {:status (or status 200)
    :headers {"Content-Type" "application/json"}
    :body (json-str data)})
-
-(defn authenticate [user password]
-  (and (= user "esko") (= password "morko")))
-
-(defn auth-token [user password]
-  (str user ":" password))
 
 (defn is-authenticated? [cookies action]
   (let [auth-token (:value (cookies "authToken"))
