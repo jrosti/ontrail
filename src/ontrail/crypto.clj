@@ -2,6 +2,18 @@
 
 (import com.lambdaworks.codec.Base64)
 
+(defn md5
+  "Generate a md5 checksum for the given string"
+  [token]
+  (let [hash-bytes
+        (doto (java.security.MessageDigest/getInstance "MD5")
+          (.reset)
+          (.update (.getBytes token)))]
+    (.toString
+      (new java.math.BigInteger 1 (.digest hash-bytes)) ; Positive and the size of the number
+      16)))
+
+(defn md5-match? [string expected] (= (md5 string) expected))
 
 (defn char-array-to-string [arr] (apply str arr))
 (defn byte-array-to-string [arr] (apply str (map #(char %) arr))) ; aebaerae -castaus char:ksi, mutta tässä toimii?
