@@ -32,9 +32,19 @@
   <header>
 
   </header>
+  <div role="login">
+    <h2>Kirjaudu sisään</h2>
+    <form id="login-form">
+      <label for="username">Käyttäjä</label>
+      <input id="username" name="username" type="text" width="30" />
+      <label for="password">Salasana</label>
+      <input id="password" name="password" type="text" width="30" />
+    </form>
+    <input id="login" type="button" value="Kirjaudu">
+  </div>
+
+
   <div role="main">
-    <label for="user">Käyttäjä</label>
-    <input id="user" type="text" width="30" />
     <table id="summary">
       <tbody id="summary-entries"></tbody>
     </table>
