@@ -4,6 +4,6 @@
 (defn authenticate [user password]
   (= (password-match password (:passwordHash (get-user user)))))
 
-(defn auth-token [user password]
-  (str (base64-encode user) ":" (base64-encode password)))
+(defn auth-token [user passwordHash]
+  (str (base64-encode user) ":" (base64-encode passwordHash)))
 
