@@ -20,7 +20,7 @@
    :body (json-str data)})
 
 (defn authenticate [user password]
-  (and (= user "esko") (= password "morko")))
+  (= user password))
 
 (defn auth-token [user password]
   (str user ":" password))
