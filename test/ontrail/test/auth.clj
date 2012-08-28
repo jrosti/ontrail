@@ -7,3 +7,6 @@
 
 (deftest not-username-fails-as-password
   (not (is (authenticate "esko" "esko2"))))
+
+(deftest auth-token-returns-base64-encoded-strings
+  (is (= "ZXNrbw==:ZXNrbw==" (auth-token "esko" "esko"))))
