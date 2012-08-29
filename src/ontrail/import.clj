@@ -1,4 +1,5 @@
-(ns ontrail.import)
+(ns ontrail.import
+  (:use ontrail.mongodb ontrail.user))
 
 (require '[monger.collection :as mc]
          '[net.cgrand.enlive-html :as html]
@@ -6,8 +7,6 @@
          '[clj-time.core :as time]
          ;; for date serialization to mongo.
          '[monger.joda-time])
-
-(use 'ontrail.mongodb)
 
 (defn import-html [filename]
   (html/html-resource (java.io.FileReader. filename)))
@@ -28,11 +27,6 @@
   "Input format: 12.08.2012"
   (let [date-array (map #(read-string (str "10r" %)) (string/split date-string #"\."))]
     (time/date-time (nth date-array 2) (second date-array) (first date-array))))
-
-(defn get-or-create-login-id [login-id]
-    (let [_login-id (mc/find-one ONUSER {:_id login-id})]
-      (if (= nil _login-id) (mc/insert ONUSER {:_id login-id}))
-      login-id))
 
 (defn get-timestamp [exercise]
   (convert-to-timestamp (html/text (nth exercise 0))))
@@ -92,14 +86,17 @@
                    :tags (get-tags exercise)
                    }))
 
-(defn import-user-and-file [login-id filename]
-  (let [login-id (get-or-create-login-id login-id)
-        imported-html (import-html filename)]
+(defn import-user-and-file [username filename]
+  (let [imported-html (import-html filename)]
     (map #(if (is-ex? %)
-            (insert login-id (get-exercise %))
+            (insert username (get-exercise %))
             -1)
          (get-exercises imported-html))))
 
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
-  (import-user-and-file (first args) (second args)))
+  (let [username (first args)
+        import-file (second args)]
+    (println (str "Creating user " username " with import data file " import-file))
+    (create-user username)
+    (import-user-and-file username import-file)))

@@ -4,7 +4,7 @@
 (use '[clojure.string :only (split)])
 
 (defn authenticate [user password]
-  (= (password-match? password (:passwordHash (get-user user)))))
+  (= (password-match? password (:password-hash (get-user user)))))
 
 (defn auth-token [user passwordHash]
   (str (base64-encode user) ":" (base64-encode passwordHash)))
