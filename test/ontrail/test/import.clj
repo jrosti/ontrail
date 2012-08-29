@@ -5,7 +5,7 @@
 (require '[net.cgrand.enlive-html :as html])
 
 (deftest to-duration-basic
-  (is (= 360000 (to-duration "60,0")) "60,0 minuts is 360000 hundreds of seconds"))
+  (is (= 360000 (to-duration "60,0")) "60,0 minutes is 360000 hundreds of seconds"))
 
 (def lenkkivihko-import-html "<html><head><meta http-equiv=Content-Type content=\"text/html; charset=utf-8\"></head><body><table>
  <thead><tr><th>Päivä</th><th>Otsikko</th><th>Tuntemukset</th><th>Laji</th><th>Kesto (min)</th><th>Matka (km)</th><th>Syke (bpm)</th><th>Nopeus (min/km)</th><th>Tagit</th> </tr></thead>
