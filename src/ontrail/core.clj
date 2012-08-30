@@ -28,9 +28,9 @@
   "Routes requests to their handler function. Captures dynamic variables."
   (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
   (POST "/login" [username password]
-      (if (authenticate username password)
-        (json-response {"token" (auth-token (get-user username)) "user" username} 200)
-        (json-response {"error" "Authentication failed"} 401)))
+    (if (authenticate username password)
+      (json-response {"token" (auth-token (get-user username)) "user" username} 200)
+      (json-response {"error" "Authentication failed"} 401)))
   (GET "/secret" {params :params cookies :cookies} (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
 
   (route/resources "/")
