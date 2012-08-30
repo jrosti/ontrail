@@ -11,17 +11,16 @@
 (use 'ring.middleware.cookies)
 (use '[ring.middleware.params :only (wrap-params)])
 (use '[clojure.data.json :only (read-json json-str)])
-(use '[clojure.string :only (split)])
 
 (defn json-response [data & [status]]
   {:status (or status 200)
    :headers {"Content-Type" "application/json"}
    :body (json-str data)})
 
-(defn is-authenticated? [cookies action]
-  (let [auth-token (:value (cookies "authToken"))
-        [user, password] (split auth-token #":")]
-    (if (authenticate user password)
+(defn is-authenticated? [params cookies action]
+    (let [auth-token (:value (cookies "authToken"))
+        auth-token-hash (:tokenHash params)]
+    (if (valid-auth-token? auth-token)
       action
       (json-response {"error" "Authentication required"} 401))))
 
@@ -32,7 +31,7 @@
       (if (authenticate username password)
         (json-response {"token" (auth-token (get-user username)) "user" username} 200)
         (json-response {"error" "Authentication failed"} 401)))
-  (GET "/secret" [] (is-authenticated? (json-response {"secret" "ken sent me"})))
+  (GET "/secret" {params :params cookies :cookies} (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
 
   (route/resources "/")
   (route/not-found "Page not found"))
