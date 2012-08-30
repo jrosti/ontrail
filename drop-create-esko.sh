@@ -3,4 +3,4 @@
 . setenvs.bash
 
 mongo ontrail dropdb.js
-lein run :import esko trainlog-long-ex2.html
+lein run :import esko esko esko.morko@iki.fi trainlog-long-ex2.html
