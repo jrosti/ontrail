@@ -9,8 +9,8 @@
   (not (is (authenticate "esko" "esko2"))))
 
 (deftest auth-token-returns-base64-encoded-strings
-  (is (= "ZXNrbw##|ZXNrbw##" (auth-token {:username "esko" :passwordHash "esko"}))))
+  (is (= "ZXNrbw##|ZXNrbw##" (auth-token {:username "esko" :password-hash "esko"}))))
 
 (deftest valid-auth-token-matches
   (let [user (get-user "esko")]
-    (is (valid-auth-token? (str "ZXNrbw##|" (clojure.string/replace (base64-encode (:passwordHash user)) #"=" "#"))))))
+    (is (valid-auth-token? (str "ZXNrbw##|" (clojure.string/replace (base64-encode (:password-hash user)) #"=" "#"))))))

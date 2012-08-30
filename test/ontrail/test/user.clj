@@ -5,7 +5,7 @@
 (deftest user-has-password-as-username
   (let [test-account (get-user "esko")]
     (is (= "esko" (:username test-account)))
-    (is (password-match? "esko" (:passwordHash test-account)))))
+    (is (password-match? "esko" (:password-hash test-account)))))
 
 (deftest calling-get-user-twice-returns-same-hash
-  (is (= (:passwordHash (get-user "esko")) (:passwordHash (get-user "esko")))))
+  (is (= (:password-hash (get-user "esko")) (:password-hash (get-user "esko")))))
