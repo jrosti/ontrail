@@ -20,12 +20,20 @@
       $('#summary-entries').html(content)
     }
 
-    var logins = $("#login").clickAsObservable().selectAjax(doLogin)
-    logins.subscribe(debug)
+    var logouts = $("#logout").clickAsObservable()
+    var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
+    var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
+    var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var summaryRequests = logins.where(isSuccess).select(ajaxResponseData).select(function(data) { return data.user }).selectAjax(getSummary)
-    summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary)
+    var sessions = Rx.Observable.create(function(observer) {
+      logins.subscribe(function(login) { $.cookie("authToken", login.authToken ); observer.onNext(login.username) } )
+      logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); observer.onNext(null)})
+      return function() {} // todo -- should we dispose something.
+    })
+    var loggedIns = sessions.where(identity)
 
+    var summaryRequests = sessions.selectAjax(getSummary)
+    summaryRequests.where(isSuccess).select(ajaxResponseData).doAction(debug).subscribe(drawSummary)
   })
 
 })()
