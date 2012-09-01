@@ -35,3 +35,16 @@ body {
   background: url(../img/ontrail.png) no-repeat;
   background-color: #c5f3f4;
 }
+div[role="login"] {
+  width: 500px;
+}
+div[role="login"] input {
+  display: block;
+}
+div[role="login"] * {
+  margin-bottom: 1.1em;
+}
+div[role="login"] fieldset {
+  padding: 10px;
+  background-color: #ffffff;
+}
