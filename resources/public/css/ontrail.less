@@ -4,13 +4,26 @@
 
 @bg-gradient-start: #006862;
 @bg-gradient-end: #a5ecef;
+@body-bg-color: #c5f3f4;
+
+* {
+  box-sizing: border-box;
+}
 
 html {
-  min-height: 100%;
+  background-color: @bg-gradient-end;
+  .bg-gradient(@bg-gradient-start, @bg-gradient-end);
+  height: 100%;
 }
 
 body {
-  background-color: @bg-gradient-end;
-  .bg-gradient(@bg-gradient-start, @bg-gradient-end);
+  padding: 281px 10px 0px;
+  width: 968px;
+  margin: 0 auto;
   min-height: 100%;
+  border-left: 3px solid @bg-gradient-start;
+  border-right: 3px solid @bg-gradient-start;
+  background: url(../img/ontrail.png) no-repeat;
+  background-color: @body-bg-color;
 }
+
