@@ -1,0 +1,16 @@
+
+@import "css3.less";
+@import "mixins.less";
+
+@bg-gradient-start: #006862;
+@bg-gradient-end: #a5ecef;
+
+html {
+  min-height: 100%;
+}
+
+body {
+  background-color: @bg-gradient-end;
+  .bg-gradient(@bg-gradient-start, @bg-gradient-end);
+  min-height: 100%;
+}

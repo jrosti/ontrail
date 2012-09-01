@@ -1,0 +1,19 @@
+@import "css3.less";
+
+.ms-linear-gradient(@top, @bottom) {
+  filter:  ~"progid:DXImageTransform.Microsoft.gradient(startColorStr='@{top}', EndColorStr='@{bottom}')";  // IE6,IE7
+  -ms-filter:  ~"progid:DXImageTransform.Microsoft.gradient(startColorStr='@{top}', EndColorStr='@{bottom}')"; // IE8
+}
+
+.inline-block {
+  display: inline-block;
+/* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+  zoom: 1;
+  *display: inline;
+}
+
+.bg-gradient(@top, @bottom) {
+  .linear-gradient(top, ~',@{top} 0, @{bottom} 270px');
+  .ms-linear-gradient(@top, @bottom);
+  background-repeat: repeat-x;
+}
