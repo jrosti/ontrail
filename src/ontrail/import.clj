@@ -66,7 +66,7 @@
   (int (read-string (html/text (nth exercise 6)))))
 
 (defn get-tags [exercise]
-  "Current implementation stores either empty string or one tag per ex. Now tag is a list of strings."
+  "Import implementation stores either empty string or one tag per ex. Now tag is a list of strings."
   (let [one-tag (string/trim (html/text (nth exercise 8)))]
     (if (= "" one-tag)
       '()
