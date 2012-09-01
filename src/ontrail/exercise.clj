@@ -23,7 +23,7 @@
 
 (defn get-exercise [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
-        user-profile (get :profile (mc/find-one-as-map ONUSER {:_id (get exercise :user)}))
+        user-profile (get (mc/find-one-as-map ONUSER {:_id (get exercise :user)}) :profile)
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
     {:heading (get exercise :heading)
      :body (get exercise :body)
