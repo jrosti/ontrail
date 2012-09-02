@@ -2,7 +2,7 @@
   (:use
         aleph.http
         compojure.core)
-  (:use [ontrail summary auth crypto user])
+  (:use [ontrail summary auth crypto user exercise])
   (:gen-class)
   (:require [compojure.route :as route]))
 
@@ -27,6 +27,7 @@
 (defroutes app-routes
   "Routes requests to their handler function. Captures dynamic variables."
   (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
+  (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (POST "/login" [username password]
     (if (authenticate username password)
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
