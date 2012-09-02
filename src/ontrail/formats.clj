@@ -1,5 +1,7 @@
 (ns ontrail.formats)
 
+(require '[clj-time.format :as time-format])
+
 (defn not-nil? [val]
   (not= val nil))
 
@@ -12,6 +14,10 @@
     (if (> km 0)
       (str km "," m "km")
       (str m "m"))))
+
+(defn to-human-date [date-time]
+  (let [date-format (time-format/formatter "dd.MM.yyyy")]
+    (time-format/unparse date-format date-time)))
 
 (defn to-human-time [duration]
   (let [hundreds (mod duration 100)

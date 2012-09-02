@@ -23,9 +23,6 @@
     (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)))
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
-
-(defn to-human-date [date]
-  (str date))
  
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
