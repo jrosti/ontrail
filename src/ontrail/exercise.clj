@@ -15,24 +15,18 @@
       (to-human-pace (/ duration distance))
       "")))
 
-(defn not-nil? [val]
-  (not= val nil))
-
-(defn positive-numbers? [vals]
-  (reduce #(and %1 %2) (map #(and (not-nil? %) (> % 0)) vals)))
-
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
         avghr (get exercise :avghr)]
     (println (format "hr res: %d %d %d" resthr maxhr avghr))
-    (if (positive-numbers? (list resthr maxhr avghr))
+    (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)))
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
 (defn to-human-date [date]
   (str date))
-
+ 
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
         user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)

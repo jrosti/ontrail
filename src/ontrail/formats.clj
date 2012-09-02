@@ -1,5 +1,11 @@
 (ns ontrail.formats)
 
+(defn not-nil? [val]
+  (not= val nil))
+
+(defn positive-numbers? [vals]
+  (reduce #(and %1 %2) (map #(and (not-nil? %) (> % 0)) vals)))
+
 (defn to-human-distance [distance]
   (let [km (int (/ distance 1000))
         m (mod distance 1000)]

@@ -1,6 +1,5 @@
 (ns ontrail.core
-  (:use
-        aleph.http
+  (:use aleph.http
         compojure.core)
   (:use [ontrail summary auth crypto user exercise])
   (:gen-class)
