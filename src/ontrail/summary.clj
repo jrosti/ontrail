@@ -66,5 +66,6 @@
     (get-summary {:sport sport :user user :date {:$gte first-day :$lte last-day}} sport)))
 
 (defn get-overall-summary [user]
+  (println (str "Getting overall summary: " user))
   (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
     (map #(get-summary {:user user :sport %} %) all-sports)))
