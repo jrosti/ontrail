@@ -1,11 +1,10 @@
 (ns ontrail.summary
-  (:use ontrail.mongodb ontrail.formats))
-
-(require '[monger.core]
-         '[monger.conversion]
-         '[clj-time.core :as time]
-         '[monger.joda-time]
-         '[monger.collection :as mc])
+  (:use ontrail.mongodb ontrail.formats)
+  (:require [monger.core]
+            [monger.conversion]
+            [clj-time.core :as time]
+            [monger.joda-time]
+            [monger.collection :as mc]))
 
 (defn avghr [db-retmap]
   (let [hrcount (get db-retmap :hrcount)]
