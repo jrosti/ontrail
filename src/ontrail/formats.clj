@@ -40,7 +40,9 @@
       (if (= m 0)
         (str km "km")
         (str km "," (format "%03d" (int m)) "km"))
-      (str (int m) "m"))))
+      (if (> m 0)
+        (str (int m) "m")
+        ""))))
 
 (defn to-human-date [date-time]
   (let [date-format (time-format/formatter "dd.MM.yyyy")]
