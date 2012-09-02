@@ -1,15 +1,14 @@
 (ns ontrail.core
   (:use aleph.http
-        compojure.core)
+        compojure.core
+        ring.middleware.file
+        ring.middleware.cookies
+        [ring.middleware.params :only (wrap-params)]
+        [clojure.data.json :only (read-json json-str)])
   (:use [ontrail summary auth crypto user exercise])
   (:gen-class)
-  (:require [compojure.route :as route]))
-
-(require '[monger.collection :as mc])
-(use 'ring.middleware.file)
-(use 'ring.middleware.cookies)
-(use '[ring.middleware.params :only (wrap-params)])
-(use '[clojure.data.json :only (read-json json-str)])
+  (:require [compojure.route :as route]
+            [monger.collection :as mc]))
 
 (defn json-response [data & [status]]
   {:status (or status 200)
