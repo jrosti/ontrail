@@ -25,7 +25,7 @@
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
         avghr (get exercise :avghr)]
-    (println (format "Computen hr res: %d %d %d" resthr maxhr avghr))
+    (println (format "hr res: %d %d %d" resthr maxhr avghr))
     (if (positive-numbers? (list resthr maxhr avghr))
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
