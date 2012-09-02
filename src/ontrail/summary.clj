@@ -1,19 +1,11 @@
-(ns ontrail.summary)
+(ns ontrail.summary
+  (:use ontrail.mongodb ontrail.formats))
 
 (require '[monger.core]
          '[monger.conversion]
          '[clj-time.core :as time]
          '[monger.joda-time]
          '[monger.collection :as mc])
-
-(use 'ontrail.mongodb)
-(use 'ontrail.formats)
-
-(defn pace [db-retmap]
-  (let [distance (get db-retmap :tdist)]
-    (if (> distance 0)
-      (/ (/ (get db-retmap :tdur) 6000) (/ distance 1000))
-      0)))
 
 (defn avghr [db-retmap]
   (let [hrcount (get db-retmap :hrcount)]
@@ -23,10 +15,12 @@
 
 (defn to-summary [db-object sport]
   (let [db-retmap (first (get db-object :retval))
-        count (int (get db-object :count))]
-    {:duration (to-human-time (int (get db-retmap :dur)))
-     :distance (to-human-distance (int (get db-retmap :dist)))
-     :pace (to-human-pace (pace db-retmap))
+        count (int (get db-object :count))
+        true-duration (get db-retmap :tdur)
+        true-distance (get db-retmap :tdist)]
+    {:duration (to-human-time (get db-retmap :tdur))
+     :distance (to-human-distance (get db-retmap :tdist))
+     :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
      :avghr (avghr db-retmap)
      :count count
      :sport sport}))
