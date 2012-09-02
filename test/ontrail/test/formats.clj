@@ -7,6 +7,16 @@
 (deftest test-to-human-pace-minkm
   (is (= "6:00min/km" (to-human-pace-minkm (* 100 60 6) 1000)) "Basic pace test."))
 
+(deftest test-to-human-distance
+  (is (= (to-human-distance 1000) "1km") "one kilometer is 1km"))
+
+(deftest test-to-human-distance-1001
+  (is (= (to-human-distance 1001) "1,001km") "meters"))
+
+(deftest test-to-human-distance-800
+  (is (= (to-human-distance 800) "800m") "subkm"))
+
+
 (deftest test-pace-from-exercise
   (let [ex {:duration 30000 :distance 1000}] ;; is 5min/km
     (is (= "5:00min/km" (get-pace ex)) "Pace in min/km.")))
