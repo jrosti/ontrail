@@ -8,13 +8,6 @@
 
 (import [org.bson.types ObjectId])
 
-(defn get-pace [exercise]
-  (let [duration (/ (get exercise :duration) 6000)
-        distance (/ (get exercise :distance) 1000)]
-    (if (and (> duration 0) (> distance 0))
-      (to-human-pace (/ duration distance))
-      "")))
-
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
