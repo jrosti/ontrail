@@ -5,7 +5,7 @@
     var entryTemplate = Handlebars.compile(source);
 
     var getSummary = function(user) {
-      return $.ajaxAsObservable({ url: "http://localhost:8080/summary/" + user })
+      return $.ajaxAsObservable({ url: "http://localhost:8080/rest/v1/summary/" + user })
     }
 
     var doLogin = function() {

@@ -24,7 +24,7 @@
 
 (defroutes app-routes
   "Routes requests to their handler function. Captures dynamic variables."
-  (GET "/summary/:user" [user] (json-response (get-overall-summary user)))
+  (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (POST "/login" [username password]
     (if (authenticate username password)
