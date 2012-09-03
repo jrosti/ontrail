@@ -1,3 +1,4 @@
 
 # fetches one exercise
 curl http://localhost:8080/rest/v1/ex/50430c4703647f0a2509a07c
+curl http://localhost:8080/rest/v1/ex-list/all/1

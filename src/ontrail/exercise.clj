@@ -16,14 +16,26 @@
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
+(def TRUNCATE 50)
+
+(defn strip-and-truncate [s]
+  "Does not strip tags yet"
+  (let [chars (count s)
+        truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
+    (if (= s nil)
+      ""
+      (if (> chars TRUNCATE)
+        (str (subs s 0 truncated-len) "...")
+        s))))
+
 (defn as-ex-result [result]
   (let [pace (get-pace {:duration (get result :duration)
                         :distance (get result :distance)
                         :sport (get result :sport)})
         duration (to-human-time (get result :duration))
         distance (to-human-distance (get result :distance))
-        truncated-body (get result :body)
-        id (get result :_id)
+        truncated-body (strip-and-truncate (get result :body))
+        _id (get result :_id)
         sport (get result :sport)
         comment-count (count (get result :comments))]
     {:pace pace
@@ -31,7 +43,7 @@
      :distance distance
      :body truncated-body
      :sport sport
-     :id id
+     :id (str _id)
      :comment-count comment-count}))
 
 (defn as-ex-result-list [results]
