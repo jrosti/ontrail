@@ -6,6 +6,7 @@
 @bg-gradient-end: #a5ecef;
 @body-bg-color: #c5f3f4;
 @content-background: white;
+@login-border-color: #87dfe0;
 
 * {
   box-sizing: border-box;
@@ -29,7 +30,7 @@ body {
 }
 
 div[role="login"] {
-  width: 500px;
+  width: 450px;
 
   input {
     display: block;
@@ -40,7 +41,11 @@ div[role="login"] {
   }
 
   fieldset {
-    padding: 10px;
+    width: 100%;
+    .border-radius(30px);
+    padding: 10px 30px;
+    margin: 40px;
     background-color: @content-background;
+    border: solid 3px @login-border-color;
   }
 }
