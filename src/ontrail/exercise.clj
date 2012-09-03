@@ -1,22 +1,50 @@
 (ns ontrail.exercise
-  (:use ontrail.mongodb ontrail.formats))
-
-(require '[monger.conversion]
-         '[clj-time.core :as time]
-         '[monger.joda-time]
-         '[monger.collection :as mc])
-
-(import [org.bson.types ObjectId])
+  (:use ontrail.mongodb ontrail.formats
+        monger.operators)
+  (:require [monger.collection :as mc]
+            [clj-time.core :as time]
+            [monger.query :as mq]
+            [monger.joda-time]
+            [net.cgrand.enlive-html :as html])
+  (:import [org.bson.types ObjectId]))
 
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
         avghr (get exercise :avghr)]
-    (println (format "hr res: %d %d %d" resthr maxhr avghr))
     (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)))
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
- 
+
+(defn as-ex-result [result]
+  (let [pace (get-pace {:duration (get result :duration)
+                        :distance (get result :distance)
+                        :sport (get result :sport)})
+        duration (to-human-time (get result :duration))
+        distance (to-human-distance (get result :distance))
+        truncated-body (get result :body)
+        id (get result :_id)
+        sport (get result :sport)
+        comment-count (count (get result :comments))]
+    {:pace pace
+     :duration duration
+     :distance distance
+     :body truncated-body
+     :sport sport
+     :id id
+     :comment-count comment-count}))
+
+(defn as-ex-result-list [results]
+  (map as-ex-result results))
+
+(defn get-latest-ex-list [stream-name page]
+  (let [results (mq/with-collection EXERCISE
+               (mq/find {})
+               (mq/fields [ :_id :heading :body :duration :distance :sport :date :comments ])
+               (mq/limit 30)
+               (mq/sort {:date 1}))]
+    (as-ex-result-list results)))
+
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
         user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
