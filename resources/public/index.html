@@ -54,9 +54,7 @@
 
 
   <div role="latest">
-    <table id="summary">
-      <tbody id="summary-entries"></tbody>
-    </table>
+    <div id="summary-entries"></div>
   </div>
   <footer>
 
@@ -82,6 +80,10 @@
 
 </body>
 <script id="summary-entry-template" type="text/x-handlebars-template">
-  <tr><td>{{sport}}</td><td>{{duration}}</td><td>{{distance}}</td><td>{{pace}}</td></tr>
+  <article class="{{sport}}">
+    <h2>{{title}}</h2>
+    <h3>{{duration}}, {{distance}} vauhdilla {{pace}}</h3>
+    <p>{{body}}</p>
+  </article>
 </script>
 </html>
