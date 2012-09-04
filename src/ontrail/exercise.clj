@@ -53,7 +53,7 @@
   (let [results (mq/with-collection EXERCISE
                (mq/find rule)
                (mq/fields [ :_id :heading :body :duration :distance :sport :creationDate :comments ])
-               (mq/paginate :page 0 :per-page 20)
+               (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
     (println "Ex list" rule page)
     (as-ex-result-list results)))
