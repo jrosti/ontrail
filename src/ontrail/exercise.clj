@@ -39,7 +39,7 @@
         sport (get result :sport)
         comment-count (count (get result :comments))]
     {:pace pace
-     :title (get result :heading)
+     :title (get result :title)
      :duration duration
      :distance distance
      :body truncated-body
@@ -53,7 +53,7 @@
 (defn get-latest-ex-list [rule page]
   (let [results (mq/with-collection EXERCISE
                (mq/find rule)
-               (mq/fields [ :_id :heading :body :duration :distance :sport :creationDate :comments ])
+               (mq/fields [ :_id :title :body :duration :distance :sport :creationDate :comments ])
                (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
     (println "Ex list" rule page)
@@ -64,7 +64,7 @@
         user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
     (println "Getting ex " id)
-    {:heading (get exercise :heading)
+    {:title (get exercise :title)
      :body (get exercise :body)
      :duration (to-human-time (get exercise :duration))
      :creationDate (to-human-date (get exercise :creationDate))

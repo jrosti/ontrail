@@ -82,7 +82,7 @@
               :distance (get-distance exercise),
               :avghr (get-avghr exercise),
               :elevation 0,
-              :heading (get-heading exercise),
+              :title (get-heading exercise),
               :body (get-report exercise),
               :tags (get-tags exercise)
               }))
