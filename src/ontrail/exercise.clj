@@ -54,13 +54,15 @@
                (mq/find {})
                (mq/fields [ :_id :heading :body :duration :distance :sport :creationDate :comments ])
                (mq/limit 30)
-               (mq/sort {:last-modified-date 1}))]
+               (mq/sort {:lastModifiedDate 1}))]
+    (println "Ex list " stream-name page)
     (as-ex-result-list results)))
 
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
         user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
+    (println "Getting ex " id)
     {:heading (get exercise :heading)
      :body (get exercise :body)
      :duration (to-human-time (get exercise :duration))
