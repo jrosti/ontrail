@@ -49,13 +49,13 @@
 (defn as-ex-result-list [results]
   (map as-ex-result results))
 
-(defn get-latest-ex-list [stream-name page]
+(defn get-latest-ex-list [rule page]
   (let [results (mq/with-collection EXERCISE
-               (mq/find {})
+               (mq/find rule)
                (mq/fields [ :_id :heading :body :duration :distance :sport :creationDate :comments ])
-               (mq/limit 30)
-               (mq/sort {:lastModifiedDate 1}))]
-    (println "Ex list " stream-name page)
+               (mq/paginate :page 0 :per-page 20)
+               (mq/sort {:lastModifiedDate -1}))]
+    (println "Ex list" rule page)
     (as-ex-result-list results)))
 
 (defn get-ex [id]
