@@ -78,6 +78,7 @@ body div[role] {
 }
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
+body[data-page="latest"] div[role="latest"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;

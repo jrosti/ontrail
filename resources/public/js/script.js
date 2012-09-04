@@ -8,14 +8,18 @@
       return $.ajaxAsObservable({ url: "http://localhost:8080/rest/v1/summary/" + user })
     }
 
+    var getLatest = function() {
+      return $.ajaxAsObservable({ url: "http://localhost:8080/rest/v1/ex-list-all/1" })
+    }
+
     var doLogin = function() {
       console.log($('#login-form').serialize())
       return $.ajaxAsObservable({ type: 'POST', url: "http://localhost:8080/rest/v1/login", data: $('#login-form').serialize() })
     }
 
-    var drawSummary = function(data) {
+    var drawSummary = function(elem, data) {
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
-      $('#summary-entries').html(content)
+      $(elem).html(content)
     }
 
     var logouts = $("#logout").clickAsObservable()
@@ -36,7 +40,7 @@
     // toggle pages when pageLink is clicked
     var currentPages = $('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') });
 
-    currentPages.where(partialEquals("latest")).selectAjax(getLatest).subscribe(debug)
+    currentPages.where(partialEquals("latest")).selectAjax(getLatest).where(isSuccess).select(ajaxResponseData).subscribe(_.partial(drawSummary, "#summary-entries"))
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
