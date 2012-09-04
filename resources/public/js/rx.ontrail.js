@@ -32,12 +32,17 @@
 
 var debug = function() {console.log("debug: ", arguments)}
 
+// functional js
 var always = function(x) { return function(y) { return x } }
 var identity = function(x) { return x }
 var not = function(x) { return !x }
 var first = function() { return arguments[0] }
 var second = function() { return arguments[1] }
+var nothing = function() {}
 
+// ajax requests
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }
 var ajaxResponseData = function(response) { return response.data }
 
+// events
+var eventTarget = function(event) { return event.target }

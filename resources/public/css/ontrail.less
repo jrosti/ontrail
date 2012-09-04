@@ -8,6 +8,8 @@
 @content-background: white;
 @login-border-color: #87dfe0;
 @menu-bg-color: white;
+@text-color: #242834;
+@link-color: darken(#79cace, 25%);
 
 @full-header-height: 268px;
 @cropped-header-bottom: 30px;
@@ -18,6 +20,16 @@
 
 * {
   box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: @link-color;
+
+  &:hover {
+    text-decoration: underline;
+    color: darken(@link-color, 10%);
+  }
 }
 
 html {
@@ -33,7 +45,7 @@ header {
   background-color: @menu-bg-color;
   padding: @cropped-header-height 0px 0px;
 
-  .transition(~"height .5s ease, background .5s ease, padding 0.5s ease");
+  .transition(~"height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear");
 
   h1 {
     position: absolute;
@@ -63,12 +75,14 @@ body[data-page="login"] header {
 body div[role] {
   display: none;
   padding: 10px;
+  opacity: 0;
 }
 
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="main"] div[role="main"] {
-  display: block
+  display: block;
+  opacity: 1;
 }
 
 div[role="menu"] {
@@ -111,6 +125,11 @@ div[role="login"] {
     margin: 40px;
     background-color: @content-background;
     border: solid 3px @login-border-color;
+
+    h2 {
+      width: 90%;
+      margin: 1em auto;
+    }
 
     input {
       font-family: 'Audiowide', cursive;

@@ -33,9 +33,12 @@
     var summaryRequests = sessions.selectAjax(getSummary)
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
 
-    var menuClicks = $('#menu a').clickAsObservable().doAction(debug)
+    // toggle pages when pageLink is clicked
+    $('.pageLink').clickAsObservable().select(eventTarget).doAction(debug).subscribe(function(elem) {
+      $('body').attr('data-page', $(elem).attr('rel'))
+    })
 
-    var loginScreens = $("#login-link").clickAsObservable().subscribe(function() { $('body').attr('data-page', 'login')});
+    _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })
 
 })()

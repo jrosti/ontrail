@@ -8,6 +8,14 @@
 * {
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+  color: #358e92;
+}
+a:hover {
+  text-decoration: underline;
+  color: #28696d;
+}
 html {
   background-color: #a5ecef;
   background-image: -webkit-linear-gradient(top ,#006862 0, #a5ecef 270px);
@@ -31,16 +39,16 @@ header {
   background: url(../img/ontrail-notext.png) no-repeat -2px -88px;
   background-color: #ffffff;
   padding: 150px 0px 0px;
-  -webkit-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -moz-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -ms-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -o-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -webkit-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -moz-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -ms-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  -o-transition: height .5s ease, background .5s ease, padding 0.5s ease;
-  transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -webkit-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -moz-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -ms-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -o-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -webkit-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -moz-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -ms-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  -o-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
+  transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
 }
 header h1 {
   position: absolute;
@@ -66,11 +74,13 @@ body[data-page="login"] header {
 body div[role] {
   display: none;
   padding: 10px;
+  opacity: 0;
 }
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="main"] div[role="main"] {
   display: block;
+  opacity: 1;
 }
 div[role="menu"] {
   width: 100%;
@@ -121,6 +131,10 @@ div[role="login"] fieldset {
   margin: 40px;
   background-color: #ffffff;
   border: solid 3px #87dfe0;
+}
+div[role="login"] fieldset h2 {
+  width: 90%;
+  margin: 1em auto;
 }
 div[role="login"] fieldset input {
   font-family: 'Audiowide', cursive;
