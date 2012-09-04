@@ -39,6 +39,7 @@
         sport (get result :sport)
         comment-count (count (get result :comments))]
     {:pace pace
+     :title (get result :heading)
      :duration duration
      :distance distance
      :body truncated-body
