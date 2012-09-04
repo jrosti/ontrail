@@ -38,7 +38,7 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
 
     // toggle pages when pageLink is clicked
-    var currentPages = $('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') });
+    var currentPages = Rx.Observable.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
 
     currentPages.where(partialEquals("latest")).selectAjax(getLatest).where(isSuccess).select(ajaxResponseData).subscribe(_.partial(drawSummary, "#summary-entries"))
 
