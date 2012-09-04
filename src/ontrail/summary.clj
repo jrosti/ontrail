@@ -19,7 +19,7 @@
         true-distance (get db-retmap :tdist)]
     {:duration (to-human-time (get db-retmap :dur))
      :distance (to-human-distance (get db-retmap :dist))
-     :numerical-duration (get db-retmap :dur)
+     :numericalDuration (get db-retmap :dur)
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
      :avghr (avghr db-retmap)
      :count count
@@ -58,14 +58,14 @@
 (defn get-year-summary [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (get-summary {:user user :date {:$gte first-day :$lte last-day}}) "Kaikki"))
+    (get-summary {:user user :creationDate {:$gte first-day :$lte last-day}}) "Kaikki"))
 
 (defn get-year-summary-sport [user year sport]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (get-summary {:sport sport :user user :date {:$gte first-day :$lte last-day}} sport)))
+    (get-summary {:sport sport :user user :creationDate {:$gte first-day :$lte last-day}} sport)))
 
 (defn get-overall-summary [user]
   (println (str "Getting overall summary: " user))
   (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
-    (sort-by :numerical-duration > (map #(get-summary {:user user :sport %} %) all-sports))))
+    (sort-by :numericalDuration > (map #(get-summary {:user user :sport %} %) all-sports))))

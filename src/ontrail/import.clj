@@ -1,12 +1,12 @@
 (ns ontrail.import
-  (:use ontrail.mongodb ontrail.user))
-
-(require '[monger.collection :as mc]
-         '[net.cgrand.enlive-html :as html]
-         '[clojure.string :as string]
-         '[clj-time.core :as time]
-         ;; for date serialization to mongo.
-         '[monger.joda-time])
+  (:use ontrail.mongodb ontrail.user)
+  (:require [monger.collection :as mc]
+            [monger.result :as mr]
+            [net.cgrand.enlive-html :as html]
+            [clojure.string :as string]
+            [clj-time.core :as time]
+            ;; for date serialization to mongo.
+            [monger.joda-time]))
 
 (defn import-html [filename]
   (html/html-resource (java.io.FileReader. filename)))
@@ -74,25 +74,27 @@
 
 (defn insert [login-id exercise]
   (mc/insert EXERCISE
-                  {:date (get-timestamp exercise),
-                   :user login-id,
-                   :sport (get-or-create-sport exercise),
-                   :duration (get-duration exercise),
-                   :distance (get-distance exercise),
-                   :avghr (get-avghr exercise),
-                   :elevation 0,
-                   :heading (get-heading exercise),
-                   :body (get-report exercise),
-                   :tags (get-tags exercise)
-                   }))
+             {:creationDate (get-timestamp exercise),
+              :lastModifiedDate (get-timestamp exercise),
+              :user login-id,
+              :sport (get-or-create-sport exercise),
+              :duration (get-duration exercise),
+              :distance (get-distance exercise),
+              :avghr (get-avghr exercise),
+              :elevation 0,
+              :heading (get-heading exercise),
+              :body (get-report exercise),
+              :tags (get-tags exercise)
+              }))
 
 (defn import-user-and-file [username filename]
   (let [imported-html (import-html filename)]
-    (map #(if (is-ex? %)
-            (insert username (get-exercise %))
-            -1)
-         (get-exercises imported-html))))
-
+    (reduce str (map #(if (is-ex? %)
+                        (if (mr/ok? (insert username (get-exercise %)))
+                          "+"
+                          "-")
+                        "x")
+                     (get-exercises imported-html)))))
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (let [[username password email import-file & rest] args]

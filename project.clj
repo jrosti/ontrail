@@ -12,6 +12,7 @@
                  [ring/ring-jetty-adapter "0.2.5"]
                  [ring-json-params "0.1.0"]
                  [org.clojure/data.json "0.1.3"]
+		 [squarepeg "0.6.1"] ;; combinatorial parsing
                  [com.lambdaworks/scrypt "1.3.3"]
                  [com.novemberain/monger "1.1.2"]]
   :run-aliases {:import ontrail.import}

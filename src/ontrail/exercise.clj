@@ -52,9 +52,9 @@
 (defn get-latest-ex-list [stream-name page]
   (let [results (mq/with-collection EXERCISE
                (mq/find {})
-               (mq/fields [ :_id :heading :body :duration :distance :sport :date :comments ])
+               (mq/fields [ :_id :heading :body :duration :distance :sport :creationDate :comments ])
                (mq/limit 30)
-               (mq/sort {:date 1}))]
+               (mq/sort {:last-modified-date 1}))]
     (as-ex-result-list results)))
 
 (defn get-ex [id]
@@ -64,7 +64,7 @@
     {:heading (get exercise :heading)
      :body (get exercise :body)
      :duration (to-human-time (get exercise :duration))
-     :date (to-human-date (get exercise :date))
+     :creationDate (to-human-date (get exercise :creationDate))
      :avghr (get exercise :avghr)
      :hr-reserve heart-rate-reserve
      :pace (get-pace exercise)
