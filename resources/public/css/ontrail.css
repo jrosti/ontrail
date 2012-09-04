@@ -25,15 +25,73 @@ html {
   background-repeat: repeat-x;
   height: 100%;
 }
+header {
+  position: relative;
+  height: 190px;
+  background: url(../img/ontrail-notext.png) no-repeat -2px -88px;
+  background-color: #ffffff;
+  padding: 150px 0px 0px;
+  -webkit-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -moz-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -ms-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -o-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -webkit-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -moz-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -ms-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  -o-transition: height .5s ease, background .5s ease, padding 0.5s ease;
+  transition: height .5s ease, background .5s ease, padding 0.5s ease;
+}
+header h1 {
+  position: absolute;
+  font-size: 44px;
+  font-family: 'Nosifer', cursive;
+  top: 10px;
+  right: 40px;
+  text-align: right;
+}
 body {
-  padding: 281px 10px 0px;
-  width: 968px;
+  width: 962px;
   margin: 0 auto;
   min-height: 100%;
   border-left: 3px solid #006862;
   border-right: 3px solid #006862;
-  background: url(../img/ontrail.png) no-repeat;
   background-color: #c5f3f4;
+}
+body[data-page="login"] header {
+  height: 268px;
+  background-position: -2px 0;
+  padding-top: 268px;
+}
+body div[role] {
+  display: none;
+  padding: 10px;
+}
+body div[role="menu"],
+body[data-page="login"] div[role="login"],
+body[data-page="main"] div[role="main"] {
+  display: block;
+}
+div[role="menu"] {
+  width: 100%;
+  padding: 0;
+  background-color: #ffffff;
+}
+div[role="menu"] ul {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+div[role="menu"] ul li {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+}
+div[role="menu"] ul li.right {
+  float: right;
 }
 div[role="login"] {
   width: 450px;
@@ -45,6 +103,7 @@ div[role="login"] * {
   margin-bottom: 1.1em;
 }
 div[role="login"] fieldset {
+  font-family: 'Audiowide', cursive;
   width: 100%;
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
@@ -62,4 +121,10 @@ div[role="login"] fieldset {
   margin: 40px;
   background-color: #ffffff;
   border: solid 3px #87dfe0;
+}
+div[role="login"] fieldset input {
+  font-family: 'Audiowide', cursive;
+  width: 90%;
+  height: 2em;
+  margin: 1em auto;
 }

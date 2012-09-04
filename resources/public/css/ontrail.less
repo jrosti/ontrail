@@ -7,6 +7,14 @@
 @body-bg-color: #c5f3f4;
 @content-background: white;
 @login-border-color: #87dfe0;
+@menu-bg-color: white;
+
+@full-header-height: 268px;
+@cropped-header-bottom: 30px;
+@cropped-header-height: 150px;
+@header-logo-margin-top: -@cropped-header-height + 44px;
+@header-logo-margin-bottom: @cropped-header-height - 104px;
+@menu-height: 40px;
 
 * {
   box-sizing: border-box;
@@ -18,15 +26,70 @@ html {
   height: 100%;
 }
 
+header {
+  position: relative;
+  height: @cropped-header-height + @menu-height;
+  background: url(../img/ontrail-notext.png) no-repeat -2px (@cropped-header-height + @cropped-header-bottom - @full-header-height);
+  background-color: @menu-bg-color;
+  padding: @cropped-header-height 0px 0px;
+
+  .transition(~"height .5s ease, background .5s ease, padding 0.5s ease");
+
+  h1 {
+    position: absolute;
+    font-size: 44px;
+    font-family: 'Nosifer', cursive;
+    top: 10px;
+    right: 40px;
+    text-align: right;
+  }
+}
+
 body {
-  padding: 281px 10px 0px;
-  width: 968px;
+  width: 962px;
   margin: 0 auto;
   min-height: 100%;
   border-left: 3px solid @bg-gradient-start;
   border-right: 3px solid @bg-gradient-start;
-  background: url(../img/ontrail.png) no-repeat;
   background-color: @body-bg-color;
+}
+
+body[data-page="login"] header {
+  height: @full-header-height;
+  background-position: -2px 0;
+  padding-top: @full-header-height;
+}
+
+body div[role] {
+  display: none;
+  padding: 10px;
+}
+
+body div[role="menu"],
+body[data-page="login"] div[role="login"],
+body[data-page="main"] div[role="main"] {
+  display: block
+}
+
+div[role="menu"] {
+  width: 100%;
+  padding: 0;
+  background-color: @menu-bg-color;
+
+  ul {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      .inline-block;
+
+      &.right {
+        float: right;
+      }
+    }
+  }
 }
 
 div[role="login"] {
@@ -41,11 +104,19 @@ div[role="login"] {
   }
 
   fieldset {
+    font-family: 'Audiowide', cursive;
     width: 100%;
     .border-radius(30px);
     padding: 10px 30px;
     margin: 40px;
     background-color: @content-background;
     border: solid 3px @login-border-color;
+
+    input {
+      font-family: 'Audiowide', cursive;
+      width: 90%;
+      height: 2em;
+      margin: 1em auto;
+    }
   }
 }

@@ -13,10 +13,8 @@
       return $.ajaxAsObservable({ type: 'POST', url: "http://localhost:8080/login", data: $('#login-form').serialize() })
     }
 
-
     var drawSummary = function(data) {
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
-      debug(data, content)
       $('#summary-entries').html(content)
     }
 
@@ -33,7 +31,11 @@
     var loggedIns = sessions.where(identity)
 
     var summaryRequests = sessions.selectAjax(getSummary)
-    summaryRequests.where(isSuccess).select(ajaxResponseData).doAction(debug).subscribe(drawSummary)
+    summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
+
+    var menuClicks = $('#menu a').clickAsObservable().doAction(debug)
+
+    var loginScreens = $("#login-link").clickAsObservable().subscribe(function() { $('body').attr('data-page', 'login')});
   })
 
 })()
