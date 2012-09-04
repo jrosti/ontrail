@@ -30,7 +30,9 @@
   }
 }());
 
+// debugging and dummy subscribing
 var debug = function() {console.log("debug: ", arguments)}
+var nothing = function() {}
 
 // functional js
 var always = function(x) { return function(y) { return x } }
@@ -38,7 +40,8 @@ var identity = function(x) { return x }
 var not = function(x) { return !x }
 var first = function() { return arguments[0] }
 var second = function() { return arguments[1] }
-var nothing = function() {}
+var equals = function( a, b ) { return a === b }
+var partialEquals = function(val) { return _.partial(equals, val) }
 
 // ajax requests
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }

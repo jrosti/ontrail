@@ -10,7 +10,7 @@
 
     var doLogin = function() {
       console.log($('#login-form').serialize())
-      return $.ajaxAsObservable({ type: 'POST', url: "http://localhost:8080/login", data: $('#login-form').serialize() })
+      return $.ajaxAsObservable({ type: 'POST', url: "http://localhost:8080/rest/v1/login", data: $('#login-form').serialize() })
     }
 
     var drawSummary = function(data) {
@@ -34,8 +34,12 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
 
     // toggle pages when pageLink is clicked
-    $('.pageLink').clickAsObservable().select(eventTarget).doAction(debug).subscribe(function(elem) {
-      $('body').attr('data-page', $(elem).attr('rel'))
+    var currentPages = $('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') });
+
+    currentPages.where(partialEquals("latest")).selectAjax(getLatest).subscribe(debug)
+
+    currentPages.subscribe(function(page) {
+      $('body').attr('data-page', page)
     })
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
