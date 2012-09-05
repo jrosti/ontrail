@@ -5,16 +5,16 @@
     var entryTemplate = Handlebars.compile(source);
 
     var getSummary = function(user) {
-      return $.ajaxAsObservable({ url: "http://localhost:8080/rest/v1/summary/" + user })
+      return $.ajaxAsObservable({ url: "/rest/v1/summary/" + user })
     }
 
     var getLatest = function() {
-      return $.ajaxAsObservable({ url: "http://localhost:8080/rest/v1/ex-list-all/1" })
+      return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/1" })
     }
 
     var doLogin = function() {
       console.log($('#login-form').serialize())
-      return $.ajaxAsObservable({ type: 'POST', url: "http://localhost:8080/rest/v1/login", data: $('#login-form').serialize() })
+      return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
     }
 
     var drawSummary = function(elem, data) {
