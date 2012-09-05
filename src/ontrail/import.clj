@@ -1,5 +1,5 @@
 (ns ontrail.import
-  (:use ontrail.mongodb ontrail.user)
+  (:use ontrail.mongodb ontrail.user ontrail.log)
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [net.cgrand.enlive-html :as html]
@@ -98,6 +98,6 @@
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (let [[username password email import-file & rest] args]
-    (println (str "Creating user " username " with import data file " import-file))
+    (log "Creating user " username " with import data file " import-file)
     (create-user username password email)
     (import-user-and-file username import-file)))
