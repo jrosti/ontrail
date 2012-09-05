@@ -44,8 +44,9 @@
      :distance distance
      :body truncated-body
      :sport sport
+     :user (get result :user)
      :id (str _id)
-     :comment-count comment-count}))
+     :commentCount comment-count}))
 
 (defn as-ex-result-list [results]
   (map as-ex-result results))
@@ -53,7 +54,7 @@
 (defn get-latest-ex-list [rule page]
   (let [results (mq/with-collection EXERCISE
                (mq/find rule)
-               (mq/fields [ :_id :title :body :duration :distance :sport :creationDate :comments ])
+               (mq/fields [ :_id :title :user :body :duration :distance :sport :creationDate :comments ])
                (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
     (log "Get exercise list" rule page "with # results" (count results))
