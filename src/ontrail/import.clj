@@ -98,6 +98,6 @@
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (let [[username password email import-file & rest] args]
-    (log "Creating user " username " with import data file " import-file)
+    (log "Creating user " username "with import data file" import-file)
     (create-user username password email)
     (import-user-and-file username import-file)))

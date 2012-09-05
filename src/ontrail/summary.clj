@@ -1,5 +1,5 @@
 (ns ontrail.summary
-  (:use ontrail.mongodb ontrail.formats)
+  (:use ontrail.mongodb ontrail.formats ontrail.log)
   (:require [monger.core]
             [monger.conversion]
             [clj-time.core :as time]
@@ -29,7 +29,8 @@
 ;; db.exercise.group({cond: {user: "username"}, reduce: function(obj, prev) { prev.csum += obj.distance }, initial: {csum: 0 }});
 (defn get-db-summary [condition]
     ;; Pace computation uses exercises, where both distance and duration are known. Those sums are recorded to tdur and tdist
-    ;; while reducing, and dist and dur are plain sums over the db values.
+  ;; while reducing, and dist and dur are plain sums over the db values.
+  (log "Db summary using" condition)
   (let [js-reduce "function(exercise, prev) {
                      if (exercise.distance > 0 && exercise.duration > 0) {
                         prev.tdist += exercise.distance;
@@ -66,6 +67,6 @@
     (get-summary {:sport sport :user user :creationDate {:$gte first-day :$lte last-day}} sport)))
 
 (defn get-overall-summary [user]
-  (println (str "Getting overall summary: " user))
+  (log "Getting overall summary" user)
   (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
     (sort-by :numericalDuration > (map #(get-summary {:user user :sport %} %) all-sports))))
