@@ -5,10 +5,11 @@
         ring.middleware.cookies
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)])
-  (:use [ontrail summary auth crypto user exercise])
+  (:use [ontrail summary auth crypto user exercise log])
   (:gen-class)
   (:require [compojure.route :as route]
-            [monger.collection :as mc]))
+            [monger.collection :as mc]
+            [ring.util.response :as response]))
 
 (defn json-response [data & [status]]
   {:status (or status 200)
@@ -22,8 +23,17 @@
       action
       (json-response {"error" "Authentication required"} 401))))
 
+(defn to-log-entry [req]
+  (str "HTTP " (get req :remote-addr) (get req :uri)))
+
+(defn log-and-wrap-dir-index [handler]
+  (fn [req]
+    (log (to-log-entry req))
+    (handler
+     (update-in req [:uri]
+                #(if (= "/" %) "/index.html" %)))))
+
 (defroutes app-routes
-  "Routes requests to their handler function. Captures dynamic variables."
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
@@ -44,5 +54,6 @@
   (start-http-server (-> app-routes
                        wrap-cookies
                        wrap-params
+                       log-and-wrap-dir-index
                        wrap-ring-handler)
                      {:host "localhost" :port 8080 :websocket true}))
