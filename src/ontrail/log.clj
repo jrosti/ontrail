@@ -1,5 +1,6 @@
 (ns ontrail.log
-  (:require [clj-time.core :as time]))
+  (:require [clj-time.local :as lt]))
+
 
 (defn log [& args]
-  (apply println (cons (str (time/now) ":") args)))
+  (apply println (cons (lt/format-local-time (lt/local-now) :date-hour-minute-second-ms) args)))
