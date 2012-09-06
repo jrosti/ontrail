@@ -8,6 +8,7 @@
       return $.ajaxAsObservable({ url: "/rest/v1/summary/" + user })
     }
 
+    // unused Jro
     var getAvatarUrl = function(user) {
       return $.ajaxAsObservable({ url: "/rest/v1/avatar/" + user })
     }

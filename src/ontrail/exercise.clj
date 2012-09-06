@@ -1,5 +1,5 @@
 (ns ontrail.exercise
-  (:use ontrail.mongodb ontrail.formats ontrail.log
+  (:use ontrail.mongodb ontrail.formats ontrail.log ontrail.user
         monger.operators)
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
@@ -37,6 +37,8 @@
         truncated-body (strip-and-truncate (get result :body))
         _id (get result :_id)
         sport (get result :sport)
+        user (get result :user)
+        avatar (get-avatar-url user)
         comment-count (count (get result :comments))]
     {:pace pace
      :title (get result :title)
@@ -44,7 +46,8 @@
      :distance distance
      :body truncated-body
      :sport sport
-     :user (get result :user)
+     :user user
+     :avatar avatar
      :id (str _id)
      :commentCount comment-count}))
 
