@@ -97,7 +97,7 @@
                      (get-exercises imported-html)))))
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
-  (let [[username password email import-file & rest] args]
+  (let [[username password email has-gravatar import-file & rest] args]
     (log "Creating user " username "with import data file" import-file)
-    (create-user username password email "true")
+    (create-user username password email has-gravatar)
     (import-user-and-file username import-file)))
