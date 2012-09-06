@@ -35,6 +35,8 @@
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
+  (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
+
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
   (GET "/rest/v1/ex-list-user/:user/:page" [user page] (json-response (get-latest-ex-list {:user user} page)))

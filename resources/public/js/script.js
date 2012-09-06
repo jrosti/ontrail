@@ -8,6 +8,10 @@
       return $.ajaxAsObservable({ url: "/rest/v1/summary/" + user })
     }
 
+    var getAvatarUrl = function(user) {
+      return $.ajaxAsObservable({ url: "/rest/v1/avatar/" + user })
+    }
+
     var getLatest = function() {
       return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/1" })
     }
