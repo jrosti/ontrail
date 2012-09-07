@@ -8,6 +8,20 @@
             [net.cgrand.enlive-html :as html])
   (:import [org.bson.types ObjectId]))
 
+(def verb-map {"Pyöräily" "pyöräili"
+               "Uinti" "ui"
+               "Suunnistus" "suunnisti"
+               "Juoksu" "juoksi"
+               "Squash" "pelasi squashia"
+               "Kävely" "käveli"
+               "Sulkapallo" "sulkapalloili"})
+
+(defn get-verb [sport-id]
+  (let [verb (get verb-map sport-id)]
+    (if (= nil verb)
+      (str "harrasti lajia " (.toLowerCase sport-id))
+      verb)))
+
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
@@ -45,7 +59,7 @@
      :duration duration
      :distance distance
      :body truncated-body
-     :sport sport
+     :sport (get-verb sport)
      :user user
      :avatar avatar
      :id (str _id)

@@ -24,7 +24,7 @@
       (json-response {"error" "Authentication required"} 401))))
 
 (defn to-log-entry [req]
-  (str req))
+  (str (get req :request-method) " "  (get req :remote-addr) " " (get req :uri)))
 
 (defn log-and-wrap-dir-index [handler]
   (fn [req]

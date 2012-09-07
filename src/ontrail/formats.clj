@@ -1,6 +1,6 @@
-(ns ontrail.formats)
-
-(require '[clj-time.format :as time-format])
+(ns ontrail.formats
+  (:require [clj-time.format :as time-format]
+            [clojure.string :as string]))
 
 (defn float= [x y]
   (<= (Math/abs (- x y)) 0.00001))
@@ -14,12 +14,12 @@
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))
         secs (int (+ 0.49 (* 60.0 (- pace (int pace)))))]
-    (str (int pace) ":" (format "%02d" secs) "min/km")))
+    (str (int pace) ":" (format "%02d" secs) " min/km")))
 
 (defn to-human-pace-kmh [duration distance]
   (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
-        fraction (int (* 100 (- speed (int speed))))]
-    (str (int speed) "." (format "%02d" fraction) "km/h")))
+        fraction (int (* 10 (- speed (int speed))))]
+    (str (int speed) "." (format "%01d" fraction) " km/h")))
 
 (defn pace-conversion-fun [sport]
   (case sport
@@ -35,11 +35,12 @@
 
 (defn to-human-distance [distance]
   (let [km (int (/ distance 1000))
-        m (mod distance 1000)]
+        m (mod distance 1000)
+        m-as-str (str "." m)]
     (if (> km 0)
       (if (= m 0)
-        (str km "km")
-        (str km "," (format "%03d" (int m)) "km"))
+        (str km " km")
+        (str km "." (string/replace  (format "%03d" (int m)) #"0*$" "")  " km"))
       (if (> m 0)
         (str (int m) "m")
         ""))))
@@ -53,4 +54,4 @@
         seconds (mod (int (/ duration 100)) 60)
         minutes (mod (int (/ duration 6000)) 60)
         hours (int (/ duration 360000))]
-    (str hours "h" minutes "m")))
+    (str hours " h " minutes " min")))
