@@ -13,6 +13,16 @@
 (deftest test-to-human-distance-1100
   (is (= "1,1 km" (to-human-distance 1100)) "fractions"))
 
+(deftest test-to-human-time-small
+  (is (= "0.30" (to-human-time 3000)) "30 seconds"))
+
+(deftest test-to-human-time-small2
+  (is (= "30,01" (to-human-time 3001)) "30 seconds and parts"))
+
+(deftest test-to-human-normal
+  (is (= "0,30" (to-human-time 30)) "30 seconds"))
+
+
 (deftest test-to-human-distance-1001
   (is (= "1,001 km" (to-human-distance 1001)) "meters"))
 
