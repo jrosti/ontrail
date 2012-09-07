@@ -30,7 +30,7 @@
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
-(def TRUNCATE 50)
+(def TRUNCATE 100)
 
 (defn strip-and-truncate [s]
   "Does not strip tags yet"

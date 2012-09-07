@@ -55,13 +55,15 @@
         minutes (mod (int (/ duration 6000)) 60)
         hours (int (/ duration 360000))]
     (if (> hours 0)
-      (str hours " t " minutes " min")
+      (if (> minutes 0)
+        (str hours " t " minutes " min")
+        (str hours " t"))
       (if (> seconds 0)
         (str minutes " min " seconds " s")
         (str minutes " min")))))
 
 (defn to-human-stats-time [duration]
-  "Finnish time formatting"
+  "finnish time formatting"
   (let [hundreds (mod duration 100)
         seconds (mod (int (/ duration 100)) 60)
         minutes (mod (int (/ duration 6000)) 60)
@@ -69,7 +71,7 @@
     (if (and (> hundreds 0))
       (if (< minutes 1)
         (format "%d,%02d" seconds hundreds)
-        (format "%d.%d,%d" minutes seconds hundreds))
+        (format "%d.%d,%02d" minutes seconds hundreds))
       (if (> hours 0)
         (format "%d.%d.%d" hours minutes seconds)
         (format "%d.%d" minutes seconds)))))
