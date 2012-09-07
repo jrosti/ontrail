@@ -59,7 +59,8 @@
      :duration duration
      :distance distance
      :body truncated-body
-     :sport (get-verb sport)
+     :did (get-verb sport)
+     :sport sport
      :user user
      :avatar avatar
      :id (str _id)

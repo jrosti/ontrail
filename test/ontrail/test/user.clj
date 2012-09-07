@@ -2,9 +2,9 @@
   (:use ontrail.user ontrail.crypto clojure.test))
 
 (deftest user-has-password-as-username
-  (let [test-account (get-user "esko")]
-    (is (= "esko" (:username test-account)))
-    (is (password-match? "esko" (:passwordHash test-account)))))
+  (let [test-account (get-user "Esko")]
+    (is (= "Esko" (:username test-account)))
+    (is (password-match? "Esko" (:passwordHash test-account)))))
 
 (deftest calling-get-user-twice-returns-same-hash
-  (is (= (:passwordHash (get-user "esko")) (:passwordHash (get-user "esko")))))
+  (is (= (:passwordHash (get-user "Esko")) (:passwordHash (get-user "Esko")))))

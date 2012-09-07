@@ -3,14 +3,14 @@
   (:use [clojure.test]))
 
 (deftest username-goes-as-password
-    (is (authenticate "esko" "esko")))
+    (is (authenticate "Esko" "Esko")))
 
 (deftest not-username-fails-as-password
-  (not (is (authenticate "esko" "esko2"))))
+  (not (is (authenticate "Esko" "esko2"))))
 
 (deftest auth-token-returns-base64-encoded-strings
-  (is (= "ZXNrbw##|ZXNrbw##" (auth-token {:username "esko" :passwordHash "esko"}))))
+  (is (= "RXNrbw##|RXNrbw##" (auth-token {:username "Esko" :passwordHash "Esko"}))))
 
 (deftest valid-auth-token-matches
-  (let [user (get-user "esko")]
-    (is (valid-auth-token? (str "ZXNrbw##|" (clojure.string/replace (base64-encode (:passwordHash user)) #"=" "#"))))))
+  (let [user (get-user "Esko")]
+    (is (valid-auth-token? (str "RXNrbw##|" (clojure.string/replace (base64-encode (:passwordHash user)) #"=" "#"))))))
