@@ -4,6 +4,7 @@
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
             [monger.query :as mq]
+            [clojure.string :as string]
             [monger.joda-time]
             [net.cgrand.enlive-html :as html])
   (:import [org.bson.types ObjectId]))
@@ -33,14 +34,14 @@
 (def TRUNCATE 100)
 
 (defn strip-and-truncate [s]
-  "Does not strip tags yet"
-  (let [chars (count s)
-        truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
-    (if (= s nil)
-      ""
+  (if (= s nil)
+    ""
+    (let [stripped (string/replace s #"<[^>]*>" " ")
+          chars (count stripped)
+          truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
       (if (> chars TRUNCATE)
-        (str (subs s 0 truncated-len) "...")
-        s))))
+        (str (subs stripped 0 truncated-len) "...")
+        stripped))))
 
 (defn as-ex-result [result]
   (let [pace (get-pace {:duration (get result :duration)

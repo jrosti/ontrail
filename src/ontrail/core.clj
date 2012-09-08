@@ -25,7 +25,7 @@
 
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
-    (log (to-logline req))
+    (log "HTTP" (to-logline req))
     (handler
      (update-in req [:uri]
                 #(if (= "/" %) "/index.html" %)))))
@@ -52,7 +52,7 @@
   all the routes we specified and is websocket ready."
   (start-http-server (-> app-routes
                        wrap-cookies
-                       wrap-params
+
                        log-and-wrap-dir-index
                        wrap-ring-handler)
                      {:host "localhost" :port 8080 :websocket true}))
