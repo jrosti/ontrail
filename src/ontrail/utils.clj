@@ -1,4 +1,5 @@
-(ns ontrail.utils)
+(ns ontrail.utils
+  (:require [clojure.string :as string]))
 
 (defn float= [x y]
   (<= (Math/abs (- x y)) 0.00001))
@@ -9,3 +10,6 @@
 (defn positive-numbers? [vals]
   ;; XXX why lambda is needed? and is macro?
   (reduce #(and %1 %2) (map #(and (not-nil? %) (> % 0)) vals)))
+
+(defn strip-html [val]
+   (string/replace val #"<[^>]*>" " "))

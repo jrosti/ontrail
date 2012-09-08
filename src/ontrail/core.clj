@@ -4,10 +4,12 @@
         ring.middleware.file
         ring.middleware.cookies
         [ring.middleware.params :only (wrap-params)]
-        [clojure.data.json :only (read-json json-str)])
+        [clojure.data.json :only (read-json json-str)]
+        [ontrail.search :only (search-wrapper)])
   (:use [ontrail summary auth crypto user exercise log])
   (:gen-class)
-  (:require [compojure.route :as route]
+  (:require [compojure.handler :as handler]
+            [compojure.route :as route]
             [monger.collection :as mc]
             [ring.util.response :as response]))
 
@@ -33,7 +35,8 @@
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
-
+  (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
+  
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
   (GET "/rest/v1/ex-list-user/:user/:page" [user page] (json-response (get-latest-ex-list {:user user} page)))
@@ -48,11 +51,9 @@
   (route/not-found "Page not found"))
 
 (defn -main [& args]
-  "Main thread for the server which starts an async server with
-  all the routes we specified and is websocket ready."
   (start-http-server (-> app-routes
-                       wrap-cookies
-
-                       log-and-wrap-dir-index
-                       wrap-ring-handler)
+                         handler/site
+                         wrap-cookies
+                         log-and-wrap-dir-index
+                         wrap-ring-handler)
                      {:host "localhost" :port 8080 :websocket true}))

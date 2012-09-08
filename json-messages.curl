@@ -10,4 +10,7 @@ http http://localhost:8080/rest/v1/ex-list-user/esko/0
 
 http http://localhost:8080/rest/v1/ex-list-tag/uintikisa/0
 
+## Before getting any results, you must run following: 
+# lein run :rebuild-index 
+http http://localhost:8080/rest/v1/search?q=hiihtolenkki%20jokseenkin
 
