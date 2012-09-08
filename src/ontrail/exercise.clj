@@ -1,5 +1,5 @@
 (ns ontrail.exercise
-  (:use [ontrail mongodb formats log user utils]
+  (:use [ontrail mongodb formats log user utils nlp]
         monger.operators)
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
@@ -9,19 +9,6 @@
             [net.cgrand.enlive-html :as html])
   (:import [org.bson.types ObjectId]))
 
-(def verb-map {"Pyöräily" "pyöräili"
-               "Uinti" "ui"
-               "Suunnistus" "suunnisti"
-               "Juoksu" "juoksi"
-               "Squash" "pelasi squashia"
-               "Kävely" "käveli"
-               "Sulkapallo" "sulkapalloili"})
-
-(defn get-verb [sport-id]
-  (let [verb (get verb-map sport-id)]
-    (if (= nil verb)
-      (str "harrasti lajia " (.toLowerCase sport-id))
-      verb)))
 
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
@@ -36,7 +23,7 @@
 (defn strip-and-truncate [s]
   (if (= s nil)
     ""
-    (let [stripped (string/replace s #"<[^>]*>" " ")
+    (let [stripped (strip-html s)
           chars (count stripped)
           truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
       (if (> chars TRUNCATE)
