@@ -53,7 +53,8 @@
         sport (get result :sport)
         user (get result :user)
         avatar (get-avatar-url user)
-        comment-count (count (get result :comments))]
+        comment-count (count (get result :comments))
+        date (to-human-date (get result :creationDate))]
     {:pace pace
      :title (get result :title)
      :duration duration
@@ -64,6 +65,7 @@
      :user user
      :avatar avatar
      :id (str _id)
+     :date date
      :commentCount comment-count}))
 
 (defn as-ex-result-list [results]
