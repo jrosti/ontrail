@@ -21,9 +21,9 @@
 (defn insert-term [ex-id term]
   (let [index @inverted-index]
     (if (not (contains? index term))
-      (fst 0 (swap! inverted-index assoc term #{ex-id}))
-      (fst 1 (let [new-one (merge-with clojure.set/union index {term #{ex-id}})]
-        (swap! inverted-index assoc term (get new-one term)))))))
+      (fst 1 (swap! inverted-index assoc term #{ex-id}))
+      (fst 0 (let [new-val (clojure.set/union (get index term) #{ex-id})]
+        (swap! inverted-index assoc term new-val))))))
 
 (defn insert-exercise-inmem-index [ex]
   (let [terms (get-ex-terms ex)
@@ -42,7 +42,7 @@
 
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
-    (log "TRACE" " search result " ids)
+    (log "TRACE" " search result count: " (count ids))
     (as-ex-result-list (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids)))))
 
 (defn search-wrapper [query]
@@ -50,6 +50,3 @@
     (if (= query-string nil)
       '()
       (apply search (string/split query-string #" ")))))
-
-(defn -main [& args]
-  (rebuild-index))
