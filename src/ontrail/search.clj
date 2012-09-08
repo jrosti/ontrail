@@ -6,41 +6,47 @@
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
 
-(defn get-terms [exercise]
-  (let [part #(get exercise %)
-        words (.toLowerCase (str (part :body) " " (part :title)))
+(defn get-ex-terms [exercise]
+  (let [part (partial get exercise)
+        words (.toLowerCase (str (part :user) " " (part :sport) " " (part :body) " " (part :title)))
         clean-words (string/replace (strip-html words) #"[^a-zåäö]+" " ")
         bare-term-list (string/split clean-words #" +")]
-    (filter #(> (count %) 3) bare-term-list))) ;; search terms must contain more than three letters, in order to ignore more common ones
+    (filter #(> (count %) 3) bare-term-list))) ;; search terms must contain more than three letters, in order to ignore too common ones
+
+(def inverted-index (atom {}))
+
+(defn fst [x y]
+  x)
 
 (defn insert-term [ex-id term]
-  (let [idx (mc/find-one-as-map "exerciseIndex" {:_id term})]
-    (if (mr/ok? (if (= nil idx)
-                  (mc/insert "exerciseIndex" {:_id term :p (list ex-id)})
-                  (mc/update "exerciseIndex" {:_id term} {:p (cons ex-id (get idx :p))})))
-      1
-      0)))
-  
+  (let [index @inverted-index]
+    (if (not (contains? index term))
+      (fst 0 (swap! inverted-index assoc term #{ex-id}))
+      (fst 1 (let [new-one (merge-with clojure.set/union index {term #{ex-id}})]
+        (swap! inverted-index assoc term (get new-one term)))))))
 
-(defn insert-exercise [ex]
-  (let [terms (get-terms ex)
-        ex-id (str (get ex :_id))]
+(defn insert-exercise-inmem-index [ex]
+  (let [terms (get-ex-terms ex)
+        ex-id (str (:_id ex))]
+    ;;(log "TRACE" terms)
     (reduce + (map (partial insert-term ex-id) terms))))
 
-(defmacro rebuild-index [] `(do (mc/drop "exerciseIndex") (reduce + (map insert-exercise (mc/find-maps EXERCISE {})))))
+(defmacro rebuild-index []
+  `(do (reset! inverted-index {})
+       (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
 
-(def search-limit 100)
+(def search-limit 1000)
 
 (defn search-ids [& terms]
-  (take search-limit (reduce clojure.set/intersection (map #(set (get (mc/find-one-as-map "exerciseIndex" {:_id (.toLowerCase %)}) :p)) terms))))
+  (take search-limit (reduce clojure.set/intersection (map #(get @inverted-index (.toLowerCase %)) terms))))
 
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
-    (log "TRACE" ids)
-    (as-ex-result-list (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids))))
+    (log "TRACE" " search result " ids)
+    (as-ex-result-list (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids)))))
 
 (defn search-wrapper [query]
-  (let [query-string (get query :q)]
+  (let [query-string (:q query)]
     (if (= query-string nil)
       '()
       (apply search (string/split query-string #" ")))))

@@ -5,7 +5,7 @@
         ring.middleware.cookies
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
-        [ontrail.search :only (search-wrapper)])
+        [ontrail.search :only (search-wrapper rebuild-index)])
   (:use [ontrail summary auth crypto user exercise log])
   (:gen-class)
   (:require [compojure.handler :as handler]
@@ -51,6 +51,7 @@
   (route/not-found "Page not found"))
 
 (defn -main [& args]
+  (rebuild-index) ;; builds in-memory index for fast searches
   (start-http-server (-> app-routes
                          handler/site
                          wrap-cookies
