@@ -11,7 +11,7 @@
         words (.toLowerCase (str (part :body) " " (part :title)))
         clean-words (string/replace (strip-html words) #"[^a-zåäö]+" " ")
         bare-term-list (string/split clean-words #" +")]
-    (filter #(> (count %) 3) bare-term-list))) ;; search terms must contain more than three letters
+    (filter #(> (count %) 3) bare-term-list))) ;; search terms must contain more than three letters, in order to ignore more common ones
 
 (defn insert-term [ex-id term]
   (let [idx (mc/find-one-as-map "exerciseIndex" {:_id term})]

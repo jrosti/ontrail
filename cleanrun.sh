@@ -6,4 +6,6 @@
 
 mongo ontrail create-index.js
 
+lein run :rebuild-index&
+
 lein run
