@@ -13,15 +13,14 @@
 (deftest test-to-human-distance-1100
   (is (= "1,1 km" (to-human-distance 1100)) "fractions"))
 
-(deftest test-to-human-time-small
-  (is (= "0.30" (to-human-time 3000)) "30 seconds"))
+(deftest test-to-human-stats-time-small
+  (is (= "0.30" (to-human-stats-time 3000)) "30 seconds"))
 
-(deftest test-to-human-time-small2
-  (is (= "30,01" (to-human-time 3001)) "30 seconds and parts"))
+(deftest test-to-human-stats-time-small2
+  (is (= "30,01" (to-human-stats-time 3001)) "30 seconds and parts"))
 
 (deftest test-to-human-normal
-  (is (= "0,30" (to-human-time 30)) "30 seconds"))
-
+  (is (= "45 min" (to-human-time (* 45 100 60))) "This format is incorporated to sentences."))
 
 (deftest test-to-human-distance-1001
   (is (= "1,001 km" (to-human-distance 1001)) "meters"))
@@ -29,16 +28,13 @@
 (deftest test-to-human-distance-800
   (is (= (to-human-distance 800) "800m") "800m does not show km:s"))
 
-;;XXX: TODO(deftest test-to-human-time
-;;  (is (= (to-human-time (* 100 * 60 * 2) "800m") "800m does not show km:s"))
-
 (deftest test-pace-from-exercise
   (let [ex {:duration 30000 :distance 1000}] ;; is 5min/km
     (is (= "5.00 min/km" (get-pace ex)) "Pace in min/km.")))
 
 (deftest test-kmh-pace-from-exercise
   (let [ex {:duration (* 210 100 60) :distance 42195 :sport "Pyöräily"}]
-    (is (= "12,0 km/h" (get-pace ex)) "Driving marathon 3:30 time.")))
+    (is (= "12,0 km/t" (get-pace ex)) "Driving marathon 3:30 time.")))
 
 (deftest test-user-time-format
   (is (= "11.05.1978" (to-human-date (time/date-time 1978 5 11))) "Default formatting for exercise date"))

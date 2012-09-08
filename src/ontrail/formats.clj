@@ -1,15 +1,7 @@
 (ns ontrail.formats
+  (:use ontrail.utils)
   (:require [clj-time.format :as time-format]
             [clojure.string :as string]))
-
-(defn float= [x y]
-  (<= (Math/abs (- x y)) 0.00001))
-
-(defn not-nil? [val]
-  (not= val nil))
-
-(defn positive-numbers? [vals]
-  (reduce #(and %1 %2) (map #(and (not-nil? %) (> % 0)) vals)))
 
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))

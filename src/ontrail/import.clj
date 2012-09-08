@@ -1,5 +1,5 @@
 (ns ontrail.import
-  (:use ontrail.mongodb ontrail.user ontrail.log)
+  (:use [ontrail mongodb user log])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [net.cgrand.enlive-html :as html]
@@ -82,7 +82,6 @@
               :duration (get-duration exercise),
               :distance (get-distance exercise),
               :avghr (get-avghr exercise),
-              :elevation 0,
               :title (get-heading exercise),
               :body (get-report exercise),
               :tags (get-tags exercise)

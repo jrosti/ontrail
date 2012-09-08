@@ -10,4 +10,7 @@
 (deftest hr-reserve-no-profile
   (let [ex {}
         prof nil]
-      (is (= "" (get-heart-rate-reserve ex prof)) "No profile.")))
+    (is (= "" (get-heart-rate-reserve ex prof)) "No profile.")))
+
+(deftest verb-from-sport
+  (is (= "pyöräili" (get-verb "Pyöräily")) "UI forms finnish sentences, and it requires modifying word body"))

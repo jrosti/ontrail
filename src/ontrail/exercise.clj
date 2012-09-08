@@ -1,5 +1,5 @@
 (ns ontrail.exercise
-  (:use ontrail.mongodb ontrail.formats ontrail.log ontrail.user
+  (:use [ontrail mongodb formats log user utils]
         monger.operators)
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
@@ -75,14 +75,14 @@
                (mq/fields [ :_id :title :user :body :duration :distance :sport :creationDate :comments ])
                (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
-    (log "Get exercise list" rule page "with # results" (count results))
+    (log "DEBUG" "Get exercise list" rule page "with" (count results) "results.")
     (as-ex-result-list results)))
 
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
         user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
-    (log "Getting ex " id)
+    (log "DEBUG" "ex " id)
     {:title (get exercise :title)
      :body (get exercise :body)
      :duration (to-human-time (get exercise :duration))
