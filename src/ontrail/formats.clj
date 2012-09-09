@@ -23,7 +23,8 @@
         distance (get exercise :distance)
         pace-fun (pace-conversion-fun (get exercise :sport))]
     (if (positive-numbers? (list duration distance))
-      (pace-fun duration distance))))
+      (pace-fun duration distance)
+      "nil")))
 
 (defn to-human-distance [distance]
   (if (= nil distance)
@@ -40,25 +41,31 @@
         "")))))
   
 (defn to-human-date [date-time]
-  (let [date-format (time-format/formatter "dd.MM.yyyy")]
-    (time-format/unparse date-format date-time)))
+  (if (= nil date-time)
+    "nil"
+    (let [date-format (time-format/formatter "dd.MM.yyyy")]
+      (time-format/unparse date-format date-time))))
 
 (defn to-human-time [duration]
-  (let [hundreds (mod duration 100)
-        seconds (mod (int (/ duration 100)) 60)
-        minutes (mod (int (/ duration 6000)) 60)
-        hours (int (/ duration 360000))]
-    (if (> hours 0)
-      (if (> minutes 0)
-        (str hours " t " minutes " min")
-        (str hours " t"))
-      (if (> seconds 0)
-        (str minutes " min " seconds " s")
-        (str minutes " min")))))
-
+  (if (= nil duration)
+    "nil"
+    (let [hundreds (mod duration 100)
+          seconds (mod (int (/ duration 100)) 60)
+          minutes (mod (int (/ duration 6000)) 60)
+          hours (int (/ duration 360000))]
+      (if (> hours 0)
+        (if (> minutes 0)
+          (str hours " t " minutes " min")
+          (str hours " t"))
+        (if (> seconds 0)
+          (str minutes " min " seconds " s")
+          (str minutes " min"))))))
+  
 (defn to-human-stats-time [duration]
   "finnish time formatting"
-  (let [hundreds (mod duration 100)
+  (if (= nil duration)
+    "nil"
+    (let [hundreds (mod duration 100)
         seconds (mod (int (/ duration 100)) 60)
         minutes (mod (int (/ duration 6000)) 60)
         hours (int (/ duration 360000))]
@@ -68,6 +75,6 @@
         (format "%d.%d,%02d" minutes seconds hundreds))
       (if (> hours 0)
         (format "%d.%d.%d" hours minutes seconds)
-        (format "%d.%d" minutes seconds)))))
+        (format "%d.%d" minutes seconds))))))
         
         

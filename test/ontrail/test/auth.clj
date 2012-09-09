@@ -1,6 +1,6 @@
 (ns ontrail.test.auth
-  (:use [ontrail auth user crypto])
-  (:use [clojure.test]))
+  (:use [ontrail auth user crypto]
+        clojure.test))
 
 (deftest username-goes-as-password
     (is (authenticate "Esko" "Esko")))

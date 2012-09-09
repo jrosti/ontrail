@@ -31,18 +31,18 @@
         stripped))))
 
 (defn as-ex-result [result]
-  (let [pace (get-pace {:duration (get result :duration)
-                        :distance (get result :distance)
-                        :sport (get result :sport)})
-        duration (to-human-time (get result :duration))
-        distance (to-human-distance (get result :distance))
-        truncated-body (strip-and-truncate (get result :body))
-        _id (get result :_id)
-        sport (get result :sport)
-        user (get result :user)
+  (let [pace (get-pace {:duration (:duration result)
+                        :distance (:distance result)
+                        :sport (:sport result)})
+        duration (to-human-time (:duration result))
+        distance (to-human-distance (:distance result))
+        truncated-body (strip-and-truncate (:body result))
+        _id (:_id result)
+        sport (:sport result)
+        user (:user result)
         avatar (get-avatar-url user)
-        comment-count (count (get result :comments))
-        date (to-human-date (get result :creationDate))]
+        comment-count (count (:comments result))
+        date (to-human-date (:creationDate result))]
     {:pace pace
      :title (get result :title)
      :duration duration
