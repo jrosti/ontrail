@@ -1,12 +1,12 @@
 
 ## httpie
 
-# fetches one exercise
-http http://localhost:8080/rest/v1/ex/50430c4703647f0a2509a07c
+## fetches one exercise
+#http http://localhost:8080/rest/v1/ex/50430c4703647f0a2509a07c
 
-http http://localhost:8080/rest/v1/ex-list-all/0
+http http://localhost:8080/rest/v1/ex-list-all/1
 
-http http://localhost:8080/rest/v1/ex-list-user/esko/0
+http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
 http http://localhost:8080/rest/v1/ex-list-tag/uintikisa/0
 

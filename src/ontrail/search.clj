@@ -33,7 +33,7 @@
 
 (defmacro rebuild-index []
   `(do (reset! inverted-index {})
-       (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
+       (log "INFO" "built " (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {}))) "terms")))
 
 (def search-limit 1000)
 
