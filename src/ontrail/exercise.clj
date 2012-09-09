@@ -41,10 +41,11 @@
         sport (:sport result)
         user (:user result)
         avatar (get-avatar-url user)
-        comment-count (count (:comments result))
+        comments (:comments result)
+        comment-count (if (list? comments) (count comments) 0)
         date (to-human-date (:creationDate result))]
     {:pace pace
-     :title (get result :title)
+     :title (:title result)
      :duration duration
      :distance distance
      :body truncated-body
@@ -69,15 +70,18 @@
     (as-ex-result-list results)))
 
 (defn get-ex [id]
-  (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
-        user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
-        heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
-    (log "DEBUG" "ex " id)
-    {:title (get exercise :title)
-     :body (get exercise :body)
-     :duration (to-human-time (get exercise :duration))
-     :creationDate (to-human-date (get exercise :creationDate))
-     :avghr (get exercise :avghr)
-     :hr-reserve heart-rate-reserve
-     :pace (get-pace exercise)
-     :comments ()}))
+  (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
+    (if (= nil exercise)
+      {:error "No such id"}
+      (let [user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
+            heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
+        (log "DEBUG" "ex " id)
+        {:title (:title exercise)
+         :body (:body exercise)
+         :tags (:tags exercise)
+         :duration (to-human-time (:duration exercise))
+         :creationDate (to-human-date (:creationDate exercise))
+         :avghr (:avghr exercise)
+         :hr-reserve heart-rate-reserve
+         :pace (get-pace exercise)
+         :comments (:comments exercise)}))))

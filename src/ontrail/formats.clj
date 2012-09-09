@@ -24,7 +24,7 @@
         pace-fun (pace-conversion-fun (get exercise :sport))]
     (if (positive-numbers? (list duration distance))
       (pace-fun duration distance)
-      "nil")))
+      "")))
 
 (defn to-human-distance [distance]
   (if (= nil distance)
@@ -42,13 +42,13 @@
   
 (defn to-human-date [date-time]
   (if (= nil date-time)
-    "nil"
+    ""
     (let [date-format (time-format/formatter "dd.MM.yyyy")]
       (time-format/unparse date-format date-time))))
 
 (defn to-human-time [duration]
   (if (= nil duration)
-    "nil"
+    ""
     (let [hundreds (mod duration 100)
           seconds (mod (int (/ duration 100)) 60)
           minutes (mod (int (/ duration 6000)) 60)
@@ -64,7 +64,7 @@
 (defn to-human-stats-time [duration]
   "finnish time formatting"
   (if (= nil duration)
-    "nil"
+    ""
     (let [hundreds (mod duration 100)
         seconds (mod (int (/ duration 100)) 60)
         minutes (mod (int (/ duration 6000)) 60)

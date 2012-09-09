@@ -32,16 +32,16 @@
           :comments '()
           :creationDate (time/now)})
 
-(def ex3 {:duration 600
+(def ex3 {:duration nil
           :sport "Juoksu"
-          :body "body"
+          :body nil
           :title "title"
           :_id "_id"
-          :user "user"
-          :comments '()
+          :user nil
+          :comments nil
           :creationDate (time/now)})
 
-(deftest as-ex-result-test1
+(deftest as-ex-result-list-test1
   (let [res (as-ex-result ex1)]
     (is (= "title" (:title res)))
     (is (= "1 km" (:distance res)))
@@ -49,14 +49,14 @@
     (is (= "1 min" (:duration res)))
     (is (= "body" (:body res)))))
 
-(deftest as-ex-result-test2
+(deftest as-ex-result-list-test2
   (let [res (as-ex-result ex2)]
     (is (= "title" (:title res)))
     (is (= "Juoksu" (:sport res)))
     (is (= "1 min" (:duration res)))
     (is (= "body" (:body res)))))
 
-(deftest as-ex-result-test3
+(deftest as-ex-result-list-test3
   (let [res (as-ex-result ex3)]
     (is (= "_id" (:id res)))))
   

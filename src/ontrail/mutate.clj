@@ -48,7 +48,6 @@
         avghr (if (positive-numbers? (list (:avghr uex))) (int (:avghr uex)) nil)
         distance (if (positive-numbers? (list (:distance uex))) (:distance uex) 0)]
     (-> bare-ex
-        ;; nil body disallowed
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
