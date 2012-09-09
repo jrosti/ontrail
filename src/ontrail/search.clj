@@ -15,10 +15,10 @@
 
 (def inverted-index (atom {}))
 
-(defn fst [x y]
-  x)
+(defn fst [x y] x)
 
 (defn insert-term [ex-id term]
+  ;; XXX: do this thread-safely, but write tests first.
   (let [index @inverted-index]
     (if (not (contains? index term))
       (fst 1 (swap! inverted-index assoc term #{ex-id}))

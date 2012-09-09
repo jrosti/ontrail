@@ -1,5 +1,5 @@
 (ns ontrail.user
-  (:use ontrail.crypto ontrail.mongodb)
+  (:use [ontrail crypto mongodb log])
   (:require [monger.collection :as mc]))
 
 (defn get-avatar-url [user]
@@ -13,8 +13,13 @@
 
 (defn create-user [username password email gravatar]
   (let [profile {:resthr 42 :maxhr 192}]
-    (println (str "creating user " username " with profile " profile))
+    (log (str "creating user " username " with profile " profile))
     (mc/insert ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
 
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
+
+(defn -main[& args]
+  (let [[username password email has-gravatar & rest] args]
+    (log "Create user " username " email " email)
+    (create-user username password email has-gravatar)))

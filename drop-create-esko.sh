@@ -2,6 +2,10 @@
 
 . setenvs.bash
 
-mongo ontrail dropdb.js
-lein run :import Esko Esko ja.ri.ros.ti@gmail.com true trainlog-long-ex2.html
-lein run :import Urpo Urpo urpo@ante.ro false geo.html
+mongo ontrail remove-esko.js
+
+lein run :create-user Esko Esko ja.ri.ros.ti@gmail.com true 
+lein run :create-user Urpo Urpo urpo@ante.ro false
+
+lein run :import Esko trainlog-long-ex2.html
+lein run :import false geo.html

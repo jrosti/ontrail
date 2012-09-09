@@ -5,8 +5,9 @@
         ring.middleware.cookies
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
-        [ontrail.search :only (search-wrapper rebuild-index)])
-  (:use [ontrail summary auth crypto user exercise log])
+        [ontrail.search :only (search-wrapper rebuild-index)]
+        [ontrail.user :only (get-avatar-url get-user)])
+  (:use [ontrail summary auth crypto exercise log])
   (:gen-class)
   (:require [compojure.handler :as handler]
             [compojure.route :as route]

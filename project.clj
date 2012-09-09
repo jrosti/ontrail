@@ -16,6 +16,6 @@
                  [com.lambdaworks/scrypt "1.3.3"]
                  [com.novemberain/monger "1.1.2"]]
   :run-aliases {:import ontrail.import
-                :rebuild-index ontrail.search}
+                :create-user ontrail.user}
   :main ontrail.core)
 
