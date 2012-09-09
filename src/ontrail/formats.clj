@@ -26,17 +26,19 @@
       (pace-fun duration distance))))
 
 (defn to-human-distance [distance]
-  (let [km (int (/ distance 1000))
-        m (mod distance 1000)
-        m-as-str (str "," m)]
+  (if (= nil distance)
+    ""
+    (let [km (int (/ distance 1000))
+          m (mod distance 1000)
+          m-as-str (str "," m)]
     (if (> km 0)
       (if (= m 0)
         (str km " km")
         (str km "," (string/replace  (format "%03d" (int m)) #"0*$" "")  " km"))
       (if (> m 0)
         (str (int m) "m")
-        ""))))
-
+        "")))))
+  
 (defn to-human-date [date-time]
   (let [date-format (time-format/formatter "dd.MM.yyyy")]
     (time-format/unparse date-format date-time)))
