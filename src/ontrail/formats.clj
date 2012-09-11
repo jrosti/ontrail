@@ -11,7 +11,7 @@
 (defn to-human-pace-kmh [duration distance]
   (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
         fraction (int (* 10 (- speed (int speed))))]
-    (str (int speed) "," (format "%01d" fraction) " km/t")))
+    (str (int speed) "," (format "%01d" fraction) " km/h")))
 
 (defn pace-conversion-fun [sport]
   (case sport
@@ -55,8 +55,8 @@
           hours (int (/ duration 360000))]
       (if (> hours 0)
         (if (> minutes 0)
-          (str hours " t " minutes " min")
-          (str hours " t"))
+          (str hours " h " minutes " min")
+          (str hours " h"))
         (if (> seconds 0)
           (str minutes " min " seconds " s")
           (str minutes " min"))))))
