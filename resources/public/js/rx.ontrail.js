@@ -43,11 +43,9 @@ var nothing = function() {}
 
 // general utilities
 var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
+var asArgs = function() { return arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments }
 
 // functional js
-var asArgs = function() {
-  return arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments }
-
 var always = function(x) { return function(y) { return x } }
 var identity = function(x) { return x }
 var not = function(x) { return !x }

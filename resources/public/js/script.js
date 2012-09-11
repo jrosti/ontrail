@@ -7,6 +7,7 @@
 
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
+    var summaryTemplate = Handlebars.compile($("#summary-template").html());
 
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
     var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(entries, 100) })
@@ -36,7 +37,7 @@
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
     }
 
-    var renderSummary = function(elem, data) {
+    var renderLatest = function(elem, data) {
       if (!data || !data.length || data.length == 0) return;
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo(entries)
@@ -44,8 +45,10 @@
     var renderExercise = function(exercise) {
       $('#ex-' + exercise.id).replaceWith($(exerciseTemplate(exercise)))
     }
-    var renderSingleSummary = function(exercise) {
-      $('#ex-' + exercise.id).replaceWith($(entryTemplate(exercise)))
+    var renderSummary = function(summary) {
+      if (!summary || !summary.length || summary.length == 0) return;
+      var content = _.map(summary, summaryTemplate).reduce(function(a, b) { return a+b })
+      $(content).appendTo($('#homies tbody'))
     }
 
     var logouts = $("#logout").clickAsObservable()
@@ -82,7 +85,6 @@
 
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
-
     // initiate loading and search
     var oegyscroll = query
       .doAction(function() { entries.html("") })
@@ -94,8 +96,11 @@
           return getSearchResults(query)
       })
       .switchLatest()
+    oegyscroll.subscribe(_.partial(renderLatest, entries))
 
-    oegyscroll.subscribe(_.partial(renderSummary, entries))
+    // initiate summary loading after login
+    var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(getSummary)
+    ownSummaries.subscribe(renderSummary)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })

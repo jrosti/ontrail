@@ -88,6 +88,31 @@
       </aside>
       <div id="entries"></div>
     </section>
+
+    <section role="home">
+      <aside>
+        <div>
+          <header>
+            <h2>Tähän toiminnallisuudet </h2>
+            <p>Tähän sit websocketilla ne.</p>
+            <h2>Kommentteja testaajille:</h2>
+            <ul>
+              <li>Kehitysselaimena on Chrome. CSS:t ovat vinossa
+                Firefoxilla ja IE:llä tuskin toimii ollenkaan.</li>
+              <li>Kiitokset HäHille erinomaisesta oppitunnista ajan
+                esityksessä.</li>
+              <li>Voiko lenkki laajentua listanäkymässä, vai pitäisikö
+                sen avautua aina uuteen ikkunaan?</li>
+            </ul>
+          </header>
+        </div>
+      </aside>
+      <table id="homies">
+        <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
   </div>
   <footer>
 
@@ -132,10 +157,7 @@
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
     {{duration}}{{/if}}.</h4>
     <table class="full">
-      <tr>
-	<th>Laji</th><th>Matka</th><th>Vauhti</th>
-	<th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th>
-      </tr>
+      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
       <tr>
 	<td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
 	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{tags}}</td>
@@ -145,6 +167,10 @@
     <div class="full">{{{body}}}</div>
     <p class="full">{{commentCount}} kommenttia.</p>
   </article>
+</script>
+
+<script id="summary-template" type="text/x-handlebars-template">
+  <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
 </html>

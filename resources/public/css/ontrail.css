@@ -86,6 +86,7 @@ body .content-area *[role] {
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] section[role="latest"],
+body[data-page="home"] section[role="home"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
