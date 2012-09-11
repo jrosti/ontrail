@@ -17,6 +17,7 @@
 @header-logo-margin-top: -@cropped-header-height + 44px;
 @header-logo-margin-bottom: @cropped-header-height - 104px;
 @menu-height: 40px;
+@sidebar-width: 250px;
 
 * {
   box-sizing: border-box;
@@ -38,7 +39,7 @@ html {
   height: 100%;
 }
 
-header {
+header[role="top"] {
   position: relative;
   height: @cropped-header-height + @menu-height;
   background: url(../img/ontrail-notext.png) no-repeat -2px (@cropped-header-height + @cropped-header-bottom - @full-header-height);
@@ -139,4 +140,23 @@ div[role="login"] {
       margin: 1em auto;
     }
   }
+}
+
+section {
+  > div {
+    margin-right: @sidebar-width;
+  }
+
+  article {
+    .border-radius(5px)
+
+    background: @content-background;
+    padding: 5px;
+  }
+}
+
+aside {
+  float: right;
+  width: @sidebar-width;
+  height: 100%;
 }
