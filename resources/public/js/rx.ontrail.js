@@ -68,6 +68,7 @@ var isLink = function(el) { return $(el).prop('localName') === "a"}
 var hasClass = function(name, el) { return $(el).hasClass(name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var elementBottomIsAlmostVisible = function(el, margin) {
+  if (!$(el).is(':visible')) return false;
   // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
   var viewportBottom = $(window).scrollTop() + window.innerHeight
   var loadingPoint = el.offset().top + el.outerHeight()
