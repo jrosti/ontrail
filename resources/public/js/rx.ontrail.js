@@ -49,3 +49,13 @@ var ajaxResponseData = function(response) { return response.data }
 
 // events
 var eventTarget = function(event) { return event.target }
+
+// DOM
+var elementBottomIsAlmostVisible = function(el, margin) {
+  // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
+  var viewportBottom = $(window).scrollTop() + window.innerHeight
+  var loadingPoint = el.offset().top + el.outerHeight()
+  return (viewportBottom  + margin) >= loadingPoint
+}
+
+

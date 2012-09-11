@@ -1,8 +1,26 @@
 
 (function() {
   $(document).ready(function() {
+    var rx = Rx.Observable;
+
     var source = $("#summary-entry-template").html();
     var entryTemplate = Handlebars.compile(source);
+
+    var query = $("#search").keyupAsObservable().throttle(500).select(eventTarget).distinctUntilChanged().startWith("")
+    var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) }).doAction(_.partial(debug, "nextpage"))
+
+    function pager(ajaxSearch, page) {
+      return ajaxSearch(page).where(isSuccess).select(ajaxResponseData).selectMany(function(res) {
+        if (res.length === 0)
+          return rx.never().doAction(_.partial(debug, "end"))
+        else
+          return rx.returnValue(res).doAction(_.partial(debug, "res")).concat(nextpage.take(1).selectMany(function() { return pager(ajaxSearch, page+1).doAction(_.partial(debug, "res3")) })).doAction(_.partial(debug, "res2"))
+      })
+    }
+    function scrollWith(ajaxQuery) {
+      $('#entries').html('')
+      pager(ajaxQuery, 1).subscribe(_.partial(drawSummary, "#entries"))
+    }
 
     var getSummary = function(user) {
       return $.ajaxAsObservable({ url: "/rest/v1/summary/" + user })
@@ -13,8 +31,9 @@
       return $.ajaxAsObservable({ url: "/rest/v1/avatar/" + user })
     }
 
-    var getLatest = function() {
-      return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/1" })
+    var getLatest = function(page) {
+      debug("getting " + page);
+      return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/" + page })
     }
 
     var doLogin = function() {
@@ -24,7 +43,7 @@
 
     var drawSummary = function(elem, data) {
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
-      $(elem).html(content)
+      $(content).appendTo("#entries")
     }
 
     var logouts = $("#logout").clickAsObservable()
@@ -32,7 +51,7 @@
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var sessions = Rx.Observable.create(function(observer) {
+    var sessions = rx.create(function(observer) {
       logins.subscribe(function(login) { $.cookie("authToken", login.authToken ); observer.onNext(login.username) } )
       logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); observer.onNext(null)})
       return function() {} // todo -- should we dispose something.
@@ -43,9 +62,9 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
 
     // toggle pages when pageLink is clicked
-    var currentPages = Rx.Observable.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
+    var currentPages = rx.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
 
-    currentPages.where(partialEquals("latest")).selectAjax(getLatest).where(isSuccess).select(ajaxResponseData).subscribe(_.partial(drawSummary, "#summary-entries"))
+    currentPages.where(partialEquals("latest")).subscribe(_.partial(scrollWith, getLatest))
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
