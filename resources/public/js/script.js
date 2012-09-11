@@ -25,9 +25,9 @@
       var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
       return $.ajaxAsObservable({ url: "/rest/v1/" + path }).where(isSuccess).select(ajaxResponseData)
     }
-    var getSummary = function(user) { getRest("summary", user) }
+    var getSummary = function(user) { return getRest("summary", user) }
     // unused Jro
-    var getAvatarUrl = function(user) { getRest("avatar", user) }
+    var getAvatarUrl = function(user) { return getRest("avatar", user) }
     var getLatest = function(page) { return getRest("ex-list-all", page) }
     var getDetails = function(kind, id) { return getRest(kind, id) }
     var getSearchResults = function(query) { return getRest("search?q=" + query ) }
@@ -60,11 +60,11 @@
     })
     var loggedIns = sessions.where(identity)
 
-    var summaryRequests = loggedIns.selectAjax(getSummary)
-    summaryRequests.subscribe(renderSummary);
+//    var summaryRequests = loggedIns.selectAjax(getSummary)
+//    summaryRequests.subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
-    var currentPages = $('.pageLink').clickAsObservable().select(target).select(function(elem) { return $(elem).attr('rel') }).startWith("latest");
+    var currentPages = loggedIns.select(always("home")).mergeTo($('.pageLink').clickAsObservable().select(target).select(_.partial(attr, 'rel'))).startWith("latest");
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
