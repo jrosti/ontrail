@@ -187,6 +187,7 @@ section article {
   background: #ffffff;
   padding: 5px 20px;
   margin: 5px 5px 10px;
+  width: 680px;
 }
 section article *.full {
   display: none;
@@ -206,7 +207,7 @@ section table {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
   margin: 5px;
-  width: 100%;
+  width: 640px;
   text-align: left;
 }
 section table th {
