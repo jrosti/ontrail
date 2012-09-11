@@ -165,9 +165,21 @@ section > div {
   margin-right: 250px;
 }
 section article {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
   background: #ffffff;
   padding: 5px 20px;
-  margin: 5px;
+  margin: 5px 5px 10px;
 }
 section article *.full {
   display: none;
