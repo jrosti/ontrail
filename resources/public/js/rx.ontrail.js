@@ -22,14 +22,15 @@
   Rx.Observable.prototype.mergeTo = function(observable) {
     return Rx.Observable.merge(null, this, observable)
   }
-  Rx.Observable.prototype.combineWithLatestOf = function(second, combinator) {
+  Rx.Observable.prototype.combineWithLatestOf = function() {
     var first = this
-    var latest
-    second.subscribe(function(value) { latest = value })
-
+    var latest = []
+    for(var i in arguments) {
+      arguments[i].subscribe(_.bind(function(index, value) { latest[index] = value }, null, i))
+    }
     return Rx.Observable.create(function(subscriber) {
       var seq = first.subscribe(function(value) {
-        subscriber.onNext(combinator(value, latest))
+        subscriber.onNext([value].concat(latest))
       })
       return function() { seq.dispose() }
     })
