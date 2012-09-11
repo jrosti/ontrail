@@ -61,7 +61,7 @@
     var loggedIns = sessions.where(identity)
 
     // toggle logged-in and logged-out
-    sessions.subscribe(function(userId) { console.log("loggin in/out", userId); $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
+    sessions.subscribe(function(userId) { co  nsole.log("loggin in/out", userId); $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
 
 //    var summaryRequests = loggedIns.selectAjax(getSummary)
 //    summaryRequests.subscribe(renderSummary);

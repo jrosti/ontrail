@@ -39,6 +39,11 @@ h4 {
   }
 }
 
+img {
+  box-sizing: content-box;
+  padding-right: 15px;
+}
+
 html {
   background-color: @bg-gradient-end;
   .bg-gradient(@bg-gradient-start, @bg-gradient-end);
@@ -168,7 +173,7 @@ section {
 
   article {
     background: @content-background;
-    padding: 5px;
+    padding: 5px 20px;
     margin: 5px;
 
     *.full { display: none; }
@@ -210,6 +215,7 @@ section {
 aside {
   float: right;
   width: @sidebar-width;
+  padding: 5px 20px;
   height: 100%;
 }
 
