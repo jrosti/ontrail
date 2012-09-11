@@ -59,15 +59,14 @@
       return function() {} // todo -- should we dispose something.
     })
     var loggedIns = sessions.where(identity)
+    var loggedOuts = sessions.where(_.compose(not, identity))
 
     // toggle logged-in and logged-out
-    sessions.subscribe(function(userId) { co  nsole.log("loggin in/out", userId); $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
-
-//    var summaryRequests = loggedIns.selectAjax(getSummary)
-//    summaryRequests.subscribe(renderSummary);
+    sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
 
     // toggle pages when pageLink is clicked
-    var currentPages = loggedIns.select(always("home")).mergeTo($('.pageLink').clickAsObservable().select(target).select(_.partial(attr, 'rel'))).startWith("latest");
+    var currentPages = loggedIns.select(always("home")).mergeTo(loggedOuts.select(always("latest")))
+      .mergeTo($('.pageLink').clickAsObservable().select(target).select(_.partial(attr, 'rel'))).startWith("latest")
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
