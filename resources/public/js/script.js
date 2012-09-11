@@ -3,8 +3,7 @@
   $(document).ready(function() {
     var rx = Rx.Observable;
 
-    var source = $("#summary-entry-template").html();
-    var entryTemplate = Handlebars.compile(source);
+    var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
 
     var query = $("#search").keyupAsObservable().throttle(500).select(eventTarget).distinctUntilChanged().startWith("")
     var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) })
@@ -19,7 +18,7 @@
     }
     function scrollWith(ajaxQuery) {
       $('#entries').html('')
-      pager(ajaxQuery, 1).subscribe(_.partial(drawSummary, "#entries"))
+      pager(ajaxQuery, 1).subscribe(_.partial(renderSummary, "#entries"))
     }
 
     var getSummary = function(user) {
@@ -39,7 +38,7 @@
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
     }
 
-    var drawSummary = function(elem, data) {
+    var renderSummary = function(elem, data) {
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo("#entries")
     }
@@ -57,7 +56,7 @@
     var loggedIns = sessions.where(identity)
 
     var summaryRequests = sessions.selectAjax(getSummary)
-    summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(drawSummary);
+    summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
     var currentPages = rx.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
