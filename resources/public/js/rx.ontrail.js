@@ -62,6 +62,8 @@ var ajaxResponseData = function(response) { return response.data }
 // DOM
 var target = function(event) { return event.target }
 var value = function(input) { return input.value }
+var isLink = function(el) { return $(el).prop('localName') === "a"}
+var hasClass = function(name, el) { return $(el).hasClass(name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var elementBottomIsAlmostVisible = function(el, margin) {
   // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
@@ -69,5 +71,3 @@ var elementBottomIsAlmostVisible = function(el, margin) {
   var loadingPoint = el.offset().top + el.outerHeight()
   return (viewportBottom  + margin) >= loadingPoint
 }
-
-

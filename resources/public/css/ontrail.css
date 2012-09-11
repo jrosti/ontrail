@@ -33,7 +33,7 @@ html {
   background-repeat: repeat-x;
   height: 100%;
 }
-header {
+header[role="top"] {
   position: relative;
   height: 190px;
   background: url(../img/ontrail-notext.png) no-repeat -2px -88px;
@@ -50,7 +50,7 @@ header {
   -o-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
   transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
 }
-header h1 {
+header[role="top"] h1 {
   position: absolute;
   font-size: 44px;
   font-family: 'Nosifer', cursive;
@@ -142,4 +142,17 @@ div[role="login"] fieldset input {
   width: 90%;
   height: 2em;
   margin: 1em auto;
+}
+section > div {
+  margin-right: 250px;
+}
+section article {
+  background: #ffffff;
+  padding: 5px;
+  margin: 5px;
+}
+aside {
+  float: right;
+  width: 250px;
+  height: 100%;
 }
