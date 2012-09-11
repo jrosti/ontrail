@@ -134,6 +134,31 @@ div[role="menu"] {
   }
 }
 
+label {
+  font-weight: bold;
+  font-size: 1.2em;
+  vertical-align: middle;
+  padding: 40px 0;
+}
+
+input {
+  @pad: 5px;
+  .border-radius(@pad);
+  *border: 1px solid #888888;
+  height: 1.88em;
+  line-height: 1.88em;
+  padding: 0 2px 0 @pad;
+  font-size: 1em;
+  outline: none;
+  &:focus {
+    border: 2px solid @shadow-color;
+  }
+}
+#search {
+  width: 75%;
+  margin-left: 20px;
+}
+
 div[role="login"] {
   width: 450px;
 
@@ -177,7 +202,7 @@ section {
     .border-radius(10px);
     .box-shadow(2px 2px 5px -3px fade(@shadow-color, 30%));
     background: @content-background;
-    padding: 5px 20px;
+    padding: 8px 20px;
     margin: 5px 5px 10px;
     width: 680px;
 

@@ -123,6 +123,39 @@ div[role="menu"] ul li {
 div[role="menu"] ul li.right {
   float: right;
 }
+label {
+  font-weight: bold;
+  font-size: 1.2em;
+  vertical-align: middle;
+  padding: 40px 0;
+}
+input {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  *border: 1px solid #888888;
+  height: 1.88em;
+  line-height: 1.88em;
+  padding: 0 2px 0 5px;
+  font-size: 1em;
+  outline: none;
+}
+input:focus {
+  border: 2px solid rgba(0, 0, 0, 0.25);
+}
+#search {
+  width: 75%;
+  margin-left: 20px;
+}
 div[role="login"] {
   width: 450px;
 }
@@ -185,7 +218,7 @@ section article {
   -moz-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
   box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
   background: #ffffff;
-  padding: 5px 20px;
+  padding: 8px 20px;
   margin: 5px 5px 10px;
   width: 680px;
 }
