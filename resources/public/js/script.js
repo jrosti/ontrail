@@ -67,7 +67,7 @@
 
     // open single entries
     var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), target))
-    entryClicks.doAction(_.partial(debug, "foo")).selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
+    entryClicks.selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
 
     // initiate loading and search
     var oegyscroll = query
