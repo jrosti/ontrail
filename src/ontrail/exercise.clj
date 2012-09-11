@@ -77,12 +77,14 @@
             user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
             heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
             comments (:comments exercise)
+            distance (to-human-distance (:distance exercise))
             comment-count (if (list? comments) (count comments) 0)
             avatar (get-avatar-url user)
             date (to-human-date (:creationDate exercise))]
         (log "DEBUG" "ex " id)
         {:id id
          :user user
+         :distance distance
          :title (:title exercise)
          :body (:body exercise)
          :tags (:tags exercise)
@@ -93,7 +95,7 @@
          :duration (to-human-time (:duration exercise))
          :creationDate (to-human-date (:creationDate exercise))
          :avghr (:avghr exercise)
-         :hr-reserve heart-rate-reserve
+         :hrReserve heart-rate-reserve
          :pace (get-pace exercise)
          :commentCount comment-count
          :comments comments}))))
