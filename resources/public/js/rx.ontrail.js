@@ -2,6 +2,7 @@
 
   Rx.Observable.prototype.selectArgs = function(selectAction) {
     return this.select(function(args) {
+      debug(selectAction, asArgs(args))
       return selectAction.apply(null, asArgs(args))
     })
   }
@@ -45,7 +46,8 @@ var nothing = function() {}
 var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
 
 // functional js
-var asArgs = function() { return arguments.length == 1 ? arguments[0] : arguments }
+var asArgs = function() {
+  return arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments }
 
 var always = function(x) { return function(y) { return x } }
 var identity = function(x) { return x }

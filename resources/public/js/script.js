@@ -25,7 +25,7 @@
       var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
       return $.ajaxAsObservable({ url: "/rest/v1/" + path }).where(isSuccess).select(ajaxResponseData)
     }
-    var getSummary = function(user) { getRest("summary") }
+    var getSummary = function(user) { getRest("summary", user) }
     // unused Jro
     var getAvatarUrl = function(user) { getRest("avatar", user) }
     var getLatest = function(page) { return getRest("ex-list-all", page) }
@@ -37,6 +37,7 @@
     }
 
     var renderSummary = function(elem, data) {
+      if (!data || !data.length || data.length == 0) return;
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo(entries)
     }
@@ -59,7 +60,7 @@
     })
     var loggedIns = sessions.where(identity)
 
-    var summaryRequests = sessions.selectAjax(getSummary)
+    var summaryRequests = loggedIns.selectAjax(getSummary)
     summaryRequests.subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked

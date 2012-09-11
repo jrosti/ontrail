@@ -168,6 +168,10 @@ section article.preview .body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+section table {
+  border-collapse: collapse;
+  width: 100%;
+}
 aside {
   float: right;
   width: 250px;
