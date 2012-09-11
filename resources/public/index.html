@@ -121,8 +121,10 @@
 <script id="exercise-template" type="text/x-handlebars-template">
   <article id="ex-{{id}}" class="full exercise {{sport}}">
     <h2><img src="{{avatar}}"  width="48" height="48"><a rel="ex-{{id}}">{{title}}</a></h2>
-    <h4 class="full">{{user}} <span class="date">{{date}}</span></h4>
-    <h4 class="preview"><span class="date">{{date}}</span> {{user}} {{did}} {{distance}} vauhdilla {{pace}} ajassa {{duration}}.</h4>
+    <h4 class="full"><span class="date">{{date}}</span>{{user}}</h4>
+    <h4 class="preview"><span class="date">{{date}}</span> {{user}}
+    {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
+    {{duration}}{{/if}}.</h4>
     <table class="full" id="hor-minimalist-ex-details" summary="Employee Pay Sheet">
       <tr>
 	<th>Laji</th><th>Matka</th><th>Vauhti</th>
