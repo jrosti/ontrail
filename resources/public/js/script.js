@@ -35,7 +35,6 @@
     }
 
     var getDetails = function(kind, id) {
-      debug("getDetailz", arguments)
       return $.ajaxAsObservable({ url: "/rest/v1/" + kind + "/" + id })
     }
 
@@ -49,8 +48,6 @@
     }
 
     var renderExercise = function(exercise) {
-      console.log(exercise)
-      var content =
       $('#ex-' + exercise.id).replaceWith($(exerciseTemplate(exercise)))
     }
 
