@@ -151,6 +151,15 @@ section article {
   padding: 5px;
   margin: 5px;
 }
+section article *.full {
+  display: none;
+}
+section article.full *.full {
+  display: inherit;
+}
+section article.full *.preview {
+  display: none;
+}
 aside {
   float: right;
   width: 250px;

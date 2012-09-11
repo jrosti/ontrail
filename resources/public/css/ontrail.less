@@ -151,6 +151,13 @@ section {
     background: @content-background;
     padding: 5px;
     margin: 5px;
+
+    *.full { display: none; }
+
+    &.full {
+      *.full { display: inherit; }
+      *.preview { display: none; }
+    }
   }
 }
 

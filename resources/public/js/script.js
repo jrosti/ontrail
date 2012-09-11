@@ -72,8 +72,12 @@
     var parentArticle = function(el) { return $(el).closest('article') }
     var clickedArticles = entries.clickAsObservable().select(target).where(isLink).select(parentArticle)
 
-    clickedArticles.where(_.compose(not, _.partial(hasClass, 'full'))).select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "id")))
+    var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
+    clickedArticles.where(_.compose(not, isArticleLoaded)).select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "id")))
       .selectAjax(getDetails).subscribe(renderExercise)
+
+    clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
+
 
     // initiate loading and search
     var oegyscroll = query

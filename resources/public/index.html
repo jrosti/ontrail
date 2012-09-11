@@ -111,8 +111,9 @@
 <script id="exercise-template" type="text/x-handlebars-template">
   <article id="ex-{{id}}" class="full exercise {{sport}}">
     <h2><img src="{{avatar}}"><a rel="ex-{{id}}">{{title}}</a></h2>
-    <h4>{{user}} <span class="date">{{date}}</span></h4>
-    <table>
+    <h4 class="full">{{user}} <span class="date">{{date}}</span></h4>
+    <h4 class="preview">{{user}} {{did}} {{distance}} vauhdilla {{pace}} ajassa {{duration}}.</h4>
+    <table class="full">
       <tr>
 	<th>Laji</th><th>Matka</th><th>Vauhti</th>
 	<th>Aika</th><th>Keskisyke</th><th>Sykereservi</th>
@@ -122,10 +123,9 @@
 	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td>
       </tr>
     </table>
-    <h4>Tagit: {{tags}}</h4>
-    <p>{{{body}}}</p>
+    <h4 class="full">Tagit: {{tags}}</h4>
+    <p class="body">{{{body}}}</p>
     <p>{{commentCount}} kommenttia.</p>
-    <hr>
   </article>
 </script>
 

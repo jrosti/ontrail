@@ -42,7 +42,7 @@ var debug = function() {console.log("debug: ", arguments)}
 var nothing = function() {}
 
 // general utilities
-var splitWith = function(delim, string) { return string.split(delim) }
+var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
 
 // functional js
 var asArgs = function() { return arguments.length == 1 ? arguments[0] : arguments }
