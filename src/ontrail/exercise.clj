@@ -18,7 +18,7 @@
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
-(def TRUNCATE 100)
+(def TRUNCATE 1000)
 
 (defn strip-and-truncate [s]
   (if (= s nil)
@@ -27,7 +27,7 @@
           chars (count stripped)
           truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
       (if (> chars TRUNCATE)
-        (str (subs stripped 0 truncated-len) "...")
+        (str (subs stripped 0 truncated-len))
         stripped))))
 
 (defn as-ex-result [result]
