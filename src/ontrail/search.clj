@@ -35,7 +35,7 @@
   `(do (reset! inverted-index {})
        (log "INFO" "built " (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {}))) "terms")))
 
-(def search-limit 1000)
+(def search-limit 100)
 
 (defn search-ids [& terms]
   (take search-limit (reduce clojure.set/intersection (map #(get @inverted-index (.toLowerCase %)) terms))))
