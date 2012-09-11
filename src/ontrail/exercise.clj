@@ -76,7 +76,8 @@
       (let [user-profile (get (mc/find-one-as-map ONUSER {:username (get exercise :user)}) :profile)
             heart-rate-reserve (get-heart-rate-reserve exercise user-profile)]
         (log "DEBUG" "ex " id)
-        {:title (:title exercise)
+        {:id id
+         :title (:title exercise)
          :body (:body exercise)
          :tags (:tags exercise)
          :duration (to-human-time (:duration exercise))
