@@ -50,7 +50,7 @@
   (GET "/secret" {params :params cookies :cookies} (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
 
   ;; testing needed
-  (PUT "/rest/v1/put-ex/:user" [user body] (json-response (create-ex-wrapper user body)))
+  ;;(PUT "/rest/v1/put-ex/:user" [user body] (json-response (create-ex-wrapper user body)))
   
   (route/resources "/")
   (route/not-found "Page not found"))
