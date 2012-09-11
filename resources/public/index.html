@@ -55,37 +55,39 @@
       </ul>
     </div>
   </header>
-  <div role="login">
-    <fieldset>
-      <h2>Kirjaudu sisään</h2>
-      <form id="login-form">
-        <input id="username" name="username" type="text" width="30" placeholder="Username" />
-        <input id="password" name="password" type="password" width="30" placeholder="Password"/>
-      </form>
-      <input id="login" type="button" value="Kirjaudu">
-    </fieldset>
-  </div>
+  <div class="content-area">
+    <div role="login">
+      <fieldset>
+        <h2>Kirjaudu sisään</h2>
+        <form id="login-form">
+          <input id="username" name="username" type="text" width="30" placeholder="Username" />
+          <input id="password" name="password" type="password" width="30" placeholder="Password"/>
+        </form>
+        <input id="login" type="button" value="Kirjaudu">
+      </fieldset>
+    </div>
 
-  <section role="latest">
-    <aside>
-      <div>
-        <header>
-          <h2>Kirjautuneet käyttäjät</h2>
-          <p>Tähän sit websocketilla ne.</p>
-	  <h2>Kommentteja testaajille:</h2>
-          <ul>
-	    <li>Kehitysselaimena on Chrome. CSS:t ovat vinossa
-	    Firefoxilla ja IE:llä tuskin toimii ollenkaan.</li>
-	    <li>Kiitokset HäHille erinomaisesta oppitunnista ajan
-	    esityksessä.</li>
-            <li>Voiko lenkki laajentua listanäkymässä, vai pitäisikö
-	    sen avautua aina uuteen ikkunaan?</li>
-          </ul>
-        </header>
-      </div>
-    </aside>
-    <div id="entries"></div>
-  </section>
+    <section role="latest">
+      <aside>
+        <div>
+          <header>
+            <h2>Kirjautuneet käyttäjät</h2>
+            <p>Tähän sit websocketilla ne.</p>
+      <h2>Kommentteja testaajille:</h2>
+            <ul>
+        <li>Kehitysselaimena on Chrome. CSS:t ovat vinossa
+        Firefoxilla ja IE:llä tuskin toimii ollenkaan.</li>
+        <li>Kiitokset HäHille erinomaisesta oppitunnista ajan
+        esityksessä.</li>
+              <li>Voiko lenkki laajentua listanäkymässä, vai pitäisikö
+        sen avautua aina uuteen ikkunaan?</li>
+            </ul>
+          </header>
+        </div>
+      </aside>
+      <div id="entries"></div>
+    </section>
+  </div>
   <footer>
 
   </footer>

@@ -79,7 +79,7 @@ body[data-page="login"] header {
   padding-top: @full-header-height;
 }
 
-body div[role] {
+body .content-area *[role] {
   display: none;
   padding: 10px;
   opacity: 0;
@@ -87,7 +87,7 @@ body div[role] {
 
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
-body[data-page="latest"] div[role="latest"],
+body[data-page="latest"] section[role="latest"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
@@ -100,7 +100,8 @@ div[role="menu"] {
 
   ul {
     width: 100%;
-    padding: 0;
+    height: 44px;
+    padding: 10px 10px 0;
     margin: 0;
     list-style: none;
 
