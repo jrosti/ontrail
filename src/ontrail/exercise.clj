@@ -18,7 +18,7 @@
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
-(def TRUNCATE 1000)
+(def TRUNCATE 110)
 
 (defn strip-and-truncate [s]
   (if (= s nil)
