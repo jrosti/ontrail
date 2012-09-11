@@ -4,6 +4,7 @@
     var rx = Rx.Observable;
 
     var entries = $("#entries")
+
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
 
