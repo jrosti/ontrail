@@ -10,7 +10,7 @@
     var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) })
 
     function pager(ajaxSearch, page) {
-      return ajaxSearch(page).where(isSuccess).select(ajaxResponseData).selectMany(function(res) {
+      return ajaxSearch(page).selectMany(function(res) {
         if (res.length === 0)
           return rx.never()
         else
@@ -21,7 +21,7 @@
 
     var getRest = function() {
       var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
-      return $.ajaxAsObservable({ url: "/rest/v1/" + path })
+      return $.ajaxAsObservable({ url: "/rest/v1/" + path }).where(isSuccess).select(ajaxResponseData)
     }
     var getSummary = function(user) { getRest("summary") }
     // unused Jro
@@ -55,7 +55,7 @@
     var loggedIns = sessions.where(identity)
 
     var summaryRequests = sessions.selectAjax(getSummary)
-    summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(renderSummary);
+    summaryRequests.subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
     var currentPages = $('.pageLink').clickAsObservable().select(target).select(function(elem) { return $(elem).attr('rel') }).startWith("latest");
@@ -67,7 +67,7 @@
 
     // open single entries
     var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), target))
-    entryClicks.selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
+    entryClicks.selectAjax(getDetails).subscribe(renderExercise)
 
     // initiate loading and search
     var oegyscroll = query
