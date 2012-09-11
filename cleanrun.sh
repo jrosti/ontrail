@@ -2,7 +2,7 @@
 
 . setenvs.bash
 
-./drop-create-esko.sh
+#./drop-create-esko.sh
 
 mongo ontrail create-index.js
 
