@@ -6,7 +6,8 @@
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
-        [ontrail.user :only (get-avatar-url get-user)])
+        [ontrail.user :only (get-avatar-url get-user)]
+        [ontrail.mutate :only (create-ex-wrapper)])
   (:use [ontrail summary auth crypto exercise log])
   (:gen-class)
   (:require [compojure.handler :as handler]
@@ -48,6 +49,9 @@
       (json-response {"error" "Authentication failed"} 401)))
   (GET "/secret" {params :params cookies :cookies} (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
 
+  ;; testing needed
+  (PUT "/rest/v1/put-ex/:user" [user body] (json-response (create-ex-wrapper user body)))
+  
   (route/resources "/")
   (route/not-found "Page not found"))
 
