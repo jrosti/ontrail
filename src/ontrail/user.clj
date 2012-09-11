@@ -9,7 +9,7 @@
             email (get onuser :email)
             gravatar-md5-hash (md5 email)]
         (if gravatar?
-          (str "http://www.gravatar.com/avatar/" gravatar-md5-hash ".jpg")
+          (str "http://www.gravatar.com/avatar/" gravatar-md5-hash)
           "/img/default-avatar.png"))
       "/img/drno.png")))
 
