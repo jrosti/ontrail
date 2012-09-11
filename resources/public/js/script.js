@@ -4,6 +4,7 @@
     var rx = Rx.Observable;
 
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
+    var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
 
     var query = $("#search").keyupAsObservable().throttle(500).select(eventTarget).distinctUntilChanged().startWith("")
     var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) })
@@ -34,6 +35,11 @@
       return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/" + page })
     }
 
+    var getDetails = function(kind, id) {
+      debug("getDetailz", arguments)
+      return $.ajaxAsObservable({ url: "/rest/v1/" + kind + "/" + id })
+    }
+
     var doLogin = function() {
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
     }
@@ -41,6 +47,12 @@
     var renderSummary = function(elem, data) {
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo("#entries")
+    }
+
+    var renderExercise = function(exercise) {
+      console.log(exercise)
+      var content =
+      $('#ex-' + exercise.id).replaceWith($(exerciseTemplate(exercise)))
     }
 
     var logouts = $("#logout").clickAsObservable()
@@ -59,17 +71,19 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
-    var currentPages = rx.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
 
+    var currentPages = rx.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
     currentPages.where(partialEquals("latest")).subscribe(_.partial(scrollWith, getLatest))
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
     })
 
+    var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), eventTarget))
+    entryClicks.doAction(_.partial(debug, "foo")).selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
+
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })
-
 })()
 
 

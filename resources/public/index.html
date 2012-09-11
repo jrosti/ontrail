@@ -93,11 +93,22 @@
 
 </body>
 <script id="summary-entry-template" type="text/x-handlebars-template">
-  <article class="{{sport}}">
-    <h2><img src="{{avatar}}"> {{title}}</h2>
-    <h3>{{user}} {{did}} {{distance}} vauhdilla {{pace}} ajassa {{duration}}.</h3>
-    <p>{{date}}. {{{body}}} {{commentCount}} kommenttia.</p>
+  <article id="ex-{{id}}" class="exercise {{sport}}">
+    <h2><img src="{{avatar}}"><a rel="ex-{{id}}">{{title}}</a></h2>
+    <h4>{{user}} {{did}} {{distance}} vauhdilla {{pace}} ajassa {{duration}}.</h4>
+    <p><span class="date">{{date}}</span>. {{{body}}}</p>
+    <p>{{commentCount}} kommenttia.</p>
     <hr>
   </article>
 </script>
+<script id="exercise-template" type="text/x-handlebars-template">
+  <article id="ex-{{id}}" class="exercise {{sport}}">
+    <h2><img src="{{avatar}}"><a rel="ex-{{id}}">{{title}}</a></h2>
+    <h4>{{user}} {{did}} {{distance}} vauhdilla {{pace}} ajassa {{duration}}.</h4>
+    <p><span class="date">{{date}}</span>. {{{body}}}</p>
+    <p>{{commentCount}} kommenttia.</p>
+    <hr>
+  </article>
+</script>
+
 </html>
