@@ -7,14 +7,14 @@
     var entryTemplate = Handlebars.compile(source);
 
     var query = $("#search").keyupAsObservable().throttle(500).select(eventTarget).distinctUntilChanged().startWith("")
-    var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) }).doAction(_.partial(debug, "nextpage"))
+    var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) })
 
     function pager(ajaxSearch, page) {
       return ajaxSearch(page).where(isSuccess).select(ajaxResponseData).selectMany(function(res) {
         if (res.length === 0)
-          return rx.never().doAction(_.partial(debug, "end"))
+          return rx.never()
         else
-          return rx.returnValue(res).doAction(_.partial(debug, "res")).concat(nextpage.take(1).selectMany(function() { return pager(ajaxSearch, page+1).doAction(_.partial(debug, "res3")) })).doAction(_.partial(debug, "res2"))
+          return rx.returnValue(res).concat(nextpage.take(1).selectMany(function() { return pager(ajaxSearch, page+1) }))
       })
     }
     function scrollWith(ajaxQuery) {
@@ -32,12 +32,10 @@
     }
 
     var getLatest = function(page) {
-      debug("getting " + page);
       return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/" + page })
     }
 
     var doLogin = function() {
-      console.log($('#login-form').serialize())
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
     }
 
