@@ -10,6 +10,7 @@
 @menu-bg-color: white;
 @text-color: #242834;
 @link-color: darken(#79cace, 25%);
+@shadow-color: fade(black, 25%);
 
 @full-header-height: 268px;
 @cropped-header-bottom: 30px;
@@ -173,6 +174,7 @@ section {
 
   article {
     .border-radius(10px);
+    .box-shadow(2px 2px 5px -3px fade(@shadow-color, 30%));
     background: @content-background;
     padding: 5px 20px;
     margin: 5px 5px 10px;
