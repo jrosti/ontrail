@@ -64,7 +64,7 @@ body {
   min-height: 100%;
   border-left: 3px solid #006862;
   border-right: 3px solid #006862;
-  background-color: #c5f3f4;
+  background-color: #f0f0f0;
 }
 body[data-page="login"] header {
   height: 268px;
