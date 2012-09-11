@@ -17,26 +17,17 @@
           return rx.returnValue(res).concat(nextpage.take(1).selectMany(function() { return pager(ajaxSearch, page+1) }))
       })
     }
-    function scrollWith(ajaxQuery) {
-      pager(ajaxQuery, 1).subscribe(_.partial(renderSummary, "#entries"))
-    }
+    function scrollWith(ajaxQuery) { return pager(ajaxQuery, 1) }
 
-    var getSummary = function(user) {
-      return $.ajaxAsObservable({ url: "/rest/v1/summary/" + user })
+    var getRest = function() {
+      var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
+      return $.ajaxAsObservable({ url: "/rest/v1/" + path })
     }
-
+    var getSummary = function(user) { getRest("summary") }
     // unused Jro
-    var getAvatarUrl = function(user) {
-      return $.ajaxAsObservable({ url: "/rest/v1/avatar/" + user })
-    }
-
-    var getLatest = function(page) {
-      return $.ajaxAsObservable({ url: "/rest/v1/ex-list-all/" + page })
-    }
-
-    var getDetails = function(kind, id) {
-      return $.ajaxAsObservable({ url: "/rest/v1/" + kind + "/" + id })
-    }
+    var getAvatarUrl = function(user) { getRest("avatar", user) }
+    var getLatest = function(page) { return getRest("ex-list-all", page) }
+    var getDetails = function(kind, id) { return getRest(kind, id) }
 
     var doLogin = function() {
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
@@ -84,7 +75,7 @@
       .select(function(q) { return scrollWith(getLatest) })
       .switchLatest()
 
-    oegyscroll.subscribe(nothing)
+    oegyscroll.subscribe(_.partial(renderSummary, "#entries"))
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })
