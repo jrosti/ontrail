@@ -65,7 +65,7 @@
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
 
     // toggle pages when pageLink is clicked
-    var currentPages = loggedIns.select(always("home")).mergeTo(loggedOuts.select(always("latest")))
+    var currentPages = loggedIns.select(always("home"))
       .mergeTo($('.pageLink').clickAsObservable().select(target).select(_.partial(attr, 'rel'))).startWith("latest")
 
     currentPages.subscribe(function(page) {
