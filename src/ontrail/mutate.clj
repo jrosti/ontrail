@@ -59,3 +59,7 @@
   (if (valid? user-input-ex)
     (insert-exercise-inmem-index
      (mc/insert-and-return EXERCISE (from-user-ex user user-input-ex)))))
+
+(def create-ex-wrapper [cookies body]
+  (let [username (user-from-token (:value (cookies "authToken")))]
+    ))
