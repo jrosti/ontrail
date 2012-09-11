@@ -28,6 +28,7 @@
     var getAvatarUrl = function(user) { getRest("avatar", user) }
     var getLatest = function(page) { return getRest("ex-list-all", page) }
     var getDetails = function(kind, id) { return getRest(kind, id) }
+    var getSearchResults = function(query) { return getRest("search?q=" + query ) }
 
     var doLogin = function() {
       return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
@@ -37,7 +38,6 @@
       var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo("#entries")
     }
-
     var renderExercise = function(exercise) {
       $('#ex-' + exercise.id).replaceWith($(exerciseTemplate(exercise)))
     }
@@ -71,8 +71,14 @@
 
     // initiate loading and search
     var oegyscroll = query
-      .doAction(function() { $("#entries").html("") } )
-      .select(function(q) { return scrollWith(getLatest) })
+      .doAction(function() { $("#entries").html("") })
+      .combineWithLatestOf(currentPages)
+      .selectArgs(function(query, currentPage) {
+        if (query === "")
+          return scrollWith(getLatest)
+        else
+          return getSearchResults(query)
+      })
       .switchLatest()
 
     oegyscroll.subscribe(_.partial(renderSummary, "#entries"))
