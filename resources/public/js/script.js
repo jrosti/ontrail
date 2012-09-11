@@ -6,7 +6,7 @@
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
 
-    var query = $("#search").keyupAsObservable().throttle(500).select(eventTarget).distinctUntilChanged().startWith("")
+    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
     var nextpage = Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible($('#entries'), 100) })
 
     function pager(ajaxSearch, page) {
@@ -70,7 +70,7 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
-    var currentPages = $('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }).startWith("latest");
+    var currentPages = $('.pageLink').clickAsObservable().select(target).select(function(elem) { return $(elem).attr('rel') }).startWith("latest");
 //    currentPages.where(partialEquals("latest")).takeWhile(partialEquals("latest")).subscribe(_.partial(scrollWith, getLatest))
 
     currentPages.subscribe(function(page) {
@@ -78,7 +78,7 @@
     })
 
     // open single entries
-    var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), eventTarget))
+    var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), target))
     entryClicks.doAction(_.partial(debug, "foo")).selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
 
     // initiate loading and search

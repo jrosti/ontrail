@@ -58,10 +58,9 @@ var partialEquals = function(val) { return _.partial(equals, val) }
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }
 var ajaxResponseData = function(response) { return response.data }
 
-// events
-var eventTarget = function(event) { return event.target }
-
 // DOM
+var target = function(event) { return event.target }
+var value = function(input) { return input.value }
 var attr = function(name, el) { return $(el).attr(name) }
 var elementBottomIsAlmostVisible = function(el, margin) {
   // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
