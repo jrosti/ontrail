@@ -96,10 +96,10 @@ body .logged-out {
   display: none !important;
 }
 body.logged-in .logged-in {
-  display: inherit !important;
+  display: initial !important;
 }
 body.logged-out .logged-out {
-  display: inherit !important;
+  display: initial !important;
 }
 div[role="menu"] {
   width: 100%;
