@@ -18,7 +18,6 @@
       })
     }
     function scrollWith(ajaxQuery) {
-      $('#entries').html('')
       pager(ajaxQuery, 1).subscribe(_.partial(renderSummary, "#entries"))
     }
 
@@ -71,16 +70,24 @@
     summaryRequests.where(isSuccess).select(ajaxResponseData).subscribe(renderSummary);
 
     // toggle pages when pageLink is clicked
-
-    var currentPages = rx.returnValue("latest").mergeTo($('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }));
-    currentPages.where(partialEquals("latest")).subscribe(_.partial(scrollWith, getLatest))
+    var currentPages = $('.pageLink').clickAsObservable().select(eventTarget).select(function(elem) { return $(elem).attr('rel') }).startWith("latest");
+//    currentPages.where(partialEquals("latest")).takeWhile(partialEquals("latest")).subscribe(_.partial(scrollWith, getLatest))
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
     })
 
+    // open single entries
     var entryClicks = $('#entries').clickAsObservable().select(_.compose(_.partial(splitWith, "-"), _.partial(attr, "rel"), eventTarget))
     entryClicks.doAction(_.partial(debug, "foo")).selectAjax(getDetails).where(isSuccess).select(ajaxResponseData).subscribe(renderExercise)
+
+    // initiate loading and search
+    var oegyscroll = query
+      .doAction(function() { $("#entries").html("") } )
+      .select(function(q) { return scrollWith(getLatest) })
+      .switchLatest()
+
+    oegyscroll.subscribe(nothing)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })
