@@ -21,7 +21,7 @@
      :distance (to-human-distance (get db-retmap :dist))
      :numericalDuration (get db-retmap :dur)
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
-     :avghr (avghr db-retmap)
+     :avghr (int (+ 0.5 (avghr db-retmap)))
      :count count
      :sport sport}))
 
