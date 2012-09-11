@@ -2,7 +2,6 @@
 
   Rx.Observable.prototype.selectArgs = function(selectAction) {
     return this.select(function(args) {
-      debug(selectAction, asArgs(args))
       return selectAction.apply(null, asArgs(args))
     })
   }
