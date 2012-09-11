@@ -93,6 +93,18 @@ body[data-page="main"] div[role="main"] {
   opacity: 1;
 }
 
+body .logged-in, body .logged-out {
+  display: none !important;
+}
+
+body.logged-in .logged-in {
+  display: inherit !important;
+}
+
+body.logged-out .logged-out {
+  display: inherit !important;
+}
+
 div[role="menu"] {
   width: 100%;
   padding: 0;

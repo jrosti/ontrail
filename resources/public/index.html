@@ -44,14 +44,15 @@
     })();
   </script>
 </head>
-<body>
+<body class="logged-out">
   <header role="top">
     <h1>On Trail</h1>
     <div id="menu" role="menu">
       <ul>
         <li><a class="pageLink" id="exercises" rel="latest">Lenkkivuo</a></li>
         <li><input type="text" width="40" id="search"></li>
-        <li class="right"><a class="pageLink" id="login-link" rel="login">Kirjaudu</a></li>
+        <li class="right logged-out"><a class="pageLink" id="login-link" rel="login">Kirjaudu sisään</a></li>
+        <li class="right logged-in"><a class="pageLink" id="logout" rel="login">Kirjaudu ulos</a></li>
       </ul>
     </div>
   </header>
@@ -62,7 +63,7 @@
         <form id="login-form">
           <input id="username" name="username" type="text" width="30" placeholder="Username" />
           <input id="password" name="password" type="password" width="30" placeholder="Password"/>
-        </form>
+        </form> 
         <input id="login" type="button" value="Kirjaudu">
       </fieldset>
     </div>
