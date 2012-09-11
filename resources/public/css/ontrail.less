@@ -33,6 +33,12 @@ a {
   }
 }
 
+h4 {
+  span {
+    padding-right: 7px;
+  }
+}
+
 html {
   background-color: @bg-gradient-end;
   .bg-gradient(@bg-gradient-start, @bg-gradient-end);
@@ -157,6 +163,14 @@ section {
     &.full {
       *.full { display: inherit; }
       *.preview { display: none; }
+    }
+
+    &.preview {
+      .body {
+        height: 1.0em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }

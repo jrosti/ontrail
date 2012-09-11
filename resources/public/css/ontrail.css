@@ -16,6 +16,9 @@ a:hover {
   text-decoration: underline;
   color: #28696d;
 }
+h4 span {
+  padding-right: 7px;
+}
 html {
   background-color: #a5ecef;
   background-image: -webkit-linear-gradient(top ,#006862 0, #a5ecef 270px);
@@ -159,6 +162,11 @@ section article.full *.full {
 }
 section article.full *.preview {
   display: none;
+}
+section article.preview .body {
+  height: 1.0em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 aside {
   float: right;
