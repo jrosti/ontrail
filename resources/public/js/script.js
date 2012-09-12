@@ -73,6 +73,7 @@
 
     currentPages.subscribe(function(page) {
       $('body').attr('data-page', page)
+      $('#password').attr('value', '')
     })
 
     // open single entries
@@ -101,6 +102,13 @@
     // initiate summary loading after login
     var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(getSummary)
     ownSummaries.subscribe(renderSummary)
+
+    // Kirjaudu sisään clicks toggle password & login fields visibility
+    $('#login-link').clickAsObservable().subscribe(function() {
+      $('body').toggleClass('login')
+      $('#username').focus()
+    })
+    loggedIns.subscribe(function() { $('body').toggleClass('login', false) })
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })

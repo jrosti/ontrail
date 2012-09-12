@@ -51,23 +51,19 @@
       <ul>
         <li class="logged-in"><a class="pageLink" id="home-link" rel="home">Oma profiilini</a></li>
         <li><a class="pageLink" id="exercises" rel="latest">Lenkit</a></li>
-        <li class="right logged-out"><a class="pageLink" id="login-link" rel="login">Kirjaudu sisään</a></li>
-        <li class="right logged-in"><a class="pageLink" id="logout" rel="latest">Kirjaudu ulos</a></li>
+        <li class="right login">
+          <a class="logged-out" id="login-link">Kirjaudu sisään</a>
+          <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
+          <form id="login-form">
+            <input id="username" name="username" type="text" placeholder="Username" />
+            <input id="password" name="password" type="password" placeholder="Password"/>
+            <input id="login" type="button" value="Sisään"/>
+          </form>
+        </li>
       </ul>
     </div>
   </header>
   <div class="content-area">
-    <div role="login">
-      <fieldset>
-        <h2>Kirjaudu sisään</h2>
-        <form id="login-form">
-          <input id="username" name="username" type="text" width="30" placeholder="Username" />
-          <input id="password" name="password" type="password" width="30" placeholder="Password"/>
-        </form> 
-        <input id="login" type="button" value="Kirjaudu">
-      </fieldset>
-    </div>
-
     <section role="latest">
       <aside>
         <div>
