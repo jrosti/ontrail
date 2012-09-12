@@ -25,6 +25,11 @@ h4 span {
   padding-right: 7px;
 }
 img {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box;
   padding-right: 15px;
 }
