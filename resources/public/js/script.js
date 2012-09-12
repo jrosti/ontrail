@@ -53,7 +53,7 @@
 
     var logouts = $("#logout").clickAsObservable()
     var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
-    var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
+    var logins = loginRequests.doAction(function() { debug("authToken", $.cookie("authToken")) }).where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
     var sessions = rx.create(function(observer) {

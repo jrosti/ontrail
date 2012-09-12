@@ -3,18 +3,27 @@
 
 (use '[clojure.string :only (split)])
 
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+
 (defn authenticate [username password]
   (let [user (get-user username)]
     (and (not (= user nil)) (= (password-match? password (:passwordHash user))))))
 
+(defn hash-part [password-hash]
+  (if password-hash
+    (last (.split password-hash "\\$"))
+    ""))
+
 (defn auth-token [user]
-  (clojure.string/replace (str (base64-encode (:username user)) "|" (base64-encode (:passwordHash user))) #"=" "#"))
+  (clojure.string/replace (str (base64-encode (:username user)) "|" (hash-part (:passwordHash user))) #"=" "#"))
 
 (defn user-from-token [token]
   (let [[usernameBase64, passwordHashBase64] (split (clojure.string/replace token #"#" "=") #"\|")]
-    {:username (base64-decode usernameBase64) :passwordHash (base64-decode passwordHashBase64)}))
+    {:username (byte-array-to-string (base64-decode usernameBase64)) :passwordHash passwordHashBase64}))
 
 (defn valid-auth-token? [token]
   (let [from-token (user-from-token token)
         user (get-user (:username from-token))]
-      (= (:passwordHash from-token) (:passwordHash user))))
+      (if user
+      (= (:passwordHash from-token) (hash-part (:passwordHash user)))
+      false)))

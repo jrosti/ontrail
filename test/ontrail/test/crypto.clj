@@ -9,4 +9,10 @@
   (is (password-match? "keijo" (com.lambdaworks.crypto.SCryptUtil/scrypt "keijo" 16384 8 1))))
 
 (deftest base64-decodes
-  (is (= "esko" (base64-decode "ZXNrbw=="))))
+  (is (= "esko" (byte-array-to-string (base64-decode "ZXNrbw==")))))
+
+(deftest encrypt-and-decrypt-does-what-it-should-do
+  (is (= "foo2" (decrypt (encrypt "foo2")))))
+
+(deftest decrypt-does-what-it-should-do
+  (is (= "foo2" (decrypt "hcmlYlBedinIG2d5PohVCRKkEGg="))))
