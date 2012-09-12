@@ -106,10 +106,10 @@ body .logged-out {
   display: none !important;
 }
 body.logged-in .logged-in {
-  display: initial !important;
+  display: inherit !important;
 }
 body.logged-out .logged-out {
-  display: initial !important;
+  display: inherit !important;
 }
 div[role="menu"] {
   width: 100%;
