@@ -101,7 +101,13 @@
       $('#password').attr('value', '')
     })
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
-    userPages.subscribe(function(user) { $(".current-username").text(user) })
+    userPages.subscribe(function(user) {
+      $("#button").click(function() {
+        $('html, body').animate({
+          scrollTop: $('[role="user"]').offset().top
+        }, 300);
+      });
+      $(".current-username").text(user) })
 
     // initiate loading and search
     var latestScroll = query
