@@ -25,7 +25,7 @@
 
     var errorHandler;
     var ajaxErrors = Rx.Observable.create(function(observer) {
-      errorHandler = { error: function(error) { console.log(error); observer.onNext({ jqXHR: error }) } }
+      errorHandler = { error: function(error) { observer.onNext(error) } }
       return function() { errorHandler = null } // todo -- is there something to cleanup?
     });
 
