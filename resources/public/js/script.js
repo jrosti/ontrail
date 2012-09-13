@@ -68,7 +68,7 @@
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
     var sessions = rx.create(function(observer) {
-      logins.subscribe(function(login) { $.cookie("authToken", login.authToken ); observer.onNext(login.username) } )
+      logins.subscribe(function(login) { $.cookie("authToken", login.token ); observer.onNext(login.username) } )
       logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); observer.onNext(null)})
       return function() {} // todo -- should we dispose something.
     })
