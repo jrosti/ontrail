@@ -6,7 +6,10 @@
     (is (authenticate "Esko" "Esko")))
 
 (deftest not-username-fails-as-password
-  (not (is (authenticate "Esko" "esko2"))))
+  (is (not (authenticate "Esko" "esko2"))))
+
+(deftest not-existing-username-fails-as-password
+  (is (not (authenticate "Esko2" "esko2"))))
 
 (deftest auth-token-can-be-decrypted
   (is (= "Esko|RXNrbw##" (decrypt (auth-token {:username "Esko" :passwordHash "RXNrbw##"})))))

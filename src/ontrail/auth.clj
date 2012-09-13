@@ -27,5 +27,4 @@
     false
     (let [from-token (user-from-token token)
           user (if from-token (get-user (:username from-token)) {})]
-        (= (:passwordHash from-token) (hash-part (:passwordHash user)))
-        false))))
+        (and user (= (:passwordHash from-token) (hash-part (:passwordHash user)))))))
