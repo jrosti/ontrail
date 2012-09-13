@@ -97,9 +97,19 @@ body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] section[role="latest"],
 body[data-page="home"] section[role="home"],
+body[data-page="addex"] section[role="addex"],
+body[data-page="user"] section[role="user"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
+}
+body[data-page="login"] a[rel="login"],
+body[data-page="latest"] a[rel="latest"],
+body[data-page="home"] a[rel="home"],
+body[data-page="user"] a[rel="user"],
+body[data-page="addex"] a[rel="addex"],
+body[data-page="main"] a[rel="main"] {
+  font-weight: bold;
 }
 div[role="menu"] {
   width: 100%;
