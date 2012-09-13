@@ -49,7 +49,8 @@
     (if (authenticate username password)
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
-  (GET "/secret" {params :params cookies :cookies} (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
+  (GET "/secret" {params :params cookies :cookies}
+    (is-authenticated? params cookies (json-response {"secret" "ken sent me"})))
 
   ;; testing needed
   ;;(PUT "/rest/v1/put-ex/:user" [user body] (json-response (create-ex-wrapper user body)))

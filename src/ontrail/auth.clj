@@ -23,8 +23,9 @@
     {:username username :passwordHash passwordHash}))
 
 (defn valid-auth-token? [token]
-  (let [from-token (user-from-token token)
-        user (get-user (:username from-token))]
-      (if user
-      (= (:passwordHash from-token) (hash-part (:passwordHash user)))
-      false)))
+  (if (not token)
+    false
+    (let [from-token (user-from-token token)
+          user (if from-token (get-user (:username from-token)) {})]
+        (= (:passwordHash from-token) (hash-part (:passwordHash user)))
+        false))))
