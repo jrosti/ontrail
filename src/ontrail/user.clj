@@ -1,6 +1,8 @@
 (ns ontrail.user
-  (:use [ontrail crypto mongodb log utils])
+  (:use [ontrail crypto mongodb utils])
   (:require [monger.collection :as mc]))
+
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn get-avatar-url [user]
   (let [onuser (mc/find-one-as-map ONUSER {:username user})]
@@ -15,7 +17,7 @@
 
 (defn create-user [username password email gravatar]
   (let [profile {:resthr 42 :maxhr 192}]
-    (log (str "creating user " username " with profile " profile))
+    (.info logger (str "creating user " username " with profile " profile))
     (mc/insert ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
 
 (defn get-user [username]
@@ -23,5 +25,5 @@
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]
-    (log "Create user " username " email " email)
+    (.info logger (str "Create user " username " email " email))
     (create-user username password email has-gravatar)))

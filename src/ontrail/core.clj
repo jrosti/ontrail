@@ -15,6 +15,8 @@
             [monger.collection :as mc]
             [ring.util.response :as response]))
 
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+
 (defn json-response [data & [status]]
   {:status (or status 200)
    :headers {"Content-Type" "application/json"}
@@ -29,7 +31,7 @@
 
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
-    (log "HTTP" (to-logline req))
+    (.info logger (str "HTTP" (to-logline req)))
     (handler
      (update-in req [:uri]
                 #(if (= "/" %) "/index.html" %)))))

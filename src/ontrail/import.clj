@@ -1,5 +1,5 @@
 (ns ontrail.import
-  (:use [ontrail mongodb log])
+  (:use [ontrail mongodb])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [net.cgrand.enlive-html :as html]
@@ -7,6 +7,8 @@
             [clj-time.core :as time]
             ;; for date serialization to mongo.
             [monger.joda-time]))
+
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn import-html [filename]
   (html/html-resource (java.io.FileReader. filename)))
@@ -98,5 +100,5 @@
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (let [[username import-file & rest] args]
-    (log "Importing user " username "with import data file" import-file)
+    (.info logger (str "Importing user " username "with import data file" import-file))
     (import-user-and-file username import-file)))

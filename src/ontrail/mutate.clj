@@ -1,5 +1,5 @@
 (ns ontrail.mutate
-  (:use [ontrail mongodb log utils search])
+  (:use [ontrail mongodb utils search])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [clj-time.format :as format]
@@ -7,6 +7,8 @@
             [clj-time.core :as time]
             ;; for date serialization to mongo.
             [monger.joda-time]))
+
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (def multi-parser (format/formatter (time/default-time-zone)
                                     "dd.MM.yyyy"
@@ -18,7 +20,7 @@
 
 (defn date-ok? [date]
   (not-nil? (try (parse-time date)
-                 (catch Exception e (log "DEBUG" "ex in parse date" date e)))))
+                 (catch Exception e (.debug logger (str "ex in parse date" date e))))))
 
 (defn sport-ok? [sport]
   (not-nil? (mc/find-one-as-map ONSPORT {:_id sport})))
@@ -55,11 +57,11 @@
         (assoc :comments '()))))
 
 (defn create-ex [user user-input-ex]
-  (log "DEBUG" (format "User %s created an ex %s" user (:title user-input-ex)))
+  (.debug logger (format "User %s created an ex %s" user (:title user-input-ex)))
   (if (valid? user-input-ex)
     (insert-exercise-inmem-index
      (mc/insert-and-return EXERCISE (from-user-ex user user-input-ex)))))
 
 (defn create-ex-wrapper [user body-as-json]
-  (log "DEBUG" "creating ex" body-as-json "for user" user)
+  (.debug logger (str "creating ex" body-as-json "for user" user))
   (create-ex user body-as-json))

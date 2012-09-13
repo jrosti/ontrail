@@ -9,6 +9,7 @@
             [net.cgrand.enlive-html :as html])
   (:import [org.bson.types ObjectId]))
 
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn get-heart-rate-reserve [exercise user-profile]
   (let [resthr (get user-profile :resthr)
@@ -66,7 +67,7 @@
                (mq/fields [ :_id :title :user :body :duration :distance :sport :creationDate :comments ])
                (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
-    (log "DEBUG" "Get exercise list" rule page "with" (count results) "results.")
+    (.debug logger (str "Get exercise list" rule page "with" (count results) "results."))
     (as-ex-result-list results)))
 
 (defn get-ex [id]
@@ -81,7 +82,7 @@
             comment-count (if (list? comments) (count comments) 0)
             avatar (get-avatar-url user)
             date (to-human-date (:creationDate exercise))]
-        (log "DEBUG" "ex " id)
+        (.debug logger (str "ex " id))
         {:id id
          :user user
          :distance distance

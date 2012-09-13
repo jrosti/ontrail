@@ -1,10 +1,12 @@
 (ns ontrail.search
-  (:use [ontrail mongodb utils log exercise])
+  (:use [ontrail mongodb utils exercise])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
             [monger.result :as mr]
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
+
+;(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn get-ex-terms [exercise]
   (let [part (partial get exercise)
@@ -33,7 +35,8 @@
 
 (defmacro rebuild-index []
   `(do (reset! inverted-index {})
-       (log "INFO" "built " (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {}))) "terms")))
+     (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
+ ;    (.info logger (str "built " (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {}))) "terms"))))
 
 (def search-limit 100)
 
@@ -42,7 +45,7 @@
 
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
-    (log "TRACE" " search result count: " (count ids))
+;    (.trace logger (str " search result count: " (count ids)))
     (as-ex-result-list (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids)))))
 
 (defn search-wrapper [query]
