@@ -53,7 +53,7 @@
         <li class="right login">
           <a class="logged-out" id="login-link">Kirjaudu sisään</a>
           <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
-          <form id="login-form">
+          <form id="login-form" method="post">
             <input id="username" name="username" type="text" placeholder="Username" />
             <input id="password" name="password" type="password" placeholder="Password"/>
             <input id="login" type="button" value="Sisään"/>
@@ -110,6 +110,11 @@
       <article>
         <h2>Lisää uusi lenkki</h2>
         <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
+        <form id="add-exercise-form" method="post">
+          <input name="ex-title"></input>
+          <textarea name="ex-body" rows="10" cols="68" ></textarea>
+          <input id="add-exercise" type="button" value="Lisää lenkki"></input>
+        </form>
       </article>
     </section>
 
@@ -122,7 +127,7 @@
   <!-- JavaScript at the bottom for fast page loading -->
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
   <script src="js/jquery.cookie.js"></script>
   <script src="js/jquery.md5.js"></script>
   <script src="js/handlebars-1.0.0.beta.6.js"></script>

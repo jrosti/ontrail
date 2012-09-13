@@ -25,7 +25,7 @@
 
     var errorHandler;
     var ajaxErrors = Rx.Observable.create(function(observer) {
-      errorHandler = { error: function(error) { observer.onNext(error) } }
+      errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
       return function() { errorHandler = null } // todo -- is there something to cleanup?
     });
 
@@ -43,6 +43,9 @@
 
     var doLogin = function() {
       return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() }, errorHandler)).mergeTo(ajaxErrors)
+    }
+    var postExercise = function(user) {
+      return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/ex/" + user , data: $('#login-form').serialize() }, errorHandler)).mergeTo(ajaxErrors)
     }
 
     var renderLatest = function(elem, data) {
@@ -91,7 +94,7 @@
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
     // toggle pages when pageLink is clicked
-    var pageAndArgs = function(elem) { return $(elem).attr('rel').split('-') }
+    var pageAndArgs = function(elem) { return attr('rel', elem).split('-') }
     var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
     var currentPages = loggedIns.select(always("home"))
       .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
@@ -138,6 +141,11 @@
       $('#username').focus()
     })
     loggedIns.subscribe(function() { $('body').toggleClass('login', false) })
+
+    // Lisää lenkki
+    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
+
+    addExercises.subscribe(_.partial(debug, "log here"))
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })

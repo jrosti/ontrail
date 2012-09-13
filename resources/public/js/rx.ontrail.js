@@ -60,6 +60,7 @@ var asArgs = function() { return arguments.length == 1 ? (($.isArray(arguments[0
 // functional js
 var always = function(x) { return function(y) { return x } }
 var identity = function(x) { return x }
+var exists = identity
 var not = function(x) { return !x }
 var first = function() { return asArgs.apply(null, arguments)[0] }
 var second = function() { return asArgs.apply(null, arguments)[1] }
