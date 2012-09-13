@@ -78,14 +78,15 @@
     clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
-    clickedArticles.where(_.compose(not, isArticleLoaded)).select(_.compose(_.bind(splitWith, "-"), _.partial(attr, "id")))
+    clickedArticles.where(_.compose(not, isArticleLoaded))
+      .select(function(el) { return $(el).attr("id").split("-") })
       .selectAjax(getDetails).subscribe(renderExercise)
 
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = function(elem) { return $(elem).attr('rel').split('-') }
-    var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})).doAction(_.partial(debug, "pageLink"))
+    var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
     var currentPages = loggedIns.select(always("home"))
       .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
 
@@ -97,7 +98,7 @@
     userPages.subscribe(function(user) { $(".current-username").text(user) })
 
     // initiate loading and search
-    var oegyscroll = query
+    var latestScroll = query
       .doAction(function() { entries.html("") })
       .combineWithLatestOf(currentPages)
       .selectArgs(function(query, currentPage) {
@@ -107,12 +108,12 @@
           return getSearchResults(query)
       })
       .switchLatest()
-    oegyscroll.subscribe(_.partial(renderLatest, entries))
+    latestScroll.subscribe(_.partial(renderLatest, entries))
 
-    var userScroll = userPages.selectArgs(function(user) {
+    var userScroll = userPages.distinctUntilChanged().doAction(function() { userEntries.html("") })
+      .selectArgs(function(user) {
         return scrollWith(_.partial(getUserExercises, user), userEntries)
-      })
-      .switchLatest()
+      }).switchLatest()
     userScroll.subscribe(_.partial(renderLatest, userEntries))
 
     // initiate summary loading after login
