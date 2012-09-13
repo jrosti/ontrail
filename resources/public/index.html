@@ -144,8 +144,8 @@
     <!-- XXXXX: why this is repeated twice? -->
 <script id="summary-entry-template" type="text/x-handlebars-template">
   <article id="ex-{{id}}" class="exercise {{sport}}">
-    <h2><img src="{{avatar}}" width="48" height="48"><a rel="ex-{{id}}">{{title}}</a></h2>
-    <h4 class="preview"><span class="date">{{date}}</span> {{user}}
+    <h2><img src="{{avatar}}" width="48" height="48"><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+    <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}}. {{else}}
     {{duration}}.{{/if}}</h4>
     {{truncate body 100}} {{commentCount}} kommenttia.
@@ -153,9 +153,9 @@
 </script>
 <script id="exercise-template" type="text/x-handlebars-template">
   <article id="ex-{{id}}" class="full exercise {{sport}}">
-    <h2><img src="{{avatar}}"  width="48" height="48"><a rel="ex-{{id}}">{{title}}</a></h2>
-    <h4 class="full"><span class="date">{{date}}</span>{{user}}</h4>
-    <h4 class="preview"><span class="date">{{date}}</span>{{user}}
+    <h2><img src="{{avatar}}"  width="48" height="48"><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+    <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+    <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
     {{duration}}{{/if}}.</h4>
     <table class="full">

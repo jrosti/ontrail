@@ -70,10 +70,24 @@
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user-' + userId)})
 
+    // open single entries
+    var parentArticle = function(el) { return $(el).closest('article') }
+    var clickedArticleLinks = entries.clickAsObservable().select(target).where(isLink)
+    var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
+
+    clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
+
+    var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
+    clickedArticles.where(_.compose(not, isArticleLoaded)).select(_.compose(_.bind(splitWith, "-"), _.partial(attr, "id")))
+      .selectAjax(getDetails).subscribe(renderExercise)
+
+    clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
+
     // toggle pages when pageLink is clicked
     var pageAndArgs = function(elem) { return $(elem).attr('rel').split('-') }
+    var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})).doAction(_.partial(debug, "pageLink"))
     var currentPages = loggedIns.select(always("home"))
-      .mergeTo($('.pageLink').clickAsObservable().selectArgs(_.compose(pageAndArgs, target))).startWith("latest")
+      .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
 
     currentPages.subscribeArgs(function(page) {
       $('body').attr('data-page', page)
@@ -81,16 +95,6 @@
     })
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
     userPages.subscribe(function(user) { $(".current-username").text(user) })
-
-    // open single entries
-    var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedArticles = entries.clickAsObservable().select(target).where(isLink).select(parentArticle)
-
-    var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
-    clickedArticles.where(_.compose(not, isArticleLoaded)).select(_.compose(_.bind(splitWith, "-"), _.partial(attr, "id")))
-      .selectAjax(getDetails).subscribe(renderExercise)
-
-    clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
     // initiate loading and search
     var oegyscroll = query
