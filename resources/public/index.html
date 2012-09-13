@@ -49,8 +49,7 @@
     <h1>On Trail</h1>
     <div id="menu" role="menu">
       <ul>
-        <li class="logged-in"><a class="pageLink" id="home-link" rel="home">Oma profiilini</a></li>
-        <li><a class="pageLink" id="exercises" rel="latest">Lenkit</a></li>
+        <li><a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a></li>
         <li class="right login">
           <a class="logged-out" id="login-link">Kirjaudu sisään</a>
           <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
@@ -64,33 +63,39 @@
     </div>
   </header>
   <div class="content-area">
+    <aside>
+      <div>
+        <header>
+          <div class="logged-in">
+            <h2>Omat toiminnot</h2>
+            <p><a class="pageLink" rel="addex">Lisää lenkki</a></p>
+            <h2>Omat sivut</h2>
+            <p>
+              <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
+              <a class="pageLink" rel="home">Yhteenveto lenkeistä</a>
+            </p>
+            <p></p>
+
+          </div>
+          <h2>Twitter-aikajana</h2>
+          <p>Keskustele ontrailnetistä twitterissä:</p>
+          <a class="twitter-timeline" href="https://twitter.com/search?q=%23ontrailnet" data-widget-id="245929627292401664">Tviitit "#ontrailnet"</a>
+        </header>
+      </div>
+    </aside>
     <section role="latest">
-      <aside>
-        <div>
-          <header>
-            <h2>Kirjautuneet käyttäjät</h2>
-            <p>Tulossa.</p>
-	  <a class="twitter-timeline" href="https://twitter.com/search?q=%23ontrailnet" data-widget-id="245929627292401664">Tviitit "#ontrailnet"</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-          </header>
-        </div>
-      </aside>
       <article>
         <label for="search">Etsi lenkeistä: </label> <input type="text" width="40" id="search">
       </article>
       <div id="entries"></div>
     </section>
 
-    <section role="home">
-      <aside>
-        <div>
-          <header>
-            <h2>Tähän toiminnallisuudet </h2>
-            <p>Tähän sit websocketilla ne.</p>
+    <section role="user">
+      <h2>Käyttäjän <span class="current-username"></span> lenkit</h2>
+      <div id="user-entries"></div>
+    </section>
 
-          </header>
-        </div>
-      </aside>
+    <section role="home">
       <article>
         <h2>Yhteenveto harjoituksista</h2>
         <p></p>
@@ -98,6 +103,13 @@
         <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
         <tbody></tbody>
       </table>
+      </article>
+    </section>
+
+    <section role="addex">
+      <article>
+        <h2>Lisää uusi lenkki</h2>
+        <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
       </article>
     </section>
 
@@ -124,6 +136,8 @@
   <!-- scripts concatenated and minified via build script -->
   <script src="js/plugins.js"></script>
   <script src="js/script.js"></script>
+
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   <!-- end scripts -->
 
 </body>

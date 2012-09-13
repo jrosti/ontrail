@@ -6,6 +6,18 @@
     })
   }
 
+  Rx.Observable.prototype.whereArgs = function(whereAction) {
+    return this.where(function(args) {
+      return whereAction.apply(null, asArgs(args))
+    })
+  }
+
+  Rx.Observable.prototype.subscribeArgs = function(subscribeAction) {
+    return this.subscribe(function(args) {
+      return subscribeAction.apply(null, asArgs(args))
+    })
+  }
+
   Rx.Observable.prototype.selectAjax = function(ajaxAction) {
     var stream = this.selectArgs(ajaxAction).switchLatest().publish()
     stream.connect()
