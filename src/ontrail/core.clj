@@ -23,7 +23,7 @@
    :body (json-str data)})
 
 (defn is-authenticated? [params cookies action]
-    (let [auth-token (:value (cookies "authToken"))
+  (let [auth-token (:value (cookies "authToken"))
         auth-token-hash (:tokenHash params)]
     (if (valid-auth-token? auth-token)
       action
