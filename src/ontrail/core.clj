@@ -13,9 +13,11 @@
   (:require [compojure.handler :as handler]
             [compojure.route :as route]
             [monger.collection :as mc]
-            [ring.util.response :as response]))
+            [ring.util.response :as response]
+            [clj-stacktrace.repl :as strp]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+(def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
 
 (defn json-response [data & [status]]
   {:status (or status 200)
@@ -31,10 +33,12 @@
 
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
-    (.info logger (str "HTTP" (to-logline req)))
-    (handler
-     (update-in req [:uri]
-                #(if (= "/" %) "/index.html" %)))))
+    (.info request-logger (str "HTTP" (to-logline req)))
+    (try
+      (handler
+        (update-in req [:uri] #(if (= "/" %) "/index.html" %)))
+      (catch Exception e
+        (.error logger (str "Exception in handler:\n%s" (strp/pst-str e)))))))
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
