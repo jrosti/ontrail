@@ -23,9 +23,15 @@
     }
     function scrollWith(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
 
+    var errorHandler;
+    var ajaxErrors = Rx.Observable.create(function(observer) {
+      errorHandler = { error: function(error) { console.log(error); observer.onNext({ jqXHR: error }) } }
+      return function() { errorHandler = null } // todo -- is there something to cleanup?
+    });
+
     var getRest = function() {
       var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
-      return $.ajaxAsObservable({ url: "/rest/v1/" + path }).where(isSuccess).select(ajaxResponseData)
+      return $.ajaxAsObservable($.extend({ url: "/rest/v1/" + path }, errorHandler)).mergeTo(ajaxErrors).where(isSuccess).select(ajaxResponseData)
     }
     var getSummary = function(user) { return getRest("summary", user) }
     // unused Jro
@@ -36,7 +42,7 @@
     var getSearchResults = function(query) { return getRest("search?q=" + query ) }
 
     var doLogin = function() {
-      return $.ajaxAsObservable({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() })
+      return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() }, errorHandler)).mergeTo(ajaxErrors)
     }
 
     var renderLatest = function(elem, data) {
