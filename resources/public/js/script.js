@@ -99,10 +99,11 @@
     var currentPages = loggedIns.select(always("home"))
       .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
 
-    currentPages.subscribeArgs(function(page) {
+    var showPage = function(page) {
       $('body').attr('data-page', page)
       $('#password').attr('value', '')
-    })
+    }
+    currentPages.subscribeArgs(showPage)
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
     userPages.subscribe(function(user) {
       $("#button").click(function() {
@@ -145,7 +146,7 @@
     // Lisää lenkki
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
 
-    addExercises.subscribe(_.partial(debug, "log here"))
+    addExercises.subscribe(_.partial(showPage, "home"))
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
   })
