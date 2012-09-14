@@ -6,7 +6,8 @@
             [clojure.string :as string]
             [clj-time.core :as time]
             ;; for date serialization to mongo.
-            [monger.joda-time]))
+            [monger.joda-time])
+  (:import [org.bson.types ObjectId]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
@@ -62,10 +63,11 @@
         (assoc :avghr 0) ;; How to not insert if avghr nil?
         (assoc :comments '()))))
 
-(defn create-ex [user user-input-ex]
-  (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user user-input-ex))]
+(defn create-ex [params]
+  (let [user (:user params)
+        ret  (mc/insert-and-return EXERCISE (from-user-ex user params))]
     (.debug logger (format "User %s created an ex %s " user ret))
     (insert-exercise-inmem-index ret)))
           
-(defn create-ex-wrapper [params]
-  (create-ex (:user params) params))
+(defn comment-ex [ex-id params]
+  (mc/update-by-id EXERCISE (ObjectId. ex-id) {"$push" {:comments {:user (:user params) :text (:text params)}}}))

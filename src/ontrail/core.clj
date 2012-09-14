@@ -7,7 +7,7 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
-        [ontrail.mutate :only (create-ex-wrapper)])
+        [ontrail.mutate :only (create-ex comment-ex)])
   (:use [ontrail summary auth crypto exercise log])
   (:gen-class)
   (:require [compojure.handler :as handler]
@@ -53,9 +53,13 @@
     (if (authenticate username password)
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
+  
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-        (is-authenticated? params cookies (json-response (create-ex-wrapper params))))
-    
+        (is-authenticated? params cookies (json-response (create-ex params))))
+
+  (POST "/rest/v1/ex/comment/:id/:user" {params :params cookies :cookies}
+     (is-authenticated? params cookies (json-response (comment-ex params))))
+
   (route/resources "/")
   (route/not-found "Page not found"))
 
