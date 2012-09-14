@@ -10,7 +10,9 @@ http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
 http http://localhost:8080/rest/v1/ex-list-tag/uintikisa/0
 
-## Before getting any results, you must run following: 
-# lein run :rebuild-index 
+# search 
 http http://localhost:8080/rest/v1/search?q=hiihtolenkki%20jokseenkin
 
+# lgoin request
+http -v -f POST http://localhost:8080/rest/v1/login username=Esko password=Esko 
+http -j -v -f POST http://localhost:8080/rest/v1/ex/Esko Cookie:authToken=BC1SGlq6TLeESw2PYseMoEN-uTSwViFOOGWxC3LzskPFKNybvVCTivLq5slPCeKeIQbnSgic26GYLxk-rASuvyk

@@ -54,11 +54,8 @@
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-    (is-authenticated? params cookies (json-response {"user" (:user params), "secret" "ken sent me"})))
-
-  ;; testing needed
-  ;;(PUT "/rest/v1/put-ex/:user" [user body] (json-response (create-ex-wrapper user body)))
-  
+        (is-authenticated? params cookies (json-response (create-ex-wrapper params))))
+    
   (route/resources "/")
   (route/not-found "Page not found"))
 

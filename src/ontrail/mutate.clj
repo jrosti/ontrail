@@ -37,31 +37,35 @@
        (duration-ok? (:duration uex))
        (sport-ok? (:sport uex))
        (date-ok? (:date uex))))
-       
+
+(defn parse-distance [d]
+  (Integer. d))
+
+(defn parse-duration [d] 
+  (* (Integer. d) 60 100))
+
 (defn from-user-ex [user uex]
   (let [bare-ex {:title (:title uex)
-                 :duration (* (Integer. (:duration uex)) 60 100)
+                 :duration (parse-duration (:duration uex))
                  :sport (:sport uex)
                  :creationDate (parse-time (:date uex))
                  :lastModifiedDate (parse-time (:date uex))
                  :user user}
         body (if (= nil (:body uex)) "" (:body uex)) ;; disallow nil body
         tags (if (= nil (:tags uex)) '() (:tags uex)) ;; default empty tag list or tags
-        avghr (if (positive-numbers? (list (:avghr uex))) (int (:avghr uex)) nil)
-        distance (if (positive-numbers? (list (:distance uex))) (:distance uex) 0)]
+        ;avghr (if (positive-numbers? (list (:avghr uex))) (int (:avghr uex)) nil)
+        distance (parse-distance (:distance uex))]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
-        (assoc :avghr avghr) ;; How to not insert if avghr nil?
+        (assoc :avghr 0) ;; How to not insert if avghr nil?
         (assoc :comments '()))))
 
 (defn create-ex [user user-input-ex]
-  (.debug logger (format "User %s created an ex %s" user (:title user-input-ex)))
-  (if (valid? user-input-ex)
-    (insert-exercise-inmem-index
-     (mc/insert-and-return EXERCISE (from-user-ex user user-input-ex)))))
-
-(defn create-ex-wrapper [user body-as-json]
-  (.debug logger (str "creating ex" body-as-json "for user" user))
-  (create-ex user body-as-json))
+  (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user user-input-ex))]
+    (.debug logger (format "User %s created an ex %s " user ret))
+    (insert-exercise-inmem-index ret)))
+          
+(defn create-ex-wrapper [params]
+  (create-ex (:user params) params))
