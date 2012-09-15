@@ -29,8 +29,8 @@
 (defn password-hash [password] (com.lambdaworks.crypto.SCryptUtil/scrypt password 16384 8 1))
 (defn password-match? [password hash] (com.lambdaworks.crypto.SCryptUtil/check password hash))
 
-(def KEY (:KEY (:auth properties)))
-(def MACKEY (:MACKEY (:auth properties)))
+(def KEY (eval (:KEY (:auth properties))))
+(def MACKEY (eval (:MACKEY (:auth properties))))
 
 (defn new-aes-cipher [] (Cipher/getInstance "AES/CTR/NoPadding"))
 
