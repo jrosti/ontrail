@@ -49,6 +49,10 @@
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
   (GET "/rest/v1/ex-list-user/:user/:page" [user page] (json-response (get-latest-ex-list {:user user} page)))
   (GET "/rest/v1/ex-list-tag/:tag/:page" [tag page] (json-response (get-latest-ex-list {:tags tag} page)))
+
+  (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
+  (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
+  
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)

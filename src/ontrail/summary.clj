@@ -72,3 +72,6 @@
   (.debug logger (str "Getting overall summary" user))
   (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
     (sort-by :numericalDuration > (map #(get-summary {:user user :sport %} %) all-sports))))
+
+(defn get-distinct-tags [condition]
+  (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))

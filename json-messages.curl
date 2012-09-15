@@ -8,9 +8,17 @@ http http://localhost:8080/rest/v1/ex-list-all/1
 
 http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
-http http://localhost:8080/rest/v1/ex-list-tag/uintikisa/0
+## Tag support
+# list exs with a tag uintikisa
+http http://localhost:8080/rest/v1/ex-list-tag/uintikisa/1
 
-# search 
+# List Esko's tag
+http http://localhost:8080/rest/v1/list-tags/Esko
+
+# List all tags in use
+http http://localhost:8080/rest/v1/list-tags-all
+
+# search, returns max 100 results.
 http http://localhost:8080/rest/v1/search?q=hiihtolenkki%20jokseenkin
 
 # lgoin request

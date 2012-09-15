@@ -16,6 +16,7 @@
                                     "dd-MM-yyyy"
                                     "dd/MM/yyyy"
                                     "yyyy/MM/dd"))
+
 (defn parse-time [time-str]
   (format/parse multi-parser time-str))
 
@@ -45,17 +46,21 @@
 (defn parse-duration [d] 
   (* (Integer. d) 60 100))
 
-(defn from-user-ex [user uex]
-  (let [bare-ex {:title (:title uex)
-                 :duration (parse-duration (:duration uex))
-                 :sport (:sport uex)
-                 :creationDate (parse-time (:date uex))
-                 :lastModifiedDate (parse-time (:date uex))
+(defn parse-tags
+  ([] '())
+  ([tags] (string/split (.toLowerCase tags) #"[, \.]+")))
+  
+(defn from-user-ex [user user-ex]
+  (let [bare-ex {:title (:title user-ex)
+                 :duration (parse-duration (:duration user-ex))
+                 :sport (:sport user-ex)
+                 :creationDate (parse-time (:date user-ex))
+                 :lastModifiedDate (parse-time (:date user-ex))
                  :user user}
-        body (if (= nil (:body uex)) "" (:body uex)) ;; disallow nil body
-        tags (if (= nil (:tags uex)) '() (:tags uex)) ;; default empty tag list or tags
-        ;avghr (if (positive-numbers? (list (:avghr uex))) (int (:avghr uex)) nil)
-        distance (parse-distance (:distance uex))]
+        body (if (= nil (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
+        tags (parse-tags (:tags user-ex))
+        ;avghr (if (positive-numbers? (list (:avghr user-ex))) (int (:avghr user-ex)) nil)
+        distance (parse-distance (:distance user-ex))]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)
@@ -67,7 +72,8 @@
   (let [user (:user params)
         ret  (mc/insert-and-return EXERCISE (from-user-ex user params))]
     (.debug logger (format "User %s created an ex %s " user ret))
-    (insert-exercise-inmem-index ret)))
+    (insert-exercise-inmem-index ret)
+    ret))
           
 (defn comment-ex [ex-id params]
   (mc/update-by-id EXERCISE (ObjectId. ex-id) {"$push" {:comments {:user (:user params) :text (:text params)}}}))
