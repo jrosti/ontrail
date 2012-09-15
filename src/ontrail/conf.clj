@@ -9,5 +9,5 @@
 
 (def properties
   (if (file-exists? properties-file)
-    (read-string (slurp properties-file))
+    (eval (read-string (slurp properties-file)))
     default-properties))

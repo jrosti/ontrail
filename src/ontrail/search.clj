@@ -56,6 +56,6 @@
 
 (defn search-wrapper [query]
   (let [query-string (:q query)]
-    (if (= query-string nil)
+    (if (nil? query-string)
       '()
       (apply search (string/split query-string #" +")))))
