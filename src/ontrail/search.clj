@@ -6,7 +6,7 @@
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
 
-;(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn get-ex-terms [exercise]
   (let [part (partial get exercise)
@@ -45,11 +45,11 @@
 
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
-;    (.trace logger (str " search result count: " (count ids)))
+    (.trace logger (str " search result count: " (count ids)))
     (as-ex-result-list (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids)))))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)]
     (if (= query-string nil)
       '()
-      (apply search (string/split query-string #" ")))))
+      (apply search (string/split query-string #" +")))))

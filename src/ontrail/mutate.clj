@@ -48,8 +48,12 @@
 
 (defn parse-tags
   ([] '())
-  ([tags] (string/split (.toLowerCase tags) #"[, \.]+")))
-  
+  ([tags]
+     (let [trim-tag #(-> % .toLowerCase string/trim)]
+       (if (string? tags)
+         (string/split (trim-tag tags) #"[, ;\.]+")
+         '()))))
+
 (defn from-user-ex [user user-ex]
   (let [bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
@@ -76,4 +80,6 @@
     ret))
           
 (defn comment-ex [ex-id params]
-  (mc/update-by-id EXERCISE (ObjectId. ex-id) {"$push" {:comments {:user (:user params) :text (:text params)}}}))
+  (mc/update-by-id EXERCISE
+                   (ObjectId. ex-id)
+                   {"$push" {:comments {:user (:user params) :text (:text params)}}}))
