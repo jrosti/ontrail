@@ -61,7 +61,7 @@
                  :creationDate (parse-time (:date user-ex))
                  :lastModifiedDate (parse-time (:date user-ex))
                  :user user}
-        body (if (= nil (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
+        body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
         tags (parse-tags (:tags user-ex))
         ;avghr (if (positive-numbers? (list (:avghr user-ex))) (int (:avghr user-ex)) nil)
         distance (parse-distance (:distance user-ex))]
