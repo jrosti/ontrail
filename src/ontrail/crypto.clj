@@ -1,4 +1,5 @@
 (ns ontrail.crypto
+  (:use ontrail.conf)
   (:import (org.apache.commons.codec.binary Hex, Base64))
   (:import (javax.crypto Cipher Mac))
   (:import (javax.crypto.spec IvParameterSpec SecretKeySpec)))
@@ -28,8 +29,8 @@
 (defn password-hash [password] (com.lambdaworks.crypto.SCryptUtil/scrypt password 16384 8 1))
 (defn password-match? [password hash] (com.lambdaworks.crypto.SCryptUtil/check password hash))
 
-(def KEY (.getBytes "s49628MbrU8VoG8Q"))
-(def MACKEY (.getBytes "R4A6bX69a4NU68xK"))
+(def KEY (:KEY (:auth properties)))
+(def MACKEY (:MACKEY (:auth properties)))
 
 (defn new-aes-cipher [] (Cipher/getInstance "AES/CTR/NoPadding"))
 

@@ -1,5 +1,9 @@
 (ns ontrail.utils
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string])
+  (:import [java.io File]))
+
+(defn file-exists? [filename]
+  (.exists (File. filename)))
 
 (defn float= [x y]
   (<= (Math/abs (- x y)) 0.00001))

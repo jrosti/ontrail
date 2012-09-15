@@ -51,7 +51,7 @@
   ([tags]
      (let [trim-tag #(-> % .toLowerCase string/trim)]
        (if (string? tags)
-         (string/split (trim-tag tags) #"[, ;\.]+")
+         (string/split (trim-tag tags) #"[, ;\.\^\*\/]+")
          '()))))
 
 (defn from-user-ex [user user-ex]
