@@ -16,6 +16,9 @@
                      :body "Pom"
                      :tags "tag1 tag2 tag3"})
 
+(deftest basic-exercise-is-valid
+  (is (valid? basic-exercise)))
+
 (deftest test-db-insertable-from-basic-user-ex
   (is (= {:title "A title"
           :body "Pom"

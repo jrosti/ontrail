@@ -33,18 +33,18 @@
 (defn duration-ok? [dur]
   (positive-numbers? (list dur)))
 
+(defn parse-duration [d] 
+  (* (Integer. d) 60 100))
+
 (defn valid? [uex]
   "Defines minimal set of keys for a valid ex"
   (and (title-ok? (:title uex))
-       (duration-ok? (:duration uex))
+       (duration-ok? (parse-duration (:duration uex)))
        (sport-ok? (:sport uex))
        (date-ok? (:date uex))))
 
 (defn parse-distance [d]
   (Integer. d))
-
-(defn parse-duration [d] 
-  (* (Integer. d) 60 100))
 
 (defn parse-tags
   ([] '())
