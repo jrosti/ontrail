@@ -19,6 +19,10 @@
 (deftest basic-exercise-is-valid
   (is (valid? basic-exercise)))
 
+;(deftest test-parse-distance
+;  (let [hour (* 60 60 100)]
+;    (is (= hour (parse-distance "1h")))))
+
 (deftest test-db-insertable-from-basic-user-ex
   (is (= {:title "A title"
           :body "Pom"
@@ -29,7 +33,7 @@
           :avghr 0
           :distance 10000
           :duration (* 30 60 100)
-          :creationDate (parse-time "20.4.2012")
-          :lastModifiedDate (parse-time "20.4.2012")}
+          :creationDate (parse-date "20.4.2012")
+          :lastModifiedDate (parse-date "20.4.2012")}
          (from-user-ex "Esko" basic-exercise))
          "Basic user data import test."))
