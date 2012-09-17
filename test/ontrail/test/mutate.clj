@@ -19,9 +19,9 @@
 (deftest basic-exercise-is-valid
   (is (valid? basic-exercise)))
 
-(deftest test-parse-distance
-  (let [hour (* 60 60 100)]
-    (is (= hour (parse-distance "1h")))))
+;(deftest test-parse-distance
+;  (let [hour (* 60 60 100)]
+;    (is (= hour (parse-distance "1h")))))
 
 (deftest test-db-insertable-from-basic-user-ex
   (is (= {:title "A title"
