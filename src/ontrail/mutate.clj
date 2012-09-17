@@ -17,11 +17,11 @@
                                     "dd/MM/yyyy"
                                     "yyyy/MM/dd"))
 
-(defn parse-time [time-str]
+(defn parse-date [time-str]
   (format/parse multi-parser time-str))
 
 (defn date-ok? [date]
-  (not-nil? (try (parse-time date)
+  (not-nil? (try (parse-date date)
                  (catch Exception e (.debug logger (str "ex in parse date" date e))))))
 
 (defn sport-ok? [sport]
@@ -58,8 +58,8 @@
   (let [bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
                  :sport (:sport user-ex)
-                 :creationDate (parse-time (:date user-ex))
-                 :lastModifiedDate (parse-time (:date user-ex))
+                 :creationDate (parse-date (:date user-ex))
+                 :lastModifiedDate (parse-date (:date user-ex))
                  :user user}
         body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
         tags (parse-tags (:tags user-ex))
