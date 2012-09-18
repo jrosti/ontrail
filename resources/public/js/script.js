@@ -54,7 +54,7 @@
       $(content).appendTo(elem)
     }
     var renderExercise = function(exercise) {
-      $('#ex-' + exercise.id).replaceWith($(exerciseTemplate(exercise)))
+      $('[data-id=' + exercise.id + ']').replaceWith($(exerciseTemplate(exercise)))
     }
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
@@ -88,7 +88,7 @@
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(_.compose(not, isArticleLoaded))
-      .select(function(el) { return $(el).attr("id").split("-") })
+      .select(function(el) { return ['ex', $(el).attr("data-id")] })
       .selectAjax(getDetails).subscribe(renderExercise)
 
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
