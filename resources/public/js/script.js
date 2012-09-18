@@ -5,6 +5,7 @@
 
     var entries = $("#entries")
     var userEntries = $("#user-entries")
+    var allEntries = $("#entries,#user-entries")
 
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
@@ -81,7 +82,7 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedArticleLinks = entries.clickAsObservable().select(target).where(isLink)
+    var clickedArticleLinks = allEntries.clickAsObservable().select(target).where(isLink)
     var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
 //    clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
