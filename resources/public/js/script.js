@@ -1,8 +1,6 @@
 
 (function() {
   $(document).ready(function() {
-    var rx = Rx.Observable;
-
     var entries = $("#entries")
     var userEntries = $("#user-entries")
     var allEntries = $("#entries,#user-entries")
@@ -63,17 +61,12 @@
       $(content).appendTo($('#homies tbody'))
     }
 
-    var sessions = rx.create(function(observer) {
-      var logouts = $("#logout").clickAsObservable()
-      var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
-      var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
-      var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
+    var logouts = $("#logout").clickAsObservable()
+    var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
+    var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
+    var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
+    var sessions = OnTrail.session.create(logins, loginFails, logouts);
 
-      logins.subscribe(function(login) { $.cookie("authToken", login.token ); $.cookie("authUser", login.username); observer.onNext(login.username) } )
-      logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); $.cookie("authUser", null); observer.onNext(null)})
-      observer.onNext($.cookie("authUser")) // initialize with login state
-      return function() {} // todo -- should we dispose something.
-    })
     var loggedIns = sessions.where(identity)
     var loggedOuts = sessions.where(_.compose(not, identity))
 

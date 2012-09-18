@@ -48,6 +48,9 @@
     })
   }
 }());
+var rx = Rx.Observable;
+
+var OnTrail = {}
 
 // debugging and dummy subscribing
 var debug = function() {console.log("debug: ", arguments)}
