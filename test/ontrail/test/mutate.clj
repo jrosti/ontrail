@@ -19,6 +19,10 @@
 (deftest basic-exercise-is-valid
   (is (valid? basic-exercise)))
 
+(deftest test-parse-minutes
+  (is (= (parse-duration "60") (parse-duration "60 m")))
+  (is (= (parse-duration "60") (parse-duration "60m"))))
+  
 ;(deftest test-parse-distance
 ;  (let [hour (* 60 60 100)]
 ;    (is (= hour (parse-distance "1h")))))

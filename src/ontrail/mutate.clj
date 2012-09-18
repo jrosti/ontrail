@@ -17,8 +17,26 @@
                                     "dd/MM/yyyy"
                                     "yyyy/MM/dd"))
 
-(defn parse-date [time-str]
-  (format/parse multi-parser time-str))
+
+(defn minutes [min] (* (Integer. min) 60 100))
+
+(def duration-regexps
+  [ {:re #"^([0-9]+) *m$" :conv minutes}
+    {:re #"^([0-9]+)$" :conv minutes}])
+
+(defn try-match [re str]
+  (re-matches re str))
+
+(defn try-parse [re-conv str]
+  (let [match (try-match (:re re-conv) str)]
+    (if match
+      (apply (:conv re-conv) (rest match)))))
+
+(defn parse-duration [dur-str] 
+  (some identity (map #(try-parse % dur-str) duration-regexps)))
+
+(defn parse-date [date-str]
+  (format/parse multi-parser date-str))
 
 (defn date-ok? [date]
   (not-nil? (try (parse-date date)
@@ -32,9 +50,6 @@
 
 (defn duration-ok? [dur]
   (positive-numbers? (list dur)))
-
-(defn parse-duration [d] 
-  (* (Integer. d) 60 100))
 
 (defn valid? [uex]
   "Defines minimal set of keys for a valid ex"
