@@ -23,11 +23,11 @@
   (is (= (parse-duration "60") (parse-duration "60 m")))
   (is (= (parse-duration "60") (parse-duration "60m")))
   (is (= (parse-duration "60") (parse-duration "1 h")))
-  (is (= (hours 1) (hours-and-minutes 1 0))))
+  (is (= (hours 1) (hours-and-minutes 1 0)))
+  (is (= (parse-duration "1:0") (hours 1)))
+  (is (= (parse-duration "1.0") (hours 1)))
+  (is (= (parse-duration "1.0.0") (hours 1))))
   
-;(deftest test-parse-distance
-;  (let [hour (* 60 60 100)]
-;    (is (= hour (parse-distance "1h")))))
 
 (deftest test-db-insertable-from-basic-user-ex
   (is (= {:title "A title"

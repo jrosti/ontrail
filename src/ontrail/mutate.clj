@@ -26,10 +26,14 @@
 
 (defn hours-and-minutes [h min] (+ (hours h) (to-db min)))
 
+(defn hours-and-minutes-and-seconds [h min sec] (+ (hours h) (to-db min) (* (Integer. sec) 100)))
+
 (def duration-regexps
   [ {:re #"^([0-9]+) *m$" :conv minutes}
     {:re #"^([0-9]+)$" :conv minutes}
-    {:re #"^([0-9]+) *h$" :conv hours}])
+    {:re #"^([0-9]+) *h$" :conv hours}
+    {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv hours-and-minutes}
+    {:re #"^([0-9]+)\.([0-9]+)\.([0-9]+)$" :conv hours-and-minutes-and-seconds}])
 
 (defn try-match [re str]
   (re-matches re str))
