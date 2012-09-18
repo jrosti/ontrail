@@ -22,30 +22,8 @@
     }
     function scrollWith(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
 
-    var errorHandler;
-    var ajaxErrors = Rx.Observable.create(function(observer) {
-      errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
-      return function() { errorHandler = null } // todo -- is there something to cleanup?
-    });
-
-    var getRest = function() {
-      var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
-      return $.ajaxAsObservable($.extend({ url: "/rest/v1/" + path }, errorHandler)).mergeTo(ajaxErrors).where(isSuccess).select(ajaxResponseData)
-    }
-    var getSummary = function(user) { return getRest("summary", user) }
-    // unused Jro
-    var getAvatarUrl = function(user) { return getRest("avatar", user) }
-    var getLatest = function(page) { return getRest("ex-list-all", page) }
-    var getUserExercises = function(user, page) { return getRest("ex-list-user", user, page) }
-    var getDetails = function(kind, id) { return getRest(kind, id) }
-    var getSearchResults = function(query) { return getRest("search?q=" + query ) }
-
-    var doLogin = function() {
-      return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/login", data: $('#login-form').serialize() }, errorHandler)).mergeTo(ajaxErrors)
-    }
-    var postExercise = function(user) {
-      return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/ex/" + user , data: $('#login-form').serialize() }, errorHandler)).mergeTo(ajaxErrors)
-    }
+    var doLogin = function() { return OnTrail.rest.postAsObservable("/rest/v1/login", $('#login-form').serialize()) }
+    var postExercise = function(user) { return OnTrail.rest.postAsObservable("/rest/v1/ex/" + user, $('#add-exercise-form').serialize()) }
 
     var renderLatest = function(elem, data) {
       if (!data || !data.length || data.length == 0) return;
@@ -84,7 +62,7 @@
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(_.compose(not, isArticleLoaded))
       .select(function(el) { return ['ex', $(el).attr("data-id")] })
-      .selectAjax(getDetails).subscribe(renderExercise)
+      .selectAjax(OnTrail.rest.details).subscribe(renderExercise)
 
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
@@ -114,21 +92,21 @@
       .combineWithLatestOf(currentPages)
       .selectArgs(function(query, currentPage) {
         if (query === "")
-          return scrollWith(getLatest, entries)
+          return scrollWith(OnTrail.rest.latest, entries)
         else
-          return getSearchResults(query)
+          return OnTrail.rest.searchResults(query)
       })
       .switchLatest()
     latestScroll.subscribe(_.partial(renderLatest, entries))
 
     var userScroll = userPages.distinctUntilChanged().doAction(function() { userEntries.html("") })
       .selectArgs(function(user) {
-        return scrollWith(_.partial(getUserExercises, user), userEntries)
+        return scrollWith(_.partial(OnTrail.rest.userExercises, user), userEntries)
       }).switchLatest()
     userScroll.subscribe(_.partial(renderLatest, userEntries))
 
     // initiate summary loading after login
-    var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(getSummary)
+    var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
     ownSummaries.subscribe(renderSummary)
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
@@ -148,8 +126,3 @@
     $(".chzn-select").chosen()
   })
 })()
-
-
-
-
-
