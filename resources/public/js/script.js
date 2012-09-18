@@ -63,21 +63,22 @@
       $(content).appendTo($('#homies tbody'))
     }
 
-    var logouts = $("#logout").clickAsObservable()
-    var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
-    var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
-    var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
-
     var sessions = rx.create(function(observer) {
-      logins.subscribe(function(login) { $.cookie("authToken", login.token ); observer.onNext(login.username) } )
-      logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); observer.onNext(null)})
+      var logouts = $("#logout").clickAsObservable()
+      var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
+      var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
+      var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
+
+      logins.subscribe(function(login) { $.cookie("authToken", login.token ); $.cookie("authUser", login.username); observer.onNext(login.username) } )
+      logouts.mergeTo(loginFails).subscribe(function() { $.cookie("authToken", null); $.cookie("authUser", null); observer.onNext(null)})
+      observer.onNext($.cookie("authUser")) // initialize with login state
       return function() {} // todo -- should we dispose something.
     })
     var loggedIns = sessions.where(identity)
     var loggedOuts = sessions.where(_.compose(not, identity))
 
     // toggle logged-in and logged-out
-    sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', userId).toggleClass('logged-out', !userId) })
+    sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user-' + userId)})
 
     // open single entries
