@@ -150,6 +150,8 @@
     addExercises.subscribe(_.partial(showPage, "home"))
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
+    // pimp selection boxes
+    $(".chzn-select").chosen()
   })
 })()
 
