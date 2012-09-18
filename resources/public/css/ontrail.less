@@ -146,19 +146,22 @@ label {
   padding: 40px 0;
 }
 
-input {
+input, textarea {
   @pad: 5px;
   .border-radius(@pad);
-  *border: 1px solid #888888;
-  height: 1.68em;
-  line-height: 1.68em;
   padding: 0 2px 0 @pad;
   font-size: 1em;
   outline: none;
+}
+
+input {
+  height: 1.68em;
+  line-height: 1.68em;
   &:focus {
     border: 2px solid @shadow-color;
   }
 }
+
 #search {
   width: 75%;
   margin-left: 20px;
@@ -269,3 +272,8 @@ body.login {
   }
 }
 
+section[role="addex"] {
+  input, select, textarea {
+    margin: 10px;
+  }
+}

@@ -143,7 +143,8 @@ label {
   vertical-align: middle;
   padding: 40px 0;
 }
-input {
+input,
+textarea {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -156,12 +157,13 @@ input {
   -webkit-background-clip: padding-box;
   -moz-background-clip: padding;
   background-clip: padding-box;
-  *border: 1px solid #888888;
-  height: 1.68em;
-  line-height: 1.68em;
   padding: 0 2px 0 5px;
   font-size: 1em;
   outline: none;
+}
+input {
+  height: 1.68em;
+  line-height: 1.68em;
 }
 input:focus {
   border: 2px solid rgba(0, 0, 0, 0.25);
@@ -298,4 +300,9 @@ body.login #login-form {
 }
 body.login #login-form * {
   display: inline-block;
+}
+section[role="addex"] input,
+section[role="addex"] select,
+section[role="addex"] textarea {
+  margin: 10px;
 }
