@@ -84,7 +84,7 @@
     var clickedArticleLinks = entries.clickAsObservable().select(target).where(isLink)
     var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
-    clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
+//    clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(_.compose(not, isArticleLoaded))
