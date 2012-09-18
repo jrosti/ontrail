@@ -22,7 +22,8 @@
 (deftest test-parse-minutes
   (is (= (parse-duration "60") (parse-duration "60 m")))
   (is (= (parse-duration "60") (parse-duration "60m")))
-  (is (= (parse-duration "60") (parse-duration "1 h"))))
+  (is (= (parse-duration "60") (parse-duration "1 h")))
+  (is (= (hours 1) (hours-and-minutes 1 0))))
   
 ;(deftest test-parse-distance
 ;  (let [hour (* 60 60 100)]

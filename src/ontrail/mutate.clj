@@ -18,9 +18,13 @@
                                     "yyyy/MM/dd"))
 
 
-(defn minutes [min] (* (Integer. min) 60 100))
+(defn to-db [min] (* (Integer. min) 60 100))
 
-(defn hours [h] (* (Integer. h) 60 60 100))
+(defn minutes [min] (to-db min))
+
+(defn hours [h] (* (to-db 1) 60))
+
+(defn hours-and-minutes [h min] (+ (hours h) (to-db min)))
 
 (def duration-regexps
   [ {:re #"^([0-9]+) *m$" :conv minutes}
