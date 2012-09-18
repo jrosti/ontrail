@@ -20,9 +20,12 @@
 
 (defn minutes [min] (* (Integer. min) 60 100))
 
+(defn hours [h] (* (Integer. h) 60 60 100))
+
 (def duration-regexps
   [ {:re #"^([0-9]+) *m$" :conv minutes}
-    {:re #"^([0-9]+)$" :conv minutes}])
+    {:re #"^([0-9]+)$" :conv minutes}
+    {:re #"^([0-9]+) *h$" :conv hours}])
 
 (defn try-match [re str]
   (re-matches re str))
