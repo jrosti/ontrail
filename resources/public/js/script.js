@@ -10,17 +10,6 @@
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
 
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
-    var nextPage = function(elem) { return Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(elem, 100) }) }
-
-    var pager = function(ajaxSearch, page, next) {
-      return ajaxSearch(page).selectMany(function(res) {
-        if (res.length === 0)
-          return rx.never()
-        else
-          return rx.returnValue(res).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page+1, next) }))
-      })
-    }
-    function scrollWith(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
 
     var doLogin = function() { return OnTrail.rest.postAsObservable("/rest/v1/login", $('#login-form').serialize()) }
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("/rest/v1/ex/" + user, $('#add-exercise-form').serialize()) }
@@ -92,7 +81,7 @@
       .combineWithLatestOf(currentPages)
       .selectArgs(function(query, currentPage) {
         if (query === "")
-          return scrollWith(OnTrail.rest.latest, entries)
+          return OnTrail.pager.create(OnTrail.rest.latest, entries)
         else
           return OnTrail.rest.searchResults(query)
       })
@@ -101,7 +90,7 @@
 
     var userScroll = userPages.distinctUntilChanged().doAction(function() { userEntries.html("") })
       .selectArgs(function(user) {
-        return scrollWith(_.partial(OnTrail.rest.userExercises, user), userEntries)
+        return OnTrail.pager.create(_.partial(OnTrail.rest.userExercises, user), userEntries)
       }).switchLatest()
     userScroll.subscribe(_.partial(renderLatest, userEntries))
 
