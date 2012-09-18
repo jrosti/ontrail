@@ -11,8 +11,7 @@
 
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
 
-    var doLogin = function() { return OnTrail.rest.postAsObservable("/rest/v1/login", $('#login-form').serialize()) }
-    var postExercise = function(user) { return OnTrail.rest.postAsObservable("/rest/v1/ex/" + user, $('#add-exercise-form').serialize()) }
+    var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
 
     var renderLatest = function(elem, data) {
       if (!data || !data.length || data.length == 0) return;
@@ -28,6 +27,7 @@
       $(content).appendTo($('#homies tbody'))
     }
 
+    var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
     var logouts = $("#logout").clickAsObservable()
     var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
