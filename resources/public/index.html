@@ -185,6 +185,15 @@
     </table>
     <div class="preview">{{truncate body 100}} {{commentCount}} kommenttia.</div>
     <div class="full">{{{body}}}</div>
+    <div class="full">
+      <strong>Tägit:</strong  >
+      <ul>
+
+      {{#each tags}}
+      <li><a class="tag" rel="tag-{{this}}">{{this}}</a></li>
+      {{/each}}
+      </ul>
+    </div>
     <p class="full">{{commentCount}} kommenttia.</p>
   </article>
 </script>

@@ -242,6 +242,13 @@ section article.preview .body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+section article ul {
+  display: inline-block;
+  list-style: none;
+}
+section article li {
+  display: inline;
+}
 section table {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
@@ -304,5 +311,6 @@ body.login #login-form * {
 section[role="addex"] input,
 section[role="addex"] select,
 section[role="addex"] textarea {
-  margin: 10px;
+  margin: 10px 10px 10px 0;
+  display: block;
 }
