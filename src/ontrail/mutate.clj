@@ -119,6 +119,6 @@
   (.debug logger (str (:user params) " creating comment " params))
   (mc/update-by-id EXERCISE
                    (ObjectId. (:id params))
-                   {"$push" {:comments {:date (time/now) :user (:user params) :body (:body params)}}})
+                   {"$push" {:comments {:tile (:title params) :date (time/now) :user (:user params) :body (:body params)}}})
    (.debug logger (str (:user params) " creating comment " params))
   (get-ex (:id params)))
