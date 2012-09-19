@@ -3,13 +3,12 @@
   $(document).ready(function() {
     var entries = $("#entries")
     var userEntries = $("#user-entries")
-    var allEntries = $("#entries,#user-entries")
+    var tagEntries = $("#tag-entries")
+    var allEntries = $("#entries,#user-entries,#tag-entries")
 
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
-
-    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
 
@@ -27,13 +26,17 @@
       $(content).appendTo($('#homies tbody'))
     }
 
+    // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
     var logouts = $("#logout").clickAsObservable()
     var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
-    var sessions = OnTrail.session.create(logins, loginFails, logouts);
 
+    // create session
+    var sessions = OnTrail.session.create(logins, logouts.mergeTo(loginFails));
+
+    // loggedIn and loggedOut state resolved from session
     var loggedIns = sessions.where(identity)
     var loggedOuts = sessions.where(_.compose(not, identity))
 
@@ -45,8 +48,6 @@
     var parentArticle = function(el) { return $(el).closest('article') }
     var clickedArticleLinks = allEntries.clickAsObservable().select(target).where(isLink)
     var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
-
-//    clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(_.compose(not, isArticleLoaded))
@@ -68,14 +69,25 @@
     currentPages.subscribeArgs(showPage)
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
     userPages.subscribe(function(user) {
-      $("#button").click(function() {
-        $('html, body').animate({
-          scrollTop: $('[role="user"]').offset().top
-        }, 300);
-      });
+//      $("button").click(function() {
+//        $('html, body').animate({
+//          scrollTop: $('[role="user"]').offset().top
+//        }, 300);
+//      });
       $(".current-username").text(user) })
 
+    var tagPages = currentPages.whereArgs(partialEquals("tag")).selectArgs(second)
+    tagPages.subscribe(function(tag) {
+//      $("#button").click(function() {
+//        $('html, body').animate({
+//          scrollTop: $('[role="user"]').offset().top
+//        }, 300);
+//      });
+      $(".current-tag").text(tag) })
+
+
     // initiate loading and search
+    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().where(function(val) { return val.length > 2 }).startWith("")
     var latestScroll = query
       .doAction(function() { entries.html("") })
       .combineWithLatestOf(currentPages)
@@ -88,11 +100,19 @@
       .switchLatest()
     latestScroll.subscribe(_.partial(renderLatest, entries))
 
+    // scrolling on user page
     var userScroll = userPages.distinctUntilChanged().doAction(function() { userEntries.html("") })
       .selectArgs(function(user) {
         return OnTrail.pager.create(_.partial(OnTrail.rest.userExercises, user), userEntries)
       }).switchLatest()
     userScroll.subscribe(_.partial(renderLatest, userEntries))
+
+    // scrolling on tag page
+    var tagScroll = tagPages.distinctUntilChanged().doAction(function() { tagEntries.html("") })
+      .selectArgs(function(tag) {
+        return OnTrail.pager.create(_.partial(OnTrail.rest.tagExercises, tag), tagEntries)
+      }).switchLatest()
+    tagScroll.subscribe(_.partial(renderLatest, tagEntries))
 
     // initiate summary loading after login
     var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
@@ -107,7 +127,6 @@
 
     // Lisää lenkki
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
-
     addExercises.subscribe(_.partial(showPage, "home"))
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })

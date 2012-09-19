@@ -4,7 +4,7 @@
   var errorHandler;
   var ajaxErrors = Rx.Observable.create(function(observer) {
     errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
-    return function() { errorHandler = null } // todo -- is there something to cleanup?
+    return function() { errorHandler = null }
   });
 
   var getAsObservable = function() {
@@ -16,6 +16,7 @@
   Rest.prototype.avatarUrl = function(user) { return getAsObservable("avatar", user) }
   Rest.prototype.latest = function(page) { return getAsObservable("ex-list-all", page) }
   Rest.prototype.userExercises = function(user, page) { return getAsObservable("ex-list-user", user, page) }
+  Rest.prototype.tagExercises = function(tag, page) { return getAsObservable("ex-list-tag", tag, page) }
   Rest.prototype.details = function(kind, id) { return getAsObservable(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservable("search?q=" + query ) }
 
