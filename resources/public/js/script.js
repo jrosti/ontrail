@@ -12,6 +12,7 @@
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
+    var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/comment/" + exercise, $('#add-comment-form').serialize()) }
 
     var renderLatest = function(elem, data) {
       if (!data || !data.length || data.length == 0) return;
@@ -81,8 +82,8 @@
     var tagPages = currentPages.whereArgs(partialEquals("tag")).selectArgs(second)
     tagPages.subscribe(function(tag) { $(".current-tag").text(tag) })
 
-    var exPages = currentPages.whereArgs(partialEquals("ex"))
-    exPages.selectAjax(OnTrail.rest.details).subscribe(renderSingleExercise)
+    var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
+    exPages.subscribe(renderSingleExercise)
 
     // initiate loading and search
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().where(function(val) { return val.length > 2 }).startWith("")
@@ -126,6 +127,12 @@
     // Lisää lenkki
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
     addExercises.subscribe(_.partial(showPage, "home"))
+    // Lisää kommentti
+    exPages.subscribe(function(exercise) {
+      var addComments = $('#add-comment').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists)
+        .select(always(exercise.id)).selectAjax(postComment)
+      addComments.subscribe(renderSingleExercise)
+    })
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
     // pimp selection boxes
