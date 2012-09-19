@@ -31,14 +31,18 @@
       action
       (json-response {"error" "Authentication required"} 401))))
 
+(defn catch-exceptions [handler]
+  (fn [req]
+    (try
+      (handler req)
+      (catch Exception e
+        (.error logger (str "Exception in handler:\n%s" (strp/pst-str e)))))))
+
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
     (.info request-logger (str "HTTP" (to-logline req)))
-    (try
-      (handler
-        (update-in req [:uri] #(if (= "/" %) "/index.html" %)))
-      (catch Exception e
-        (.error logger (str "Exception in handler:\n%s" (strp/pst-str e)))))))
+    (handler
+      (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
@@ -69,7 +73,8 @@
 
 (defn -main [& args]
   (rebuild-index) ;; builds in-memory index for fast searches
-  (start-http-server (-> app-routes
+  (start-http-server (-> catch-exceptions
+                         app-routes
                          handler/site
                          wrap-cookies
                          log-and-wrap-dir-index
