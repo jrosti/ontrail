@@ -237,7 +237,9 @@
     <h3>Kommentit:</h3>
       {{#each comments}}
       <article>
-        {{body}}
+        <h2><img src="{{avatar}}"  width="48" height="48">{{title}}</h2>
+        <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+        <div>{{body}}</div>
       </article>
       {{/each}}
     </div>
