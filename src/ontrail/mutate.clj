@@ -115,8 +115,10 @@
     (.debug logger (str (:user params) " created ex " ret))
     tret))
 
-(defn comment-ex [ex-id params]
+(defn comment-ex [params]
+  (.debug logger (str (:user params) " creating comment " params))
   (mc/update-by-id EXERCISE
-                   (ObjectId. ex-id)
-                   {"$push" {:comments {:user (:user params) :text (:text params)}}})
-  (get-ex ex-id))
+                   (ObjectId. (:id params))
+                   {"$push" {:comments {:user (:user params) :body (:body params)}}})
+   (.debug logger (str (:user params) " creating comment " params))
+  (get-ex (:id params)))

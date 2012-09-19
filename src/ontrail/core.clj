@@ -61,7 +61,7 @@
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
         (is-authenticated? params cookies (json-response (create-ex params))))
   
-  (POST "/rest/v1/ex/comment/:id" {params :params cookies :cookies}
+  (POST "/rest/v1/comment" {params :params cookies :cookies}
      (is-authenticated? params cookies (json-response (comment-ex params))))
 
   (route/resources "/")
