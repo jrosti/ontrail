@@ -127,6 +127,18 @@
       </article>
     </section>
 
+    <section role="ex">
+      laalaa
+
+      <div id="exercise"></div>
+    </section>
+
+    <section role="tag">
+      laalaa2
+
+      <div id="exercise"></div>
+    </section>
+
   </div>
   <footer>
 
@@ -190,11 +202,11 @@
       <ul>
 
       {{#each tags}}
-      <li><a class="tag" rel="tag-{{this}}">{{this}}</a></li>
+      <li><a class="pageLink" rel="tag-{{this}}">{{this}}</a></li>
       {{/each}}
       </ul>
     </div>
-    <p class="full">{{commentCount}} kommenttia.</p>
+    <p class="full"><a class="pageLink" rel="ex-{{id}}"> {{commentCount}} kommenttia.</a></p>
   </article>
 </script>
 
