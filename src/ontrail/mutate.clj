@@ -106,6 +106,7 @@
         (assoc :comments '()))))
 
 (defn create-ex [params]
+  (.debug logger (str (:user params) " created ex " params))
   (let [user (:user params)
         ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))
