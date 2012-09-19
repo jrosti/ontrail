@@ -75,3 +75,6 @@
 
 (defn get-distinct-tags [condition]
   (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
+
+(defn get-distinct-sports []
+  (filter (partial not= nil) (mc/distinct EXERCISE "sport" {})))
