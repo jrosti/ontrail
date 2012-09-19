@@ -24,12 +24,10 @@
    :headers {"Content-Type" "application/json"}
    :body (json-str data)})
 
-(defn is-authenticated? [params cookies action]
-  (let [auth-token (:value (cookies "authToken"))
-        auth-token-hash (:tokenHash params)]
-    (if (valid-auth-token? auth-token)
-      action
-      (json-response {"error" "Authentication required"} 401))))
+(defmacro is-authenticated? [params cookies action]
+  `(if (valid-auth-token? (:value (~cookies "authToken")))
+     ~action
+     (json-response {"error" "Authentication required"} 401)))
 
 (defn log-and-wrap-dir-index [handler]
   (fn [req]

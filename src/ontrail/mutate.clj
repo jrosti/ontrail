@@ -87,7 +87,7 @@
          (string/split (trim-tag tags) #"[, ;\.\^\*\/]+")
          '()))))
 
-<(defn from-user-ex [user user-ex]
+(defn from-user-ex [user user-ex]
   (let [bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
                  :sport (:sport user-ex)
@@ -106,13 +106,14 @@
         (assoc :comments '()))))
 
 (defn create-ex [params]
-  (.debug logger (str (:user params) " created ex " params))
+  (.debug logger (str (:user params) " creating ex " params))
   (let [user (:user params)
         ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))
         tret (assoc  (dissoc ret :_id) :id str-id)]
-         (insert-exercise-inmem-index ret)
-         tret))
+    (insert-exercise-inmem-index ret)
+    (.debug logger (str (:user params) " created ex " ret))
+    tret))
 
 (defn comment-ex [ex-id params]
   (mc/update-by-id EXERCISE
