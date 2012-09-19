@@ -54,15 +54,12 @@
     (if (authenticate username password)
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
-  
-  (POST "/rest/v1/ex/:user/:_" {params :params cookies :cookies}
-        (is-authenticated? params cookies (json-response (create-ex params))))
+
+  (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
+    (is-authenticated? params cookies (json-response (comment-ex params))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
         (is-authenticated? params cookies (json-response (create-ex params))))
-  
-  (POST "/rest/v1/comment/:id" {params :params cookies :cookies}
-     (is-authenticated? params cookies (json-response (comment-ex params))))
 
   (route/resources "/")
   (route/not-found "Page not found"))

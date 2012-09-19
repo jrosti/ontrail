@@ -12,7 +12,7 @@
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
-    var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/comment/" + exercise, $('#add-comment-form').serialize()) }
+    var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
 
     var renderLatest = function(elem, data) {
       if (!data || !data.length || data.length == 0) return;
