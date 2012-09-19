@@ -8,6 +8,7 @@ Ennen launchia:
 * Lenkkien validaatio
 * Lenkkien muokkaus
 * Lenkkien poisto
+* Back-hanskaus
 * Täginäkymä
 * Lenkin tägit
 * Vuosi, Kuukausi, Viikko -näkymä
