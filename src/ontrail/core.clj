@@ -24,7 +24,7 @@
    :headers {"Content-Type" "application/json"}
    :body (json-str data)})
 
-(defmacro is-authenticated? [params cookies action]
+(defmacro is-authenticated? [cookies action]
   `(if (valid-auth-token? (:value (~cookies "authToken")))
      ~action
      (json-response {"error" "Authentication required"} 401)))
@@ -56,10 +56,10 @@
       (json-response {"error" "Authentication failed"} 401)))
 
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-    (is-authenticated? params cookies (json-response (comment-ex params))))
+    (is-authenticated? cookies (json-response (comment-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-        (is-authenticated? params cookies (json-response (create-ex params))))
+        (is-authenticated? cookies (json-response (create-ex params))))
 
   (route/resources "/")
   (route/not-found "Page not found"))
