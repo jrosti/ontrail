@@ -16,3 +16,9 @@ Taustalla:
 
 * Parempi autentikaatio
 * Error-logitus
+
+Myöhemmin:
+
+* Sticky -navigaatio
+* Animaatioita UI:ssa
+* Routemapper -import + KML-ui gmapsiin.
