@@ -128,11 +128,9 @@
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
     addExercises.subscribe(_.partial(showPage, "home"))
     // Lisää kommentti
-    exPages.subscribe(function(exercise) {
-      var addComments = $('#add-comment').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists)
-        .select(always(exercise.id)).selectAjax(postComment)
-      addComments.subscribe(renderSingleExercise)
-    })
+    var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
+      .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
+    addComments.subscribe(renderSingleExercise)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
     // pimp selection boxes
