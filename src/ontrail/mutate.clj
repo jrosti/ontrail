@@ -1,5 +1,5 @@
 (ns ontrail.mutate
-  (:use [ontrail mongodb utils search])
+  (:use [ontrail mongodb utils search exercise])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [clj-time.format :as format]
@@ -118,4 +118,5 @@
 (defn comment-ex [ex-id params]
   (mc/update-by-id EXERCISE
                    (ObjectId. ex-id)
-                   {"$push" {:comments {:user (:user params) :text (:text params)}}}))
+                   {"$push" {:comments {:user (:user params) :text (:text params)}}})
+  (get-ex ex-id))
