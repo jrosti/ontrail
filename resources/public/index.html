@@ -112,13 +112,16 @@
         <h2>Lisää uusi lenkki</h2>
         <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
         <form id="add-exercise-form" method="post">
-          <input name="ex-title" placeholder="Mitä teit?"></input>
-          <select data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
+          <input name="title" class="required" placeholder="Mitä teit?"></input>
+          <select name="sport" class="required" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
             <option value="juoksu">juoksu</option>
             <option value="hiihto">hiihto</option>
             <option value="pyöräily">pyöräily</option>
           </select>
-          <textarea name="ex-body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
+          <input name="duration" class="required" placeholder="Kesto"></input>
+          <input name="distance" placeholder="Matka metreissä"></input>
+          <input name="date" placeholder="Milloin?"></input>
+          <textarea name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
           <input id="add-exercise" type="button" value="Lisää lenkki"></input>
         </form>
       </article>
