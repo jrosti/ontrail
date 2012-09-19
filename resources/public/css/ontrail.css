@@ -275,6 +275,10 @@ aside {
   padding: 5px 20px;
   height: 100%;
 }
+footer {
+  clear: both;
+  width: 100%;
+}
 body.logged-out *.logged-in,
 body.logged-in *.logged-out,
 body.login #login-link {
