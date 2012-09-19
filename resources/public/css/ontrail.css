@@ -314,9 +314,9 @@ body.login #login-form {
 body.login #login-form * {
   display: inline-block;
 }
-section[role="addex"] input,
-section[role="addex"] select,
-section[role="addex"] textarea {
+section input,
+section select,
+section textarea {
   margin: 10px 10px 10px 0;
   display: block;
 }
