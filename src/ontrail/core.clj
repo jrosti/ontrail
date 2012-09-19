@@ -48,7 +48,6 @@
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
-  (GET "/rest/v1/sports" [] (json-response (get-distinct-sports)))
   
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
@@ -57,6 +56,8 @@
 
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
   (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
+  
+  (GET "/rest/v1/sports" [] (json-response (get-distinct-sports {})))
   
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)
@@ -74,8 +75,7 @@
 
 (defn -main [& args]
   (rebuild-index) ;; builds in-memory index for fast searches
-  (start-http-server (-> catch-exceptions
-                         app-routes
+  (start-http-server (-> app-routes
                          handler/site
                          wrap-cookies
                          log-and-wrap-dir-index
