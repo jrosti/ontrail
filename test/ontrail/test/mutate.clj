@@ -26,7 +26,8 @@
   (is (= (hours 1) (hours-and-minutes 1 0)))
   (is (= (parse-duration "1:0") (hours 1)))
   (is (= (parse-duration "1.0") (hours 1)))
-  (is (= (parse-duration "1.0.0") (hours 1))))
+  (is (= (parse-duration "1.0.0") (hours 1)))
+  (is (= (parse-duration "2.42,2") 16320)))
   
 
 (deftest test-db-insertable-from-basic-user-ex

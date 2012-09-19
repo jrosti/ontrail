@@ -26,22 +26,30 @@
 
 (defn hours-and-minutes [h min] (+ (hours h) (to-db min)))
 
-(defn hours-and-minutes-and-seconds [h min sec] (+ (hours h) (to-db min) (* (Integer. sec) 100)))
+(defn hours-and-minutes-and-seconds [h min sec]
+  (+ (hours h) (to-db min) (* (Integer. sec) 100)))
+
+(defn minutes-and-seconds-and-tenths [min sec tenths]
+  (+ (to-db min) (* (Integer. sec) 100) (* 10 (Integer. tenths))))
+
+(defn minutes-and-seconds-and-tenths-and-hundreds [min sec tenths hundreds]
+  (+ (to-db min) (* (Integer. sec) 100) (* 10 (Integer. tenths)) hundreds))
 
 (def duration-regexps
   [ {:re #"^([0-9]+) *m$" :conv minutes}
     {:re #"^([0-9]+)$" :conv minutes}
     {:re #"^([0-9]+) *h$" :conv hours}
     {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv hours-and-minutes}
-    {:re #"^([0-9]+)\.([0-9]+)\.([0-9]+)$" :conv hours-and-minutes-and-seconds}])
+    {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv minutes-and-seconds}
+    {:re #"^([0-9]+)\.([0-9]+),([0-9])$" :conv minutes-and-seconds-and-tenths}
+    {:re #"^([0-9]+)\.([0-9]+),([0-9])([0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}])
 
 (defn try-match [re str]
   (re-matches re str))
 
 (defn try-parse [re-conv str]
   (let [match (try-match (:re re-conv) str)]
-    (if match
-      (apply (:conv re-conv) (rest match)))))
+    (if match (apply (:conv re-conv) (rest match)))))
 
 (defn parse-duration [dur-str] 
   (some identity (map #(try-parse % dur-str) duration-regexps)))
