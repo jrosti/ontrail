@@ -19,19 +19,11 @@
 
 
 (defn to-db [min] (* (Integer. min) 60 100))
-
 (defn minutes [min] (to-db min))
-
 (defn hours [h] (* (to-db 1) 60))
-
 (defn hours-and-minutes [h min] (+ (hours h) (to-db min)))
-
-(defn hours-and-minutes-and-seconds [h min sec]
-  (+ (hours h) (to-db min) (* (Integer. sec) 100)))
-
 (defn minutes-and-seconds-and-tenths [min sec tenths]
   (+ (to-db min) (* (Integer. sec) 100) (* 10 (Integer. tenths))))
-
 (defn minutes-and-seconds-and-tenths-and-hundreds [min sec tenths hundreds]
   (+ (to-db min) (* (Integer. sec) 100) (* 10 (Integer. tenths)) hundreds))
 
@@ -87,7 +79,7 @@
          (string/split (trim-tag tags) #"[, ;\.\^\*\/]+")
          '()))))
 
-(defn from-user-ex [user user-ex]
+<(defn from-user-ex [user user-ex]
   (let [bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
                  :sport (:sport user-ex)
@@ -107,11 +99,12 @@
 
 (defn create-ex [params]
   (let [user (:user params)
-        ret  (mc/insert-and-return EXERCISE (from-user-ex user params))]
-    (.debug logger (format "User %s created an ex %s " user ret))
-    (insert-exercise-inmem-index ret)
-    ret))
-          
+        ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
+        str-id (str (:_id ret))
+        tret (assoc  (dissoc ret :_id) :id str-id)]
+         (insert-exercise-inmem-index ret)
+         tret))
+
 (defn comment-ex [ex-id params]
   (mc/update-by-id EXERCISE
                    (ObjectId. ex-id)
