@@ -68,8 +68,16 @@
        (sport-ok? (:sport uex))
        (date-ok? (:date uex))))
 
-(defn parse-distance [d]
-  (Integer. d))
+(defn meters [m] (Integer. m))
+(defn kilometers [m] (* (Integer. m) 1000))
+
+(def distance-regexps
+  [{:re #"^([0-9]+)$" :conv meters}
+   {:re #"^([0-9]+) *m$" :conv meters},
+   {:re #"^([0-9]+) *km$" :conv kilometers}])
+
+(defn parse-distance [dist]
+  (some identity (map #(try-parse % dist) distance-regexps)))
 
 (defn parse-tags
   ([] '())
@@ -94,7 +102,7 @@
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
-        (assoc :avghr 0) ;; How to not insert if avghr nil?
+        (assoc :avghr 0) 
         (assoc :comments '()))))
 
 (defn create-ex [params]
