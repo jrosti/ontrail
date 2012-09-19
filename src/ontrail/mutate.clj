@@ -40,7 +40,6 @@
     {:re #"^([0-9]+)$" :conv minutes}
     {:re #"^([0-9]+) *h$" :conv hours}
     {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv hours-and-minutes}
-    {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv minutes-and-seconds}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])$" :conv minutes-and-seconds-and-tenths}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])([0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}])
 
