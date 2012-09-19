@@ -128,10 +128,6 @@
     </section>
 
     <section role="ex" class="full with-comments">
-      <article>
-        laalaa
-      </article>
-
       <div id="exercise"></div>
     </section>
 
@@ -182,7 +178,7 @@
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}}. {{else}}
     {{duration}}.{{/if}}</h4>
-    {{truncate body 100}} {{commentCount}} kommenttia.
+    <div>{{truncate body 100}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
   </article>
 </script>
 <script id="exercise-template" type="text/x-handlebars-template">
@@ -199,10 +195,11 @@
 	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{tags}}</td>
       </tr>
     </table>
-    <div class="preview">{{truncate body 100}} {{commentCount}} kommenttia.</div>
+    <div class="preview">{{truncate body 100}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
     <div class="full">{{{body}}}</div>
+    {{#if tags}}
     <div class="full">
-      <strong>Tägit:</strong  >
+      <h4>Tägit:</h4>
       <ul>
 
       {{#each tags}}
@@ -210,8 +207,58 @@
       {{/each}}
       </ul>
     </div>
-    <p class="full"><a class="pageLink" rel="ex-{{id}}"> {{commentCount}} kommenttia.</a></p>
+    {{/if}}
+    <p class="full"><a class="pageLink" rel="ex-{{id}}"> {{commentCount}} kommenttia</a>.</p>
   </article>
+</script>
+
+<script id="single-exercise-template" type="text/x-handlebars-template">
+  <article data-id="{{id}}" class="full exercise {{sport}}">
+    <h2><img src="{{avatar}}"  width="48" height="48">{{title}}</h2>
+    <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+    <table>
+      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
+      <tr>
+        <td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
+        <td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{tags}}</td>
+      </tr>
+    </table>
+    <div>{{{body}}}</div>
+    {{#if tags}}
+    <div>
+      <h4>Tägit:</h4>
+      <ul>
+        {{#each tags}}
+        <li><a class="pageLink" rel="tag-{{this}}">{{this}}</a></li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/if}}
+    </article>
+    <h3>Kommentit:</h3>
+      {{#each comments}}
+      <article>
+        {{body}}
+      </article>
+      {{/each}}
+    </div>
+    <article class="logged-in">
+      {{#unless comments}}
+      <h4>Ei kommentteja</h4>
+      <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
+      {{/unless}}
+      {{#if comments}}
+      <h4>Jätä oma kommenttisi</h4>
+      {{/if}}
+      <form id="add-comment-form" method="post">
+        <input name="title" class="required" placeholder="Otsikko"></input>
+        <textarea name="body" rows="10" cols="68" placeholder="Kommenttisi"></textarea>
+        <input id="add-comment" type="button" value="Lisää lenkki"></input>
+      </form>
+    </article>
+    <article class="logged-out">
+      To be decided
+    </article>
 </script>
 
 <script id="summary-template" type="text/x-handlebars-template">

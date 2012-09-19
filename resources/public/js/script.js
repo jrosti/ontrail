@@ -8,6 +8,7 @@
 
     var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
+    var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
@@ -20,6 +21,10 @@
     var renderExercise = function(exercise) {
       $('[data-id=' + exercise.id + ']').replaceWith($(exerciseTemplate(exercise)))
     }
+    var renderSingleExercise = function(exercise) {
+      $('#exercise').html($(singleExerciseTemplate(exercise)))
+    }
+
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
       var content = _.map(summary, summaryTemplate).reduce(function(a, b) { return a+b })
@@ -67,24 +72,17 @@
       $('#password').attr('value', '')
     }
     currentPages.subscribeArgs(showPage)
+
+    // TODO: Handlebars maybe?
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
-    userPages.subscribe(function(user) {
-//      $("button").click(function() {
-//        $('html, body').animate({
-//          scrollTop: $('[role="user"]').offset().top
-//        }, 300);
-//      });
-      $(".current-username").text(user) })
+    userPages.subscribe(function(user) { $(".current-username").text(user) })
 
+    // TODO: Handlebars maybe?
     var tagPages = currentPages.whereArgs(partialEquals("tag")).selectArgs(second)
-    tagPages.subscribe(function(tag) {
-//      $("#button").click(function() {
-//        $('html, body').animate({
-//          scrollTop: $('[role="user"]').offset().top
-//        }, 300);
-//      });
-      $(".current-tag").text(tag) })
+    tagPages.subscribe(function(tag) { $(".current-tag").text(tag) })
 
+    var exPages = currentPages.whereArgs(partialEquals("ex"))
+    exPages.selectAjax(OnTrail.rest.details).subscribe(renderSingleExercise)
 
     // initiate loading and search
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().where(function(val) { return val.length > 2 }).startWith("")
