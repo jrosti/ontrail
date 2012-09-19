@@ -23,8 +23,6 @@ http http://localhost:8080/rest/v1/search?q=hiihtolenkki%20jokseenkin
 
 http http://localhost:8080/rest/v1/sports
 
-
-
 # lgoin request
 http -v -f POST http://localhost:8080/rest/v1/login username=Esko password=Esko 
 http -v -f POST http://localhost:8080/rest/v1/ex/Esko Cookie:authToken=UYHohHmrziSocjGNRs0vSrtRcF_fG0XqrNooJ7dKRARPgirn7OD9nepzhARErGfybaiFRBQ1WLSPhEPYfgdu2hE title="A title" sport="Juoksu" duration="30" date="20.4.2012" distance="10000" avghr="129"
