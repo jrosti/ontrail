@@ -34,10 +34,17 @@
         :body (str exception#)})))
 
 (defmacro is-authenticated? [cookies action]
-  `(if (valid-auth-token? (:value (~cookies "authToken")))
-     ~action
-     (json-response {"error" "Authentication required"} 401)))
-
+  `(try
+     (if (valid-auth-token? (:value (~cookies "authToken")))
+       ~action
+       (json-response {"error" "Authentication required"} 401))
+     (catch Exception exception#
+       (.error logger (str exception#))
+       (stacktrace/print-stack-trace exception# 100)
+       {:status 400
+        :headers {"Content-Type" "application/tex"}
+        :body (str exception#)})))
+    
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
     (.info request-logger (str "HTTP" (to-logline req)))
