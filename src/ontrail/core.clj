@@ -28,7 +28,7 @@
       :body (json-str ~data)}
      (catch Exception exception#
        (.error logger (str exception#))
-       (stacktrace/print-stack-trace exception#)
+       (stacktrace/print-stack-trace exception# 100)
        {:status 400
         :headers {"Content-Type" "application/tex"}
         :body (str exception#)})))
