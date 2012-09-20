@@ -6,7 +6,6 @@
     var tagEntries = $("#tag-entries")
     var allEntries = $("#entries,#user-entries,#tag-entries")
 
-    var entryTemplate = Handlebars.compile($("#summary-entry-template").html());
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
     var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
@@ -17,12 +16,9 @@
     var renderLatest = function(el) {
       return _.partial(function(elem, data) {
         if (!data || !data.length || data.length == 0) return;
-        var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
+        var content = _.map(data, exerciseTemplate).reduce(function(a, b) { return a+b })
         $(content).appendTo(elem)
       }, $(el))
-    }
-    var renderExercise = function(exercise) {
-      $('[data-id=' + exercise.id + ']').replaceWith($(exerciseTemplate(exercise)))
     }
     var renderSingleExercise = function(exercise) {
       $('#exercise').html($(singleExerciseTemplate(exercise)))
@@ -58,10 +54,6 @@
     var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
-    clickedArticles.where(_.compose(not, isArticleLoaded))
-      .select(function(el) { return ['ex', $(el).attr("data-id")] })
-      .selectAjax(OnTrail.rest.details).subscribe(renderExercise)
-
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
     // toggle pages when pageLink is clicked

@@ -176,17 +176,8 @@
 
 </body>
     <!-- XXXXX: why this is repeated twice? -->
-<script id="summary-entry-template" type="text/x-handlebars-template">
-  <article data-id="{{id}}" class="exercise {{sport}}">
-    <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
-    <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
-    {{did}} {{#if distance}} {{distance}} ajassa {{duration}}. {{else}}
-    {{duration}}.{{/if}}</h4>
-    <div>{{truncate body 100}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
-  </article>
-</script>
 <script id="exercise-template" type="text/x-handlebars-template">
-  <article data-id="{{id}}" class="full exercise {{sport}}">
+  <article data-id="{{id}}" class="preview exercise {{sport}}">
     <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
     <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
