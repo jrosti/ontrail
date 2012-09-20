@@ -173,7 +173,7 @@
     <!-- XXXXX: why this is repeated twice? -->
 <script id="summary-entry-template" type="text/x-handlebars-template">
   <article data-id="{{id}}" class="exercise {{sport}}">
-    <h2><img src="{{avatar}}" width="48" height="48"><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+    <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}}. {{else}}
     {{duration}}.{{/if}}</h4>
@@ -182,7 +182,7 @@
 </script>
 <script id="exercise-template" type="text/x-handlebars-template">
   <article data-id="{{id}}" class="full exercise {{sport}}">
-    <h2><img src="{{avatar}}"  width="48" height="48"><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+    <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
     <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
@@ -213,7 +213,7 @@
 
 <script id="single-exercise-template" type="text/x-handlebars-template">
   <article data-id="{{id}}" class="full exercise {{sport}}">
-    <h2><img src="{{avatar}}"  width="48" height="48">{{title}}</h2>
+    <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     <table>
       <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
@@ -236,8 +236,8 @@
     </article>
     <h3>Kommentit:</h3>
       {{#each comments}}
-      <article>
-        <h2><img src="{{avatar}}"  width="48" height="48">{{title}}</h2>
+      <article class="comment">
+        <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{body}}</div>
       </article>

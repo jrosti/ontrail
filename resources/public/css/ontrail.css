@@ -33,6 +33,10 @@ img {
   box-sizing: content-box;
   padding-right: 15px;
 }
+img.avatar {
+  float: left;
+  vertical-align: bottom;
+}
 html {
   background-color: #a5ecef;
   background-image: -webkit-linear-gradient(top ,#006862 0, #a5ecef 270px);
@@ -250,6 +254,17 @@ section article ul {
 }
 section article li {
   display: inline;
+}
+section article.exercise h2,
+section article.comment h2,
+section article.exercise h4,
+section article.comment h4 {
+  margin: 0;
+  padding: 0;
+}
+section article.exercise h4,
+section article.comment h4 {
+  padding-bottom: 10px;
 }
 section table {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
