@@ -23,8 +23,8 @@
 (defn get-bytes [in] (if (string? in) (.getBytes in) in))
 
 (defn byte-array-to-string [arr]
-  (.debug logger (str arr))
-  (apply str (map #(char %) arr))) ; aebaerae -castaus char:ksi, mutta tässä toimii?
+  (.debug logger (str "Array: " (apply str (map #(char (bit-and 255 (int %))) arr))))
+  (String. arr)) ; aebaerae -castaus char:ksi, mutta tässä toimii?
 
 (defn base64-encode [bytes-or-string] (byte-array-to-string (Base64/encodeBase64URLSafeString (get-bytes bytes-or-string))))
 (defn base64-decode [bytes-or-string] (Base64/decodeBase64 (get-bytes bytes-or-string)))
