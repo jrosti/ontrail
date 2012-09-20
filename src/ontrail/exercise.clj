@@ -43,7 +43,7 @@
         user (:user result)
         avatar (get-avatar-url user)
         comments (:comments result)
-        comment-count (if (list? comments) (count comments) 0)
+        comment-count (if-not (nil? comments) (count comments) 0)
         date (to-human-date (:creationDate result))]
     {:pace pace
      :title (:title result)

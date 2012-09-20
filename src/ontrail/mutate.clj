@@ -1,5 +1,5 @@
 (ns ontrail.mutate
-  (:use [ontrail mongodb utils search exercise])
+  (:use [ontrail mongodb utils search exercise user formats])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [clj-time.format :as format]
@@ -118,6 +118,10 @@
   (.debug logger (str user " creating comment " params))
   (mc/update-by-id EXERCISE
                    (ObjectId. (:id params))
-                   {"$push" {:comments {:title (:title params) :date (time/now) :user user :body (:body params)}}})
+                   {"$push" {:comments {:avatar (get-avatar-url user)
+                                        :title (:title params)
+                                        :date (to-human-date (time/now))
+                                        :user user
+                                        :body (:body params)}}})
   (.debug logger (str user " created comment " params))
   (get-ex (:id params)))
