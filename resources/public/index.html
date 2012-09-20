@@ -112,16 +112,20 @@
         <h2>Lisää uusi lenkki</h2>
         <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
         <form id="add-exercise-form" method="post">
-          <input name="title" class="required" placeholder="Mitä teit?"></input>
-          <select name="sport" class="required" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
+          <input id="ex-title" name="title" placeholder="Mitä teit?"></input>
+          <em class="error title-required">Otsikko vaaditaan</em>
+          <select id="ex-sport" name="sport" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
             <option value="juoksu">juoksu</option>
             <option value="hiihto">hiihto</option>
             <option value="pyöräily">pyöräily</option>
           </select>
-          <input name="duration" class="required" placeholder="Kesto"></input>
-          <input name="distance" placeholder="Matka metreissä"></input>
-          <input name="date" placeholder="Milloin?"></input>
-          <textarea name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
+          <em class="error sport-required">Lenkin laji vaaditaan</em>
+          <input id="ex-duration" name="duration" placeholder="Kesto"></input>
+          <em class="error duration-required">Lenkin kesto vaaditaan</em>
+          <input id="ex-distance" name="distance" placeholder="Matka metreissä"></input>
+          <input id="ex-date" name="date" placeholder="Milloin?"></input>
+          <em class="error date-required">Päivämäärä vaaditaan</em>
+          <textarea id="ex-body" name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
           <input id="add-exercise" type="button" value="Lisää lenkki"></input>
         </form>
       </article>
@@ -159,6 +163,7 @@
   <script src="js/rx.jquery.min.js"></script>
   <script src="js/rx.ontrail.js"></script>
   <script src="js/rx.ontrail.backend.js"></script>
+  <script src="js/rx.ontrail.validation.js"></script>
   <script src="js/rx.ontrail.pager.js"></script>
   <script src="js/rx.ontrail.session.js"></script>
 

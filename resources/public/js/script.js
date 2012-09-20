@@ -129,5 +129,13 @@
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
     // pimp selection boxes
     $(".chzn-select").chosen()
+
+    // validation
+    var require = function(field) {
+      var validation = mkValidation($('#ex-' + field).changes(), requiredV())
+      validation.subscribe(toggleEffect($("." + field + "-required")))
+      return validation
+    }
+    combine(_.map(['title', 'sport', 'duration', 'date'], require)).subscribe(disableEffect($('#add-exercise')))
   })
 })()
