@@ -92,7 +92,7 @@
                  :duration (parse-duration (:duration user-ex))
                  :sport (:sport user-ex)
                  :creationDate (parse-date (:date user-ex))
-                 :lastModifiedDate (parse-date (:date user-ex))
+                 :lastModifiedDate (time/now)
                  :user user}
         body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
         tags (parse-tags (:tags user-ex))
