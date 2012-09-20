@@ -16,7 +16,7 @@
   OnTrail.pager = new Pager()
 
   Rx.Observable.prototype.scrollWith = function(action, element) {
-    var userScroll = this.distinctUntilChanged().doAction(function() { element.html("") })
+    return this.distinctUntilChanged().doAction(function() { element.html("") })
       .selectArgs(function(item) {
         return OnTrail.pager.create(_.partial(action, item), element)
       }).switchLatest()
