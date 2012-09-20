@@ -1,4 +1,5 @@
 (function(){
+  // todo: remove depsu to elementBottomIsAlmostVisible
   var nextPage = function(elem) { return Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(elem, 100) }) }
 
   var pager = function(ajaxSearch, page, next) {
@@ -13,4 +14,11 @@
   var Pager = function() {}
   Pager.prototype.create = function(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
   OnTrail.pager = new Pager()
+
+  Rx.Observable.prototype.scrollWith = function(action, element) {
+    var userScroll = this.distinctUntilChanged().doAction(function() { element.html("") })
+      .selectArgs(function(item) {
+        return OnTrail.pager.create(_.partial(action, item), element)
+      }).switchLatest()
+  }
 })()

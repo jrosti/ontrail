@@ -14,10 +14,12 @@
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
 
-    var renderLatest = function(elem, data) {
-      if (!data || !data.length || data.length == 0) return;
-      var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
-      $(content).appendTo(elem)
+    var renderLatest = function(el) {
+      return _.partial(function(elem, data) {
+        if (!data || !data.length || data.length == 0) return;
+        var content = _.map(data, entryTemplate).reduce(function(a, b) { return a+b })
+        $(content).appendTo(elem)
+      }, $(el))
     }
     var renderExercise = function(exercise) {
       $('[data-id=' + exercise.id + ']').replaceWith($(exerciseTemplate(exercise)))
@@ -86,32 +88,24 @@
     exPages.subscribe(renderSingleExercise)
 
     // initiate loading and search
-    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().where(function(val) { return val.length > 2 }).startWith("")
-    var latestScroll = query
+    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
+
+    var latestScroll = query.mergeTo(currentPages.whereArgs(_.compose(not, partialEquals("latest"))).select(always("")))
       .doAction(function() { entries.html("") })
-      .combineWithLatestOf(currentPages)
-      .selectArgs(function(query, currentPage) {
+      .selectArgs(function(query) {
         if (query === "")
           return OnTrail.pager.create(OnTrail.rest.latest, entries)
         else
           return OnTrail.rest.searchResults(query)
       })
       .switchLatest()
-    latestScroll.subscribe(_.partial(renderLatest, entries))
+    latestScroll.subscribe(renderLatest(entries))
 
     // scrolling on user page
-    var userScroll = userPages.distinctUntilChanged().doAction(function() { userEntries.html("") })
-      .selectArgs(function(user) {
-        return OnTrail.pager.create(_.partial(OnTrail.rest.userExercises, user), userEntries)
-      }).switchLatest()
-    userScroll.subscribe(_.partial(renderLatest, userEntries))
+    userPages.scrollWith(OnTrail.rest.userExercises, userEntries).subscribe(renderLatest(userEntries))
 
     // scrolling on tag page
-    var tagScroll = tagPages.distinctUntilChanged().doAction(function() { tagEntries.html("") })
-      .selectArgs(function(tag) {
-        return OnTrail.pager.create(_.partial(OnTrail.rest.tagExercises, tag), tagEntries)
-      }).switchLatest()
-    tagScroll.subscribe(_.partial(renderLatest, tagEntries))
+    tagPages.scrollWith(OnTrail.rest.tagExercises, tagEntries).subscribe(renderLatest(tagEntries))
 
     // initiate summary loading after login
     var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
