@@ -10,7 +10,9 @@
         [ontrail.mutate :only (create-ex comment-ex)])
   (:use [ontrail summary auth crypto exercise log])
   (:gen-class)
-  (:require [compojure.handler :as handler]
+  (:require
+            [clojure.stacktrace :as stacktrace]
+            [compojure.handler :as handler]
             [compojure.route :as route]
             [monger.collection :as mc]
             [ring.util.response :as response]
@@ -19,10 +21,17 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 (def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
 
-(defn json-response [data & [status]]
-  {:status (or status 200)
-   :headers {"Content-Type" "application/json"}
-   :body (json-str data)})
+(defmacro json-response [data & [status]]
+  `(try
+     {:status (or ~status 200)
+      :headers {"Content-Type" "application/json"}
+      :body (json-str ~data)}
+     (catch Exception exception#
+       (.error logger (str exception#))
+       (stacktrace/print-stack-trace exception#)
+       {:status 400
+        :headers {"Content-Type" "application/tex"}
+        :body (str exception#)})))
 
 (defmacro is-authenticated? [cookies action]
   `(if (valid-auth-token? (:value (~cookies "authToken")))
@@ -39,6 +48,8 @@
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
+
+  (GET "/rest/v1/throw" [] (json-response (throw (Exception. "Test Exception"))))
   
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
