@@ -11,6 +11,7 @@ Ennen launchia:
 * Kommenttien poisto
   * omat mistä tahansa lenkeistä
   * muiden omista lenkeistä
+* omien kommenttien muokkaus
 * Back-hanskaus
 * Kaikki tagit - täginäkymä
 * Omat tagit sivupalkkiin
