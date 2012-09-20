@@ -31,32 +31,34 @@
         (str (subs stripped 0 truncated-len))
         stripped))))
 
-(defn as-ex-result [result]
-  (let [pace (get-pace {:duration (:duration result)
-                        :distance (:distance result)
-                        :sport (:sport result)})
-        duration (to-human-time (:duration result))
-        distance (to-human-distance (:distance result))
-        truncated-body (strip-and-truncate (:body result))
-        _id (:_id result)
-        sport (:sport result)
-        user (:user result)
-        avatar (get-avatar-url user)
-        comments (:comments result)
+(defn as-ex-result [exercise]
+  (let [id (str (:_id exercise))
+        user (:user exercise)
+        user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
+        heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
+        comments (:comments exercise)
+        distance (to-human-distance (:distance exercise))
         comment-count (if-not (nil? comments) (count comments) 0)
-        date (to-human-date (:creationDate result))]
-    {:pace pace
-     :title (:title result)
-     :duration duration
-     :distance distance
-     :body truncated-body
-     :did (get-verb sport)
-     :sport sport
+        avatar (get-avatar-url user)
+        date (to-human-date (:creationDate exercise))]
+    (.debug logger (format " get ex=%s" id))
+    {:id id
      :user user
+     :distance distance
+     :title (:title exercise)
+     :body (:body exercise)
+     :tags (:tags exercise)
+     :did (get-verb (:sport exercise))
+     :sport (:sport exercise)
      :avatar avatar
-     :id (str _id)
      :date date
-     :commentCount comment-count}))
+     :duration (to-human-time (:duration exercise))
+     :creationDate (to-human-date (:creationDate exercise))
+     :avghr (:avghr exercise)
+     :hrReserve heart-rate-reserve
+     :pace (get-pace exercise)
+     :commentCount comment-count
+     :comments comments}))
 
 (defn as-ex-result-list [results]
   (map as-ex-result results))
