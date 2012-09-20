@@ -3,7 +3,7 @@
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [aleph "0.3.0-alpha2"]
                  [compojure "1.1.1"]
-                 [ring "1.1.0-beta2"]
+                 [ring "1.1.5"]
                  [lein-swank "1.4.4"]
                  [clj-time "0.4.4"]
                  [enlive "1.0.0"]
@@ -12,7 +12,6 @@
                  [ring/ring-jetty-adapter "0.2.5"]
                  [ring-json-params "0.1.0"]
                  [org.clojure/data.json "0.1.3"]
-		             [squarepeg "0.6.1"] ;; combinatorial parsing
                  [com.lambdaworks/scrypt "1.3.3"]
                  [org.slf4j/slf4j-api "1.6.4"]
                  [ch.qos.logback/logback-classic "1.0.3"]

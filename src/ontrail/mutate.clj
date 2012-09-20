@@ -105,10 +105,9 @@
         (assoc :avghr 0) 
         (assoc :comments '()))))
 
-(defn create-ex [params]
+(defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))
-  (let [user (:user params)
-        ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
+  (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))
         tret (assoc  (dissoc ret :_id) :id str-id)]
     (insert-exercise-inmem-index ret)

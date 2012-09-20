@@ -59,7 +59,7 @@
     (is-authenticated? cookies (json-response (comment-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-        (is-authenticated? cookies (json-response (create-ex params))))
+        (is-authenticated? cookies (json-response (create-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
 
   (route/resources "/")
   (route/not-found "Page not found"))
