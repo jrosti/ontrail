@@ -118,6 +118,7 @@
   (.debug logger (str user " creating comment " params))
   (mc/update-by-id EXERCISE
                    (ObjectId. (:id params))
+                   {:lastModifiedDate (time/now)}
                    {"$push" {:comments {:avatar (get-avatar-url user)
                                         :title (:title params)
                                         :date (to-human-date (time/now))
