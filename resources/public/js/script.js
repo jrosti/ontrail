@@ -90,7 +90,7 @@
     // initiate loading and search
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
 
-    var latestScroll = query.mergeTo(currentPages.whereArgs(_.compose(not, partialEquals("latest"))).select(always("")))
+    var latestScroll = query.mergeTo(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() { entries.html("") })
       .selectArgs(function(query) {
         if (query === "")
