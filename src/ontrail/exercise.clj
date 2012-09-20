@@ -79,7 +79,7 @@
             heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
             comments (:comments exercise)
             distance (to-human-distance (:distance exercise))
-            comment-count (if (list? comments) (count comments) 0)
+            comment-count (if-not (nil? comments) (count comments) 0)
             avatar (get-avatar-url user)
             date (to-human-date (:creationDate exercise))]
         (.debug logger (format " get ex=%s" id))
