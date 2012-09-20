@@ -2,8 +2,8 @@ TODO
 
 Ennen launchia:
 
-* -Yksittäisen lenkin näkymä-
-* -Kommentointi-
+* ~~Yksittäisen lenkin näkymä~~
+* ~~Kommentointi~~
 * Create users
 * Lenkkien validaatio
 * Lenkkien muokkaus
@@ -20,8 +20,8 @@ Ennen launchia:
 
 Taustalla:
 
-* -Parempi autentikaatio-
-* -Error-logitus-
+* Parempi autentikaatio
+* ~~Error-logitus~~
 
 Myöhemmin:
 
