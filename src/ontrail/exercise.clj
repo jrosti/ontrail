@@ -41,7 +41,6 @@
         comment-count (if-not (nil? comments) (count comments) 0)
         avatar (get-avatar-url user)
         date (to-human-date (:creationDate exercise))]
-    (.debug logger (format " get ex=%s" id))
     {:id id
      :user user
      :distance distance
@@ -69,7 +68,7 @@
                (mq/fields [ :_id :title :user :body :duration :distance :sport :creationDate :comments ])
                (mq/paginate :page (Integer. page) :per-page 20)
                (mq/sort {:lastModifiedDate -1}))]
-    (.debug logger (str "Get exercise list" rule page "with" (count results) "results."))
+    (.debug logger (str "Get exercise list " rule " " page " with " (count results) " results."))
     (as-ex-result-list results)))
 
 (defn get-ex [id]
