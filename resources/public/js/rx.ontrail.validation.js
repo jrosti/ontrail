@@ -255,13 +255,7 @@ function notV(validatorF) {
 
 // Observable a -> (a -> ValidationResult) -> Validation
 function mkValidation(observable, validator) {
-  return observable.select(
-    function(args) {
-      if ($.isArray(args))
-        return validator.apply(null, args)
-      else
-        return validator(args)
-    })
+  return observable.selectArgs(validator)
 }
 
 // FIXME: convert for only accepted status codes
