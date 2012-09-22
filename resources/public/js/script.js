@@ -128,6 +128,15 @@
       validation.subscribe(toggleEffect($("." + field + "-required")))
       return validation
     }
-    combine(_.map(['title', 'sport', 'duration', 'date'], require)).subscribe(disableEffect($('#add-exercise')))
+    var dates = $('#ex-date').changes().select(parseDate);
+    var isDateValidation = mkValidation(dates, dateV())
+    isDateValidation.subscribe(toggleEffect($(".invalid-date")))
+    var notFutureDateValidation = mkValidation(dates, dateInThePastV())
+    notFutureDateValidation.subscribe(toggleEffect($(".date-too-new")))
+
+    var validations = _.flatten(
+      [_.map(['title', 'sport', 'duration', 'date'], require), isDateValidation, notFutureDateValidation]
+    )
+    combine(validations).subscribe(disableEffect($('#add-exercise')))
   })
 })()

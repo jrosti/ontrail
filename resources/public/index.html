@@ -125,6 +125,8 @@
           <input id="ex-distance" name="distance" placeholder="Matka metreissä"></input>
           <input id="ex-date" name="date" placeholder="Milloin?"></input>
           <em class="error date-required">Päivämäärä vaaditaan</em>
+          <em class="error invalid-date">Syötä päivämäärä muodossa pp.kk.vvvv tai vvvv/kk/pp</em>
+          <em class="error date-too-new">Päivä on tulevaisuudessa</em>
           <textarea id="ex-body" name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
           <input id="add-exercise" type="button" value="Lisää lenkki"></input>
         </form>
@@ -158,6 +160,7 @@
   <script src="js/handlebars-1.0.0.beta.6.js"></script>
   <script src="js/handlebars-helpers.js"></script>
   <script src="js/lodash-0.5.2.js"></script>
+  <script src="js/xdate-0.7.js"></script>
   <script src="js/rx.min.js"></script>
   <script src="js/rx.time.min.js"></script>
   <script src="js/rx.jquery.min.js"></script>

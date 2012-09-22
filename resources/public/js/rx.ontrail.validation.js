@@ -147,6 +147,47 @@ function emailV() {
   }
 }
 
+// extend XDate parsing
+var parseDate
+(function() {
+
+  var toValidDate = function(year, month, day) {
+    var date = new XDate(year, month-1, day)
+    if ((date.getYear()+1900) == year && date.getMonth() == (month-1) && date.getDate() == day)
+      return date;
+    return null;
+  }
+
+  var stringsToDate = function(parts) {
+    if (parts === null)
+      return null;
+    if (parts[1].length == 4) return toValidDate(parseInt(parts[1]), parseInt(parts[3]), parseInt(parts[5]))
+    else if (parts[5].length == 4) return toValidDate(parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
+    return toValidDate(2000 + parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
+  }
+
+  parseDate = function(str) {
+    // this example parses dates like "month/date/year"
+    var validDate = /^(\d{1,2}|\d{4})(\.|-|\/)(\d{1,2})(\.|-|\/)(\d{1,2}|\d{4})$/
+    return stringsToDate(validDate.exec(str));
+  }
+
+  XDate.parsers.splice(parseDate);
+})()
+
+// () -> (String -> ValidationResult)
+function dateV() {
+  return function(date) {
+    return (date != null && date.valid()).orFailure("invalid_date")
+  }
+}
+
+function dateInThePastV() {
+  return function(date) {
+    return (date == null || date.diffDays(new XDate()) > 0).orFailure("date_too_new")
+  }
+}
+
 // () -> (String -> ValidationResult)
 function moneyV() {
   return function(e) {
