@@ -230,13 +230,13 @@ function emptyOk(validatorF) { return okWhen(isEmpty, validatorF) }
 
 // (String -> ValidationResult)... -> (String -> ValidationResult)
 function andV() {
-  validators = []
+  var validators = []
   for (var i = 0; i < arguments.length; i++)
     validators.push(arguments[i])
 
   return function() {
     var result = []
-    for (var i in validators)
+    for (var i = 0; i < validators.length; i++)
       result.push(validators[i].apply(this, arguments))
     return _.flatten(result)
   }
