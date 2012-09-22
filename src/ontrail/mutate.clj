@@ -21,7 +21,8 @@
 (defn to-db [min] (* (Integer. min) 60 100))
 (defn minutes [min] (to-db min))
 (defn hours [h] (* (to-db 1) 60))
-(defn hours-and-minutes [h min] (+ (hours h) (to-db min)))
+(defn hours-and-minutes [h min] (+ (* (to-db 1) 60) (to-db (Integer. min))))
+(defn minutes-and-seconds [min sec] (+ (to-db (Integer. min)) (* (Integer. sec) 100)))
 (defn minutes-and-seconds-and-tenths [min sec tenths]
   (+ (to-db min) (* (Integer. sec) 100) (* 10 (Integer. tenths))))
 (defn minutes-and-seconds-and-tenths-and-hundreds [min sec tenths hundreds]
@@ -31,7 +32,9 @@
   [ {:re #"^([0-9]+) *m$" :conv minutes}
     {:re #"^([0-9]+)$" :conv minutes}
     {:re #"^([0-9]+) *h$" :conv hours}
-    {:re #"^([0-9]+)[\.:]([0-9]+)$" :conv hours-and-minutes}
+    {:re #"^([0-9]+).*h.*([0-9]+).*m$" :conv hours-and-minutes}
+    {:re #"^([0-9]+)\.([0-9]+)$" :conv minutes-and-seconds}
+    {:re #"^([0-9]+):([0-9]+)$" :conv hours-and-minutes}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])$" :conv minutes-and-seconds-and-tenths}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])([0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}])
 

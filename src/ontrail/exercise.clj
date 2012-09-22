@@ -73,6 +73,7 @@
 
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
+    (.debug logger (format " get ex=%s" id))
     (if (nil? exercise)
       {:error "No such id"}      
       (let [user (:user exercise)
@@ -83,7 +84,6 @@
             comment-count (if-not (nil? comments) (count comments) 0)
             avatar (get-avatar-url user)
             date (to-human-date (:creationDate exercise))]
-        (.debug logger (format " get ex=%s" id))
         {:id id
          :user user
          :distance distance
