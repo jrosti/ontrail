@@ -75,12 +75,15 @@
        (date-ok? (:date uex))))
 
 (defn meters [m] (Integer. m))
-(defn kilometers [m] (* (Integer. m) 1000))
-
+(defn kilometers [km] (* (Integer. km) 1000))
+(defn kilometers-and-meters [km m] (+ (meters m) (kilometers km)))
+  
 (def distance-regexps
   [{:re #"^([0-9]+)$" :conv meters}
-   {:re #"^([0-9]+) *m$" :conv meters},
-   {:re #"^([0-9]+) *km$" :conv kilometers}])
+   {:re #"^([0-9]+) *m *$" :conv meters}
+   {:re #"^([0-9]+) *k$" :conv kilometers}
+   {:re #"^([0-9]+) *km$" :conv kilometers}
+   {:re #"^([0-9]+) *[k\.,][^0-9]*([0-9]+)" :conv kilometers-and-meters}])
 
 (defn parse-distance [dist]
   (some identity (map #(try-parse % dist) distance-regexps)))

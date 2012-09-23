@@ -7,7 +7,7 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
-        [ontrail.mutate :only (create-ex comment-ex)])
+        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance)])
   (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
@@ -70,7 +70,7 @@
 
   (GET "/rest/v1/parse-time/:time" [time] (json-response {:time (to-human-time (parse-duration time))}))
   (GET "/rest/v1/parse-distance/:distance" [distance]
-       (json-response {:distance (to-human-distance (parse-duration distance))}))
+       (json-response {:distance (to-human-distance (parse-distance distance))}))
   
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)
