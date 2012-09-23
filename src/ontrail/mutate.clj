@@ -18,6 +18,7 @@
                                     "yyyy/MM/dd"))
 
 
+(defn as-number [x] (Integer. x))
 (defn to-db [min] (* (Integer. min) 60 100))
 (defn minutes [min] (to-db min))
 (defn hours [h] (* (to-db h) 60))
@@ -29,6 +30,9 @@
   (+ (to-db min) (secs sec) (* 10 (Integer. tenths))))
 (defn minutes-and-seconds-and-tenths-and-hundreds [min sec tenths hundreds]
   (+ (to-db min) (secs sec) (* 10 (Integer. tenths)) hundreds))
+
+(defn kilometers [km] (* (Integer. km) 1000))
+(defn kilometers-and-meters [km m] (+ (as-number m) (kilometers km)))
 
 (def duration-regexps
   [ {:re #"^([0-9]+) *m$" :conv minutes}
@@ -61,26 +65,9 @@
 (defn sport-ok? [sport]
   (not-nil? (mc/find-one-as-map ONSPORT {:_id sport})))
 
-(defn title-ok? [title]
-  (and (not-nil? title) (> (count title) 0)))
-
-(defn duration-ok? [dur]
-  (positive-numbers? (list dur)))
-
-(defn valid? [uex]
-  "Defines minimal set of keys for a valid ex"
-  (and (title-ok? (:title uex))
-       (duration-ok? (parse-duration (:duration uex)))
-       (sport-ok? (:sport uex))
-       (date-ok? (:date uex))))
-
-(defn meters [m] (Integer. m))
-(defn kilometers [km] (* (Integer. km) 1000))
-(defn kilometers-and-meters [km m] (+ (meters m) (kilometers km)))
-  
 (def distance-regexps
-  [{:re #"^([0-9]+)$" :conv meters}
-   {:re #"^([0-9]+) *m *$" :conv meters}
+  [{:re #"^([0-9]+)$" :conv as-number}
+   {:re #"^([0-9]+) *m *$" :conv as-number}
    {:re #"^([0-9]+) *k$" :conv kilometers}
    {:re #"^([0-9]+) *km$" :conv kilometers}
    {:re #"^([0-9]+) *[k\.,][^0-9]*([0-9]+)" :conv kilometers-and-meters}])
@@ -96,6 +83,10 @@
          (string/split (trim-tag tags) #"[, ;\.\^\*\/]+")
          '()))))
 
+(defn parse-natural [hr]
+  (if-not (= nil hr)
+    (try-parse {:re #"^([0-9]+)$" :conv as-number} hr)))
+
 (defn from-user-ex [user user-ex]
   (let [bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
@@ -105,13 +96,13 @@
                  :user user}
         body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
         tags (parse-tags (:tags user-ex))
-        ;avghr (if (positive-numbers? (list (:avghr user-ex))) (int (:avghr user-ex)) nil)
+        avghr (parse-natural (:avghr user-ex))
         distance (parse-distance (:distance user-ex))]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
-        (assoc :avghr 0) 
+        (assoc :avghr avghr) 
         (assoc :comments '()))))
 
 (defn create-ex [user params]
