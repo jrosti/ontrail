@@ -3,6 +3,7 @@
         compojure.core
         ring.middleware.file
         ring.middleware.cookies
+        [ring.util.response :only (redirect)]
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
@@ -44,7 +45,7 @@
        {:status 400
         :headers {"Content-Type" "application/tex"}
         :body (str exception#)})))
-    
+
 (defn log-and-wrap-dir-index [handler]
   (fn [req]
     (.info request-logger (str "HTTP" (to-logline req)))
@@ -87,7 +88,7 @@
   (route/not-found "Page not found"))
 
 (defn -main [& args]
-  (rebuild-index) ;; builds in-memory index for fast searches
+  (time (rebuild-index)) ;; builds in-memory index for fast searches
   (start-http-server (-> app-routes
                          handler/site
                          wrap-cookies

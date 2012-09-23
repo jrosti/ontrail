@@ -46,6 +46,16 @@
     (let [date-format (time-format/formatter "dd.MM.yyyy")]
       (time-format/unparse date-format date-time))))
 
+(defn seconds-part [seconds hundreds]
+  (if (> hundreds 0)
+    (str seconds "," (format "%02d" hundreds) " s")
+    (str seconds " s")))
+
+(defn minutes-part [minutes seconds]
+  (if (> seconds 0)
+    (str minutes " min " seconds " s")
+    (str minutes " min")))
+
 (defn to-human-time [duration]
   (if (= nil duration)
     ""
@@ -54,12 +64,12 @@
           minutes (mod (int (/ duration 6000)) 60)
           hours (int (/ duration 360000))]
       (if (> hours 0)
-        (if (> minutes 0)
-          (str hours " h " minutes " min")
+        (if (or (> minutes 0) (> seconds 0))
+          (str hours " h " (minutes-part minutes seconds))
           (str hours " h"))
-        (if (> seconds 0)
-          (str minutes " min " seconds " s")
-          (str minutes " min"))))))
+        (if (or (> seconds 0) (> hundreds 0))            
+            (str minutes " min " (seconds-part seconds hundreds))
+            (str minutes " min"))))))
   
 (defn to-human-stats-time [duration]
   "finnish time formatting"

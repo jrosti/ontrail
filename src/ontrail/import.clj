@@ -34,7 +34,6 @@
   (convert-to-timestamp (html/text (nth exercise 0))))
 
 (defn get-heading [exercise] (html/text (nth exercise 1)))
-                  
 
 (defn get-or-create-sport [exercise]
   ;; XXX: todo this properly.
