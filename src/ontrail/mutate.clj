@@ -56,7 +56,7 @@
   (some identity (map #(try-parse % dur-str) duration-regexps)))
 
 (defn parse-date [date-str]
-  (format/parse multi-parser date-str))
+  (time/plus (format/parse multi-parser date-str) (time/hours 12)))
 
 (defn date-ok? [date]
   (not-nil? (try (parse-date date)
