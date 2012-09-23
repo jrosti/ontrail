@@ -8,7 +8,7 @@
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
         [ontrail.mutate :only (create-ex comment-ex)])
-  (:use [ontrail summary auth crypto exercise log])
+  (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
             [clojure.stacktrace :as stacktrace]
@@ -67,6 +67,10 @@
   (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
   
   (GET "/rest/v1/sports" [] (json-response (get-distinct-sports {})))
+
+  (GET "/rest/v1/parse-time/:time" [time] (json-response {:time (to-human-time (parse-duration time))}))
+  (GET "/rest/v1/parse-distance/:distance" [distance]
+       (json-response {:distance (to-human-distance (parse-duration distance))}))
   
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)

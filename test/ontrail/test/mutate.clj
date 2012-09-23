@@ -26,7 +26,9 @@
   (is (= (hours 1) (hours-and-minutes 1 0)))
   (is (= (parse-duration "1:0") (hours 1)))
   (is (= (parse-duration "1.0") 6000))
-  (is (= (parse-duration "59.30") (+ (* 59 60 100) 3000)))
+  (is (= (parse-duration "59.30") (+ (* 59 6000) 3000)))
+  (is (= (parse-duration "0.59.30") (+ (* 59 6000) 3000)))
+  (is (= (parse-duration "0:59:30") (+ (* 59 6000) 3000)))
   (is (= (parse-duration "2.42,2") 16220)))
   
 
