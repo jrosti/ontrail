@@ -69,14 +69,19 @@
         <header>
           <div class="logged-in">
             <h2>Omat toiminnot</h2>
-            <p><a class="pageLink" rel="addex">Lisää lenkki</a></p>
-            <h2>Omat sivut</h2>
-            <p>
-              <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
-              <a class="pageLink" rel="home">Yhteenveto lenkeistä</a>
+	    <p>
+	      <a class="pageLink" rel="addex">Lisää lenkki</a><br/>
+	      <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
+	      <a class="pageLink" rel="profile">Oma profiili</a><br/>
+              <a class="pageLink" rel="home">Selaa harjoituspäiväkirjaa</a><br/>
+            </p>
+	    <h2>Muut</h2>
+	    <p>
+	      <a class="pageLink" rel="tbd">Etsi käyttäjiä</a><br/>
+	      <a class="pageLink" rel="tbd">Tilastot</a><br/>
+	      <a class="pageLink" rel="tbd">Kunniataulukot</a><br/>
             </p>
             <p></p>
-
           </div>
           <h2>Twitter-aikajana</h2>
           <p>Keskustele ontrailnetistä twitterissä:</p>
@@ -91,6 +96,15 @@
       <div id="entries"></div>
     </section>
 
+    <section role="profile">
+      <h2>Käyttäjän profiili.</h2>
+      <p>Profiilin tiedot ja muokkaus</p>
+    </section>
+
+    <section role="tbd">
+      <h2>Tekeillä.</h2>
+    </section>
+      
     <section role="user">
       <h2>Käyttäjän <span class="current-username"></span> lenkit</h2>
       <div id="user-entries"></div>
@@ -178,7 +192,6 @@
   <!-- end scripts -->
 
 </body>
-    <!-- XXXXX: why this is repeated twice? -->
 <script id="exercise-template" type="text/x-handlebars-template">
   <article data-id="{{id}}" class="preview exercise {{sport}}">
     <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
