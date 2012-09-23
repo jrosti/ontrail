@@ -88,7 +88,8 @@
   (route/not-found "Page not found"))
 
 (defn -main [& args]
-  (time (rebuild-index)) ;; builds in-memory index for fast searches
+  (.info logger "Starting to build index")
+  (future (.info logger (str "Search terms in index: " (time (rebuild-index))))) 
   (start-http-server (-> app-routes
                          handler/site
                          wrap-cookies
