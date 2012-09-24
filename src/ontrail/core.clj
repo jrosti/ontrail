@@ -12,6 +12,7 @@
   (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
+            [ring.middleware.head :as ring-head]
             [clojure.stacktrace :as stacktrace]
             [compojure.handler :as handler]
             [compojure.route :as route]
@@ -92,6 +93,7 @@
   (future (.info logger (str "Search terms in index: " (time (rebuild-index))))) 
   (start-http-server (-> app-routes
                          handler/site
+                         ring-head/wrap-head
                          wrap-cookies
                          log-and-wrap-dir-index
                          wrap-ring-handler)

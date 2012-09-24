@@ -2,8 +2,8 @@
   :description "A training blog."
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [aleph "0.3.0-alpha2"]
-                 [compojure "1.1.1"]
-                 [ring "1.1.5"]
+                 [compojure "1.1.3"]
+                 [ring "1.1.6"]
                  [lein-swank "1.4.4"]
                  [clj-time "0.4.4"]
                  [enlive "1.0.0"]
