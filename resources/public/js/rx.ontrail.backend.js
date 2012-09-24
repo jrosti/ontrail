@@ -19,6 +19,7 @@
   Rest.prototype.tagExercises = function(tag, page) { return getAsObservable("ex-list-tag", tag, page) }
   Rest.prototype.details = function(kind, id) { return getAsObservable(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservable("search?q=" + query ) }
+  Rest.prototype.sports = function() { return getAsObservable("sports") }
 
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {

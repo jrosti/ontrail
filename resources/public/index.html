@@ -130,9 +130,6 @@
           <input id="ex-title" name="title" placeholder="Mitä teit?"></input>
           <em class="error title-required">Otsikko vaaditaan</em>
           <select id="ex-sport" name="sport" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
-            <option value="juoksu">juoksu</option>
-            <option value="hiihto">hiihto</option>
-            <option value="pyöräily">pyöräily</option>
           </select>
           <em class="error sport-required">Lenkin laji vaaditaan</em>
           <input id="ex-duration" name="duration" placeholder="Kesto"></input>
@@ -277,6 +274,12 @@
 
 <script id="summary-template" type="text/x-handlebars-template">
   <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+</script>
+
+<script id="sports-create-template" type="text/x-handlebars-template">
+  {{#each sports}}
+  <option value="{{this}}">{{this}}</option>
+  {{/each}}
 </script>
 
 </html>

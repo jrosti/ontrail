@@ -9,6 +9,7 @@
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
     var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
+    var sportsInCreateTemplate = Handlebars.compile($("#sports-create-template").html());
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
@@ -23,6 +24,11 @@
     var renderSingleExercise = function(exercise) {
       $('#exercise').html($(singleExerciseTemplate(exercise)))
     }
+    var renderSports = function(data) {
+      $(sportsInCreateTemplate({sports: data})).appendTo($('#ex-sport'))
+      $('#ex-sport').chosen()
+    }
+
 
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
@@ -119,8 +125,6 @@
     addComments.subscribe(renderSingleExercise)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
-    // pimp selection boxes
-    $(".chzn-select").chosen()
 
     // validation
     var require = function(field) {
@@ -135,8 +139,10 @@
     notFutureDateValidation.subscribe(toggleEffect($(".date-too-new")))
 
     var validations = _.flatten(
-      [_.map(['title', 'sport', 'duration', 'date'], require), isDateValidation, notFutureDateValidation]
+      [_.map(['title', 'duration', 'date'], require), isDateValidation, notFutureDateValidation]
     )
     combine(validations).subscribe(disableEffect($('#add-exercise')))
+
+    rx.returnValue("").take(1).selectAjax(OnTrail.rest.sports).subscribe(renderSports);
   })
 })()
