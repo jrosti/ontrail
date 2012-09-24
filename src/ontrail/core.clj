@@ -31,7 +31,7 @@
        (.error logger (str exception#))
        (stacktrace/print-stack-trace exception# 100)
        {:status 500
-        :headers {"Content-Type" "application/tex"}
+        :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
 
 (defmacro is-authenticated? [cookies action]
@@ -43,7 +43,7 @@
        (.error logger (str exception#))
        (stacktrace/print-stack-trace exception# 100)
        {:status 500
-        :headers {"Content-Type" "application/tex"}
+        :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
 
 (defn log-and-wrap-dir-index [handler]
@@ -85,7 +85,7 @@
         (is-authenticated? cookies (json-response (create-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
 
   (route/resources "/")
-  (route/not-found "Page not found"))
+  (route/not-found {:status 404}))
 
 (defn -main [& args]
   (.info logger "Starting to build index")
