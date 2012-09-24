@@ -30,7 +30,7 @@
      (catch Exception exception#
        (.error logger (str exception#))
        (stacktrace/print-stack-trace exception# 100)
-       {:status 400
+       {:status 500
         :headers {"Content-Type" "application/tex"}
         :body (str exception#)})))
 
@@ -42,7 +42,7 @@
      (catch Exception exception#
        (.error logger (str exception#))
        (stacktrace/print-stack-trace exception# 100)
-       {:status 400
+       {:status 500
         :headers {"Content-Type" "application/tex"}
         :body (str exception#)})))
 
