@@ -29,7 +29,7 @@
 (defn minutes-and-seconds-and-tenths [min sec tenths]  
   (+ (to-db min) (secs sec) (* 10 (Integer. tenths))))
 (defn minutes-and-seconds-and-tenths-and-hundreds [min sec tenths hundreds]
-  (+ (to-db min) (secs sec) (* 10 (Integer. tenths)) hundreds))
+  (+ (to-db min) (secs sec) (* 10 (Integer. tenths)) (Integer. hundreds)))
 
 (defn kilometers [km] (* (Integer. km) 1000))
 (defn kilometers-and-meters [km m] (+ (as-number m) (kilometers km)))
@@ -47,7 +47,7 @@
     {:re #"^([0-9]+)[:\.]([0-9]+)[:\.]([0-9]+)$" :conv hours-and-minutes-and-seconds}
     {:re #"^([0-9]+) min ([0-9]+),([0-9]) s$" :conv minutes-and-seconds-and-tenths}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])$" :conv minutes-and-seconds-and-tenths}
-    {:re #"^([0-9]+)\.([0-9]+),([0-9][0-9])[^0-9]*$" :conv minutes-and-seconds-and-tenths-and-hundreds}
+    {:re #"^([0-9]+)\.([0-9]+),([0-9][0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}
     ])
 
 (defn try-match [re str]
