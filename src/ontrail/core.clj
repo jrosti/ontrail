@@ -70,7 +70,12 @@
   
   (GET "/rest/v1/sports" [] (json-response (get-distinct-sports {})))
 
-  (GET "/rest/v1/parse-time/:time" [time] (json-response {:time (to-human-time (parse-duration time))}))
+  (GET "/rest/v1/parse-time/:time" [time]
+       (let [duration (to-human-time (parse-duration time))]
+         (if (= "" duration)
+           (json-response {:message "invalid-duration"} 400)
+           (json-response {:success true :time duration}))))
+  
   (GET "/rest/v1/parse-distance/:distance" [distance]
        (json-response {:distance (to-human-distance (parse-distance distance))}))
   

@@ -260,16 +260,17 @@ function mkValidation(observable, validator) {
 // FIXME: convert for only accepted status codes
 // Notification a -> Notification ValidationResult
 function convertToResponseNotification(n) {
+    console.log(n, n.kind)
   function toNext(x) { return new Rx.Notification('N', x) }
 
   switch (n.kind) {
     case 'E':
       try {
-        return toNext([$.parseJSON(n.Value.xmlHttpRequest.responseText)['message']])
+        return toNext([$.parseJSON(n.value.xmlHttpRequest.responseText)['message']])
       } catch (e) { return n }
     case 'N':
-      if (n.Value.xmlHttpRequest.status == 200 && n.Value.data.success !== false) return toNext([])
-      else return toNext(n.Value.data.message) // check if this could be return as array instead
+      if (n.value.xmlHttpRequest.status == 200 && n.value.data.success !== false) return toNext([])
+      else return toNext(n.value.data.message) // check if this could be return as array instead
     default : return n
   }
 }
@@ -278,23 +279,18 @@ function convertToResponseNotification(n) {
 function mkServerValidation(observable, url, validation, _method) {
   var method = _method || "GET"
 
-  function sessionTimeoutHandler(resp) {
-    if (resp.xmlHttpRequest.status === 403) {
-      $('#session-timeout').show()
-    }
-  }
-
   if (typeof validation !== 'function') {
     validation = function(url) {
       return function(value) {
         if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        return $.ajaxAsObservable({ url: url + encodeURIComponent(value), dataType: "json", type: method })
-          .doAction(function() {}, sessionTimeoutHandler)
-          .materialize()
+        var o = $.ajaxAsObservable({ url: url + encodeURIComponent(value), dataType: "json", type: method })
+	  console.log(o) 
+          return o.materialize()
           .select(convertToResponseNotification)
           .dematerialize()
           .catchException(Rx.Observable.returnValue([]))
       }}
+      
   }
 
   var throttle = observable.throttle(1000).distinctUntilChanged()

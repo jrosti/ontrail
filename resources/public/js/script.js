@@ -134,8 +134,10 @@
       return validation
     }
 
+    var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/').validation
+    timeValidation.subscribe(debug)
     var validations = _.flatten(
-      [_.map(['title', 'duration'], require)]
+	[_.map(['title', 'duration'], require), timeValidation]
     )
     combine(validations).subscribe(disableEffect($('#add-exercise')))
 
