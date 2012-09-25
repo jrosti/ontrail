@@ -118,7 +118,9 @@
 
     // Lisää lenkki
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise).where(isSuccess).select(ajaxResponseData)
-    addExercises.doAction(function() { $("#add-exercise-form")[0].reset()}).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
+    addExercises.doAction(function() {
+      $("#add-exercise-form .reset").attr('value', '')
+    }).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)

@@ -128,18 +128,18 @@
         <h2>Lisää uusi lenkki</h2>
         <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
         <form id="add-exercise-form" method="post">
-          <input id="ex-title" name="title" placeholder="Mitä teit?"/>
+          <input id="ex-title" name="title" class="reset" placeholder="Mitä teit?"/>
           <em class="error title-required">Otsikko vaaditaan</em>
           <select id="ex-sport" name="sport" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
           </select>
-          <input id="ex-duration" name="duration" placeholder="Kesto"/>
+          <input id="ex-duration" name="duration" class="reset" placeholder="Kesto"/>
           <em class="error duration-required">Lenkin kesto vaaditaan</em>
-          <input id="ex-distance" name="distance" placeholder="Matka metreissä"/>
-          <input id="ex-avghr" name="avghr" placeholder="Keskiarvosyke"/>
+          <input id="ex-distance" name="distance" class="reset" placeholder="Matka metreissä"/>
+          <input id="ex-avghr" name="avghr" class="reset" placeholder="Keskiarvosyke"/>
           <div id="ex-continuous-date">
             <input hidden="true" id="ex-date" name="date" placeholder="Milloin?"/>
           </div>
-          <textarea id="ex-body" name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
+          <textarea id="ex-body" name="body" rows="10" cols="68" class="reset" placeholder="Kerro jotain urheilustasi!"></textarea>
           <input id="add-exercise" type="button" value="Lisää lenkki"></input>
         </form>
       </article>
