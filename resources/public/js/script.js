@@ -117,8 +117,8 @@
     loggedIns.subscribe(function() { $('body').toggleClass('login', false) })
 
     // Lisää lenkki
-    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise)
-    addExercises.doAction(function() { $("#add-exercise-form")[0].reset()}).subscribe(_.partial(showPage, "home"))
+    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise).where(isSuccess).select(ajaxResponseData)
+    addExercises.doAction(function() { $("#add-exercise-form")[0].reset()}).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
