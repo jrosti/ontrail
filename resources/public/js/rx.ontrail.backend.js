@@ -12,7 +12,7 @@
   }
 
   var getAsObservable = function() {
-    var path = _.reduce(arguments, function(a, b) { return a + "/" + b })
+    var path = _.reduce(arguments, function(a, b) { return encodeURIComponent(a) + "/" + encodeURIComponent(b) })
     return $.ajaxAsObservable($.extend({ url: "/rest/v1/" + path }, errorHandler)).mergeTo(ajaxErrors)
   }
   var getAsObservableResultData = function() {
