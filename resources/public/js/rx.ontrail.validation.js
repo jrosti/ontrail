@@ -260,7 +260,6 @@ function mkValidation(observable, validator) {
 // FIXME: convert for only accepted status codes
 // Notification a -> Notification ValidationResult
 function convertToResponseNotification(n) {
-    console.log(n, n.kind)
   function toNext(x) { return new Rx.Notification('N', x) }
 
   switch (n.kind) {
@@ -283,9 +282,8 @@ function mkServerValidation(observable, url, validation, _method) {
     validation = function(url) {
       return function(value) {
         if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        var o = $.ajaxAsObservable({ url: url + encodeURIComponent(value), dataType: "json", type: method })
-	  console.log(o) 
-          return o.materialize()
+        return $.ajaxAsObservable({ url: url + encodeURIComponent(value), dataType: "json", type: method })
+          .materialize()
           .select(convertToResponseNotification)
           .dematerialize()
           .catchException(Rx.Observable.returnValue([]))
@@ -293,7 +291,7 @@ function mkServerValidation(observable, url, validation, _method) {
       
   }
 
-  var throttle = observable.throttle(1000).distinctUntilChanged()
+  var throttle = observable.throttle(133).distinctUntilChanged()
   var serverHit = throttle.select(validation(url)).switchLatest().publish()
   serverHit.connect()
   return { validation: serverHit, requestOn: throttle, requestOff: serverHit }
