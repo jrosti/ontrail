@@ -35,19 +35,19 @@
 (defn kilometers-and-meters [km m] (+ (as-number m) (kilometers km)))
 
 (def duration-regexps
-  [ {:re #"^([0-9]+) *m$" :conv minutes}
+  [ {:re #"^([0-9]+) *m[^0-9]*$" :conv minutes}
     {:re #"^([0-9]+)$" :conv minutes}
-    {:re #"^([0-9]+) *h$" :conv hours}
-    {:re #"^([0-9]+).*h.*([0-9]+).*m$" :conv hours-and-minutes}
-    {:re #"^([0-9]+)\.([0-9]+)$" :conv minutes-and-seconds}
-    {:re #"^([0-9]+) min ([0-9]+) s$" :conv minutes-and-seconds}
+    {:re #"^([0-9]+).*h$" :conv hours}
+    {:re #"^([0-9]+).*h[^0-9]*([0-9]+)[^0-9]*$" :conv hours-and-minutes}
+    {:re #"^([0-9]+)\.([0-9]+)[^0-9]*$" :conv minutes-and-seconds}
+    {:re #"^([0-9]+)[^0-9]*min[^0-9]*([0-9]+)[^0-9]*s[^0-9]*$" :conv minutes-and-seconds}
     {:re #"^([0-9]+):([0-9]+)$" :conv hours-and-minutes}
     {:re #"^([0-9]+) h ([0-9]+) min$" :conv hours-and-minutes}
     {:re #"^([0-9]+) h ([0-9]+) min ([0-9]+) s$" :conv hours-and-minutes-and-seconds}
     {:re #"^([0-9]+)[:\.]([0-9]+)[:\.]([0-9]+)$" :conv hours-and-minutes-and-seconds}
     {:re #"^([0-9]+) min ([0-9]+),([0-9]) s$" :conv minutes-and-seconds-and-tenths}
     {:re #"^([0-9]+)\.([0-9]+),([0-9])$" :conv minutes-and-seconds-and-tenths}
-    {:re #"^([0-9]+)\.([0-9]+),([0-9])([0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}
+    {:re #"^([0-9]+)\.([0-9]+),([0-9][0-9])$" :conv minutes-and-seconds-and-tenths-and-hundreds}
     {:re #"^([0-9]+) min ([0-9]+),([0-9])([0-9]) s$" :conv minutes-and-seconds-and-tenths-and-hundreds}])
 
 (defn try-match [re str]
