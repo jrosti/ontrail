@@ -167,12 +167,11 @@ var parseDate
   }
 
   parseDate = function(str) {
-    // this example parses dates like "month/date/year"
     var validDate = /^(\d{1,2}|\d{4})(\.|-|\/)(\d{1,2})(\.|-|\/)(\d{1,2}|\d{4})$/
     return stringsToDate(validDate.exec(str));
   }
 
-  XDate.parsers.splice(parseDate);
+  XDate.parsers.push(parseDate);
 })()
 
 // () -> (String -> ValidationResult)

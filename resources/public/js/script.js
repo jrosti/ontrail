@@ -139,10 +139,14 @@
     notFutureDateValidation.subscribe(toggleEffect($(".date-too-new")))
 
     var validations = _.flatten(
-      [_.map(['title', 'duration', 'date'], require), isDateValidation, notFutureDateValidation]
+      [_.map(['title', 'duration'], require)]
     )
     combine(validations).subscribe(disableEffect($('#add-exercise')))
 
-    rx.returnValue("").take(1).selectAjax(OnTrail.rest.sports).subscribe(renderSports);
+    var onPageLoad = rx.returnValue("").take(1)
+    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
+
+    var tomorrow = (new XDate()).addDays(1).clearTime()
+    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 52, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
   })
 })()

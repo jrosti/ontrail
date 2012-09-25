@@ -21,6 +21,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chosen.css">
+  <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
   <link rel="stylesheet" href="css/ontrail.css">
   <link href='http://fonts.googleapis.com/css?family=Nosifer&subset=latin-ext' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Audiowide&subset=latin-ext' rel='stylesheet' type='text/css'>
@@ -115,7 +116,7 @@
         <u>Kaikki</u> Vuosi Kuukausi Viikko
         <h2>Yhteenveto harjoituksista</h2>
         <p></p>
-      <table id="homies">
+      <table id="homies" class="details">
         <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
         <tbody></tbody>
       </table>
@@ -127,18 +128,16 @@
         <h2>Lisää uusi lenkki</h2>
         <p>Lenkin lisääminen on tulossa pikapuolin.  Seuraa twitteriä silmä kovana, niin tiedät ensimmäisenä milloin se toimii!</p>
         <form id="add-exercise-form" method="post">
-          <input id="ex-title" name="title" placeholder="Mitä teit?"></input>
+          <input id="ex-title" name="title" placeholder="Mitä teit?"/>
           <em class="error title-required">Otsikko vaaditaan</em>
           <select id="ex-sport" name="sport" data-placeholder="Valitse laji..." class="chzn-select" style="width:350px;">
           </select>
-          <em class="error sport-required">Lenkin laji vaaditaan</em>
-          <input id="ex-duration" name="duration" placeholder="Kesto"></input>
+          <input id="ex-duration" name="duration" placeholder="Kesto"/>
           <em class="error duration-required">Lenkin kesto vaaditaan</em>
-          <input id="ex-distance" name="distance" placeholder="Matka metreissä"></input>
-          <input id="ex-date" name="date" placeholder="Milloin?"></input>
-          <em class="error date-required">Päivämäärä vaaditaan</em>
-          <em class="error invalid-date">Syötä päivämäärä muodossa pp.kk.vvvv tai vvvv/kk/pp</em>
-          <em class="error date-too-new">Päivä on tulevaisuudessa</em>
+          <input id="ex-distance" name="distance" placeholder="Matka metreissä"/>
+          <div id="ex-continuous-date">
+            <input hidden="true" id="ex-date" name="date" placeholder="Milloin?"/>
+          </div>
           <textarea id="ex-body" name="body" rows="10" cols="68" placeholder="Kerro jotain urheilustasi!"></textarea>
           <input id="add-exercise" type="button" value="Lisää lenkki"></input>
         </form>
@@ -181,6 +180,7 @@
   <script src="js/rx.ontrail.validation.js"></script>
   <script src="js/rx.ontrail.pager.js"></script>
   <script src="js/rx.ontrail.session.js"></script>
+  <script src="js/jquery.continuous-calendar.js"></script>
 
   <!-- scripts concatenated and minified via build script -->
   <script src="js/plugins.js"></script>
@@ -197,7 +197,7 @@
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
     {{duration}}{{/if}}</h4>
-    <table class="full">
+    <table class="details full">
       <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
       <tr>
 	<td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
@@ -225,7 +225,7 @@
   <article data-id="{{id}}" class="full exercise {{sport}}">
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
-    <table>
+    <table class="details">
       <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
       <tr>
         <td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
