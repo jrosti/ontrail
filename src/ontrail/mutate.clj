@@ -117,7 +117,7 @@
         tret (assoc  (dissoc ret :_id) :id str-id)]
     (insert-exercise-inmem-index ret)
     (.debug logger (str (:user params) " created ex " ret))
-    tret))
+    (as-ex-result tret)))
 
 (defn comment-ex [user params]
   (.debug logger (str user " creating comment " params))
