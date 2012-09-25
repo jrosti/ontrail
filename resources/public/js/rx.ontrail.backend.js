@@ -5,7 +5,8 @@
   var ajaxErrors = Rx.Observable.create(function(observer) {
     errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
     return function() { errorHandler = null }
-  });
+  }).publish()
+  ajaxErrors.connect()
   var success = function(ajaxStream) {
     return ajaxStream.where(isSuccess).select(ajaxResponseData)
   }
