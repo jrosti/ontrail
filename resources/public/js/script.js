@@ -126,17 +126,13 @@
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
 
-    // validation
+    // luo lenkki -validaatio
     var require = function(field) {
       var validation = mkValidation($('#ex-' + field).changes(), requiredV())
       validation.subscribe(toggleEffect($("." + field + "-required")))
+      validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
     }
-    var dates = $('#ex-date').changes().select(parseDate);
-    var isDateValidation = mkValidation(dates, dateV())
-    isDateValidation.subscribe(toggleEffect($(".invalid-date")))
-    var notFutureDateValidation = mkValidation(dates, dateInThePastV())
-    notFutureDateValidation.subscribe(toggleEffect($(".date-too-new")))
 
     var validations = _.flatten(
       [_.map(['title', 'duration'], require)]
