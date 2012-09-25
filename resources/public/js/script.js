@@ -28,13 +28,12 @@
       $(sportsInCreateTemplate({sports: data})).appendTo($('#ex-sport'))
       $('#ex-sport').chosen()
     }
-
-
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
       var content = _.map(summary, summaryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo($('#homies tbody'))
     }
+    var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
@@ -136,11 +135,40 @@
       return validation
     }
 
-    var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/').validation
-    timeValidation.subscribe(debug)
-    var validations = _.flatten(
-	[_.map(['title', 'duration'], require), timeValidation]
-    )
+
+
+    var serverTimeValidator = function() {
+      var convertToError = function(n) {
+        function toNext(x) { return new Rx.Notification.createOnNext(x) }
+
+        switch (n.kind) {
+          case 'E':
+            try {
+              console.log(n)
+              return toNext([$.parseJSON(n.value.jqXHR.responseText)['message']])
+            } catch (e) { return n }
+          case 'N': {
+            console.log(n)
+            if (n.value.jqXHR.status == 200 && n.value.data.success !== false) return toNext([])
+            else return toNext($.parseJSON(n.value.jqXHR.responseText)['message']) // check if this could be return as array instead
+          }
+          default : return n
+        }
+      }
+
+      return function(value) {
+        if ($.trim(value) == "") return Rx.Observable.returnValue([])
+        var request = OnTrail.rest.durationV(value)
+        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDurationHint)
+        return request.materialize()
+          .select(convertToError)
+          .dematerialize()
+      }}
+
+    var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/', serverTimeValidator).validation
+    timeValidation.subscribe(toggleEffect($(".invalid-duration")))
+    timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
+    var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
     combine(validations).subscribe(disableEffect($('#add-exercise')))
 
     var onPageLoad = rx.returnValue("").take(1)
