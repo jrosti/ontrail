@@ -27,6 +27,9 @@
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }
+  Rest.prototype.durationV = function(duration) { 
+    return getAsObservable("parse-time", duration)
+  }
 
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
