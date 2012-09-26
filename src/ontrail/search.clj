@@ -13,7 +13,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn tags-to-string [tags]
-  (apply str (interpose \  tags)))
+  (apply str (interpose " " tags)))
   
 (defn get-ex-terms [exercise]
   (let [part (partial get exercise)
@@ -28,20 +28,12 @@
 
 (defn fst [x y] x)
 
-;(defn insert-term [ex-id term]
-;  (let [index @inverted-index]
-;    (if (not (contains? index term))
-;      (fst 1 (swap! inverted-index assoc term #{ex-id}))
-;      (fst 0 (let [new-val (clojure.set/union (get index term) #{ex-id})]
-;        (swap! inverted-index assoc term new-val))))))
-
-(defn get-val [ex-id term]
-  (if (not (contains? @inverted-index term))
-    #{ex-id}
-    (clojure.set/union (get @inverted-index term) #{ex-id})))
-
 (defn insert-term [ex-id term]
-  (swap! @inverted-index assoc term (get-val ex-id term)))
+  (let [index @inverted-index]
+    (if (not (contains? index term))
+      (fst 1 (swap! inverted-index assoc term #{ex-id}))
+      (fst 0 (let [new-val (clojure.set/union (get index term) #{ex-id})]
+        (swap! inverted-index assoc term new-val))))))
 
 (defn insert-exercise-inmem-index [ex]
   (let [terms (get-ex-terms ex)
