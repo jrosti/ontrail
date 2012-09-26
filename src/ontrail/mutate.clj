@@ -63,13 +63,6 @@
 (defn parse-date [date-str]
   (time/plus (format/parse multi-parser date-str) (time/hours 12)))
 
-(defn date-ok? [date]
-  (not-nil? (try (parse-date date)
-                 (catch Exception e (.debug logger (str "ex in parse date" date e))))))
-
-(defn sport-ok? [sport]
-  (not-nil? (mc/find-one-as-map ONSPORT {:_id sport})))
-
 (def distance-regexps
   [{:re #"^([0-9]+)$" :conv as-number}
    {:re #"^([0-9]+) *m *$" :conv as-number}
@@ -83,9 +76,9 @@
 (defn parse-tags
   ([] '())
   ([tags]
-     (let [trim-tag #(-> % .toLowerCase string/trim)]
+     (let [trim-tag #(-> % string/trim)]
        (if (string? tags)
-         (string/split (trim-tag tags) #"[, ;\.\^\*\/]+")
+         (string/split (trim-tag tags) #",")
          '()))))
 
 (defn parse-natural [hr]
