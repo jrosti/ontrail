@@ -12,7 +12,6 @@
   (not= val nil))
 
 (defn positive-numbers? [vals]
-  ;; XXX why lambda is needed? and is macro?
   (reduce #(and %1 %2) (map #(and (not-nil? %) (> % 0)) vals)))
 
 (defn strip-html [val]
