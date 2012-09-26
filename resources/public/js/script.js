@@ -10,6 +10,7 @@
     var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
     var summaryTemplate = Handlebars.compile($("#summary-template").html());
     var sportsInCreateTemplate = Handlebars.compile($("#sports-create-template").html());
+    var tagsInCreateTemplate = Handlebars.compile($("#tags-create-template").html());
 
     var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
@@ -27,6 +28,10 @@
     var renderSports = function(data) {
       $(sportsInCreateTemplate({sports: data})).appendTo($('#ex-sport'))
       $('#ex-sport').chosen()
+    }
+    var renderTags = function(data) {
+      $(tagsInCreateTemplate({tags: data})).appendTo($('#ex-tags'))
+      $('#ex-tags').chosen({ "create_option": true, "persistent_create_option": true })
     }
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
@@ -171,8 +176,9 @@
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
     combine(validations).subscribe(disableEffect($('#add-exercise')))
 
-    var onPageLoad = rx.returnValue("").take(1)
+    var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
+    loggedIns.selectAjax(OnTrail.rest.tags).subscribe(renderTags)
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 52, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })

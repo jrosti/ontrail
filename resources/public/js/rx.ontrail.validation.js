@@ -265,11 +265,13 @@ function convertToResponseNotification(n) {
   switch (n.kind) {
     case 'E':
       try {
+        console.log(n)
         return toNext([$.parseJSON(n.value.xmlHttpRequest.responseText)['message']])
       } catch (e) { return n }
-    case 'N':
+    case 'N': {
       if (n.value.xmlHttpRequest.status == 200 && n.value.data.success !== false) return toNext([])
       else return toNext(n.value.data.message) // check if this could be return as array instead
+    }
     default : return n
   }
 }
