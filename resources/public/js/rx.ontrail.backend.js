@@ -29,6 +29,7 @@
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }
   Rest.prototype.tags = function(user) { return getAsObservableResultData("list-tags", user) }
+  Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }
   Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
 
   // todo: move login and postExercise here also and make postAsObservable private

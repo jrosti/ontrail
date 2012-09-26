@@ -178,7 +178,7 @@
 
     var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
-    loggedIns.selectAjax(OnTrail.rest.tags).subscribe(renderTags)
+    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 52, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
