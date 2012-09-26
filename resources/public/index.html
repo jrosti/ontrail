@@ -229,10 +229,10 @@
     {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
     {{duration}}{{/if}}</h4>
     <table class="details full">
-      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
+      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th></tr></thead>
       <tr>
 	<td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
-	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{tags}}</td>
+	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td>
       </tr>
     </table>
     <div class="preview">{{truncate body 100}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
@@ -248,7 +248,7 @@
       </ul>
     </div>
     {{/if}}
-    <p class="full"><a class="pageLink" rel="ex-{{id}}"> {{commentCount}} kommenttia</a>.</p>
+    <p class="full"><a class="pageLink" rel="ex-{{id}}">Lue lenkki: {{commentCount}} kommenttia</a>.</p>
   </article>
 </script>
 
