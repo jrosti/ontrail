@@ -12,7 +12,13 @@
     var sportsInCreateTemplate = Handlebars.compile($("#sports-create-template").html());
     var tagsInCreateTemplate = Handlebars.compile($("#tags-create-template").html());
 
-    var postExercise = function(user) { return OnTrail.rest.postAsObservable("ex/" + user, $('#add-exercise-form').serialize()) }
+    var postExercise = function(user) {
+      var values = $('#add-exercise-form').serialize() + "&tags=" +
+        _.reduce(_.flatten(["", _.map($("#ex-tags")[0].selectedOptions, function(option) { return option.value })]),
+          function(a, b) { return a + (a !== '' ? "," : "") + encodeURIComponent(b) })
+
+      return OnTrail.rest.postAsObservable("ex/" + user, values)
+    }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
 
     var renderLatest = function(el) {
@@ -149,11 +155,9 @@
         switch (n.kind) {
           case 'E':
             try {
-              console.log(n)
               return toNext([$.parseJSON(n.value.jqXHR.responseText)['message']])
             } catch (e) { return n }
           case 'N': {
-            console.log(n)
             if (n.value.jqXHR.status == 200 && n.value.data.success !== false) return toNext([])
             else return toNext($.parseJSON(n.value.jqXHR.responseText)['message']) // check if this could be return as array instead
           }
