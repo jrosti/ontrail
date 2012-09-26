@@ -4,7 +4,7 @@
     var entries = $("#entries")
     var userEntries = $("#user-entries")
     var tagEntries = $("#tag-entries")
-    var allEntries = $("#entries,#user-entries,#tag-entries")
+    var allEntries = $("#entries,#user-entries,#tag-entries,#exercise")
 
     var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
     var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
