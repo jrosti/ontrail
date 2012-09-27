@@ -38,8 +38,11 @@
     var renderSingleExercise = function(exercise) {
       $('#exercise').html(ich.singleExerciseTemplate(exercise))
 
-      var commentValidation = mkValidation($('#comment-body').changes(), requiredV())
-      commentValidation.subscribe(disableEffect($('#add-comment')))
+      var commentBodyValidation = mkValidation($('#comment-body').changes(), requiredV())
+      commentBodyValidation.subscribe(toggleEffect($(".comment-body-required")))
+      var commentTitleValidation = mkValidation($('#comment-title').changes(), requiredV())
+      commentTitleValidation.subscribe(toggleEffect($(".comment-title-required")))
+      combine([commentBodyValidation, commentTitleValidation]).subscribe(disableEffect($('#add-comment')))
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: data}).appendTo($('#ex-sport'))

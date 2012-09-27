@@ -272,10 +272,21 @@
       {{^comments}}
       <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
       {{/comments}}
-      <form id="add-comment-form" method="post">
-        <input name="title" class="required" placeholder="Otsikko"></input>
-        <textarea id="comment-body" name="body" rows="10" cols="68" placeholder="Kommenttisi"></textarea>
-        <input id="add-comment" type="button" value="Kommentoi"></input>
+      <form class=" edit-form" id="add-comment-form" method="post">
+        <div>
+          <label>Otsikko</label>
+          <input id="comment-title" name="title" class="required" placeholder="Otsikko"></input>
+          <em class="error comment-title-required">Lisää otsikko</em>
+        </div>
+        <div>
+          <label>Kommenttisi</label>
+          <textarea id="comment-body" name="body" rows="10" cols="68" placeholder="Kommenttisi"></textarea>
+          <em class="error comment-body-required">Kommentti tarvitaan</em>
+        </div>
+        <div>
+          <label> </label>
+          <input id="add-comment" type="button" value="Kommentoi"></input>
+        </div>
       </form>
     </article>
     <article class="logged-out">

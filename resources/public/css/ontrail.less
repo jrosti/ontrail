@@ -332,15 +332,18 @@ html .continuousCalendarContainer .popUpContainer {
     width: 350px;
   }
 
+  @label-width: 120px;
+
   em {
     width: inherit;
+    margin-left: @label-width + 4px;
   }
 
   label {
     .inline-block;
     font-size: 14px;
     font-style: normal;
-    width: 120px;
+    width: @label-width;
     line-height: 14px;
     padding: 0;
   }

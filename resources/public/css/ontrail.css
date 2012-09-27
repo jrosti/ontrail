@@ -361,6 +361,7 @@ html .continuousCalendarContainer .popUpContainer {
 }
 .edit-form em {
   width: inherit;
+  margin-left: 124px;
 }
 .edit-form label {
   display: inline-block;
