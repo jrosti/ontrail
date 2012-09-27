@@ -54,7 +54,7 @@
   (re-matches re str))
 
 (defn try-parse [re-conv str]
-  (let [match (try-match (:re re-conv) str)]
+  (let [match (try-match (:re re-conv) (string/trim str))]
     (if match (apply (:conv re-conv) (rest match)))))
 
 (defn parse-duration [dur-str] 
