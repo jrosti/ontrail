@@ -3,8 +3,8 @@
   (:use clojure.test))
 
 (deftest test-parse-tags
-  (is (= ["tag1", "tag2"] (parse-tags " tag1,,tag2")))
-  (is (= ["tag1", "tag2"] (parse-tags " tag1//*tag2 "))))
+  (is (= ["tag1", "tag2"] (parse-tags " tag1,tag2")))
+  (is (= ["tag1", "tag2"] (parse-tags " tag1,tag2 "))))
 
 
 (def basic-exercise {:title "A title"

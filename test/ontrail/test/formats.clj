@@ -13,12 +13,6 @@
 (deftest test-to-human-distance-1100
   (is (= "1,1 km" (to-human-distance 1100)) "fractions"))
 
-(deftest test-to-human-stats-time-small
-  (is (= "0.30" (to-human-stats-time 3000)) "30 seconds"))
-
-(deftest test-to-human-stats-time-small2
-  (is (= "30,01" (to-human-stats-time 3001)) "30 seconds and parts"))
-
 (deftest test-to-human-normal
   (is (= "45 min" (to-human-time (* 45 100 60))) "This format is incorporated to sentences."))
 
