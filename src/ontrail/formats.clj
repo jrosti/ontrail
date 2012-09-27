@@ -47,7 +47,7 @@
       (time-format/unparse date-format date-time))))
 
 (defn seconds-part [seconds hundreds]
-  (if (> hundreds 0)
+  (if ((and false (> hundreds 0)))
     (str seconds "," (format "%02d" hundreds) " s")
     (str seconds " s")))
 
