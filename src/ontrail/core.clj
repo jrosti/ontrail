@@ -8,7 +8,7 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
-        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance)])
+        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance delete-ex)])
   (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
@@ -84,8 +84,13 @@
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
 
+
+
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (comment-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
+
+  (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
+    (is-authenticated? cookies (json-response (delete-ex (:username (user-from-token (:value (cookies "authToken")))) (:ex-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
         (is-authenticated? cookies (json-response (create-ex (:username (user-from-token (:value (cookies "authToken")))) params))))

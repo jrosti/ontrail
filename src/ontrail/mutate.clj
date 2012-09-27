@@ -2,6 +2,7 @@
   (:use [ontrail mongodb utils search exercise user formats])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
+            [monger.query :as mq]
             [clj-time.format :as format]
             [clojure.string :as string]
             [clj-time.core :as time]
@@ -102,6 +103,16 @@
         (assoc :distance distance)
         (assoc :avghr avghr) 
         (assoc :comments '()))))
+
+(defn delete-ex [user ex-id]
+  (.debug logger (str "deleting " user " ex " ex-id))
+  (let [ex (mc/find-one-as-map EXERCISE {:_id (ObjectId. ex-id)})
+        ex-user (:user ex)
+        exists? (identity ex)]
+    (if (and exists? (= user ex-user))
+      (let [delete-ok? (mr/ok? (mc/remove-by-id EXERCISE (ObjectId. ex-id)))]
+        {:result delete-ok? :message (str "deleted " user " " ex-id)})
+        {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))
