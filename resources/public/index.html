@@ -220,7 +220,7 @@
   <!-- end scripts -->
 
 </body>
-<script id="exerciseDetailsTemplate" type="text/html">
+<script id="exerciseDetailsTemplate" class="partial" type="text/html">
   <table class="details full">
     <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th></tr></thead>
     <tr>
@@ -229,7 +229,7 @@
     </tr>
   </table>
 </script>
-<script id="tagsExpandedTemplate" type="text/html">
+<script id="tagsExpandedTemplate" class="partial" type="text/html">
   <div class="full">
     <ul>
       {{#tags}}<li><a class="pageLink" rel="tag-{{.}}">{{.}}</a></li> {{/tags}}
@@ -265,15 +265,12 @@
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{body}}</div>
       </article>
-      {{/comment}}
+      {{/comments}}
     </div>
     <article class="logged-in">
-      {{^comments}}
-      <h4>Ei kommentteja</h4>
-      <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
-      {{/unless}}
-      {{#if comments}}
       <h4>Jätä oma kommenttisi</h4>
+      {{^comments}}
+      <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
       {{/comments}}
       <form id="add-comment-form" method="post">
         <input name="title" class="required" placeholder="Otsikko"></input>
