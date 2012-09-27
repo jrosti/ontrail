@@ -16,9 +16,18 @@
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
 
     var renderLatest = function(el) {
+      var helpers = {
+        trunc: function () {
+          return function(text, render) {
+            var result = render(text)
+            return (result.length < 153) ? result : result.substr(0, 150) + '... '
+          }
+        }
+      }
       return _.partial(function(elem, data) {
         if (!data || !data.length || data.length == 0) return;
-        var content = _.map(data, ich.exerciseTemplate).reduce(function(a, b) { return a+b })
+        var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
+        var content = _.map(mappedData, ich.exerciseTemplate).reduce(function(a, b) { return a+b })
         $(content).appendTo(elem)
       }, $(el))
     }
