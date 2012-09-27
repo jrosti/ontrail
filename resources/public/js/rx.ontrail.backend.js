@@ -1,19 +1,23 @@
 (function(){
   var Rest = function() {}
 
-  var errorHandler;
-  var ajaxErrors = Rx.Observable.create(function(observer) {
-    errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
-    return function() { errorHandler = null }
-  }).publish()
-  ajaxErrors.connect()
   var success = function(ajaxStream) {
     return ajaxStream.where(isSuccess).select(ajaxResponseData)
   }
 
+  var ajaxWithErrorHandler = function(options) {
+    var errorHandler;
+    var ajaxErrors = Rx.Observable.create(function(observer) {
+      errorHandler = { error: function(error) { observer.onNext({ jqXHR: error }) } }
+      return function() { errorHandler = null }
+    }).publish()
+    ajaxErrors.connect()
+    return $.ajaxAsObservable($.extend(options, errorHandler)).mergeTo(ajaxErrors)
+  }
+
   var getAsObservable = function() {
     var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
-    return $.ajaxAsObservable($.extend({ url: "/rest/v1/" + path }, errorHandler)).mergeTo(ajaxErrors)
+    return ajaxWithErrorHandler({ url: "/rest/v1/" + path })
   }
   var getAsObservableResultData = function() {
     return success(getAsObservable.apply(this, arguments))
@@ -34,7 +38,8 @@
 
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
-    return $.ajaxAsObservable($.extend({ type: 'POST', url: "/rest/v1/" + url, data: data }, errorHandler)).mergeTo(ajaxErrors)
+    return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })
+
   }
 
   OnTrail.rest = new Rest();
