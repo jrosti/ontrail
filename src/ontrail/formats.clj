@@ -3,6 +3,8 @@
   (:require [clj-time.format :as time-format]
             [clojure.string :as string]))
 
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))
         secs (int (+ 0.49 (* 60.0 (- pace (int pace)))))]
@@ -47,9 +49,9 @@
       (time-format/unparse date-format date-time))))
 
 (defn seconds-part [seconds hundreds]
-;  (if (and false (> hundreds 0)))
-;    (str seconds "," (format "%02d" hundreds) " s")
-    (str seconds " s"))
+  (if (> hundreds 0)
+    (str seconds "," (format "%02d" hundreds) " s")
+    (str seconds " s")))
 
 (defn minutes-part [minutes seconds]
   (if (> seconds 0)
@@ -57,34 +59,25 @@
     (str minutes " min")))
 
 (defn to-human-time [duration]
-  (if (= nil duration)
-    ""
-    (let [hundreds (mod duration 100)
-          seconds (mod (int (/ duration 100)) 60)
-          minutes (mod (int (/ duration 6000)) 60)
-          hours (int (/ duration 360000))]
-      (if (> hours 0)
-        (if (or (> minutes 0) (> seconds 0))
-          (str hours " h " (minutes-part minutes seconds))
-          (str hours " h"))
-        (if (or (> seconds 0) (> hundreds 0))            
-            (str minutes " min " (seconds-part seconds hundreds))
-            (str minutes " min"))))))
+  (try
+    (if (= nil duration)
+      ""
+      (let [hundreds (mod duration 100)
+            seconds (mod (int (/ duration 100)) 60)
+            minutes (mod (int (/ duration 6000)) 60)
+            hours (int (/ duration 360000))]
+        (if (> hours 0)
+          (if (or (> minutes 0) (> seconds 0))
+            (str hours " h " (minutes-part minutes seconds))
+            (str hours " h"))
+          (if (or (> seconds 0) (> hundreds 0))
+              (str minutes " min " (seconds-part seconds hundreds))
+              (str minutes " min")))))
+    (catch Exception exception#
+      (.error logger (str exception# duration))
+      "NaN")))
+
   
-(defn to-human-stats-time [duration]
-  "finnish time formatting"
-  (if (= nil duration)
-    ""
-    (let [hundreds (mod duration 100)
-        seconds (mod (int (/ duration 100)) 60)
-        minutes (mod (int (/ duration 6000)) 60)
-        hours (int (/ duration 360000))]
-    (if (and (> hundreds 0))
-      (if (< minutes 1)
-        (format "%d,%02d" seconds hundreds)
-        (format "%d.%d,%02d" minutes seconds hundreds))
-      (if (> hours 0)
-        (format "%d.%d.%d" hours minutes seconds)
-        (format "%d.%d" minutes seconds))))))
+
         
         
