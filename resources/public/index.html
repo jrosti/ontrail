@@ -199,8 +199,7 @@
   <script src="js/jquery.chosen.0.9.8.min.js"></script>
   <script src="js/jquery.cookie.js"></script>
   <script src="js/jquery.md5.js"></script>
-  <script src="js/handlebars-1.0.0.beta.6.js"></script>
-  <script src="js/handlebars-helpers.js"></script>
+  <script src="js/icanhaz-0.10.0.js"></script>
   <script src="js/lodash-0.5.2.js"></script>
   <script src="js/xdate-0.7.js"></script>
   <script src="js/rx.min.js"></script>
@@ -221,77 +220,61 @@
   <!-- end scripts -->
 
 </body>
-<script id="exercise-template" type="text/x-handlebars-template">
+<script id="exerciseDetailsTemplate" type="text/html">
+  <table class="details full">
+    <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th></tr></thead>
+    <tr>
+      <td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
+      <td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td>
+    </tr>
+  </table>
+</script>
+<script id="tagsExpandedTemplate" type="text/html">
+  <div class="full">
+    <ul>
+      {{#tags}}<li><a class="pageLink" rel="tag-{{.}}">{{.}}</a></li> {{/tags}}
+    </ul>
+  </div>
+</script>
+<script id="exerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="preview exercise {{sport}}">
     <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
     <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
-    {{did}} {{#if distance}} {{distance}} ajassa {{duration}} {{else}}
-    {{duration}}{{/if}}</h4>
-    <table class="details full">
-      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th></tr></thead>
-      <tr>
-	<td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
-	<td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td>
-      </tr>
-    </table>
-    <div class="preview">{{truncate body 100}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
+    {{did}} {{#distance}} {{distance}} ajassa {{duration}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
+    {{> exerciseDetailsTemplate}}
+    <div class="preview">{{{body}}} <a class="pageLink" rel="ex-{{id}}">{{commentCount}} kommenttia</a>.</div>
     <div class="full">{{{body}}}</div>
-    {{#if tags}}
-    <div class="full">
-      <h4>Tägit:</h4>
-      <ul>
-
-      {{#each tags}}
-      <li><a class="pageLink" rel="tag-{{this}}">{{this}}</a></li>
-      {{/each}}
-      </ul>
-    </div>
-    {{/if}}
+    {{> tagsExpandedTemplate}}
     <p class="full"><a class="pageLink" rel="ex-{{id}}">Lue lenkki: {{commentCount}} kommenttia</a>.</p>
   </article>
 </script>
 
-<script id="single-exercise-template" type="text/x-handlebars-template">
+<script id="singleExerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="full exercise {{sport}}">
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
-    <table class="details">
-      <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th><th>Aika</th><th>Syke</th><th>Syke-%</th><th>Tagit</th></tr></thead>
-      <tr>
-        <td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td>
-        <td>{{duration}}</td><td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{tags}}</td>
-      </tr>
-    </table>
+    {{> exerciseDetailsTemplate}}
     <div>{{{body}}}</div>
-    {{#if tags}}
-    <div>
-      <h4>Tägit:</h4>
-      <ul>
-        {{#each tags}}
-        <li><a class="pageLink" rel="tag-{{this}}">{{this}}</a></li>
-        {{/each}}
-      </ul>
-    </div>
-    {{/if}}
-    </article>
+    {{> tagsExpandedTemplate}}
+  </article>
     <h3>Kommentit:</h3>
-      {{#each comments}}
+      {{#comments}}
       <article class="comment">
         <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{body}}</div>
       </article>
-      {{/each}}
+      {{/comment}}
     </div>
     <article class="logged-in">
-      {{#unless comments}}
+      {{^comments}}
       <h4>Ei kommentteja</h4>
       <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
       {{/unless}}
       {{#if comments}}
       <h4>Jätä oma kommenttisi</h4>
-      {{/if}}
+      {{/comments}}
       <form id="add-comment-form" method="post">
         <input name="title" class="required" placeholder="Otsikko"></input>
         <textarea name="body" rows="10" cols="68" placeholder="Kommenttisi"></textarea>
@@ -303,20 +286,20 @@
     </article>
 </script>
 
-<script id="summary-template" type="text/x-handlebars-template">
+<script id="summaryTemplate" type="text/html">
   <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
-<script id="sports-create-template" type="text/x-handlebars-template">
+<script id="sportsCreateTemplate" type="text/html">
   <option>Valitse laji...</option>
-  {{#each sports}}
-  <option value="{{this}}">{{this}}</option>
-  {{/each}}
+  {{#sports}}
+  <option value="{{this}}">{{.}}</option>
+  {{/sports}}
 </script>
-<script id="tags-create-template" type="text/x-handlebars-template">
-  {{#each tags}}
-  <option value="{{this}}">{{this}}</option>
-  {{/each}}
+<script id="tagsCreateTemplate" type="text/html">
+  {{#tags}}
+  <option value="{{this}}">{{.}}</option>
+  {{/tags}}
 </script>
 
 </html>

@@ -6,12 +6,6 @@
     var tagEntries = $("#tag-entries")
     var allEntries = $("#entries,#user-entries,#tag-entries,#exercise")
 
-    var exerciseTemplate = Handlebars.compile($("#exercise-template").html());
-    var singleExerciseTemplate = Handlebars.compile($("#single-exercise-template").html());
-    var summaryTemplate = Handlebars.compile($("#summary-template").html());
-    var sportsInCreateTemplate = Handlebars.compile($("#sports-create-template").html());
-    var tagsInCreateTemplate = Handlebars.compile($("#tags-create-template").html());
-
     var postExercise = function(user) {
       var values = $('#add-exercise-form').serialize() + "&tags=" +
         _.reduce(_.flatten(["", _.map($("#ex-tags")[0].selectedOptions, function(option) { return option.value })]),
@@ -24,24 +18,24 @@
     var renderLatest = function(el) {
       return _.partial(function(elem, data) {
         if (!data || !data.length || data.length == 0) return;
-        var content = _.map(data, exerciseTemplate).reduce(function(a, b) { return a+b })
+        var content = _.map(data, ich.exerciseTemplate).reduce(function(a, b) { return a+b })
         $(content).appendTo(elem)
       }, $(el))
     }
     var renderSingleExercise = function(exercise) {
-      $('#exercise').html($(singleExerciseTemplate(exercise)))
+      $('#exercise').html(ich.singleExerciseTemplate(exercise))
     }
     var renderSports = function(data) {
-      $(sportsInCreateTemplate({sports: data})).appendTo($('#ex-sport'))
+      ich.sportsCreateTemplate({sports: data}).appendTo($('#ex-sport'))
       $('#ex-sport').chosen()
     }
     var renderTags = function(data) {
-      $(tagsInCreateTemplate({tags: data})).appendTo($('#ex-tags'))
+      ich.tagsCreateTemplate({tags: data}).appendTo($('#ex-tags'))
       $('#ex-tags').chosen({ "create_option": true, "persistent_create_option": true })
     }
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
-      var content = _.map(summary, summaryTemplate).reduce(function(a, b) { return a+b })
+      var content = _.map(summary, ich.summaryTemplate).reduce(function(a, b) { return a+b })
       $(content).appendTo($('#homies tbody'))
     }
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
