@@ -15,6 +15,10 @@
     }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
 
+    var render = function(template, data) {
+      return template(data)[0].outerHTML
+    }
+
     var renderLatest = function(el) {
       var helpers = {
         trunc: function () {
@@ -27,7 +31,7 @@
       return _.partial(function(elem, data) {
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
-        var content = _.map(mappedData, ich.exerciseTemplate).reduce(function(a, b) { return a+b })
+        var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).reduce(function(a, b) { return a + b })
         $(content).appendTo(elem)
       }, $(el))
     }
@@ -44,7 +48,7 @@
     }
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
-      var content = _.map(summary, ich.summaryTemplate).reduce(function(a, b) { return a+b })
+      var content = _.map(summary, _.partial(render, ich.summaryTemplate) ).reduce(function(a, b) { return a+b })
       $(content).appendTo($('#homies tbody'))
     }
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
