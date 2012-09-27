@@ -37,6 +37,9 @@
     }
     var renderSingleExercise = function(exercise) {
       $('#exercise').html(ich.singleExerciseTemplate(exercise))
+
+      var commentValidation = mkValidation($('#comment-body').changes(), requiredV())
+      commentValidation.subscribe(disableEffect($('#add-comment')))
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: data}).appendTo($('#ex-sport'))
@@ -152,8 +155,6 @@
       validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
     }
-
-
 
     var serverTimeValidator = function() {
       var convertToError = function(n) {
