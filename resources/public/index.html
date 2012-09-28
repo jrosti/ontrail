@@ -254,7 +254,7 @@
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
-  <article data-id="{{id}}" class="full exercise {{sport}}">
+  <article data-id="{{id}}" data-user="{{user}} class="full exercise {{sport}}">
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     {{> exerciseDetailsTemplate}}
@@ -263,7 +263,7 @@
   </article>
     <h3>Kommentit:</h3>
       {{#comments}}
-      <article class="comment">
+      <article class="comment" data-id="{{id}}" data-user="{{user}}">
         <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{body}}</div>
