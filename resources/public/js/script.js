@@ -38,8 +38,18 @@
         $(content).appendTo(elem)
       }, $(el))
     }
-    var renderSingleExercise = function(exercise) {
-      $('#exercise').html(ich.singleExerciseTemplate(exercise))
+    var renderSingleExercise = function(exercise, me) {
+      var helpers = {
+        deleteComment: function () {
+          return function(text, render) {
+            if (this.user !== me && exercise.user !== me) return ""
+            this.deleteRel = (this.user === me ? "ex-" : "own-ex-") + exercise.id + (this.user === me ? "-own-comment-" : "-comment-") + this.id;
+            return render(text)
+          }
+        }
+      }
+
+      $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
 
       var commentBodyValidation = mkValidation($('#comment-body').changes(), requiredV())
       commentBodyValidation.subscribe(toggleEffect($(".comment-body-required")))
@@ -100,6 +110,15 @@
       $('#logged-in-styles').replaceWith(ich.loggedInStylesTemplate({'user': user }))
     })
 
+    // delete comments
+    var deleteCommentClicks = clickedArticleLinks
+      .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
+      .select(function(el) { return attr("rel", el).split("-") })
+    deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
+      $("*[data-id='" + data.id + "']").remove()
+    })
+
+
     // toggle pages when pageLink is clicked
     var pageAndArgs = function(elem) { return attr('rel', elem).split('-') }
     var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
@@ -121,7 +140,7 @@
     tagPages.subscribe(function(tag) { $(".current-tag").text(tag) })
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
-    exPages.subscribe(renderSingleExercise)
+    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
     var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")

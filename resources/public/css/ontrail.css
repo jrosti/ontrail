@@ -258,8 +258,12 @@ section article li {
 }
 section article.exercise h2,
 section article.comment h2,
+section article.exercise h3,
+section article.comment h3,
 section article.exercise h4,
-section article.comment h4 {
+section article.comment h4,
+section article.exercise h5,
+section article.comment h5 {
   margin: 0;
   padding: 0;
 }
@@ -415,9 +419,9 @@ html .continuousCalendarContainer .popUpContainer {
   position: relative;
   top: 1px;
 }
-a.delete {
+a.delete,
+a.delete-comment {
   float: right;
-  visibility: hidden;
 }
 a.addExercise,
 a.addComment {

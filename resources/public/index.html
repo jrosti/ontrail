@@ -267,10 +267,10 @@
     {{> tagsExpandedTemplate}}
   </article>
     <h3>Kommentit:</h3>
-      {{#comments}}
+    {{#comments}}
       <article class="comment" data-id="{{id}}">
-<!--        <span class="delete button"><a class="delete" rel="comment-{{id}}" data-user="{{user}}">Poista</a></span> -->
-        <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
+        {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
+        <img class="avatar" src="{{avatar}}"  width="48" height="48"><h3>{{title}}</h3>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{body}}</div>
       </article>
@@ -320,6 +320,9 @@
 </script>
 <script id="loggedInStylesTemplate" type="text/html">
   <style id="logged-in-styles" type="text/css">
+    a.delete {
+      visibility: hidden;
+    }
     a[data-user="{{user}}"].delete {
       visibility: visible;
     }
