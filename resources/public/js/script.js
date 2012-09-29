@@ -178,6 +178,10 @@
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.doAction(function() {
       $("#add-exercise-form .reset").attr('value', '')
+      $("#ex-sports option").removeAttr('selected')
+      $("#ex-tags option").removeAttr('selected')
+      $("#ex_tags_chzn .search-choice").remove()
+      $("#ex-body").setCode("")
     }).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
@@ -234,8 +238,8 @@
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
     $('#ex-body').redactor({
         buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-          // add 'image' below here before table, when upload support is complete
-                 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
+          // add 'image','table', below here before table, when upload support is complete
+                  'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
         minHeight: 200
       }
     )
