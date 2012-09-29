@@ -114,9 +114,7 @@
     var deleteCommentClicks = clickedArticleLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
-      $("*[data-id='" + data.id + "']").remove()
-    })
+    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(renderSingleExercise)
 
 
     // toggle pages when pageLink is clicked
