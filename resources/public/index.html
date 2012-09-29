@@ -142,13 +142,15 @@
           </div>
           <div>
             <label>Kesto</label>
-            <input id="ex-duration" name="duration" class="reset" placeholder="Kesto"/><span id="duration-hint">Esim. 2h, 1:21,01, 1m 31s...</span>
+            <input id="ex-duration" name="duration" class="reset"
+      placeholder="Kesto (esim  3h31, 3.31.28)"/>
             <em class="error duration-required">Lenkin kesto vaaditaan</em>
             <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
           </div>
           <div>
             <label>Matka</label>
-            <input id="ex-distance" name="distance" class="reset" placeholder="Matka (metreissä)"/>
+            <input id="ex-distance" name="distance" class="reset"
+      placeholder="Matka (esim 2km, 3250m)"/>
           </div>
           <div>
             <label>Keskisyke</label>
@@ -276,7 +278,7 @@
     <article class="logged-in">
       <h4>Jätä oma kommenttisi</h4>
       {{^comments}}
-      <p>Ole rohkeasti ensimmäinen ja kirjoita oma kommenttisi alle!</p>
+      <p>Kirjoita ensimmäinen kommentti</p>
       {{/comments}}
       <form class=" edit-form" id="add-comment-form" method="post">
         <div>
