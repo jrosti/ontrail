@@ -114,7 +114,8 @@
     var deleteCommentClicks = clickedArticleLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(renderSingleExercise)
+    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
+      .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
 
     // toggle pages when pageLink is clicked
@@ -179,7 +180,7 @@
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
-    addComments.subscribe(renderSingleExercise)
+    addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
 

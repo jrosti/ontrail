@@ -119,7 +119,7 @@
   (mc/update-by-id EXERCISE
     (ObjectId. ex-id)
     { "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:id comment-id :user user}}})
+      "$pull" {:comments {:_id (ObjectId. comment-id) :user user}}})
   (get-ex ex-id))
 
 (defn delete-own-ex-comment [user ex-id comment-id]
@@ -128,7 +128,7 @@
     (ObjectId. ex-id)
     { :user user
       "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:id comment-id}}})
+      "$pull" {:comments {:_id (ObjectId. comment-id)}}})
   (get-ex ex-id))
 
 (defn create-ex [user params]

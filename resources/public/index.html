@@ -269,7 +269,7 @@
     <h3>Kommentit:</h3>
     {{#comments}}
       <article class="comment" data-id="{{id}}">
-        <!--{{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}-->
+        {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
         <img class="avatar" src="{{avatar}}"  width="24" height="24">
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <div>{{{body}}}</div>
