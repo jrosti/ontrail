@@ -284,7 +284,7 @@
       <form class=" edit-form" id="add-comment-form" method="post">
         <div>
           <label>Otsikko</label>
-          <input id="comment-title" name="title" class="required" placeholder="Otsikko"></input>
+          <input id="comment-title" name="title" class="required" placeholder="Otsikko" value="Re: {{title}}"></input>
           <em class="error comment-title-required">Lisää otsikko</em>
         </div>
         <div>
@@ -294,7 +294,7 @@
         </div>
         <div>
           <label> </label>
-          <input id="add-comment" type="button" value="Kommentoi"></input>
+          <a id="add-comment" class="button addComment">Kommentoi</a>
         </div>
       </form>
     </article>

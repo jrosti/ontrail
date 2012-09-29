@@ -419,7 +419,8 @@ a.delete {
   float: right;
   visibility: hidden;
 }
-a.addExercise {
+a.addExercise,
+a.addComment {
   margin-top: 10px;
 }
 a.button {
