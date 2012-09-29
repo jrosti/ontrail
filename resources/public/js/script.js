@@ -7,7 +7,9 @@
     var allEntries = $("#entries,#user-entries,#tag-entries,#exercise")
 
     var postExercise = function(user) {
-      var values = $('#add-exercise-form').serialize() + "&tags=" +
+      var values = $('#add-exercise-form').serialize()
+        + "&body=" + encodeURIComponent($('#ex-body').getCode())
+        + "&tags=" +
         _.reduce(_.flatten(["", _.map($("#ex-tags")[0].selectedOptions, function(option) { return option.value })]),
           function(a, b) { return a + (a !== '' ? "," : "") + encodeURIComponent(b) })
 
@@ -230,5 +232,12 @@
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
+    $('#ex-body').redactor({
+        buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+          // add 'image' below here before table, when upload support is complete
+                 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
+        minHeight: 200
+      }
+    )
   })
 })()
