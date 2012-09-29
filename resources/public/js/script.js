@@ -58,7 +58,7 @@
       combine([commentBodyValidation, commentTitleValidation]).subscribe(disableEffect($('#add-comment')))
     }
     var renderSports = function(data) {
-      ich.sportsCreateTemplate({sports: data}).appendTo($('#ex-sport'))
+      ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
       $('#ex-sport').chosen()
     }
     var renderTags = function(data) {
