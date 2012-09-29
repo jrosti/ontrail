@@ -15,7 +15,10 @@
 
       return OnTrail.rest.postAsObservable("ex/" + user, values)
     }
-    var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
+    var postComment = function(exercise) {
+      var values = "body=" + encodeURIComponent($('#comment-body').getCode())
+      return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
+    }
     var deleteExerciseOrComment = function() {
       return OnTrail.rest.deleteAsObservable.apply(OnTrail.rest, arguments);
     }
@@ -50,14 +53,8 @@
           }
         }
       }
-
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
-
-      var commentBodyValidation = mkValidation($('#comment-body').changes(), requiredV())
-      commentBodyValidation.subscribe(toggleEffect($(".comment-body-required")))
-      var commentTitleValidation = mkValidation($('#comment-title').changes(), requiredV())
-      commentTitleValidation.subscribe(toggleEffect($(".comment-title-required")))
-      combine([commentBodyValidation, commentTitleValidation]).subscribe(disableEffect($('#add-comment')))
+      $('#comment-body').redactor(editorSettings)
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
@@ -237,12 +234,13 @@
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
-    $('#ex-body').redactor({
-        buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-          // add 'image','table', below here before table, when upload support is complete
-                  'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
+
+    var editorSettings = {
+      buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+        // add 'image','table', below here before table, when upload support is complete
+        'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
         minHeight: 200
-      }
-    )
+    }
+    $('#ex-body').redactor(editorSettings)
   })
 })()
