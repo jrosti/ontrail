@@ -95,6 +95,10 @@
     deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
       $("*[data-id='" + data.id + "']").remove()
     })
+    // show own delete buttons
+    sessions.subscribe(function(user) {
+      $('#logged-in-styles').replaceWith(ich.loggedInStylesTemplate({'user': user }))
+    })
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = function(elem) { return attr('rel', elem).split('-') }

@@ -47,6 +47,7 @@
   </script>
 </head>
 <body class="logged-out">
+  <style id="logged-in-styles" type="text/css"></style>
   <header role="top">
     <h1>On Trail</h1>
     <div id="menu" role="menu">
@@ -317,5 +318,12 @@
   <option value="{{this}}">{{.}}</option>
   {{/tags}}
 </script>
-
+<script id="loggedInStylesTemplate" type="text/html">
+  <style id="logged-in-styles" type="text/css">
+    a[data-user="{{user}}"].delete {
+      visibility: visible;
+    }
+  </style>
+</script>
+<body
 </html>
