@@ -92,10 +92,10 @@
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
 
-  (DELETE "/rest/v1/ex/:ex-id/my-comments/:comment-id" {params :params cookies :cookies}
+  (DELETE "/rest/v1/ex/:ex-id/own/comment/:comment-id" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
-  (DELETE "/rest/v1/my-ex/:ex-id/comments/:comment-id" {params :params cookies :cookies}
+  (DELETE "/rest/v1/own/ex/:ex-id/comment/:comment-id" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}

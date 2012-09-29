@@ -14,8 +14,8 @@
       return OnTrail.rest.postAsObservable("ex/" + user, values)
     }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
-    var deleteExerciseOrComment = function(type, id) {
-      return OnTrail.rest.deleteAsObservable(type, id);
+    var deleteExerciseOrComment = function() {
+      return OnTrail.rest.deleteAsObservable.apply(OnTrail.rest, arguments);
     }
 
     var render = function(template, data) {
@@ -114,7 +114,7 @@
     var deleteCommentClicks = clickedArticleLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
+    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
       $("*[data-id='" + data.id + "']").remove()
     })
 
