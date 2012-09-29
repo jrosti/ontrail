@@ -7,7 +7,8 @@ Ennen launchia:
 * Create users
 * Lenkkien validaatio
 * Lenkkien muokkaus
-* Lenkkien poisto
+* Wysiwyg
+* ~~Lenkkien poisto~~
 * Kommenttien poisto
   * omat mistä tahansa lenkeistä
   * muiden omista lenkeistä
