@@ -116,11 +116,11 @@
 
 (defn delete-own-comment [user ex-id comment-id]
   (.debug logger (str user " deleting own comment " comment-id " from ex " ex-id ))
-  (.debug logger (str "deleting " user " ex " comment-id))
   (mc/update-by-id EXERCISE
     (ObjectId. (:id ex-id))
     { "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:id comment-id :user user}}}))
+      "$pull" {:comments {:id comment-id :user user}}})
+  (get-ex ex-id))
 
 (defn delete-own-ex-comment [user ex-id comment-id]
   (.debug logger (str user " deleting comment " comment-id " from own ex " ex-id))
@@ -128,7 +128,8 @@
     (ObjectId. (:id ex-id))
     { :user user
       "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:id comment-id}}}))
+      "$pull" {:comments {:id comment-id}}})
+  (get-ex ex-id))
 
 (defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))

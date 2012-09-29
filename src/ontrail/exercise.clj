@@ -45,7 +45,6 @@
         comment-count (if-not (nil? comments) (count comments) 0)
         avatar (get-avatar-url user)
         date (to-human-date (:creationDate exercise))]
-    (.debug logger (str "comments " (first comments)))
     {:id id
      :user user
      :distance distance
