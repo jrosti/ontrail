@@ -181,6 +181,7 @@
       $("#ex-sports option").removeAttr('selected')
       $("#ex-tags option").removeAttr('selected')
       $("#ex_tags_chzn .search-choice").remove()
+      $("#duration-hint").html("")
       $("#ex-body").setCode("")
     }).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
     // Lisää kommentti
