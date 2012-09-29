@@ -14,6 +14,9 @@
       return OnTrail.rest.postAsObservable("ex/" + user, values)
     }
     var postComment = function(exercise) { return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", $('#add-comment-form').serialize()) }
+    var deleteExerciseOrComment = function(type, id) {
+      return OnTrail.rest.deleteAsObservable(type, id);
+    }
 
     var render = function(template, data) {
       return template(data)[0].outerHTML
@@ -84,6 +87,14 @@
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
+
+    // delete
+    var deleteClicks = clickedArticleLinks.combineWithLatestOf(sessions)
+      .whereArgs(function(elem, user) { return $(elem).hasClass('delete') && user && $(elem).attr("data-user") == user})
+      .select(function(el) { return attr("rel", el).split("-") })
+    deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
+      $("*[data-id='" + data.id + "']").remove()
+    })
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = function(elem) { return attr('rel', elem).split('-') }

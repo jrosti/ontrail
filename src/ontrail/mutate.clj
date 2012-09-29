@@ -111,7 +111,7 @@
         exists? (identity ex)]
     (if (and exists? (= user ex-user))
       (let [delete-ok? (mr/ok? (mc/remove-by-id EXERCISE (ObjectId. ex-id)))]
-        {:result delete-ok? :message (str "deleted " user " " ex-id)})
+        {:result delete-ok? :message (str user" deleted " " exercise " ex-id) :type "ex" :id ex-id})
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]

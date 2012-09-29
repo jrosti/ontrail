@@ -39,7 +39,11 @@
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
     return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })
+  }
 
+  Rest.prototype.deleteAsObservable = function() {
+    var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
+    return ajaxWithErrorHandler({ type: 'DELETE', url: "/rest/v1/" + path })
   }
 
   OnTrail.rest = new Rest();
