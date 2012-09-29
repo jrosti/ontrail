@@ -149,6 +149,6 @@
                                         :avatar (get-avatar-url user)
                                         :date (to-human-comment-date (time/now))
                                         :user user
-                                        :body (to-comment (:body params))}}})
+                                        :body (:body params)}}})
   (.debug logger (str user " created comment " params))
   (get-ex (:id params)))

@@ -29,10 +29,6 @@
       (pace-fun duration distance)
       "")))
 
-(defn to-comment [txt]
-   (string/replace (strip-html txt) #"\n" "<p/>"))
-  
-
 (defn to-human-distance [distance]
   (if (= nil distance)
     ""
