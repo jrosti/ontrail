@@ -31,16 +31,21 @@
         (str (subs stripped 0 truncated-len))
         stripped))))
 
+(defn as-comment [comment]
+  (let [id (str (:_id comment))]
+    (merge (dissoc comment :_id) {:id id})))
+
 (defn as-ex-result [exercise]
   (let [id (str (:_id exercise))
         user (:user exercise)
         user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
-        comments (:comments exercise)
+        comments (map as-comment (:comments exercise))
         distance (to-human-distance (:distance exercise))
         comment-count (if-not (nil? comments) (count comments) 0)
         avatar (get-avatar-url user)
         date (to-human-date (:creationDate exercise))]
+    (.debug logger (str "comments " (first comments)))
     {:id id
      :user user
      :distance distance

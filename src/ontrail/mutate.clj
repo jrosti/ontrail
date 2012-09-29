@@ -114,6 +114,22 @@
         {:result delete-ok? :message (str user" deleted " " exercise " ex-id) :type "ex" :id ex-id})
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
+(defn delete-own-comment [user ex-id comment-id]
+  (.debug logger (str user " deleting own comment " comment-id " from ex " ex-id ))
+  (.debug logger (str "deleting " user " ex " comment-id))
+  (mc/update-by-id EXERCISE
+    (ObjectId. (:id ex-id))
+    { "$set" {:lastModifiedDate (time/now)}
+      "$pull" {:comments {:id comment-id :user user}}}))
+
+(defn delete-own-ex-comment [user ex-id comment-id]
+  (.debug logger (str user " deleting comment " comment-id " from own ex " ex-id))
+  (mc/update-by-id EXERCISE
+    (ObjectId. (:id ex-id))
+    { :user user
+      "$set" {:lastModifiedDate (time/now)}
+      "$pull" {:comments {:id comment-id}}}))
+
 (defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))
   (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
@@ -128,7 +144,8 @@
   (mc/update-by-id EXERCISE
                    (ObjectId. (:id params))
                    {"$set" {:lastModifiedDate (time/now)}
-                    "$push" {:comments {:avatar (get-avatar-url user)
+                    "$push" {:comments {:_id (ObjectId.)
+                                        :avatar (get-avatar-url user)
                                         :title (:title params)
                                         :date (to-human-date (time/now))
                                         :user user

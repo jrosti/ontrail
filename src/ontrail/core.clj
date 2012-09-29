@@ -8,7 +8,7 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
-        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance delete-ex)])
+        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance delete-ex delete-own-comment delete-own-ex-comment)])
   (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
@@ -53,6 +53,8 @@
     (handler
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
+(defn user-from-cookie [cookies] (:username (user-from-token (:value (cookies "authToken")))))
+
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
@@ -84,16 +86,20 @@
       (json-response {"token" (auth-token (get-user username)) "username" username} 200)
       (json-response {"error" "Authentication failed"} 401)))
 
-
-
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (comment-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
+    (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
 
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (delete-ex (:username (user-from-token (:value (cookies "authToken")))) (:ex-id params)))))
+    (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
+
+  (DELETE "/rest/v1/ex/:ex-id/my-comments/:comment-id" {params :params cookies :cookies}
+    (is-authenticated? cookies (json-response (delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
+
+  (DELETE "/rest/v1/my-ex/:ex-id/comments/:comment-id" {params :params cookies :cookies}
+    (is-authenticated? cookies (json-response (delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-        (is-authenticated? cookies (json-response (create-ex (:username (user-from-token (:value (cookies "authToken")))) params))))
+        (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
 
   (route/resources "/")
   (route/not-found {:status 404}))
