@@ -1,6 +1,7 @@
 (ns ontrail.formats
   (:use ontrail.utils)
   (:require [clj-time.format :as time-format]
+            [clj-time.core :as time]
             [clojure.string :as string]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -28,6 +29,10 @@
       (pace-fun duration distance)
       "")))
 
+(defn to-comment [txt]
+   (string/replace (strip-html txt) #"\n" "<p/>"))
+  
+
 (defn to-human-distance [distance]
   (if (= nil distance)
     ""
@@ -47,6 +52,12 @@
     ""
     (let [date-format (time-format/formatter "dd.MM.yyyy")]
       (time-format/unparse date-format date-time))))
+
+(defn to-human-comment-date [date-time]
+  (if (= nil date-time)
+    ""
+    (let [date-format (time-format/formatter "dd.MM.yyyy HH:mm")]
+      (time-format/unparse date-format (time/plus date-time (time/hours 3)))))) ;; we're +3h from UTC
 
 (defn seconds-part [seconds hundreds]
   (if (> hundreds 0)

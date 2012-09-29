@@ -147,9 +147,8 @@
                    {"$set" {:lastModifiedDate (time/now)}
                     "$push" {:comments {:_id (ObjectId.)
                                         :avatar (get-avatar-url user)
-                                        :title (:title params)
-                                        :date (to-human-date (time/now))
+                                        :date (to-human-comment-date (time/now))
                                         :user user
-                                        :body (:body params)}}})
+                                        :body (to-comment (:body params))}}})
   (.debug logger (str user " created comment " params))
   (get-ex (:id params)))

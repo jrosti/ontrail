@@ -269,10 +269,10 @@
     <h3>Kommentit:</h3>
     {{#comments}}
       <article class="comment" data-id="{{id}}">
-        {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
-        <img class="avatar" src="{{avatar}}"  width="48" height="48"><h3>{{title}}</h3>
+        <!--{{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}-->
+        <img class="avatar" src="{{avatar}}"  width="24" height="24">
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
-        <div>{{body}}</div>
+        <div>{{{body}}}</div>
       </article>
       {{/comments}}
     </div>
@@ -283,13 +283,8 @@
       {{/comments}}
       <form class=" edit-form" id="add-comment-form" method="post">
         <div>
-          <label>Otsikko</label>
-          <input id="comment-title" name="title" class="required" placeholder="Otsikko" value="Re: {{title}}"></input>
-          <em class="error comment-title-required">Lisää otsikko</em>
-        </div>
-        <div>
           <label>Kommenttisi</label>
-          <textarea id="comment-body" name="body" rows="10" cols="68" placeholder="Kommenttisi"></textarea>
+          <textarea id="comment-body" name="body" rows="10" cols="55" placeholder="Kommenttisi"></textarea>
           <em class="error comment-body-required">Kommentti tarvitaan</em>
         </div>
         <div>
@@ -299,7 +294,7 @@
       </form>
     </article>
     <article class="logged-out">
-      To be decided
+      Kirjaudu sisään kommentoidaksesi.
     </article>
 </script>
 
