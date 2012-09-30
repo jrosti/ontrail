@@ -7,8 +7,7 @@
     var allEntries = $("#entries,#user-entries,#tag-entries,#exercise")
     
     var postHeartRateProfile = function(user) {
-	var values = $('#profile-form').serialize()
-	return OnTrail.rest.postAsObservable("hr/" + user, values)
+      return OnTrail.rest.postAsObservable("hr/" + user, $('#profile-form').serialize())
     }
 
     var doPostExercise = function(url) {
