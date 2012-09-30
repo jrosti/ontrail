@@ -340,8 +340,12 @@
     a.delete, #modify-ex {
       visibility: hidden;
     }
-    a[data-user="{{user}}"].delete, modify-ex[data-user="{{user}}"] {
+    a[data-user="{{user}}"].delete {
       visibility: visible;
+    }
+    #modify-ex[data-user="{{user}}"] {
+      visibility: visible;
+      vertical-align: baseline;
     }
   </style>
 </script>
