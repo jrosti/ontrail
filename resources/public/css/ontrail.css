@@ -425,8 +425,16 @@ a.delete-comment {
   float: right;
 }
 a.addExercise,
-a.addComment {
+a.editExercise,
+a.addComment,
+a.editComment {
   margin-top: 10px;
+}
+[role=addex][data-mode="add"] .edit {
+  display: none;
+}
+[role=addex][data-mode="edit"] .add {
+  display: none;
 }
 a.button {
   color: #fef4e9;

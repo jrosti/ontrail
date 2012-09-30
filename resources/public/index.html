@@ -146,7 +146,7 @@
       </article>
     </section>
 
-    <section role="addex">
+    <section role="addex" data-mode="add">
       <article class="edit-form">
         <h2>Lisää uusi lenkki</h2>
         <form id="add-exercise-form" method="post">
@@ -194,7 +194,8 @@
           </div>
           <div>
             <label></label>
-            <a id="add-exercise" class="button addExercise">Lisää lenkki</a>
+            <a id="add-exercise" class="button addExercise add">Lisää lenkki</a>
+            <a id="edit-exercise" class="button editExercise edit">Muokkaa lenkkiä</a>
           </div>
         </form>
       </article>
@@ -280,6 +281,7 @@
 
 <script id="singleExerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="full exercise {{sport}}">
+    <a class="pageLink" id="modify-ex" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
     <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
@@ -323,7 +325,7 @@
 </script>
 
 <script id="sportsCreateTemplate" type="text/html">
-  <option>Juoksu</option>
+  <option value="Juoksu">Juoksu</option>
   {{#sports}}
     <option value="{{.}}">{{.}}</option>
   {{/sports}}

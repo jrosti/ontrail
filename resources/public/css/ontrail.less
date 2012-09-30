@@ -397,8 +397,21 @@ html .continuousCalendarContainer .popUpContainer {
 a.delete, a.delete-comment {
   float: right;
 }
-a.addExercise, a.addComment {
+a.addExercise, a.editExercise, a.addComment, a.editComment {
   margin-top: 10px;
+}
+
+[role=addex] {
+  &[data-mode="add"] {
+    .edit {
+      display: none;
+    }
+  }
+  &[data-mode="edit"] {
+    .add {
+      display: none;
+    }
+  }
 }
 
 a.button {
