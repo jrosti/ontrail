@@ -11,15 +11,24 @@
 	return OnTrail.rest.postAsObservable("hr/" + user, values)
     }
 
-    var postExercise = function(user) {
+    var doPostExercise = function(url) {
       var values = $('#add-exercise-form').serialize()
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" +
         _.reduce(_.flatten(["", _.map($("#ex-tags")[0].selectedOptions, function(option) { return option.value })]),
           function(a, b) { return a + (a !== '' ? "," : "") + encodeURIComponent(b) })
 
-      return OnTrail.rest.postAsObservable("ex/" + user, values)
+      return OnTrail.rest.postAsObservable(url, values)
     }
+
+    var postAddExercise = function(user) {
+      return doPostExercise("ex/" + user)
+    }
+
+    var postEditExercise = function(exercise) {
+      return doPostExercise("update/" + exercise)
+    }
+
     var postComment = function(exercise) {
       var values = "body=" + encodeURIComponent($('#comment-body').getCode())
       return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
@@ -192,24 +201,24 @@
     loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
 
     // Lisää lenkki
-    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise).where(isSuccess).select(ajaxResponseData)
-    addExercises.doAction(function() {
+    var resetEditor = function() {
       $("#add-exercise-form .reset").attr('value', '')
       $("#ex-sports option").removeAttr('selected')
       $("#ex-tags option").removeAttr('selected')
       $("#ex_tags_chzn .search-choice").remove()
       $("#duration-hint").html("")
       $("#ex-body").setCode("")
-    }).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
+    }
+    var showExercise = function(ex) { resetEditor(); showPage("ex"); renderSingleExercise(ex) }
+    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    addExercises.subscribe(showExercise)
 
     // muokkaa lenkkiä:
     var renderEditExercise = function(ex) {
-      console.log('edit', ex)
       $("[role='addex']").attr('data-mode', 'edit')
       _.map(["title", "duration", "distance", "avghr"], function(field) { $('#ex-' + field).val(ex[field]).keyup() })
       $("#ex-date").attr('value', ex.date)
       $("#ex-date").trigger("cal:changed")
-      console.log("triggered")
       $("#ex-body").setCode(ex.body)
       $("#ex-sport").val(ex.sport)
       $("#ex-sport").trigger("liszt:updated")
@@ -218,8 +227,14 @@
 
     }
     var asExercise = function(__, exercise) { return ["ex", exercise] }
-    currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage }).selectArgs(asExercise).selectAjax(OnTrail.rest.details)
-      .subscribe(renderEditExercise)
+    var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
+    editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
+
+    // muokkauksen submit
+    var updateExercises = $('#edit-exercise').clickAsObservable()
+      .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
+    updateExercises.subscribe(showExercise)
+
 
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})

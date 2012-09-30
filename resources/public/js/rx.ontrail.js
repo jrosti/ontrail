@@ -54,6 +54,7 @@ var OnTrail = {}
 
 // debugging and dummy subscribing
 var debug = function() {console.log("debug: ", arguments)}
+var _debug = function(category) { return _.partial(debug, category ) }
 var nothing = function() {}
 
 // general utilities
