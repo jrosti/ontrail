@@ -337,10 +337,10 @@
 </script>
 <script id="loggedInStylesTemplate" type="text/html">
   <style id="logged-in-styles" type="text/css">
-    a.delete {
+    a.delete, #modify-ex {
       visibility: hidden;
     }
-    a[data-user="{{user}}"].delete {
+    a[data-user="{{user}}"].delete, modify-ex[data-user="{{user}}"] {
       visibility: visible;
     }
   </style>
