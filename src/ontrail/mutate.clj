@@ -151,10 +151,11 @@
                                       {"$set" (dissoc
                                                (assoc (from-user-ex user params) :lastModifiedDate (time/now))
                                                :comments)})]
-    (.debug logger (str "Updated " (:id params) " with status "  write-result))
-    {:result (mr/ok? write-result)
-     :message (str "Message id " (:id params) " updated.")}))
-   
+    (.debug logger (str "Updated " (:id params) " with status "  write-result)))
+  (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
+    (.debug logger (str (:id params) res))
+    (as-ex-result res)))
+
 (defn comment-ex [user params]
   (.debug logger (str user " creating comment " params))
   (mc/update-by-id EXERCISE
