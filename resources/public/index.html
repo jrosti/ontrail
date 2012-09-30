@@ -281,8 +281,8 @@
 
 <script id="singleExerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="full exercise {{sport}}">
-    <a class="pageLink" id="modify-ex" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
     <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+    <a class="pageLink" id="modify-ex" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     {{> exerciseDetailsTemplate}}
