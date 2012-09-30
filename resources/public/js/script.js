@@ -172,7 +172,7 @@
     tagPages.scrollWith(OnTrail.rest.tagExercises, tagEntries).subscribe(renderLatest(tagEntries))
 
     // initiate summary loading after login
-    var ownSummaries = currentPages.where(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
+    var ownSummaries = currentPages.whereArgs(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
     ownSummaries.subscribe(renderSummary)
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
