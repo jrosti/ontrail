@@ -187,6 +187,10 @@
     })
     loggedIns.subscribe(function() { $('body').toggleClass('login', false) })
 
+    var onPageLoad = rx.empty().startWith("")
+    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
+    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
+
     // Lisää lenkki
     var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.doAction(function() {
@@ -244,9 +248,6 @@
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
     combine(validations).subscribe(disableEffect($('#add-exercise')))
 
-    var onPageLoad = rx.empty().startWith("")
-    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
-    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
