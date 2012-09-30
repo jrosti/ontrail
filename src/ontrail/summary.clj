@@ -14,11 +14,12 @@
       (/ (get db-retmap :tavghr) hrcount)
       0)))
 
-(defn to-summary [db-object sport]
+(defn to-summary [db-object sport] 
   (let [db-retmap (first (get db-object :retval))
         count (int (get db-object :count))
         true-duration (get db-retmap :tdur)
         true-distance (get db-retmap :tdist)]
+    (.info logger (str (:tdur db-retmap)))
     {:duration (to-human-time (get db-retmap :dur))
      :distance (to-human-distance (get db-retmap :dist))
      :numericalDuration (get db-retmap :dur)
@@ -32,7 +33,6 @@
 (defn get-db-summary [condition]
     ;; Pace computation uses exercises, where both distance and duration are known. Those sums are recorded to tdur and tdist
   ;; while reducing, and dist and dur are plain sums over the db values.
-  (.trace logger (str "Db summary using" condition))
   (let [js-reduce "function(exercise, prev) {
                      if (exercise.distance > 0 && exercise.duration > 0) {
                         prev.tdist += exercise.distance;
@@ -69,7 +69,7 @@
     (get-summary {:sport sport :user user :creationDate {:$gte first-day :$lte last-day}} sport)))
 
 (defn get-overall-summary [user]
-  (.debug logger (str "Getting overall summary" user))
+  (.debug logger (str "Getting overall summary: " user))
   (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
     (sort-by :numericalDuration > (map #(get-summary {:user user :sport %} %) all-sports))))
 

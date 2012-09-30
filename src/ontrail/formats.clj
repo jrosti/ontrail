@@ -57,7 +57,7 @@
 
 (defn seconds-part [seconds hundreds]
   (if (> hundreds 0)
-    (str seconds "," (format "%02d" hundreds) " s")
+    (str seconds "," (format "%02d" (int hundreds)) " s")
     (str seconds " s")))
 
 (defn minutes-part [minutes seconds]
@@ -69,7 +69,7 @@
   (try
     (if (= nil duration)
       ""
-      (let [hundreds (mod duration 100)
+      (let [hundreds (int (mod duration 100))
             seconds (mod (int (/ duration 100)) 60)
             minutes (mod (int (/ duration 6000)) 60)
             hours (int (/ duration 360000))]

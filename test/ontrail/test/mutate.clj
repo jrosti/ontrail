@@ -11,7 +11,7 @@
                      :sport "Juoksu"
                      :duration "30"
                      :date "20.4.2012"
-                     :distance "10000"
+                     :distance "10"
                      :avghr "129"
                      :body "Pom"
                      :tags "tag1 tag2 tag3"})

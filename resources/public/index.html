@@ -104,7 +104,25 @@
 
     <section role="profile">
       <h2>Käyttäjän profiili.</h2>
-      <p>Profiilin tiedot ja muokkaus</p>
+      <div class="details">
+        <h3>Henkilökohtaiset tiedot</h3>
+        <form id="profile-form" method="post">
+           <input id="birthyear" name="birthyear" type="text" placeholder="Syntymävuosi" />
+           <input id="sex" name="sex" type="text" placeholder="Sukupuoli" />
+           <input id="tyyppi" name="tyyppi" type="text" placeholder="Tyyppi"/>
+           <a id="update-personal" class="button login">Päivitä tiedot</a>
+        </form>
+      </div>
+      <div class="details">
+      <h3>Syketiedot</h3>
+      <form id="profile-form" method="post">
+         <input id="resthr" name="resthr" type="text" placeholder="Leposyke" />
+         <input id="aerk" name="aerk" type="text"placeholder="Aerobinen kynnnys" />
+         <input id="anaerk" name="anaerk" type="text" placeholder="Anaerobinen kynnnys" />
+         <input id="maxhr" name="maxhr" type="text" placeholder="Maksimisyke"/>
+         <a id="update-hr" class="button login">Päivitä syketiedot</a>
+      </form>
+      </div>
     </section>
 
     <section role="tbd">
