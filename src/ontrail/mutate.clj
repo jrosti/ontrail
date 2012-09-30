@@ -64,12 +64,16 @@
 (defn parse-date [date-str]
   (time/plus (format/parse multi-parser date-str) (time/hours 12)))
 
+(defn as-double-km [str]
+  (let [x (string/replace str #"," ".")]
+    (int (* 1000 (Double. x)))))
+
 (def distance-regexps
-  [{:re #"^([0-9]+)$" :conv as-number}
+  [{:re #"^([0-9]+)$" :conv as-double-km}
+   {:re #"^([0-9]+[\.,][0-9]+)k*m*$" :conv as-double-km}
    {:re #"^([0-9]+) *m *$" :conv as-number}
    {:re #"^([0-9]+) *k$" :conv kilometers}
-   {:re #"^([0-9]+) *km$" :conv kilometers}
-   {:re #"^([0-9]+) *[k\.,][^0-9]*([0-9]+)" :conv kilometers-and-meters}])
+   {:re #"^([0-9]+) *km$" :conv kilometers}])
 
 (defn parse-distance [dist]
   (some identity (map #(try-parse % dist) distance-regexps)))
