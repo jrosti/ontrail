@@ -8,7 +8,7 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user)]
-        [ontrail.mutate :only (create-ex comment-ex parse-duration parse-distance delete-ex delete-own-comment delete-own-ex-comment)])
+        [ontrail.mutate :only (update-ex create-ex comment-ex parse-duration parse-distance delete-ex delete-own-comment delete-own-ex-comment)])
   (:use [ontrail summary auth crypto exercise log formats])
   (:gen-class)
   (:require
@@ -82,15 +82,18 @@
        (json-response {:distance (to-human-distance (parse-distance distance))}))
   
   (POST "/rest/v1/login" [username password]
-    (if (authenticate username password)
-      (json-response {"token" (auth-token (get-user username)) "username" username} 200)
-      (json-response {"error" "Authentication failed"} 401)))
-
+        (if (authenticate username password)
+          (json-response {"token" (auth-token (get-user username)) "username" username} 200)
+          (json-response {"error" "Authentication failed"} 401)))
+  
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
-
+        (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
+  
+  (POST "/rest/v1/update/:id" {params :params cookies :cookies}
+        (is-authenticated? cookies (json-response (update-ex (user-from-cookie cookies) params))))
+  
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
+          (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
 
   (DELETE "/rest/v1/ex/:ex-id/own/comment/:comment-id" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))

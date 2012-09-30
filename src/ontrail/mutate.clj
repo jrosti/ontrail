@@ -3,6 +3,7 @@
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
+            [monger.conversion]
             [clj-time.format :as format]
             [clojure.string :as string]
             [clj-time.core :as time]
@@ -144,6 +145,15 @@
     (.debug logger (str (:user params) " created ex " ret))
     (as-ex-result tret)))
 
+(defn update-ex [user params]
+  (.debug logger (str (:user params) " updating ex " params)) ;; non-safe
+  (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
+                                      {"$set" (assoc (from-user-ex user params)
+                                                :lastModifiedDate (time/now))})]
+    (.debug logger (str "Updated " (:id params) " with status "  write-result))
+    {:result (mr/ok? write-result)
+     :message (str "Message id " (:id params) " updated.")}))
+   
 (defn comment-ex [user params]
   (.debug logger (str user " creating comment " params))
   (mc/update-by-id EXERCISE
