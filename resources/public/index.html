@@ -76,8 +76,8 @@
 	      <a class="pageLink" rel="addex">Lisää lenkki</a><br/>
 	      <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
 	      <a class="pageLink" rel="profile">Oma profiili</a><br/>
-              <a class="pageLink" rel="home">Selaa harjoituspäiväkirjaa</a><br/>
-            </p>
+        <a class="pageLink" rel="home">Selaa harjoituspäiväkirjaa</a><br/>
+      </p>
 	    <h2>Muut</h2>
 	    <p>
 	      <a class="pageLink" rel="tbd">Etsi käyttäjiä</a><br/>
@@ -103,26 +103,56 @@
     </section>
 
     <section role="profile">
+      <article>
+
       <h2>Käyttäjän profiili.</h2>
       <div class="details">
         <h3>Henkilökohtaiset tiedot</h3>
-        <form id="profile-form" method="post">
-           <input id="birthyear" name="birthyear" type="text" placeholder="Syntymävuosi" />
-           <input id="sex" name="sex" type="text" placeholder="Sukupuoli" />
-           <input id="tyyppi" name="tyyppi" type="text" placeholder="Tyyppi"/>
-           <a id="update-personal" class="button login">Päivitä tiedot</a>
+        <form id="profile-form" class="edit-form" method="post">
+          <div>
+            <label for="birthyear">Syntymävuosi</label>
+            <input id="birthyear" name="birthyear" type="text" placeholder="Syntymävuosi" />
+          </div>
+          <div>
+            <label for="sex">Sukupuoli</label>
+            <input id="sex" name="sex" type="text" placeholder="Sukupuoli" />
+          </div>
+          <div>
+            <label for="type">Tyyppi</label>
+            <input id="type" name="type" type="text" placeholder="Tyyppi"/>
+          </div>
+          <div>
+             <label></label>
+           <a id="update-personal" class="button update-personal">Päivitä tiedot</a>
+          </div>
         </form>
       </div>
       <div class="details">
       <h3>Syketiedot</h3>
-      <form id="profile-form" method="post">
-         <input id="resthr" name="resthr" type="text" placeholder="Leposyke" />
-         <input id="aerk" name="aerk" type="text"placeholder="Aerobinen kynnnys" />
-         <input id="anaerk" name="anaerk" type="text" placeholder="Anaerobinen kynnnys" />
-         <input id="maxhr" name="maxhr" type="text" placeholder="Maksimisyke"/>
-         <a id="update-hr" class="button login">Päivitä syketiedot</a>
+      <form id="hr-form" class="edit-form" method="post">
+        <div>
+          <label for="resthr">Leposyke</label>
+          <input id="resthr" name="resthr" type="text" placeholder="Leposyke" />
+        </div>
+        <div>
+          <label for="aerk">Aerobinen kynnys</label>
+          <input id="aerk" name="aerk" type="text"placeholder="Aerobinen kynnnys" />
+        </div>
+        <div>
+          <label for="anaerk">Anaerobinen kynnys</label>
+          <input id="anaerk" name="anaerk" type="text" placeholder="Anaerobinen kynnnys" />
+        </div>
+        <div>
+          <label for="maxhr">Maksimisyke</label>
+          <input id="maxhr" name="maxhr" type="text" placeholder="Maksimisyke"/>
+        </div>
+        <div>
+          <label></label>
+          <a id="update-hr" class="button login">Päivitä syketiedot</a>
+        </div>
       </form>
       </div>
+      </article>
     </section>
 
     <section role="tbd">
