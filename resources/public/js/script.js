@@ -120,12 +120,16 @@
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
-    var currentPages = loggedIns.select(always("home"))
-      .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
+    var initialPage = function(user) {
+      return splitM($.address.value()) || (user && "home") || "latest"
+    }
+    var currentPages = sessions.select(initialPage)
+      .mergeTo(pageLinks.selectArgs(pageAndArgs))
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
-      $.address.change(function() { observer.onNext($.address.value())})
+      var next = function() { observer.onNext($.address.value())}
+      $.address.init(next).change(next)
       return nothing()
     }).select(splitM)
 
