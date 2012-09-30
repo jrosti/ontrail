@@ -868,6 +868,11 @@ $.continuousCalendar = {};$.continuousCalendar.version = '2.0.1';$.continuousCal
       var endDate = fieldDate(params.endField)
       var today = DateTime.now()
 
+      $(params.startField).bind("cal:changed", function() {
+        var startDate = new DateTime(parseDate($(params.startField).val()))
+        setDateLabel(DateFormat.format(startDate, params.locale.weekDateFormat, params.locale))
+      })
+
       if(params.selectToday) {
         var formattedToday = formatDate(today)
         startDate = today
