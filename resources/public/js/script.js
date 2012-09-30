@@ -201,6 +201,26 @@
       $("#duration-hint").html("")
       $("#ex-body").setCode("")
     }).subscribe(function(ex) { showPage("ex"); renderSingleExercise(ex) })
+
+    // muokkaa lenkkiä:
+    var renderEditExercise = function(ex) {
+      console.log('edit', ex)
+      $("[role='addex']").attr('data-mode', 'edit')
+      _.map(["title", "duration", "distance", "avghr"], function(field) { $('#ex-' + field).val(ex[field]).keyup() })
+      $("#ex-date").attr('value', ex.date)
+      $("#ex-date").trigger("cal:changed")
+      console.log("triggered")
+      $("#ex-body").setCode(ex.body)
+      $("#ex-sport").val(ex.sport)
+      $("#ex-sport").trigger("liszt:updated")
+      $("#ex-tags").val(ex.tags)
+      $("#ex-tags").trigger("liszt:updated")
+
+    }
+    var asExercise = function(__, exercise) { return ["ex", exercise] }
+    currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage }).selectArgs(asExercise).selectAjax(OnTrail.rest.details)
+      .subscribe(renderEditExercise)
+
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
