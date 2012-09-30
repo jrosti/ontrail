@@ -118,16 +118,23 @@
 
 
     // toggle pages when pageLink is clicked
-    var pageAndArgs = function(elem) { return attr('rel', elem).split('-') }
+    var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
     var currentPages = loggedIns.select(always("home"))
       .mergeTo(pageLinks.selectArgs(pageAndArgs)).startWith("latest")
 
-    var showPage = function(page) {
+    // back button handling
+    var backPresses = Rx.Observable.create(function( observer ) {
+      $.address.change(function() { observer.onNext($.address.value())})
+      return nothing()
+    }).select(splitM)
+
+    var showPage = function(page, subpage) {
       $('body').attr('data-page', page)
       $('#password').attr('value', '')
+      $.address.value(page + (subpage !== undefined ? "-" + subpage : ""))
     }
-    currentPages.subscribeArgs(showPage)
+    currentPages.mergeTo(backPresses).subscribeArgs(showPage)
 
     // TODO: Handlebars maybe?
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)

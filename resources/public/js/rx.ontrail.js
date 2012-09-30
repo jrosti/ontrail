@@ -58,6 +58,7 @@ var nothing = function() {}
 
 // general utilities
 var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
+var splitM = _.partial(splitWith, "-")
 var asArgs = function() { return arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments }
 var id = function(item) { return item.id }
 
