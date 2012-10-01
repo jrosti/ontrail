@@ -20,7 +20,7 @@
         words (.toLowerCase (str (part :user) " " (part :sport) " "
                                  (part :body) " " (part :title) " "
                                  (tags-to-string (part :tags))))
-        clean-words (string/replace (strip-html words) #"[^a-zåäö]+" " ")
+        clean-words (string/replace (strip-html words) #"[^a-zåäö0-9]+" " ")
         bare-term-list (string/split clean-words #" +")]
     (filter not-too-short-term? bare-term-list))) ;; search terms must contain more than three letters, in order to ignore too common ones
 

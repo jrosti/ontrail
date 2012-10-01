@@ -44,7 +44,8 @@
         distance (to-human-distance (:distance exercise))
         comment-count (if-not (nil? comments) (count comments) 0)
         avatar (get-avatar-url user)
-        date (to-human-date (:creationDate exercise))]
+        date (to-human-date (:creationDate exercise))
+        bpmdist (get-bpmdist exercise user-profile)]
     {:id id
      :user user
      :distance distance
@@ -61,7 +62,8 @@
      :hrReserve heart-rate-reserve
      :pace (get-pace exercise)
      :commentCount comment-count
-     :comments comments})) 
+     :comments comments
+     :bpmdist bpmdist})) 
 
 (defn as-ex-result-list [results]
   (map as-ex-result results))
