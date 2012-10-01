@@ -1,6 +1,7 @@
 (ns ontrail.user
   (:use [ontrail crypto mongodb utils])
-  (:require [monger.collection :as mc]))
+  (:require [monger.collection :as mc]
+            [monger.query :as mq]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
@@ -22,6 +23,14 @@
 
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
+
+(defn get-user-list [page]
+  (let [results (mq/with-collection ONUSER
+    (mq/find)
+    (mq/paginate :page (Integer. page) :per-page 20)
+    (mq/sort {:username -1}))]
+    (.debug logger (str "Get user list " page " with " (count results) " results."))
+  results))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]
