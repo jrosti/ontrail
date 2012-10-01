@@ -8,7 +8,7 @@
 
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))
-        secs (int (+ 0.49 (* 60.0 (- pace (int pace)))))]
+        secs (int (* 60.0 (- pace (int pace))))]
     (str (int pace) "." (format "%02d" secs) " min/km")))
 
 (defn to-human-pace-kmh [duration distance]
