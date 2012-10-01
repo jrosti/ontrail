@@ -1,5 +1,5 @@
 (ns ontrail.exercise
-  (:use [ontrail mongodb formats log user utils nlp]
+  (:use [ontrail mongodb formats user utils nlp]
         monger.operators)
   (:require [monger.collection :as mc]
             [clj-time.core :as time]

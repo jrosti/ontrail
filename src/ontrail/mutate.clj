@@ -30,7 +30,7 @@
         (assoc :comments '()))))
 
 (defn delete-ex [user ex-id]
-  (.debug logger (str "deleting " user " ex " ex-id))
+  (.trace logger (str "deleting " user " ex " ex-id))
   (let [ex (mc/find-one-as-map EXERCISE {:_id (ObjectId. ex-id)})
         ex-user (:user ex)
         exists? (identity ex)]
@@ -40,7 +40,7 @@
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn delete-own-comment [user ex-id comment-id]
-  (.debug logger (str user " deleting own comment " comment-id " from ex " ex-id ))
+  (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
   (mc/update-by-id EXERCISE
     (ObjectId. ex-id)
     { "$set" {:lastModifiedDate (time/now)}
@@ -48,7 +48,7 @@
   (get-ex ex-id))
 
 (defn delete-own-ex-comment [user ex-id comment-id]
-  (.debug logger (str user " deleting comment " comment-id " from own ex " ex-id))
+  (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
   (mc/update-by-id EXERCISE
     (ObjectId. ex-id)
     { :user user
@@ -62,7 +62,7 @@
         str-id (str (:_id ret))
         tret (assoc  (dissoc ret :_id) :id str-id)]
     (insert-exercise-inmem-index ret)
-    (.debug logger (str (:user params) " created ex " ret))
+    (.trace logger (str (:user params) " created ex " ret))
     (as-ex-result tret)))
 
 (defn update-ex [user params]
@@ -77,7 +77,7 @@
     (as-ex-result res)))
 
 (defn comment-ex [user params]
-  (.debug logger (str user " creating comment " params))
+  (.trace logger (str user " creating comment " params))
   (mc/update-by-id EXERCISE
                    (ObjectId. (:id params))
                    {"$set" {:lastModifiedDate (time/now)}

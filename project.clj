@@ -16,7 +16,8 @@
                  [org.slf4j/slf4j-api "1.6.4"]
                  [ch.qos.logback/logback-classic "1.0.3"]
                  [commons-codec/commons-codec "1.6"]
-                 [com.novemberain/monger "1.1.2"]]
+                 [com.novemberain/monger "1.1.2"]
+                 [ring.middleware.logger "0.2.2"]]
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user}
   :main ontrail.core)

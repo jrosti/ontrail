@@ -3,13 +3,16 @@
         compojure.core
         ring.middleware.file
         ring.middleware.cookies
+        ring.middleware.logger
         [ring.util.response :only (redirect)]
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user get-user-list)]
-        [ontrail.mutate :only (update-ex create-ex comment-ex parse-duration parse-distance delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise log formats])
+        [ontrail.parser :only (parse-duration parse-distance)]
+        [ontrail.mutate :only (update-ex create-ex comment-ex
+                                         delete-ex delete-own-comment delete-own-ex-comment)])
+  (:use [ontrail summary auth crypto exercise formats])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -47,13 +50,10 @@
         :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
 
-(defn log-and-wrap-dir-index [handler]
+(defn wrap-dir-index [handler]
   (fn [req]
-    (.info request-logger (str "HTTP" (to-logline req)))
     (handler
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
-
-(defn user-from-cookie [cookies] (:username (user-from-token (:value (cookies "authToken")))))
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
@@ -116,6 +116,7 @@
                          handler/site
                          ring-head/wrap-head
                          wrap-cookies
-                         log-and-wrap-dir-index
+                         wrap-with-logger
+                         wrap-dir-index
                          wrap-ring-handler)
                      {:host "localhost" :port 8080 :websocket true}))

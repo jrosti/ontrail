@@ -28,3 +28,5 @@
     (let [from-token (user-from-token token)
           user (if from-token (get-user (:username from-token)) {})]
         (and user (= (:passwordHash from-token) (hash-part (:passwordHash user)))))))
+
+(defn user-from-cookie [cookies] (:username (user-from-token (:value (cookies "authToken")))))
