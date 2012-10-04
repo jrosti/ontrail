@@ -2,6 +2,8 @@
   (:use ontrail.mutate)
   (:use clojure.test))
 
+(deftest failing (is false))
+
 (def basic-exercise {:title "A title"
                      :sport "Juoksu"
                      :duration "30"
