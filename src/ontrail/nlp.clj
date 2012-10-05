@@ -9,7 +9,9 @@
                "Sulkapallo" "sulkapalloili"})
 
 (defn get-verb [sport-id]
-  (let [verb (get verb-map sport-id)]
-    (if (= nil verb)
-      (str "harrasti lajia " (.toLowerCase sport-id))
-      verb)))
+  (if (string? sport-id)
+    (let [verb (verb-map sport-id)]
+      (if (= nil verb)
+        (str "harrasti lajia " (.toLowerCase sport-id))
+        verb))
+    "nil-sport-id"))
