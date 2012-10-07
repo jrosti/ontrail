@@ -225,6 +225,9 @@
       $("#ex-tags").trigger("liszt:updated")
 
     }
+
+    var renderAddExercise = function() { $("[role='addex']").attr('data-mode', 'add') }
+    $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
