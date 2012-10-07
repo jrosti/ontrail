@@ -271,6 +271,9 @@ section article.exercise h4,
 section article.comment h4 {
   padding-bottom: 10px;
 }
+section article img {
+  max-width: 600px;
+}
 section table.details {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
