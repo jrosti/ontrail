@@ -17,3 +17,21 @@
   .ms-linear-gradient(@top, @bottom);
   background-repeat: repeat-x;
 }
+
+.css-button(@text-color, @border-color, @bg-color, @gradient-start, @gradient-end) {
+  @adjust: 10%;
+
+  color: @text-color;
+  border: solid 1px @border-color;
+  background: @bg-color;
+  .bg-gradient(@gradient-start, @gradient-end);
+
+  &:hover {
+    background: darken(@bg-color, @adjust);
+    .bg-gradient(darken(@gradient-start, @adjust), darken(@gradient-end, @adjust));
+  }
+  &:active {
+    color: lighten(@text-color, @adjust);
+    .bg-gradient(lighten(@gradient-start, @adjust), lighten(@gradient-end, @adjust));
+  }
+}
