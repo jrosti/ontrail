@@ -20,6 +20,8 @@
 @menu-height: 40px;
 @sidebar-width: 250px;
 
+@table-header-border-color: #6678b1;
+
 * {
   .box-sizing(border-box)
 }
@@ -244,6 +246,13 @@ section {
       h4 {
         padding-bottom: 10px;
       }
+
+      div {
+        table {
+          tr:first-child td { border-bottom: solid 2px @table-header-border-color;}
+          td { padding: 1px 10px 0; }
+        }
+      }
     }
 
     img {
@@ -263,7 +272,7 @@ section {
       font-weight: normal;
       color: #000;
       padding: 4px 10px;
-      border-bottom: 2px solid #6678b1;
+      border-bottom: 2px solid @table-header-border-color;
     }
 
     td {
