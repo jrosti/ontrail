@@ -82,6 +82,7 @@ var target = function(event) { return event.target }
 var value = function(input) { return input.value }
 var isLink = function(el) { return $(el).prop('localName') === "a"}
 var hasClass = function(name, el) { return $(el).hasClass(name) }
+var _hasClass = function(name) { return _.partial( hasClass, name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var _attr = function(name) { return _.partial(attr, name) }
 var elementBottomIsAlmostVisible = function(el, margin) {

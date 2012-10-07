@@ -209,7 +209,7 @@
       $("#ex-body").setCode("")
     }
     var showExercise = function(ex) { resetEditor(); showPage("ex"); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').clickAsObservable().combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').clickAsObservable().select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
 
     // muokkaa lenkkiä:
@@ -283,8 +283,7 @@
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
     timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
-    combine(validations).subscribe(disableEffect($('#add-exercise')))
-
+    combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
     var tomorrow = (new XDate()).addDays(1).clearTime()
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
