@@ -41,7 +41,6 @@
     }
 
     var takeMax = function(renderer, left, str) {
-      console.log(str)
       var max = left.remaining
       var isLast = str.length > max+3
       var data = left.data + renderer(isLast ? str.substring(0, max) + "..." : str)
