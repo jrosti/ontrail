@@ -5,15 +5,18 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+(defn as-gravatar [user]
+  (let [gravatar? (get user :gravatar)
+        email (get user :email)
+        gravatar-md5-hash (md5 email)]
+    (if gravatar?
+      (str "http://www.gravatar.com/avatar/" gravatar-md5-hash)
+      "/img/default-avatar.png")))
+
 (defn get-avatar-url [user]
   (let [onuser (mc/find-one-as-map ONUSER {:username user})]
     (if (not-nil? onuser)
-      (let [gravatar? (get onuser :gravatar)
-            email (get onuser :email)
-            gravatar-md5-hash (md5 email)]
-        (if gravatar?
-          (str "http://www.gravatar.com/avatar/" gravatar-md5-hash)
-          "/img/default-avatar.png"))
+      (as-gravatar onuser)
       "/img/drno.png")))
 
 (defn create-user [username password email gravatar]
@@ -24,7 +27,8 @@
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
 
-(defn as-user [user] (dissoc user :_id :passwordHash :email))
+(defn as-user [user]
+  {:user (:username user) :profile (:profile user) :avatar (as-gravatar user)})
 (defn as-user-list [results] (map as-user results))
 
 (defn get-user-list [rule page]
