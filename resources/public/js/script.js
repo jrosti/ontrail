@@ -40,12 +40,22 @@
       return template(data)[0].outerHTML
     }
 
+    var takeMax = function(renderer, left, str) {
+      console.log(str)
+      var max = left.remaining
+      var isLast = str.length > max+3
+      var data = left.data + renderer(isLast ? str.substring(0, max) + "..." : str)
+      return { data: data, remaining: isLast ? 0 : (max-str.length) }
+    }
+
     var renderLatest = function(el) {
       var helpers = {
         trunc: function () {
           return function(text, render) {
-            var result = render(text)
-            return (result.length < 153) ? result : result.substr(0, 150) + '... '
+            var body = $('<div></div>').html(this.body);
+            var wrapWithParagraph = function(item) { return "<p>" + item + "</p>" }
+            var iText = function(item) { return item.innerText }
+            return _.reduce(_.map(body.children("*"), iText), _.partial(takeMax, wrapWithParagraph), { data: "", remaining: 150 }).data
           }
         }
       }
@@ -156,11 +166,9 @@
     }
     currentPages.mergeTo(backPresses).subscribeArgs(showPage)
 
-    // TODO: Handlebars maybe?
     var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
     userPages.subscribe(function(user) { $(".current-username").text(user) })
 
-    // TODO: Handlebars maybe?
     var tagPages = currentPages.whereArgs(partialEquals("tag")).selectArgs(second)
     tagPages.subscribe(function(tag) { $(".current-tag").text(tag) })
 
