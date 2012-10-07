@@ -87,7 +87,9 @@
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
     var logouts = $("#logout").clickAsObservable()
-    var loginRequests = $("#login").clickAsObservable().selectAjax(doLogin)
+    var isEnter = function(event) { return event.keyCode == 13; }
+    var loginEnters = $("#password").keyupAsObservable().where(isEnter)
+    var loginRequests = $("#login").clickAsObservable().mergeTo(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
