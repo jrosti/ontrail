@@ -4,8 +4,9 @@
     var entries = $("#entries")
     var userEntries = $("#user-entries")
     var tagEntries = $("#tag-entries")
-    var allEntries = $("#entries,#user-entries,#tag-entries,#exercise")
-    
+    var allEntries = $("#entries,#user-entries,#tag-entries,#exercise,#user-results")
+    var userList = $("#user-results")
+
     var postHeartRateProfile = function(user) {
       return OnTrail.rest.postAsObservable("hr/" + user, $('#profile-form').serialize())
     }
@@ -86,6 +87,9 @@
       ich.tagsCreateTemplate({tags: data}).appendTo($('#ex-tags'))
       $('#ex-tags').chosen({ "create_option": true, "persistent_create_option": true })
     }
+    var renderUserList = function(data) {
+      ich.usersCreateTemplate({users: data}).appendTo(userList)
+    }
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
       var content = _.map(summary, _.partial(render, ich.summaryTemplate) ).reduce(function(a, b) { return a+b })
@@ -102,6 +106,7 @@
     var loginRequests = $("#login").clickAsObservable().mergeTo(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
+
 
     // create session
     var sessions = OnTrail.session.create(logins, logouts.mergeTo(loginFails));
@@ -175,9 +180,7 @@
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
-    var query = $("#search").keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
-
-    var latestScroll = query.mergeTo(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() { entries.html("") })
       .selectArgs(function(query) {
         if (query === "")
@@ -197,6 +200,19 @@
     // initiate summary loading after login
     var ownSummaries = currentPages.whereArgs(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)
     ownSummaries.subscribe(renderSummary)
+
+    // user search scroll
+    var usersScroll = $("#search-users").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("users")).select(always("")))
+      .doAction(function() { userList.html("") })
+      .selectArgs(function(query) {
+        if (query === "")
+          return OnTrail.pager.create(OnTrail.rest.users, userList)
+        else
+          return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), userList)
+      })
+      .switchLatest()
+    usersScroll.subscribe(renderUserList)
+
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
     $('#login-link').clickAsObservable().subscribe(function() {
@@ -233,11 +249,11 @@
       $("#ex-sport").trigger("liszt:updated")
       $("#ex-tags").val(ex.tags)
       $("#ex-tags").trigger("liszt:updated")
-
     }
 
     var renderAddExercise = function() { $("[role='addex']").attr('data-mode', 'add') }
     $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
+
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
@@ -300,8 +316,7 @@
 
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-        // add 'image','table', below here before table, when upload support is complete
-        'image', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
+        'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
         minHeight: 200
     }
     $('#ex-body').redactor(editorSettings)

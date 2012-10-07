@@ -103,6 +103,7 @@ body[data-page="latest"] section[role="latest"],
 body[data-page="home"] section[role="home"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="user"] section[role="user"],
+body[data-page="users"] section[role="users"],
 body[data-page="profile"] section[role="profile"],
 body[data-page="ex"] section[role="ex"],
 body[data-page="tag"] section[role="tag"],
@@ -175,8 +176,13 @@ input {
 input:focus {
   border: 2px solid rgba(0, 0, 0, 0.25);
 }
-#search {
-  width: 75%;
+.search {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  width: 65%;
   margin-left: 20px;
 }
 div[role="login"] {

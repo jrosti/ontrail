@@ -80,9 +80,9 @@
       </p>
 	    <h2>Muut</h2>
 	    <p>
-	      <a class="pageLink" rel="tbd">Etsi käyttäjiä</a><br/>
-	      <a class="pageLink" rel="tbd">Tilastot</a><br/>
-	      <a class="pageLink" rel="tbd">Kunniataulukot</a><br/>
+	      <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
+	      <a class="pageLink" rel="stats">Tilastot</a><br/>
+	      <a class="pageLink" rel="honors">Kunniataulukot</a><br/>
             </p>
             <p></p>
           </div>
@@ -97,7 +97,7 @@
     </aside>
     <section role="latest">
       <article>
-        <label for="search">Etsi lenkeistä: </label> <input type="text" width="40" id="search">
+        <label for="search">Etsi lenkeistä: </label> <input class="search" type="text" id="search"/>
       </article>
       <div id="entries"></div>
     </section>
@@ -155,10 +155,6 @@
       </article>
     </section>
 
-    <section role="tbd">
-      <h2>Tekeillä.</h2>
-    </section>
-      
     <section role="user">
       <h2>Käyttäjän <span class="current-username"></span> lenkit</h2>
       <div id="user-entries"></div>
@@ -175,6 +171,16 @@
       </table>
       </article>
     </section>
+
+    <section role="users">
+      <article>
+        <label for="search-users">Hae käyttäjää: </label> <input class="search" type="text" id="search-users"/>
+        <div id="user-results"></div>
+      </article>
+
+    </section>
+
+
 
     <section role="addex" data-mode="add">
       <article class="edit-form">
@@ -251,7 +257,8 @@
   <!-- JavaScript at the bottom for fast page loading -->
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
   <script src="js/jquery.chosen.0.9.8.min.js"></script>
   <script src="js/jquery.cookie.js"></script>
   <script src="js/jquery.md5.js"></script>
@@ -263,6 +270,7 @@
   <script src="js/rx.time.min.js"></script>
   <script src="js/rx.jquery.min.js"></script>
   <script src="js/rx.ontrail.js"></script>
+  <script src="js/rx.ontrail.jquery.js"></script>
   <script src="js/rx.ontrail.backend.js"></script>
   <script src="js/rx.ontrail.validation.js"></script>
   <script src="js/rx.ontrail.pager.js"></script>
@@ -364,6 +372,12 @@
   {{#tags}}
   <option value="{{.}}">{{.}}</option>
   {{/tags}}
+</script>
+<script id="usersCreateTemplate" type="text/html">
+  {{#users}}
+  <img class="avatar" src="{{avatar}}"  width="24" height="24">
+  <h4><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+  {{/users}}
 </script>
 <script id="loggedInStylesTemplate" type="text/html">
   <style id="logged-in-styles" type="text/css">

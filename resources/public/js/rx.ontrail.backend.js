@@ -36,6 +36,10 @@
   Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }
   Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
 
+  // user search
+  Rest.prototype.users = function(page) { return getAsObservableResultData("list-users", page ) }
+  Rest.prototype.searchUsers = function(query, page) { return getAsObservableResultData("find-users", query, page ) }
+
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
     return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })
