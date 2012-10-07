@@ -4,6 +4,7 @@
         ring.middleware.file
         ring.middleware.cookies
         ring.middleware.logger
+        [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
@@ -70,7 +71,9 @@
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
   (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
 
-  (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list page)))
+  (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list {} page)))
+
+  (GET "/rest/v1/find-users/:term/:page" [term, page] (json-response (get-user-list {:username {$regex (str "^" term)}} page)))
 
   (GET "/rest/v1/sports" [] (json-response (get-distinct-sports {})))
 

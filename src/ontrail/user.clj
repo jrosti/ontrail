@@ -24,13 +24,16 @@
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
 
-(defn get-user-list [page]
+(defn as-user [user] (dissoc user :_id :passwordHash :email))
+(defn as-user-list [results] (map as-user results))
+
+(defn get-user-list [rule page]
   (let [results (mq/with-collection ONUSER
-    (mq/find)
-    (mq/paginate :page (Integer. page) :per-page 20)
-    (mq/sort {:username -1}))]
-    (.debug logger (str "Get user list " page " with " (count results) " results."))
-  results))
+    (mq/find rule)
+    (mq/paginate :page (Integer. page) :per-page 100)
+    (mq/sort {:username 1}))]
+    (.debug logger (str "Get user list " page " with " (count results) " results for " rule))
+  (as-user-list results)))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]
