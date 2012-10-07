@@ -279,10 +279,12 @@ section article.comment h4 {
 }
 section article.exercise div table tr:first-child td,
 section article.comment div table tr:first-child td {
+  font-size: 100%;
   border-bottom: solid 2px #6678b1;
 }
 section article.exercise div table td,
 section article.comment div table td {
+  font-size: 80%;
   padding: 1px 10px 0;
 }
 section article img {
