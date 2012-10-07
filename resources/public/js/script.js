@@ -80,6 +80,7 @@
     var renderSummary = function(summary) {
       if (!summary || !summary.length || summary.length == 0) return;
       var content = _.map(summary, _.partial(render, ich.summaryTemplate) ).reduce(function(a, b) { return a+b })
+      $('#homies tbody').html('');
       $(content).appendTo($('#homies tbody'))
     }
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
