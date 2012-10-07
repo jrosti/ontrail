@@ -33,7 +33,7 @@
   (let [{:keys [duration distance avghr]} exercise
         {:keys [resthr]} profile]
     (if (positive-numbers? (list resthr duration distance avghr))
-        (format "%.2f b/m" (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))))))
+        (format "%.2f m/b" (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))))))
 
 (defn to-human-distance [distance]
   (if (= nil distance)
