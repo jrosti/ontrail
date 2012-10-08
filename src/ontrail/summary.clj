@@ -60,18 +60,24 @@
 (defn get-year-summary [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (get-summary {:user user :creationDate {:$gte first-day :$lte last-day}}) "Kaikki"))
+    (get-summary {:user user :creationDate {:$gte first-day :$lte last-day}} "Kaikki")))
 
-(defn get-year-summary-sport [user year sport]
+(defn get-overall-summary-cond [user condition]
+  (.debug logger (str "Getting summary: " user " condition " condition))  
+  (let [cond-with-user (assoc condition :user user)
+        all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)] 
+     (sort-by :numericalDuration > (map #(get-summary (assoc condition :user user :sport %) %) all-distinct-sports))))
+
+(defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
-        last-day (time/date-time year 12 31)]
-    (get-summary {:sport sport :user user :creationDate {:$gte first-day :$lte last-day}} sport)))
+        last-day (time/date-time year 12 31)
+        year-cond {:creationDate {:$gte first-day :$lte last-day}}]
+    (get-overall-summary-cond user year-cond)))
 
 (defn get-overall-summary [user]
-  (.debug logger (str "Getting overall summary: " user))
-  (let [all-sports (mc/distinct EXERCISE "sport" {:user user})]
-    (sort-by :numericalDuration > (map #(get-summary {:user user :sport %} %) all-sports))))
-
+  (.trace logger (str "Getting overall summary: " user))
+  (get-overall-summary-cond user {}))
+                            
 (defn get-distinct-tags [condition]
   (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
 
