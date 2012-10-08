@@ -13,7 +13,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise formats])
+  (:use [ontrail summary auth crypto exercise formats nlp])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -69,7 +69,7 @@
   (GET "/rest/v1/ex-list-tag/:tag/:page" [tag page] (json-response (get-latest-ex-list {:tags tag} page)))
 
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
-  (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
+  (GET "/rest/v1/list-tags-all" [] (json-response sports))
 
   (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list {} page)))
 
