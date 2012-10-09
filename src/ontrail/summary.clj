@@ -61,7 +61,7 @@
   (.debug logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
         all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)] 
-     (sort-by :numericalDuration > (map #(get-summary (assoc condition :user user :sport %) %) all-distinct-sports))))
+    {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc condition :user user :sport %) %) all-distinct-sports))}))
 
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
