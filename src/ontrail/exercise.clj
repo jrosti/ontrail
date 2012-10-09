@@ -7,7 +7,8 @@
             [clojure.string :as string]
             [monger.joda-time]
             [net.cgrand.enlive-html :as html])
-  (:import [org.bson.types ObjectId]))
+  (:import [org.bson.types ObjectId])
+  (:import [org.joda.time DateTime]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
@@ -83,4 +84,12 @@
     (if (nil? exercise)
       {:error "No such id"}
       (as-ex-result exercise))))
- 
+
+(defn get-newer-ex-than [str-date]
+  (let [date (DateTime. str-date)
+        results (mq/with-collection EXERCISE
+                  (mq/find {:lastModifiedDate {:$gte date}})
+                  (mq/sort {:lastModifiedDate -1}))]
+    (.debug logger (str "Get exercise list newer than " str-date " with " (count results) " results."))
+    (as-ex-result-list results)))
+    
