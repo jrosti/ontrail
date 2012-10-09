@@ -4,7 +4,6 @@
     var entries = $("#entries")
     var userEntries = $("#user-entries")
     var tagEntries = $("#tag-entries")
-    var allEntries = $("#entries,#user-entries,#tag-entries,#exercise,#user-results")
     var userList = $("#user-results")
 
     var postHeartRateProfile = function(user) {
@@ -122,7 +121,7 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedArticleLinks = allEntries.clickAsObservable().select(target).where(isLink)
+    var clickedArticleLinks = $("body").onAsObservable("click", "a").select(target)
     var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
@@ -150,7 +149,7 @@
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
-    var pageLinks = $('.pageLink').clickAsObservable().select(target).mergeTo(clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')}))
+    var pageLinks = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
       return splitM($.address.value()) || (user && "home") || "latest"
     }
