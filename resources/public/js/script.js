@@ -60,7 +60,7 @@
       return _.partial(function(elem, data) {
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
-        var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).reduce(function(a, b) { return a + b })
+        var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
         $(content).appendTo(elem)
       }, $(el))
     }
