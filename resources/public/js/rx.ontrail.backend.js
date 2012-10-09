@@ -27,8 +27,7 @@
   // unused Jro
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
-  Rest.prototype.userExercises = function(user, page) { return getAsObservableResultData("ex-list-user", user, page) }
-  Rest.prototype.tagExercises = function(tag, page) { return getAsObservableResultData("ex-list-tag", tag, page) }
+  Rest.prototype.exercises = function(type, id, page) { return getAsObservableResultData("ex-list-" + type, id, page) }
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }

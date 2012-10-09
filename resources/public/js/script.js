@@ -2,8 +2,6 @@
 (function() {
   $(document).ready(function() {
     var entries = $("#entries")
-    var userEntries = $("#user-entries")
-    var tagEntries = $("#tag-entries")
     var userList = $("#user-results")
 
     var postHeartRateProfile = function(user) {
@@ -153,8 +151,7 @@
     var initialPage = function(user) {
       return splitM($.address.value()) || (user && "home") || "latest"
     }
-    var currentPages = sessions.select(initialPage)
-      .mergeTo(pageLinks.selectArgs(pageAndArgs))
+    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs))
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
@@ -170,11 +167,9 @@
     }
     currentPages.mergeTo(backPresses).subscribeArgs(showPage)
 
-    var userPages = currentPages.whereArgs(partialEquals("user")).selectArgs(second)
-    userPages.subscribe(function(user) { $(".current-username").text(user) })
-
-    var tagPages = currentPages.whereArgs(partialEquals("tag")).selectArgs(second)
-    tagPages.subscribe(function(tag) { $(".current-tag").text(tag) })
+    var userPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"]))
+    userPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
+    userPages.scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
@@ -190,12 +185,6 @@
       })
       .switchLatest()
     latestScroll.subscribe(renderLatest(entries))
-
-    // scrolling on user page
-    userPages.scrollWith(OnTrail.rest.userExercises, userEntries).subscribe(renderLatest(userEntries))
-
-    // scrolling on tag page
-    tagPages.scrollWith(OnTrail.rest.tagExercises, tagEntries).subscribe(renderLatest(tagEntries))
 
     // initiate summary loading after login
     var ownSummaries = currentPages.whereArgs(partialEquals("home")).combineWithLatestOf(sessions).selectArgs(second).selectAjax(OnTrail.rest.summary)

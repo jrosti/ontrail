@@ -72,6 +72,9 @@ var first = function() { return asArgs.apply(null, arguments)[0] }
 var second = function() { return asArgs.apply(null, arguments)[1] }
 var equals = function( a, b ) { return a === b }
 var partialEquals = function(val) { return _.partial(equals, val) }
+var partialEqualsAny = function(arr) {
+  return function(item) { return _.find(arr, _.partial(equals, item)) !== undefined }
+}
 
 // ajax requests
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }

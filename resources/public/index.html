@@ -155,9 +155,9 @@
       </article>
     </section>
 
-    <section role="user">
-      <h2>Käyttäjän <span class="current-username"></span> lenkit</h2>
-      <div id="user-entries"></div>
+    <section role="content">
+      <div id="content-header"></div>
+      <div id="content-entries"></div>
     </section>
 
     <section role="home">
@@ -177,7 +177,6 @@
         <label for="search-users">Hae käyttäjää: </label> <input class="search" type="text" id="search-users"/>
         <div id="user-results"></div>
       </article>
-
     </section>
 
 
@@ -239,12 +238,6 @@
 
     <section role="ex" class="full with-comments">
       <div id="exercise"></div>
-    </section>
-
-    <section role="tag">
-      <h2>Tagiin "<span class="current-tag"></span>" liittyvät lenkit</h2>
-
-      <div id="tag-entries"></div>
     </section>
     <footer>
     </footer>
@@ -377,6 +370,14 @@
   <h4><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
   {{/users}}
 </script>
+<script id="userHeaderTemplate" type="text/html">
+  <h2>Käyttäjän {{data}} lenkit</h2>
+  <p><a class="pageLink" rel="home-{{data}}">Harjoituspäiväkirjaan</a></p>
+</script>
+<script id="tagHeaderTemplate" type="text/html">
+  <h2>Tageihin "{{data}}" liittyvät lenkit</h2>
+</script>
+
 <script id="loggedInStylesTemplate" type="text/html">
   <style id="logged-in-styles" type="text/css">
     a.delete, #modify-ex {
