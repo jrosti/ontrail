@@ -75,6 +75,7 @@ var partialEquals = function(val) { return _.partial(equals, val) }
 var partialEqualsAny = function(arr) {
   return function(item) { return _.find(arr, _.partial(equals, item)) !== undefined }
 }
+var firstDefined = function() { return _.find(_.argsToArray(arguments), identity) }
 
 // ajax requests
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }
