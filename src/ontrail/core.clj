@@ -76,7 +76,7 @@
 
   (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list {} page)))
 
-  (GET "/rest/v1/find-users/:term/:page" [term, page] (json-response (get-user-list {:username {$regex (str "^" term)}} page)))
+  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (get-user-list {:username {$regex (str "^" term)}} page)))
 
   (GET "/rest/v1/sports" [] (json-response (get-distinct-sports {})))
 

@@ -63,6 +63,7 @@
      :pace (get-pace exercise)
      :commentCount comment-count
      :comments comments
+     :lastModifiedDate (:lastModifiedDate exercise)
      :bpmdist bpmdist})) 
 
 (defn as-ex-result-list [results]
