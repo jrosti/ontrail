@@ -191,7 +191,7 @@
     latestScroll.subscribe(renderLatest(entries))
 
     // initiate summary loading after login
-      var ownSummaries = currentPages.whereArgs(partialEquals("home")).selectArgs(second)
+      var ownSummaries = currentPages.whereArgs(partialEquals("home")).selectArgs(_.compose(emptyAsUndefined, tail))
         .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary).subscribe(renderSummary)
 
     // user search scroll

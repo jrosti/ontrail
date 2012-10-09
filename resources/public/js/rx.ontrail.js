@@ -60,7 +60,7 @@ var nothing = function() {}
 // general utilities
 var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
 var splitM = _.partial(splitWith, "-")
-var asArgs = function() { return arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments }
+var asArgs = function() { return _.argsToArray(arguments.length == 1 ? (($.isArray(arguments[0])) ? arguments[0] : [arguments[0]]) : arguments) }
 var id = function(item) { return item.id }
 
 // functional js
@@ -69,13 +69,18 @@ var identity = function(x) { return x }
 var exists = identity
 var not = function(x) { return !x }
 var first = function() { return asArgs.apply(null, arguments)[0] }
+var tail = function() { return asArgs.apply(null, arguments).slice(1) }
+var emptyAsUndefined = function() {
+  var arr = asArgs.apply(null, arguments)
+  return arr.length > 0 ? arr : undefined
+}
 var second = function() { return asArgs.apply(null, arguments)[1] }
 var equals = function( a, b ) { return a === b }
 var partialEquals = function(val) { return _.partial(equals, val) }
 var partialEqualsAny = function(arr) {
   return function(item) { return _.find(arr, _.partial(equals, item)) !== undefined }
 }
-var firstDefined = function() { return _.find(_.argsToArray(arguments), identity) }
+var firstDefined = function() { return _.find(_.argsToArray(arguments), exists) }
 
 // ajax requests
 var isSuccess = function(response) { return response.jqXHR.status >= 200 && response.jqXHR.status < 400 }

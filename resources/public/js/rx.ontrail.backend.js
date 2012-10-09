@@ -23,7 +23,7 @@
     return success(getAsObservable.apply(this, arguments))
   }
 
-  Rest.prototype.summary = function(user) { return getAsObservableResultData("summary", user) }
+  Rest.prototype.summary = function() { return getAsObservableResultData.apply(this, ["summary"].concat(_.argsToArray(arguments))) }
   // unused Jro
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
