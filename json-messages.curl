@@ -9,8 +9,8 @@ http http://localhost:8080/rest/v1/ex-list-all/1
 http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
 # Overall ond a year summary
-http http://ontrail.net/rest/v1/summary/Peppi
-http http://ontrail.net/rest/v1/summary/Peppi/2009
+http http://localhost:8080/rest/v1/summary/Peppi
+http http://localhost:8080/rest/v1/summary-year/Peppi/2009
 
 ## Tag support
 # list exs with a tag uintikisa
