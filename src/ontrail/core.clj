@@ -58,8 +58,9 @@
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
-  (GET "/rest/v1/summary-year/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
-
+  (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
+  (GET "/rest/v1/summary/:user/:year/:month" [user year month] (json-response (get-month-summary-sport user (Integer. year) (Integer. month))))
+  
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
 

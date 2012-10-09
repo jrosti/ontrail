@@ -57,11 +57,6 @@
 (defn get-summary [condition sport]
   (to-summary (get-db-summary condition) sport))
 
-(defn get-year-summary [user year]
-  (let [first-day (time/date-time year 1 1)
-        last-day (time/date-time year 12 31)]
-    (get-summary {:user user :creationDate {:$gte first-day :$lte last-day}} "Kaikki")))
-
 (defn get-overall-summary-cond [user condition]
   (.debug logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
@@ -73,6 +68,13 @@
         last-day (time/date-time year 12 31)
         year-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (get-overall-summary-cond user year-cond)))
+
+(defn get-month-summary-sport [user year month]
+  (let [first-day (time/date-time year month 1)
+        last-day (time/date-time year month 28)
+        year-cond {:creationDate {:$gte first-day :$lte last-day}}]
+    (get-overall-summary-cond user year-cond)))
+
 
 (defn get-overall-summary [user]
   (.trace logger (str "Getting overall summary: " user))
