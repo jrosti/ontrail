@@ -61,7 +61,7 @@
   (.debug logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
         all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)] 
-    {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc condition :user user :sport %) %) all-distinct-sports))}))
+    {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))}))
 
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
@@ -71,9 +71,9 @@
 
 (defn get-month-summary-sport [user year month]
   (let [first-day (time/date-time year month 1)
-        last-day (time/date-time year month 28)
-        year-cond {:creationDate {:$gte first-day :$lte last-day}}]
-    (get-overall-summary-cond user year-cond)))
+        last-day (-> first-day (.dayOfMonth) (.withMaximumValue))
+        year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
+    (assoc (get-overall-summary-cond user year-month-cond) :year year :month month)))
 
 
 (defn get-overall-summary [user]
