@@ -12,11 +12,16 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn from-user-ex [user user-ex]
-  (let [bare-ex {:title (:title user-ex)
+  (let [now (time/now)
+        creation-date (parse-date (:date user-ex))
+        last-modified (if (> (time/in-minutes (time/interval (parse-date (:date user-ex)) now)) 43200)
+                        creation-date
+                        now)
+        bare-ex {:title (:title user-ex)
                  :duration (parse-duration (:duration user-ex))
                  :sport (:sport user-ex)
-                 :creationDate (parse-date (:date user-ex))
-                 :lastModifiedDate (time/now)
+                 :creationDate creation-date
+                 :lastModifiedDate last-modified
                  :user user}
         body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
         tags (parse-tags (:tags user-ex))
