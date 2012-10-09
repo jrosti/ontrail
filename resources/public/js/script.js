@@ -88,12 +88,15 @@
     var renderUserList = function(data) {
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
+
+    // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(summary) {
-      if (!summary || !summary.length || summary.length == 0) return;
-      var content = _.map(summary, _.partial(render, ich.summaryTemplate) ).reduce(function(a, b) { return a+b })
-      $('#homies tbody').html('');
-      $(content).appendTo($('#homies tbody'))
+      var now = XDate.today();
+      var sum = _.extend(summary, {year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() })
+      $("#content-entries").html(ich.hpkContentTemplate(summary))
+      $("#content-header").html(ich.hpkHeaderTemplate(summary))
     }
+
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
 
     // logged in state handling
@@ -160,10 +163,11 @@
       return nothing()
     }).select(splitM)
 
-    var showPage = function(page, subpage) {
-      $('body').attr('data-page', page)
+    var showPage = function() {
+      var pages = _.argsToArray(arguments)
+      $('body').attr('data-page', pages[0])
       $('#password').attr('value', '')
-      $.address.value(page + (subpage !== undefined ? "-" + subpage : ""))
+      $.address.value(pages.join("-"))
     }
     currentPages.mergeTo(backPresses).subscribeArgs(showPage)
 
