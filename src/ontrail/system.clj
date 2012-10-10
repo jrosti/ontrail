@@ -7,7 +7,7 @@
   (format "%.0f min" (/ (.getUptime (ManagementFactory/getRuntimeMXBean)) 60000.0)))
 
 (defn get-used-heap[]
-  (format "%.0fM" (/ (.freeMemory (Runtime/getRuntime)) (* 1024 1024.0))))
+  (format "%.0fM" (/ (- (.maxMemory (Runtime/getRuntime)) (.freeMemory (Runtime/getRuntime))) (* 1024 1024.0))))
 
 (defn get-max-heap[]
   (format "%.0fM" (/ (.maxMemory (Runtime/getRuntime)) (* 1024 1024.0))))
