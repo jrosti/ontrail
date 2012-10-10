@@ -95,7 +95,7 @@
       var utils = {
         hasNextYear: function() {
           return function(text, render) {
-            return this.year != now.getFullYear() ? render(text) : ""
+            return this.year != now.getFullYear() ? render(text) : "<span style='visibility: none;'>&laquo; </span>"
           }
         },
         nextYear: function() { return this.year + 1 },
@@ -140,14 +140,14 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedArticleLinks = $("body").onAsObservable("click touchstart", "a").select(target)
-    var clickedArticles = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
+    var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(target)
+    var clickedArticles = clickedLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
     clickedArticles.where(isArticleLoaded).subscribe(function(el) { $(el).toggleClass('full').toggleClass('preview') })
 
     // delete
-    var deleteClicks = clickedArticleLinks.combineWithLatestOf(sessions)
+    var deleteClicks = clickedLinks.combineWithLatestOf(sessions)
       .whereArgs(function(elem, user) { return $(elem).hasClass('delete') && user && $(elem).attr("data-user") == user})
       .select(function(el) { return attr("rel", el).split("-") })
     deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
@@ -159,20 +159,25 @@
     })
 
     // delete comments
-    var deleteCommentClicks = clickedArticleLinks
+    var deleteCommentClicks = clickedLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("-") })
     deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
-
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
-    var pageLinks = clickedArticleLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
+    var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
       return splitM($.address.value()) || (user && "home") || "latest"
     }
     var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs))
+
+    // filtering
+    var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
+    var filters = currentPages.whereArgs(partialEquals("home")).subscribeArgs(function() {
+      if (arguments.length == 3) setFilter("by-year")
+    })
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
@@ -211,8 +216,9 @@
     latestScroll.subscribe(renderLatest(entries))
 
     // initiate summary loading after login
-      var ownSummaries = currentPages.whereArgs(partialEquals("home")).selectArgs(_.compose(emptyAsUndefined, tail))
-        .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary).subscribe(renderSummary)
+    var summaries = currentPages.whereArgs(partialEquals("home")).selectArgs(_.compose(emptyAsUndefined, tail))
+      .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary)
+    summaries.subscribe(renderSummary)
 
     // user search scroll
     var usersScroll = $("#search-users").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("users")).select(always("")))
