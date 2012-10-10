@@ -177,6 +177,7 @@
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
     var filters = currentPages.whereArgs(partialEquals("home")).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("by-year")
+      else setFilter("")
     })
 
     // back button handling
