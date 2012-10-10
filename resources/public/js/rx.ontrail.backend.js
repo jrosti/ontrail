@@ -31,6 +31,7 @@
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }
+  Rest.prototype.system = function() { return getAsObservableResultData("system") }
   Rest.prototype.tags = function(user) { return getAsObservableResultData("list-tags", user) }
   Rest.prototype.profile = function(user) { return getAsObservableResultData("profile", user) }
   Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }

@@ -15,8 +15,12 @@
 (defn count-exs[]
   (mc/count EXERCISE))
 
+(defn count-users[]
+  (mc/count ONUSER))
+
 (defn get-system-stats[]
-  {:heap (get-used-heap)
-   :maxHeap (get-max-heap)
-   :uptime (get-uptime)
-   :exs (count-exs)})
+  {:sysheap (get-used-heap)
+   :sysmaxHeap (get-max-heap)
+   :sysuptime (get-uptime)
+   :sysexs (count-exs)
+   :sysusers (count-users)})

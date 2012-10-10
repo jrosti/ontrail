@@ -133,6 +133,12 @@
       _.map(["resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
 
+    loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(profile) {
+      console.log(profile)
+      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(profile[field]) })
+    })
+
+
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
     var clickedArticleLinks = $("body").onAsObservable("click touchstart", "a").select(target)
