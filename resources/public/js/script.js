@@ -346,9 +346,11 @@
     }
 
     // run our function on load
-    fixMenuPosition();
+    if (!Modernizr.touch) {
+      fixMenuPosition();
 
-    // and run it again every time you scroll
-    $(window).scrollAsObservable().subscribe(fixMenuPosition)
+      // and run it again every time you scroll
+      $(window).scrollAsObservable().subscribe(fixMenuPosition)
+    }
   })
 })()
