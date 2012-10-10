@@ -13,7 +13,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise formats nlp])
+  (:use [ontrail summary auth crypto exercise formats nlp profile])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -60,6 +60,8 @@
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
   (GET "/rest/v1/summary/:user/:year/:month" [user year month] (json-response (get-month-summary-sport user (Integer. year) (Integer. month))))
+
+  (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))

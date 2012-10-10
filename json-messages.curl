@@ -8,6 +8,8 @@ http http://localhost:8080/rest/v1/ex-list-all/1
 
 http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
+http http://localhost:8080/rest/v1/profile/Peppi
+
 # Overall ond a year summary
 http http://localhost:8080/rest/v1/summary/Peppi
 http http://localhost:8080/rest/v1/summary/Peppi/2009

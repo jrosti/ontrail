@@ -72,9 +72,9 @@
 
 (defn get-latest-ex-list [rule page]
   (let [results (mq/with-collection EXERCISE
-               (mq/find rule)
-               (mq/paginate :page (Integer. page) :per-page 20)
-               (mq/sort {:lastModifiedDate -1}))]
+                  (mq/find rule)
+                  (mq/paginate :page (Integer. page) :per-page 20)
+                  (mq/sort {:lastModifiedDate -1}))]
     (.debug logger (str "Get exercise list " rule " " page " with " (count results) " results."))
     (as-ex-result-list results)))
 
