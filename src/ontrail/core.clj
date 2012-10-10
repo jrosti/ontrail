@@ -13,7 +13,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise formats nlp profile])
+  (:use [ontrail summary auth crypto exercise formats nlp profile system])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -63,6 +63,8 @@
 
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))
+
+  (GET "/rest/v1/system" [] (json-response (get-system-stats)))
   
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
