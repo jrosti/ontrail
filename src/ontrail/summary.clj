@@ -75,7 +75,6 @@
         year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (assoc (get-overall-summary-cond user year-month-cond) :year year :month month)))
 
-
 (defn get-overall-summary [user]
   (.trace logger (str "Getting overall summary: " user))
   (get-overall-summary-cond user {}))
