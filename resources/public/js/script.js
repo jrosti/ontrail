@@ -337,5 +337,19 @@
         minHeight: 200
     }
     $('#ex-body').redactor(editorSettings)
+
+    var menuOffsetTop = $('#menu').offset().top
+    var fixMenuPosition = function() {
+      $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
+      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
+      $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
+
+    }
+
+    // run our function on load
+    fixMenuPosition();
+
+    // and run it again every time you scroll
+    $(window).scrollAsObservable().subscribe(fixMenuPosition)
   })
 })()

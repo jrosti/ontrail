@@ -124,10 +124,11 @@ body[data-page="main"] a[rel="main"] {
   font-weight: bold;
 }
 div[role="menu"] {
-  width: 100%;
+  width: 956px;
   height: 44px;
   padding-bottom: 0;
   background-color: #ffffff;
+  border-bottom: 3px solid #006862;
 }
 div[role="menu"] ul {
   width: 100%;
