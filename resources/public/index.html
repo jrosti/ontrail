@@ -345,11 +345,19 @@
 </script>
 <script id="hpkHeaderTemplate" type="text/html">
   <h2>Yhteenveto harjoituksista</h2>
-  <a class="pageLink" rel="home-{{user}}">Kaikki</a>
-  <a class="pageLink" rel="home-{{user}}-{{year}}">Vuosi ({{year}})</a> Kuukausi Viikko
+  <div class="subnavi">
+    <a class="pageLink" rel="home-{{user}}">Kaikki</a>
+    <a class="pageLink by-year" rel="home-{{user}}-{{year}}">Vuosi</a> Kuukausi Viikko
+  </div>
 </script>
+
 <script id="hpkContentTemplate" type="text/html">
   <article>
+    <div class="by year">
+      {{#hasNextYear}}<a class="pageLink next" rel="home-{{user}}-{{nextYear}}">seuraava vuosi</a> {{/hasNextYear}}
+      <a class="pageLink" rel="home-{{user}}-{{year}}">{{year}}</a>
+      <a class="pageLink prev" rel="home-{{user}}-{{prevYear}}">edellinen vuosi</a>
+    </div>
     <table id="homies" class="details">
       <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
       <tbody>

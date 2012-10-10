@@ -92,9 +92,21 @@
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(summary) {
       var now = XDate.today();
-      var sum = _.extend(summary, {year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() })
-      $("#content-entries").html(ich.hpkContentTemplate(summary))
-      $("#content-header").html(ich.hpkHeaderTemplate(summary))
+      var utils = {
+        hasNextYear: function() {
+          return function(text, render) {
+            console.log("foo " + text)
+            return this.year != now.getFullYear() ? render(text) : ""
+          }
+        },
+        nextYear: function() { return this.year + 1 },
+        prevYear: function() { return this.year - 1 }
+      }
+      var sum = _.extend({year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() }, summary, utils)
+      console.log(sum)
+
+      $("#content-entries").html(ich.hpkContentTemplate(sum))
+      $("#content-header").html(ich.hpkHeaderTemplate(sum))
     }
 
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
