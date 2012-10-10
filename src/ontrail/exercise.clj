@@ -12,13 +12,6 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(defn get-heart-rate-reserve [exercise user-profile]
-  (let [resthr (get user-profile :resthr)
-        maxhr (get user-profile :maxhr)
-        avghr (get exercise :avghr)]
-    (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)))
-      (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
-      "")))
 
 (def TRUNCATE 110)
 

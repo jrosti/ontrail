@@ -32,6 +32,7 @@
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }
   Rest.prototype.tags = function(user) { return getAsObservableResultData("list-tags", user) }
+  Rest.prototype.profile = function(user) { return getAsObservableResultData("profile", user) }
   Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }
   Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
 

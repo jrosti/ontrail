@@ -62,7 +62,7 @@
   (GET "/rest/v1/summary/:user/:year/:month" [user year month] (json-response (get-month-summary-sport user (Integer. year) (Integer. month))))
 
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
-  (POST "/rest/v1/profile" {params :params cookies :cookies} (post-profile (user-from-cookie cookies) params))
+  (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))
   
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))

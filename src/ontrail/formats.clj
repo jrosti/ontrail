@@ -6,6 +6,14 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+(defn get-heart-rate-reserve [exercise user-profile]
+  (let [resthr (get user-profile :resthr)
+        maxhr (get user-profile :maxhr)
+        avghr (get exercise :avghr)]
+    (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)) (not= maxhr resthr))
+      (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
+      "")))
+
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))
         secs (int (* 60.0 (- pace (int pace))))]

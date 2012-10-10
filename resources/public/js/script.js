@@ -4,10 +4,6 @@
     var entries = $("#entries")
     var userList = $("#user-results")
 
-    var postHeartRateProfile = function(user) {
-      return OnTrail.rest.postAsObservable("hr/" + user, $('#profile-form').serialize())
-    }
-
     var doPostExercise = function(url) {
       var values = $('#add-exercise-form').serialize()
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
@@ -24,6 +20,10 @@
 
     var postEditExercise = function(exercise) {
       return doPostExercise("update/" + exercise)
+    }
+
+    var postProfile = function() {
+      return OnTrail.rest.postAsObservable("profile", $('#profile-form').serialize())
     }
 
     var postComment = function(exercise) {
@@ -129,6 +129,9 @@
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user-' + userId)})
+    loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
+      _.map(["resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+    })
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
@@ -268,6 +271,9 @@
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
+    var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
+      .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
+    updateProfiles.subscribeArgs(nothing)
 
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
