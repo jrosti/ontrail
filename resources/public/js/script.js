@@ -95,7 +95,6 @@
       var utils = {
         hasNextYear: function() {
           return function(text, render) {
-            console.log("foo " + text)
             return this.year != now.getFullYear() ? render(text) : ""
           }
         },
@@ -103,7 +102,6 @@
         prevYear: function() { return this.year - 1 }
       }
       var sum = _.extend({year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() }, summary, utils)
-      console.log(sum)
 
       $("#content-entries").html(ich.hpkContentTemplate(sum))
       $("#content-header").html(ich.hpkHeaderTemplate(sum))
