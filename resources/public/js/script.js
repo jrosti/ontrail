@@ -134,7 +134,6 @@
     })
 
     loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(profile) {
-      console.log(profile)
       _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(profile[field]) })
     })
 
