@@ -9,6 +9,8 @@ http http://localhost:8080/rest/v1/ex-list-all/1
 http http://localhost:8080/rest/v1/ex-list-user/Esko/1
 
 http http://localhost:8080/rest/v1/profile/Peppi
+http -v -f POST http://localhost:8080/rest/v1/profile Cookie:authToken=S-vHXoQse_hiRaGLkdyMi-T_HiwyF0zfJzwSNx8yiTM7vLcFx8SVqkHmRFGkcscYXHs0aksV11EyVoE-ZOGmsm0 resthr=50 maxhr=200
+
 
 # Overall ond a year summary
 http http://localhost:8080/rest/v1/summary/Peppi
