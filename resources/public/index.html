@@ -366,9 +366,9 @@
 <script id="hpkContentTemplate" type="text/html">
   <article>
     <div class="by year">
-      {{#hasNextYear}}<a class="pageLink next" rel="home-{{user}}-{{nextYear}}">&laquo;</a> {{/hasNextYear}}
+      <a class="pageLink prev" rel="home-{{user}}-{{prevYear}}">&larr;</a>
       {{year}}
-      <a class="pageLink prev" rel="home-{{user}}-{{prevYear}}">&raquo;</a>
+      {{#hasNextYear}}<a class="pageLink next" rel="home-{{user}}-{{nextYear}}">&rarr;</a> {{/hasNextYear}}
     </div>
     <table id="homies" class="details">
       <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>

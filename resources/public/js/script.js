@@ -95,7 +95,7 @@
       var utils = {
         hasNextYear: function() {
           return function(text, render) {
-            return this.year != now.getFullYear() ? render(text) : "<span style='visibility: none;'>&laquo; </span>"
+            return this.year != now.getFullYear() ? render(text) : "<span style='visibility: none;'>&rarr; </span>"
           }
         },
         nextYear: function() { return this.year + 1 },
