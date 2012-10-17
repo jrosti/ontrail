@@ -63,6 +63,7 @@
         all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)] 
     {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))}))
 
+
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)
@@ -81,6 +82,10 @@
                             
 (defn get-distinct-tags [condition]
   (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
+
+(defn get-overall-tags-summary [user]
+  (let [tags (filter (partial not= "") (get-distinct-tags {:user user}))]
+    (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} %) tags))))
 
 (defn get-distinct-sports [condition]
   (mc/distinct EXERCISE "sport" condition))
