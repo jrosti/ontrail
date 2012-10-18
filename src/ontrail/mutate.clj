@@ -71,10 +71,9 @@
     (as-ex-result tret)))
 
 (defn update-ex [user params]
-  (.debug logger (str (:user params) " updating ex " params)) ;; non-safe
+  (.debug logger (str (:user params) " updating ex " params))
   (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
-                                      {"$set" (dissoc
-                                               (assoc (from-user-ex user params) :lastModifiedDate (time/now))
+                                      {"$set" (dissoc (from-user-ex user params)
                                                :comments)})]
     (.debug logger (str "Updated " (:id params) " with status "  write-result)))
   (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]

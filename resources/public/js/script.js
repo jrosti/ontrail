@@ -271,6 +271,20 @@
       $("#ex-tags").trigger("liszt:updated")
     }
 
+    var renderProfileUpdate = function(args) {
+      console.log(args)
+      var result = _.reduce(_.map([["leposyke", args.resthr], ["maksimisyke", args.maxhr], 
+				   ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
+				  function(val) { 
+				    if (val[1]) { 
+				      return " " + val[0] + ": " + val[1] + " "
+				    } else { 
+				      return "" 
+				    }}), 
+			    function(fst,snd) { return fst + snd })
+      $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
+    }
+    
     var renderAddExercise = function() { $("[role='addex']").attr('data-mode', 'add') }
     $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
 
@@ -285,7 +299,7 @@
 
     var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
-    updateProfiles.subscribeArgs(nothing)
+    updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
