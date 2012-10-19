@@ -5,19 +5,19 @@ Ennen launchia:
 * ~~Yksittäisen lenkin näkymä~~
 * ~~Kommentointi~~
 * Create users
-* Lenkkien validaatio
-* Lenkkien muokkaus
-* Wysiwyg
+* ~~Lenkkien validaatio~~
+* ~~Lenkkien muokkaus~~
+* ~~Wysiwyg~~
 * ~~Lenkkien poisto~~
-* Kommenttien poisto
-  * omat mistä tahansa lenkeistä
-  * muiden omista lenkeistä
+* ~~Kommenttien poisto~~
+  * ~~omat mistä tahansa lenkeistä~~
+  * ~~muiden omista lenkeistä~~
 * omien kommenttien muokkaus
 * Back-hanskaus
 * Kaikki tagit - täginäkymä
 * Omat tagit sivupalkkiin
 * -Lenkin tägit-
-* Vuosi, Kuukausi, Viikko -näkymä
+* ~~Vuosi~~, Kuukausi, Viikko -näkymä
 
 Taustalla:
 
