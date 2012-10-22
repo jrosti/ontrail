@@ -1,6 +1,8 @@
 
 (function() {
   $(document).ready(function() {
+    $.ajaxSetup({ cache: false }); 
+   
     var entries = $("#entries")
     var userList = $("#user-results")
 
