@@ -66,6 +66,8 @@
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))
 
+  (GET "/rest/v1/email" {cookies :cookies} (json-response {:email (:email (get-user (user-from-cookie cookies)))}))
+  
   (GET "/rest/v1/system" [] (json-response (get-system-stats)))
   
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))

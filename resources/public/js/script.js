@@ -135,8 +135,16 @@
       _.map(["resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
 
-    loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(profile) {
-      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(profile[field]) })
+    loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
+      $('#profile-email').text(result.email) 
+    })
+
+    loggedIns.selectAjax(OnTrail.rest.avatarUrl).subscribe(function(avatar) {
+      $('#profile-avatar').attr("src", avatar.url)
+    })
+
+    loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(systemstats) {
+      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
     })
 
 

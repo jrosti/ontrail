@@ -77,7 +77,7 @@
 	      <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
 	      <a class="pageLink" rel="profile">Oma profiili</a><br/>
 	      <a class="pageLink" rel="home">Selaa harjoituspäiväkirjaa</a><br/>
-	      <a class="pageLink" rel="tagsummary">Tagiyhteenvedot</a><br/>
+	      <a class="pageLink" rel="tagsummary">Tagit</a><br/>
 	    </p>
 	    <h2>Muut</h2>
 	    <p>
@@ -128,29 +128,40 @@
       
     <section role="profile">
       <article>
-      <h2>Oma profiili</h2>
+      <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Oma profiili</h2>
       <div class="details">
+	<h3>Henkilökohtaiset tiedot <sup><tiny>*)</tiny></sup></h3>
+	<div class="edit-form">
+	  Sähköposti: <span id="profile-email"></span>
+	  <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
+      -palvelun avulla</a> käyttäen
+      sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
+      ylläpitäjän pyynnostä.</small></i></div> 
+	</div>
+	<div>
+	  <small>*) Henkilökohtaiset tiedot näkyvät vain sinulle</small>
+	</div>
 	<h3>Syketiedot</h3>
 	<form id="profile-form" class="edit-form" method="post">
         <div>
 	  <label for="resthr">Leposyke</label>
-	  <input id="resthr" name="resthr" type="text" placeholder="Leposyke" />
+	  <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
         </div>
 	<div>
           <label for="maxhr">Maksimisyke</label>
-	  <input id="maxhr" name="maxhr" type="text" placeholder="Maksimisyke"/>
+	  <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
 	</div>
 	<div>
 	  <label for="aerk">Aerobinen kynnys</label>
-	  <input id="aerk" name="aerk" type="text"placeholder="Aerobinen kynnnys" />
+	  <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
         </div>
         <div>
           <label for="anaerk">Anaerobinen kynnys</label>
-          <input id="anaerk" name="anaerk" type="text" placeholder="Anaerobinen kynnnys" />
+          <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" placeholder="Anaerobinen kynnnys" />
         </div>
         <div>
           <label></label>
-          <a id="update-profile" class="button login">Päivitä tiedot</a>
+          <a id="update-profile" class="button login">Päivitä syketiedot</a>
         </div>
       </form>
 	<span id="profile-result"></span>
