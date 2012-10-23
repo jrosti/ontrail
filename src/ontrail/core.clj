@@ -61,7 +61,7 @@
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
-  (GET "/rest/v1/summary/:user/:year/:month" [user year month] (json-response (get-month-summary-sport user (Integer. year) (Integer. month))))
+  (GET "/rest/v1/summary/:user/:year/by-month" [user year] (json-response (get-season-months user (Integer. year))))
 
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))

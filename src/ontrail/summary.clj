@@ -91,3 +91,9 @@
 
 (defn get-distinct-sports [condition]
   (mc/distinct EXERCISE "sport" condition))
+
+(defn get-season-months [user year]
+  (let [pyear (- year 1)
+        pairs [(list pyear 10) (list pyear 11) (list pyear 12) (list year 1)
+               (list year 2) (list year 3) (list year 4) (list year 5) (list year 6)]]
+    (map #(get-month-summary-sport user (first %) (second %)) pairs)))
