@@ -9,13 +9,12 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn avghr [db-retmap]
-  (.debug logger (str "avghr" db-retmap))
   (let [hrcount (:hrcount db-retmap)]
     (if (and (not (nil? hrcount)) (> hrcount 0))
       (/ (:tavghr db-retmap) hrcount)
       0)))
 
-;; fix these pointings
+;; Fix these map acceses to be idiomatic clojure, when you see them!
 (defn to-summary [db-object sport] 
   (let [db-retmap (first (get db-object :retval))
         count (int (get db-object :count))
