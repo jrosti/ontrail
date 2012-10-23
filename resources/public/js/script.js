@@ -282,7 +282,6 @@
     }
 
     var renderProfileUpdate = function(args) {
-      console.log(args)
       var result = _.reduce(_.map([["leposyke", args.resthr], ["maksimisyke", args.maxhr], 
 				   ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
 				  function(val) { 
