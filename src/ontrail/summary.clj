@@ -9,11 +9,13 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn avghr [db-retmap]
-  (let [hrcount (get db-retmap :hrcount)]
-    (if (> hrcount 0)
-      (/ (get db-retmap :tavghr) hrcount)
+  (.debug logger (str "avghr" db-retmap))
+  (let [hrcount (:hrcount db-retmap)]
+    (if (and (not (nil? hrcount)) (> hrcount 0))
+      (/ (:tavghr db-retmap) hrcount)
       0)))
 
+;; fix these pointings
 (defn to-summary [db-object sport] 
   (let [db-retmap (first (get db-object :retval))
         count (int (get db-object :count))
@@ -60,8 +62,9 @@
 (defn get-overall-summary-cond [user condition]
   (.debug logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
-        all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)] 
-    {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))}))
+        all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)
+        summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))] 
+    {:user user :sports (conj summary-sports (get-summary cond-with-user "Kaikki"))}))
 
 
 (defn get-year-summary-sport [user year]
