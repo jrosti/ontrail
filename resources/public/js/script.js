@@ -105,8 +105,8 @@
       }
       var sum = _.extend({year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() }, summary, utils)
 
-      $("#content-entries").html(ich.hpkContentTemplate(sum))
-      $("#content-header").html(ich.hpkHeaderTemplate(sum))
+      $("#summary-entries").html(ich.hpkContentTemplate(sum))
+      $("#summary-header").html(ich.hpkHeaderTemplate(sum))
     }
 
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
@@ -205,12 +205,9 @@
     }
     currentPages.mergeTo(backPresses).subscribeArgs(showPage)
 
-    var userPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
-    userPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
-    userPages.subscribeArgs(function() {
-      userPages.scrollWith(OnTrail.rest.exercises, $("#content-entries"))
-        .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tag"])))).subscribe(renderLatest($("#content-entries")))
-    })
+    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
+    userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
+    userTagPages.scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
