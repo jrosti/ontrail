@@ -13,21 +13,21 @@ Ennen launchia:
   * ~~omat mistä tahansa lenkeistä~~
   * ~~muiden omista lenkeistä~~
 * omien kommenttien muokkaus
-* Back-hanskaus
+* ~~Back-hanskaus~~
 * Kaikki tagit - täginäkymä
 * Omat tagit sivupalkkiin
 * -Lenkin tägit-
-* ~~Vuosi~~, Kuukausi, Viikko -näkymä
+* ~~Vuosi~~, ~~Kuukausi~~, Viikko -näkymä
 * Joko ryhmät tai kaverit
 
 Taustalla:
 
-* Parempi autentikaatio
+* ~~Parempi autentikaatio~~
 * ~~Error-logitus~~
 
 Myöhemmin:
 
-* Ryhmät
+* Ryhmät (tai)
 * Käyttäjien stalkkaus / seuraaminen
 * ~~Sticky -navigaatio~~
 * Animaatioita UI:ssa
