@@ -76,7 +76,7 @@
   (let [first-day (time/date-time year month 1)
         last-day (-> first-day (.dayOfMonth) (.withMaximumValue))
         year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
-    (assoc (get-overall-summary-cond user year-month-cond) :year year :month month)))
+    (assoc (get-overall-summary-cond user year-month-cond) :year year :month (- month 1))))
 
 (defn get-overall-summary [user]
   (.trace logger (str "Getting overall summary: " user))
