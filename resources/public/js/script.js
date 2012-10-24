@@ -112,8 +112,9 @@
       }
 
       if ($.isArray(summary)) {
+        var hasSports = function(item) { return item.sports.length > 1 }
         var extendWithMonthName = function(item) { return _.extend(item, monthNames ) }
-        var sums = _.map(summary, extendWithMonthName)
+        var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
         var sum = _.extend( { year: (summary[0].year + 1) }, { months: sums, "user": summary[0].user }, utils)
         $("#summary-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
