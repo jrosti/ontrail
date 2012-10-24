@@ -106,7 +106,7 @@
 
       var monthNames = {
         monthName: function() {
-          return DateLocale.FI.monthNames[ this.month -1 ]
+          return DateLocale.FI.monthNames[ this.month ]
         }
       }
 
