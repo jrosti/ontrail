@@ -59,7 +59,7 @@
   (to-summary (get-db-summary condition) sport))
 
 (defn get-overall-summary-cond [user condition]
-  (.debug logger (str "Getting summary: " user " condition " condition))  
+  (.trace logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
         all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)
         summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))] 
