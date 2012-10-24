@@ -192,7 +192,8 @@
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
-      return splitM($.address.value()) || (user && "home") || "latest"
+      if ($.address.value()) return splitM($.address.value());
+      return (user && "home") || "latest"
     }
     var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs))
 
