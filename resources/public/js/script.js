@@ -111,10 +111,8 @@
       }
 
       if ($.isArray(summary)) {
-        console.log("render by month", summary[0].user);
-        var extendWithMonthName = function(item) { var res = _.extend(item, monthNames ); console.log(res, item); return res; }
+        var extendWithMonthName = function(item) { return _.extend(item, monthNames ) }
         var sums = _.map(summary, extendWithMonthName)
-        console.log(sums)
         var sum = _.extend( { year: (summary[0].year + 1) }, { months: sums, "user": summary[0].user }, utils)
         $("#summary-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
