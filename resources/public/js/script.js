@@ -104,9 +104,18 @@
         prevYear: function() { return this.year - 1 }
       }
 
+      var monthNames = {
+        monthName: function() {
+          return DateLocale.FI.monthNames[ this.month -1 ]
+        }
+      }
+
       if ($.isArray(summary)) {
         console.log("render by month", summary[0].user);
-        var sum = _.extend( { year: (summary[0].year + 1) }, { months: summary, "user": summary[0].user }, utils)
+        var extendWithMonthName = function(item) { var res = _.extend(item, monthNames ); console.log(res, item); return res; }
+        var sums = _.map(summary, extendWithMonthName)
+        console.log(sums)
+        var sum = _.extend( { year: (summary[0].year + 1) }, { months: sums, "user": summary[0].user }, utils)
         $("#summary-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
         var sum = _.extend( { year: now.getFullYear() }, summary, utils)
