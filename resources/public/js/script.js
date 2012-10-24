@@ -103,9 +103,15 @@
         nextYear: function() { return this.year + 1 },
         prevYear: function() { return this.year - 1 }
       }
-      var sum = _.extend({year: now.getFullYear(), month: now.getMonth(), week: now.getWeek() }, summary, utils)
 
-      $("#summary-entries").html(ich.hpkContentTemplate(sum))
+      if ($.isArray(summary)) {
+        console.log("render by month", summary[0].user);
+        var sum = _.extend( { year: (summary[0].year + 1) }, { months: summary, "user": summary[0].user }, utils)
+        $("#summary-entries").html(ich.hpkMonthContentTemplate(sum))
+      } else {
+        var sum = _.extend( { year: now.getFullYear() }, summary, utils)
+        $("#summary-entries").html(ich.hpkContentTemplate(sum))
+      }
       $("#summary-header").html(ich.hpkHeaderTemplate(sum))
     }
 
@@ -187,6 +193,7 @@
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
     var filters = currentPages.whereArgs(partialEquals("home")).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("by-year")
+      else if (arguments.length == 4) setFilter("by-month")
       else setFilter("")
     })
 
