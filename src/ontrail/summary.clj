@@ -87,7 +87,7 @@
 
 (defn get-overall-tags-summary [user]
   (let [tags (filter (partial not= "") (get-distinct-tags {:user user}))]
-    (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} %) tags))))
+    {:user user :sports (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} %) tags)) }))
 
 (defn get-distinct-sports [condition]
   (mc/distinct EXERCISE "sport" condition))

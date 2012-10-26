@@ -92,7 +92,7 @@
     }
 
     // filters: {year: yyyy, month: mm, week: ww }
-    var renderSummary = function(summary) {
+    var renderSummary = function(elem, summary) {
       var now = XDate.today();
       var maxYear = $.isArray(summary) ? now.getFullYear() +1 : now.getFullYear()
       var utils = {
@@ -116,12 +116,12 @@
         var extendWithMonthName = function(item) { return _.extend(item, monthNames ) }
         var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
         var sum = _.extend( { year: (summary[0].year + 1) }, { months: sums, "user": summary[0].user }, utils)
-        $("#summary-entries").html(ich.hpkMonthContentTemplate(sum))
+        $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
         var sum = _.extend( { year: now.getFullYear() }, summary, utils)
-        $("#summary-entries").html(ich.hpkContentTemplate(sum))
+        $("#" + elem + "-entries").html(ich.hpkContentTemplate(sum))
       }
-      $("#summary-header").html(ich.hpkHeaderTemplate(sum))
+      $("#" + elem + "-header").html(ich.hpkHeaderTemplate(sum))
     }
 
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
@@ -243,7 +243,11 @@
     // initiate summary loading after login
     var summaries = currentPages.whereArgs(partialEquals("home")).selectArgs(_.compose(emptyAsUndefined, tail))
       .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary)
-    summaries.subscribe(renderSummary)
+    summaries.subscribe(_.partial(renderSummary, "summary"))
+
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(_.compose(emptyAsUndefined, tail))
+      .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.tagsummary)
+    tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
     var usersScroll = $("#search-users").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("users")).select(always("")))
