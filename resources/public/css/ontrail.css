@@ -38,26 +38,26 @@ img.avatar {
   vertical-align: bottom;
 }
 html {
-  background-color: #a5ecef;
-  background-image: -webkit-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -moz-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -ms-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -o-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -webkit-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -moz-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -ms-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: -o-linear-gradient(top ,#006862 0, #a5ecef 270px);
-  background-image: linear-gradient(top ,#006862 0, #a5ecef 270px);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#006862', EndColorStr='#a5ecef');
-  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#006862', EndColorStr='#a5ecef');
+  background-color: #6a7ea5;
+  background-image: -webkit-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -moz-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -ms-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -o-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -webkit-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -moz-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -ms-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: -o-linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  background-image: linear-gradient(top ,#2c363f 0, #6a7ea5 270px);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2c363f', EndColorStr='#6a7ea5');
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2c363f', EndColorStr='#6a7ea5');
   background-repeat: repeat-x;
   height: 100%;
 }
 header[role="top"] {
   position: relative;
   height: 210px;
-  background: url(../img/ontrail-notext.png) no-repeat -2px -68px;
+  background: url(../img/metbg.png) no-repeat -2px -68px;
   background-color: #ffffff;
   padding: 150px 0px 0px;
   -webkit-transition: height .5s ease, background .5s ease, padding .5s ease, opacity .5s linear;
@@ -83,8 +83,8 @@ body {
   width: 962px;
   margin: 0 auto;
   min-height: 100%;
-  border-left: 3px solid #006862;
-  border-right: 3px solid #006862;
+  border-left: 3px solid #2c363f;
+  border-right: 3px solid #2c363f;
   background-color: #f0f0f0;
 }
 body[data-page="login"] header {
@@ -129,7 +129,7 @@ div[role="menu"] {
   height: 44px;
   padding-bottom: 0;
   background-color: #ffffff;
-  border-bottom: 3px solid #006862;
+  border-bottom: 3px solid #2c363f;
 }
 div[role="menu"] ul {
   width: 100%;

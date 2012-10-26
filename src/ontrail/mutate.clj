@@ -71,7 +71,7 @@
     (as-ex-result tret)))
 
 (defn update-ex [user params]
-  (.debug logger (str (:user params) " updating ex " params))
+  (.trace logger (str (:user params) " updating ex " params))
   (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
                                       {"$set" (dissoc (from-user-ex user params)
                                                :comments)})]
