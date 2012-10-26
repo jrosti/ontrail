@@ -13,6 +13,7 @@
                  [ring-json-params "0.1.0"]
                  [org.clojure/data.json "0.1.3"]
                  [com.lambdaworks/scrypt "1.3.3"]
+		 [lamina "0.5.0-beta7"]
                  [org.slf4j/slf4j-api "1.6.4"]
                  [ch.qos.logback/logback-classic "1.0.3"]
                  [commons-codec/commons-codec "1.6"]
