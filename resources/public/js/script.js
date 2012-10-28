@@ -102,7 +102,8 @@
           }
         },
         nextYear: function() { return this.year + 1 },
-        prevYear: function() { return this.year - 1 }
+        prevYear: function() { return this.year - 1 },
+        kind: elem
       }
 
       var monthNames = {
@@ -195,13 +196,13 @@
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
       if ($.address.value()) return splitM($.address.value());
-      return (user && "home") || "latest"
+      return (user && "summary") || "latest"
     }
     var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs))
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEquals("home")).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEquals("summary")).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("by-year")
       else if (arguments.length == 4) setFilter("by-month")
       else setFilter("")
@@ -241,7 +242,7 @@
     latestScroll.subscribe(renderLatest(entries))
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("home")).selectArgs(_.compose(emptyAsUndefined, tail))
+    var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(_.compose(emptyAsUndefined, tail))
       .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 

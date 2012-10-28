@@ -76,7 +76,7 @@
 	      <a class="pageLink" rel="addex">Lisää lenkki</a><br/>
 	      <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
 	      <a class="pageLink" rel="profile">Oma profiili</a><br/>
-	      <a class="pageLink" rel="home">Selaa yhteenvetoja</a><br/>
+	      <a class="pageLink" rel="summary">Selaa yhteenvetoja</a><br/>
 	      <a class="pageLink" rel="tagsummary">Tagit</a><br/>
 	    </p>
 	    <h2>Muut</h2>
@@ -368,16 +368,16 @@
 </script>
 <script id="userHeaderTemplate" type="text/html">
   <h2>Käyttäjän {{data}} lenkit</h2>
-  <p><a class="pageLink" rel="home-{{data}}">Yhteenvedot</a></p>
+  <p><a class="pageLink" rel="summary-{{data}}">Yhteenvedot</a></p>
 </script>
 <script id="tagHeaderTemplate" type="text/html">
   <h2>Tageihin "{{data}}" liittyvät lenkit</h2>
 </script>
 <script id="hpkHeaderTemplate" type="text/html">
   <div class="subnavi">
-    <a class="pageLink" data-filter="" rel="home-{{user}}">Kaikki</a>
-    <a class="pageLink by-year" data-filter="by-year" rel="home-{{user}}-{{year}}">Vuosi</a>
-    <a class="pageLink by-month" data-filter="by-month" rel="home-{{user}}-{{year}}-bymonth">Kuukausittain</a>
+    <a class="pageLink" data-filter="" rel="{{kind}}-{{user}}">Kaikki</a>
+    <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}-{{user}}-{{year}}">Vuosi</a>
+    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}-{{user}}-{{year}}-bymonth">Kuukausittain</a>
   </div>
   <h2>Yhteenveto harjoituksista</h2>
 </script>
@@ -385,9 +385,9 @@
 <script id="hpkContentTemplate" type="text/html">
   <article>
     <div class="by year">
-      <a class="pageLink prev" rel="home-{{user}}-{{prevYear}}">&larr;</a>
+      <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}">&larr;</a>
       {{year}}
-      {{#hasNextYear}}<a class="pageLink next" rel="home-{{user}}-{{nextYear}}">&rarr;</a> {{/hasNextYear}}
+      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}">&rarr;</a> {{/hasNextYear}}
     </div>
     {{> summaryTemplate}}
   </article>
@@ -407,9 +407,9 @@
 <script id="hpkMonthContentTemplate" type="text/html">
   <article>
     <div class="by month">
-      <a class="pageLink prev" rel="home-{{user}}-{{prevYear}}-bymonth">&larr;</a>
+      <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}-bymonth">&larr;</a>
       Kausi {{year}}
-      {{#hasNextYear}}<a class="pageLink next" rel="home-{{user}}-{{nextYear}}-bymonth">&rarr;</a> {{/hasNextYear}}
+      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}-bymonth">&rarr;</a> {{/hasNextYear}}
     </div>
     {{#months}}
     <h2 class="monthName">{{monthName}} {{year}}</h2>
