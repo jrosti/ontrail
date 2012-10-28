@@ -63,13 +63,16 @@
 (defn as-ex-result-list [results]
   (map as-ex-result results))
 
-(defn get-latest-ex-list [rule page]
+(defn get-latest-ex-list-with-sort-rule [rule page sort-rule]
   (let [results (mq/with-collection EXERCISE
                   (mq/find rule)
                   (mq/paginate :page (Integer. page) :per-page 20)
-                  (mq/sort {:lastModifiedDate -1}))]
+                  (mq/sort sort-rule))]
     (.debug logger (str "Get exercise list " rule " " page " with " (count results) " results."))
     (as-ex-result-list results)))
+
+(defn get-latest-ex-list [rule page]
+  (get-latest-ex-list-with-sort-rule rule page {:lastModifiedDate -1}))
 
 (defn get-ex [id]
   (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]

@@ -78,7 +78,8 @@
   (GET "/rest/v1/ex/:id" [id] (json-response (get-ex id)))
   (GET "/rest/v1/ex-list-newer/:datetime" [datetime] (json-response (get-newer-ex-than datetime)))
   (GET "/rest/v1/ex-list-all/:page" [page] (json-response (get-latest-ex-list {} page)))
-  (GET "/rest/v1/ex-list-user/:user/:page" [user page] (json-response (get-latest-ex-list {:user user} page)))
+  (GET "/rest/v1/ex-list-user/:user/:page" [user page] (json-response (get-latest-ex-list-with-sort-rule {:user user} page {:creationDate -1})))
+  
   (GET "/rest/v1/ex-list-tag/:tag/:page" [tag page] (json-response (get-latest-ex-list {:tags tag} page)))
 
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
