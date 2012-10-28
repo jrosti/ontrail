@@ -13,7 +13,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise formats nlp profile system])
+  (:use [ontrail summary auth crypto exercise formats nlp profile system tagsummary])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -57,12 +57,14 @@
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
 (defroutes app-routes
-  (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))
-  (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
-  
+  (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year] (json-response (get-season-months user (Integer. year))))
 
+  (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
+  (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer. year))))
+  (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year] (json-response (get-season-months-tags user (Integer. year))))
+  
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))
 

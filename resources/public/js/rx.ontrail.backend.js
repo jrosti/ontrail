@@ -25,7 +25,7 @@
 
   Rest.prototype.summary = function() { return getAsObservableResultData.apply(this, ["summary"].concat(_.argsToArray(arguments))) }
   Rest.prototype.tagsummary = function() { return getAsObservableResultData.apply(this, ["summary-tags"].concat(_.argsToArray(arguments))) }
-  // unused Jro
+
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }

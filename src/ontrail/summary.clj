@@ -65,7 +65,6 @@
         summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))] 
     {:user user :sports (conj summary-sports (get-summary cond-with-user "Kaikki"))}))
 
-
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)
@@ -81,16 +80,6 @@
 (defn get-overall-summary [user]
   (.trace logger (str "Getting overall summary: " user))
   (get-overall-summary-cond user {}))
-                            
-(defn get-distinct-tags [condition]
-  (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
-
-(defn get-overall-tags-summary [user]
-  (let [tags (filter (partial not= "") (get-distinct-tags {:user user}))]
-    {:user user :sports (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} %) tags)) }))
-
-(defn get-distinct-sports [condition]
-  (mc/distinct EXERCISE "sport" condition))
 
 (defn get-season-months [user year]
   (let [pyear (- year 1)
