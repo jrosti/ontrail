@@ -242,29 +242,34 @@
     </section>
 
     <section role="register" data-mode="add">
-      <article class="register-form">
+      <article class="edit-form">
         <h2>Rekisteröidy käyttäjäksi</h2>
         <form id="register-form" method="post">
           <div>
             <label>Käyttäjätunnus</label>
-            <input id="new-username" name="username" class="reset" placeholder="Käyttäjätunnus"/>
-            <em class="error title-required">Käyttäjätunnus vaaditaan</em>
+            <input id="ex-username" name="username" class="reset" placeholder="Käyttäjätunnus"/>
+            <em class="error username-required">Käyttäjätunnus vaaditaan</em>
+            <em class="error user-exists">Tunnus on jo käytössä</em>
           </div>
           <div>
             <label>Salasana</label>
-            <input id="new-password1" name="password" class="reset" type="password" placeholder="Salasana"/>
+            <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana"/>
+            <em class="error password-required">Salasana vaaditaan</em>
+            <em class="error user-exists">Salasanassa pitää olla vähintään kuusi merkkiä</em>
           </div>
           <div>
             <label>Salasana uudelleen</label>
-            <input id="new-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+            <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+            <em class="error user-exists">Salasanat eivät vastaa toisiaan</em>
           </div>
           <div>
             <label>Sähköpostiosoite</label>
-            <input id="new-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
+            <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
+            <em class="error email-required">Sähköpostiosoite vaaditaan</em>
           </div>
           <div>
               <label></label>
-              <a id="register" class="button register">Rekisteröidy</a>
+              <a id="register-user" class="button register">Rekisteröidy</a>
             </div>
         </form>
       </article>

@@ -276,6 +276,9 @@
 
     // Lisää lenkki
     var resetEditor = function() {
+      var tomorrow = (new XDate()).addDays(1).clearTime()
+      $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
+
       $("#add-exercise-form .reset").attr('value', '')
       $("#ex-sports option").removeAttr('selected')
       $("#ex-tags option").removeAttr('selected')
@@ -313,7 +316,11 @@
       $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
     }
     
-    var renderAddExercise = function() { $("[role='addex']").attr('data-mode', 'add') }
+    var renderAddExercise = function() {
+      var tomorrow = (new XDate()).addDays(1).clearTime()
+      $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
+
+      $("[role='addex']").attr('data-mode', 'add') }
     $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
@@ -339,7 +346,7 @@
     // luo lenkki -validaatio
     var require = function(field) {
       var validation = mkValidation($('#ex-' + field).changes(), requiredV())
-      validation.subscribe(toggleEffect($("." + field + "-required")))
+      validation.doAction(_.partial(debug, "foo")).subscribe(toggleEffect($("." + field + "-required")))
       validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
     }
@@ -376,9 +383,6 @@
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
-    var tomorrow = (new XDate()).addDays(1).clearTime()
-    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
-
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
         'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
@@ -391,8 +395,10 @@
       $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
       $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
       $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
-
     }
+
+    var registerValidations = _.flatten([_.map(['username', 'password', 'email'], require)])
+    combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     // run our function on load
     if (!Modernizr.touch) {
