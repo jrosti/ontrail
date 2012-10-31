@@ -12,19 +12,6 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-
-(def TRUNCATE 110)
-
-(defn strip-and-truncate [s]
-  (if (= s nil)
-    ""
-    (let [stripped (strip-html s)
-          chars (count stripped)
-          truncated-len (if (> chars TRUNCATE) TRUNCATE chars)]
-      (if (> chars TRUNCATE)
-        (str (subs stripped 0 truncated-len))
-        stripped))))
-
 (defn as-comment [comment]
   (let [id (str (:_id comment))]
     (merge (dissoc comment :_id) {:id id})))
