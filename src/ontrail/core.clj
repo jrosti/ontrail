@@ -13,7 +13,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail summary auth crypto exercise formats nlp profile system tagsummary])
+  (:use [ontrail summary auth crypto exercise formats nlp profile system tagsummary weekly])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -64,6 +64,8 @@
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer. year))))
   (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year] (json-response (get-season-months-tags user (Integer. year))))
+
+  (GET "/rest/v1/weekly/:user" {params :params} (json-response (weekly-wrapper params)))
   
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))

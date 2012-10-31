@@ -2,6 +2,7 @@
   (:use [ontrail mongodb utils exercise])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
+            [clj-time.core :as time]
             [monger.result :as mr]
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
@@ -52,7 +53,7 @@
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
     (.debug logger (str "Terms " terms " search result count: " (count ids)))
-    (as-ex-result-list (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids)))))
+    (as-ex-result-list (sort-by :creationDate time/after? (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids))))))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)]
