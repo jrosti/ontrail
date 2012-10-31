@@ -13,6 +13,10 @@
       (str "http://www.gravatar.com/avatar/" gravatar-md5-hash)
       "/img/default-avatar.png")))
 
+(defn as-user [user]
+  {:user (:username user) :profile (:profile user) :avatar (as-gravatar user)})
+(defn as-user-list [results] (map as-user results))
+
 (defn get-avatar-url [user]
   (let [onuser (mc/find-one-as-map ONUSER {:username user})]
     (if (not-nil? onuser)
@@ -22,14 +26,14 @@
 (defn create-user [username password email gravatar]
   (let [profile {:resthr 42 :maxhr 192}]
     (.info logger (str "creating user " username " with profile " profile))
-    (mc/insert ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
+    (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
+
+(defn register-user [params]
+  (let [user (create-user (:username params) (:password params) (:email params) true)]
+    (as-user user)))
 
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
-
-(defn as-user [user]
-  {:user (:username user) :profile (:profile user) :avatar (as-gravatar user)})
-(defn as-user-list [results] (map as-user results))
 
 (defn get-user-list [rule page]
   (let [results (mq/with-collection ONUSER

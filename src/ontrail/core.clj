@@ -9,7 +9,7 @@
         [ring.middleware.params :only (wrap-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
-        [ontrail.user :only (get-avatar-url get-user get-user-list)]
+        [ontrail.user :only (get-avatar-url get-user get-user-list register-user)]
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
@@ -126,6 +126,10 @@
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
         (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
+
+  (POST "/rest/v1/register" {params :params cookies :cookies}
+      (let [user (register-user params)]
+        (json-response {"token" (auth-token user) "username" (:user user)} 200)))
 
   (route/resources "/")
   (route/not-found {:status 404}))
