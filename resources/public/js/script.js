@@ -343,13 +343,16 @@
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
 
-    // luo lenkki -validaatio
-    var require = function(field) {
-      var validation = mkValidation($('#ex-' + field).changes(), requiredV())
-      validation.doAction(_.partial(debug, "foo")).subscribe(toggleEffect($("." + field + "-required")))
+    var attachValidation = function(validator, error, field) {
+      var validation = mkValidation($('#ex-' + field).changes(), validator)
+      validation.subscribe(toggleEffect($("." + field + "-" + error)))
       validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
+
     }
+
+    // luo lenkki -validaatio
+    var require = _.partial(attachValidation, requiredV(), "required");
 
     var serverTimeValidator = function() {
       var convertToError = function(n) {
@@ -397,7 +400,10 @@
       $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
     }
 
-    var registerValidations = _.flatten([_.map(['username', 'password', 'email'], require)])
+    var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
+    var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
+
+    var registerValidations = _.flatten([_.map(['username', 'password'], require)], pwdLengthValidation, emailValidation)
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     // run our function on load
