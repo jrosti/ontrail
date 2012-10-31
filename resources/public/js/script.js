@@ -283,7 +283,7 @@
       $("#duration-hint").html("")
       $("#ex-body").setCode("")
     }
-    var showExercise = function(ex) { resetEditor(); showPage("ex"); renderSingleExercise(ex) }
+    var showExercise = function(ex) { resetEditor(); showPage("ex", ex.id); renderSingleExercise(ex) }
     var addExercises = $('#add-exercise').clickAsObservable().select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
 

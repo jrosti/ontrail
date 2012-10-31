@@ -64,11 +64,10 @@
 (defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))
   (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
-        str-id (str (:_id ret))
-        tret (assoc  (dissoc ret :_id) :id str-id)]
+        str-id (str (:_id ret))]
     (insert-exercise-inmem-index ret)
-    (.trace logger (str (:user params) " created ex " ret))
-    (as-ex-result tret)))
+    (.trace logger (str (:user params) " created ex " ret " with id " str-id))
+    (as-ex-result ret)))
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
