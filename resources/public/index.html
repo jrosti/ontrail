@@ -55,7 +55,8 @@
       <ul>
         <li><a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a></li>
         <li class="right login">
-          <a class="logged-out" id="login-link">Kirjaudu sisään</a>
+          <a class="pageLink logged-out" rel="register">Luo tunnus</a>
+            <a class="logged-out" id="login-link">Kirjaudu sisään</a>
           <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
           <form id="login-form" method="post">
             <input id="username" name="username" type="text" placeholder="Username" />
@@ -236,6 +237,35 @@
             <a id="add-exercise" class="button addExercise add">Lisää lenkki</a>
             <a id="edit-exercise" class="button editExercise edit">Muokkaa lenkkiä</a>
           </div>
+        </form>
+      </article>
+    </section>
+
+    <section role="register" data-mode="add">
+      <article class="register-form">
+        <h2>Rekisteröidy käyttäjäksi</h2>
+        <form id="register-form" method="post">
+          <div>
+            <label>Käyttäjätunnus</label>
+            <input id="new-username" name="username" class="reset" placeholder="Käyttäjätunnus"/>
+            <em class="error title-required">Käyttäjätunnus vaaditaan</em>
+          </div>
+          <div>
+            <label>Salasana</label>
+            <input id="new-password1" name="password" class="reset" type="password" placeholder="Salasana"/>
+          </div>
+          <div>
+            <label>Salasana uudelleen</label>
+            <input id="new-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+          </div>
+          <div>
+            <label>Sähköpostiosoite</label>
+            <input id="new-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
+          </div>
+          <div>
+              <label></label>
+              <a id="register" class="button register">Rekisteröidy</a>
+            </div>
         </form>
       </article>
     </section>

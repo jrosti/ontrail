@@ -109,6 +109,7 @@ body[data-page="ex"] section[role="ex"],
 body[data-page="summary"] section[role="summary"],
 body[data-page="user"] section[role="content"],
 body[data-page="tag"] section[role="content"],
+body[data-page="register"] section[role="register"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
@@ -122,6 +123,7 @@ body[data-page="users"] a[rel="users"],
 body[data-page="profile"] a[rel="profile"],
 body[data-page="systemstats"] section[role="systemstats"],
 body[data-page="addex"] a[rel="addex"],
+body[data-page="register"] a[rel="register"],
 body[data-page="main"] a[rel="main"] {
   font-weight: bold;
 }
@@ -156,7 +158,6 @@ label {
   font-weight: bold;
   font-size: 1.2em;
   vertical-align: middle;
-  padding: 40px 0;
 }
 input,
 textarea {
