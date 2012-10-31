@@ -127,14 +127,14 @@ function orderV() {
 // () -> ((String, String) -> ValidationResult)
 function matchingValuesV() {
   return function(x1, x2) {
-    return ($.trim(x1).toLowerCase() == $.trim(x2).toLowerCase()).orFailure("match")
+    return ($.trim(x1) === $.trim(x2)).orFailure("match")
   }
 }
 
 // () -> ((String, String) -> ValidationResult)
 function matchingRawValuesV() {
   return function(x1, x2) {
-    return (x1.toLowerCase() == x2.toLowerCase()).orFailure("match")
+    return (x1 === x2).orFailure("match")
   }
 }
 
