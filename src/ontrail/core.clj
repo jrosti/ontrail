@@ -68,7 +68,8 @@
   (GET "/rest/v1/weekly/:user" {params :params} (json-response (weekly-wrapper params)))
   
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
-  (POST "/rest/v1/profile" {params :params cookies :cookies} (json-response (post-profile (user-from-cookie cookies) params)))
+  (POST "/rest/v1/profile" {params :params cookies :cookies}
+    (is-authenticated? cookies (json-response (post-profile (user-from-cookie cookies) params))))
 
   (GET "/rest/v1/email" {cookies :cookies} (json-response {:email (:email (get-user (user-from-cookie cookies)))}))
   
