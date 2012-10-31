@@ -13,8 +13,13 @@
         week-stops (time/plus midnight (time/days (- 8 dow)))]
     (time/interval week-starts week-stops)))
 
-(defn preceding-five-weeks [dt]
-  nil)
+(defn recur-weeks [args &] nil)
+
+(defn summary-weeks [user start-date stop-date]
+  (let [first-week (week-period start-date)
+        last-week (week-period stop-date)
+        distinct-sports (mc/distinct EXERCISE "sport" {:user user :creationDate {:$gte (.getStart first-week) :$lte (.getEnd last-week)}})]
+    {:header distinct-sports :weeks (recur-weeks user first-week last-week distinct-sports)}))
 
 (defn weekly-wrapper [params]
   {})
