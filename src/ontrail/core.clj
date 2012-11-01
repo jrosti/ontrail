@@ -130,7 +130,7 @@
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
       (let [user (register-user params)]
-        (json-response {"token" (auth-token user) "username" (:user user)} 200)))
+        (json-response {"token" (auth-token user) "username" (:username user)} 200)))
 
   (route/resources "/")
   (route/not-found {:status 404}))
