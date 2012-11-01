@@ -32,6 +32,11 @@
       var values = "body=" + encodeURIComponent($('#comment-body').getCode())
       return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
     }
+
+    var postRegisterUser = function() {
+      return OnTrail.rest.postAsObservable("register", $('#register-form').serialize())
+    }
+
     var deleteExerciseOrComment = function() {
       return OnTrail.rest.deleteAsObservable.apply(OnTrail.rest, arguments);
     }
@@ -136,9 +141,10 @@
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
+    var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser).where(isSuccess).select(ajaxResponseData);
 
     // create session
-    var sessions = OnTrail.session.create(logins, logouts.mergeTo(loginFails));
+    var sessions = OnTrail.session.create(logins.mergeTo(registerUsers), logouts.mergeTo(loginFails));
 
     // loggedIn and loggedOut state resolved from session
     var loggedIns = sessions.where(identity)
