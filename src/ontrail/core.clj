@@ -101,7 +101,7 @@
          (if (= "" duration)
            (json-response {:message "invalid-duration"} 400)
            (json-response {:success true :time duration}))))
-  
+
   (GET "/rest/v1/parse-distance/:distance" [distance]
        (json-response {:distance (to-human-distance (parse-distance distance))}))
   
@@ -131,6 +131,12 @@
   (POST "/rest/v1/register" {params :params cookies :cookies}
       (let [user (register-user params)]
         (json-response {"token" (auth-token user) "username" (:username user)} 200)))
+
+  (GET "/rest/v1/username-available/:username" [username] ;; XXX throws
+    (let [user (get-user username)]
+      (if (= user nil)
+        (json-response {:success true})
+        (json-response {:message "username-exists"} 400))))
 
   (route/resources "/")
   (route/not-found {:status 404}))
