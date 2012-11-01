@@ -206,7 +206,7 @@
       if ($.address.value()) return splitM($.address.value());
       return (user && "summary") || "latest"
     }
-    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs))
+    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs)).mergeTo(registerUsers.select(always("profile")))
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
