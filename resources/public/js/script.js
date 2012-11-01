@@ -276,8 +276,6 @@
 
     // Lisää lenkki
     var resetEditor = function() {
-      var tomorrow = (new XDate()).addDays(1).clearTime()
-      $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
 
       $("#add-exercise-form .reset").attr('value', '')
       $("#ex-sports option").removeAttr('selected')
@@ -317,9 +315,6 @@
     }
     
     var renderAddExercise = function() {
-      var tomorrow = (new XDate()).addDays(1).clearTime()
-      $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: tomorrow, startField: $('#ex-date'), locale: DateLocale.FI })
-
       $("[role='addex']").attr('data-mode', 'add') }
     $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
 
@@ -386,6 +381,8 @@
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
+    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: "today", startField: $('#ex-date'), locale: DateLocale.FI })
+
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
         'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
@@ -403,7 +400,11 @@
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
     var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
 
-    var registerValidations = _.flatten([_.map(['username', 'password'], require)], pwdLengthValidation, emailValidation)
+    var samePassword = mkValidation($('#ex-password').changes().combineLatest($('#ex-password2').changes(), asArgs), matchingValuesV())
+    samePassword.subscribe(toggleEffect($(".passwords-do-not-match")))
+    samePassword.subscribe(toggleClassEffect($('#ex-password2'), "has-error"))
+
+    var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     // run our function on load

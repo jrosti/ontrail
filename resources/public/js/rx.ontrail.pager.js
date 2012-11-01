@@ -17,7 +17,7 @@
 
   Rx.Observable.prototype.scrollWith = function(action, element) {
     return this.distinctUntilChanged().doAction(function() { element.html("") })
-      .selectArgs(function(item) {
+      .selectArgs(function() {
         var partialAppliedArgs = [action].concat(_.argsToArray(arguments))
         return OnTrail.pager.create(_.partial.apply(_.partial, partialAppliedArgs), element)
       }).switchLatest()
