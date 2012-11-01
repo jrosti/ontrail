@@ -358,22 +358,6 @@
     var require = _.partial(attachValidation, requiredV(), "required");
 
     var serverTimeValidator = function() {
-      var convertToError = function(n) {
-        function toNext(x) { return new Rx.Notification.createOnNext(x) }
-
-        switch (n.kind) {
-          case 'E':
-            try {
-              return toNext([$.parseJSON(n.value.jqXHR.responseText)['message']])
-            } catch (e) { return n }
-          case 'N': {
-            if (n.value.jqXHR.status == 200 && n.value.data.success !== false) return toNext([])
-            else return toNext($.parseJSON(n.value.jqXHR.responseText)['message']) // check if this could be return as array instead
-          }
-          default : return n
-        }
-      }
-
       return function(value) {
         if ($.trim(value) == "") return Rx.Observable.returnValue([])
         var request = OnTrail.rest.durationV(value)
@@ -412,7 +396,13 @@
     samePassword.subscribe(toggleEffect($(".passwords-do-not-match")))
     samePassword.subscribe(toggleClassEffect($('#ex-password2'), "has-error"))
 
-    var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation])
+    var usernameAvailableValidator = createAjaxValidator(OnTrail.rest.usernameV);
+    var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation
+    usernameExistsValidation.subscribe(toggleEffect($(".user-exists")))
+    usernameExistsValidation.subscribe(toggleClassEffect($('#ex-username'), "has-error"))
+
+
+    var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     // run our function on load

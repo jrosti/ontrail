@@ -274,6 +274,34 @@ function convertToResponseNotification(n) {
   }
 }
 
+var convertToError = function(n) {
+  function toNext(x) { return new Rx.Notification.createOnNext(x) }
+
+  switch (n.kind) {
+    case 'E':
+      try {
+        return toNext([$.parseJSON(n.value.jqXHR.responseText)['message']])
+      } catch (e) { return n }
+    case 'N': {
+      if (n.value.jqXHR.status == 200 && n.value.data.success !== false) return toNext([])
+      else return toNext($.parseJSON(n.value.jqXHR.responseText)['message']) // check if this could be return as array instead
+    }
+    default : return n
+  }
+}
+
+var createAjaxValidator = function(ajax) {
+  return function(){
+    return function(value) {
+      if ($.trim(value) == "") return Rx.Observable.returnValue([])
+      var request = ajax(value)
+      return request.materialize()
+        .select(convertToError)
+        .dematerialize()
+    }
+  }
+}
+
 // Observable String -> String -> (String -> Validation) -> (Validation, Observable a, Observable a)
 function mkServerValidation(observable, url, validation, _method) {
   var method = _method || "GET"
@@ -290,6 +318,8 @@ function mkServerValidation(observable, url, validation, _method) {
       }}
       
   }
+
+  console.log("validate url " + url)
 
   var throttle = observable.throttle(133).distinctUntilChanged()
   var serverHit = throttle.select(validation(url)).switchLatest().publish()
