@@ -29,8 +29,7 @@
     (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
 
 (defn register-user [params]
-  (let [user (create-user (:username params) (:password params) (:email params) true)]
-    (as-user user)))
+  (create-user (:username params) (:password params) (:email params) true))
 
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))

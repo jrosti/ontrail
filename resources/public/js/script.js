@@ -141,7 +141,9 @@
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser).where(isSuccess).select(ajaxResponseData);
+    var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser)
+      .doAction(function() { $('#register-form')[0].reset() })
+      .where(isSuccess).select(ajaxResponseData);
 
     // create session
     var sessions = OnTrail.session.create(logins.mergeTo(registerUsers), logouts.mergeTo(loginFails));
