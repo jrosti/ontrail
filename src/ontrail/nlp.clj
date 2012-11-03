@@ -40,7 +40,7 @@
                "Sähly" "pelasi sählyä" 
                "Tanssi" "tanssi" 
                "Tennis" "pelasi tennistä" 
-               "Triathlon" "juoksi, hiihti ja pyöräili" 
+               "Triathlon" "ui, pyöräili ja juoksi" 
                "Uinti" "ui" 
                "Vaellus" "vaelsi" 
                "Venyttely" "venytteli" 
