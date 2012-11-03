@@ -4,7 +4,7 @@ Ennen launchia:
 
 * ~~Yksittäisen lenkin näkymä~~
 * ~~Kommentointi~~
-* Create users
+* ~~Create users~~
 * ~~Lenkkien validaatio~~
 * ~~Lenkkien muokkaus~~
 * ~~Wysiwyg~~
