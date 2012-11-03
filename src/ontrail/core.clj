@@ -65,7 +65,8 @@
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer. year))))
   (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year] (json-response (get-season-months-tags user (Integer. year))))
 
-  (GET "/rest/v1/weekly/:user" {params :params} (json-response (weekly-wrapper params)))
+  (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
+       (json-response (generate-month user (Integer. year) (Integer. month))))
   
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies}

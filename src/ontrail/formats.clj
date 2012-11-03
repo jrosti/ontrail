@@ -52,7 +52,7 @@
     (if (> km 0)
       (if (= m 0)
         (str km " km")
-        (str km "," (string/replace  (format "%03d" (int m)) #"0*$" "")  " km"))
+        (str km "," (string/replace  (format "%03d" (int m)) #"00*$" "0")  " km"))
       (if (> m 0)
         (str (int m) "m")
         "")))))

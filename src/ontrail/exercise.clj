@@ -24,6 +24,7 @@
         comments (map as-comment (:comments exercise))
         distance (to-human-distance (:distance exercise))
         comment-count (if-not (nil? comments) (count comments) 0)
+        avghr (if (> (:avghr exercise) 0) (:avghr exercise) "") 
         avatar (get-avatar-url user)
         date (to-human-date (:creationDate exercise))
         bpmdist (get-bpmdist exercise user-profile)]
@@ -39,7 +40,7 @@
      :date date
      :duration (to-human-time (:duration exercise))
      :creationDate (to-human-date (:creationDate exercise))
-     :avghr (:avghr exercise)
+     :avghr avghr
      :hrReserve heart-rate-reserve
      :pace (get-pace exercise)
      :commentCount comment-count
