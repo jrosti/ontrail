@@ -15,19 +15,28 @@
 
 (defn tags-to-string [tags]
   (apply str (interpose " " tags)))
-  
+
+(defn kms[d]
+  (str "km:" (quot d 1000)))
+
 (defn get-ex-terms [exercise]
   (let [part (partial get exercise)
-        words (.toLowerCase (str "y:" (year (:creationDate exercise)) " "
-                                 "m:" (month (:creationDate exercise)) " "
-                                 "d:" (to-human-date (:creationDate exercise)) " "
-                                  (part :user) " " (part :sport) " "
+        ex-date (:creationDate exercise)
+        ex-distance (:distance exercise)
+        words (.toLowerCase (str (part :user) " " (part :sport) " "
                                  (part :body) " " (part :title) " "
                                  (tags-to-string (part :tags))))
         clean-words (string/replace (strip-html words) #"[^a-zåäö#0-9]+" " ")
-        bare-term-list (string/split clean-words #" +")]
-    (filter not-too-short-term? bare-term-list))) ;; search terms must contain more than three letters, in order to ignore too common ones
-
+        bare-term-list (string/split clean-words #" +")
+        term-list (filter not-too-short-term? bare-term-list)
+        extra-terms (conj term-list
+                          (str "y:" (time/year ex-date))
+                          (str "m:" (time/month ex-date)))]
+    (if (number? ex-distance)
+      (conj extra-terms (kms ex-distance))
+      extra-terms)))
+      
+          
 (def inverted-index (atom {}))
 
 (defn fst [x y] x)
