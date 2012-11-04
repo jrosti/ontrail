@@ -1,5 +1,5 @@
 (ns ontrail.search
-  (:use [ontrail mongodb utils exercise])
+  (:use [ontrail mongodb utils exercise formats])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
             [clj-time.core :as time]
@@ -8,7 +8,7 @@
   (:import [org.bson.types ObjectId]))
 
 (def minimum-term-length 3)
-(def search-limit 100)
+(def search-limit 300)
 (def not-too-short-term? #(>= (count %) minimum-term-length))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -18,10 +18,13 @@
   
 (defn get-ex-terms [exercise]
   (let [part (partial get exercise)
-        words (.toLowerCase (str (part :user) " " (part :sport) " "
+        words (.toLowerCase (str "y:" (year (:creationDate exercise)) " "
+                                 "m:" (month (:creationDate exercise)) " "
+                                 "d:" (to-human-date (:creationDate exercise)) " "
+                                  (part :user) " " (part :sport) " "
                                  (part :body) " " (part :title) " "
                                  (tags-to-string (part :tags))))
-        clean-words (string/replace (strip-html words) #"[^a-zåäö0-9]+" " ")
+        clean-words (string/replace (strip-html words) #"[^a-zåäö#0-9]+" " ")
         bare-term-list (string/split clean-words #" +")]
     (filter not-too-short-term? bare-term-list))) ;; search terms must contain more than three letters, in order to ignore too common ones
 
