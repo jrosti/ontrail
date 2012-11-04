@@ -99,7 +99,7 @@
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(elem, summary) {
       var now = XDate.today();
-      var maxYear = $.isArray(summary) ? now.getFullYear() +1 : now.getFullYear()
+      var maxYear = $.isArray(summary) ? now.getFullYear() : now.getFullYear()
       var utils = {
         hasNextYear: function() {
           return function(text, render) {
@@ -121,7 +121,7 @@
         var hasSports = function(item) { return item.sports.length > 1 }
         var extendWithMonthName = function(item) { return _.extend(item, monthNames ) }
         var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
-        var sum = _.extend( { year: (summary[0].year + 1) }, { months: sums, "user": summary[0].user }, utils)
+        var sum = _.extend( { year: (summary[0].year) }, { months: sums, "user": summary[0].user }, utils)
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
         var sum = _.extend( { year: now.getFullYear() }, summary, utils)

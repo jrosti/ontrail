@@ -412,7 +412,7 @@
   <div class="subnavi">
     <a class="pageLink" data-filter="" rel="{{kind}}-{{user}}">Kaikki</a>
     <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}-{{user}}-{{year}}">Vuosi</a>
-    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}-{{user}}-{{year}}-bymonth">Kuukausittain</a>
+    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}-{{user}}-{{year}}-bymonth">Kuukausi</a>
   </div>
   <h2>Yhteenveto harjoituksista</h2>
 </script>
@@ -443,11 +443,11 @@
   <article>
     <div class="by month">
       <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}-bymonth">&larr;</a>
-      Kausi {{year}}
+      Vuosi {{year}}
       {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}-bymonth">&rarr;</a> {{/hasNextYear}}
     </div>
     {{#months}}
-    <h2 class="monthName">{{monthName}} {{year}}</h2>
+    <h2 class="monthName">{{monthName}}</h2>
     {{> summaryTemplate}}
     {{/months}}
   </article>
