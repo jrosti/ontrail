@@ -8,7 +8,7 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-;;; copy-paste from sport summary. REDO this lazy bastard!!
+;;; copy-paste from sport summary. 
 
 (defn get-distinct-tags [condition]
   (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
@@ -34,10 +34,3 @@
 (defn get-overall-tags-summary [user]
   (let [tags (filter (partial not= "") (get-distinct-tags {:user user}))]
     {:user user :sports (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} %) tags)) }))
-
-(defn get-season-months-tags [user year]
-  (let [pyear (- year 1)
-        pairs [(list pyear 10) (list pyear 11) (list pyear 12) (list year 1)
-               (list year 2) (list year 3) (list year 4) (list year 5) (list year 6)
-               (list year 7) (list year 8) (list year 9)]]
-    (map #(get-month-summary-tags user (first %) (second %)) pairs)))

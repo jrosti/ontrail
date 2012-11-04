@@ -58,32 +58,10 @@
 (defn get-summary [condition sport]
   (to-summary (get-db-summary condition) sport))
 
-(defn get-overall-summary-cond [user condition]
-  (.trace logger (str "Getting summary: " user " condition " condition))  
-  (let [cond-with-user (assoc condition :user user)
-        all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)
-        summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))] 
-    {:user user :sports (concat summary-sports [(get-summary cond-with-user "YHTEENSÄ")])}))
-
-(defn get-year-summary-sport [user year]
-  (let [first-day (time/date-time year 1 1)
-        last-day (time/date-time year 12 31)
-        year-cond {:creationDate {:$gte first-day :$lte last-day}}]
-    (assoc (get-overall-summary-cond user year-cond) :year year)))
-
-(defn get-month-summary-sport [user year month]
-  (let [first-day (time/date-time year month 1)
-        last-day (-> first-day (.dayOfMonth) (.withMaximumValue))
-        year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
-    (assoc (get-overall-summary-cond user year-month-cond) :year year :month (- month 1))))
-
-(defn get-overall-summary [user]
-  (.trace logger (str "Getting overall summary: " user))
-  (get-overall-summary-cond user {}))
-
-(defn get-season-months [user year]
-  (let [pyear (- year 1)
+(defn get-season-months [summary-fun user prev-year]
+  (let [pyear (- prev-year 1)
+        year prev-year
         pairs [(list pyear 10) (list pyear 11) (list pyear 12) (list year 1)
                (list year 2) (list year 3) (list year 4) (list year 5) (list year 6)
                (list year 7) (list year 8) (list year 9)]]
-    (map #(get-month-summary-sport user (first %) (second %)) pairs)))
+    (map #(summary-fun user (first %) (second %)) pairs)))
