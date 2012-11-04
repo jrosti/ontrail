@@ -61,5 +61,5 @@
 (defn get-season-months [summary-fun user prev-year]
   (let [pyear (- prev-year 1)
         year prev-year
-        pairs (for [month (range 1 13)] (list year month))]
+        pairs (reverse (for [month (range 1 13)] (list year month)))]
     (map #(summary-fun user (first %) (second %)) pairs)))

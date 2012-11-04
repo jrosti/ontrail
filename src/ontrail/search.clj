@@ -55,12 +55,13 @@
 
 (defn rebuild-index []
   (do (reset! inverted-index {})
-      (reduce + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
+      (apply + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
 
 (defn search-ids [& terms]
   (let [filtered-terms (filter not-too-short-term? terms)]
-    (take search-limit (reduce clojure.set/intersection
-                               (map #(get @inverted-index (.toLowerCase %)) filtered-terms)))))
+    (if (> (count filtered-terms) 0)
+      (take search-limit (apply clojure.set/intersection (map #(get @inverted-index (.toLowerCase %)) filtered-terms)))
+      '())))
 
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
