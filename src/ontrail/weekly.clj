@@ -66,12 +66,6 @@
 (defn generate-month [user year month]
   (map (partial interval-as-exlist user) (week-intervals year month)))
 
-(defn summary-weeks [user start-date stop-date]
-  (let [first-week (week-period start-date)
-        last-week (week-period stop-date)
-        distinct-sports (mc/distinct EXERCISE "sport" {:user user :creationDate {:$gte (.getStart first-week) :$lte (.getEnd last-week)}})]
-    nil))
-
 (defn weekly-wrapper [params]
   {})
                            
