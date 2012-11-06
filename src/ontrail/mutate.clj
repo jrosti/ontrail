@@ -56,8 +56,7 @@
   (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
   (mc/update-by-id EXERCISE
     (ObjectId. ex-id)
-    { :user user
-      "$set" {:lastModifiedDate (time/now)}
+    { "$set" {:lastModifiedDate (time/now)}
       "$pull" {:comments {:_id (ObjectId. comment-id)}}})
   (get-ex ex-id))
 
