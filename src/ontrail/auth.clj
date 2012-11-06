@@ -29,4 +29,10 @@
           user (if from-token (get-user (:username from-token)) {})]
         (and user (= (:passwordHash from-token) (hash-part (:passwordHash user)))))))
 
-(defn user-from-cookie [cookies] (:username (user-from-token (:value (cookies "authToken")))))
+(defn user-from-cookie [cookies]
+  (try
+      (:username (user-from-token (:value (cookies "authToken"))))
+      (catch Exception exception
+        (.error logger (str "Could not get user from cookie " exception))
+        "nobody")))
+    

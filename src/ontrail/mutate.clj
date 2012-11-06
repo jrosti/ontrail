@@ -1,5 +1,5 @@
 (ns ontrail.mutate
-  (:use [ontrail mongodb search exercise user formats parser])
+  (:use [ontrail mongodb search exercise user formats parser readcount])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
@@ -91,4 +91,5 @@
                                         :user user
                                         :body (:body params)}}})
   (.debug logger (str user " created comment " params))
+  (cc-comment-ex (:id params))
   (get-ex (:id params)))

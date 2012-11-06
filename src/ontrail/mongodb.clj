@@ -4,6 +4,7 @@
 
 ;; Mongo collection names
 (def ONUSER "onuser")
+(def CCCACHE "cccache")
 (def EXERCISE "exercise")
 (def ONSPORT "onsport")
 
