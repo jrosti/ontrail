@@ -37,12 +37,16 @@
       return OnTrail.rest.postAsObservable("register", $('#register-form').serialize())
     }
 
-    var confirmDelete = function(type, id) {
-      return $("#dialog-delete-ex-confirm").dialogAsObservable({
+    var confirmDelete = function(dialog, type, id) {
+      return $(dialog).dialogAsObservable({
         resizable: false,
         modal: true
       }, [{id: "cancel", name: "Peruuta"}, {id: "delete", name: "Poista!"}]).take(1).where(partialEquals("delete")).select(always([type, id]))
+
     }
+
+    var confirmDeleteEx = _.partial(confirmDelete, "#dialog-delete-ex-confirm")
+    var confirmDeleteComment = _.partial(confirmDelete, "#dialog-delete-comment-confirm")
 
     var deleteExerciseOrComment = function() {
       return OnTrail.rest.deleteAsObservable.apply(OnTrail.rest, arguments);
@@ -191,7 +195,7 @@
     var deleteClicks = clickedLinks.combineWithLatestOf(sessions)
       .whereArgs(function(elem, user) { return $(elem).hasClass('delete') && user && $(elem).attr("data-user") == user})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteClicks.selectMany(confirmDelete).selectArgs(first)
+    deleteClicks.selectMany(confirmDeleteEx).selectArgs(first)
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
       $("*[data-id='" + data.id + "']").remove()
     })
@@ -204,7 +208,7 @@
     var deleteCommentClicks = clickedLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteCommentClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
+    deleteCommentClicks.selectMany(confirmDeleteComment).selectArgs(first).selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // toggle pages when pageLink is clicked
