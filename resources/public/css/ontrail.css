@@ -374,7 +374,7 @@ html .continuousCalendarContainer .popUpContainer {
   position: absolute;
 }
 .new-comments {
-  color: #4D6DD1;
+  color: #C515DD;
 }
 .error {
   color: red;
@@ -604,4 +604,10 @@ body[data-filter="by-month"] .by.month .prev {
 }
 h2.monthName {
   text-transform: capitalize;
+}
+.ui-dialog-titlebar-close {
+  display: none;
+}
+.ui-widget {
+  font-size: 1em;
 }

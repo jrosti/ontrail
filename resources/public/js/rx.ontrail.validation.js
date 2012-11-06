@@ -319,8 +319,6 @@ function mkServerValidation(observable, url, validation, _method) {
       
   }
 
-  console.log("validate url " + url)
-
   var throttle = observable.throttle(133).distinctUntilChanged()
   var serverHit = throttle.select(validation(url)).switchLatest().publish()
   serverHit.connect()

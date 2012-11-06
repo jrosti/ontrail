@@ -37,6 +37,13 @@
       return OnTrail.rest.postAsObservable("register", $('#register-form').serialize())
     }
 
+    var confirmDelete = function(type, id) {
+      return $("#dialog-delete-ex-confirm").dialogAsObservable({
+        resizable: false,
+        modal: true
+      }, [{id: "cancel", name: "Peruuta"}, {id: "delete", name: "Poista!"}]).take(1).where(partialEquals("delete")).select(always([type, id]))
+    }
+
     var deleteExerciseOrComment = function() {
       return OnTrail.rest.deleteAsObservable.apply(OnTrail.rest, arguments);
     }
@@ -184,7 +191,8 @@
     var deleteClicks = clickedLinks.combineWithLatestOf(sessions)
       .whereArgs(function(elem, user) { return $(elem).hasClass('delete') && user && $(elem).attr("data-user") == user})
       .select(function(el) { return attr("rel", el).split("-") })
-    deleteClicks.selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
+    deleteClicks.selectMany(confirmDelete).selectArgs(first)
+      .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
       $("*[data-id='" + data.id + "']").remove()
     })
     // show own delete buttons

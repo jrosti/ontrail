@@ -22,10 +22,11 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chosen.css">
   <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
-  <link rel="stylesheet" href="css/ontrail.css">
   <link rel="stylesheet" href="redactor/redactor.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
   <link href='http://fonts.googleapis.com/css?family=Nosifer&subset=latin-ext' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Audiowide&subset=latin-ext' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/ontrail.css">
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
@@ -285,12 +286,14 @@
 
   </div>
 
-
+  <div id="dialog-delete-ex-confirm" title="Poista lenkki?" style="display: none">
+    <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.  Oletko varma?</p>
+  </div>
   <!-- JavaScript at the bottom for fast page loading -->
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
   <script src="js/jquery.chosen.0.9.8.min.js"></script>
   <script src="js/jquery.cookie.js"></script>
   <script src="js/jquery.md5.js"></script>
@@ -300,6 +303,7 @@
   <script src="js/xdate-0.7.js"></script>
   <script src="js/rx.min.js"></script>
   <script src="js/rx.time.min.js"></script>
+  <script src="js/rx.joinpatterns.min.js"></script>
   <script src="js/rx.jquery.min.js"></script>
   <script src="js/rx.ontrail.js"></script>
   <script src="js/rx.ontrail.jquery.js"></script>
@@ -335,7 +339,7 @@
 </script>
 <script id="exerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="preview exercise {{sport}}">
-    <!-- <a class="delete" rel="ex-{{id}}" data-user="{{user}}">Poista</a> -->
+    <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
     <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
     <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
