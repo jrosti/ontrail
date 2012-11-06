@@ -1,5 +1,5 @@
 (ns ontrail.search
-  (:use [ontrail mongodb utils exercise formats])
+  (:use [ontrail mongodb utils exercise formats readcount])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
             [clj-time.core :as time]
@@ -66,7 +66,7 @@
 (defn search [& terms]
   (let [ids  (apply search-ids terms)]
     (.debug logger (str "Terms " terms " search result count: " (count ids)))
-    (as-ex-result-list (sort-by :creationDate time/after? (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids))))))
+    (as-ex-result-list zero-fun (sort-by :creationDate time/after? (filter (partial not= nil) (map #(mc/find-one-as-map EXERCISE {:_id (ObjectId. %)}) ids))))))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)]
