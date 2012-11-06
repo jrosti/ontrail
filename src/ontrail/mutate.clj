@@ -67,7 +67,7 @@
         str-id (str (:_id ret))]
     (insert-exercise-inmem-index ret)
     (.trace logger (str (:user params) " created ex " ret " with id " str-id))
-    (as-ex-result ret)))
+    (as-ex-result zero-fun ret)))
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
@@ -78,7 +78,7 @@
     (.debug logger (str "Updated " (:id params) " with status "  write-result)))
   (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
     (.debug logger (str (:id params) res))
-    (as-ex-result res)))
+    (as-ex-result zero-fun res)))
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))
