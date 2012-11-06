@@ -344,11 +344,11 @@
     
     <div class="preview">{{#trunc}}{{/trunc}} 
     <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
-    {{#newComments}}<span class="new-comments">{{commentCount}} kommenttia, {{newComments}} uutta.</span>{{/newComments}}</a></div> 
+    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></div> 
     <div class="full">{{{body}}}</div>
     {{> tagsExpandedTemplate}}
     <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
-    {{#newComments}}<span class="new-comments">{{commentCount}} kommenttia, {{newComments}} uutta.</span>{{/newComments}}</a></p>
+    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
   </article>
 </script>
 
