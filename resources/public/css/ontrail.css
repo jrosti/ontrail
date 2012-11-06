@@ -577,7 +577,8 @@ body .subnavi {
   vertical-align: bottom;
   line-height: 40px;
 }
-body .by.year {
+body .by.year,
+body .by.month {
   display: none;
 }
 body[data-filter="by-year"] .by.year {

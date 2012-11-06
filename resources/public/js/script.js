@@ -222,7 +222,7 @@
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEquals("summary")).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("by-year")
       else if (arguments.length == 4) setFilter("by-month")
       else setFilter("")
