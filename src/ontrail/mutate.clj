@@ -23,10 +23,10 @@
                  :creationDate creation-date
                  :lastModifiedDate last-modified
                  :user user}
-        body (if (nil? (:body user-ex)) "" (:body user-ex)) ;; disallow nil body
+        body (if (nil? (:body user-ex)) "" (:body user-ex))
         tags (parse-tags (:tags user-ex))
         avghr (parse-natural (:avghr user-ex))
-        distance (parse-distance (:distance user-ex))]
+        distance (parse-distance (:distance user-ex) (:duration bare-ex)]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)

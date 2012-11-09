@@ -68,7 +68,10 @@
    {:re #"^([0-9]+) *km$" :conv kilometers}])
 
 (defn parse-distance [dist]
-  (some identity (map #(try-parse % dist) distance-regexps)))
+  (let [parse-result (some identity (map #(try-parse % dist) distance-regexps))]
+    (if (> parse-result 1000000)
+      (quot parse-result 1000)
+      parse-result)))
 
 (defn parse-tags
   ([] '())
