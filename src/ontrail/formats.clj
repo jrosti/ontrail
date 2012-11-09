@@ -27,6 +27,7 @@
 (defn pace-conversion-fun [sport]
   (case sport
     "Pyöräily" to-human-pace-kmh
+    "Rullaluistelu" to-human-pace-kmh
     to-human-pace-minkm))
 
 (defn get-pace [exercise]

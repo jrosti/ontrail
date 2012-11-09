@@ -142,6 +142,7 @@
     }
 
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
+    var renderDistanceHint = function(distance) { $('#distance-hint').text(distance.distance) }
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
@@ -302,6 +303,7 @@
       $("#ex-tags option").removeAttr('selected')
       $("#ex_tags_chzn .search-choice").remove()
       $("#duration-hint").html("")
+      $("#distance-hint").html("")
       $("#ex-body").setCode("")
     }
     var showExercise = function(ex) { resetEditor(); showPage("ex", ex.id); renderSingleExercise(ex) }
@@ -379,10 +381,23 @@
           .dematerialize()
       }}
 
+    var serverDistanceValidator = function() {
+      return function(value) {
+        if ($.trim(value) == "") return Rx.Observable.returnValue([])
+        var request = OnTrail.rest.distanceV(value)
+        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDistanceHint)
+        return request.materialize()
+          .select(convertToError)
+          .dematerialize()
+      }}
+
     var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/', serverTimeValidator).validation
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
     timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
-    var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation])
+
+    var distanceValidation = mkServerValidation($('#ex-distance').changes(), '/rest/v1/parse-distance/', serverDistanceValidator).validation
+  
+    var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: "today", startField: $('#ex-date'), locale: DateLocale.FI })

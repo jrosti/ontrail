@@ -68,10 +68,20 @@
    {:re #"^([0-9]+) *km$" :conv kilometers}])
 
 (defn parse-distance [dist]
-  (let [parse-result (some identity (map #(try-parse % dist) distance-regexps))]
-    (if (> parse-result 1000000)
-      (quot parse-result 1000)
-      parse-result)))
+  (try
+    (let [parse-result (some identity (map #(try-parse % dist) distance-regexps))]
+      (case dist
+        "" 0
+        "kilsa" 1000
+        "maraton" 42195
+        "mara" 42195
+        "maili" 1609
+        (if (>= parse-result 1000000) ;; bare number is interpreted as meters, if it is over "1000km"
+          (quot parse-result 1000)
+          parse-result)))
+    (catch Exception exception
+        0)))
+  
 
 (defn parse-tags
   ([] '())

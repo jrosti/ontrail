@@ -26,7 +26,7 @@
         body (if (nil? (:body user-ex)) "" (:body user-ex))
         tags (parse-tags (:tags user-ex))
         avghr (parse-natural (:avghr user-ex))
-        distance (parse-distance (:distance user-ex) (:duration bare-ex)]
+        distance (parse-distance (:distance user-ex))]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)

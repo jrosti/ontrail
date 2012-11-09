@@ -38,6 +38,7 @@
   Rest.prototype.profile = function(user) { return getAsObservableResultData("profile", user) }
   Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }
   Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
+  Rest.prototype.distanceV = function(distance) { return getAsObservable("parse-distance", distance) }
   Rest.prototype.usernameV = function(username) { return getAsObservable("username-available", username) }
 
   // user search
