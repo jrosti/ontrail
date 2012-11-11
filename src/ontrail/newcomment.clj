@@ -30,7 +30,7 @@
 (defn newcount-reset [user id]
   (dosync
    (let [user-cache-ref (@users-cache user)]
-     (if (= user-cache-ref nil)
+     (if (not= user-cache-ref nil)
        (let [user-cache @user-cache-ref
              id-key (keyword id)]
          (if (contains? user-cache id-key)
