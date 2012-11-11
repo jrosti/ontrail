@@ -16,11 +16,11 @@
      ((alter users-cache assoc user (ref {})) user))))
 
 (defn newcount-get-new [user id]
-  (dosync
-   (let [user-cache (get-newcount user)]
-     (if (and (not= nil user-cache) (contains? @user-cache id))
-       (:c (@user-cache id))
-       0))))
+  (let [user-cache (get-newcount user)]
+    (.info logger (str "User " user " cache " (:c (@user-cache id) )))
+    (if (and (not= nil user-cache) (contains? @user-cache id))
+      (:c (@user-cache id))
+      0)))
   
 (defn newcount-reset [user id]
   (dosync
@@ -39,7 +39,6 @@
        (alter user-newcount-ref assoc id {:ts now :c 1})))))
 
 (defn newcount-cache-inc [id user] (newcount-cache-mod + id user))
-(defn newcount-cache-dec [id user] (newcount-cache-mod - id user))
 
 (defn zero-cache [id] 0)
 
@@ -50,8 +49,8 @@
 
 (defn newcount-comment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache increment. Distributed to: " (count (map (partial newcount-cache-inc id) users)))))))
+    (future (.debug logger (str "Comment cache increment " id ". Distributed to: " (count (map (partial newcount-cache-inc id) users)))))))
 
 (defn newcount-uncomment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache decrement. Distributed to: " (count (map (partial newcount-cache-dec id) users)))))))
+    (future (.debug logger (str "Comment cache reset. " id "Distributed to: " (count (map #(newcount-reset % id) users)))))))
