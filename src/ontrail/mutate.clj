@@ -82,19 +82,18 @@
   (mc/update-by-id EXERCISE
     (ObjectId. ex-id)
     { "$set" {:lastModifiedDate (time/now)}
-      "$pull" rule}))
+      "$pull" rule})
+  (get-ex ex-id))
 
 (defn delete-own-comment [user ex-id comment-id]
   (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
-  (delete-comment ex-id {:comments {:_id (ObjectId. comment-id) :user user}})
-  (get-ex ex-id))
+  (delete-comment ex-id {:comments {:_id (ObjectId. comment-id) :user user}}))
 
 (defn delete-own-ex-comment [user ex-id comment-id]
   (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
   (let [ex (get-ex ex-id)]
     (if (= (:user ex) user)
       (delete-comment ex-id {:comments {:_id (ObjectId. comment-id)}})
-      (.error logger (str user " trying to delete " comment-id " from ex " ex-id )))
-    ex))
+      (.error logger (str user " trying to delete " comment-id " from ex " ex-id )))))
       
     

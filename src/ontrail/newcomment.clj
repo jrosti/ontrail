@@ -50,8 +50,8 @@
 
 (defn newcount-comment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache updated. Distributed to: " (count (map (partial newcount-cache-inc id) users)))))))
+    (future (.debug logger (str "Comment cache increment. Distributed to: " (count (map (partial newcount-cache-inc id) users)))))))
 
 (defn newcount-uncomment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache updated. Distributed to: " (count (map (partial newcount-cache-dec id) users)))))))
+    (future (.debug logger (str "Comment cache decrement. Distributed to: " (count (map (partial newcount-cache-dec id) users)))))))
