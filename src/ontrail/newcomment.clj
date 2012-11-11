@@ -17,7 +17,6 @@
 
 (defn newcount-get-new [user id]
   (let [user-cache (get-newcount user)]
-    (.info logger (str "User " user " cache " (:c (@user-cache id) )))
     (if (and (not= nil user-cache) (contains? @user-cache id))
       (:c (@user-cache id))
       0)))
