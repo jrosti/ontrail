@@ -23,17 +23,6 @@
       (as-gravatar onuser)
       "/img/drno.png")))
 
-(defn create-user [username password email gravatar]
-  (let [profile {:resthr 42 :maxhr 192}]
-    (.info logger (str "creating user " username " with profile " profile))
-    (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})))
-
-(defn register-user [params]
-  (create-user (:username params) (:password params) (:email params) true))
-
-(defn get-user [username]
-  (mc/find-one-as-map ONUSER {:username username}))
-
 (defn get-user-list [rule page]
   (let [results (mq/with-collection ONUSER
     (mq/find rule)
@@ -41,6 +30,19 @@
     (mq/sort {:username 1}))]
     (.debug logger (str "Get user list " page " with " (count results) " results for " rule))
   (as-user-list results)))
+
+(defn create-user [username password email gravatar]
+  (let [profile {:resthr 42 :maxhr 192}]
+    (.info logger (str "creating user " username " with profile " profile))
+    (if (and (not= username "") (not= username "nobody") (> (count (get-user-list {:username username} 1)) 0))
+      (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})
+      (.error logger (str "creating user failed " username " with profile " profile)))))
+
+(defn register-user [params]
+  (create-user (:username params) (:password params) (:email params) true))
+
+(defn get-user [username]
+  (mc/find-one-as-map ONUSER {:username username}))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]

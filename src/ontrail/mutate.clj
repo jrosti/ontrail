@@ -1,5 +1,5 @@
 (ns ontrail.mutate
-  (:use [ontrail mongodb search exercise user formats parser readcount])
+  (:use [ontrail mongodb search exercise user formats parser newcomment])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
@@ -44,29 +44,13 @@
         {:result delete-ok? :message (str user" deleted " " exercise " ex-id) :type "ex" :id ex-id})
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
-(defn delete-own-comment [user ex-id comment-id]
-  (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
-  (mc/update-by-id EXERCISE
-    (ObjectId. ex-id)
-    { "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:_id (ObjectId. comment-id) :user user}}})
-  (get-ex ex-id))
-
-(defn delete-own-ex-comment [user ex-id comment-id]
-  (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
-  (mc/update-by-id EXERCISE
-    (ObjectId. ex-id)
-    { "$set" {:lastModifiedDate (time/now)}
-      "$pull" {:comments {:_id (ObjectId. comment-id)}}})
-  (get-ex ex-id))
-
 (defn create-ex [user params]
   (.debug logger (str (:user params) " creating ex " params))
   (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))]
     (insert-exercise-inmem-index ret)
     (.trace logger (str (:user params) " created ex " ret " with id " str-id))
-    (as-ex-result zero-fun ret)))
+    (as-ex-result ret)))
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
@@ -77,7 +61,7 @@
     (.debug logger (str "Updated " (:id params) " with status "  write-result)))
   (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
     (.debug logger (str (:id params) res))
-    (as-ex-result zero-fun res)))
+    (as-ex-result res)))
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))
@@ -90,5 +74,27 @@
                                         :user user
                                         :body (:body params)}}})
   (.debug logger (str user " created comment " params))
-  (cc-comment-ex (:id params))
+  (newcount-comment-ex (:id params))
   (get-ex (:id params)))
+
+(defn delete-comment[ex-id rule]
+  (newcount-uncomment-ex ex-id)
+  (mc/update-by-id EXERCISE
+    (ObjectId. ex-id)
+    { "$set" {:lastModifiedDate (time/now)}
+      "$pull" rule}))
+
+(defn delete-own-comment [user ex-id comment-id]
+  (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
+  (delete-comment ex-id {:comments {:_id (ObjectId. comment-id) :user user}})
+  (get-ex ex-id))
+
+(defn delete-own-ex-comment [user ex-id comment-id]
+  (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
+  (let [ex (get-ex ex-id)]
+    (if (= (:user ex) user)
+      (delete-comment ex-id {:comments {:_id (ObjectId. comment-id)}})
+      (.error logger (str user " trying to delete " comment-id " from ex " ex-id )))
+    ex))
+      
+    
