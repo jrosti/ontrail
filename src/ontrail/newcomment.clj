@@ -29,11 +29,12 @@
   
 (defn newcount-reset [user id]
   (dosync
-   (let [user-cache-ref (@users-cache user)
-         user-cache @user-cache-ref
-         id-key (keyword id)]
-     (if (and (not= nil user-cache-ref) (contains? user-cache id-key))
-       (alter user-cache-ref dissoc id-key)))))
+   (let [user-cache-ref (@users-cache user)]
+     (if (= user-cache-ref nil)
+       (let [user-cache @user-cache-ref
+             id-key (keyword id)]
+         (if (contains? user-cache id-key)
+           (alter user-cache-ref dissoc id-key)))))))
 
 (defn cache-mod[f t val] (assoc (merge-with f val {:c 1}) :ts t))
 
