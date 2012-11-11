@@ -33,6 +33,6 @@
   (try
       (:username (user-from-token (:value (cookies "authToken"))))
       (catch Exception exception
-        (.error trace (str "Could not get user from cookie " exception))
+        (.trace logger (str "Could not get user from cookie " exception))
         "nobody")))
     
