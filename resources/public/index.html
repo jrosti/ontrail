@@ -56,9 +56,9 @@
       <ul>
         <li><a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a></li>
         <li class="right login">
-          <a class="pageLink logged-out" rel="register">Luo tunnus</a>
+            <a class="pageLink logged-out" rel="register">Luo tunnus</a>
             <a class="logged-out" id="login-link">Kirjaudu sisään</a>
-          <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
+            <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
           <form id="login-form" method="post">
             <input id="username" name="username" type="text" placeholder="Username" />
             <input id="password" name="password" type="password" placeholder="Password"/>
@@ -73,39 +73,31 @@
       <div>
         <header>
           <div class="logged-in">
-            <h2>Omat toiminnot</h2>
-	    <p>
-	      <a class="pageLink" rel="addex">Lisää lenkki</a><br/>
-	      <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
-	      <a class="pageLink" rel="profile">Oma profiili</a><br/>
-	      <a class="pageLink" rel="summary">Selaa yhteenvetoja</a><br/>
-	      <a class="pageLink" rel="tagsummary">Tagit</a><br/>
-	    </p>
-	    <h2>Muut</h2>
-	    <p>
-	      <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
-	      <a class="pageLink" rel="systemstats">Ontrail palvelin</a><br/>
-            </p>
-            <p></p>
+             <h2>Omat toiminnot</h2>
+               <p>
+                  <a class="pageLink" rel="addex">Lisää lenkki</a><br/>
+                  <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
+                  <a class="pageLink" rel="profile">Oma profiili</a><br/>
+                  <a class="pageLink" rel="summary">Selaa yhteenvetoja</a><br/>
+                  <a class="pageLink" rel="tagsummary">Tagit</a><br/>
+               </p>
+             <h2>Muut</h2>
+               <p>
+                      <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
+                      <a class="pageLink" rel="systemstats">Ontrail palvelin</a><br/>
+               </p>
           </div>
-          <h3>Kehittäjille</h3>
-	  <small>
-	  <p><a href="https://www.github.com/jrosti/ontrail">Lähdekoodi</a>,
-	  <a href="https://www.github.com/jrosti/ontrail/issues">bugilistaus.</a>
-	  ja <a href="https://github.com/jrosti/ontrail/blob/master/README.md">toiveiden tynnyri.</a></p>
-	  <p>Palvelu on testivaiheessa ja sitä pävitetään
-          säännöllisesti. Viimeisimmän päivityksen ajankohdan näkee "Ontrail-palvelin" linkistä.</p>
-          <p>Palvelu on testattu parhaiten Chromella, versio 22+. Muita
-      selaimia aktiivisessa käytössä tällä hetkellä: Firefox 15+,
-          Safari 6.0 ja iOS6 iPhone iPad.</p>
-	  </small>
+          <h2>Muut</h2>
+          <p>
+          </p>
         </header>
-      </div>
     </aside>
     <section role="latest">
+      <div class="logged-in">
       <article>
         <label for="search">Etsi lenkeistä: </label> <input class="search" type="text" id="search"/>
       </article>
+      </div>
       <div id="entries"></div>
     </section>
 
@@ -126,30 +118,27 @@
       <article>
       <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Oma profiili</h2>
       <div class="details">
-	<h3>Henkilökohtaiset tiedot <sup><tiny>*)</tiny></sup></h3>
-	<div class="edit-form">
-	  Sähköposti: <span id="profile-email"></span>
-	  <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
+    <h3>Henkilökohtaiset tiedot</h3>
+    <div class="edit-form">
+      Sähköposti: <span id="profile-email"></span>
+      <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
       -palvelun avulla</a> käyttäen
       sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
       ylläpitäjän pyynnostä.</small></i></div> 
-	</div>
-	<div>
-	  <small>*) Henkilökohtaiset tiedot näkyvät vain sinulle</small>
-	</div>
-	<h3>Syketiedot</h3>
-	<form id="profile-form" class="edit-form" method="post">
+    </div>
+    <h3>Syketiedot</h3>
+    <form id="profile-form" class="edit-form" method="post">
         <div>
-	  <label for="resthr">Leposyke</label>
-	  <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
+      <label for="resthr">Leposyke</label>
+      <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
         </div>
-	<div>
+    <div>
           <label for="maxhr">Maksimisyke</label>
-	  <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
-	</div>
-	<div>
-	  <label for="aerk">Aerobinen kynnys</label>
-	  <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
+      <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
+    </div>
+    <div>
+      <label for="aerk">Aerobinen kynnys</label>
+      <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
         </div>
         <div>
           <label for="anaerk">Anaerobinen kynnys</label>
@@ -160,7 +149,7 @@
           <a id="update-profile" class="button login">Päivitä syketiedot</a>
         </div>
       </form>
-	<span id="profile-result"></span>
+    <span id="profile-result"></span>
       </div>
       </article>
     </section>
@@ -350,13 +339,18 @@
     {{did}} {{#distance}} {{distance}} ajassa {{duration}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
     {{> exerciseDetailsTemplate}}
     
-    <div class="preview">{{#trunc}}{{/trunc}} 
-    <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
-    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></div> 
+    <div class="preview logged-in">
+      {{#trunc}}{{/trunc}} 
+      <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
+      {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
+    </div>
     <div class="full">{{{body}}}</div>
+
     {{> tagsExpandedTemplate}}
-    <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
-    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
+    <div class="logged-in">
+      <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
+         {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
+    </div>
   </article>
 </script>
 
@@ -420,10 +414,12 @@
 </script>
 <script id="userHeaderTemplate" type="text/html">
   <h2>Käyttäjän {{data}} lenkit</h2>
-  <p>
-    <a class="pageLink" rel="summary-{{data}}">Yhteenvedot</a>
-    <a class="pageLink" rel="tagsummary-{{data}}">Tagi-yhteenvedot</a>
-  </p>
+  <div class="logged-in">
+    <p>
+      <a class="pageLink" rel="summary-{{data}}">Yhteenvedot</a>
+      <a class="pageLink" rel="tagsummary-{{data}}">Tagi-yhteenvedot</a>
+    </p>
+  </div>
 </script>
 <script id="tagHeaderTemplate" type="text/html">
   <h2>Tageihin "{{data}}" liittyvät lenkit</h2>
