@@ -92,6 +92,7 @@
           }
         }
       }
+      $('meta[name=description]').attr('content', exercise.user + ' ' + exercise.body);
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
       $('#comment-body').redactor(editorSettings)
     }
