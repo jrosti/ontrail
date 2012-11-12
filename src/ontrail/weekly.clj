@@ -12,9 +12,12 @@
 (defn week-number [week]
   (.get (.weekOfWeekyear (.getStart week))))
 
+(defn to-week-day-idx [date]
+  (- (time/day-of-week date) 1))
+
 (defn to-week-day [date]
   (["maanantai" "tiistai" "keskiviikko" "torstai" "perjantai" "lauantai" "sunnuntai"]
-     (- (time/day-of-week date) 1)))
+     (to-week-day-idx date)))
 
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
@@ -22,15 +25,17 @@
         user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
         distance (to-human-distance (:distance exercise))
-        date (to-human-date (:creationDate exercise))]
+        creation-date (:creationDate exercise)]        
     {:id id
      :distance distance
      :title (:title exercise)
      :tags (:tags exercise)
      :sport (:sport exercise)
-     :date date
+     :isoDate (:creationDate exercise)
+     :dayIndex (to-week-day-idx creation-date)
+     :date (to-human-date creation-date)
      :duration (to-human-time (:duration exercise))
-     :day (to-week-day (:creationDate exercise))
+     :day (to-week-day creation-date)
      :avghr (:avghr exercise)
      :hrReserve heart-rate-reserve
      :pace (get-pace exercise)})) 
