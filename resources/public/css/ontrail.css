@@ -433,6 +433,7 @@ html .continuousCalendarContainer .popUpContainer {
 }
 .edit-form #add-tags-select .select2-container-multi input {
   height: 25px;
+  width: 350px ! important;
 }
 .edit-form #add-tags-select .select2-container-multi * {
   -webkit-box-sizing: content-box;
