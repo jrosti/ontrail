@@ -227,7 +227,7 @@
       if ($.address.value()) return splitM($.address.value());
       return (user && "summary") || "latest"
     }
-    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs)).mergeTo(registerUsers.select(always("profile")))
+    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs)).mergeTo(registerUsers.select(always("profile"))).publish()
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
@@ -306,15 +306,19 @@
     // Lisää lenkki
     var resetEditor = function() {
       $("#add-exercise-form .reset").attr('value', '')
-      $("#ex-sports").select2('data', ["Juoksu"])
+      $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
       $("#ex-tags").select2("data", [])
       $("#duration-hint").html("")
       $("#distance-hint").html("")
       $("#ex-body").setCode("")
     }
-    var showExercise = function(ex) { resetEditor(); showPage("ex", ex.id); renderSingleExercise(ex) }
+
+    var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
     var addExercises = $('#add-exercise').clickAsObservable().select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
+    currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
+      if (exid === undefined) resetEditor()
+    })
 
     // muokkaa lenkkiä:
     var renderEditExercise = function(ex) {
@@ -324,7 +328,6 @@
       $("#ex-date").trigger("cal:changed")
       $("#ex-body").setCode(ex.body)
       $("#ex-sport").select2("data", [ex.sport])
-      $("#ex-sport").trigger("liszt:updated")
       if (ex.tags && ex.tags.length > 0)
         $("#ex-tags").select2("data", ex.tags)
     }
@@ -343,7 +346,9 @@
     }
     
     var renderAddExercise = function() {
-      $("[role='addex']").attr('data-mode', 'add') }
+      resetEditor()
+      $("[role='addex']").attr('data-mode', 'add')
+    }
     $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
@@ -445,5 +450,8 @@
       // and run it again every time you scroll
       $(window).scrollAsObservable().subscribe(fixMenuPosition)
     }
+
+    // initiate current page
+    currentPages.connect()
   })
 })()
