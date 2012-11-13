@@ -231,7 +231,6 @@ section {
     &.full {
       *.full { display: inherit; }
       *.preview { display: none; }
-      *.preview-new { display: none; }
     }
 
     &.preview {
@@ -239,15 +238,6 @@ section {
         height: 1.0em;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-    }
-
-    &.preview-new {
-      .body {
-        height: 1.0em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background: @content-background-new;
       }
     }
 
