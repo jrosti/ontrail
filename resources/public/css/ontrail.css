@@ -260,10 +260,19 @@ section article.full *.full {
 section article.full *.preview {
   display: none;
 }
+section article.full *.preview-new {
+  display: none;
+}
 section article.preview .body {
   height: 1.0em;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+section article.preview-new .body {
+  height: 1.0em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: #efefef;
 }
 section article ul {
   display: inline-block;

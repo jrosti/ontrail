@@ -6,6 +6,7 @@
 @bg-gradient-end: #a5ecef;
 @body-bg-color: #f0f0f0;
 @content-background: white;
+@content-background-new: #efefef;
 @login-border-color: #87dfe0;
 @menu-bg-color: white;
 @text-color: #242834;
@@ -230,6 +231,7 @@ section {
     &.full {
       *.full { display: inherit; }
       *.preview { display: none; }
+      *.preview-new { display: none; }
     }
 
     &.preview {
@@ -237,6 +239,15 @@ section {
         height: 1.0em;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+    }
+
+    &.preview-new {
+      .body {
+        height: 1.0em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        background: @content-background-new;
       }
     }
 

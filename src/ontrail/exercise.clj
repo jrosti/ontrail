@@ -17,8 +17,8 @@
     (merge (dissoc comment :_id) {:id id})))
 
 (defn as-ex-result
-  ([exercise] (as-ex-result zero-cache exercise))
-  ([newcomment-cache exercise]
+  ([exercise] (as-ex-result (time/now) zero-cache exercise))
+  ([last-visit newcomment-cache exercise]
      (let [id (str (:_id exercise))
            user (:user exercise)
            user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
@@ -32,6 +32,7 @@
            new-comments (newcomment-cache id)
            bare-ex {:id id
                     :user user
+                    :isNew (time/after? (:lastModifiedDate exercise) last-visit)
                     :distance distance
                     :title (:title exercise)
                     :body (:body exercise)
@@ -55,9 +56,9 @@
   
 (defn as-ex-result-list
   ([results]
-     (as-ex-result-list zero-cache results))
-  ([new-comment-cache results]
-     (map (partial as-ex-result new-comment-cache) results)))
+     (as-ex-result-list (time/now) zero-cache results))
+  ([last-visit new-comment-cache results]
+     (map (partial as-ex-result last-visit new-comment-cache) results)))
 
 (defn get-latest-ex-list
   ([rule page sort-rule]
@@ -67,8 +68,12 @@
                      (mq/find rule)
                      (mq/paginate :page (Integer. page) :per-page 20)
                      (mq/sort sort-rule))]
-       (.debug logger (str "Get exercise list " rule " for user " viewing-user " page=" page " with " (count results) " results."))
-       (as-ex-result-list (get-cache viewing-user) results))))
+       (let [last-visit (if (not= viewing-user "nobody")
+                         (get-last-visit viewing-user)
+                         (time/now))]
+         (visit-now viewing-user)
+         (.debug logger (str "Ex-list " rule " vu=" viewing-user " p=" page " w" (count results) " rsts. " last-visit))
+         (as-ex-result-list last-visit (get-cache viewing-user) results)))))
 
 (defn get-latest-ex-list-default-order
   ([rule page]
