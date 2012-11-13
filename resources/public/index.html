@@ -16,7 +16,7 @@
   <meta name="title" content="Ontrail" >
   <meta name="description" content="Ulkoilijan harjoituspäiväkirja." >
 
-  <link rel="image_src" href="img/share.jpg" / >
+  <link rel="image_src" href="img/share.jpg" >
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
@@ -82,25 +82,26 @@
                   <a class="pageLink" rel="user" id="my-page">Omat lenkit</a><br/>
                   <a class="pageLink" rel="profile">Oma profiili</a><br/>
                   <a class="pageLink" rel="summary">Selaa yhteenvetoja</a><br/>
+                  <a class="pageLink" rel="weekly">Harjoitusviikot</a><br/>
                   <a class="pageLink" rel="tagsummary">Tagit</a><br/>
                </p>
              <h2>Muut</h2>
                <p>
-                      <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
-                      <a class="pageLink" rel="systemstats">Ontrail palvelin</a><br/>
+                  <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
+                  <a class="pageLink" rel="systemstats">Ontrail palvelin</a><br/>
                </p>
           </div>
-          <p>
-	  How far?
-	  <i>To the next tree.</i>
+            <p>How far?
+	        <i>To the next tree.</i>
 
-	  How fast?
-	  <i>Your best effort.</i>
+	        How fast?
+	        <i>Your best effort.</i>
 
-	  How many? 
-	  <i>Until you get tired!</i>
-         </p>
+	        How many?
+	        <i>Until you get tired!</i>
+            </p>
         </header>
+      </div>
     </aside>
     <section role="latest">
       <div class="logged-in">
@@ -109,6 +110,13 @@
       </article>
       </div>
       <div id="entries"></div>
+    </section>
+
+    <section role="weekly">
+        <article>
+            <h3>Harjoitusviikot</h3>
+
+        </article>
     </section>
 
     <section role="systemstats">
@@ -207,8 +215,7 @@
           </div>
           <div>
             <label>Kesto</label>
-            <input id="ex-duration" name="duration" class="reset"
-      placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="duration-hint"></span>
+            <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="duration-hint"></span>
             <em class="error duration-required">Lenkin kesto vaaditaan</em>
             <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
           </div>
@@ -232,7 +239,6 @@
             <select id="ex-tags" data-placeholder="Lisää tageja..." multiple class="chzn-select" style="width:350px;">
             </select>
           </div>
-          <div>
           <div>
             <label>Kuvaus</label>
             <div id="ex-body"></div>
@@ -500,5 +506,5 @@
     }
   </style>
 </script>
-<body
+</body>
 </html>

@@ -78,6 +78,7 @@
 
 (defn get-ex
   ([viewing-user id]
+     (.info logger (str "User " viewing-user " getting ex with id " id))
      (newcount-reset viewing-user id)
      (get-ex id))
   ([id]
