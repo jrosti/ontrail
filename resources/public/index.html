@@ -349,7 +349,7 @@
     {{did}} {{#distance}} {{distance}} ajassa {{duration}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
     {{> exerciseDetailsTemplate}}
     
-    <div class="preview logged-in">
+    <div class="preview">
       {{#trunc}}{{/trunc}} 
       <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
       {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
@@ -357,7 +357,7 @@
     <div class="full">{{{body}}}</div>
 
     {{> tagsExpandedTemplate}}
-    <div class="logged-in">
+    <div>
       <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
          {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
     </div>
