@@ -55,7 +55,9 @@
   (some identity (map #(try-parse % dur-str) duration-regexps)))
 
 (defn parse-date [date-str]
-  (time/plus (format/parse multi-parser date-str) (time/hours 12)))
+  (if (= "" date-str)
+    (time/now)
+    (time/plus (format/parse multi-parser date-str) (time/hours 12))))
 
 (defn as-double-km [str]
   (let [x (string/replace str #"," ".")]
