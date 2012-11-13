@@ -6,12 +6,17 @@
     var entries = $("#entries")
     var userList = $("#user-results")
 
+    function selectionFormat(state) {
+      if (!state.id) return state.toString();
+      return state.text.toString();
+    }
+
     var doPostExercise = function(url) {
+      var renderSelection = _.compose(encodeURIComponent, selectionFormat)
       var values = $('#add-exercise-form').serialize()
+        + "&sport=" + renderSelection($('#ex-sport').select2("data"))
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
-        + "&tags=" +
-        _.reduce(_.flatten(["", _.map($("#ex-tags")[0].selectedOptions, function(option) { return option.value })]),
-          function(a, b) { return a + (a !== '' ? "," : "") + encodeURIComponent(b) })
+        + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
 
       return OnTrail.rest.postAsObservable(url, values)
     }
@@ -98,11 +103,14 @@
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
-      $('#ex-sport').chosen()
+      $('#ex-sport').select2({formatSelection: selectionFormat})
     }
     var renderTags = function(data) {
-      ich.tagsCreateTemplate({tags: data}).appendTo($('#ex-tags'))
-      $('#ex-tags').chosen({ "create_option": true, "persistent_create_option": true })
+      $('#ex-tags').select2({
+        tags: data,
+        tokenSeparators: [",", ";"],
+        formatSelection: selectionFormat
+      })
     }
     var renderUserList = function(data) {
       ich.usersCreateTemplate({users: data}).appendTo(userList)
@@ -297,11 +305,9 @@
 
     // Lisää lenkki
     var resetEditor = function() {
-
       $("#add-exercise-form .reset").attr('value', '')
-      $("#ex-sports option").removeAttr('selected')
-      $("#ex-tags option").removeAttr('selected')
-      $("#ex_tags_chzn .search-choice").remove()
+      $("#ex-sports").select2('data', ["Juoksu"])
+      $("#ex-tags").select2("data", [])
       $("#duration-hint").html("")
       $("#distance-hint").html("")
       $("#ex-body").setCode("")
@@ -317,10 +323,10 @@
       $("#ex-date").attr('value', ex.date)
       $("#ex-date").trigger("cal:changed")
       $("#ex-body").setCode(ex.body)
-      $("#ex-sport").val(ex.sport)
+      $("#ex-sport").select2("data", [ex.sport])
       $("#ex-sport").trigger("liszt:updated")
-      $("#ex-tags").val(ex.tags)
-      $("#ex-tags").trigger("liszt:updated")
+      if (ex.tags && ex.tags.length > 0)
+        $("#ex-tags").select2("data", ex.tags)
     }
 
     var renderProfileUpdate = function(args) {

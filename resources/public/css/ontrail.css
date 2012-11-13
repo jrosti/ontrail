@@ -419,13 +419,17 @@ html .continuousCalendarContainer .popUpContainer {
   height: 300px;
 }
 .edit-form #add-tags-select label {
-  margin-top: -17px;
+  margin-top: 15px;
 }
-.edit-form #add-tags-select .chzn-container-multi {
+.edit-form #add-tags-select .select2-container-multi {
+  width: 350px ! important;
   box-sizing: content-box;
   padding: 7px 0;
 }
-.edit-form #add-tags-select .chzn-container-multi * {
+.edit-form #add-tags-select .select2-container-multi input {
+  height: 16px;
+}
+.edit-form #add-tags-select .select2-container-multi * {
   box-sizing: content-box;
 }
 .button {
