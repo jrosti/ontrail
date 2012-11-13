@@ -13,7 +13,7 @@
 
 (def users-cache (ref {}))
 
-(defn get-or-create-newcount [user]
+(defn get-or-create-usercache [user]
   (let [users-cache-val @users-cache]
     (if (contains? users-cache-val user)
       (users-cache-val user)
@@ -41,7 +41,7 @@
 (defn newcount-cache-mod [mod id user]
   (dosync
    (let [now (System/currentTimeMillis)
-         user-newcount-ref (get-or-create-newcount user)
+         user-newcount-ref (get-or-create-usercache user)
          id-key (keyword id)]
      (if (contains? @user-newcount-ref id-key)
        (alter user-newcount-ref update-in [id-key] (partial cache-mod mod now))
@@ -58,11 +58,23 @@
 
 (defn newcount-comment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache increment " id ". Distributed to: " (count (map (partial newcount-cache-inc id) users)))))))
+    (future (.debug logger (str "Comment cache increment " id ". Distributed to: "
+                                (count (map (partial newcount-cache-inc id) users)))))))
 
 (defn newcount-uncomment-ex [id]
   (let [users (mc/distinct ONUSER "username" {})]
-    (future (.debug logger (str "Comment cache reset. " id "Distributed to: " (count (map #(newcount-reset % id) users)))))))
+    (future (.debug logger (str "Comment cache reset. " id "Distributed to: "
+                                (count (map #(newcount-reset % id) users)))))))
+
+(defn visit-now [user]
+  (dosync (let [user-cache-ref (get-or-create-usercache user)]
+            (alter user-cache-ref assoc :lastvisit (time/now)))))
+
+(defn get-last-visit [user]
+  (let [user-cache-ref (@users-cache user)]
+    (if (and (not= nil user-cache-ref) (not= nil (:lastvisit @user-cache-ref)))
+      (:lastvisit @user-cache-ref)
+      (time/date-time 2000 1 1))))
 
 (defn store-cache [user]
   (if (not= nil (@users-cache user))
