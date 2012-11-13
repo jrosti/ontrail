@@ -423,13 +423,23 @@ html .continuousCalendarContainer .popUpContainer {
 }
 .edit-form #add-tags-select .select2-container-multi {
   width: 350px ! important;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box;
   padding: 7px 0;
 }
 .edit-form #add-tags-select .select2-container-multi input {
-  height: 16px;
+  height: 25px;
 }
 .edit-form #add-tags-select .select2-container-multi * {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 .button {
