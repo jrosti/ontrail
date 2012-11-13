@@ -184,7 +184,6 @@
       _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
     })
 
-
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
     var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(target)
