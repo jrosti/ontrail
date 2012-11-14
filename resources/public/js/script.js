@@ -75,7 +75,7 @@
           return function(text, render) {
             var body = $('<div></div>').html(this.body);
             var wrapWithParagraph = function(item) { return "<p>" + item + "</p>" }
-            var iText = function(item) { return item.innerText }
+            var iText = function(item) { return $(item).text() }
             return _.reduce(_.map(body.children("*"), iText), _.partial(takeMax, wrapWithParagraph), { data: "", remaining: 150 }).data
           }
         }
