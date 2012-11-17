@@ -56,7 +56,7 @@
   (let [get-entry #(if (contains? %1 %2) (%1 %2) 0)
         acc #(+ (get-entry totals %1) (get-entry result %2))
         kw-all-distance (keyword "distance_Kaikki")
-        kw-all-duration (keyword "duration_kaikki")
+        kw-all-duration (keyword "duration_Kaikki")
         kw-sport-distance (keyword (str "distance_" (:sport result)))
         kw-sport-duration (keyword (str "duration_" (:sport result)))]
     (assoc totals
@@ -64,6 +64,8 @@
       kw-all-distance (acc kw-all-distance :distance)
       kw-sport-distance (acc kw-sport-distance :distance)
       kw-sport-duration (acc kw-sport-duration :duration))))
+
+(defn to-array [sum] nil)
 
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
@@ -88,7 +90,7 @@
       week)))
   
 (defn generate-month [user year month]
-  (map (partial interval-as-exlist user) (week-intervals year month)))
+  (reverse (map (partial interval-as-exlist user) (week-intervals year month))))
 
 (defn weekly-wrapper [params]
   {})
