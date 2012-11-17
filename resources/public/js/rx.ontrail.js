@@ -36,11 +36,12 @@
   }
   Rx.Observable.prototype.combineWithLatestOf = function() {
     var first = this
-    var latest = []
-    for(var i in arguments) {
-      arguments[i].subscribe(_.bind(function(index, value) { latest[index] = value }, null, i))
-    }
+    var args = arguments
     return Rx.Observable.create(function(subscriber) {
+      var latest = []
+      for(var i in args) {
+        args[i].subscribe(_.bind(function(index, value) { latest[index] = value }, null, i))
+      }
       var seq = first.subscribe(function(value) {
         subscriber.onNext([value].concat(latest))
       })
