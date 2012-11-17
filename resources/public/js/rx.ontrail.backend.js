@@ -25,6 +25,14 @@
 
   Rest.prototype.summary = function() { return getAsObservableResultData.apply(this, ["summary"].concat(_.argsToArray(arguments))) }
   Rest.prototype.tagsummary = function() { return getAsObservableResultData.apply(this, ["summary-tags"].concat(_.argsToArray(arguments))) }
+  Rest.prototype.weeksummary = function(user, n) {
+    var nthMonth = function(n) {
+      monthsTotal = 2011 * 12 + 11 - n
+      return [Math.floor(monthsTotal/12), monthsTotal % 12]
+    }
+
+    return getAsObservableResultData.apply(this, ["weekly-list", user].concat(nthMonth(n-1)))
+  }
 
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
