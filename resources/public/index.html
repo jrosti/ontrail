@@ -182,8 +182,21 @@
     </section>
 
     <section role="weeksummary">
-      <div id="weeksummary-header"></div>
-      <div id="weeksummary-entries"></div>
+      <div id="weeksummary-header">
+        <h2>Viikoittainen harjoitusyhteenveto</h2>
+      </div>
+      <div>
+        <article>
+          <table class="weekly">
+            <thead>
+              <tr><td colspan="0">Otsikko</td></tr>
+            </thead>
+            <tbody id="weeksummary-entries">
+
+            </tbody>
+          </table>
+        </article>
+      </div>
     </section>
 
     <section role="users">
@@ -484,6 +497,30 @@
 
 <script id="summaryItemTemplate" type="text/html">
   <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+</script>
+
+<script id="hpkWeeklyContentTemplate" type="text/html">
+  <tr><th>Viikko</th><th>Ma</th><th>Ti</th><th>Ke</th><th>To</th><th>Pe</th><th>La</th><th>Su</th></tr>
+  {{#summary}}
+    <tr>
+      <td><strong>{{week}}</strong></td>
+      {{#exs}}
+        <td>
+          {{> hpkWeeklyExTemplate}}
+        </td>
+      {{/exs}}
+    </tr>
+    <tr>
+      <th>Yhteenveto</th>
+      <th colspan="7">Tulossa!</th>
+    </tr>
+  {{/summary}}
+</script>
+
+<script id="hpkWeeklyExTemplate" type="text/html">
+  {{#exs}}
+    <span class="sport {{sport}}">{{#distance}}{{distance}}, {{/distance}}{{^distance}}{{duration}}{{/distance}}</span><br/>
+  {{/exs}}
 </script>
 
 <script id="loggedInStylesTemplate" type="text/html">
