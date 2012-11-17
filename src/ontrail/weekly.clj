@@ -52,11 +52,30 @@
     (mq/find {:user user :creationDate {:$gte start :$lte end}})
     (mq/sort {:lastModifiedDate 1})))
 
+(defn accumulate [totals result]
+  (let [get-entry #(if (contains? %1 %2) (%1 %2) 0)
+        acc #(+ (get-entry totals %1) (get-entry result %2))
+        kw-all-distance (keyword "distance_Kaikki")
+        kw-all-duration (keyword "duration_kaikki")
+        kw-sport-distance (keyword (str "distance_" (:sport result)))
+        kw-sport-duration (keyword (str "duration_" (:sport result)))]
+    (assoc totals
+      kw-all-duration (acc kw-all-duration :duration)
+      kw-all-distance (acc kw-all-distance :distance)
+      kw-sport-distance (acc kw-sport-distance :distance)
+      kw-sport-duration (acc kw-sport-duration :duration))))
+
+(defn weekly-sums [results]
+  (if (>= (count results) 1) 
+    (reduce accumulate (cons {} results))
+    {}))
+
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
       {:week (week-number week-interval)
        :from (to-human-date start) :to (to-human-date (time/minus end (time/days 1)))
+       :sums (weekly-sums results)
        :exs (map simple-result results)}))
        
 (defn weeks-from [date-time]
