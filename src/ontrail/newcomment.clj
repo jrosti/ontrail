@@ -87,7 +87,7 @@
 
 (defn newcomment-cache-store-all[]
   (let [res (count (filter (partial not= nil) (map store-cache (mc/distinct ONUSER "username" {}))))]
-    (.info logger (str "Comment count cache stored " res " caches "))))
+    (.info trace (str "Comment count cache stored " res " caches "))))
 
 (defn newcomment-cache-restore-all[]
   (.info logger (str "Restored comment count cache for users " (count (map restore-cache (mc/distinct ONUSER "username" {}))))))

@@ -97,7 +97,6 @@
           }
         }
       }
-      $('meta[name=description]').attr('content', 'Ontrail, ' + exercise.user + ' ' + exercise.title);
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
       $('#comment-body').redactor(editorSettings)
     }
