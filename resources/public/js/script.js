@@ -152,12 +152,14 @@
     // filters: {year: yyyy, month: mm, week: ww }
     var renderWeeklySummary = function(summary) {
       function toWeeklySummary(summaryItem) {
-        var exs = _(_.groupBy(summaryItem.exs, _attr("dayIndex"))).map(function(item, index){
+        var exs = _.groupBy(summaryItem.exs, _attr("dayIndex"))
+        for (var i in _.range(0, 7))
+          if (exs[i] === undefined) exs[i] = [];
+        exs = _.map(exs, function(item, index){
+          console.log("groupd", item, index)
           return {dayIndex: index, exs: item}
         })
         var monday = new XDate(summary.fromIsoDate)
-        for (var i in _.range(0, 7))
-          if (exs[i] === undefined) exs[i] = {dayIndex: i, exs: []};
         return {week: summaryItem.week, exs: exs }
       }
 
@@ -288,7 +290,7 @@
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary-entries").html("") })
-      .combineWithLatestOf(sessions).doAction(_.partial(debug, "foo"))
+      .combineWithLatestOf(sessions)
       .selectArgs(function(pg, user) {
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
       }).switchLatest()
