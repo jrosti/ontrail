@@ -149,6 +149,22 @@
       $("#" + elem + "-header").html(ich.hpkHeaderTemplate(sum))
     }
 
+    // filters: {year: yyyy, month: mm, week: ww }
+    var renderWeeklySummary = function(summary) {
+      function toWeeklySummary(summaryItem) {
+        var exs = _(_.groupBy(summaryItem.exs, _attr("dayIndex"))).map(function(item, index){
+          return {dayIndex: index, exs: item}
+        })
+        for (var i in _.range(0, 7))
+          if (exs[i] === undefined) exs[i] = {dayIndex: i, exs: []};
+        return {week: summaryItem.week, exs: exs }
+      }
+
+      var summaries = {summary: _.map(summary, toWeeklySummary)}
+      $("#weeksummary-entries").html(ich.hpkWeeklyContentTemplate(summaries))
+    }
+
+
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
     var renderDistanceHint = function(distance) { $('#distance-hint').text(distance.distance) }
 
@@ -268,6 +284,13 @@
       })
       .switchLatest()
     latestScroll.subscribe(renderLatest(entries))
+
+    var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
+      .combineWithLatestOf(sessions)
+      .selectArgs(function(pg, user) {
+        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
+      }).switchLatest()
+    weeklyScroll.subscribe(renderWeeklySummary)
 
     // initiate summary loading after login
     var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(_.compose(emptyAsUndefined, tail))
