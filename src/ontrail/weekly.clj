@@ -44,7 +44,7 @@
   (let [midnight (time/date-time (time/year dt) (time/month dt) (time/day dt))
         dow (time/day-of-week midnight)
         week-starts (time/minus midnight (time/days (- dow 1)))
-        week-stops (time/plus midnight (time/days (- 8 dow)))]
+        week-stops (time/plus midnight (time/days (- 7 dow)))]
     (time/interval week-starts week-stops)))
 
 (defn interval-query [user start end]
@@ -76,7 +76,7 @@
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
       {:week (week-number week-interval)
-       :from start :to (time/minus end (time/days 1))
+       :from start
        :sums (weekly-sums results)
        :exs (map simple-result results)}))
        
