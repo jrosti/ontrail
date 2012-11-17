@@ -76,7 +76,7 @@
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
       {:week (week-number week-interval)
-       :from (to-human-date start) :to (to-human-date (time/minus end (time/days 1)))
+       :from start :to (time/minus end (time/days 1))
        :sums (weekly-sums results)
        :exs (map simple-result results)}))
        
