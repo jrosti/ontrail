@@ -52,9 +52,13 @@
     (mq/find {:user user :creationDate {:$gte start :$lte end}})
     (mq/sort {:lastModifiedDate 1})))
 
+(defn get-entry [coll kw]
+  (if (and (contains? coll kw) (not= nil (kw coll)) (number? (kw coll)))
+    (kw coll)
+    0))
+
 (defn accumulate [totals result]
-  (let [get-entry #(if (contains? %1 %2) (%1 %2) 0)
-        acc #(+ (get-entry totals %1) (get-entry result %2))
+  (let [acc #(+ (get-entry totals %1) (get-entry result %2))
         kw-all-distance (keyword "distance_Kaikki")
         kw-all-duration (keyword "duration_Kaikki")
         kw-sport-distance (keyword (str "distance_" (:sport result)))
