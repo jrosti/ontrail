@@ -29,7 +29,7 @@
     var nthMonth = function(n) {
       var now = XDate.today()
       monthsTotal = (1900 + now.getYear()) * 12 + (now.getMonth()+1) - n
-      return [Math.floor(monthsTotal/12), monthsTotal % 12]
+      return [Math.floor(monthsTotal/12), monthsTotal % 12 + 1]
     }
 
     return getAsObservableResultData.apply(this, ["weekly-list", user].concat(nthMonth(n-1)))

@@ -162,7 +162,7 @@
       }
 
       var summaries = {summary: _.map(summary, toWeeklySummary)}
-      $("#weeksummary-entries").html(ich.hpkWeeklyContentTemplate(summaries))
+      $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary-entries"))
     }
 
 
@@ -287,7 +287,8 @@
     latestScroll.subscribe(renderLatest(entries))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
-      .combineWithLatestOf(sessions)
+      .doAction(function() { $("#weeksummary-entries").html("") })
+      .combineWithLatestOf(sessions).doAction(_.partial(debug, "foo"))
       .selectArgs(function(pg, user) {
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
       }).switchLatest()
