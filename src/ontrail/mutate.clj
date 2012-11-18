@@ -45,7 +45,7 @@
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
-  (.debug logger (str (:user params) " creating ex " params))
+  (.info logger (str (:user params) " creating ex " params))
   (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))]
     (insert-exercise-inmem-index ret)
@@ -61,7 +61,7 @@
                                                             :lastModifiedDate)})]
           (.trace logger (str "Updated " (:id params) " with status "  write-result)))
         (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
-          (.debug logger (str "Updated " (:id params) user res))
+          (.info logger (str "Updated " (:id params) user res))
           (as-ex-result res)))
     (.error logger (str user " does not own exercise, which is under mofidication."))))
   
@@ -76,7 +76,7 @@
                                         :date (to-human-comment-date (time/now))
                                         :user user
                                         :body (:body params)}}})
-  (.debug logger (str user " created comment " params))
+  (.info logger (str user " created comment " params))
   (newcount-comment-ex (:id params))
   (get-ex (:id params)))
 

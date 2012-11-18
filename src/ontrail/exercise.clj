@@ -72,9 +72,10 @@
                          (get-last-visit viewing-user)
                          (time/now))]
          (visit-now viewing-user)
-         (.debug logger (str "Ex-list " rule " vu=" viewing-user " p=" page " w" (count results) " rsts. " last-visit))
+         (.info logger (str "Ex-list " rule " for " viewing-user
+                             " at page " page " last-visit " last-visit))
          (as-ex-result-list last-visit (get-cache viewing-user) results)))))
-
+  
 (defn get-latest-ex-list-default-order
   ([rule page]
      (get-latest-ex-list "nobody" rule page))
@@ -88,7 +89,7 @@
      (get-ex id))
   ([id]
      (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
-       (.debug logger (format " get ex=%s" id))
+       (.trace logger (format " get ex=%s" id))
        (if (nil? exercise)
          {:error "No such id"}
          (as-ex-result exercise)))))

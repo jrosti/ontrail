@@ -31,7 +31,7 @@
     (mq/find rule)
     (mq/paginate :page (Integer. page) :per-page 100)
     (mq/sort {:username 1}))]
-    (.debug logger (str "Get user list " page " with " (count results) " results for " rule))
+    (.trace logger (str "Get user list " page " with " (count results) " results for " rule))
   (as-user-list results)))
 
 (defn create-user [username password email gravatar]

@@ -3,7 +3,6 @@
         compojure.core
         ring.middleware.file
         ring.middleware.cookies
-        ring.middleware.logger
         [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
         [ring.middleware.params :only (wrap-params)]
@@ -13,7 +12,7 @@
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)])
-  (:use [ontrail scheduler newcomment summary auth crypto exercise formats nlp profile system tagsummary sportsummary weekly])
+  (:use [ontrail log scheduler newcomment summary auth crypto exercise formats nlp profile system tagsummary sportsummary weekly])
   (:gen-class)
   (:require
             [ring.middleware.head :as ring-head]
@@ -28,16 +27,19 @@
 (def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
 
 (defmacro json-response [data & [status]]
-  `(try
-     {:status (or ~status 200)
-      :headers {"Content-Type" "application/json"}
-      :body (json-str ~data)}
-     (catch Exception exception#
-       (.error logger (str exception#))
-       (stacktrace/print-stack-trace exception# 100)
-       {:status 500
-        :headers {"Content-Type" "application/text"}
-        :body (str exception#)})))
+  `(let [start# (System/currentTimeMillis)]
+     (try
+       (let [data# {:status (or ~status 200)
+                   :headers {"Content-Type" "application/json"}
+                   :body (json-str ~data)}]
+         (.trace logger (str "Generating " ~data " consumed " (- (System/currentTimeMillis) start#)))
+         data#)
+       (catch Exception exception#
+         (.error logger (str exception#))
+         (stacktrace/print-stack-trace exception# 100)
+         {:status 500
+          :headers {"Content-Type" "application/text"}
+          :body (str exception#)}))))
 
 (defmacro is-authenticated? [cookies action]
   `(try
@@ -155,7 +157,7 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (newcomment-cache-restore-all)
-  (schedule-work newcomment-cache-store-all 30) ;; store new comment cache every 60 s
+  (schedule-work newcomment-cache-store-all 30) 
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head
