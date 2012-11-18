@@ -27,19 +27,16 @@
 (def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
 
 (defmacro json-response [data & [status]]
-  `(let [start# (System/currentTimeMillis)]
-     (try
-       (let [data# {:status (or ~status 200)
-                   :headers {"Content-Type" "application/json"}
-                   :body (json-str ~data)}]
-         (.trace logger (str "Generating " ~data " consumed " (- (System/currentTimeMillis) start#)))
-         data#)
-       (catch Exception exception#
-         (.error logger (str exception#))
-         (stacktrace/print-stack-trace exception# 100)
-         {:status 500
-          :headers {"Content-Type" "application/text"}
-          :body (str exception#)}))))
+  `(try
+     {:status (or ~status 200)
+      :headers {"Content-Type" "application/json"}
+      :body (json-str ~data)}
+     (catch Exception exception#
+       (.error logger (str exception#))
+       (stacktrace/print-stack-trace exception# 100)
+       {:status 500
+        :headers {"Content-Type" "application/text"}
+        :body (str exception#)})))
 
 (defmacro is-authenticated? [cookies action]
   `(try
@@ -157,7 +154,7 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (newcomment-cache-restore-all)
-  (schedule-work newcomment-cache-store-all 30) 
+  (schedule-work newcomment-cache-store-all 30) ;; store new comment cache every 60 s
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head
