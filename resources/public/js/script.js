@@ -114,6 +114,11 @@
     var renderUserList = function(data) {
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
+    var renderActiveUsersList = function(data) {
+       console.log(data)
+       $("#active-users").text(data)
+    }
+
 
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(elem, summary) {
@@ -318,6 +323,7 @@
     usersScroll.subscribe(renderUserList)
 
 
+
     // Kirjaudu sisään clicks toggle password & login fields visibility
     $('#login-link').clickAsObservable().subscribe(function() {
       $('body').toggleClass('login')
@@ -328,6 +334,8 @@
     var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
     loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
+
+    onPageLoad.selectAjax(OnTrail.rest.activeUsers).subscribe(renderActiveUsersList)
 
     // Lisää lenkki
     var resetEditor = function() {

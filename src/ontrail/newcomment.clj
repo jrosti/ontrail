@@ -19,11 +19,16 @@
       (users-cache-val user)
       ((alter users-cache assoc user (ref {})) user))))
 
+(defn get-user-cache [user]
+  (let [user-cache-ref (@users-cache user)]
+    (if (not= user-cache-ref nil)
+      @user-cache-ref
+      {})))
+        
 (defn newcount-get-new [user id]
-  (let [user-cache-ref (@users-cache user)
-        user-cache @user-cache-ref
+  (let [user-cache (get-user-cache user)
         id-key (keyword id)]
-    (if (and (not= nil user-cache-ref) (contains? user-cache id-key))
+    (if (contains? user-cache id-key)
       (:c (user-cache id-key))
       0)))
   
@@ -75,6 +80,10 @@
     (if (and (not= nil user-cache-ref) (not= nil (:lastvisit @user-cache-ref)))
       (:lastvisit @user-cache-ref)
       (time/date-time 2000 1 1))))
+
+(defn active-users[]
+  (let [active-time (time/minus (time/now) (time/minutes 25))]
+    (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
 (defn store-cache [user]
   (if (not= nil (@users-cache user))

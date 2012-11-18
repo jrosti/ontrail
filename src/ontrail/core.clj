@@ -62,6 +62,8 @@
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
        (json-response (get-season-months get-month-summary-sport user (Integer. year))))
 
+  (GET "/rest/v1/active-users" [] (json-response (active-users)))
+  
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer. year))))
   (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year]

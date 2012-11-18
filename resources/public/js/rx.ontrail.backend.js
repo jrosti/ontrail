@@ -53,6 +53,7 @@
   // user search
   Rest.prototype.users = function(page) { return getAsObservableResultData("list-users", page ) }
   Rest.prototype.searchUsers = function(query, page) { return getAsObservableResultData("find-users", query, page ) }
+  Rest.prototype.activeUsers = function() { return getAsObservableResultData("active-users") }
 
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
