@@ -629,6 +629,9 @@ h2.monthName {
 .ui-widget {
   font-size: 1em;
 }
+p.activeUserList {
+  font-size: 40%;
+}
 table.weekly {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 12px;
