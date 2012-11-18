@@ -54,14 +54,17 @@
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
-  (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
-                                      {"$set" (dissoc (from-user-ex user params)
-                                                      :comments
-                                                      :lastModifiedDate)})]
-    (.debug logger (str "Updated " (:id params) " with status "  write-result)))
-  (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
-    (.debug logger (str (:id params) res))
-    (as-ex-result res)))
+  (if (= user (:user (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})))
+    (do (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
+                                            {"$set" (dissoc (from-user-ex user params)
+                                                            :comments
+                                                            :lastModifiedDate)})]
+          (.trace logger (str "Updated " (:id params) " with status "  write-result)))
+        (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
+          (.debug logger (str "Updated " (:id params) user res))
+          (as-ex-result res)))
+    (.error logger (str user " does not own exercise, which is under mofidication."))))
+  
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))

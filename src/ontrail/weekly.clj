@@ -69,7 +69,6 @@
       kw-sport-distance (acc kw-sport-distance :distance)
       kw-sport-duration (acc kw-sport-duration :duration))))
 
-
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
     (reduce accumulate (cons {} results))
