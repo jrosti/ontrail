@@ -69,7 +69,6 @@
       kw-sport-distance (acc kw-sport-distance :distance)
       kw-sport-duration (acc kw-sport-duration :duration))))
 
-(defn to-array [sum] nil)
 
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
