@@ -1,5 +1,5 @@
 (ns ontrail.weekly
-  (:use [ontrail mongodb formats exercise]
+  (:use [ontrail mongodb formats exercise formats]
         monger.operators)
   (:require [monger.core]
             [monger.conversion]
@@ -58,28 +58,27 @@
     0))
 
 (defn accumulate [totals result]
-  (let [acc #(+ (get-entry totals %1) (get-entry result %2))
-        kw-all-distance (keyword "distance_Kaikki")
-        kw-all-duration (keyword "duration_Kaikki")
-        kw-sport-distance (keyword (str "distance_" (:sport result)))
-        kw-sport-duration (keyword (str "duration_" (:sport result)))]
+  (let [kw-all (keyword "Kaikki")]
     (assoc totals
-      kw-all-duration (acc kw-all-duration :duration)
-      kw-all-distance (acc kw-all-distance :distance)
-      kw-sport-distance (acc kw-sport-distance :distance)
-      kw-sport-duration (acc kw-sport-duration :duration))))
+      kw-all {:distance (+ (:distance (kw-all totals)) (get-entry result :distance))
+              :duration (+ (:duration (kw-all totals)) (get-entry result :duration))})))
+
+(defn humanize [coll]
+  (let [key (first (keys coll))
+        val (key coll)]
+    {key {:distance (to-human-distance (:distance val)) :duration (to-human-time (:duration val))}}))
 
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
-    (reduce accumulate (cons {} results))
-    {}))
+    (cons (humanize (reduce accumulate (cons {(keyword "Kaikki") {:distance 0 :duration 0}} results))) [])
+    [(keyword "Kaikki") {:distance "" :duration ""}]))
 
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
       {:week (week-number week-interval)
        :from start
-       :sums (weekly-sums results)
+       :summary (weekly-sums results)
        :exs (map simple-result results)}))
        
 (defn weeks-from [date-time]
