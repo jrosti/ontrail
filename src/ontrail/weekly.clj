@@ -57,21 +57,17 @@
     (kw coll)
     0))
 
-(defn accumulate-all [kw totals result]
-  (let [kw-all (keyword "Kaikki")]
-    (assoc totals
-      kw-all {:distance (+ (:distance (kw-all totals)) (get-entry result :distance))
-              :duration (+ (:duration (kw-all totals)) (get-entry result :duration))})))
+(defn accumulate [kw totals result]
+  {:sport kw :distance (+ (:distance totals) (get-entry result :distance))
+   :duration (+ (:duration totals) (get-entry result :duration))})
 
 (defn humanize [coll]
-  (let [key (first (keys coll))
-        val (key coll)]
-    {key {:distance (to-human-distance (:distance val)) :duration (to-human-time (:duration val))}}))
+  (assoc coll :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll))))
 
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
     (let [kw-all (keyword "Kaikki")
-          all (humanize (reduce (partial accumulate-all kw-all) (cons {kw-all {:distance 0 :duration 0}} results)))]        
+          all (humanize (reduce (partial accumulate kw-all) (cons {:sport kw-all :distance 0 :duration 0} results)))]        
       (cons all []))
     [{}]))
 
