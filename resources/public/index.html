@@ -187,15 +187,7 @@
         <h2>Viikoittainen harjoitusyhteenveto</h2>
       </div>
       <div>
-        <article>
-          <table class="weekly" id="weeksummary">
-            <thead>
-              <tr><td colspan="0">Otsikko</td></tr>
-            </thead>
-            <tbody id="weeksummary-entries">
-
-            </tbody>
-          </table>
+        <article id="weeksummary">
         </article>
       </div>
     </section>
@@ -500,6 +492,9 @@
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
+
+  <table class="weekly">
+    <tbody>
   <tr><th>Viikko</th><th>Ma</th><th>Ti</th><th>Ke</th><th>To</th><th>Pe</th><th>La</th><th>Su</th></tr>
   {{#summary}}
     <tr>
@@ -515,6 +510,10 @@
       <th colspan="7">Tulossa!</th>
     </tr>
   {{/summary}}
+
+    </tbody>
+  </table>
+  <h2 class="monthName">{{monthName}}</h2>
 </script>
 
 <script id="hpkWeeklyExTemplate" type="text/html">

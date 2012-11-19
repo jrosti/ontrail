@@ -119,6 +119,11 @@
        $("#active-users").text(data)
     }
 
+    var monthNames = {
+      monthName: function() {
+        return DateLocale.FI.monthNames[ this.month ]
+      }
+    }
 
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(elem, summary) {
@@ -133,12 +138,6 @@
         nextYear: function() { return this.year + 1 },
         prevYear: function() { return this.year - 1 },
         kind: elem
-      }
-
-      var monthNames = {
-        monthName: function() {
-          return DateLocale.FI.monthNames[ this.month ]
-        }
       }
 
       if ($.isArray(summary)) {
@@ -160,16 +159,16 @@
         var exs = _.groupBy(summaryItem.exs, _attr("dayIndex"))
         for (var i in _.range(0, 7))
           if (exs[i] === undefined) exs[i] = [];
-        exs = _.map(exs, function(item, index){
-          console.log("groupd", item, index)
+        exs = _.map(exs, function(item, index) {
           return {dayIndex: index, exs: item}
         })
         var monday = new XDate(summary.fromIsoDate)
         return {week: summaryItem.week, exs: exs }
       }
 
-      var summaries = {summary: _.map(summary, toWeeklySummary)}
-      $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary-entries"))
+      month = new XDate(summary[0].from).getMonth()
+      var summaries =_.extend( {summary: _.map(summary, toWeeklySummary), month: month, weeks: (summary.length*2) + 1}, monthNames)
+      $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
 
@@ -294,7 +293,7 @@
     latestScroll.subscribe(renderLatest(entries))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
-      .doAction(function() { $("#weeksummary-entries").html("") })
+      .doAction(function() { $("#weeksummary").html("") })
       .combineWithLatestOf(sessions)
       .selectArgs(function(pg, user) {
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
