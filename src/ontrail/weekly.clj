@@ -57,7 +57,7 @@
     (kw coll)
     0))
 
-(defn accumulate [totals result]
+(defn accumulate-all [kw totals result]
   (let [kw-all (keyword "Kaikki")]
     (assoc totals
       kw-all {:distance (+ (:distance (kw-all totals)) (get-entry result :distance))
@@ -70,8 +70,10 @@
 
 (defn weekly-sums [results]
   (if (>= (count results) 1) 
-    (cons (humanize (reduce accumulate (cons {(keyword "Kaikki") {:distance 0 :duration 0}} results))) [])
-    [(keyword "Kaikki") {:distance "" :duration ""}]))
+    (let [kw-all (keyword "Kaikki")
+          all (humanize (reduce (partial accumulate-all kw-all) (cons {kw-all {:distance 0 :duration 0}} results)))]        
+      (cons all []))
+    [{}]))
 
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
