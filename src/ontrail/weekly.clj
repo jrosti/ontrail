@@ -57,19 +57,30 @@
     (kw coll)
     0))
 
-(defn accumulate [kw totals result]
-  {:sport kw :distance (+ (:distance totals) (get-entry result :distance))
+(defn accumulate [sport totals result]
+  {:sport sport :distance (+ (:distance totals) (get-entry result :distance))
    :duration (+ (:duration totals) (get-entry result :duration))})
+
+(defn accumulate-if-sport-is [sport totals result]
+  (if (= sport (:sport result))
+    (accumulate sport totals result)
+    totals))
 
 (defn humanize [coll]
   (assoc coll :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll))))
 
+(defn zero-result[sport] {:sport sport :distance 0 :duration 0})
+
+(defn summary-distinct-sports [results]
+  (let [sports-distinct (distinct (map :sport results))]
+    (map humanize (sort-by :duration >
+                           (for [sport sports-distinct]
+                             (reduce (partial accumulate-if-sport-is sport) (cons (zero-result sport) results)))))))
+
 (defn weekly-sums [results]
-  (if (>= (count results) 1) 
-    (let [kw-all (keyword "Kaikki")
-          all (humanize (reduce (partial accumulate kw-all) (cons {:sport kw-all :distance 0 :duration 0} results)))]        
-      (cons all []))
-    [{}]))
+  (let [sport-all "Kaikki"
+        summary-all (humanize (reduce (partial accumulate sport-all) (cons (zero-result sport-all) results)))]        
+    (cons summary-all (summary-distinct-sports results))))
 
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
