@@ -163,7 +163,12 @@
           return {dayIndex: index, exs: item}
         })
         var monday = new XDate(summary.fromIsoDate)
-        return {week: summaryItem.week, exs: exs }
+
+        var sum = (summaryItem.exs.length > 0 ? [summaryItem.summary[0].Kaikki] : [])
+        if (summaryItem.exs.length > 0)
+          sum[0].sport = "Kaikki"
+        var result = {week: summaryItem.week, exs: exs, summaries: sum }
+        return result
       }
 
       month = new XDate(summary[0].from).getMonth()

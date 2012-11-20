@@ -505,10 +505,14 @@
         </td>
       {{/exs}}
     </tr>
+  {{#summaries}}
     <tr>
       <th>Yhteenveto</th>
-      <th colspan="7">Tulossa!</th>
+      <th colspan="7">
+        {{> hpkWeeklySummaryTemplate}}
+      </th>
     </tr>
+  {{/summaries}}
   {{/summary}}
 
     </tbody>
@@ -520,6 +524,19 @@
   {{#exs}}
     <span class="sport {{sport}}">{{#distance}}{{distance}}, {{/distance}}{{^distance}}{{duration}}{{/distance}}</span><br/>
   {{/exs}}
+</script>
+
+<script id="hpkWeeklySummaryTemplate" type="text/html">
+  <table>
+    <thead>
+    <tr><td>{{sport}}</td><td>{{duration}}</td><td>{{distance}}</td></tr>
+    </thead>
+    <tbody>
+      {{#summaries}}
+      <tr><td>{{sport}}</td><td>{{duration}}</td><td>{{distance}}</td></tr>
+      {{/summaries}}
+    </tbody>
+  </table>
 </script>
 
 <script id="loggedInStylesTemplate" type="text/html">
