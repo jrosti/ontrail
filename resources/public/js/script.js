@@ -164,9 +164,7 @@
         })
         var monday = new XDate(summary.fromIsoDate)
 
-        var sum = (summaryItem.exs.length > 0 ? [summaryItem.summary[0].Kaikki] : [])
-        if (summaryItem.exs.length > 0)
-          sum[0].sport = "Kaikki"
+        var sum = (summaryItem.exs.length > 0 ? summaryItem.summary : [])
         var result = {week: summaryItem.week, exs: exs, summaries: sum }
         return result
       }
