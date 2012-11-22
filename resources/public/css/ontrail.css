@@ -382,9 +382,7 @@ html .continuousCalendarContainer .popUpContainer {
   color: red;
 }
 .edit-form input,
-.edit-form textarea,
 .edit-form em,
-.edit-form #ex-body,
 .edit-form #ex-continuous-date {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
