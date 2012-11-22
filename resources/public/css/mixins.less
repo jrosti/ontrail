@@ -35,3 +35,10 @@
     .bg-gradient(lighten(@gradient-start, @adjust), lighten(@gradient-end, @adjust));
   }
 }
+
+.sports-icon-20(@x, @y, @w) {
+  .inline-block;
+  background: url(../img/icons_20.png) no-repeat -1px*@x -1px*@y;
+  width: 0px + @w;
+  height: 20px;
+}
