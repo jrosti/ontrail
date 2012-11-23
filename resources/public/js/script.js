@@ -168,8 +168,8 @@
         return result
       }
 
-      month = new XDate(summary[0].from).getMonth()
-      var summaries =_.extend( {summary: _.map(summary, toWeeklySummary), month: month, weeks: (summary.length*2) + 1}, monthNames)
+      var date = new XDate(summary[0].from)
+      var summaries =_.extend( {summary: _.map(summary, toWeeklySummary), month: date.getMonth(), year: (1900 + date.getYear()), weeks: (summary.length*2) + 1}, monthNames)
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 

@@ -494,9 +494,12 @@
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
 
+  <h2 class="monthName">{{monthName}} {{year}}</h2>
   <table class="weekly">
+    <thead>
+    <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
+    </thead>
     <tbody>
-  <tr><th>Viikko</th><th>Ma</th><th>Ti</th><th>Ke</th><th>To</th><th>Pe</th><th>La</th><th>Su</th></tr>
   {{#summary}}
     <tr>
       <td><strong>{{week}}</strong></td>
@@ -505,39 +508,27 @@
           {{> hpkWeeklyExTemplate}}
         </td>
       {{/exs}}
+        {{> hpkWeeklySummaryTemplate}}
     </tr>
   {{#summaries}}
-    <tr>
-      <th>Yhteenveto</th>
-      <th colspan="7">
-        {{> hpkWeeklySummaryTemplate}}
-      </th>
     </tr>
   {{/summaries}}
   {{/summary}}
 
     </tbody>
   </table>
-  <h2 class="monthName">{{monthName}}</h2>
 </script>
 
 <script id="hpkWeeklyExTemplate" type="text/html">
   {{#exs}}
-    <span class="sport {{sport}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span><br/>
+    <span class="sport {{sport}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>
   {{/exs}}
 </script>
 
 <script id="hpkWeeklySummaryTemplate" type="text/html">
-  <table>
-    <thead>
-    <tr><td>{{sport}}</td><td>{{duration}}</td><td>{{distance}}</td></tr>
-    </thead>
-    <tbody>
-      {{#summaries}}
-      <tr><td>{{sport}}</td><td>{{duration}}</td><td>{{distance}}</td></tr>
-      {{/summaries}}
-    </tbody>
-  </table>
+  <td>
+    {{#summaries}} {{duration}}{{#distance}}<br/>{{distance}}{{/distance}}{{/summaries}}
+  </td>
 </script>
 
 <script id="loggedInStylesTemplate" type="text/html">
