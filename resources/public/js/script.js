@@ -115,7 +115,6 @@
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
     var renderActiveUsersList = function(data) {
-       console.log(data)
        $("#active-users").text(data)
     }
 
@@ -302,6 +301,21 @@
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
       }).switchLatest()
     weeklyScroll.subscribe(renderWeeklySummary)
+
+    $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
+      var e = $(el.target);
+      if (el.type === "mouseenter") {
+        e.tooltip({content: function() {
+          var distance = e.attr("data-distance")
+          var duration = e.attr("data-duration")
+          return e.attr("data-sport") + ", " + (distance !== "" ? distance : duration)
+        }, "items": "[data-sport]", show: false, hide: false})
+        e.tooltip("open")
+      } else if (el.type === "mouseleave") {
+        e.tooltip("close")
+      }
+      return true;
+    })
 
     // initiate summary loading after login
     var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(_.compose(emptyAsUndefined, tail))
