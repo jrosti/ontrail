@@ -218,7 +218,7 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(target)
+    var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(targetLink)
     var clickedArticles = clickedLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}

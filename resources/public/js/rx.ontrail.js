@@ -88,6 +88,11 @@ var isSuccess = function(response) { return response.jqXHR.status >= 200 && resp
 var ajaxResponseData = function(response) { return response.data }
 
 // DOM
+var parent = function(el) { return el.parentNode }
+var findParent = function(el, match) {
+  if (el === undefined || match(el)) return el;
+  return findParent(parent(el), match);
+}
 var target = function(event) { return event.target }
 var value = function(input) { return input.value }
 var isLink = function(el) { return $(el).prop('localName') === "a"}
@@ -95,6 +100,12 @@ var hasClass = function(name, el) { return $(el).hasClass(name) }
 var _hasClass = function(name) { return _.partial( hasClass, name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var _attr = function(name) { return _.partial(attr, name) }
+
+var targetLink = function(event) {
+    return findParent(target(event), isLink)
+}
+
+
 var elementBottomIsAlmostVisible = function(el, margin) {
   if (!$(el).is(':visible')) return false;
   // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
