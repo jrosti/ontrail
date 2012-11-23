@@ -539,12 +539,17 @@ table.weekly {
     padding: 4px 10px 0 0;
     border-bottom: 2px solid @table-header-border-color;
 
-    &.day { width: 80px; }
+    &.day { width: 84px; }
   }
 
   td {
-    padding: 3px 0 0;
+    padding: 3px 2px;
     color: #000;
+    border: solid 1px #ccc
+  }
+
+  td.other-month {
+    background-color: rgba(200,200,200, 0.5)
   }
 
   tbody {

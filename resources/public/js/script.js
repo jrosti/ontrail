@@ -154,12 +154,13 @@
 
     // filters: {year: yyyy, month: mm, week: ww }
     var renderWeeklySummary = function(summary) {
-      function toWeeklySummary(summaryItem) {
+      function toWeeklySummary(month, summaryItem) {
+        var monday = new XDate(summaryItem.from)
         var exs = _.groupBy(summaryItem.exs, _attr("dayIndex"))
         for (var i in _.range(0, 7))
           if (exs[i] === undefined) exs[i] = [];
-        exs = _.map(exs, function(item, index) {
-          return {dayIndex: index, exs: item}
+          exs = _.map(exs, function(item, index) {
+          return {dayIndex: index, exs: item, class: monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
 
@@ -169,10 +170,10 @@
       }
 
       var date = new XDate(summary[0].from)
-      var summaries =_.extend( {summary: _.map(summary, toWeeklySummary), month: date.getMonth(), year: (1900 + date.getYear()), weeks: (summary.length*2) + 1}, monthNames)
+      var month = date.getMonth()
+      var summaries =_.extend( {summary: _.map(summary, _.partial(toWeeklySummary, month)), month: month, year: (1900 + date.getYear()), weeks: (summary.length*2) + 1}, monthNames)
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
-
 
     var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
     var renderDistanceHint = function(distance) { $('#distance-hint').text(distance.distance) }

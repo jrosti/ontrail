@@ -645,11 +645,15 @@ table.weekly th {
   border-bottom: 2px solid #6678b1;
 }
 table.weekly th.day {
-  width: 80px;
+  width: 84px;
 }
 table.weekly td {
-  padding: 3px 0 0;
+  padding: 3px 2px;
   color: #000;
+  border: solid 1px #cccccc;
+}
+table.weekly td.other-month {
+  background-color: rgba(200, 200, 200, 0.5);
 }
 table.weekly tbody th {
   font-weight: bold;
