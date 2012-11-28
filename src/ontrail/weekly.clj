@@ -75,7 +75,8 @@
   (let [sports-distinct (distinct (map :sport results))]
     (map humanize (sort-by :duration >
                            (for [sport sports-distinct]
-                             (reduce (partial accumulate-if-sport-is sport) (cons (zero-result sport) results)))))))
+                             (reduce (partial accumulate-if-sport-is sport)
+                                     (cons (zero-result sport) results)))))))
 
 (defn weekly-sums [results]
   (let [sport-all "Kaikki"

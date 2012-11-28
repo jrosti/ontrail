@@ -55,6 +55,15 @@
     (handler
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
+(defn monger-filter-from [params]
+  (let [{:keys [user tags sport]} params]
+    params))
+
+(defn get-page [params]
+  (if (not= nil (:page params))
+    (:page params)
+    1))
+
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
@@ -88,13 +97,16 @@
        (json-response (get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (:page params))))
+       (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
+
+  (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
+       (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (:page params) {:creationDate -1})))
+       (json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-list-tag/:tag/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (:page params) {:creationDate -1})))
+       (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (get-page params) {:creationDate -1})))
 
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
   (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
@@ -105,7 +117,7 @@
 
   (GET "/rest/v1/sports" []  (json-response sports))
 
-  (GET "/rest/v1/parse-time/:time" [time] ;; XXX throws
+  (GET "/rest/v1/parse-time/:time" [time] 
        (let [duration (to-human-time (parse-duration time))]
          (if (= "" duration)
            (json-response {:message "invalid-duration"} 400)

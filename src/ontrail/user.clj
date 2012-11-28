@@ -1,7 +1,8 @@
 (ns ontrail.user
   (:use [ontrail crypto mongodb utils])
   (:require [monger.collection :as mc]
-            [monger.query :as mq]))
+            [monger.query :as mq]
+            [postal.core :as postal]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
@@ -42,7 +43,13 @@
       (.error logger (str "creating user failed " username " with profile " profile)))))
 
 (defn register-user [params]
-  (create-user (:username params) (:password params) (:email params) true))
+  (let [user (:username params)
+        email (:email params)]
+    (.info logger (str (postal/send-message {:from "ontrail@ontrail.net"
+                                             :to ["jari.rosti@gmail.com"]
+                                             :subject "Uusi rekisteröityminen"
+                                             :body (str email "\n" user) })))
+    (create-user user (:password params) email true)))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]
