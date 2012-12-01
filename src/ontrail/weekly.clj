@@ -80,7 +80,8 @@
 
 (defn weekly-sums [results]
   (let [sport-all "Kaikki"
-        summary-all (humanize (reduce (partial accumulate sport-all) (cons (zero-result sport-all) results)))]        
+        summary-all (humanize (reduce (partial accumulate sport-all)
+                                      (cons (zero-result sport-all) results)))]        
     (cons summary-all (summary-distinct-sports results))))
 
 (defn interval-as-exlist [user week-interval]

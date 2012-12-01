@@ -6,12 +6,14 @@
         [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
         [ring.middleware.params :only (wrap-params)]
+        [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.user :only (get-avatar-url get-user get-user-list register-user)]
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
-                                         delete-ex delete-own-comment delete-own-ex-comment)])
+                                         delete-ex delete-own-comment delete-own-ex-comment)]
+        [ontrail.import :only (import-from-tempfile)])
   (:use [ontrail log scheduler newcomment summary auth crypto exercise formats nlp profile system tagsummary sportsummary weekly])
   (:gen-class)
   (:require
@@ -66,19 +68,19 @@
 
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
-  (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer. year))))
+  (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
-       (json-response (get-season-months get-month-summary-sport user (Integer. year))))
+       (json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
 
   (GET "/rest/v1/active-users" [] (json-response (active-users)))
   
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
-  (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer. year))))
+  (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer/valueOf year))))
   (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year]
-       (json-response (get-season-months get-month-summary-tags user (Integer. year))))
+       (json-response (get-season-months get-month-summary-tags user (Integer/valueOf year))))
 
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
-       (json-response (generate-month user (Integer. year) (Integer. month))))
+       (json-response (generate-month user (Integer/valueOf year) (Integer/valueOf month))))
   
   (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
   (POST "/rest/v1/profile" {params :params cookies :cookies}
@@ -154,11 +156,15 @@
         (json-response {"token" (auth-token user) "username" (:username user)} 200)))
 
   (GET "/rest/v1/username-available/:username" [username] ;; XXX throws
-    (let [user (get-user username)]
-      (if (= user nil)
-        (json-response {:success true})
-        (json-response {:message "username-exists"} 400))))
-
+       (let [user (get-user username)]
+         (if (= user nil)
+           (json-response {:success true})
+           (json-response {:message "username-exists"} 400))))
+  
+  (wrap-multipart-params
+   (POST "/rest/v1/import" {params :params cookies :cookies}
+         (json-response (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
+  
   (route/resources "/")
   (route/not-found {:status 404}))
 

@@ -1,12 +1,15 @@
 (ns ontrail.import
-  (:use [ontrail mongodb])
-  (:require [monger.collection :as mc]
+  (:use [ontrail mongodb formats])
+  (:require [clojure.java.io :as io]
+            [postal.core :as postal]
+            [monger.collection :as mc]
             [monger.result :as mr]
             [net.cgrand.enlive-html :as html]
             [clojure.string :as string]
             [clj-time.core :as time]
             ;; for date serialization to mongo.
-            [monger.joda-time]))
+            [monger.joda-time])
+  (:import [java.io File]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
@@ -96,6 +99,20 @@
                           "-")
                         "x")
                      (get-exercises imported-html)))))
+
+(defn import-from-tempfile [user tempfile]
+  (let [date-string (to-simple-date (time/now))
+        import-file (File. (str user "-" date-string ".html"))]
+    (.info logger (str "Importing " import-file " for user " user))
+    (io/copy tempfile import-file)
+    (let [res (import-user-and-file user (.getName import-file))]
+      (postal/send-message {:from "ontrail@ontrail.net"
+                            :to ["jari.rosti@gmail.com"]
+                            :subject "Uusi vihko-import"
+                            :body (str res)})
+      (.info logger (str "Import result: " res))
+      {:user user :result res})))
+
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
   (let [[username import-file & rest] args]
