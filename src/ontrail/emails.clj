@@ -14,7 +14,7 @@
 
 (defn send-import-msg [user fres]
   (try
-    (.info logger (postal/send-message (import-message user fres)))
+    (.info logger (str (postal/send-message (import-message user fres))))
     (catch Exception exception
        (.error logger (str exception))
        (stacktrace/print-stack-trace exception 100)
