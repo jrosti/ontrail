@@ -1,5 +1,5 @@
 (ns ontrail.user
-  (:use [ontrail crypto mongodb utils])
+  (:use [ontrail crypto mongodb utils emails])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
             [postal.core :as postal]))
@@ -45,10 +45,7 @@
 (defn register-user [params]
   (let [user (:username params)
         email (:email params)]
-    (.info logger (str (postal/send-message {:from "ontrail@ontrail.net"
-                                             :to ["jari.rosti@gmail.com"]
-                                             :subject "Uusi rekisteröityminen"
-                                             :body (str email "\n" user) })))
+    (send-register-msg user email)
     (create-user user (:password params) email true)))
 
 (defn -main[& args]
