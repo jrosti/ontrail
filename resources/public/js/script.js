@@ -372,7 +372,10 @@
     })
 
     currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
-        var res = args.split('=')
+        var res = ["wait", ""]
+        if (args !== undefined) {
+            res = args.split('=')
+        }
         if (res[0] === 'ok') {
             $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
         } else {
