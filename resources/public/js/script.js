@@ -395,7 +395,7 @@
 			    function(fst,snd) { return fst + snd })
       $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
     }
-    
+
     var renderAddExercise = function() {
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
@@ -411,6 +411,7 @@
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
+    // update user profile
     var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)

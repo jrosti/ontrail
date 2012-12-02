@@ -90,6 +90,7 @@
                <p>
                   <a class="pageLink" rel="users">Etsi käyttäjiä</a><br/>
                   <a class="pageLink" rel="systemstats">Ontrail palvelin</a><br/>
+                  <a class="pageLink" rel="import">Tuo harjoituspäiväkirja</a><br/>
                </p>
           </div>
         </header>
@@ -118,7 +119,25 @@
        <p id="active-users" class="activeUserList"/>
       </article>
     </section>
-      
+
+    <section role="import">
+        <article>
+            <h3>Tuo harjoituspäiväkirja Lenkkivihko-formaatista</h3>
+            <form action="/rest/v1/import" class="edit-form" method="post" enctype="multipart/form-data">
+                <div>
+                    <label>Valitse tuontitiedosto:</label>
+                    <input name="file" type="file" size="20" />
+                </div>
+
+                <div>
+                    <label></label>
+                    <input type="submit" name="submit" value="Lähetä harjoituspäiväkirja käsiteltäväksi." />
+                </div>
+            </form>
+            <span id="import-result"></span>
+        </article>
+    </section>
+
     <section role="profile">
       <article>
       <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Oma profiili</h2>
@@ -199,6 +218,7 @@
       <article class="edit-form">
         <h2>Lisää uusi lenkki</h2>
         <form id="add-exercise-form" method="post">
+
           <div>
             <label>Otsikko</label>
             <input id="ex-title" name="title" class="reset" placeholder="Otsikko"/>
@@ -233,10 +253,10 @@
             <label>Avainsanat</label>
             <input id="ex-tags" data-placeholder="Lisää avainsanoja..." multiple class="chzn-select"/>
           </div>
-          <div>
-            <label>Kuvaus</label>
-            </p><div id="ex-body"></div>
-          </div>
+            <div>
+                <label>Kuvaus</label>
+                <div id="ex-body"></div>
+            </div>
           <div>
             <label></label>
             <a id="add-exercise" class="button addExercise add">Lisää lenkki</a>

@@ -163,7 +163,7 @@
   
   (wrap-multipart-params
    (POST "/rest/v1/import" {params :params cookies :cookies}
-         (json-response (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
+         (redirect (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
   
   (route/resources "/")
   (route/not-found {:status 404}))

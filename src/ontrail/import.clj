@@ -101,17 +101,20 @@
                      (get-exercises imported-html)))))
 
 (defn import-from-tempfile [user tempfile]
-  (let [date-string (to-simple-date (time/now))
-        import-file (File. (str user "-" date-string ".html"))]
+  (let [import-file (File. (str user ".html"))]
     (.info logger (str "Importing " import-file " for user " user))
-    (io/copy tempfile import-file)
-    (let [res (import-user-and-file user (.getName import-file))]
-      (postal/send-message {:from "ontrail@ontrail.net"
-                            :to ["jari.rosti@gmail.com"]
-                            :subject "Uusi vihko-import"
-                            :body (str res)})
-      (.info logger (str "Import result: " res))
-      {:user user :result res})))
+    (if (not (.exists import-file))
+      (do (io/copy tempfile import-file)
+          (let [res (import-user-and-file user (.getName import-file))
+                fres (frequencies res)]
+            (postal/send-message {:from "ontrail@ontrail.net"
+                                  :to ["jari.rosti@gmail.com"]
+                                  :subject (str "Lenkkivihko harjoituspäiväkirjan tuonti käyttäjälle " user)
+                                  :body (str fres)})
+            (if (= (fres \+) 0)
+              "/#import-error-invalidFormat"
+              (str "/#import-ok-" (fres \+)))))
+      "/#import-error-alreadyExists")))
 
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
