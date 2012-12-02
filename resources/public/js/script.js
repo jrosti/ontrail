@@ -361,7 +361,7 @@
       $("#ex-tags").select2("data", [])
       $("#duration-hint").html("")
       $("#distance-hint").html("")
-      $("#ex-body").setCode("<p/>")
+      $("#ex-body").setCode("<p>\n<br>\n</p>")
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
