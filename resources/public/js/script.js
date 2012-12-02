@@ -371,6 +371,15 @@
       if (exid === undefined) resetEditor()
     })
 
+    currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
+        var res = args.split('=')
+        if (res[0] === 'ok') {
+            $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
+        } else {
+            $("#import-result").html("<p class=\"error\">Virhe tuonnissa, koodi: " + res[1] + " </p>")
+        }
+    })
+
     // muokkaa lenkkiä:
     var renderEditExercise = function(ex) {
       $("[role='addex']").attr('data-mode', 'edit')

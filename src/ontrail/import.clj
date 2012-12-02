@@ -1,7 +1,6 @@
 (ns ontrail.import
-  (:use [ontrail mongodb formats])
+  (:use [ontrail emails mongodb formats])
   (:require [clojure.java.io :as io]
-            [postal.core :as postal]
             [monger.collection :as mc]
             [monger.result :as mr]
             [net.cgrand.enlive-html :as html]
@@ -101,20 +100,18 @@
                      (get-exercises imported-html)))))
 
 (defn import-from-tempfile [user tempfile]
-  (let [import-file (File. (str user ".html"))]
+  (let [user-clean (string/replace user #"[^a-z09]+" "_")
+        import-file (File. "imports" (str user-clean ".html"))]
     (.info logger (str "Importing " import-file " for user " user))
     (if (not (.exists import-file))
       (do (io/copy tempfile import-file)
           (let [res (import-user-and-file user (.getName import-file))
                 fres (frequencies res)]
-            (postal/send-message {:from "ontrail@ontrail.net"
-                                  :to ["jari.rosti@gmail.com"]
-                                  :subject (str "Lenkkivihko harjoituspäiväkirjan tuonti käyttäjälle " user)
-                                  :body (str fres)})
-            (if (= (fres \+) 0)
-              "/#import-error-invalidFormat"
-              (str "/#import-ok-" (fres \+)))))
-      "/#import-error-alreadyExists")))
+            (send-import-msg user fres)
+            (if (> (fres \+) 0)
+              (str "/#import-ok=" (fres \+))
+              "/#import-error=invalidFormat")))
+      "/#import-error=alreadyExists")))
 
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."

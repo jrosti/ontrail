@@ -122,11 +122,15 @@
 
     <section role="import">
         <article>
-            <h3>Tuo harjoituspäiväkirja Lenkkivihko-formaatista</h3>
+            <h3>Harjoituspäiväkirjan tuonti Lenkkivihko-formaatista</h3>
+             1. Klikkaa Lenkkivihon etusivulta linkkiä "Tuo harjoitukset tiedostona".<br />
+             2. Tallenna tiedosto levylle.<br />
+             3. Liitä tuontitiedosto oheiseen lomakkeeseen<br />
+
             <form action="/rest/v1/import" class="edit-form" method="post" enctype="multipart/form-data">
                 <div>
-                    <label>Valitse tuontitiedosto:</label>
-                    <input name="file" type="file" size="20" />
+                    <label>Valitse tiedosto:</label>
+                    <input name="file" type="file" size="15" />
                 </div>
 
                 <div>
