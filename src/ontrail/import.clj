@@ -105,7 +105,7 @@
     (.info logger (str "Importing " import-file " for user " user))
     (if (not (.exists import-file))
       (do (io/copy tempfile import-file)
-          (let [res (import-user-and-file user (.getName import-file))
+          (let [res (import-user-and-file user (str "imports/" (.getName import-file)))
                 fres (frequencies res)]
             (send-import-msg user fres)
             (if (> (fres \+) 0)
