@@ -372,13 +372,13 @@
     })
 
     currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
-        var res = ["wait", ""]
+        var res = []
         if (args !== undefined) {
             res = args.split('=')
         }
-        if (res[0] === 'ok') {
+        if (res[0] === "ok") {
             $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
-        } else {
+        } if (args[0] === "error") {
             $("#import-result").html("<p class=\"error\">Virhe tuonnissa, koodi: " + res[1] + " </p>")
         }
     })
