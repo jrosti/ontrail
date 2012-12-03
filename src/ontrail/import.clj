@@ -105,12 +105,16 @@
     (.info logger (str "Importing " import-file " for user " user))
     (if (not (.exists import-file))
       (do (io/copy tempfile import-file)
-          (let [res (import-user-and-file user (str "imports/" (.getName import-file)))
-                fres (frequencies res)]
-            (send-import-msg user fres)
-            (if (> (fres \+) 0)
-              (str "/#import-ok=" (fres \+))
-              "/#import-error=invalidFormat")))
+          (try 
+            (let [res (import-user-and-file user (str "imports/" (.getName import-file)))
+                  fres (frequencies res)]
+              (send-import-msg user fres)
+              (if (> (fres \+) 0)
+                (str "/#import-ok=" (fres \+))
+                (do (.delete import-file) "/#import-error=invalidFormat")))
+            (catch Exception exception
+              (.error logger (str exception))
+              (do (.delete import-file) "/#import-error=invalidFormat"))))
       "/#import-error=alreadyExists")))
 
 (defn -main [& args]
