@@ -372,14 +372,15 @@
     })
 
     currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
-        var res = ["wait", ""]
+        var res = ["reset", ""]
         if (args !== undefined) {
             res = args.split('=')
         }
         if (res[0] === 'ok') {
             $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
         } if (res[0] === 'error') {
-            $("#import-result").html("<p class=\"error\">Virhe tuonnissa, koodi: " + res[1] + " </p>")
+            var errors = {"invalidFormat": "virheellinen tiedostomuoto", "alreadyExists": "harjoituspäiväkirja on jo tuotu"}
+            $("#import-result").html("<p class=\"error\">Virhe tuonnissa, syy: " + errors[res[1]] + " </p>")
         } if (res[0] === "reset") {
             $("#import-result").html("")
         }
