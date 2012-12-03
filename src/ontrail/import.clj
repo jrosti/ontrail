@@ -100,7 +100,7 @@
                      (get-exercises imported-html)))))
 
 (defn import-from-tempfile [user tempfile]
-  (let [user-clean (string/replace user #"[^a-z09]+" "_")
+  (let [user-clean (string/replace user #"[^a-z09A-Z]+" "_")
         import-file (File. "imports" (str user-clean ".html"))]
     (.info logger (str "Importing " import-file " for user " user))
     (if (not (.exists import-file))
