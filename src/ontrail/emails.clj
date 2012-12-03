@@ -14,7 +14,7 @@
 
 (defn send-import-msg [user fres]
   (try
-    (.info logger (str (postal/send-message (import-message user fres))))
+    (future (.info logger (str (postal/send-message (import-message user fres)))))
     (catch Exception exception
        (.error logger (str exception))
        (stacktrace/print-stack-trace exception 100)
@@ -22,30 +22,28 @@
 
 (defn reg-body [user]
   (str "Hei " user "!\n\n"
-       "Tervetuloa käyttämään Ontrailia! Olemme vielä kehitysvaiheessa ja palvelua kehitetään jatkuvasti, "
-       "tällä hetkellä työn alla ovat viikkonäkymä, sekä kaverilistat. Palvelu saatetaan ensimmäiseen versioonsa "
+       "Tervetuloa käyttämään Ontrailia! Olemme vielä kehitysvaiheessa ja palvelun ominaisuuksia päivitetään jatkuvasti, "
+       "Tällä hetkellä työn alla ovat viikkonäkymä, sekä kaverilistat. Palvelu saatetaan ensimmäiseen versioonsa "
        "vuoden loppuun mennnessä\n\n"
        
        "Lenkkisi varmuuskopioidaan kahdesti päivässä. Halutessasi kaikki sinuun liittyvä data poistetaan "
        "palvelimelta tai siirretään haluamassasi muodossa sinulle takaisin.\n\n" 
 
-       "Kehitystä voit myös seurata facebook-ryhmässä: https://www.facebook.com/groups/ontrail/ Palvelun teknisiin "
-       "yksityiskohtiin voin tutustua osoitteessa http://www.github.com/jrost/ontrail\n\n"
+       "Kehitystä voit myös seurata Facebook-ryhmässä: https://www.facebook.com/groups/ontrail/ Palvelun teknisiin "
+       "yksityiskohtiin voin tutustua osoitteessa http://www.github.com/jrosti/ontrail\n\n"
 
        "Jos palvelusta on jotain kysyttävää, niin voit lähettää sähköpostia suoraan meille tai liittyä facebook-ryhmään, "
        "josta voit seurata palvelun toimintaa, ominaisuuksia ja kehitystyötä lähemmin.\n\n"
        
        "Ystävällisin terveisin, Ontrail-tiimi"))
-       
 
 (defn send-register-msg [user email]
     (try
-      (.info logger (str (postal/send-message {:from "ontrail@ontrail.net"
+      (future (.info logger (str (postal/send-message {:from "ontrail@ontrail.net"
                                                :to [email]
                                                :cc [admin]
-                                               :bcc "hanna_liisa@hotmail.com"
                                                :subject "Tervetuloa Ontrailiin!"
-                                               :body (reg-body user) })))
+                                               :body (reg-body user) }))))
       (catch Exception exception
         (.error logger (str exception))
         (stacktrace/print-stack-trace exception 100)
