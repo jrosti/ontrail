@@ -1,0 +1,25 @@
+
+@import "css3.less";
+@import "mixins.less";
+
+body.logged-out *.logged-in, body.logged-in *.logged-out, body.login #login-link {
+  display: none;
+}
+
+#login-form {
+  input {
+    display: block;
+    width: 66%;
+    margin: 0.2em 0 1em;
+  }
+}
+
+body.login {
+  #login-form {
+    width: inherit;
+    * {
+      display: inline-block;
+    }
+    .transition(~"width .5s ease");
+  }
+}

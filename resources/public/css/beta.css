@@ -1,0 +1,28 @@
+.inline-block {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+}
+body.logged-out *.logged-in,
+body.logged-in *.logged-out,
+body.login #login-link {
+  display: none;
+}
+#login-form input {
+  display: block;
+  width: 66%;
+  margin: 0.2em 0 1em;
+}
+body.login #login-form {
+  width: inherit;
+  -webkit-transition: width .5s ease;
+  -moz-transition: width .5s ease;
+  -ms-transition: width .5s ease;
+  -o-transition: width .5s ease;
+  transition: width .5s ease;
+}
+body.login #login-form * {
+  display: inline-block;
+}

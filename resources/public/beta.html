@@ -1,0 +1,584 @@
+<!DOCTYPE HTML>
+<!--
+	Halcyonic 2.5 by HTML5 Up!
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<head>
+    <title>ontrail.net</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="title" content="Ontrail" >
+    <meta name="description" content="Ulkoilijan harjoituspäiväkirja." >
+    <meta name="keywords" content="" />
+
+    <link rel="image_src" href="img/share.jpg" >
+
+    <noscript>
+        <link rel="stylesheet" href="halcyonic/css/5grid/core.css" />
+        <link rel="stylesheet" href="halcyonic/css/5grid/core-desktop.css" />
+        <link rel="stylesheet" href="halcyonic/css/5grid/core-1200px.css" />
+        <link rel="stylesheet" href="halcyonic/css/5grid/core-noscript.css" />
+        <link rel="stylesheet" href="halcyonic/css/style.css" />
+        <link rel="stylesheet" href="halcyonic/css/style-desktop.css" /></noscript>
+    <script src="halcyonic/css/5grid/jquery.js"></script>
+    <script src="halcyonic/css/5grid/init.js?use=mobile,desktop,1000px&amp;mobileUI=1&amp;mobileUI.theme=none&amp;mobileUI.titleBarHeight=55&amp;mobileUI.openerWidth=75&amp;mobileUI.openerText=&lt;"></script>
+    <!--[if lte IE 9]><link rel="stylesheet" href="halcyonic/css/style-ie9.css" /><![endif]-->
+
+    <link rel="stylesheet" href="css/select2.css">
+    <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
+    <link rel="stylesheet" href="redactor/redactor.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+
+    <link rel="stylesheet" href="css/beta.css">
+
+    <!-- ga / jro -->
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-34593654-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <style id="logged-in-styles" type="text/css"></style>
+</head>
+<body>
+
+<!-- Header -->
+<div id="header-wrapper">
+    <header id="header" class="5grid-layout">
+        <div class="row">
+            <div class="12u">
+
+                <!-- Logo -->
+                <h1><a href="#" class="mobileUI-site-name">On Trail</a></h1>
+
+                <!-- Nav -->
+                <nav class="mobileUI-site-nav">
+                    <a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a>
+                    <a class="pageLink logged-out" rel="register">Luo tunnus</a>
+                    <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+    <div id="banner" class="logged-out">
+        <div class="5grid-layout">
+            <div class="row">
+                <div class="6u">
+
+                    <!-- Banner Copy -->
+                    <p>Enemmän, nopeammin, korkeammalle ...</p>
+                    <fieldset>
+                        <form id="login-form" method="post">
+                            <input id="username" name="username" type="text" placeholder="Username" />
+                            <input id="password" name="password" type="password" placeholder="Password"/>
+                            <a id="login" class="button-big login">Kirjaudu sisään!</a>
+                        </form>
+                    </fieldset>
+
+                </div>
+                <div class="6u">
+
+                    <!-- Banner Image -->
+                    <a href="#" class="bordered-feature-image"><img src="img/compass.jpg" alt="" /></a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features -->
+<div id="features-wrapper" class="logged-out">
+    <div id="features">
+        <div class="5grid-layout">
+            <div class="row">
+                <div class="3u">
+
+                    <!-- Feature #1 -->
+                    <section>
+                        <a href="#" class="bordered-feature-image"><img src="images/pic01.jpg" alt="" /></a>
+                        <h2>Welcome to Halcyonic</h2>
+                        <p>
+                            This is <strong>Halcyonic</strong>, a free site template
+                            by <a href="http://n33.co/">N33</a> for
+                            <a href="http://html5up.net">HTML5 Up!</a> It's responsive,
+                            built on HTML5 + CSS3, and includes 5 unique page layouts.
+                        </p>
+                    </section>
+
+                </div>
+                <div class="3u">
+
+                    <!-- Feature #2 -->
+                    <section>
+                        <a href="#" class="bordered-feature-image"><img src="images/pic02.jpg" alt="" /></a>
+                        <h2>Responsive You Say?</h2>
+                        <p>
+                            Yes! Halcyonic is built on the <a href="http://n33.co/5grid/">5grid</a>
+                            framework, so it has full responsive support for desktop, tablet,
+                            and mobile device displays.
+                        </p>
+                    </section>
+
+                </div>
+                <div class="3u">
+
+                    <!-- Feature #3 -->
+                    <section>
+                        <a href="#" class="bordered-feature-image"><img src="images/pic03.jpg" alt="" /></a>
+                        <h2>License Info</h2>
+                        <p>
+                            Halcyonic is licensed under the <a href="http://html5up.net/license">CCA 3.0</a> license,
+                            so use it for personal or commercial use as much as you like (just keep
+                            the footer credit intact).
+                        </p>
+                    </section>
+
+                </div>
+                <div class="3u">
+
+                    <!-- Feature #4 -->
+                    <section>
+                        <a href="#" class="bordered-feature-image"><img src="images/pic04.jpg" alt="" /></a>
+                        <h2>Volutpat etiam aliquam</h2>
+                        <p>
+                            Duis neque nisi, dapibus sed mattis quis, rutrum accumsan sed. Suspendisse
+                            eu varius nibh. Suspendisse vitae magna eget odio amet mollis.
+                        </p>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div id="content-wrapper">
+    <div id="content">
+        <div class="5grid-layout">
+            <div class="row">
+                <div class="9u">
+
+                    <!-- Main Content -->
+                    <section>
+                        <header>
+                            <h2>Two Column #1</h2>
+                            <h3>A generic two column layout</h3>
+                        </header>
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam metus, congue
+                            vel suscipit ut, dignissim non risus. Vestibulum ante est, fringilla nec placerat
+                            eu, vestibulum vitae diam. Integer eget egestas eros. Duis enim erat, mollis quis
+                            lacinia eget, blandit nec ipsum. Donec vitae turpis ipsum. Aliquam mauris libero,
+                            sagittis in eleifend at, mattis imperdiet velit. Donec urna risus, rutrum molestie
+                            varius ac, lacinia sit amet augue. Nam ultrices elementum eros.
+                        </p>
+                        <p>
+                            Sed faucibus viverra ligula, non varius magna semper vitae. Donec eu justo ut ipsum
+                            hendrerit congue nec eu risus. Cum sociis natoque penatibus et magnis dis parturient
+                            montes, nascetur ridiculus mus. Lorem ipsum dolor sit amet, consectetur adipiscing
+                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
+                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
+                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
+                            elit. Suspendisse fermentum adipiscing nisi, a tempor libero malesuada at. Morbi
+                            lacinia dui adipiscing risus eleifend tincidunt. Proin eu mauris eu tellus eleifend
+                            hendrerit.
+                        </p>
+                        <p>
+                            Mauris sit amet tellus urna. In facilisis, tortor vitae ultricies egestas, odio
+                            mi rhoncus arcu, quis euismod felis felis et velit. Mauris varius consectetur erat
+                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
+                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
+                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
+                            iaculis. Phasellus ultrices diam sit amet orci lacinia sed consequat dui auctor.
+                        </p>
+                        <p>
+                            Sed faucibus viverra ligula, non varius magna semper vitae. Donec eu justo ut ipsum
+                            hendrerit congue nec eu risus. Cum sociis natoque penatibus et magnis dis parturient
+                            montes, nascetur ridiculus mus. Lorem ipsum dolor sit amet, consectetur adipiscing
+                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
+                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
+                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
+                            elit. Suspendisse fermentum adipiscing nisi, a tempor libero malesuada at. Morbi
+                            lacinia dui adipiscing risus eleifend tincidunt. Proin eu mauris eu tellus eleifend
+                            hendrerit.
+                        </p>
+                        <p>
+                            Mauris sit amet tellus urna. In facilisis, tortor vitae ultricies egestas, odio
+                            mi rhoncus arcu, quis euismod felis felis et velit. Mauris varius consectetur erat
+                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
+                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
+                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
+                            iaculis. Phasellus ultrices diam sit amet orci lacinia sed consequat dui auctor.
+                        </p>
+                    </section>
+
+                </div>
+                <div class="3u">
+
+                    <!-- Sidebar -->
+                    <section>
+                        <header>
+                            <h2 class="username"></h2>
+                        </header>
+                        <ul class="link-list">
+                            <li><a class="pageLink logged-in" rel="profile">Oma profiili</a></li>
+                            <li><a class="pageLink logged-in" rel="user" id="my-page">Omat lenkit</a></li>
+                            <li><a class="pageLink logged-in" rel="summary">Yhteenvedot</a></li>
+                            <li><a class="pageLink logged-in" rel="weeksummary">Harjoitusviikot</a></li>
+                            <li><a class="pageLink logged-in" rel="tagsummary">Avainsanat</a></li>
+
+                        </ul>
+                    </section>
+                    <section>
+                        <header>
+                            <h2>Ipsum Dolor</h2>
+                        </header>
+                        <p>
+                            Vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
+                            iaculis. Phasellus ultrices diam sit amet orci lacinia sed consequat.
+                        </p>
+                        <ul class="link-list">
+                            <li><a href="#">Sed dolore viverra</a></li>
+                            <li><a href="#">Ligula non varius</a></li>
+                            <li><a href="#">Dis parturient montes</a></li>
+                            <li><a href="#">Nascetur ridiculus</a></li>
+                        </ul>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div id="footer-wrapper">
+    <footer id="footer" class="5grid-layout">
+        <div class="row">
+            <div class="8u">
+
+                <!-- Links -->
+                <section>
+                    <h2>Links to Important Stuff</h2>
+                    <div class="5grid">
+                        <div class="row">
+                            <div class="3u">
+                                <ul class="link-list last-child">
+                                    <li><a href="#">Neque amet dapibus</a></li>
+                                    <li><a href="#">Sed mattis quis rutrum</a></li>
+                                    <li><a href="#">Accumsan suspendisse</a></li>
+                                    <li><a href="#">Eu varius vitae magna</a></li>
+                                </ul>
+                            </div>
+                            <div class="3u">
+                                <ul class="link-list last-child">
+                                    <li><a href="#">Neque amet dapibus</a></li>
+                                    <li><a href="#">Sed mattis quis rutrum</a></li>
+                                    <li><a href="#">Accumsan suspendisse</a></li>
+                                    <li><a href="#">Eu varius vitae magna</a></li>
+                                </ul>
+                            </div>
+                            <div class="3u">
+                                <ul class="link-list last-child">
+                                    <li><a href="#">Neque amet dapibus</a></li>
+                                    <li><a href="#">Sed mattis quis rutrum</a></li>
+                                    <li><a href="#">Accumsan suspendisse</a></li>
+                                    <li><a href="#">Eu varius vitae magna</a></li>
+                                </ul>
+                            </div>
+                            <div class="3u">
+                                <ul class="link-list last-child">
+                                    <li><a href="#">Neque amet dapibus</a></li>
+                                    <li><a href="#">Sed mattis quis rutrum</a></li>
+                                    <li><a href="#">Accumsan suspendisse</a></li>
+                                    <li><a href="#">Eu varius vitae magna</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+            <div class="4u">
+
+                <!-- Blurb -->
+                <section>
+                    <h2>An Informative Text Blurb</h2>
+                    <p>
+                        Duis neque nisi, dapibus sed mattis quis, rutrum accumsan sed. Suspendisse eu
+                        varius nibh. Suspendisse vitae magna eget odio amet mollis. Duis neque nisi,
+                        dapibus sed mattis quis, sed rutrum accumsan sed. Suspendisse eu varius nibh
+                        lorem ipsum amet dolor sit amet lorem ipsum consequat gravida justo mollis.
+                    </p>
+                </section>
+
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Copyright -->
+<div id="copyright">
+    &copy; Untitled. All rights reserved. | Design: <a href="http://html5up.net">HTML5 Up!</a> | Images: <a href="http://fotogrph.com">Fotogrph</a>
+</div>
+
+<!-- templates -->
+<script id="exerciseDetailsTemplate" class="partial" type="text/html">
+    <table class="details full">
+        <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th></tr></thead>
+        <tr>
+            <td>{{sport}}</td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
+            <td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{bpmdist}}</td>
+        </tr>
+    </table>
+</script>
+<script id="tagsExpandedTemplate" class="partial" type="text/html">
+    <div class="full">
+        <ul>
+            {{#tags}}<li><a class="pageLink" rel="tag-{{.}}">{{.}}</a></li> {{/tags}}
+        </ul>
+    </div>
+</script>
+<script id="exerciseTemplate" type="text/html">
+    <article data-id="{{id}}" class="preview exercise {{sport}}">
+        <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+        <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+        <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+        <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
+            {{did}} {{#distance}} {{distance}} ajassa {{duration}}{{/distance}} {{^distance}} {{duration}}{{/distance}}{{#isNew}}!{{/isNew}}</h4>
+        {{> exerciseDetailsTemplate}}
+
+        <div class="preview">
+            {{#trunc}}{{/trunc}}
+            <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
+        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
+        </div>
+        <div class="full">{{{body}}}</div>
+
+        {{> tagsExpandedTemplate}}
+        <div>
+            <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
+                {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
+        </div>
+    </article>
+</script>
+
+<script id="singleExerciseTemplate" type="text/html">
+    <article data-id="{{id}}" class="full exercise {{sport}}">
+        <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+        <a class="pageLink" id="modify-ex" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
+        <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
+        <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+        {{> exerciseDetailsTemplate}}
+        <div>{{{body}}}</div>
+        {{> tagsExpandedTemplate}}
+    </article>
+    <h3>Kommentit:</h3>
+    {{#comments}}
+    <article class="comment" data-id="{{id}}">
+        {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
+        <img class="avatar" src="{{avatar}}"  width="24" height="24">
+        <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+        <div>{{{body}}}</div>
+    </article>
+    {{/comments}}
+    </div>
+    <article class="logged-in">
+        <h4>Jätä oma kommenttisi</h4>
+        {{^comments}}
+        <p>Kirjoita ensimmäinen kommentti</p>
+        {{/comments}}
+        <form class=" edit-form" id="add-comment-form" method="post">
+            <div>
+                <label>Kommenttisi</label>
+                <div id="comment-body"></div>
+            </div>
+            <div>
+                <label> </label>
+                <a id="add-comment" class="button addComment">Kommentoi</a>
+            </div>
+        </form>
+    </article>
+    <article class="logged-out">
+        Kirjaudu sisään kommentoidaksesi.
+    </article>
+</script>
+
+<script id="sportsCreateTemplate" type="text/html">
+    {{#sports}}
+    <option value="{{.}}">{{.}}</option>
+    {{/sports}}
+</script>
+<script id="tagsCreateTemplate" type="text/html">
+    {{#tags}}
+    <option value="{{.}}">{{.}}</option>
+    {{/tags}}
+</script>
+<script id="usersCreateTemplate" type="text/html">
+    {{#users}}
+    <img class="avatar" src="{{avatar}}"  width="24" height="24">
+    <h4><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+    {{/users}}
+</script>
+<script id="userHeaderTemplate" type="text/html">
+    <h2>Käyttäjän {{data}} lenkit</h2>
+    <div class="logged-in">
+        <p>
+            <a class="pageLink" rel="summary-{{data}}">Lajiyhteenvedot</a>
+            <a class="pageLink" rel="tagsummary-{{data}}">Avainsanayhteenvedot</a>
+        </p>
+    </div>
+</script>
+<script id="tagHeaderTemplate" type="text/html">
+    <h2>Avainsanaan "{{data}}" liittyvät lenkit</h2>
+</script>
+<script id="hpkHeaderTemplate" type="text/html">
+    <div class="subnavi">
+        <a class="pageLink" data-filter="" rel="{{kind}}-{{user}}">Kaikki</a>
+        <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}-{{user}}-{{year}}">Vuosi</a>
+        <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}-{{user}}-{{year}}-bymonth">Kuukausi</a>
+    </div>
+    <h2>Yhteenveto harjoituksista</h2>
+</script>
+
+<script id="hpkContentTemplate" type="text/html">
+    <article>
+        <div class="by year">
+            <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}">&larr;</a>
+            {{year}}
+            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}">&rarr;</a> {{/hasNextYear}}
+        </div>
+        {{> summaryTemplate}}
+    </article>
+</script>
+
+<script id="summaryTemplate" type="text/html">
+    <table id="homies" class="details">
+        <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
+        <tbody>
+        {{#sports}}
+        {{> summaryItemTemplate}}
+        {{/sports}}
+        </tbody>
+    </table>
+</script>
+
+<script id="hpkMonthContentTemplate" type="text/html">
+    <article>
+        <div class="by month">
+            <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}-bymonth">&larr;</a>
+            Vuosi {{year}}
+            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}-bymonth">&rarr;</a> {{/hasNextYear}}
+        </div>
+        {{#months}}
+        <h2 class="monthName">{{monthName}}</h2>
+        {{> summaryTemplate}}
+        {{/months}}
+    </article>
+</script>
+
+<script id="summaryItemTemplate" type="text/html">
+    <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+</script>
+
+<script id="hpkWeeklyContentTemplate" type="text/html">
+
+    <h2 class="monthName">{{monthName}} {{year}}</h2>
+    <table class="weekly">
+        <thead>
+        <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
+        </thead>
+        <tbody>
+        {{#summary}}
+        <tr>
+            <td><strong>{{week}}</strong></td>
+            {{#exs}}
+            <td class="{{class}}">
+                {{> hpkWeeklyExTemplate}}
+            </td>
+            {{/exs}}
+            {{> hpkWeeklySummaryTemplate}}
+        </tr>
+        {{#summaries}}
+        </tr>
+        {{/summaries}}
+        {{/summary}}
+
+        </tbody>
+    </table>
+</script>
+
+<script id="hpkWeeklyExTemplate" type="text/html">
+    {{#exs}}
+    <a class="pageLink" rel="ex-{{id}}"><span class="sport {{sport}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
+    {{/exs}}
+</script>
+
+<script id="hpkWeeklySummaryTemplate" type="text/html">
+    <td>
+        {{#summaries}} {{duration}}{{#distance}}<br/>{{distance}}{{/distance}}{{/summaries}}
+    </td>
+</script>
+<script id="loggedInStylesTemplate" type="text/html">
+    <style id="logged-in-styles" type="text/css">
+        a.delete, #modify-ex {
+            visibility: hidden;
+        }
+        a[data-user="{{user}}"].delete {
+            visibility: visible;
+        }
+        #modify-ex[data-user="{{user}}"] {
+            visibility: visible;
+            vertical-align: baseline;
+        }
+        body[data-page="user"] a[rel="user-{{user}}"] {
+            font-weight: bold;
+        }
+    </style></script>
+
+
+
+<!-- JavaScript at the bottom for fast page loading -->
+
+<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/select2.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/jquery.cookie.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/jquery.md5.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/jquery.address-1.5-30680d.min.js?strict=false"></script>
+<script src="js/icanhaz-0.10.0.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/lodash-0.5.2.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/xdate-0.7.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.binding.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.time.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.joinpatterns.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.jquery.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.jquery.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.backend.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.validation.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.pager.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/rx.ontrail.session.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/jquery.continuous-calendar.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="redactor/redactor.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+
+<!-- scripts concatenated and minified via build script -->
+<script src="js/plugins.js?_=UNIQUE_INSTALLATION_ID2"></script>
+<script src="js/ontrail.js?_=UNIQUE_INSTALLATION_ID2"></script>
+
+<!-- end scripts -->
+
+</body>
+</html>
