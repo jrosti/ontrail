@@ -183,7 +183,7 @@
     var logouts = $("#logout").clickAsObservable()
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").clickAsObservable().mergeTo(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").clickAsObservable().merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
@@ -192,7 +192,7 @@
       .where(isSuccess).select(ajaxResponseData);
 
     // create session
-    var sessions = OnTrail.session.create(logins.mergeTo(registerUsers), logouts.mergeTo(loginFails));
+    var sessions = OnTrail.session.create(logins.merge(registerUsers), logouts.merge(loginFails));
 
     // loggedIn and loggedOut state resolved from session
     var loggedIns = sessions.where(identity)
@@ -252,7 +252,7 @@
       if ($.address.value()) return splitM($.address.value());
       return (user && "summary") || "latest"
     }
-    var currentPages = sessions.select(initialPage).mergeTo(pageLinks.selectArgs(pageAndArgs)).mergeTo(registerUsers.select(always("profile"))).publish()
+    var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
@@ -275,7 +275,7 @@
       $('#password').attr('value', '')
       $.address.value(pages.join("-"))
     }
-    currentPages.mergeTo(backPresses).subscribeArgs(showPage)
+    currentPages.merge(backPresses).subscribeArgs(showPage)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
     userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
@@ -284,7 +284,7 @@
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
-    var latestScroll = $("#search").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() { entries.html("") })
       .selectArgs(function(query) {
         if (query === "")
@@ -328,7 +328,7 @@
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
-    var usersScroll = $("#search-users").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("users")).select(always("")))
+    var usersScroll = $("#search-users").valueAsObservable().merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
       .doAction(function() { userList.html("") })
       .selectArgs(function(query) {
         if (query === "")

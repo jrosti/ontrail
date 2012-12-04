@@ -169,57 +169,219 @@
                 <div class="9u">
 
                     <!-- Main Content -->
-                    <section>
-                        <header>
-                            <h2>Two Column #1</h2>
-                            <h3>A generic two column layout</h3>
-                        </header>
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam metus, congue
-                            vel suscipit ut, dignissim non risus. Vestibulum ante est, fringilla nec placerat
-                            eu, vestibulum vitae diam. Integer eget egestas eros. Duis enim erat, mollis quis
-                            lacinia eget, blandit nec ipsum. Donec vitae turpis ipsum. Aliquam mauris libero,
-                            sagittis in eleifend at, mattis imperdiet velit. Donec urna risus, rutrum molestie
-                            varius ac, lacinia sit amet augue. Nam ultrices elementum eros.
-                        </p>
-                        <p>
-                            Sed faucibus viverra ligula, non varius magna semper vitae. Donec eu justo ut ipsum
-                            hendrerit congue nec eu risus. Cum sociis natoque penatibus et magnis dis parturient
-                            montes, nascetur ridiculus mus. Lorem ipsum dolor sit amet, consectetur adipiscing
-                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
-                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
-                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
-                            elit. Suspendisse fermentum adipiscing nisi, a tempor libero malesuada at. Morbi
-                            lacinia dui adipiscing risus eleifend tincidunt. Proin eu mauris eu tellus eleifend
-                            hendrerit.
-                        </p>
-                        <p>
-                            Mauris sit amet tellus urna. In facilisis, tortor vitae ultricies egestas, odio
-                            mi rhoncus arcu, quis euismod felis felis et velit. Mauris varius consectetur erat
-                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
-                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
-                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
-                            iaculis. Phasellus ultrices diam sit amet orci lacinia sed consequat dui auctor.
-                        </p>
-                        <p>
-                            Sed faucibus viverra ligula, non varius magna semper vitae. Donec eu justo ut ipsum
-                            hendrerit congue nec eu risus. Cum sociis natoque penatibus et magnis dis parturient
-                            montes, nascetur ridiculus mus. Lorem ipsum dolor sit amet, consectetur adipiscing
-                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
-                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
-                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
-                            elit. Suspendisse fermentum adipiscing nisi, a tempor libero malesuada at. Morbi
-                            lacinia dui adipiscing risus eleifend tincidunt. Proin eu mauris eu tellus eleifend
-                            hendrerit.
-                        </p>
-                        <p>
-                            Mauris sit amet tellus urna. In facilisis, tortor vitae ultricies egestas, odio
-                            mi rhoncus arcu, quis euismod felis felis et velit. Mauris varius consectetur erat
-                            egestas tempus. Cras convallis odio sit amet risus convallis porttitor. Integer
-                            vehicula fermentum ligula at pretium. Suspendisse semper iaculis eros, eu aliquam
-                            justo imperdiet vel. Proin nec dictum mi. Duis commodo enim non tellus interdum
-                            iaculis. Phasellus ultrices diam sit amet orci lacinia sed consequat dui auctor.
-                        </p>
+                    <section role="latest">
+                        <div class="logged-in">
+                            <header>
+                                <h2>Lenkit</h2>
+                                <h3>Viimeksi lisätyt ja kommentoidut lenkit</h3>
+                                <label for="search">Etsi lenkeistä: </label> <input class="search" type="text" id="search"/>
+                            </header>
+                            <article>
+                            </article>
+                        </div>
+                        <div id="entries"></div>
+                    </section>
+
+                    <section role="systemstats">
+                        <article>
+                            <h3>Ontrail palvelimen tiedot</h3>
+                            <p>
+                                Muistia käytössä: <span id="sysheap"></span><br/>
+                                Muistia varattu: <span id="sysmaxHeap"></span><br/>
+                                Palvelin käynnissä: <span id="sysuptime"></span><br/>
+                                Harjoituksia: <span id="sysexs"></span><br/>
+                                Käyttäjiä: <span id="sysusers"></span><br/>
+                            </p>
+                            <p>Aktiiviset käyttäjät</p>
+                            <p id="active-users" class="activeUserList"/>
+                        </article>
+                    </section>
+
+                    <section role="import">
+                        <article>
+                            <h3>Harjoituspäiväkirjan tuonti Lenkkivihko-formaatista</h3>
+                            1. Klikkaa Lenkkivihon etusivulta linkkiä "Tuo harjoitukset tiedostona".<br />
+                            2. Tallenna tiedosto levylle. Älä avaa tiedostoa välillä Execelissä tai muussa ohjelmassa, vaan talleta se sellaisenaan.<br />
+                            3. Liitä tuontitiedosto oheiseen lomakkeeseen. Paina "Lähetä linkkiä alla" ja odota rauhassa noin 10 sekuntia, kunnes
+                            kaikki harjoitukset on tuotu.<br />
+
+                            <form action="/rest/v1/import" class="edit-form" method="post" enctype="multipart/form-data">
+                                <div>
+                                    <label>Valitse tiedosto:</label>
+                                    <input name="file" type="file" size="15" />
+                                </div>
+
+                                <div>
+                                    <label></label>
+                                    <input type="submit" name="submit" value="Lähetä harjoituspäiväkirja käsiteltäväksi." />
+                                </div>
+                            </form>
+                            <span id="import-result"></span>
+                        </article>
+                    </section>
+
+                    <section role="profile">
+                        <article>
+                            <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Oma profiili</h2>
+                            <div class="details">
+                                <h3>Henkilökohtaiset tiedot</h3>
+                                <div class="edit-form">
+                                    Sähköposti: <span id="profile-email"></span>
+                                    <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
+                                        -palvelun avulla</a> käyttäen
+                                        sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
+                                        ylläpitäjän pyynnostä.</small></i></div>
+                                </div>
+                                <h3>Syketiedot</h3>
+                                <form id="profile-form" class="edit-form" method="post">
+                                    <div>
+                                        <label for="resthr">Leposyke</label>
+                                        <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
+                                    </div>
+                                    <div>
+                                        <label for="maxhr">Maksimisyke</label>
+                                        <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
+                                    </div>
+                                    <div>
+                                        <label for="aerk">Aerobinen kynnys</label>
+                                        <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
+                                    </div>
+                                    <div>
+                                        <label for="anaerk">Anaerobinen kynnys</label>
+                                        <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" placeholder="Anaerobinen kynnnys" />
+                                    </div>
+                                    <div>
+                                        <label></label>
+                                        <a id="update-profile" class="button login">Päivitä syketiedot</a>
+                                    </div>
+                                </form>
+                                <span id="profile-result"></span>
+                            </div>
+                        </article>
+                    </section>
+
+                    <section role="content">
+                        <div id="content-header"></div>
+                        <div id="content-entries"></div>
+                    </section>
+
+                    <section role="summary">
+                        <div id="summary-header"></div>
+                        <div id="summary-entries"></div>
+                    </section>
+
+                    <section role="tagsummary">
+                        <div id="tagsummary-header"></div>
+                        <div id="tagsummary-entries"></div>
+                    </section>
+
+                    <section role="weeksummary">
+                        <div id="weeksummary-header">
+                            <h2>Viikoittainen harjoitusyhteenveto</h2>
+                        </div>
+                        <div>
+                            <article id="weeksummary">
+                            </article>
+                        </div>
+                    </section>
+
+                    <section role="users">
+                        <article>
+                            <label for="search-users">Hae käyttäjää: </label> <input class="search" type="text" id="search-users"/>
+                            <div id="user-results"></div>
+                        </article>
+                    </section>
+
+                    <section role="ex" class="full with-comments">
+                        <div id="exercise" />
+                    </section>
+
+                    <section role="addex" data-mode="add">
+                        <article class="edit-form">
+                            <h2>Lisää uusi lenkki</h2>
+                            <form id="add-exercise-form" method="post">
+
+                                <div>
+                                    <label>Otsikko</label>
+                                    <input id="ex-title" name="title" class="reset" placeholder="Otsikko"/>
+                                    <em class="error title-required">Lisää otsikko</em>
+                                </div>
+                                <div>
+                                    <label>Laji</label>
+                                    <select id="ex-sport" class="chzn-select" style="width:350px;">
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>Kesto</label>
+                                    <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="duration-hint"></span>
+                                    <em class="error duration-required">Lenkin kesto vaaditaan</em>
+                                    <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
+                                </div>
+                                <div>
+                                    <label>Matka</label>
+                                    <input id="ex-distance" name="distance" class="reset" placeholder="Matka (esim 2km, 3250m)"/> <span id="distance-hint"></span>
+                                </div>
+                                <div>
+                                    <label>Keskisyke</label>
+                                    <input id="ex-avghr" name="avghr" class="reset" placeholder="Keskisyke"/>
+                                </div>
+                                <div>
+                                    <label>Päivä</label>
+                                    <div id="ex-continuous-date">
+                                        <input style="display: none ! important" id="ex-date" name="date" placeholder="Milloin?"/>
+                                    </div>
+                                </div>
+                                <div id="add-tags-select">
+                                    <label>Avainsanat</label>
+                                    <input id="ex-tags" data-placeholder="Lisää avainsanoja..." multiple class="chzn-select"/>
+                                </div>
+                                <div>
+                                    <label>Kuvaus</label>
+                                    <div id="ex-body"></div>
+                                </div>
+                                <div>
+                                    <label></label>
+                                    <a id="add-exercise" class="button addExercise add">Lisää lenkki</a>
+                                    <a id="edit-exercise" class="button editExercise edit">Muokkaa lenkkiä</a>
+                                </div>
+                            </form>
+                        </article>
+                    </section>
+
+                    <section role="register" data-mode="add">
+                        <article class="edit-form">
+                            <h2>Rekisteröidy käyttäjäksi</h2>
+                            <form id="register-form" method="post">
+                                <div>
+                                    <label>Käyttäjätunnus</label>
+                                    <input id="ex-username" name="username" class="reset" placeholder="Käyttäjätunnus"/>
+                                    <em class="error username-required">Käyttäjätunnus vaaditaan</em>
+                                    <em class="error user-exists">Tunnus on jo käytössä</em>
+                                </div>
+                                <div>
+                                    <label>Salasana</label>
+                                    <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana"/>
+                                    <em class="error password-required">Salasana vaaditaan</em>
+                                    <em class="error password-too-short">Salasanassa pitää olla vähintään kuusi merkkiä</em>
+                                </div>
+                                <div>
+                                    <label>Salasana uudelleen</label>
+                                    <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+                                    <em class="error passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
+                                </div>
+                                <div>
+                                    <label>Sähköpostiosoite</label>
+                                    <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
+                                    <em class="error email-invalid">Sähköpostiosoite vaaditaan</em>
+                                    <p>Asetathan toimivan sähköpostiosoitteen, sillä tunnuksesi käyttö edellyttää
+                                        sähköpostien vastaanottamista. Osoittettasi ei näytetä muille käyttäjille.</p>
+                                </div>
+                                <div>
+                                    <label></label>
+                                    <a id="register-user" class="button register">Rekisteröidy</a>
+                                </div>
+                            </form>
+                        </article>
                     </section>
 
                 </div>
@@ -351,8 +513,8 @@
 </script>
 <script id="exerciseTemplate" type="text/html">
     <article data-id="{{id}}" class="preview exercise {{sport}}">
-        <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
-        <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
+        <a class="delete button right" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+        <img class="avatar" src="{{avatar}}" width="48" height="48"><h3><a class="more" rel="ex-{{id}}">{{title}}</a></h3>
         <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
             {{did}} {{#distance}} {{distance}} ajassa {{duration}}{{/distance}} {{^distance}} {{duration}}{{/distance}}{{#isNew}}!{{/isNew}}</h4>

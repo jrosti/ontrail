@@ -1,5 +1,12 @@
 (function() {
 
+  Rx.Observable.prototype.log = function(category) {
+    return this.doAction(function() {
+      var dbg = _debug(category)
+      dbg.apply(dbg, asArgs(arguments))
+    })
+  }
+
   Rx.Observable.prototype.selectArgs = function(selectAction) {
     return this.select(function(args) {
       return selectAction.apply(null, asArgs(args))
@@ -29,10 +36,6 @@
     this.doAction(merged.onNext, merged.onNext, merged.onCompleted)
       .retry().publish().connect()
     return merged
-  }
-
-  Rx.Observable.prototype.mergeTo = function(observable) {
-    return Rx.Observable.merge(null, this, observable)
   }
   Rx.Observable.prototype.combineWithLatestOf = function() {
     var first = this

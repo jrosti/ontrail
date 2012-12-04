@@ -27,7 +27,7 @@ $(function() {
 
   $.fn.allChanges = function() {
     var source = this
-    return eventSourceFor(source, ["keyup", "blur"]).mergeTo(source.toObservable("valueChange").select(function(event) { return currentValue(source) }))
+    return eventSourceFor(source, ["keyup", "blur"]).merge(source.toObservable("valueChange").select(function(event) { return currentValue(source) }))
   }
 
   $.fn.liveChanges = function() {
@@ -343,14 +343,14 @@ function eventSourceFor(selector, events) {
   var initialValue = currentValue(selector)
   var changes = selector.onAsObservable(events.toString().replace(/,/g, " "))
     .select(function(event) { return currentValue(selector) })
-  return changes.mergeTo(Rx.Observable.returnValue(initialValue)).distinctUntilChanged()
+  return changes.merge(Rx.Observable.returnValue(initialValue)).distinctUntilChanged()
 }
 
 function liveEventSourceFor(selector, events) {
   var initialValue = currentValue(selector)
   var changes = selector.toLiveObservable(events.toString().replace(/,/g, " "))
     .select(function(event) { return currentValue(selector) })
-  return changes.mergeTo(Rx.Observable.returnValue(initialValue != undefined ? initialValue : "")).distinctUntilChanged()
+  return changes.merge(Rx.Observable.returnValue(initialValue != undefined ? initialValue : "")).distinctUntilChanged()
 }
 
 // JQuery -> String

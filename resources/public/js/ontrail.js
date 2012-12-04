@@ -279,7 +279,7 @@
       $('#password').attr('value', '')
       $.address.value(pages.join("-"))
     }
-    currentPages.mergeTo(backPresses).subscribeArgs(showPage)
+    currentPages.merge(backPresses).subscribeArgs(showPage)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
     userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
@@ -288,7 +288,7 @@
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
-    var latestScroll = $("#search").valueAsObservable().mergeTo(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() { entries.html("") })
       .selectArgs(function(query) {
         if (query === "")
@@ -332,7 +332,7 @@
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
-    var usersScroll = $("#search-users").valueAsObservable().doAction(_.partial(debug, "foo1")).merge(currentPages.whereArgs(partialEquals("users")).doAction(_.partial(debug, "foo")).select(always("")))
+    var usersScroll = $("#search-users").valueAsObservable().merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
       .doAction(function() { console.log(arguments, "usereScroll"); userList.html("") })
       .selectArgs(function(query) {
           if (query === "")
@@ -347,9 +347,164 @@
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
     loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
 
-    currentPages.subscribe(debug)
+    // Lisää lenkki
+    var resetEditor = function() {
+      $("#add-exercise-form .reset").attr('value', '')
+      $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
+      $("#ex-tags").select2("data", [])
+      $("#duration-hint").html("")
+      $("#distance-hint").html("")
+      $("#ex-body").setCode("<p>\n<br>\n</p>")
+    }
+
+    var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
+    var addExercises = $('#add-exercise').clickAsObservable().select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    addExercises.subscribe(showExercise)
+    currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
+      if (exid === undefined) resetEditor()
+    })
+
+    currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
+      var res = ["reset", ""]
+      if (args !== undefined) {
+        res = args.split('=')
+      }
+      if (res[0] === 'ok') {
+        $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
+      } if (res[0] === 'error') {
+        var errors = {"invalidFormat": "virheellinen tiedostomuoto", "alreadyExists": "harjoituspäiväkirja on jo tuotu"}
+        $("#import-result").html("<p class=\"error\">Virhe tuonnissa, syy: " + errors[res[1]] + " </p>")
+      } if (res[0] === "reset") {
+        $("#import-result").html("")
+      }
+    })
+
+    // muokkaa lenkkiä:
+    var renderEditExercise = function(ex) {
+      $("[role='addex']").attr('data-mode', 'edit')
+      _.map(["title", "duration", "distance", "avghr"], function(field) { $('#ex-' + field).val(ex[field]).keyup() })
+      $("#ex-date").attr('value', ex.date)
+      $("#ex-date").trigger("cal:changed")
+      $("#ex-body").setCode(ex.body)
+      $("#ex-sport").select2("data", [ex.sport])
+      if (ex.tags && ex.tags.length > 0)
+        $("#ex-tags").select2("data", ex.tags)
+    }
+
+    var renderProfileUpdate = function(args) {
+      var result = _.reduce(_.map([["leposyke", args.resthr], ["maksimisyke", args.maxhr],
+        ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
+        function(val) {
+          if (val[1]) {
+            return " " + val[0] + ": " + val[1] + " "
+          } else {
+            return ""
+          }}),
+        function(fst,snd) { return fst + snd })
+      $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
+    }
+
+    var renderAddExercise = function() {
+      resetEditor()
+      $("[role='addex']").attr('data-mode', 'add')
+    }
+    $('.pageLink[rel="addex"]').clickAsObservable().subscribe(renderAddExercise)
+
+    var asExercise = function(__, exercise) { return ["ex", exercise] }
+    var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
+    editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
+
+    // muokkauksen submit
+    var updateExercises = $('#edit-exercise').clickAsObservable()
+      .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
+    updateExercises.subscribe(showExercise)
+
+    // update user profile
+    var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
+      .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
+    updateProfiles.subscribeArgs(renderProfileUpdate)
+
+    // Lisää kommentti
+    var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
+      .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
+    addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
 
+    var attachValidation = function(validator, error, field) {
+      var validation = mkValidation($('#ex-' + field).changes(), validator)
+      validation.subscribe(toggleEffect($("." + field + "-" + error)))
+      validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
+      return validation
+
+    }
+
+    // luo lenkki -validaatio
+    var require = _.partial(attachValidation, requiredV(), "required");
+
+    var serverTimeValidator = function() {
+      return function(value) {
+        if ($.trim(value) == "") return Rx.Observable.returnValue([])
+        var request = OnTrail.rest.durationV(value)
+        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDurationHint)
+        return request.materialize()
+          .select(convertToError)
+          .dematerialize()
+      }}
+
+    var serverDistanceValidator = function() {
+      return function(value) {
+        if ($.trim(value) == "") return Rx.Observable.returnValue([])
+        var request = OnTrail.rest.distanceV(value)
+        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDistanceHint)
+        return request.materialize()
+          .select(convertToError)
+          .dematerialize()
+      }}
+
+    var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/', serverTimeValidator).validation
+    timeValidation.subscribe(toggleEffect($(".invalid-duration")))
+    timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
+
+    var distanceValidation = mkServerValidation($('#ex-distance').changes(), '/rest/v1/parse-distance/', serverDistanceValidator).validation
+
+    var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
+    combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
+
+    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: "today", startField: $('#ex-date'), locale: DateLocale.FI })
+
+    var editorSettings = {
+      buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
+        'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
+      minHeight: 200
+    }
+    $('#ex-body').redactor(editorSettings)
+
+    var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
+    var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
+
+    var samePassword = mkValidation($('#ex-password').changes().combineLatest($('#ex-password2').changes(), asArgs), matchingValuesV())
+    samePassword.subscribe(toggleEffect($(".passwords-do-not-match")))
+    samePassword.subscribe(toggleClassEffect($('#ex-password2'), "has-error"))
+
+    var usernameAvailableValidator = createAjaxValidator(OnTrail.rest.usernameV);
+    var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation
+    usernameExistsValidation.subscribe(toggleEffect($(".user-exists")))
+    usernameExistsValidation.subscribe(toggleClassEffect($('#ex-username'), "has-error"))
+
+    var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
+    combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
+
+//    var menuOffsetTop = $('#menu').offset().top
+//    var fixMenuPosition = function() {
+//      $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
+//      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
+//      $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
+//    }
+
+
+    // initiate current page
+    currentPages.connect()
   })
 })()
 

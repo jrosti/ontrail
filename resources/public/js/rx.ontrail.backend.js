@@ -12,7 +12,7 @@
       return function() { errorHandler = null }
     }).publish()
     ajaxErrors.connect()
-    return $.ajaxAsObservable($.extend(options, errorHandler)).mergeTo(ajaxErrors)
+    return $.ajaxAsObservable($.extend(options, errorHandler)).merge(ajaxErrors)
   }
 
   var getAsObservable = function() {
