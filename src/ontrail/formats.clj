@@ -17,12 +17,12 @@
 (defn to-human-pace-minkm [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 1000))
         secs (int (* 60.0 (- pace (int pace))))]
-    (str (int pace) "." (format "%02d" secs) " min/km")))
+    (str (int pace) "." (format "%02d" secs) "&nbsp;min/km")))
 
 (defn to-human-pace-kmh [duration distance]
   (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
         fraction (int (* 10 (- speed (int speed))))]
-    (str (int speed) "," (format "%01d" fraction) " km/h")))
+    (str (int speed) "," (format "%01d" fraction) "&nbsp;km/h")))
 
 (defn pace-conversion-fun [sport]
   (case sport
@@ -42,7 +42,7 @@
   (let [{:keys [duration distance avghr]} exercise
         {:keys [resthr]} profile]
     (if (positive-numbers? (list resthr duration distance avghr))
-        (string/replace (format "%.2f m/b" (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))) #"\." ","))))
+        (string/replace (format "%.2f&nbsp;m/b" (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))) #"\." ","))))
 
 (defn to-human-distance [distance]
   (if (= nil distance)
@@ -52,8 +52,8 @@
           m-as-str (str "," m)]
     (if (> km 0)
       (if (= m 0)
-        (str km " km")
-        (str km "," (string/replace  (format "%03d" (int m)) #"0+$" "")  " km"))
+        (str km "&nbsp;km")
+        (str km "," (string/replace  (format "%03d" (int m)) #"0+$" "")  "&nbsp;km"))
       (if (> m 0)
         (str (int m) "m")
         "")))))
@@ -78,13 +78,13 @@
 
 (defn seconds-part [seconds hundreds]
   (if (> hundreds 0)
-    (str seconds "," (format "%02d" (int hundreds)) " s")
-    (str seconds " s")))
+    (str seconds "," (format "%02d" (int hundreds)) "&nbsp;s")
+    (str seconds "&nbsp;s")))
 
 (defn minutes-part [minutes seconds]
   (if (> seconds 0)
-    (str minutes " min " seconds " s")
-    (str minutes " min")))
+    (str minutes "&nbsp;min&nbsp;" seconds "&nbsp;s")
+    (str minutes "&nbsp;min")))
 
 (defn to-human-time [duration]
   (try
@@ -96,16 +96,15 @@
             hours (int (/ duration 360000))]
         (if (> hours 0)
           (if (or (> minutes 0) (> seconds 0))
-            (str hours " h " (minutes-part minutes seconds))
-            (str hours " h"))
+            (str hours "&nbsp;h&nbsp;" (minutes-part minutes seconds))
+            (str hours "&nbsp;h"))
           (if (or (> seconds 0) (> hundreds 0))
-              (str minutes " min " (seconds-part seconds hundreds))
-              (str minutes " min")))))
+              (str minutes "&nbsp;min&nbsp;" (seconds-part seconds hundreds))
+              (str minutes "&nbsp;min")))))
     (catch Exception exception#
       (.error logger (str exception# duration))
       "NaN")))
 
-  
 
         
         

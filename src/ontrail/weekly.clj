@@ -19,6 +19,18 @@
   (["maanantai" "tiistai" "keskiviikko" "torstai" "perjantai" "lauantai" "sunnuntai"]
      (to-week-day-idx date)))
 
+(defn to-weekly-duration [duration]
+  (let [minutes (mod (int (/ duration 6000)) 60)
+        hours (int (/ duration 360000))
+        seconds (mod (int (/ duration 100)) 60)]
+    (format "%d.%02d" hours minutes)))  
+
+(defn to-weekly-distance [distance]
+  (if (or (= nil distance) (= 0 distance))
+    ""
+    (let [km (/ distance 1000.0)]
+      (format "%.1f" km))))
+
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
         user (:user exercise)
@@ -34,7 +46,7 @@
      :isoDate (:creationDate exercise)
      :dayIndex (to-week-day-idx creation-date)
      :date (to-human-date creation-date)
-     :duration (to-human-time (:duration exercise))
+     :duration (to-weekly-duration (:duration exercise))
      :day (to-week-day creation-date)
      :avghr (:avghr exercise)
      :hrReserve heart-rate-reserve
@@ -67,12 +79,12 @@
     totals))
 
 (defn humanize [coll]
-  (assoc coll :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll))))
+  (assoc coll :distance (to-human-distance (:distance coll)) :duration (to-weekly-duration (:duration coll))))
 
 (defn zero-result[sport] {:sport sport :distance 0 :duration 0})
 
 (defn summary-distinct-sports [results]
-  (let [sports-distinct (distinct (map :sport results))]
+  (let [sports-distinct (filter (partial not= "Muu merkintä") (distinct (map :sport results)))]
     (map humanize (sort-by :duration >
                            (for [sport sports-distinct]
                              (reduce (partial accumulate-if-sport-is sport)
