@@ -175,8 +175,8 @@
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
-    var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
-    var renderDistanceHint = function(distance) { $('#distance-hint').text(distance.distance) }
+    var renderDurationHint = function(duration) { $('#duration-hint').html(duration.time) }
+    var renderDistanceHint = function(distance) { $('#distance-hint').html(distance.distance) }
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
