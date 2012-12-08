@@ -666,7 +666,7 @@ table.weekly .sport {
 
   zoom: 1;
   *display: inline;
-  background: url(../img/icons_20.png) no-repeat -143px -20px;
+  background: url(../img/icons_20.png) no-repeat -143px -40px;
   width: 21px;
   height: 20px;
 }
@@ -836,8 +836,8 @@ table.weekly .sport.Lentopallo {
 
   zoom: 1;
   *display: inline;
-  background: url(../img/icons_20.png) no-repeat -61px -79px;
-  width: 21px;
+  background: url(../img/icons_20.png) no-repeat -20px 0px;
+  width: 20px;
   height: 20px;
 }
 table.weekly .sport.Luistelu {
