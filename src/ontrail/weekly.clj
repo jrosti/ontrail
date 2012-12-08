@@ -20,16 +20,12 @@
      (to-week-day-idx date)))
 
 (defn to-weekly-duration [duration]
-  (let [minutes (mod (int (/ duration 6000)) 60)
-        hours (int (/ duration 360000))
-        seconds (mod (int (/ duration 100)) 60)]
-    (format "%d.%02d" hours minutes)))  
-
-(defn to-weekly-distance [distance]
-  (if (or (= nil distance) (= 0 distance))
+  (if (or (= nil duration) (= 0 duration))
     ""
-    (let [km (/ distance 1000.0)]
-      (format "%.1f" km))))
+    (let [minutes (mod (int (/ duration 6000)) 60)
+          hours (int (/ duration 360000))
+          seconds (mod (int (/ duration 100)) 60)]
+      (format "%d.%02d" hours minutes))))
 
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
