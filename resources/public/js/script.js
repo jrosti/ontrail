@@ -304,16 +304,16 @@
     weeklyScroll.subscribe(renderWeeklySummary)
 
     var formatToolTip = function(distance, duration, pace) {
-      return  (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + ", " : "") + (duration !== "" ? duration : "")
+      return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + ", " : "") + (duration !== "" ? duration : "")
     }
 
     $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
-      var e = $(el.target);
+      var e = $(el.target)
       if (el.type === "mouseenter") {
-        e.tooltip({content: function() {
-          var distance = e.attr("data-distance")
-          var duration = e.attr("data-duration")
-	  var pace = e.attr("data-pace")
+          e.tooltip({content: function() {
+          var distance = e.attr("data-distance").replace(" ", "&nbsp;")
+          var duration = e.attr("data-duration").replace(" ", "&nbsp;")
+	      var pace = e.attr("data-pace").replace(" ", "&nbsp;")
           return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")

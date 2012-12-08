@@ -27,6 +27,9 @@
           seconds (mod (int (/ duration 100)) 60)]
       (format "%d.%02d" hours minutes))))
 
+(defn sport-id [sport]
+  (string/replace sport #"[^a-z09A-Z]+" "_"))
+
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
         user (:user exercise)
@@ -39,6 +42,7 @@
      :title (:title exercise)
      :tags (:tags exercise)
      :sport (:sport exercise)
+     :sportId (sport-id (:sport exercise))
      :isoDate (:creationDate exercise)
      :dayIndex (to-week-day-idx creation-date)
      :date (to-human-date creation-date)
@@ -66,7 +70,7 @@
     0))
 
 (defn accumulate [sport totals result]
-  {:sport sport :distance (+ (:distance totals) (get-entry result :distance))
+  {:sportId (sport-id sport) :sport sport :distance (+ (:distance totals) (get-entry result :distance))
    :duration (+ (:duration totals) (get-entry result :duration))})
 
 (defn accumulate-if-sport-is [sport totals result]
