@@ -70,8 +70,11 @@
     0))
 
 (defn accumulate [sport totals result]
+  (let [distance (get-entry result :distance)
+        true-duration (if (> distance 0) (get-entry result :duration) 0)]
   {:sportId (sport-id sport) :sport sport :distance (+ (:distance totals) (get-entry result :distance))
-   :duration (+ (:duration totals) (get-entry result :duration))})
+   :duration (+ (:duration totals) (get-entry result :duration))
+   :tduration (+ (:tduration totals) true-duration)}))
 
 (defn accumulate-if-sport-is [sport totals result]
   (if (= sport (:sport result))
@@ -79,9 +82,10 @@
     totals))
 
 (defn humanize [coll]
-  (assoc coll :distance (to-human-distance (:distance coll)) :duration (to-weekly-duration (:duration coll))))
+  (let [pace (get-pace (assoc coll :duration (:tduration coll)))]
+    (assoc coll :pace pace :distance (to-human-distance (:distance coll)) :duration (to-weekly-duration (:duration coll)))))
 
-(defn zero-result[sport] {:sport sport :distance 0 :duration 0})
+(defn zero-result[sport] {:sport sport :distance 0 :duration 0 :tduration 0})
 
 (defn summary-distinct-sports [results]
   (let [sports-distinct (filter (partial not= "Muu merkintä") (distinct (map :sport results)))]
