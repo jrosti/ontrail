@@ -308,7 +308,7 @@
     weeklyScroll.subscribe(renderWeeklySummary)
 
     var formatToolTip = function(distance, duration, pace) {
-      return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + ", " : "") + (duration !== "" ? duration : "")
+      return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
     }
 
     $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
@@ -408,16 +408,16 @@
     }
 
     var renderProfileUpdate = function(args) {
-      var result = _.reduce(_.map([["leposyke", args.resthr], ["maksimisyke", args.maxhr], 
+      var result = _.reduce(_.map([["synopsis", args.synopsis], ["leposyke", args.resthr], ["maksimisyke", args.maxhr],
 				   ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
 				  function(val) { 
 				    if (val[1]) { 
 				      return " " + val[0] + ": " + val[1] + " "
-				    } else { 
+				    } else {
 				      return "" 
 				    }}), 
 			    function(fst,snd) { return fst + snd })
-      $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
+      $("#profile-result").html("Profiili päivitetty tiedoilla: " + result)
     }
 
     var renderAddExercise = function() {

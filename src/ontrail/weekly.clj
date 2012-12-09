@@ -46,7 +46,7 @@
      :isoDate (:creationDate exercise)
      :dayIndex (to-week-day-idx creation-date)
      :date (to-human-date creation-date)
-     :duration (to-weekly-duration (:duration exercise))
+     :duration (to-human-time (:duration exercise))
      :day (to-week-day creation-date)
      :avghr (:avghr exercise)
      :hrReserve heart-rate-reserve
@@ -83,7 +83,7 @@
 
 (defn humanize [coll]
   (let [pace (get-pace (assoc coll :duration (:tduration coll)))]
-    (assoc coll :pace pace :distance (to-human-distance (:distance coll)) :duration (to-weekly-duration (:duration coll)))))
+    (assoc coll :pace pace :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll)))))
 
 (defn zero-result[sport] {:sport sport :distance 0 :duration 0 :tduration 0})
 
