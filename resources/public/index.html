@@ -159,7 +159,7 @@
     <form id="profile-form" class="edit-form" method="post">
         <div>
             <label for="synopsis">Ytimekäs kuvaus</label>
-            <input id="synopsis" name="synopsis" type="text" maxlength="20" size="40" placeholder="Kuvaus" />
+            <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" placeholder="Kuvaus" />
         </div>
         <div>
             <label for="resthr">Leposyke</label>
@@ -454,7 +454,7 @@
   {{/users}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
-  <h2>Käyttäjän {{data}} lenkit</h2>
+  <h2>Käyttäjä {{data}}</h2>
     <p>
       <a class="pageLink" rel="summary-{{data}}">Lajiyhteenvedot</a>
       <a class="pageLink" rel="tagsummary-{{data}}">Avainsanayhteenvedot</a>

@@ -202,7 +202,7 @@
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user-' + userId)})
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
-      _.map(["resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+      _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
 
     loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
