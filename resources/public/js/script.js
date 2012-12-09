@@ -299,7 +299,11 @@
       .doAction(function() { $("#weeksummary").html("") })
       .combineWithLatestOf(sessions)
       .selectArgs(function(pg, user) {
-        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
+        var targetUser = user
+        if (pg.length == 2) {
+           targetUser = pg[1]
+        }
+        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
       }).switchLatest()
     weeklyScroll.subscribe(renderWeeklySummary)
 

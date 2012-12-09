@@ -30,6 +30,7 @@
         bare-term-list (string/split clean-words #" +")
         term-list (filter not-too-short-term? bare-term-list)
         extra-terms (conj term-list
+                          (str "d:" (:distance exercise))
                           (str "y:" (time/year ex-date))
                           (str "m:" (time/month ex-date)))]
     (if (number? ex-distance)

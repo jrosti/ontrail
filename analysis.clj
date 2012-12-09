@@ -4,7 +4,7 @@
 (use 'monger.operators)
 (use 'clojure.java.io)
 
-(defn exs[year] (mq/with-collection "exercise" (mq/find {:user "jatossu" :sport "Juoksu" :creationDate {:$gte (time/date-time year 1 1) :$lte (time/date-time year 12 30)}})))
+(defn exs[year] (mq/with-collection "exercise" (mq/find {:user "maja" :sport "Sisäsoutu" :creationDate {:$gte (time/date-time year 1 1) :$lte (time/date-time year 12 30)}})))
 
 (defn minkm [dist dur]
   (if (> dist 0)

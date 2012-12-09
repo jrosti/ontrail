@@ -910,6 +910,16 @@ table.weekly .sport.Hiihto {
   width: 21px;
   height: 20px;
 }
+table.weekly .sport.Perinteinen_hiihto {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat 0px -40px;
+  width: 21px;
+  height: 20px;
+}
 table.weekly .sport.Py_r_ily {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
@@ -960,7 +970,7 @@ table.weekly .sport.Sauvak_vely {
   width: 20px;
   height: 20px;
 }
-table.weekly .sport.Seikkailu-urheilu {
+table.weekly .sport.Seikkailu_urheilu {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
 
