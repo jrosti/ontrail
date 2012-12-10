@@ -150,10 +150,9 @@ function emailV() {
 // extend XDate parsing
 var parseDate
 (function() {
-
   var toValidDate = function(year, month, day) {
     var date = new XDate(year, month-1, day)
-    if ((date.getYear()+1900) == year && date.getMonth() == (month-1) && date.getDate() == day)
+    if (((date.getYear()+1900) == year || date.getYear() == year) && date.getMonth() == (month-1) && date.getDate() == day)
       return date;
     return null;
   }
