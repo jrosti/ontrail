@@ -61,8 +61,8 @@
     (partial newcount-get-new user)
     zero-cache))
 
-(defn newcount-comment-ex [id]
-  (let [users (mc/distinct ONUSER "username" {})]
+(defn newcount-comment-ex [from-user id]
+  (let [users (filter (partial not= from-user) (mc/distinct ONUSER "username" {}))]
     (future (.debug logger (str "Comment cache increment " id ". Distributed to: "
                                 (count (map (partial newcount-cache-inc id) users)))))))
 

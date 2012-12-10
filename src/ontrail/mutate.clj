@@ -77,7 +77,7 @@
                                         :user user
                                         :body (:body params)}}})
   (.info logger (str user " created comment " params))
-  (newcount-comment-ex (:id params))
+  (newcount-comment-ex user (:id params))
   (get-ex (:id params)))
 
 (defn delete-comment[ex-id rule]
