@@ -159,10 +159,9 @@
         for (var i in _.range(0, 7))
           if (exs[i] === undefined) exs[i] = [];
         exs = _.map(exs, function(item, index) {
-          return {dayIndex: index, exs: item, class: monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
+          return {dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
-
         var sum = (summaryItem.exs.length > 0 ? summaryItem.summary : [])
         var result = {week: summaryItem.week, exs: exs, summaries: sum }
         return result
