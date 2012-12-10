@@ -157,10 +157,11 @@
       function toWeeklySummary(month, summaryItem) {
         var monday = new XDate(summaryItem.from)
         var exs = _.groupBy(summaryItem.exs, _attr("dayIndex"))
+        var resex = [];
         for (var i in _.range(0, 7))
-          if (exs[i] === undefined) exs[i] = [];
-          exs = _.map(exs, function(item, index) {
-          return {dayIndex: index, exs: item, class: monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
+          if (exs[i] === undefined) resex[i] = []; else resex[i] = exs[i];
+          exs = _.map(resex, function(item, index) {
+          return {dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
 
