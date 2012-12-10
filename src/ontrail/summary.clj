@@ -14,8 +14,7 @@
       (/ (:tavghr db-retmap) hrcount)
       0)))
 
-;; Fix these map acceses to be idiomatic clojure, when you see them!
-(defn to-summary [db-object sport] 
+(defn to-summary [db-object key sport] 
   (let [db-retmap (first (get db-object :retval))
         count (int (get db-object :count))
         true-duration (get db-retmap :tdur)
@@ -26,7 +25,7 @@
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
      :avghr (int (+ 0.5 (avghr db-retmap)))
      :count count
-     :sport sport}))
+     key sport}))
 
 ;; Example of db.group -command in mongodb format.
 ;; db.exercise.group({cond: {user: "username"}, reduce: function(obj, prev) { prev.csum += obj.distance }, initial: {csum: 0 }});
@@ -55,8 +54,8 @@
                                                                               :tdur 0}}})
                                       true)))
   
-(defn get-summary [condition sport]
-  (to-summary (get-db-summary condition) sport))
+(defn get-summary [condition key sport]
+  (to-summary (get-db-summary condition) key sport))
 
 (defn get-season-months [summary-fun user prev-year]
   (let [pyear (- prev-year 1)

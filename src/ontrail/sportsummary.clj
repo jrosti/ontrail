@@ -12,8 +12,8 @@
   (.trace logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
         all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)
-        summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) %) all-distinct-sports))] 
-    {:user user :sports (concat summary-sports [(get-summary cond-with-user "YHTEENSÄ")])}))
+        summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) :sport %) all-distinct-sports))] 
+    {:user user :sports (concat summary-sports [(get-summary cond-with-user :sport "YHTEENSÄ")])}))
 
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)

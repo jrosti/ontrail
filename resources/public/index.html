@@ -520,7 +520,8 @@
 </script>
 
 <script id="summaryItemTemplate" type="text/html">
-  <tr><td>{{sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+  <tr><td>{{#tag}}<a class="pageLink" rel="tag-{{tag}}">{{tag}}</a>{{/tag}}
+  {{#sport}}{{sport}}{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
