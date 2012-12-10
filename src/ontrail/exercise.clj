@@ -49,7 +49,8 @@
                     :commentCount comment-count
                     :comments comments
                     :lastModifiedDate (:lastModifiedDate exercise)
-                    :bpmdist bpmdist}]
+                    :bpmdist bpmdist
+                    :synopsis (:synopsis user-profile)}]
        (if (> new-comments 0)
          (assoc bare-ex :newComments new-comments)
          bare-ex))))

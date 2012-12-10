@@ -158,7 +158,7 @@
     <h3>Profiilin tiedot</h3>
     <form id="profile-form" class="edit-form" method="post">
         <div>
-            <label for="synopsis">Ytimekäs kuvaus</label>
+            <label for="synopsis">Motto</label>
             <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" placeholder="Kuvaus" />
         </div>
         <div>
@@ -387,7 +387,11 @@
       <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
       {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
     </div>
-    <div class="full">{{{body}}}</div>
+    <div class="full">{{{body}}}
+        <p class="signature">
+          {{synopsis}}
+        </p>
+    </div>
 
     {{> tagsExpandedTemplate}}
     <div>
@@ -404,7 +408,11 @@
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
     {{> exerciseDetailsTemplate}}
-    <div>{{{body}}}</div>
+    <div>{{{body}}}
+        <p class="signature">
+          {{synopsis}}
+        </p>
+    </div>
     {{> tagsExpandedTemplate}}
   </article>
     <h3>Kommentit:</h3>

@@ -24,6 +24,12 @@ a:hover {
 h4 span {
   padding-right: 7px;
 }
+p.signature {
+  margin-left: 3em !important;
+  font-style: italic !important;
+  color: #777;
+  float: right;
+}
 img {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
