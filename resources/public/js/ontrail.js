@@ -156,9 +156,10 @@
       function toWeeklySummary(month, summaryItem) {
         var monday = new XDate(summaryItem.from)
         var exs = _.groupBy(summaryItem.exs, _attr("dayIndex"))
+        var resex = [];
         for (var i in _.range(0, 7))
-          if (exs[i] === undefined) exs[i] = [];
-        exs = _.map(exs, function(item, index) {
+          if (exs[i] === undefined) resex[i] = []; else resex[i] = exs[i];
+        exs = _.map(resex, function(item, index) {
           return {dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
@@ -255,7 +256,7 @@
       return (user && "summary") || "latest"
     }
 
-    var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).doAction(_.partial(debug, "foos")).merge(registerUsers.select(always("profile"))).publish()
+    var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
@@ -304,7 +305,11 @@
       .selectArgs(function(pg, user) {
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
       }).switchLatest()
-//    weeklyScroll.subscribe(renderWeeklySummary)
+    weeklyScroll.subscribe(renderWeeklySummary)
+
+    var formatToolTip = function(distance, duration, pace) {
+      return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
+    }
 
     $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
       var e = $(el.target);

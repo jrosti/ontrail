@@ -685,10 +685,11 @@
 
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
-        {{#summaries}} {{duration}}{{#distance}}<br/>{{distance}}{{/distance}}{{/summaries}}
+        {{#summaries}}<span class="sport {{sport}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>{{/summaries}}
     </td>
 </script>
-<script id="loggedInStylesTemplate" type="text/html">
+
+    <script id="loggedInStylesTemplate" type="text/html">
     <style id="logged-in-styles" type="text/css">
         a.delete, #modify-ex {
             visibility: hidden;
