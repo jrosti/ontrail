@@ -58,7 +58,7 @@
     }
 
     var render = function(template, data) {
-      return template(data)[0].outerHTML
+      return $(template(data)[0]).html()
     }
 
     var takeMax = function(renderer, left, str) {
@@ -322,8 +322,6 @@
           return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")
-      } else if (el.type === "mouseleave") {
-        e.tooltip("close")
       }
       return true;
     })
