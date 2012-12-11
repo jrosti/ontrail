@@ -109,6 +109,14 @@ article {
     margin: 0;
   }
 
+  &.exercise {
+//    background: #ccc;
+    border-bottom: 1px dotted #ccc;
+    p {
+      margin-bottom: 0;
+    }
+    margin-bottom: 1.5em;
+  }
 
   table.details {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
@@ -161,6 +169,30 @@ a.button {
 
   &.disabled {
     .css-button(#e9e9e9, #555, #6e6e6e, #888888, #575757);
+  }
+}
+
+a.modify {
+  float: right;
+  margin-top: 3px;
+  margin-right: 10px;
+  vertical-align: baseline;
+}
+
+a.addExercise, a.editExercise, a.addComment, a.editComment {
+  margin-top: 10px;
+}
+
+[role=addex] {
+  &[data-mode="add"] {
+    .edit {
+      display: none;
+    }
+  }
+  &[data-mode="edit"] {
+    .add {
+      display: none;
+    }
   }
 }
 
@@ -218,7 +250,7 @@ table.weekly {
   font-size: 10px;
   margin: 5px 0 0 30px;
   width: 96%;
-  text-align: left;
+  text-align  : left;
 
 
   th {
@@ -298,7 +330,6 @@ table.weekly {
     &.Venyttely { .sports-icon-20(184, 79, 20); }
     &.Vesijuoksu { .sports-icon-20(0, 79, 20); }
     &.Yleisurheilu { .sports-icon-20(163, 60, 21); }
-
   }
 }
 
@@ -310,4 +341,9 @@ table.weekly {
     line-height: 20px;
     height: 20px;
   }
+}
+
+div.tooltip-content {
+  display: block ! important;
+
 }

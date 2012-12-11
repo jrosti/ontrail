@@ -509,8 +509,9 @@
     </div>
 </script>
 <script id="exerciseTemplate" type="text/html">
+    <div>
     <article data-id="{{id}}" class="preview exercise {{sport}}">
-        <a class="delete button right" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+        <a class="pageLink modify" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
         <img class="avatar" src="{{avatar}}" width="48" height="48"><h3><a class="more" rel="ex-{{id}}">{{title}}</a></h3>
         <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
@@ -519,8 +520,8 @@
 
         <div class="preview">
             {{#trunc}}{{/trunc}}
-            <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a></div> {{/newComments}}
-        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
+            <p><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
         <div class="full">{{{body}}}</div>
 
@@ -530,12 +531,13 @@
                 {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
     </article>
+    </div>
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
     <article data-id="{{id}}" class="full exercise {{sport}}">
         <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
-        <a class="pageLink" id="modify-ex" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
+        <a class="pageLink modify" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
         <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
         {{> exerciseDetailsTemplate}}
@@ -679,13 +681,13 @@
 
 <script id="hpkWeeklyExTemplate" type="text/html">
     {{#exs}}
-    <a class="pageLink" rel="ex-{{id}}"><span class="sport {{sport}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
+    <a class="pageLink" rel="ex-{{id}}"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
     {{/exs}}
 </script>
 
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
-        {{#summaries}}<span class="sport {{sport}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>{{/summaries}}
+        {{#summaries}}<span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>{{/summaries}}
     </td>
 </script>
 
