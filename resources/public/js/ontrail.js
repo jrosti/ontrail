@@ -57,7 +57,7 @@
     }
 
     var render = function(template, data) {
-      return template(data)[0].outerHTML
+      return $(template(data)[0]).html()
     }
 
     var takeMax = function(renderer, left, str) {
@@ -312,12 +312,14 @@
     }
 
     $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
-      var e = $(el.target);
+      var e = $(el.target)
       if (el.type === "mouseenter") {
         e.tooltip({content: function() {
-          var distance = e.attr("data-distance")
-          var duration = e.attr("data-duration")
-          return e.attr("data-sport") + ", " + (distance !== "" ? distance : duration)
+          var distance = e.attr("data-distance").replace(" ", "&nbsp;")
+          var duration = e.attr("data-duration").replace(" ", "&nbsp;")
+          var pace = e.attr("data-pace").replace(" ", "&nbsp;")
+          console.log("tooltip is " +e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace) )
+          return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")
       } else if (el.type === "mouseleave") {
