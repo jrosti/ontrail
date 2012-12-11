@@ -58,8 +58,7 @@
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
 (defn monger-filter-from [params]
-  (let [{:keys [user tags sport]} params]
-    params))
+  (select-keys params [:user :tags :sport]))
 
 (defn get-page [params]
   (if (not= nil (:page params))
@@ -101,7 +100,7 @@
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
-  (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
+  (GET "/rest/v1/ex-list-filter/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
