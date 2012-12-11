@@ -93,12 +93,12 @@ var ajaxResponseData = function(response) { return response.data }
 // DOM
 var parent = function(el) { return el.parentNode }
 var findParent = function(el, match) {
-  if (el === undefined || match(el)) return el;
+  if (el == undefined || match(el)) return el;
   return findParent(parent(el), match);
 }
 var target = function(event) { return event.target }
 var value = function(input) { return input.value }
-var isLink = function(el) { return $(el).prop('localName') === "a"}
+var isLink = function(el) { return $(el).prop('nodeName') == "A"}
 var hasClass = function(name, el) { return $(el).hasClass(name) }
 var _hasClass = function(name) { return _.partial( hasClass, name) }
 var attr = function(name, el) { return $(el).attr(name) }
