@@ -104,6 +104,13 @@ var _hasClass = function(name) { return _.partial( hasClass, name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var _attr = function(name) { return _.partial(attr, name) }
 
+var asFilter = function(el) {
+  function isFilterItem(a) { return a.name.indexOf("data-filter-") == 0 }
+  function asFilterItem(a) { var item = {}; item[a.name.substring(12)] = a.value; return item }
+  return _.extend.apply(_.extend, _($(el)[0].attributes).chain().filter(isFilterItem).map(asFilterItem).value())
+}
+
+
 var targetLink = function(event) {
     return findParent(target(event), isLink)
 }
