@@ -2,6 +2,7 @@
   (:use [ontrail crypto mongodb utils emails])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
+            [monger.result :as mr]
             [postal.core :as postal]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -47,6 +48,16 @@
         email (:email params)]
     (send-register-msg user email)
     (create-user user (:password params) email true)))
+
+(defn change-password [user params]
+  (let [new-password (:ch-password params)
+        id (:_id (get-user user))]
+    (if (and (not= nil id) (not= nil new-password))
+      (do (.info logger (str "Changing password for user " user))
+        {:result (mr/ok? (mc/update-by-id ONUSER 
+                                          id {"$set" 
+                                          {:passwordHash (password-hash new-password)}}))})
+      {:result false})))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]

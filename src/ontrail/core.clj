@@ -9,7 +9,7 @@
         [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
-        [ontrail.user :only (get-avatar-url get-user get-user-list register-user)]
+        [ontrail.user :only (change-password get-avatar-url get-user get-user-list register-user)]
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)]
@@ -91,8 +91,6 @@
   
   (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
-
-  (GET "/rest/v1/throw" [] (json-response (throw (Exception. "Test Exception"))))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
        (json-response (get-ex (user-from-cookie cookies) (:id params))))
@@ -100,7 +98,7 @@
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
-  (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
+  (GET "/rest/v1/ex-list-filter/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
@@ -153,6 +151,9 @@
   (POST "/rest/v1/register" {params :params cookies :cookies}
       (let [user (register-user params)]
         (json-response {"token" (auth-token user) "username" (:username user)} 200)))
+
+  (POST "/rest/v1/change-password" {params :params cookies :cookies}
+    (json-response (change-password (user-from-cookie cookies) params)))
 
   (GET "/rest/v1/username-available/:username" [username] ;; XXX throws
        (let [user (get-user username)]

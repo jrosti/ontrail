@@ -33,6 +33,10 @@
       return OnTrail.rest.postAsObservable("profile", $('#profile-form').serialize())
     }
 
+    var postChangePassword = function() {
+      return OnTrail.rest.postAsObservable("change-password", $('#change-password-form').serialize())
+    }
+
     var postComment = function(exercise) {
       var values = "body=" + encodeURIComponent($('#comment-body').getCode())
       return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
@@ -116,6 +120,10 @@
     }
     var renderActiveUsersList = function(data) {
        $("#active-users").text(data)
+    }
+
+    var renderChangePassword = function(data) {
+      $("#password-change-result").text(data)
     }
 
     var monthNames = {
@@ -279,8 +287,9 @@
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
-    userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
+    userTagPages.subscribeArgs(function(type, id) { $("#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
     userTagPages.scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
+
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
@@ -439,6 +448,11 @@
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
+    // change password
+    var changePasswords = $('#change-password').onAsObservable('click touchstart')
+      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
+    changePasswords.subscribeArgs(renderChangePassword)
+
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
@@ -501,6 +515,12 @@
       $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
       $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
     }
+
+    var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
+    updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
+    updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
+    var changePasswordValidations = _.flatten([updatePassword, require('ch-password')])
+    combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
     var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
