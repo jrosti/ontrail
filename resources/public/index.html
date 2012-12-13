@@ -497,7 +497,7 @@
   <div class="subnavi">
     <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a>
     <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a>
-    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}/{{user}}/{{year}}-bymonth">Kuukausi</a>
+    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a>
   </div>
   <h2>Yhteenveto harjoituksista</h2>
 </script>
@@ -539,8 +539,8 @@
 </script>
 
 <script id="summaryItemTemplate" type="text/html">
-  <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}">{{tag}}</a>{{/tag}}
-  {{#sport}}{{sport}}{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+  <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
+  {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">

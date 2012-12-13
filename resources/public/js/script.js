@@ -96,7 +96,7 @@
         deleteComment: function () {
           return function(text, render) {
             if (this.user !== me && exercise.user !== me) return ""
-            this.deleteRel = (this.user === me ? "ex/" : "own-ex/") + exercise.id + (this.user === me ? "/own-comment/" : "/comment/") + this.id;
+            this.deleteRel = (this.user === me ? "ex/" : "own/ex/") + exercise.id + (this.user === me ? "/own/comment/" : "/comment/") + this.id;
             return render(text)
           }
         }
@@ -263,14 +263,6 @@
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
-    var exListPages = pageLinks.where( function(el) {
-      console.log(el)
-      var isExListPage = partialEqualsAny(["user", "tags"])
-      return isExListPage(pageAndArgs(el))
-    })
-
-    exListPages.subscribe(debug)
-
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
     var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
@@ -296,7 +288,10 @@
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
     userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
-    userTagPages.selectArgs(function(type, id) {var item = {}; item[type] = id; return item}).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
+    userTagPages.selectArgs(function() {
+      var args = Array.prototype.slice.call(arguments)
+      return asObject.apply(asObject, _.flatten([{}, args]))
+    }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 

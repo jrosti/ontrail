@@ -110,6 +110,12 @@ var asFilter = function(el) {
   return _.extend.apply(_.extend, _($(el)[0].attributes).chain().filter(isFilterItem).map(asFilterItem).value())
 }
 
+var asObject = function(item, type, id) {
+  if (type == undefined || id == undefined) return item
+  item[type] = id
+  var args = Array.prototype.slice.call(arguments)
+  return asObject.apply(asObject, _.flatten([item, args.slice(3)]))
+}
 
 var targetLink = function(event) {
     return findParent(target(event), isLink)
