@@ -386,24 +386,24 @@
 <script id="tagsExpandedTemplate" class="partial" type="text/html">
   <div class="full">
     <ul>
-      {{#tags}}<li><a class="pageLink" rel="tags-{{.}}">{{.}}</a></li> {{/tags}}
+      {{#tags}}<li><a class="pageLink" rel="tags/{{.}}">{{.}}</a></li> {{/tags}}
     </ul>
   </div>
 </script>
 <script id="exerciseTemplate" type="text/html">
   <div>
   <article data-id="{{id}}" class="preview exercise {{sport}}">
-      <a class="pageLink modify" rel="addex-{{id}}" data-user="{{user}}">muokkaa</a>
-      <!--<a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>-->
-      <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex-{{id}}">{{title}}</a></h2>
-    <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
-    <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user-{{user}}">{{user}}</a>
+      <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+      <!--<a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>-->
+      <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
+    <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
+    <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
     {{did}} {{#distance}} {{distance}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}{{#isNew}}!{{/isNew}}</h4>
     {{> exerciseDetailsTemplate}}
     
     <div class="preview">
       {{#trunc}}{{/trunc}} 
-      <a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+      <a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
       {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
     </div>
     <div class="full">{{{body}}}
@@ -414,7 +414,7 @@
 
     {{> tagsExpandedTemplate}}
     <div>
-      <p class="full"><a class="pageLink" rel="ex-{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
+      <p class="full"><a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
          {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
     </div>
   </article>
@@ -423,9 +423,9 @@
 
 <script id="singleExerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="full exercise {{sport}}">
-    <a class="delete button" rel="ex-{{id}}" data-user="{{user}}">Poista</a>
+    <a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
-    <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+    <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
     {{> exerciseDetailsTemplate}}
     <div>{{{body}}}
         <p class="signature">
@@ -439,7 +439,7 @@
       <article class="comment" data-id="{{id}}">
         {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
         <img class="avatar" src="{{avatar}}"  width="24" height="24">
-        <h4><span class="date">{{date}}</span><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+        <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
         <div>{{{body}}}</div>
       </article>
       {{/comments}}
@@ -478,16 +478,16 @@
 <script id="usersCreateTemplate" type="text/html">
   {{#users}}
   <img class="avatar" src="{{avatar}}"  width="24" height="24">
-  <h4><a class="pageLink" rel="user-{{user}}">{{user}}</a></h4>
+  <h4><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
   {{/users}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
   <h2>Käyttäjä {{data}}</h2>
     <p>
-      <a class="pageLink" rel="summary-{{data}}">Lajiyhteenvedot</a>
-      <a class="pageLink" rel="tagsummary-{{data}}">Avainsanayhteenvedot</a>
-      <a class="pageLink" rel="weeksummary-{{data}}">Harjoitusviikot</a>
-      <a class="pageLink" rel="tags-{{data}}kisa">Kisat</a>
+      <a class="pageLink" rel="summary/{{data}}">Lajiyhteenvedot</a>
+      <a class="pageLink" rel="tagsummary/{{data}}">Avainsanayhteenvedot</a>
+      <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
+      <a class="pageLink" rel="tags/{{data}}kisa">Kisat</a>
     </p>
 </script>
 <script id="tagsHeaderTemplate" type="text/html">
@@ -495,9 +495,9 @@
 </script>
 <script id="hpkHeaderTemplate" type="text/html">
   <div class="subnavi">
-    <a class="pageLink" data-filter="" rel="{{kind}}-{{user}}">Kaikki</a>
-    <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}-{{user}}-{{year}}">Vuosi</a>
-    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}-{{user}}-{{year}}-bymonth">Kuukausi</a>
+    <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a>
+    <a class="pageLink by-year" data-filter="by-year" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a>
+    <a class="pageLink by-month" data-filter="by-month" rel="{{kind}}/{{user}}/{{year}}-bymonth">Kuukausi</a>
   </div>
   <h2>Yhteenveto harjoituksista</h2>
 </script>
@@ -505,9 +505,9 @@
 <script id="hpkContentTemplate" type="text/html">
   <article>
     <div class="by year">
-      <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}">&larr;</a>
+      <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}">&larr;</a>
       {{year}}
-      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}">&rarr;</a> {{/hasNextYear}}
+      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}">&rarr;</a> {{/hasNextYear}}
     </div>
     {{> summaryTemplate}}
   </article>
@@ -527,9 +527,9 @@
 <script id="hpkMonthContentTemplate" type="text/html">
   <article>
     <div class="by month">
-      <a class="pageLink prev" rel="{{kind}}-{{user}}-{{prevYear}}-bymonth">&larr;</a>
+      <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth">&larr;</a>
       Vuosi {{year}}
-      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}-{{user}}-{{nextYear}}-bymonth">&rarr;</a> {{/hasNextYear}}
+      {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth">&rarr;</a> {{/hasNextYear}}
     </div>
     {{#months}}
     <h2 class="monthName">{{monthName}}</h2>
@@ -539,7 +539,7 @@
 </script>
 
 <script id="summaryItemTemplate" type="text/html">
-  <tr><td>{{#tag}}<a class="pageLink" rel="tags-{{tag}}">{{tag}}</a>{{/tag}}
+  <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}">{{tag}}</a>{{/tag}}
   {{#sport}}{{sport}}{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
@@ -572,7 +572,7 @@
 
 <script id="hpkWeeklyExTemplate" type="text/html">
   {{#exs}}
-  <a class="pageLink" rel="ex-{{id}}"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
+  <a class="pageLink" rel="ex/{{id}}"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
   {{/exs}}
 </script>
 
@@ -594,7 +594,7 @@
       visibility: visible;
       vertical-align: baseline;
     }
-    body[data-page="user"] a[rel="user-{{user}}"] {
+    body[data-page="user"] a[rel="user/{{user}}"] {
       font-weight: bold;
     }
   </style></script>

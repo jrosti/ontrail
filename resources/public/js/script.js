@@ -96,7 +96,7 @@
         deleteComment: function () {
           return function(text, render) {
             if (this.user !== me && exercise.user !== me) return ""
-            this.deleteRel = (this.user === me ? "ex-" : "own-ex-") + exercise.id + (this.user === me ? "-own-comment-" : "-comment-") + this.id;
+            this.deleteRel = (this.user === me ? "ex/" : "own-ex/") + exercise.id + (this.user === me ? "/own-comment/" : "/comment/") + this.id;
             return render(text)
           }
         }
@@ -209,7 +209,7 @@
 
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
-    loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user-' + userId)})
+    loggedIns.subscribe(function(userId) { $('#my-page').attr('rel', 'user/' + userId)})
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
       _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
@@ -263,6 +263,14 @@
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
+    var exListPages = pageLinks.where( function(el) {
+      console.log(el)
+      var isExListPage = partialEqualsAny(["user", "tags"])
+      return isExListPage(pageAndArgs(el))
+    })
+
+    exListPages.subscribe(debug)
+
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
     var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
@@ -282,7 +290,7 @@
       var pages = _.argsToArray(arguments)
       $('body').attr('data-page', pages[0])
       $('#password').attr('value', '')
-      $.address.value(pages.join("-"))
+      $.address.value(pages.join("/"))
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
