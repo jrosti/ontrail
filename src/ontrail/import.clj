@@ -110,12 +110,12 @@
                   fres (frequencies res)]
               (send-import-msg user fres)
               (if (> (fres \+) 0)
-                (str "/#import-ok=" (fres \+))
-                (do (.delete import-file) "/#import-error=invalidFormat")))
+                (str "/#import/ok=" (fres \+))
+                (do (.delete import-file) "/#import/error=invalidFormat")))
             (catch Exception exception
               (.error logger (str exception))
-              (do (.delete import-file) "/#import-error=invalidFormat"))))
-      "/#import-error=alreadyExists")))
+              (do (.delete import-file) "/#import/error=invalidFormat"))))
+      "/#import/error=alreadyExists")))
 
 (defn -main [& args]
   "Imports lenkkivihko.fi export format. First arg is an username, and the second export filename."
