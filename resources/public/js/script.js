@@ -286,10 +286,9 @@
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
-    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
-    userTagPages.subscribeArgs(function(type, id) { $("#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
-    userTagPages.scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
-
+    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
+    userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
+    userTagPages.selectArgs(function(type, id) {var item = {}; item[type] = id; return item}).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 

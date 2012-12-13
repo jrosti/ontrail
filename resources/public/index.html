@@ -386,7 +386,7 @@
 <script id="tagsExpandedTemplate" class="partial" type="text/html">
   <div class="full">
     <ul>
-      {{#tags}}<li><a class="pageLink" rel="tag-{{.}}">{{.}}</a></li> {{/tags}}
+      {{#tags}}<li><a class="pageLink" rel="tags-{{.}}">{{.}}</a></li> {{/tags}}
     </ul>
   </div>
 </script>
@@ -487,10 +487,10 @@
       <a class="pageLink" rel="summary-{{data}}">Lajiyhteenvedot</a>
       <a class="pageLink" rel="tagsummary-{{data}}">Avainsanayhteenvedot</a>
       <a class="pageLink" rel="weeksummary-{{data}}">Harjoitusviikot</a>
-      <a class="pageLink" rel="tag-{{data}}kisa">Kisat</a>
+      <a class="pageLink" rel="tags-{{data}}kisa">Kisat</a>
     </p>
 </script>
-<script id="tagHeaderTemplate" type="text/html">
+<script id="tagsHeaderTemplate" type="text/html">
   <h2>Avainsanaan "{{data}}" liittyvät lenkit</h2>
 </script>
 <script id="hpkHeaderTemplate" type="text/html">
@@ -539,7 +539,7 @@
 </script>
 
 <script id="summaryItemTemplate" type="text/html">
-  <tr><td>{{#tag}}<a class="pageLink" rel="tag-{{tag}}">{{tag}}</a>{{/tag}}
+  <tr><td>{{#tag}}<a class="pageLink" rel="tags-{{tag}}">{{tag}}</a>{{/tag}}
   {{#sport}}{{sport}}{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 

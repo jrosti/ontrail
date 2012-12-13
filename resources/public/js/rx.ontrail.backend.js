@@ -39,9 +39,7 @@
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
 
-  // can replace ex-list- type stuff with more generic filters.
-  Rest.prototype.exercisefilter = function(page) { return getAsObservableResultData("ex-list-filter?" + filter) }
-  Rest.prototype.exercises = function(type, id, page) { return getAsObservableResultData("ex-list-" + type, id, page) }
+  Rest.prototype.exercises = function(filter, page) { return getAsObservableResultData("ex-list-filter?" + [$.param(filter), "page=" + page].join("&")) }
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
   Rest.prototype.sports = function() { return getAsObservableResultData("sports") }

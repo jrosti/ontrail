@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.js" line="109" mnemonic="6" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d9b3596f-faa5-46ec-9d41-bed80b699ca7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/css/mixins.css" afterPath="$PROJECT_DIR$/resources/public/css/mixins.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/css/ontrail.css" afterPath="$PROJECT_DIR$/resources/public/css/ontrail.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/index.html" afterPath="$PROJECT_DIR$/resources/public/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ontrail.iml" afterPath="$PROJECT_DIR$/ontrail.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js" afterPath="$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/js/script.js" afterPath="$PROJECT_DIR$/resources/public/js/script.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ontrail.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/script.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1353670262061" ignored="false" />
-    <file path="/Dummy.txt" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354650484715" ignored="false" />
+    <file path="/script.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1355336185848" ignored="false" />
+    <file path="/Dummy.txt" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1355249802945" ignored="false" />
     <file path="/beta.html" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354575502145" ignored="false" />
-    <file path="/index.html" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354569080273" ignored="false" />
+    <file path="/index.html" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1355336321077" ignored="false" />
     <file path="/ontrail.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354572558316" ignored="false" />
     <file path="/a.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354570564611" ignored="false" />
     <file path="/beta.less" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354573936324" ignored="false" />
     <file path="/a.dummy" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354575458859" ignored="false" />
     <file path="/.gitignore" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1354650858341" ignored="false" />
+    <file path="/rx.ontrail.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1355334295211" ignored="false" />
+    <file path="/rx.ontrail.backend.js" changelist="d9b3596f-faa5-46ec-9d41-bed80b699ca7" time="1355334770048" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,17 +85,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="script.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/js/script.js">
+      <file leaf-file-name="rx.ontrail.backend.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="339" column="41" selection-start="15329" selection-end="15329" vertical-scroll-proportion="0.0">
+            <state line="42" column="92" selection-start="2008" selection-end="2008" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rx.ontrail.backend.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js">
+      <file leaf-file-name="rx.ontrail.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="111" column="0" selection-start="4111" selection-end="4111" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="script.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/js/script.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="413" column="44" selection-start="18664" selection-end="18667" vertical-scroll-proportion="-10.592592">
+              <folding>
+                <marker date="1355336344108" expanded="false" signature="4977:4994" placeholder="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="handlebars-helpers.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/js/handlebars-helpers.js">
           <provider selected="true" editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
@@ -98,21 +123,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ontrail.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/js/ontrail.js">
+      <file leaf-file-name="jquery.continuous-calendar.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/js/jquery.continuous-calendar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="347" column="0" selection-start="15625" selection-end="15625" vertical-scroll-proportion="0.0">
-              <folding>
-                <marker date="1354574868334" expanded="false" signature="4970:4987" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="beta.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/beta.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="64" column="48" selection-start="2813" selection-end="2813" vertical-scroll-proportion="54.26923">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,28 +159,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="114" column="0" selection-start="4548" selection-end="4799" vertical-scroll-proportion="-24.192308">
+            <state line="469" column="34" selection-start="19740" selection-end="19743" vertical-scroll-proportion="0.33333334">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="5" selection-start="91" selection-end="91" vertical-scroll-proportion="0.18042453">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ontrail.less" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/public/css/ontrail.less">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="0" selection-start="1" selection-end="45" vertical-scroll-proportion="0.0">
+            <state line="9" column="5" selection-start="91" selection-end="91" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -193,20 +198,22 @@
         <option value="$PROJECT_DIR$/ontrail.iml" />
         <option value="$PROJECT_DIR$/drop-create-esko.sh" />
         <option value="$PROJECT_DIR$/resources/public/js/ontrail-ui.js" />
-        <option value="$PROJECT_DIR$/resources/public/js/rx.ontrail.js" />
-        <option value="$PROJECT_DIR$/resources/public/index.html" />
         <option value="$PROJECT_DIR$/resources/public/css/beta.css" />
         <option value="$PROJECT_DIR$/resources/public/css/beta.less" />
         <option value="$PROJECT_DIR$/resources/public/js/ontrail.js" />
-        <option value="$PROJECT_DIR$/resources/public/js/script.js" />
         <option value="$PROJECT_DIR$/resources/public/beta.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/resources/public/js/rx.ontrail.js" />
+        <option value="$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js" />
+        <option value="$PROJECT_DIR$/resources/public/js/script.js" />
+        <option value="$PROJECT_DIR$/resources/public/index.html" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
-    <option name="width" value="1932" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -486,6 +493,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -504,9 +512,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ontrail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ontrail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ontrail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ontrail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -525,8 +572,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager">
     <configuration default="false" name="project" type="ClojureScriptRunConfiguration" factoryName="Clojure Script" temporary="true">
@@ -540,7 +587,7 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugSession" factoryName="Local">
+    <configuration default="true" type="JavascriptDebugSession" factoryName="Local" singleton="true">
       <JSDebuggerConfigurationSettings>
         <option name="engineId" value="embedded" />
         <option name="fileUrl" />
@@ -582,11 +629,10 @@
       <timeSpent>9194000</timeSpent>
       <updated>1352569807634</updated>
     </task>
-    <option name="myTotallyTimeSpent" value="9194000" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="0" width="1932" height="1050" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -604,7 +650,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24383709" sideWeight="0.67009133" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24305555" sideWeight="0.67009133" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -648,6 +694,8 @@
     <option name="SHOW_FILE_HISTORY_DETAILS" value="true" />
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="SHOW_DIRTY_RECURSIVELY" value="false" />
+    <option name="LIMIT_HISTORY" value="true" />
+    <option name="MAXIMUM_HISTORY_ROWS" value="1000" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
     <option name="LAST_COMMIT_MESSAGE" />
@@ -680,23 +728,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="34" selection-start="892" selection-end="892" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="0" selection-start="0" selection-end="9068" vertical-scroll-proportion="-3.9230769">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lessw.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/css/beta.css">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="0" selection-start="102" selection-end="102" vertical-scroll-proportion="0.0">
@@ -718,25 +749,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/js/ontrail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="347" column="0" selection-start="15625" selection-end="15625" vertical-scroll-proportion="0.0">
-          <folding>
-            <marker date="1354574868334" expanded="false" signature="4970:4987" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/js/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="339" column="41" selection-start="15329" selection-end="15329" vertical-scroll-proportion="0.0">
+        <state line="347" column="0" selection-start="15794" selection-end="15794" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -771,21 +786,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/beta.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="64" column="48" selection-start="2813" selection-end="2813" vertical-scroll-proportion="54.26923">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="114" column="0" selection-start="4548" selection-end="4799" vertical-scroll-proportion="-24.192308">
+        <state line="64" column="48" selection-start="2813" selection-end="2813" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="5" selection-start="91" selection-end="91" vertical-scroll-proportion="0.18042453">
+        <state line="9" column="5" selection-start="91" selection-end="91" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/js/handlebars-helpers.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/js/jquery.continuous-calendar.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="111" column="0" selection-start="4111" selection-end="4111" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/js/rx.ontrail.backend.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="42" column="92" selection-start="2008" selection-end="2008" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/js/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="413" column="44" selection-start="18664" selection-end="18667" vertical-scroll-proportion="-10.592592">
+          <folding>
+            <marker date="1355336344108" expanded="false" signature="4977:4994" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="469" column="34" selection-start="19740" selection-end="19743" vertical-scroll-proportion="0.33333334">
           <folding />
         </state>
       </provider>
