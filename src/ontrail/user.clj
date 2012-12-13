@@ -31,7 +31,7 @@
 (defn get-user-list [rule page]
   (let [results (mq/with-collection ONUSER
     (mq/find rule)
-    (mq/paginate :page (Integer. page) :per-page 100)
+    (mq/paginate :page (Integer/valueOf page) :per-page 100)
     (mq/sort {:username 1}))]
     (.trace logger (str "Get user list " page " with " (count results) " results for " rule))
   (as-user-list results)))
@@ -41,22 +41,27 @@
     (.info logger (str "creating user " username " with profile " profile))
     (if (and (not= username "") (not= username "nobody") (= nil (get-user username)))
       (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})
-      (.error logger (str "creating user failed " username " with profile " profile)))))
+      (do (.error logger (str "creating user failed " username " with profile " profile))
+          nil))))
 
 (defn register-user [params]
   (let [user (:username params)
         email (:email params)]
-    (send-register-msg user email)
-    (create-user user (:password params) email true)))
+    (if (not= nil (create-user user (:password params) email true))
+      (do (send-register-msg user email) {:result "success"})
+      {:result "failed"})))
+
+(defn verify-password [password]
+  (and (not= nil password) (>= (count password) 6)))
 
 (defn change-password [user params]
   (let [new-password (:ch-password params)
         id (:_id (get-user user))]
-    (if (and (not= nil id) (not= nil new-password))
+    (if (and (not= nil id) (verify-password new-password))
       (do (.info logger (str "Changing password for user " user))
-        {:result (mr/ok? (mc/update-by-id ONUSER 
-                                          id {"$set" 
-                                          {:passwordHash (password-hash new-password)}}))})
+          {:result (mr/ok? (mc/update-by-id ONUSER 
+                                            id {"$set" 
+                                            {:passwordHash (password-hash new-password)}}))})
       {:result false})))
 
 (defn -main[& args]

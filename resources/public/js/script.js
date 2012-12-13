@@ -123,7 +123,11 @@
     }
 
     var renderChangePassword = function(data) {
-      $("#password-change-result").text(data)
+      if (data.result == true) {
+        $("#password-change-result").text("Salasanan vaihto onnistui!")
+      } else {
+        $("#password-change-result").text("Salasanan vaihto epäonnistui!")
+      }
     }
 
     var monthNames = {
@@ -521,7 +525,7 @@
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
     updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
     updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
-    var changePasswordValidations = _.flatten([updatePassword, require('ch-password')])
+    var changePasswordValidations = _.flatten([updatePassword])
     combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')

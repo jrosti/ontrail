@@ -182,13 +182,13 @@
           <a id="update-profile" class="button login">Päivitä profiilitiedot</a>
         </div>
       </form>
-      <p><span id="profile-result"></span></p>
-      <h3>Vaihda salasanaa</h3>
+      <p><span id="profile-result"></span></p><br/>
+      <h3>Vaihda salasana</h3>
       <form id="change-password-form" method="post">
+          <p>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</p>
           <div>
             <label>Salasana</label>
             <input id="ch-password" name="ch-password" class="reset" type="password" placeholder="Salasana"/>
-            <em class="error ch-password-required">Salasana vaaditaan</em>
           </div>
           <div>
             <label>Salasana uudelleen</label>
@@ -200,7 +200,7 @@
               <a id="change-password" class="button change-password">Vaihda salasana</a>
             </div>
         </form>
-        <p><span id="password-change-result"></span></p>
+        <p class="error"><span id="password-change-result"></span></p>
       </div>
       </article>
     </section>
