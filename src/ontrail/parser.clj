@@ -11,8 +11,8 @@
                                     "yyyy/MM/dd"))
 
 
-(defn as-number [x] (Integer. x))
-(defn to-db [min] (* (Integer. min) 60 100))
+(defn as-number [x] (Integer/valueOf x))
+(defn to-db [min] (* (Integer/valueOf min) 60 100))
 (defn minutes [min] (to-db min))
 (defn hours [h] (* (to-db h) 60))
 (defn secs [sec] (* (Integer. sec) 100))

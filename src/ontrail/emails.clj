@@ -22,9 +22,8 @@
 
 (defn reg-body [user]
   (str "Hei " user "!\n\n"
-       "Tervetuloa käyttämään Ontrailia! Olemme vielä kehitysvaiheessa ja palvelun ominaisuuksia päivitetään jatkuvasti, "
-       "Tällä hetkellä työn alla ovat viikkonäkymä, sekä kaverilistat. Palvelu saatetaan ensimmäiseen versioonsa "
-       "vuoden loppuun mennnessä\n\n"
+       "Tervetuloa käyttämään Ontrailia! Olemme vielä kehitysvaiheessa ja palvelun ominaisuuksia päivitetään pikkuhiljaa. "
+       "Tällä hetkellä työn alla ovat lenkkien parempi seurattavuus. \n\n"
        
        "Lenkkisi varmuuskopioidaan kahdesti päivässä. Halutessasi kaikki sinuun liittyvä data poistetaan "
        "palvelimelta tai siirretään haluamassasi muodossa sinulle takaisin.\n\n" 

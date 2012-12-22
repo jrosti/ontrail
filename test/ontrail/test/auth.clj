@@ -3,7 +3,7 @@
         clojure.test))
 
 (deftest username-goes-as-password
-    (is (authenticate "Esko" "Esko")))
+    (is (not (authenticate "zxcv" "notvalid"))))
 
 (deftest not-username-fails-as-password
   (is (not (authenticate "Esko" "esko2"))))
@@ -15,5 +15,5 @@
   (is (= "Esko|RXNrbw##" (decrypt (auth-token {:username "Esko" :passwordHash "RXNrbw##"})))))
 
 (deftest valid-auth-token-matches
-  (let [user (get-user "Esko")]
-    (is (valid-auth-token? (encrypt (str "Esko|" (hash-part (:passwordHash user)) ))))))
+  (let [user (get-user "zxcv")]
+    (is (valid-auth-token? (encrypt (str "zxcv|" (hash-part (:passwordHash user)) ))))))

@@ -16,6 +16,12 @@
   (let [id (str (:_id comment))]
     (merge (dissoc comment :_id) {:id id})))
 
+(defn is-new [ex last-visit]
+  (let [lmd (:lastModifiedDate ex)]
+    (if (and (not= nil lmd) (not= nil last-visit))
+      (time/after? (:lastModifiedDate ex) last-visit)
+      false)))
+
 (defn as-ex-result
   ([exercise] (as-ex-result (time/now) zero-cache exercise))
   ([last-visit newcomment-cache exercise]
@@ -32,7 +38,7 @@
            new-comments (newcomment-cache id)
            bare-ex {:id id
                     :user user
-                    :isNew (time/after? (:lastModifiedDate exercise) last-visit)
+                    :isNew (is-new exercise last-visit)
                     :distance distance
                     :title (:title exercise)
                     :body (:body exercise)
