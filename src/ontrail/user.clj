@@ -21,7 +21,7 @@
 
 (defn get-avatar-url [user]
   (let [onuser (mc/find-one-as-map ONUSER {:username user})]
-    (if (not-nil? onuser)
+    (if (not= nil onuser)
       (as-gravatar onuser)
       "/img/drno.png")))
 

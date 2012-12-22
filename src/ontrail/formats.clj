@@ -10,7 +10,7 @@
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
         avghr (get exercise :avghr)]
-    (if (and (not-nil? user-profile) (positive-numbers? (list resthr maxhr avghr)) (not= maxhr resthr))
+    (if (and (not= nil user-profile) (positive-numbers? (list resthr maxhr avghr)) (not= maxhr resthr))
       (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
       "")))
 
@@ -45,22 +45,15 @@
     (if (positive-numbers? (list resthr duration distance avghr))
         (string/replace (format "%.2f m/b" (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))) #"\." ","))))
 
-(defn to-padded-meters [^Integer meters]
-  (if (<= meters 0)
-    "000"
-    (let [pad (- 2 (int (Math/log10 meters)))]
-      (reduce str (reverse (conj (repeat pad "0") (str meters)))))))
-
 (defn to-human-distance [distance]
   (if (= nil distance)
     ""
     (let [km (int (/ distance 1000))
-          m (mod distance 1000)
-          m-as-str (str "," m)]
+          m (int (mod distance 1000))]
     (if (> km 0)
       (if (= m 0)
         (str km " km")
-        (str km "," (to-padded-meters m) " km"))
+        (str km "," (string/replace (format "%03d" m) #"0+$" "") " km"))
       (if (> m 0)
         (str (int m) "m")
         "")))))
