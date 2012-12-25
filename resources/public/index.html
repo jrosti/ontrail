@@ -150,10 +150,8 @@
     <h3>Henkilökohtaiset tiedot</h3>
     <div class="edit-form">
       Sähköposti: <span id="profile-email"></span>
-      <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
-      -palvelun avulla</a> käyttäen
-      sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
-      ylläpitäjän pyynnostä.</small></i></div>
+      <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar-palvelun avulla</a> käyttäen
+      sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain ylläpitäjän pyynnostä.</small></i></div>
     </div>
     <h3>Profiilin tiedot</h3>
     <form id="profile-form" class="edit-form" method="post">
@@ -346,6 +344,8 @@
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
+
+  <!-- scripts concatenated and minified via build script -->
   <script src="js/select2.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="js/jquery.cookie.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="js/jquery.md5.js?_=UNIQUE_INSTALLATION_ID2"></script>
@@ -366,8 +366,6 @@
   <script src="js/rx.ontrail.session.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="js/jquery.continuous-calendar.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="redactor/redactor.min.js?_=UNIQUE_INSTALLATION_ID2"></script>
-
-  <!-- scripts concatenated and minified via build script -->
   <script src="js/plugins.js?_=UNIQUE_INSTALLATION_ID2"></script>
   <script src="js/script.js?_=UNIQUE_INSTALLATION_ID2"></script>
 
@@ -482,13 +480,14 @@
   {{/users}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
-  <h2>Käyttäjä {{data}}</h2>
-    <p>
-      <a class="pageLink" rel="summary/{{data}}">Lajiyhteenvedot</a>
-      <a class="pageLink" rel="tagsummary/{{data}}">Avainsanayhteenvedot</a>
-      <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
-      <a class="pageLink" rel="tags/{{data}}kisa">Kisat</a>
+  <article>
+    <h2>Käyttäjä {{data}}</h2>
+      <p>
+        <a class="pageLink" rel="summary/{{data}}">Lajiyhteenvedot</a>
+        <a class="pageLink" rel="tagsummary/{{data}}">Avainsanayhteenvedot</a>
+        <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
     </p>
+    </article>
 </script>
 <script id="tagsHeaderTemplate" type="text/html">
   <h2>Avainsanaan "{{data}}" liittyvät lenkit</h2>
@@ -504,6 +503,7 @@
 
 <script id="hpkContentTemplate" type="text/html">
   <article>
+    <p class="signature">{{user}}</p>
     <div class="by year">
       <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}">&larr;</a>
       {{year}}
@@ -526,6 +526,7 @@
 
 <script id="hpkMonthContentTemplate" type="text/html">
   <article>
+    <p class="signature">{{user}}</p>
     <div class="by month">
       <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth">&larr;</a>
       Vuosi {{year}}
@@ -543,8 +544,33 @@
   {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
-<script id="hpkWeeklyContentTemplate" type="text/html">
+<script id="hpkWeeklyContentTemplateCalendar" type="text/html">
+  <h2 class="monthName">{{monthName}} {{year}}</h2>
+  <table class="weekly">
+    <thead>
+    <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
+    </thead>
+    <tbody>
+  {{#summary}}
+    <tr>
+      <td><strong>{{week}}</strong></td>
+      {{#exs}}
+        <td class="{{class}}">
+          {{> hpkWeeklyExTemplate}}
+        </td>
+      {{/exs}}
+        {{> hpkWeeklySummaryTemplate}}
+    </tr>
+  {{#summaries}}
+    </tr>
+  {{/summaries}}
+  {{/summary}}
 
+    </tbody>
+  </table>
+</script>
+
+<script id="hpkWeeklyContentTemplate" type="text/html">
   <h2 class="monthName">{{monthName}} {{year}}</h2>
   <table class="weekly">
     <thead>
