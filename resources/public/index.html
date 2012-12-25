@@ -544,32 +544,6 @@
   {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
 </script>
 
-<script id="hpkWeeklyContentTemplateCalendar" type="text/html">
-  <h2 class="monthName">{{monthName}} {{year}}</h2>
-  <table class="weekly">
-    <thead>
-    <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
-    </thead>
-    <tbody>
-  {{#summary}}
-    <tr>
-      <td><strong>{{week}}</strong></td>
-      {{#exs}}
-        <td class="{{class}}">
-          {{> hpkWeeklyExTemplate}}
-        </td>
-      {{/exs}}
-        {{> hpkWeeklySummaryTemplate}}
-    </tr>
-  {{#summaries}}
-    </tr>
-  {{/summaries}}
-  {{/summary}}
-
-    </tbody>
-  </table>
-</script>
-
 <script id="hpkWeeklyContentTemplate" type="text/html">
   <h2 class="monthName">{{monthName}} {{year}}</h2>
   <table class="weekly">
@@ -596,6 +570,16 @@
   </table>
 </script>
 
+<script id="hpkWeeklyContentTemplateText" type="text/html">
+  <h2 class="monthName">{{monthName}} {{year}}</h2>
+  {{#summary}}
+      <strong>Viikko {{week}}</strong>        
+      {{> hpkWeeklySummaryTemplate}}
+      <hr>
+  {{/summary}}
+
+</script>
+
 <script id="hpkWeeklyExTemplate" type="text/html">
   {{#exs}}
   <a class="pageLink" rel="ex/{{id}}"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span></a>
@@ -607,6 +591,8 @@
     {{#summaries}}<span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>{{/summaries}}
   </td>
 </script>
+
+
 
 <script id="loggedInStylesTemplate" type="text/html">
   <style id="logged-in-styles" type="text/css">
