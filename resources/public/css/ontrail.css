@@ -30,6 +30,9 @@ p.signature {
   color: #777;
   float: right;
 }
+.newEx {
+  color: red;
+}
 img {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
