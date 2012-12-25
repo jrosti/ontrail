@@ -398,13 +398,13 @@
       <img class="avatar" src="{{avatar}}" width="48" height="48"><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
     <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
     <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
-    {{did}} {{#distance}} {{distance}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}{{#isNew}}</h4>
+    {{did}} {{#distance}} {{distance}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
     {{> exerciseDetailsTemplate}}
     
     <div class="preview">
       {{#trunc}}{{/trunc}} 
       <a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-      {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> <span class="newEx">uusi</span>{{/isNew}}
+      {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
     </div>
     <div class="full">{{{body}}}
         <p class="signature">

@@ -8,7 +8,7 @@
   (:import [org.bson.types ObjectId]))
 
 (def minimum-term-length 3)
-(def search-limit 300)
+(def search-limit 100)
 (def not-too-short-term? #(>= (count %) minimum-term-length))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
