@@ -1,7 +1,7 @@
 
 (function() {
   $(document).ready(function() {
-    $.ajaxSetup({ cache: false }); 
+    $.ajaxSetup({ cache: false })
    
     var entries = $("#entries")
     var userList = $("#user-results")
@@ -123,7 +123,7 @@
     }
 
     var renderChangePassword = function(data) {
-      if (data.result == true) {
+      if (data.username) {
         $("#password-change-result").text("Salasanan vaihto onnistui!")
       } else {
         $("#password-change-result").text("Salasanan vaihto epäonnistui!")
@@ -202,14 +202,16 @@
 
     var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
-      .where(isSuccess).select(ajaxResponseData);
+      .where(isSuccess).select(ajaxResponseData)
+
+    // change password
+    var changePasswords = $('#change-password').onAsObservable('click touchstart')
+      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
+    changePasswords.subscribeArgs(renderChangePassword)
 
     // create session
-    var sessions = OnTrail.session.create(logins.merge(registerUsers), logouts.merge(loginFails));
-
-    // loggedIn and loggedOut state resolved from session
+    var sessions = OnTrail.session.create(logins.merge(registerUsers).merge(changePasswords), logouts.merge(loginFails))
     var loggedIns = sessions.where(identity)
-    var loggedOuts = sessions.where(_.compose(not, identity))
 
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
@@ -262,7 +264,7 @@
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
-      if ($.address.value()) return splitM($.address.value());
+      if ($.address.value()) return splitM($.address.value())
       return (user && "summary") || "latest"
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
@@ -454,11 +456,6 @@
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
-    // change password
-    var changePasswords = $('#change-password').onAsObservable('click touchstart')
-      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
-    changePasswords.subscribeArgs(renderChangePassword)
-
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
@@ -540,7 +537,6 @@
     var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation
     usernameExistsValidation.subscribe(toggleEffect($(".user-exists")))
     usernameExistsValidation.subscribe(toggleClassEffect($('#ex-username'), "has-error"))
-
 
     var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))

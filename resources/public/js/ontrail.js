@@ -200,14 +200,16 @@
 
     var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
-      .where(isSuccess).select(ajaxResponseData);
+      .where(isSuccess).select(ajaxResponseData)
+
+    // change password
+    var changePasswords = $('#change-password').onAsObservable('click touchstart')
+      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
+    changePasswords.subscribeArgs(renderChangePassword)
 
     // create session
-    var sessions = OnTrail.session.create(logins.merge(registerUsers), logouts.merge(loginFails));
-
-    // loggedIn and loggedOut state resolved from session
+    var sessions = OnTrail.session.create(logins.merge(registerUsers).merge(changePasswords), logouts.merge(loginFails))
     var loggedIns = sessions.where(identity)
-    var loggedOuts = sessions.where(_.compose(not, identity))
 
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
@@ -267,7 +269,6 @@
       if ($.address.value()) return splitM($.address.value())
       return (user && "summary") || "latest"
     }
-
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
     // filtering
@@ -451,11 +452,6 @@
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
-    // change password
-    var changePasswords = $('#change-password').onAsObservable('click touchstart')
-      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
-    changePasswords.subscribeArgs(renderChangePassword)
-
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
@@ -512,6 +508,13 @@
     }
     $('#ex-body').redactor(editorSettings)
 
+//    var menuOffsetTop = $('#menu').offset().top
+//    var fixMenuPosition = function() {
+//      $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
+//      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
+//      $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
+//    }
+
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
     var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
     updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
@@ -534,16 +537,7 @@
     var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
-//    var menuOffsetTop = $('#menu').offset().top
-//    var fixMenuPosition = function() {
-//      $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
-//      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
-//      $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
-//    }
-
-
     // initiate current page
     currentPages.connect()
   })
 })()
-
