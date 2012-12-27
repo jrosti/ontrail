@@ -65,6 +65,13 @@
     (:page params)
     1))
 
+(defn do-user-action [user-action params]
+  (let [user (user-action params)
+        username (:username user)]
+    (if (and (not= nil username) (not= "nobody" username)) 
+      (json-response {"token" (auth-token user) "username" username} 200)
+      (json-response {"token" nil "username" username} 404))))
+
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
@@ -149,18 +156,10 @@
         (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
-      (let [user (register-user params)
-            username (:username user)]
-        (if (not= "nobody" username) 
-          (json-response {"token" (auth-token user) "username" username} 200)
-          (json-response {"token" nil "username" username} 404))))
+    (do-user-action register-user params))
 
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
-    (let [user (change-password (user-from-cookie cookies) params)
-          username (:username user)]
-        (if (not= "nobody" username) 
-          (json-response {"token" (auth-token user) "username" username} 200)
-          (json-response {"token" nil "username" username} 404))))
+    (do-user-action (partial change-password (user-from-cookie cookies)) params))
 
   (GET "/rest/v1/username-available/:username" [username]
        (let [user (get-user username)]

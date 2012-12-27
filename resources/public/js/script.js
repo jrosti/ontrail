@@ -474,6 +474,8 @@
     // luo lenkki -validaatio
     var require = _.partial(attachValidation, requiredV(), "required");
 
+    //var serverThing
+
     var serverTimeValidator = function() {
       return function(value) {
         if ($.trim(value) == "") return Rx.Observable.returnValue([])
