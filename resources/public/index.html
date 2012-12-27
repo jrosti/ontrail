@@ -421,6 +421,7 @@
 
 <script id="singleExerciseTemplate" type="text/html">
   <article data-id="{{id}}" class="full exercise {{sport}}">
+    <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
     <a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
     <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
     <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
@@ -503,7 +504,7 @@
 
 <script id="hpkContentTemplate" type="text/html">
   <article>
-    <p class="signature">{{user}}</p>
+    <p class="signature"><a class="pageLink" rel="user/{{user}}">{{user}}</a></p>
     <div class="by year">
       <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}">&larr;</a>
       {{year}}
@@ -526,7 +527,7 @@
 
 <script id="hpkMonthContentTemplate" type="text/html">
   <article>
-    <p class="signature">{{user}}</p>
+    <p class="signature"><a class="pageLink" rel="user/{{user}}">{{user}}</a></p>
     <div class="by month">
       <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth">&larr;</a>
       Vuosi {{year}}
@@ -545,6 +546,7 @@
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
+  <p class="signature"><a class="pageLink" rel="user/{{user}}">{{user}}</a></p>
   <h2 class="monthName">{{monthName}} {{year}}</h2>
   <table class="weekly">
     <thead>

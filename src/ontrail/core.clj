@@ -178,7 +178,7 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (newcomment-cache-restore-all)
-  (schedule-work newcomment-cache-store-all 30) ;; store new comment cache every 60 s
+  (schedule-work newcomment-cache-store-all 60) ;; store new comment cache every 60 s
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head
