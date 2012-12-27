@@ -44,26 +44,31 @@
       (do (.error logger (str "creating user failed " username " with profile " profile))
           nil))))
 
+(def non-user {:username "nobody" :gravatar false :email "nobody@ontrail.net"})
+
 (defn register-user [params]
   (let [user (:username params)
         email (:email params)
         created-user (create-user user (:password params) email true)]
     (if (not= nil created-user)
       (do (send-register-msg user email) created-user)
-      {:username "nobody" :gravatar false :email "nobody@ontrail.net"})))
+      non-user)))
 
 (defn verify-password [password]
   (and (not= nil password) (>= (count password) 6)))
 
-(defn change-password [user params]
+(defn change-password [username params]
   (let [new-password (:ch-password params)
-        id (:_id (get-user user))]
+        user (get-user username)
+        id (:_id user)]
     (if (and (not= nil id) (verify-password new-password))
-      (do (.info logger (str "Changing password for user " user))
-          {:result (mr/ok? (mc/update-by-id ONUSER 
-                                            id {"$set" 
-                                            {:passwordHash (password-hash new-password)}}))})
-      {:result false})))
+      (do (.info logger (str "Changing password for user " username))
+          (if (mr/ok? (mc/update-by-id ONUSER 
+                                       id {"$set" 
+                                       {:passwordHash (password-hash new-password)}}))
+            user
+            non-user))
+      non-user)))
 
 (defn -main[& args]
   (let [[username password email has-gravatar & rest] args]
