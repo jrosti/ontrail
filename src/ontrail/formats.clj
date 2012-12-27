@@ -24,11 +24,15 @@
         fraction (int (* 10 (- speed (int speed))))]
     (str (int speed) "," (format "%01d" fraction) " km/h")))
 
-(defn pace-conversion-fun [sport]
+(defn pace-conversion-fun [^String sport]
   (case sport
     "Pyöräily" to-human-pace-kmh
     "Rullaluistelu" to-human-pace-kmh
-    "Luistelu" to-human-pace-kmh
+    ;; testing for tag pace suppport
+    "CYCLO" to-human-pace-kmh
+    "MAANTIE" to-human-pace-kmh
+    "TYÖMATKAPYÖRÄILY" to-human-pace-kmh
+    "MTB" to-human-pace-kmh
     to-human-pace-minkm))
 
 (defn get-pace [exercise]
