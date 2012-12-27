@@ -150,7 +150,7 @@
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
       (let [user (register-user params)]
-        (json-response {"token" (auth-token user) "username" (:username user)} 200)))
+        (json-response {"token" (auth-token user) "username" (:username params)} 200)))
 
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
     (json-response (change-password (user-from-cookie cookies) params)))
