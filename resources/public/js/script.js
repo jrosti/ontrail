@@ -472,35 +472,31 @@
     }
 
     // luo lenkki -validaatio
-    var require = _.partial(attachValidation, requiredV(), "required");
+    var require = _.partial(attachValidation, requiredV(), "required")
 
-    //var serverThing
+    var serverExDataValidator = function(restValidator, renderer) {
+      return function() {
+        return function(value) {
+          if ($.trim(value) == "") return Rx.Observable.returnValue([])
+          var request = restValidator(value) 
+          request.where(isSuccess).select(ajaxResponseData).subscribe(renderer) 
+          return request.materialize()
+            .select(convertToError)
+            .dematerialize()
+        }
+      }
+    }
 
-    var serverTimeValidator = function() {
-      return function(value) {
-        if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        var request = OnTrail.rest.durationV(value)
-        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDurationHint)
-        return request.materialize()
-          .select(convertToError)
-          .dematerialize()
-      }}
+    var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), 
+                                            '/rest/v1/parse-time/', 
+                                            serverExDataValidator(OnTrail.rest.durationV, renderDurationHint)).validation
 
-    var serverDistanceValidator = function() {
-      return function(value) {
-        if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        var request = OnTrail.rest.distanceV(value)
-        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDistanceHint)
-        return request.materialize()
-          .select(convertToError)
-          .dematerialize()
-      }}
-
-    var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), '/rest/v1/parse-time/', serverTimeValidator).validation
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
     timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
 
-    var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), '/rest/v1/parse-distance/', serverDistanceValidator).validation
+    var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), 
+                                                  '/rest/v1/parse-distance/', 
+                                                  serverExDataValidator(OnTrail.rest.distanceV, renderDistanceHint)).validation
   
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
