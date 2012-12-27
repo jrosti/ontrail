@@ -523,9 +523,10 @@
     }
 
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
+    var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
     updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
     updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
-    var changePasswordValidations = _.flatten([updatePassword])
+    var changePasswordValidations = [updatePassword, requirePassword]
     combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')

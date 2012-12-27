@@ -32,6 +32,10 @@
       return OnTrail.rest.postAsObservable("profile", $('#profile-form').serialize())
     }
 
+    var postChangePassword = function() {
+      return OnTrail.rest.postAsObservable("change-password", $('#change-password-form').serialize())
+    }
+
     var postComment = function(exercise) {
       var values = "body=" + encodeURIComponent($('#comment-body').getCode())
       return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
@@ -91,7 +95,7 @@
         deleteComment: function () {
           return function(text, render) {
             if (this.user !== me && exercise.user !== me) return ""
-            this.deleteRel = (this.user === me ? "ex-" : "own-ex-") + exercise.id + (this.user === me ? "-own-comment-" : "-comment-") + this.id;
+            this.deleteRel = (this.user === me ? "ex/" : "own/ex/") + exercise.id + (this.user === me ? "/own/comment/" : "/comment/") + this.id;
             return render(text)
           }
         }
@@ -115,6 +119,14 @@
     }
     var renderActiveUsersList = function(data) {
       $("#active-users").text(data)
+    }
+
+    var renderChangePassword = function(data) {
+      if (data.result == true) {
+        $("#password-change-result").text("Salasanan vaihto onnistui!")
+      } else {
+        $("#password-change-result").text("Salasanan vaihto epäonnistui!")
+      }
     }
 
     var monthNames = {
@@ -174,8 +186,8 @@
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
-    var renderDurationHint = function(duration) { $('#duration-hint').text(duration.time) }
-    var renderDistanceHint = function(distance) { $('#distance-hint').text(distance.distance) }
+    var renderDurationHint = function(duration) { $('#duration-hint').html(duration.time) }
+    var renderDistanceHint = function(distance) { $('#distance-hint').html(distance.distance) }
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
@@ -200,12 +212,12 @@
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) {
-      $('#my-page').attr('rel', 'user-' + userId)
+      $('#my-page').attr('rel', 'user/' + userId)
       $('.username').html(userId)
     })
 
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
-      _.map(["resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+      _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
 
     loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
@@ -277,13 +289,16 @@
       var pages = _.argsToArray(arguments)
       $('body').attr('data-page', pages[0])
       $('#password').attr('value', '')
-      $.address.value(pages.join("-"))
+      $.address.value(pages.join("/"))
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
-    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tag"])).distinctUntilChanged()
+    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
     userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
-    userTagPages.scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
+    userTagPages.selectArgs(function() {
+      var args = Array.prototype.slice.call(arguments)
+      return asObject.apply(asObject, _.flatten([{}, args]))
+    }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
     var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
@@ -303,7 +318,11 @@
       .doAction(function() { $("#weeksummary").html("") })
       .combineWithLatestOf(sessions)
       .selectArgs(function(pg, user) {
-        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, user), $("#weeksummary"))
+        var targetUser = user
+        if (pg.length == 2) {
+           targetUser = pg[1]
+        }
+        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
       }).switchLatest()
     weeklyScroll.subscribe(renderWeeklySummary)
 
@@ -339,7 +358,7 @@
 
     // user search scroll
     var usersScroll = $("#search-users").valueAsObservable().merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
-      .doAction(function() { console.log(arguments, "usereScroll"); userList.html("") })
+      .doAction(function() { userList.html("") })
       .selectArgs(function(query) {
           if (query === "")
           return OnTrail.pager.create(OnTrail.rest.users, userList)
@@ -347,11 +366,13 @@
           return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), userList)
       })
       .switchLatest()
-//    usersScroll.subscribe(renderUserList)
+    usersScroll.subscribe(renderUserList)
 
     var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
     loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
+
+    onPageLoad.selectAjax(OnTrail.rest.activeUsers).subscribe(renderActiveUsersList)
 
     // Lisää lenkki
     var resetEditor = function() {
@@ -398,7 +419,7 @@
     }
 
     var renderProfileUpdate = function(args) {
-      var result = _.reduce(_.map([["leposyke", args.resthr], ["maksimisyke", args.maxhr],
+      var result = _.reduce(_.map([["synopsis", args.synopsis], ["leposyke", args.resthr], ["maksimisyke", args.maxhr],
         ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
         function(val) {
           if (val[1]) {
@@ -407,7 +428,7 @@
             return ""
           }}),
         function(fst,snd) { return fst + snd })
-      $("#profile-result").html("Sykeprofiili päivitetty tiedoilla: " + result)
+      $("#profile-result").html("Profiili päivitetty tiedoilla: " + result)
     }
 
     var renderAddExercise = function() {
@@ -429,6 +450,11 @@
     var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
+
+    // change password
+    var changePasswords = $('#change-password').onAsObservable('click touchstart')
+      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
+    changePasswords.subscribeArgs(renderChangePassword)
 
     // Lisää kommentti
     var addComments = $('#exercise').clickAsObservable().select(target).where(function(el) { return el.id === "add-comment"})
@@ -485,6 +511,13 @@
       minHeight: 200
     }
     $('#ex-body').redactor(editorSettings)
+
+    var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
+    var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
+    updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
+    updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
+    var changePasswordValidations = [updatePassword, requirePassword]
+    combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
     var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
