@@ -46,10 +46,11 @@
 
 (defn register-user [params]
   (let [user (:username params)
-        email (:email params)]
-    (if (not= nil (create-user user (:password params) email true))
-      (do (send-register-msg user email) {:result "success"})
-      {:result "failed"})))
+        email (:email params)
+        created-user (create-user user (:password params) email true)]
+    (if (not= nil created-user)
+      (do (send-register-msg user email) created-user)
+      {:username "nobody" :gravatar false :email "nobody@ontrail.net"})))
 
 (defn verify-password [password]
   (and (not= nil password) (>= (count password) 6)))

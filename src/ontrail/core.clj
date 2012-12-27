@@ -155,7 +155,7 @@
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
     (json-response (change-password (user-from-cookie cookies) params)))
 
-  (GET "/rest/v1/username-available/:username" [username] ;; XXX throws
+  (GET "/rest/v1/username-available/:username" [username]
        (let [user (get-user username)]
          (if (= user nil)
            (json-response {:success true})
