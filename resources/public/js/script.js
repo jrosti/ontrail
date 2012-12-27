@@ -468,7 +468,6 @@
       validation.subscribe(toggleEffect($("." + field + "-" + error)))
       validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
-
     }
 
     // luo lenkki -validaatio
