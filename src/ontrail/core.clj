@@ -168,7 +168,7 @@
            (json-response {:message "username-exists"} 400))))
   
   (wrap-multipart-params
-   (POST "/rest/v1/import" {params :params cookies :cookies}
+    (POST "/rest/v1/import" {params :params cookies :cookies}
          (redirect (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
   
   (route/resources "/")
