@@ -149,11 +149,17 @@
         (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
-      (let [user (register-user params)]
-        (json-response {"token" (auth-token user) "username" (:username params)} 200)))
+      (let [user (register-user params)
+            username (:username user)]
+        (if (not= "nobody" username) 
+          (json-response {"token" (auth-token user) "username" username} 200)
+          (json-response {"token" nil "username" username} 404))))
 
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
-    (json-response (change-password (user-from-cookie cookies) params)))
+    (let [res (change-password (user-from-cookie cookies) params)]
+      (if (:result res)
+        (json-response res 200)
+        (json-response res 404))))
 
   (GET "/rest/v1/username-available/:username" [username]
        (let [user (get-user username)]
