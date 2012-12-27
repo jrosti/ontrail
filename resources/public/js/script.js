@@ -200,12 +200,12 @@
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var registerUsers = $('#register-user').onAsObservable('click touchstart').selectAjax(postRegisterUser)
+    var registerUsers = $('#register-user').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
       .where(isSuccess).select(ajaxResponseData)
 
     // change password
-    var changePasswords = $('#change-password').onAsObservable('click touchstart')
+    var changePasswords = $('#change-password').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled")))
       .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
     changePasswords.subscribeArgs(renderChangePassword)
 
@@ -494,11 +494,11 @@
           .dematerialize()
       }}
 
-    var timeValidation = mkServerValidation($('#ex-duration').changes(), '/rest/v1/parse-time/', serverTimeValidator).validation
+    var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), '/rest/v1/parse-time/', serverTimeValidator).validation
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
     timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
 
-    var distanceValidation = mkServerValidation($('#ex-distance').changes(), '/rest/v1/parse-distance/', serverDistanceValidator).validation
+    var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), '/rest/v1/parse-distance/', serverDistanceValidator).validation
   
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
