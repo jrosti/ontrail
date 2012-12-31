@@ -105,12 +105,10 @@
                     <!-- Feature #1 -->
                     <section>
                         <a href="#" class="bordered-feature-image"><img src="images/pic01.jpg" alt="" /></a>
-                        <h2>Welcome to Halcyonic</h2>
+                        <h2>Tervetuloa On Trailiin</h2>
                         <p>
-                            This is <strong>Halcyonic</strong>, a free site template
-                            by <a href="http://n33.co/">N33</a> for
-                            <a href="http://html5up.net">HTML5 Up!</a> It's responsive,
-                            built on HTML5 + CSS3, and includes 5 unique page layouts.
+                            Tämä on  <strong>On Trail</strong>, sosiaalinen lenkkivihko sinulle, joka
+                            tahdot jakaa lenkeistäsi muutakin kuin pelkät faktat.
                         </p>
                     </section>
 
@@ -120,11 +118,10 @@
                     <!-- Feature #2 -->
                     <section>
                         <a href="#" class="bordered-feature-image"><img src="images/pic02.jpg" alt="" /></a>
-                        <h2>Responsive You Say?</h2>
+                        <h2>Liiku</h2>
                         <p>
-                            Yes! Halcyonic is built on the <a href="http://n33.co/5grid/">5grid</a>
-                            framework, so it has full responsive support for desktop, tablet,
-                            and mobile device displays.
+                            On Trail tarjoaa sinulle paikan, jonne voit tallentaa urheiluhistoriasi ja seurata
+                            kehittymistäsi viikko viikolta, kuukausi kuukaudelta ja vuosi vuodelta.
                         </p>
                     </section>
 
@@ -134,11 +131,10 @@
                     <!-- Feature #3 -->
                     <section>
                         <a href="#" class="bordered-feature-image"><img src="images/pic03.jpg" alt="" /></a>
-                        <h2>License Info</h2>
+                        <h2>Jaa</h2>
                         <p>
-                            Halcyonic is licensed under the <a href="http://html5up.net/license">CCA 3.0</a> license,
-                            so use it for personal or commercial use as much as you like (just keep
-                            the footer credit intact).
+                            Jaa kanssamme parhaat lenkkisi, kauneimmat vaelluksesi ja aallonpohjasi.  Seuraa, kuinka
+                            suoriutuvat haasteistaan.
                         </p>
                     </section>
 
@@ -148,10 +144,10 @@
                     <!-- Feature #4 -->
                     <section>
                         <a href="#" class="bordered-feature-image"><img src="images/pic04.jpg" alt="" /></a>
-                        <h2>Volutpat etiam aliquam</h2>
+                        <h2>Osallistu</h2>
                         <p>
-                            Duis neque nisi, dapibus sed mattis quis, rutrum accumsan sed. Suspendisse
-                            eu varius nibh. Suspendisse vitae magna eget odio amet mollis.
+                            <strong>On Trailin</strong> virkeä käyttäjäkunta toivottaa sinut mukaan osallistumaan.
+                            Kommentoi, jaa ja seuraa muiden lenkkejä.  Lähde mukaan yhteisiin haasteisiin ja tapahtumii
                         </p>
                     </section>
 
@@ -197,7 +193,7 @@
                         </article>
                     </section>
 
-                    <section role="import">
+                    <section role="import" class="logged-in">
                         <article>
                             <h3>Harjoituspäiväkirjan tuonti Lenkkivihko-formaatista</h3>
                             1. Klikkaa Lenkkivihon etusivulta linkkiä "Tuo harjoitukset tiedostona".<br />
@@ -220,7 +216,7 @@
                         </article>
                     </section>
 
-                    <section role="profile">
+                    <section role="profile" class="logged-in">
                         <article>
                             <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Oma profiili</h2>
                             <div class="details">
@@ -265,17 +261,17 @@
                         <div id="content-entries"></div>
                     </section>
 
-                    <section role="summary">
+                    <section role="summary" class="logged-in">
                         <div id="summary-header"></div>
                         <div id="summary-entries"></div>
                     </section>
 
-                    <section role="tagsummary">
+                    <section role="tagsummary" class="logged-in">
                         <div id="tagsummary-header"></div>
                         <div id="tagsummary-entries"></div>
                     </section>
 
-                    <section role="weeksummary">
+                    <section role="weeksummary" class="logged-in">
                         <div id="weeksummary-header">
                             <h2>Viikoittainen harjoitusyhteenveto</h2>
                         </div>
@@ -285,18 +281,18 @@
                         </div>
                     </section>
 
-                    <section role="users">
+                    <section role="users" class="logged-in">
                         <article>
                             <label for="search-users">Hae käyttäjää: </label> <input class="search" type="text" id="search-users"/>
                             <div id="user-results"></div>
                         </article>
                     </section>
 
-                    <section role="ex" class="full with-comments">
+                    <section role="ex" class="full with-comments logged-in">
                         <div id="exercise" />
                     </section>
 
-                    <section role="addex" data-mode="add">
+                    <section role="addex" data-mode="add" class="logged-in">
                         <article class="edit-form">
                             <h2>Lisää uusi lenkki</h2>
                             <form id="add-exercise-form" method="post">
@@ -348,7 +344,7 @@
                         </article>
                     </section>
 
-                    <section role="register" data-mode="add">
+                    <section role="register" data-mode="add" class="logged-in">
                         <article class="edit-form">
                             <h2>Rekisteröidy käyttäjäksi</h2>
                             <form id="register-form" method="post">
@@ -418,72 +414,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<!-- Footer -->
-<div id="footer-wrapper">
-    <footer id="footer" class="5grid-layout">
-        <div class="row">
-            <div class="8u">
-
-                <!-- Links -->
-                <section>
-                    <h2>Links to Important Stuff</h2>
-                    <div class="5grid">
-                        <div class="row">
-                            <div class="3u">
-                                <ul class="link-list last-child">
-                                    <li><a href="#">Neque amet dapibus</a></li>
-                                    <li><a href="#">Sed mattis quis rutrum</a></li>
-                                    <li><a href="#">Accumsan suspendisse</a></li>
-                                    <li><a href="#">Eu varius vitae magna</a></li>
-                                </ul>
-                            </div>
-                            <div class="3u">
-                                <ul class="link-list last-child">
-                                    <li><a href="#">Neque amet dapibus</a></li>
-                                    <li><a href="#">Sed mattis quis rutrum</a></li>
-                                    <li><a href="#">Accumsan suspendisse</a></li>
-                                    <li><a href="#">Eu varius vitae magna</a></li>
-                                </ul>
-                            </div>
-                            <div class="3u">
-                                <ul class="link-list last-child">
-                                    <li><a href="#">Neque amet dapibus</a></li>
-                                    <li><a href="#">Sed mattis quis rutrum</a></li>
-                                    <li><a href="#">Accumsan suspendisse</a></li>
-                                    <li><a href="#">Eu varius vitae magna</a></li>
-                                </ul>
-                            </div>
-                            <div class="3u">
-                                <ul class="link-list last-child">
-                                    <li><a href="#">Neque amet dapibus</a></li>
-                                    <li><a href="#">Sed mattis quis rutrum</a></li>
-                                    <li><a href="#">Accumsan suspendisse</a></li>
-                                    <li><a href="#">Eu varius vitae magna</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-            <div class="4u">
-
-                <!-- Blurb -->
-                <section>
-                    <h2>An Informative Text Blurb</h2>
-                    <p>
-                        Duis neque nisi, dapibus sed mattis quis, rutrum accumsan sed. Suspendisse eu
-                        varius nibh. Suspendisse vitae magna eget odio amet mollis. Duis neque nisi,
-                        dapibus sed mattis quis, sed rutrum accumsan sed. Suspendisse eu varius nibh
-                        lorem ipsum amet dolor sit amet lorem ipsum consequat gravida justo mollis.
-                    </p>
-                </section>
-
-            </div>
-        </div>
-    </footer>
 </div>
 
 <!-- Copyright -->
