@@ -267,7 +267,7 @@
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
       if ($.address.value()) return splitM($.address.value())
-      return (user && "summary") || "latest"
+      return (user && "summary") || "welcome"
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
@@ -305,7 +305,10 @@
 
     // initiate loading and search
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
-      .doAction(function() { entries.html("") })
+      .doAction(function() {
+        entries.html("")
+        $('html, body').animate({scrollTop: entries.offset().top}, 1000);
+      })
       .selectArgs(function(query) {
         if (query === "")
           return OnTrail.pager.create(OnTrail.rest.latest, entries)
