@@ -16,21 +16,24 @@
 (defn get-overall-tags-cond [user condition]
   (.trace logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
-        all-distinct-tags (filter (partial not= "") (get-distinct-tags cond-with-user))]
-    {:user user :sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :tags %) :tag %) all-distinct-tags))}))
+        all-distinct-tags (filter (partial not= "") (get-distinct-tags cond-with-user))
+        summary-tags (sort-by :numericalDuration > 
+          (map #(get-summary (assoc cond-with-user :tags %) :tag %) all-distinct-tags))]
+    {:user user :sports summary-tags}))
 
 (defn get-month-summary-tags [user year month]
   (let [first-day (time/date-time year month 1)
-        last-day (-> first-day (.dayOfMonth) (.withMaximumValue))
+        last-day (time/plus (-> first-day (.dayOfMonth) (.withMaximumValue)) (time/hours 23))
         year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (assoc (get-overall-tags-cond user year-month-cond) :year year :month (- month 1))))
 
 (defn get-year-summary-tags [user year]
   (let [first-day (time/date-time year 1 1)
-        last-day (time/date-time year 12 31)
+        last-day (time/date-time year 12 31 23 59)
         year-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (assoc (get-overall-tags-cond user year-cond) :year year)))
 
 (defn get-overall-tags-summary [user]
   (let [tags (filter (partial not= "") (get-distinct-tags {:user user}))]
-    {:user user :sports (sort-by :numericalDuration > (map #(get-summary {:user user :tags %} :tag %) tags)) }))
+    {:user user :sports (sort-by :numericalDuration > 
+      (map #(get-summary {:user user :tags %} :tag %) tags)) }))
