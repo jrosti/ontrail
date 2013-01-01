@@ -17,13 +17,13 @@
 
 (defn get-year-summary-sport [user year]
   (let [first-day (time/date-time year 1 1)
-        last-day (time/date-time year 12 31)
+        last-day (time/date-time year 12 31 23 59)
         year-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (assoc (get-overall-summary-cond user year-cond) :year year)))
 
 (defn get-month-summary-sport [user year month]
   (let [first-day (time/date-time year month 1)
-        last-day (-> first-day (.dayOfMonth) (.withMaximumValue))
+        last-day (time/plus (-> first-day (.dayOfMonth) (.withMaximumValue)) (time/hours 23))
         year-month-cond {:creationDate {:$gte first-day :$lte last-day}}]
     (assoc (get-overall-summary-cond user year-month-cond) :year year :month (- month 1))))
 

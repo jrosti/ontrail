@@ -22,7 +22,8 @@
                 [com.novemberain/monger "1.1.2"]
                 [ring.middleware.logger "0.2.2"]]
   :run-aliases {:import ontrail.import
-                :create-user ontrail.user}
+                :create-user ontrail.user
+                :import-images ontrail.imgimport}
   :main ontrail.core
   :js {:src "resources/public/js" :deploy "resources/public/minjs"
        :bundles ["min.js" ["handlebars-1.0.0.beta.6.js" "handlebars-helpers.js" "icanhaz-0.10.0.js" 
