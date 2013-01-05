@@ -14,9 +14,11 @@
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)]
         [ontrail.import :only (import-from-tempfile)])
-  (:use [ontrail log scheduler newcomment summary auth crypto exercise formats nlp profile system tagsummary sportsummary weekly])
+  (:use [ontrail log scheduler newcomment summary auth crypto exercise formats nlp 
+         profile system tagsummary sportsummary weekly])
   (:gen-class)
   (:require
+            [ontrail.unread :as unread]
             [ring.middleware.head :as ring-head]
             [clojure.stacktrace :as stacktrace]
             [compojure.handler :as handler]
@@ -108,6 +110,12 @@
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
+  (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
+       (json-response (unread/comments-all (user-from-cookie cookies))))
+
+  (GET "/rest/v1/ex-unread-own-comments" {params :params cookies :cookies}
+       (json-response (unread/comments-own (user-from-cookie cookies))))  
+
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (get-page params) {:creationDate -1})))
   

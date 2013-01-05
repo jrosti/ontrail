@@ -1,7 +1,8 @@
 (ns ontrail.exercise
-  (:use [ontrail mongodb formats user utils nlp newcomment]
+  (:use [ontrail mongodb formats user utils nlp]
         monger.operators)
-  (:require [monger.collection :as mc]
+  (:require [ontrail.newcomment :as nc]
+            [monger.collection :as mc]
             [clj-time.core :as time]
             [monger.query :as mq]
             [clojure.string :as string]
@@ -19,11 +20,11 @@
 (defn is-new [ex last-visit]
   (let [lmd (:lastModifiedDate ex)]
     (if (and (not= nil lmd) (not= nil last-visit))
-      (time/after? (:lastModifiedDate ex) last-visit)
+      (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 2)))
       false)))
 
 (defn as-ex-result
-  ([exercise] (as-ex-result (time/now) zero-cache exercise))
+  ([exercise] (as-ex-result (time/now) nc/zero-cache exercise))
   ([last-visit newcomment-cache exercise]
      (let [id (str (:_id exercise))
            user (:user exercise)
@@ -63,26 +64,29 @@
   
 (defn as-ex-result-list
   ([results]
-     (as-ex-result-list (time/now) zero-cache results))
+     (as-ex-result-list (time/now) nc/zero-cache results))
   ([last-visit new-comment-cache results]
      (map (partial as-ex-result last-visit new-comment-cache) results)))
+
+(defn decorate-results [viewing-user results]
+  (let [last-visit (if (not= viewing-user "nobody")
+                      (nc/get-last-visit viewing-user)
+                      (time/now))]
+    (as-ex-result-list last-visit (nc/get-cache viewing-user) results)))
 
 (defn get-latest-ex-list
   ([rule page sort-rule]
      (get-latest-ex-list "nobody" rule page sort-rule))
   ([viewing-user rule page sort-rule]
-     (let [results (mq/with-collection EXERCISE
+    (let [results (mq/with-collection EXERCISE
                      (mq/find rule)
                      (mq/paginate :page (Integer. page) :per-page 20)
-                     (mq/sort sort-rule))]
-       (let [last-visit (if (not= viewing-user "nobody")
-                         (get-last-visit viewing-user)
-                         (time/now))]
-         (visit-now viewing-user)
-         (.info logger (str "Ex-list " rule " for " viewing-user
-                             " at page " page " last-visit " last-visit))
-         (as-ex-result-list last-visit (get-cache viewing-user) results)))))
-  
+                     (mq/sort sort-rule))
+          decorated-results (decorate-results viewing-user results)]
+      (nc/visit-now viewing-user)
+      (.info logger (str "Ex-list " rule " for " viewing-user " at page " page))
+      decorated-results)))
+
 (defn get-latest-ex-list-default-order
   ([rule page]
      (get-latest-ex-list "nobody" rule page))
@@ -92,7 +96,7 @@
 (defn get-ex
   ([viewing-user id]
      (.info logger (str "User " viewing-user " getting ex with id " id))
-     (newcount-reset viewing-user id)
+     (nc/newcount-reset viewing-user id)
      (get-ex id))
   ([id]
      (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
