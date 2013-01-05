@@ -85,6 +85,14 @@
   (let [active-time (time/minus (time/now) (time/minutes 25))]
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
+(def max-age (* 1000 60 60 24 30))
+
+(defn clean-cache [comment-cache]
+  (let [now-millis (System/currentTimeMillis)]
+    (apply dissoc comment-cache 
+      (filter identity (map #(if (> (- now-millis ((comp :ts comment-cache) %)) max-age) % nil) 
+        (filter (partial not= :lastvisit) (keys comment-cache)))))))
+
 (defn store-cache [user]
   (if (not= nil (@users-cache user))
     (mc/update NCCACHE {:u user} {"$set" {:ref (deref (@users-cache user))}} :upsert true)))
