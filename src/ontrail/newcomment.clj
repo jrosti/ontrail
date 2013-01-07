@@ -34,12 +34,11 @@
   
 (defn newcount-reset [user id]
   (dosync
-   (let [user-cache-ref (@users-cache user)]
-     (if (not= user-cache-ref nil)
-       (let [user-cache @user-cache-ref
-             id-key (keyword id)]
-         (if (contains? user-cache id-key)
-           (alter user-cache-ref dissoc id-key)))))))
+   (if-let [user-cache-ref (@users-cache user)]
+      (let [user-cache @user-cache-ref
+            id-key (keyword id)]
+        (if (contains? user-cache id-key)
+          (alter user-cache-ref dissoc id-key))))))
 
 (defn cache-mod[f t val] (assoc (merge-with f val {:c 1}) :ts t))
 
@@ -86,7 +85,7 @@
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
 (defn dissoc-comment-keys [comment-cache]
-  (let [max-age (* 1000 60 60 24 21)
+  (let [max-age (* 1000 60 60 24 14)
         now-millis (System/currentTimeMillis)]
     (filter identity 
       (map #(if (> (- now-millis ((comp :ts comment-cache) %)) max-age) % nil) 
