@@ -85,17 +85,17 @@
   (let [active-time (time/minus (time/now) (time/minutes 25))]
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
-(def max-age (* 1000 60 60 24 30))
-
-(defn clean-cache [comment-cache]
-  (let [now-millis (System/currentTimeMillis)]
-    (apply dissoc comment-cache 
-      (filter identity (map #(if (> (- now-millis ((comp :ts comment-cache) %)) max-age) % nil) 
-        (filter (partial not= :lastvisit) (keys comment-cache)))))))
+(defn dissoc-comment-keys [comment-cache]
+  (let [max-age (* 1000 60 60 24 21)
+        now-millis (System/currentTimeMillis)]
+    (filter identity 
+      (map #(if (> (- now-millis ((comp :ts comment-cache) %)) max-age) % nil) 
+        (filter (partial not= :lastvisit) (keys comment-cache))))))
 
 (defn store-cache [user]
-  (if (not= nil (@users-cache user))
-    (mc/update NCCACHE {:u user} {"$set" {:ref (deref (@users-cache user))}} :upsert true)))
+  (if-let [ucache (@users-cache user)]
+    (do (dosync (apply alter ucache dissoc (dissoc-comment-keys @ucache)))
+        (mc/update NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))))
 
 (defn restore-cache [user]
   (let [cache (mc/find-one-as-map NCCACHE {:u user})]
@@ -107,5 +107,6 @@
     (.trace logger (str "Comment count cache stored " res " caches "))))
 
 (defn newcomment-cache-restore-all[]
-  (.info logger (str "Restored comment count cache for users " (count (map restore-cache (mc/distinct ONUSER "username" {}))))))
+  (.info logger (str "Restored comment count cache for users " 
+    (count (map restore-cache (mc/distinct ONUSER "username" {}))))))
 
