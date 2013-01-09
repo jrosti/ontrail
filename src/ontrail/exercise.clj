@@ -20,7 +20,7 @@
 (defn is-new [ex last-visit]
   (let [lmd (:lastModifiedDate ex)]
     (if (and (not= nil lmd) (not= nil last-visit))
-      (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 2)))
+      (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 1)))
       false)))
 
 (defn as-ex-result
