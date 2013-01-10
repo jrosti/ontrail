@@ -12,7 +12,7 @@
         email (.toLowerCase (get user :email))
         gravatar-md5-hash (md5 email)]
     (if gravatar?
-      (str "http://www.gravatar.com/avatar/" gravatar-md5-hash "?d=monsterid")
+      (str "http://www.gravatar.com/avatar/" gravatar-md5-hash "?d=identicon&r=x")
       "/img/default-avatar.png")))
 
 (defn as-user [user]
