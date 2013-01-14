@@ -37,18 +37,24 @@
       .retry().publish().connect()
     return merged
   }
+
   Rx.Observable.prototype.combineWithLatestOf = function() {
     var first = this
     var args = arguments
     return Rx.Observable.create(function(subscriber) {
       var latest = []
-      for(var i in args) {
-        args[i].subscribe(_.bind(function(index, value) { latest[index] = value }, null, i))
-      }
-      var seq = first.subscribe(function(value) {
-        subscriber.onNext([value].concat(latest))
+      var subs = []
+      _.each(args, function(a, index) {
+        subs.push(a.subscribe(function(value) { latest[index] = value }))
       })
-      return function() { seq.dispose() }
+      subs.push(first.subscribe(function(value) {
+        if(args.length==latest.length) {
+          subscriber.onNext([value].concat(latest))
+        }
+      }))
+      return function() {
+        while(subs.length > 0) subs.pop().dispose()
+      }
     })
   }
 }());
@@ -60,6 +66,18 @@ var OnTrail = {}
 var debug = function() {console.log("debug: ", arguments)}
 var _debug = function(category) { return _.partial(debug, category ) }
 var nothing = function() {}
+
+var ielog = function(name) {
+  return function() {
+    try {
+      var out = _.map(arguments, function(a){return JSON.stringify(a, null, "\t")}).toString()
+      console.log(name + ": " + out)
+    } catch (e) {
+      console.log("error while trying to log with name '" + name + "', error: " + e)
+    }
+  }
+}
+var _ielog = function(name) { return _.partial(ielog, name) }
 
 // general utilities
 var splitWith = function(delim, string) { return (string !== undefined) ? string.split(delim) : string }
