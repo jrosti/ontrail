@@ -196,7 +196,7 @@
     var logouts = $("#logout").onAsObservable("click touchstart")
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onAsObservable("click touchstart").merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onAsObservable("click touchstart").throttle(300).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
