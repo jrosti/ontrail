@@ -59,6 +59,8 @@
     <div id="menu" role="menu">
       <ul>
         <li><a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a></li>
+        <li><a class="pageLink logged-in" rel="new-comments">Uudet kommentit</a></li>
+        <li><a class="pageLink logged-in" rel="new-own-comments">Kommentit omiin lenkkeihin</a></li>
         <li class="right login">
             <a class="pageLink logged-out" rel="register">Luo tunnus</a>
             <a class="logged-out" id="login-link">Kirjaudu sisään</a>
@@ -208,6 +210,14 @@
     <section role="content">
       <div id="content-header"></div>
       <div id="content-entries"></div>
+    </section>
+
+    <section role="new-comments">
+        <div id="unread-entries"></div>
+    </section>
+
+    <section role="new-own-comments">
+        <div id="unread-own-entries"></div>
     </section>
 
     <section role="summary">

@@ -38,6 +38,8 @@
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
+  Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
+  Rest.prototype.newOwnComments = function() { return getAsObservableResultData("ex-unread-own-comments") }
 
   Rest.prototype.exercises = function(filter, page) { return getAsObservableResultData("ex-list-filter?" + [$.param(filter), "page=" + page].join("&")) }
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
