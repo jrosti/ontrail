@@ -76,7 +76,7 @@
 
 (defn get-last-visit [user]
   (let [user-cache-ref (@users-cache user)]
-    (if (and (not= nil user-cache-ref) (not= nil (:lastvisit @user-cache-ref)))
+    (if (and user-cache-ref (:lastvisit @user-cache-ref))
       (:lastvisit @user-cache-ref)
       (time/date-time 2000 1 1))))
 

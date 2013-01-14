@@ -8,7 +8,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn as-gravatar [user]
-  (let [gravatar? (get user :gravatar)
+  (let [gravatar? (:gravatar user)
         email (.toLowerCase (get user :email))
         gravatar-md5-hash (md5 email)]
     (if gravatar?
@@ -17,13 +17,13 @@
 
 (defn as-user [user]
   {:user (:username user) :profile (:profile user) :avatar (as-gravatar user)})
+
 (defn as-user-list [results] (map as-user results))
 
 (defn get-avatar-url [user]
-  (let [onuser (mc/find-one-as-map ONUSER {:username user})]
-    (if (not= nil onuser)
-      (as-gravatar onuser)
-      "/img/drno.png")))
+  (if-let [onuser (mc/find-one-as-map ONUSER {:username user})]
+    (as-gravatar onuser)
+    "/img/drno.png"))
 
 (defn get-user [username]
   (mc/find-one-as-map ONUSER {:username username}))
@@ -44,13 +44,13 @@
       (do (.error logger (str "creating user failed " username " with profile " profile))
           nil))))
 
-(def non-user {:username "nobody" :gravatar false :email "nobody@ontrail.net"})
+(def non-user {:username "nobody" :gravatar false :email "ontrail@ontrail.net"})
 
 (defn register-user [params]
   (let [user (:username params)
         email (:email params)
         created-user (create-user user (:password params) email true)]
-    (if (not= nil created-user)
+    (if created-user
       (do (send-register-msg user email) created-user)
       non-user)))
 
