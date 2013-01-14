@@ -22,12 +22,28 @@
 	{
 		color: #474f51;
 		font-size: 13.5pt;
-		font-family: 'Yanone Kaffeesatz';
+    font-family: 'Open Sans', sans-serif;
 		line-height: 1.85em;
 		font-weight: 300;
 	}
 
-	ul, ol, p, dl
+h1, h2, h3, h4, h5, h6, h7
+{
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  color: #6b7770;
+}
+
+.byline
+{
+  display: block;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #c1cac5;
+}
+
+ul, ol, p, dl
 	{
 		margin: 0 0 2em 0;
 	}
