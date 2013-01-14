@@ -345,5 +345,59 @@ table.weekly {
 
 div.tooltip-content {
   display: block ! important;
+}
 
+p.signature {
+  margin-left: 3em;
+  font-style: italic;
+  color: #777;
+  float: right;
+}
+
+body {
+  .subnavi {
+    float: right;
+    vertical-align: bottom;
+    line-height: 40px;
+  }
+
+  .by.year, .by.month {
+    display: none
+  }
+
+  &[data-filter="by-year"] {
+    .by.year {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+
+      .next, .prev {
+        cursor: pointer
+      }
+    }
+  }
+
+  &[data-filter="by-month"] {
+    .by.month {
+      display: block;
+      width: 100%;
+      text-align: center;
+      font-size: 20px;
+      font-weight: bold;
+
+      .next, .prev {
+        cursor: pointer
+      }
+    }
+  }
+}
+
+a.prev, a.next {
+  text-decoration: none ! important;
+}
+
+a.pageLink {
+  cursor: pointer
 }

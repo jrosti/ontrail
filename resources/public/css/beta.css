@@ -842,3 +842,47 @@ table.weekly .sport.Yleisurheilu {
 div.tooltip-content {
   display: block ! important;
 }
+p.signature {
+  margin-left: 3em;
+  font-style: italic;
+  color: #777;
+  float: right;
+}
+body .subnavi {
+  float: right;
+  vertical-align: bottom;
+  line-height: 40px;
+}
+body .by.year,
+body .by.month {
+  display: none;
+}
+body[data-filter="by-year"] .by.year {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+body[data-filter="by-year"] .by.year .next,
+body[data-filter="by-year"] .by.year .prev {
+  cursor: pointer;
+}
+body[data-filter="by-month"] .by.month {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+body[data-filter="by-month"] .by.month .next,
+body[data-filter="by-month"] .by.month .prev {
+  cursor: pointer;
+}
+a.prev,
+a.next {
+  text-decoration: none ! important;
+}
+a.pageLink {
+  cursor: pointer;
+}
