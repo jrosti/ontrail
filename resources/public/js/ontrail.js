@@ -285,7 +285,7 @@
     var initialPage = function(user) {
       var address = $.address.value()
       if (address && address != "") return splitM($.address.value())
-      return (user && "summary") || ""
+      return (user && ["user", user]) || ""
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
