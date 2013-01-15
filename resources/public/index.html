@@ -413,7 +413,7 @@
     
     <div class="preview">
       {{#trunc}}{{/trunc}} 
-      <a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+      <a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
       {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
     </div>
     <div class="full">{{{body}}}
@@ -424,7 +424,7 @@
 
     {{> tagsExpandedTemplate}}
     <div>
-      <p class="full"><a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
+      <p class="full"><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a>
          {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
     </div>
   </article>
