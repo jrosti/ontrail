@@ -221,7 +221,7 @@
       return function(content) {
         var items = asArgs(content)
         if (asArgs(content).length > 0) {
-          var newComments = _(items).map(_prop("newComments")).reduce(function(a, b) { return a + b })
+          var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
           $(countEl).text(newComments).show()
           renderLatest($(el))(items)
         } else {
