@@ -223,6 +223,7 @@
         if (asArgs(content).length > 0) {
           var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
           $(countEl).text(newComments).show()
+          $(el).html("")
           renderLatest($(el))(items)
         } else {
           $(countEl).hide()
