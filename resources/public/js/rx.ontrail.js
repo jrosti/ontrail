@@ -121,6 +121,8 @@ var hasClass = function(name, el) { return $(el).hasClass(name) }
 var _hasClass = function(name) { return _.partial( hasClass, name) }
 var attr = function(name, el) { return $(el).attr(name) }
 var _attr = function(name) { return _.partial(attr, name) }
+var prop = function(name, item) { console.log(name, item ); return item[name] }
+var _prop = function(name) { return _.partial(prop, name) }
 
 var asFilter = function(el) {
   function isFilterItem(a) { return a.name.indexOf("data-filter-") == 0 }
