@@ -886,3 +886,11 @@ a.next {
 a.pageLink {
   cursor: pointer;
 }
+body div[role="tooltip"] {
+  display: block ! important;
+  z-index: 10001;
+  opacity: 1;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+}
