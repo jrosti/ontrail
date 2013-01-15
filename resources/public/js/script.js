@@ -383,7 +383,7 @@
 
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
-    $('#login-link').onAsObservable("click touchstart").subscribe(function() {
+    $('#login-link').onAsObservable("click touchstart").distinctUntilChanged().subscribe(function() {
       $('body').toggleClass('login')
       $('#username').focus()
     })
@@ -406,7 +406,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').onAsObservable("click touchstart").select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').onAsObservable("click touchstart").distinctUntilChanged().select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
@@ -456,24 +456,25 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable("click touchstart").subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onAsObservable("click touchstart")..distinctUntilChanged().subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart")
+    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart")..distinctUntilChanged()
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
     // update user profile
-    var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
+    var updateProfiles = $('#update-profile').onAsObservable('click touchstart').distinctUntilChanged()
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onAsObservable("click touchstart").select(target).where(function(el) { return el.id === "add-comment"})
+    var addComments = $('#exercise').onAsObservable("click touchstart").distinctUntilChanged()
+      .select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
