@@ -28,9 +28,9 @@
     <link rel="stylesheet" href="css/select2.css">
     <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
     <link rel="stylesheet" href="redactor/redactor.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 
     <link rel="stylesheet" href="css/beta.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
 
     <!-- ga / jro -->
     <script type="text/javascript">
@@ -60,7 +60,8 @@
 
                 <!-- Nav -->
                 <nav class="mobileUI-site-nav">
-                    <a class="pageLink" id="exercises" rel="latest">Kaikki lenkit</a>
+                    <a class="pageLink logged-in" rel="new-comments">Uudet kommentit</a>
+                    <a class="pageLink logged-in" rel="new-own-comments">Kommentit omiin lenkkeihin</a>
                     <a class="pageLink logged-out" rel="register">Luo tunnus</a>
                     <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
                 </nav>
@@ -177,6 +178,15 @@
                         </div>
                         <div id="entries"></div>
                     </section>
+
+                    <section role="new-comments">
+                        <div id="unread-entries"></div>
+                    </section>
+
+                    <section role="new-own-comments">
+                        <div id="unread-own-entries"></div>
+                    </section>
+
 
                     <section role="systemstats">
                         <article>

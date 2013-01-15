@@ -218,6 +218,20 @@
       $('.username').html(userId)
     })
 
+    function renderNewContent(el) {
+      return function(content) {
+        var items = asArgs(content)
+        if (asArgs(content).length > 0)
+          renderLatest($(el))(items)
+        else
+          console.log("no new content", content)
+
+      }
+    }
+
+    loggedIns.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries"))
+    loggedIns.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries"))
+
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
       _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
