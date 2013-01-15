@@ -238,8 +238,12 @@
                                         sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
                                         ylläpitäjän pyynnostä.</small></i></div>
                                 </div>
-                                <h3>Syketiedot</h3>
+                                <h3>Profiilin tiedot</h3>
                                 <form id="profile-form" class="edit-form" method="post">
+                                    <div>
+                                        <label for="synopsis">Motto</label>
+                                        <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" placeholder="Kuvaus" />
+                                    </div>
                                     <div>
                                         <label for="resthr">Leposyke</label>
                                         <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
@@ -262,6 +266,25 @@
                                     </div>
                                 </form>
                                 <span id="profile-result"></span>
+
+                                <h3>Vaihda salasana</h3>
+                                <form id="change-password-form" method="post">
+                                    <p>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</p>
+                                    <div>
+                                        <label>Salasana</label>
+                                        <input id="ch-password" name="ch-password" class="reset" type="password" placeholder="Salasana"/>
+                                    </div>
+                                    <div>
+                                        <label>Salasana uudelleen</label>
+                                        <input id="ch-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+                                        <em class="error ch-passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
+                                    </div>
+                                    <div>
+                                        <label></label>
+                                        <a id="change-password" class="button change-password">Vaihda salasana</a>
+                                    </div>
+                                </form>
+                                <p class="error"><span id="password-change-result"></span></p>
                             </div>
                         </article>
                     </section>
