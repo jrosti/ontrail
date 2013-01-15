@@ -232,9 +232,6 @@
       }
     }
 
-    loggedIns.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
-    loggedIns.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
-
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
       _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
@@ -359,7 +356,6 @@
           var distance = e.attr("data-distance").replace(" ", "&nbsp;")
           var duration = e.attr("data-duration").replace(" ", "&nbsp;")
           var pace = e.attr("data-pace").replace(" ", "&nbsp;")
-          console.log("tooltip is " +e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace) )
           return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")
@@ -557,6 +553,11 @@
 
     var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
+
+    var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
+    loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
+    loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
 
     // initiate current page
     currentPages.connect()

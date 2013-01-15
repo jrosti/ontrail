@@ -483,14 +483,14 @@
 
         <div class="preview">
             {{#trunc}}{{/trunc}}
-            <p><a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+            <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
         <div class="full">{{{body}}}</div>
 
         {{> tagsExpandedTemplate}}
         <div>
-            <p class="full"><a class="pageLink" rel="ex/{{id}}">{{^newComments}}{{commentCount}} kommenttia.</a>
+            <p class="full"><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a>
                 {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
     </article>
