@@ -456,14 +456,14 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable("click touchstart")..distinctUntilChanged().subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onAsObservable("click touchstart").distinctUntilChanged().subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart")..distinctUntilChanged()
+    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart").distinctUntilChanged()
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
