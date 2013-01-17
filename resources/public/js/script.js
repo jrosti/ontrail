@@ -556,6 +556,11 @@
     var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
+    var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
+    loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
+    loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
+
     // run our function on load
     if (!Modernizr.touch) {
       fixMenuPosition();
@@ -563,11 +568,6 @@
       // and run it again every time you scroll
       $(window).scrollAsObservable().subscribe(fixMenuPosition)
     }
-
-    var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
-    var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
-    loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
-    loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
 
     // initiate current page
     currentPages.connect()

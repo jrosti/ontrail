@@ -526,12 +526,24 @@
     }
     $('#ex-body').redactor(editorSettings)
 
-//    var menuOffsetTop = $('#menu').offset().top
-//    var fixMenuPosition = function() {
-//      $('#menu').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
+    var menuOffsetTop = $('#header-wrapper').offset().top + 50
+    var menuOffsetWidth = $('#header-wrapper').width()
+    var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
+    var sideMenuOffsetRight = $('#sidemenu').position().left
+    var sideMenuOffsetWidth = $('#sidemenu').width()
+    var fixMenuPosition = function() {
+      if ($(window).scrollTop() > menuOffsetTop) {
+        $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin })
+        $('#sidemenu').css({ 'position': 'fixed', top: 152, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
+        $('#sidemenu').removeAttr("class")
+      } else {
+        $('#sidemenu,#header-wrapper').removeAttr("style")
+        $('#sidemenu').addClass("3u")
+      }
+
+//      $('#header').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
 //      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
-//      $('aside').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '44px', marginLeft: '706px' } : { 'position': 'relative', top: 'auto', marginLeft: '0' })
-//    }
+    }
 
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
     var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
@@ -559,6 +571,15 @@
     var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
     loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
     loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
+
+
+    // run our function on load
+    if (!Modernizr.touch) {
+      fixMenuPosition();
+
+      // and run it again every time you scroll
+      $(window).scrollAsObservable().subscribe(fixMenuPosition)
+    }
 
     // initiate current page
     currentPages.connect()
