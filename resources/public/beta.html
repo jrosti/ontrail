@@ -67,40 +67,15 @@
                 <nav class="mobileUI-site-nav">
                     <a class="pageLink logged-in" rel="new-comments">Uudet kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
                     <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
-                    <a class="pageLink logged-out" rel="register">Luo tunnus</a>
                     <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
+                    <a class="pageLink logged-out" rel="register">Luo tunnus</a>
+                    <a class="pageLink logged-out" id="login">Kirjaudu sisään</a>
                 </nav>
 
             </div>
         </div>
     </header>
-    <div id="banner" class="logged-out">
-        <div class="5grid-layout">
-            <div class="row">
-                <div class="6u">
-
-                    <!-- Banner Copy -->
-                    <p>Enemmän, nopeammin, korkeammalle ...</p>
-                    <fieldset>
-                        <form id="login-form" method="post">
-                            <input id="username" name="username" type="text" placeholder="Username" />
-                            <input id="password" name="password" type="password" placeholder="Password"/>
-                            <a id="login" class="button-big login">Kirjaudu sisään!</a>
-                        </form>
-                    </fieldset>
-
-                </div>
-                <div class="6u">
-
-                    <!-- Banner Image -->
-                    <a href="#" class="bordered-feature-image"><img src="img/compass.jpg" alt="" /></a>
-
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-
 <!-- Features -->
 <div id="features-wrapper" class="logged-out">
     <div id="features">
@@ -156,6 +131,34 @@
                             Kommentoi, jaa ja seuraa muiden lenkkejä.  Lähde mukaan yhteisiin haasteisiin ja tapahtumii
                         </p>
                     </section>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="login-wrapper">
+    <div id="banner" class="logged-out">
+        <div class="5grid-layout">
+            <div class="row">
+                <div class="6u">
+
+                    <!-- Banner Copy -->
+                    <p>Enemmän, nopeammin, korkeammalle ...</p>
+                    <fieldset>
+                        <form id="login-form" method="post">
+                            <input id="username" name="username" type="text" placeholder="Username" />
+                            <input id="password" name="password" type="password" placeholder="Password"/>
+                            <a id="login" class="button-big login">Kirjaudu sisään!</a>
+                        </form>
+                    </fieldset>
+
+                </div>
+                <div class="6u">
+
+                    <!-- Banner Image -->
+                    <a href="#" class="bordered-feature-image"><img src="img/compass.jpg" alt="" /></a>
 
                 </div>
             </div>

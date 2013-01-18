@@ -15,7 +15,7 @@ section:last-child
 
 /* Wrappers */
 
-	#header-wrapper
+	#header-wrapper, #login-wrapper
 	{
 		background: #3B4346 url('images/bg01.jpg');
 		border-bottom: solid 1px #272d30;

@@ -55,7 +55,7 @@ body, input, textarea, select
 	
 /* Wrappers */
 
-	#header-wrapper
+	#header-wrapper,#login-wrapper
 	{
 		background: #3B4346 url('images/bg01.jpg') top center;
 		box-shadow: inset 0px -1px 0px 0px #272d30, inset 0px -2px 0px 0px #51575a;
