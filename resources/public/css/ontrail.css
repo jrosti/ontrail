@@ -83,7 +83,7 @@ header[role="top"] {
 header[role="top"] h1 {
   position: absolute;
   font-size: 44px;
-  font-family: 'Nosifer', cursive;
+  font-family: 'Open Sans', sans-serif;
   top: 10px;
   right: 40px;
   text-align: right;
@@ -319,7 +319,7 @@ section article img {
 }
 section table.details {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  font-size: 12px;
+  body-size: 12px;
   margin: 5px;
   width: 640px;
   text-align: left;
@@ -603,6 +603,9 @@ a.button.disabled:active {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#a2a2a2', EndColorStr='#717171');
   -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#a2a2a2', EndColorStr='#717171');
   background-repeat: repeat-x;
+}
+body {
+  font-family: 'Open Sans', sans-serif;
 }
 body .subnavi {
   float: right;
@@ -1218,4 +1221,12 @@ table.weekly .sport.Yleisurheilu {
   background-image: -ms-linear-gradient(top, #ce1a00, #ed391b);
   background-image: -o-linear-gradient(top, #ce1a00, #ed391b);
   background-image: linear-gradient(top, #ce1a00, #ed391b);
+}
+.loading {
+  width: 110px;
+  margin: 0 auto;
+}
+.loading:after {
+  content: 'Ladataan';
+  text-align: center;
 }

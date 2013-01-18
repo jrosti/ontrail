@@ -316,8 +316,8 @@
       var args = Array.prototype.slice.call(arguments)
       return asObject.apply(asObject, _.flatten([{}, args]))
     }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
-    var exPages = currentPages.whereArgs(partialEquals("ex")).selectAjax(OnTrail.rest.details)
-    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+    var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
+    exPages.combineWithLatestOf(sessions).throttle(3000).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
@@ -533,12 +533,14 @@
     var sideMenuOffsetWidth = $('#sidemenu').width()
     var fixMenuPosition = function() {
       if ($(window).scrollTop() > menuOffsetTop) {
-        $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin })
+        $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#sidemenu').css({ 'position': 'fixed', top: 152, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
         $('#sidemenu').removeAttr("class")
+        $('#content').css({"margin-top": 152})
       } else {
         $('#sidemenu,#header-wrapper').removeAttr("style")
         $('#sidemenu').addClass("3u")
+        $('#content').removeAttr('style')
       }
 
 //      $('#header').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
