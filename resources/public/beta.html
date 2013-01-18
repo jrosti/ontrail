@@ -487,7 +487,11 @@
             <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
-        <div class="full">{{{body}}}</div>
+        <div class="full">{{{body}}}
+            <p class="signature">
+                {{synopsis}}
+            </p>
+        </div>
 
         {{> tagsExpandedTemplate}}
         <div>
@@ -505,7 +509,11 @@
         <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
         <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
         {{> exerciseDetailsTemplate}}
-        <div>{{{body}}}</div>
+        <div>{{{body}}}
+            <p class="signature">
+                {{synopsis}}
+            </p>
+        </div>
         {{> tagsExpandedTemplate}}
     </article>
     <h3>Kommentit:</h3>
@@ -602,6 +610,7 @@
 
 <script id="hpkMonthContentTemplate" type="text/html">
     <article>
+        <p class="signature"><a class="pageLink" rel="user/{{user}}">{{user}}</a></p>
         <div class="by month">
             <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth">&larr;</a>
             Vuosi {{year}}
