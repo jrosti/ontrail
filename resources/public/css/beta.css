@@ -913,3 +913,11 @@ body div[role="tooltip"] {
 .link-list {
   font-size: 80%;
 }
+.loading {
+  width: 110px;
+  margin: 0 auto;
+}
+.loading:after {
+  content: 'Ladataan';
+  text-align: center;
+}

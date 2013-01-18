@@ -82,7 +82,7 @@ header[role="top"] {
   h1 {
     position: absolute;
     font-size: 44px;
-    font-family: 'Nosifer', cursive;
+    font-family: 'Open Sans', sans-serif;
     top: 10px;
     right: 40px;
     text-align: right;
@@ -292,7 +292,7 @@ section {
 
   table.details {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 12px;
+    body-size: 12px;
     margin: 5px;
     width: 640px;
     text-align: left;
@@ -488,6 +488,8 @@ a.button {
 }
 
 body {
+  font-family: 'Open Sans', sans-serif;
+
   .subnavi {
     float: right;
     vertical-align: bottom;
@@ -685,4 +687,13 @@ table.weekly {
   background-image: -ms-linear-gradient(top, #ce1a00, #ed391b);
   background-image: -o-linear-gradient(top, #ce1a00, #ed391b);
   background-image: linear-gradient(top, #ce1a00, #ed391b);
+}
+
+.loading {
+  &:after {
+    content: 'Ladataan';
+    text-align: center;
+  }
+  width: 110px;
+  margin: 0 auto;
 }
