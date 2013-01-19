@@ -9,7 +9,7 @@
         [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
-        [ontrail.user :only (change-password get-avatar-url get-user get-user-list register-user)]
+        [ontrail.user :only (change-password get-avatar-url get-user get-case-user get-user-list register-user)]
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)]
@@ -131,7 +131,7 @@
 
   (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list {} page)))
 
-  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (get-user-list {:username {$regex (str "^" term)}} page)))
+  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
 
   (GET "/rest/v1/sports" []  (json-response sports))
 
@@ -174,7 +174,7 @@
     (do-user-action (partial change-password (user-from-cookie cookies)) params))
 
   (GET "/rest/v1/username-available/:username" [username]
-    (if-let [user (get-user username)]
+    (if-let [user (get-case-user username)]
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
   

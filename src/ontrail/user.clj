@@ -26,6 +26,9 @@
     "/img/drno.png"))
 
 (defn get-user [username]
+  (mc/find-one-as-map ONUSER {:username username}))
+
+(defn get-case-user [username]
   (let [lower-user (.toLowerCase username)
         user (mc/find-one-as-map ONUSER {:username username})]
     (if user
@@ -36,7 +39,7 @@
   (let [results (mq/with-collection ONUSER
     (mq/find rule)
     (mq/paginate :page (Integer/valueOf page) :per-page 100)
-    (mq/sort {:username 1}))]
+    (mq/sort {:lusername 1}))]
     (.trace logger (str "Get user list " page " with " (count results) " results for " rule))
   (as-user-list results)))
 
@@ -44,7 +47,7 @@
   (let [profile {:resthr 42 :maxhr 192}
         lower-user (.toLowerCase username)]
     (.info logger (str "creating user " username " with profile " profile))
-    (if (and (not= username "") (not= username "nobody") (= nil (get-user username)))
+    (if (and (not= username "") (not= username "nobody") (= nil (get-case-user username)))
       (mc/insert-and-return ONUSER {:username username :lusername lower-user :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})
       (do (.error logger (str "creating user failed " username " with profile " profile))
           nil))))
