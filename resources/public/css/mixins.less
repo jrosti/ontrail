@@ -18,6 +18,14 @@
   background-repeat: repeat-x;
 }
 
+.scroll-gradient(@top, @topPx, @bottom) {
+  .linear-gradient(top, ~',@{top} 0, @{top} @{topPx}px, @{bottom} 152px');
+  .ms-linear-gradient(@top, @bottom);
+  border-bottom: 0;
+  box-shadow: none;
+  background-repeat: repeat-x;
+}
+
 .css-button(@text-color, @border-color, @bg-color, @gradient-start, @gradient-end) {
   @adjust: 10%;
 

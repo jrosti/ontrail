@@ -547,7 +547,7 @@
     }
     $('#ex-body').redactor(editorSettings)
 
-    var menuOffsetTop = $('#header-wrapper').offset().top + 50
+    var menuOffsetTop = $('#header-wrapper').offset().top + 52
     var menuOffsetWidth = $('#header-wrapper').width()
     var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
     var sideMenuOffsetRight = $('#sidemenu').position().left
@@ -557,14 +557,16 @@
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
       if ($(window).scrollTop() > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
+        $('#header-wrapper').addClass("scroll-overflow")
         $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 152})
       } else {
         $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
+        $('#header-wrapper').removeClass("scroll-overflow")
         $('#sidemenu').addClass("3u")
       }
 
       if ($(window).scrollTop() > headerHeight) {
-        $('#sidemenu').css({ 'position': 'fixed', top: 152, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
+        $('#sidemenu').css({ 'position': 'fixed', top: 145, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
         $('#sidemenu').removeAttr("class")
       } else {
         $('#sidemenu').removeAttr("style")
