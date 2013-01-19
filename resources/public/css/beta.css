@@ -116,6 +116,9 @@ article.exercise {
 article.exercise p {
   margin: 20px 0 0;
 }
+article .newEx {
+  color: red;
+}
 article table.details {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
