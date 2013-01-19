@@ -40,6 +40,7 @@
            bare-ex {:id id
                     :user user
                     :isNew (is-new exercise last-visit)
+                    :userProfile  user-profile
                     :distance distance
                     :title (:title exercise)
                     :body (:body exercise)
