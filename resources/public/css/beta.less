@@ -511,8 +511,9 @@ body div[role="tooltip"] {
 @scroll-overflow-height: "12px";
 #content-wrapper.scroll-overflow {
   #content-top {
+    z-index: 20000;
     position: fixed;
-    top: 105px;
+    top: 140px;
     width: 100%;
     .scroll-gradient(@header-bg-color, @header-bg-color-bottom, @scroll-overflow-height);
     height: 12px;
