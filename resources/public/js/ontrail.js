@@ -186,7 +186,7 @@
 
       var date = new XDate(summary[0].from)
       var month = date.getMonth()
-      var summaries =_.extend( {summary: _.map(summary, _.partial(toWeeklySummary, month)), month: month, year: (1900 + date.getYear()), weeks: (summary.length*2) + 1}, monthNames)
+      var summaries =_.extend( {summary: _.map(summary, _.partial(toWeeklySummary, month)), month: month, year: date.getFullYear(), weeks: (summary.length*2) + 1}, monthNames)
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
@@ -299,17 +299,26 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-    // filtering
     var appendUser = function(args, currentUser) {
-      return (args.length > 1) ? args : args.concat(currentUser)
+      return (args.length > 0) ? args : args.concat(currentUser)
     }
 
+    var appendYear = function(args) {
+      return (args.length > 1) ? args : args.concat(XDate.today().getFullYear())
+    }
+
+    var appendFilter = function(args) {
+      return (args.length > 2) ? args : args.concat("bymonth")
+    }
+
+    var appendParameters = _.compose(appendFilter, appendYear, appendUser)
+
+    // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
     var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(appendUser).subscribeArgs(function() {
-      console.log("blaa", arguments)
-      if (arguments.length == 3) setFilter("by-year")
-      else if (arguments.length == 4) setFilter("by-month")
-      else setFilter("by-month")
+      if (arguments.length == 3) setFilter("byyear")
+      else if (arguments.length == 4) setFilter("bymonth")
+      else setFilter("")
     })
 
     // back button handling
@@ -385,8 +394,7 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(_.compose(emptyAsUndefined, tail))
-      .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(tail).combineWithLatestOf(sessions).selectArgs(appendUser).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
     var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(_.compose(emptyAsUndefined, tail))
