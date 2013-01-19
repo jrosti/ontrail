@@ -192,11 +192,16 @@
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
     var logouts = $("#logout").onAsObservable("click touchstart")
+    var loginClicks = $("#gotoLogin").onAsObservable("click touchstart")
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
     var loginRequests = $("#login").onAsObservable("click touchstart").merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
+
+    loginClicks.subscribe(function() {
+      $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top }, 400)
+    })
 
     var registerUsers = $('#register-user').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
@@ -283,7 +288,7 @@
     var initialPage = function(user) {
       var address = $.address.value()
       if (address && address != "") return splitM($.address.value())
-      return (user && ["user", user]) || ""
+      return (user && ["user", user]) || "latest"
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
@@ -323,7 +328,6 @@
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         entries.html("")
-        $('html, body').animate({scrollTop: entries.offset().top}, 1000);
       })
       .selectArgs(function(query) {
         if (query === "")
@@ -531,8 +535,8 @@
     var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
     var sideMenuOffsetRight = $('#sidemenu').position().left
     var sideMenuOffsetWidth = $('#sidemenu').width()
-    var fixMenuPosition = function() {
-      if ($(window).scrollTop() > menuOffsetTop) {
+    var fixMenuPosition = function(top) {
+      if (top > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#sidemenu').css({ 'position': 'fixed', top: 152, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
         $('#sidemenu').removeAttr("class")
@@ -577,10 +581,13 @@
 
     // run our function on load
     if (!Modernizr.touch) {
-      fixMenuPosition();
 
       // and run it again every time you scroll
-      $(window).scrollAsObservable().subscribe(fixMenuPosition)
+      $(window).scrollAsObservable()
+        .doAction(_debug)
+        .select(function() { return $(window).scrollTop() })
+        .selectMany(sessions).whereArgs(identity)// doesn't fix menu position for non-loggedins.
+        .subscribe(fixMenuPosition)
     }
 
     // initiate current page
