@@ -397,8 +397,7 @@
     var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(tail).combineWithLatestOf(sessions).selectArgs(appendUser).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
-    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(_.compose(emptyAsUndefined, tail))
-      .combineWithLatestOf(sessions).selectArgs(firstDefined).selectAjax(OnTrail.rest.tagsummary)
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(tail).combineWithLatestOf(sessions).selectArgs(appendUser).selectAjax(OnTrail.rest.tagsummary)
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
