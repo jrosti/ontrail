@@ -93,6 +93,7 @@
       }, $(el))
     }
     var renderSingleExercise = function(exercise, me) {
+      renderUserMenu(exercise.user)
       var helpers = {
         deleteComment: function () {
           return function(text, render) {
@@ -336,9 +337,11 @@
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
+    function renderUserMenu(user) { $("#user-header").html(ich.userHeaderTemplate({"data": user})) }
+
     // update current user in the menu bar
     var currentPageLinkUsers = currentPages.distinctUntilChanged().combineWithLatestOf(sessions).selectArgs(_findUser(1));
-    sessions.merge(currentPageLinkUsers).subscribeArgs(function(id) { $("#user-header").html(ich.userHeaderTemplate({"data": id})) })
+    sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
