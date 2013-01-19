@@ -501,12 +501,22 @@ body div[role="tooltip"] {
 }
 
 
-@header-bg-color: rgb(59,67,70);
-@header-bg-color-bottom: rgba(59,67,70, 0.0);
+@header-bg-color: rgb(81,87,90);
+@header-bg-color-bottom: rgba(247,247,247, 0.0);
 
-  #header-wrapper.scroll-overflow {
-  background: none;
-  .scroll-gradient(@header-bg-color, 147, @header-bg-color-bottom);
+#content-wrapper {
+  position: relative;
+}
+
+@scroll-overflow-height: "6px";
+#content-wrapper.scroll-overflow {
+  #content-top {
+    position: fixed;
+    top: 105px;
+    width: 100%;
+    .scroll-gradient(@header-bg-color, @header-bg-color-bottom, @scroll-overflow-height);
+    height: 6px;
+  }
 }
 
 #sidemenu {

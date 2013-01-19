@@ -18,11 +18,9 @@
   background-repeat: repeat-x;
 }
 
-.scroll-gradient(@top, @topPx, @bottom) {
-  .linear-gradient(top, ~',@{top} 0, @{top} @{topPx}px, @{bottom} 152px');
+.scroll-gradient(@top, @bottom, @height) {
+  .linear-gradient(top, ~',@{top} 0, @{bottom} @{height}');
   .ms-linear-gradient(@top, @bottom);
-  border-bottom: 0;
-  box-shadow: none;
   background-repeat: repeat-x;
 }
 
