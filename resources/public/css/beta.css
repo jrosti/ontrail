@@ -921,3 +921,11 @@ body div[role="tooltip"] {
   content: 'Ladataan';
   text-align: center;
 }
+.error {
+  color: #ce1a00;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+}
+.has-error {
+  border: solid 2px #ce1a00;
+}
