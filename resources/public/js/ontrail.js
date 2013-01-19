@@ -218,7 +218,6 @@
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) {
-      $('#my-page').attr('rel', 'user/' + userId)
       $('.username').html(userId)
     })
 
@@ -295,23 +294,28 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-    var appendUser = function(args, currentUser) {
-      return (args.length > 0) ? args : args.concat(currentUser)
+    var findUser = function(inArgs, currentUser, pos) {
+      var args = asArgs(inArgs)
+      var userPos = _(args).indexOf("user")
+      console.log(args, userPos, currentUser, args.length)
+      if (userPos >= 0 && userPos+1 < args.length)
+        return args[userPos+1]
+      var position = (pos || 0)
+      if (args && args.length >= position && _(["user", "tagsummary", "weeksummary", "summary"]).find(partialEquals(args[position-1])))
+        return (args.length > position) ? args[position] : currentUser
+      return currentUser
     }
+    var _findUser = function(pos) { return function(args, currentUser) { return findUser(args, currentUser, pos )} }
 
-    var appendYear = function(args) {
-      return (args.length > 1) ? args : args.concat(XDate.today().getFullYear())
+    var appendUser = function(args, currentUser, pos) {
+      return (args.length > (pos || 0)) ? args : args.concat(currentUser)
     }
+    var _appendUser = function(pos) { return function(args, currentUser) { return appendUser(args, currentUser, pos )} }
 
-    var appendFilter = function(args) {
-      return (args.length > 2) ? args : args.concat("bymonth")
-    }
-
-    var appendParameters = _.compose(appendFilter, appendYear, appendUser)
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(appendUser).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(_findUser(1)).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("byyear")
       else if (arguments.length == 4) setFilter("bymonth")
       else setFilter("")
@@ -332,11 +336,12 @@
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
-    var userRelatedPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "tagsummary", "weeksummary", "summary"])).distinctUntilChanged()
-    userRelatedPages.subscribeArgs(function(type, id) { $("#user-header").html(ich.userHeaderTemplate({"data": id})) })
+    // update current user in the menu bar
+    var currentPageLinkUsers = currentPages.distinctUntilChanged().combineWithLatestOf(sessions).selectArgs(_findUser(1));
+    sessions.merge(currentPageLinkUsers).subscribeArgs(function(id) { $("#user-header").html(ich.userHeaderTemplate({"data": id})) })
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
-    userTagPages.selectArgs(function() {
+    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
       return asObject.apply(asObject, _.flatten([{}, args]))
     }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
@@ -390,10 +395,10 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).selectArgs(tail).combineWithLatestOf(sessions).selectArgs(appendUser).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).combineWithLatestOf(sessions).doAction(_debug("laa")).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
-    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(tail).combineWithLatestOf(sessions).selectArgs(appendUser).selectAjax(OnTrail.rest.tagsummary)
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
