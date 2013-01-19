@@ -19,6 +19,11 @@
         secs (int (* 60.0 (- pace (int pace))))]
     (str (int pace) "." (format "%02d" secs) " min/km")))
 
+(defn to-human-pace-500m [duration distance]
+  (let [pace  (/ (/ duration 6000) (/ distance 500))
+        secs (int (* 60.0 (- pace (int pace))))]
+    (str (int pace) "." (format "%02d" secs) " min/500m")))
+
 (defn to-human-pace-kmh [duration distance]
   (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
         fraction (int (* 10 (- speed (int speed))))]
@@ -27,6 +32,7 @@
 (defn pace-conversion-fun [^String sport]
   (case sport
     "Pyöräily" to-human-pace-kmh
+    "Sisäsoutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     ;; testing for tag pace suppport
     "CYCLO" to-human-pace-kmh
