@@ -535,16 +535,23 @@
     var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
     var sideMenuOffsetRight = $('#sidemenu').position().left
     var sideMenuOffsetWidth = $('#sidemenu').width()
-    var fixMenuPosition = function(top) {
-      if (top > menuOffsetTop) {
+
+    var fixMenuPosition = function(isLoggedIn) {
+      var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
+      if ($(window).scrollTop() > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
+        $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 152})
+      } else {
+        $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
+        $('#sidemenu').addClass("3u")
+      }
+
+      if ($(window).scrollTop() > headerHeight) {
         $('#sidemenu').css({ 'position': 'fixed', top: 152, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
         $('#sidemenu').removeAttr("class")
-        $('#content').css({"margin-top": 152})
       } else {
-        $('#sidemenu,#header-wrapper').removeAttr("style")
+        $('#sidemenu').removeAttr("style")
         $('#sidemenu').addClass("3u")
-        $('#content').removeAttr('style')
       }
 
 //      $('#header').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
@@ -583,11 +590,7 @@
     if (!Modernizr.touch) {
 
       // and run it again every time you scroll
-      $(window).scrollAsObservable()
-        .doAction(_debug)
-        .select(function() { return $(window).scrollTop() })
-        .selectMany(sessions).whereArgs(identity)// doesn't fix menu position for non-loggedins.
-        .subscribe(fixMenuPosition)
+      $(window).scrollAsObservable().startWith(0).selectMany(sessions).select(function(val) { return exists(val) ? true : false }).subscribe(fixMenuPosition)
     }
 
     // initiate current page
