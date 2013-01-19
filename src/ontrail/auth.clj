@@ -6,7 +6,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn authenticate [username password]
-  (let [user (get-user username)
+  (let [user (get-case-user username)
         is-match (and (not (= user nil)) (password-match? password (:passwordHash user)))]
     is-match))
 

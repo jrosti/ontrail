@@ -9,15 +9,14 @@
         [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
-        [ontrail.user :only (change-password get-avatar-url get-user get-case-user get-user-list register-user)]
         [ontrail.parser :only (parse-duration parse-distance)]
-        [ontrail.mutate :only (update-ex create-ex comment-ex
-                                         delete-ex delete-own-comment delete-own-ex-comment)]
         [ontrail.import :only (import-from-tempfile)])
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          profile system tagsummary sportsummary weekly])
   (:gen-class)
-  (:require
+  (:require [ontrail.mutate :as mutate]
+            [ontrail.exercise :as ex]
+            [ontrail.user :as user]
             [ontrail.newcomment :as nc]
             [ontrail.unread :as unread]
             [ring.middleware.head :as ring-head]
@@ -95,21 +94,21 @@
   (POST "/rest/v1/profile" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (post-profile (user-from-cookie cookies) params))))
 
-  (GET "/rest/v1/email" {cookies :cookies} (json-response {:email (:email (get-user (user-from-cookie cookies)))}))
+  (GET "/rest/v1/email" {cookies :cookies} (json-response {:email (:email (user/get-user (user-from-cookie cookies)))}))
   
   (GET "/rest/v1/system" [] (json-response (get-system-stats)))
   
-  (GET "/rest/v1/avatar/:user" [user] (json-response {:url (get-avatar-url user)}))
+  (GET "/rest/v1/avatar/:user" [user] (json-response {:url (user/get-avatar-url user)}))
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
-    (json-response (get-ex (user-from-cookie cookies) (:id params))))
+    (json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-    (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
+    (json-response (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
+    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
     (json-response (unread/comments-all (user-from-cookie cookies))))
@@ -129,9 +128,9 @@
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
   (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
 
-  (GET "/rest/v1/list-users/:page" [page] (json-response (get-user-list {} page)))
+  (GET "/rest/v1/list-users/:page" [page] (json-response (user/get-user-list {} page)))
 
-  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
+  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
 
   (GET "/rest/v1/sports" []  (json-response sports))
 
@@ -146,35 +145,35 @@
   
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)
-      (json-response {"token" (auth-token (get-user username)) "username" username} 200)
-      (json-response {"error" "Authentication failed"} 401)))
+      (json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
+      (json-response {:error "Authentication failed"} 401)))
   
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (mutate/comment-ex (user-from-cookie cookies) params))))
   
   (POST "/rest/v1/update/:id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (update-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (mutate/update-ex (user-from-cookie cookies) params))))
   
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
+    (is-authenticated? cookies (json-response (mutate/delete-ex (user-from-cookie cookies) (:ex-id params)))))
 
   (DELETE "/rest/v1/ex/:ex-id/own/comment/:comment-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
+    (is-authenticated? cookies (json-response (mutate/delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (DELETE "/rest/v1/own/ex/:ex-id/comment/:comment-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
+    (is-authenticated? cookies (json-response (mutate/delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (mutate/create-ex (user-from-cookie cookies) params))))
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
-    (do-user-action register-user params))
+    (do-user-action user/register-user params))
 
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
-    (do-user-action (partial change-password (user-from-cookie cookies)) params))
+    (do-user-action (partial user/change-password (user-from-cookie cookies)) params))
 
   (GET "/rest/v1/username-available/:username" [username]
-    (if-let [user (get-case-user username)]
+    (if-let [user (user/get-case-user username)]
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
   
