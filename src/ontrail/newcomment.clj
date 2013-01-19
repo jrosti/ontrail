@@ -84,7 +84,7 @@
   (let [active-time (time/minus (time/now) (time/minutes 25))]
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
-(defn mark-all-unread [user]
+(defn mark-all-read [user]
   (dosync 
     (if-let [ucache (@users-cache user)]
       (let [lastvisit (:lastvisit @ucache)]
