@@ -565,11 +565,11 @@
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
       if ($(window).scrollTop() > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
-        $('#header-wrapper').addClass("scroll-overflow")
+        $('#content-wrapper').addClass("scroll-overflow")
         $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 152})
       } else {
         $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
-        $('#header-wrapper').removeClass("scroll-overflow")
+        $('#content-wrapper').removeClass("scroll-overflow")
         $('#sidemenu').addClass("3u")
       }
 
