@@ -328,6 +328,9 @@ a.editComment {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
+.edit-form .buttons {
+  margin-top: 12px;
+}
 table.weekly {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 10px;

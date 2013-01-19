@@ -122,6 +122,7 @@
     }
 
     var renderChangePassword = function(data) {
+      $("#change-password-form")[0].reset()
       if (data.username) {
         $("#password-change-result").text("Salasanan vaihto onnistui!")
       } else {
@@ -199,7 +200,7 @@
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
     $("#gotoLogin").onAsObservable("click touchstart").subscribe(function() {
-      $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top }, 400)
+      $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top - 110 }, 1000)
     })
 
     var registerUsers = $('#register-user').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
@@ -555,16 +556,16 @@
         $('#sidemenu').removeAttr("style")
         $('#sidemenu').addClass("3u")
       }
-
-//      $('#header').css($(window).scrollTop() > menuOffsetTop ? { 'position': 'fixed', top: '0', margin: '0 auto', padding: '0' } : { 'position': 'relative' })
-//      $('#menu ul').css( { margin: $(window).scrollTop() > menuOffsetTop ? '0' : '1em  0' } )
     }
 
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
     var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
+    var pwdChangeLengthValidation = mkValidation($('#ch-password').changes(),  minLengthV(6))
+    pwdChangeLengthValidation.subscribe(toggleEffect($(".ch-password-too-short")))
+    pwdChangeLengthValidation.subscribe(toggleClassEffect($('#ch-password'), "has-error"))
     updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
     updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
-    var changePasswordValidations = [updatePassword, requirePassword]
+    var changePasswordValidations = [updatePassword, requirePassword, pwdChangeLengthValidation]
     combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var passwordRequiredValidation = require("password")
