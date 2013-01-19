@@ -89,8 +89,6 @@
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
-
-        console.log("append " + content);
         $(content).appendTo(elem)
       }, $(el))
     }
@@ -324,8 +322,10 @@
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
+    var userRelatedPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "tagsummary", "weeksummary", "summary"])).distinctUntilChanged()
+    userRelatedPages.subscribeArgs(function(type, id) { $("#user-header").html(ich.userHeaderTemplate({"data": id})) })
+
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
-    userTagPages.subscribeArgs(function(type, id) { $( "#content-header").html(ich[type + "HeaderTemplate"]({"data": id})) })
     userTagPages.selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
       return asObject.apply(asObject, _.flatten([{}, args]))
