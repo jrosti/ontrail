@@ -2,8 +2,6 @@
 @import "css3.less";
 @import "mixins.less";
 
-@table-header-border-color: #6678b1;
-
 body.logged-out *.logged-in, body.logged-in *.logged-out, body.login #login-link {
   display: none;
 }
@@ -121,15 +119,21 @@ article {
   }
 
   table.details {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
     font-size: 12px;
     margin: 5px;
-    width: 640px;
+    width: 100%;
     text-align: left;
 
+    tr:nth-child(2n) {
+      background: @table-zebra-color;
+    }
+
     th {
+      font-family: "Open Sans Condensed", sans-serif;
+      font-weight: 700;
       font-size: 14px;
-      font-weight: normal;
       color: #000;
       padding: 4px 10px;
       border-bottom: 2px solid @table-header-border-color;
@@ -154,6 +158,9 @@ article {
 @button-gradient-start: #ed391b;
 @button-gradient-end: #ce1a00;
 @error-transparent-bg: rgba(206, 26, 0, 0.1);
+
+@table-header-border-color: rgb(218, 124, 12);
+@table-zebra-color: rgba(218, 124, 12, 0.1);
 
 #content a.button {
   color: @button-text-color;
