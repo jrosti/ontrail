@@ -869,10 +869,6 @@ body[data-filter="by-year"] .by.year {
   font-size: 20px;
   font-weight: bold;
 }
-body[data-filter="by-year"] .by.year .next,
-body[data-filter="by-year"] .by.year .prev {
-  cursor: pointer;
-}
 body[data-filter="by-month"] .by.month {
   display: block;
   width: 100%;
@@ -880,19 +876,17 @@ body[data-filter="by-month"] .by.month {
   font-size: 20px;
   font-weight: bold;
 }
-body[data-filter="by-month"] .by.month .next,
-body[data-filter="by-month"] .by.month .prev {
-  cursor: pointer;
-}
 a.prev,
 a.next {
   text-decoration: none ! important;
+  cursor: pointer;
 }
 a.delete,
 a.delete-comment {
   float: right;
 }
-a.pageLink {
+a.pageLink,
+a.more {
   cursor: pointer;
 }
 body div[role="tooltip"] {
