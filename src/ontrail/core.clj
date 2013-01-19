@@ -14,10 +14,11 @@
         [ontrail.mutate :only (update-ex create-ex comment-ex
                                          delete-ex delete-own-comment delete-own-ex-comment)]
         [ontrail.import :only (import-from-tempfile)])
-  (:use [ontrail log scheduler newcomment summary auth crypto exercise formats nlp 
+  (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          profile system tagsummary sportsummary weekly])
   (:gen-class)
   (:require
+            [ontrail.newcomment :as nc]
             [ontrail.unread :as unread]
             [ring.middleware.head :as ring-head]
             [clojure.stacktrace :as stacktrace]
@@ -102,19 +103,22 @@
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
-       (json-response (get-ex (user-from-cookie cookies) (:id params))))
+    (json-response (get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
+    (json-response (get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
+    (json-response (get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
-       (json-response (unread/comments-all (user-from-cookie cookies))))
+    (json-response (unread/comments-all (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-unread-own-comments" {params :params cookies :cookies}
-       (json-response (unread/comments-own (user-from-cookie cookies))))  
+    (json-response (unread/comments-own (user-from-cookie cookies))))  
+
+  (GET "/rest/v1/mark-all-read" {params :params cookies :cookies}
+    (json-response (nc/mark-all-read (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (get-page params) {:creationDate -1})))
@@ -132,27 +136,27 @@
   (GET "/rest/v1/sports" []  (json-response sports))
 
   (GET "/rest/v1/parse-time/:time" [time] 
-       (let [duration (to-human-time (parse-duration time))]
-         (if (= "" duration)
-           (json-response {:message "invalid-duration"} 400)
-           (json-response {:success true :time duration}))))
+    (let [duration (to-human-time (parse-duration time))]
+      (if (= "" duration)
+        (json-response {:message "invalid-duration"} 400)
+        (json-response {:success true :time duration}))))
 
   (GET "/rest/v1/parse-distance/:distance" [distance]
        (json-response {:distance (to-human-distance (parse-distance distance))}))
   
   (POST "/rest/v1/login" [username password]
-        (if (authenticate username password)
-          (json-response {"token" (auth-token (get-user username)) "username" username} 200)
-          (json-response {"error" "Authentication failed"} 401)))
+    (if (authenticate username password)
+      (json-response {"token" (auth-token (get-user username)) "username" username} 200)
+      (json-response {"error" "Authentication failed"} 401)))
   
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-        (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (comment-ex (user-from-cookie cookies) params))))
   
   (POST "/rest/v1/update/:id" {params :params cookies :cookies}
-        (is-authenticated? cookies (json-response (update-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (update-ex (user-from-cookie cookies) params))))
   
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
-          (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
+    (is-authenticated? cookies (json-response (delete-ex (user-from-cookie cookies) (:ex-id params)))))
 
   (DELETE "/rest/v1/ex/:ex-id/own/comment/:comment-id" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
@@ -161,7 +165,7 @@
     (is-authenticated? cookies (json-response (delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-        (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
+    (is-authenticated? cookies (json-response (create-ex (user-from-cookie cookies) params))))
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
     (do-user-action register-user params))

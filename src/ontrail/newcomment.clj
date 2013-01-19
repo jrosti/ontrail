@@ -85,7 +85,10 @@
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
 (defn mark-all-unread [user]
-  )
+  (dosync 
+    (if-let [ucache (@users-cache user)]
+      (let [lastvisit (:lastvisit @ucache)]
+        (alter users-cache assoc user (ref {:lastvisit lastvisit}))))))
 
 (defn dissoc-comment-keys [comment-cache]
   (let [max-age (* 1000 60 60 24 7)
