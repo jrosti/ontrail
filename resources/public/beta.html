@@ -493,7 +493,7 @@
         <div class="preview">
             {{#trunc}}{{/trunc}}
             <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
+        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
         </div>
         <div class="full">{{{body}}}
             <p class="signature">
@@ -729,4 +729,12 @@
 <!-- end scripts -->
 
 </body>
+<script type="text/javascript">
+  var uvOptions = {};
+  (function() {
+    var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/dw1PwcLbcvvhAzgGZajaA.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+  })();
+</script>
 </html>
