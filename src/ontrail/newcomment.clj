@@ -80,12 +80,15 @@
       (:lastvisit @user-cache-ref)
       (time/date-time 2000 1 1))))
 
-(defn active-users[]
+(defn active-users []
   (let [active-time (time/minus (time/now) (time/minutes 25))]
     (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
 
+(defn mark-all-unread [user]
+  )
+
 (defn dissoc-comment-keys [comment-cache]
-  (let [max-age (* 1000 60 60 24 14)
+  (let [max-age (* 1000 60 60 24 7)
         now-millis (System/currentTimeMillis)]
     (filter identity 
       (map #(if (> (- now-millis ((comp :ts comment-cache) %)) max-age) % nil) 
