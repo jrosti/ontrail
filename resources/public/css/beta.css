@@ -995,6 +995,9 @@ body div[role="tooltip"] {
 #content-wrapper {
   position: relative;
 }
+body.logged-out .scroll-overflow {
+  display: none;
+}
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;
   position: fixed;
