@@ -24,6 +24,7 @@
 
 (defn is-own? [user ex]
   (or (= user (:user ex))
+      (= "admin" (:user ex))
       (contains? (set (map :user (:comments ex))) user)))
 
 (defn comments-own [user] 
