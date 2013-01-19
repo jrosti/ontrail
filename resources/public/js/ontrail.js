@@ -315,7 +315,7 @@
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(_findUser(1)).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("byyear")
       else if (arguments.length == 4) setFilter("bymonth")
       else setFilter("")
