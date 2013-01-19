@@ -912,6 +912,9 @@ body .subnavi {
   vertical-align: bottom;
   line-height: 40px;
 }
+body .by h2 {
+  font-size: 2.4em ! important;
+}
 body .by.year,
 body .by.month {
   display: none;
@@ -929,6 +932,44 @@ body[data-filter="bymonth"] .by.month {
   text-align: center;
   font-size: 20px;
   font-weight: bold;
+}
+a.prev {
+  margin: 0 0.3em 0 0.1em;
+}
+a.prev .arr {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  width: 0px;
+  height: 0px;
+  padding-right: 0.1em;
+  border-style: solid;
+  border-width: 8px 13.9px 8px 0;
+  border-color: transparent #ED391B transparent transparent;
+}
+a.next {
+  margin-left: 0.3em;
+}
+a.next.disabled {
+  color: #373f42 ! important;
+}
+a.next.disabled .arr {
+  border-color: transparent transparent transparent #373f42;
+}
+a.next .arr {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  padding-left: 0.1em;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 8px 0 8px 13.9px;
+  border-color: transparent transparent transparent #ED391B;
 }
 a.prev,
 a.next {
