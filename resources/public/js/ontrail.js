@@ -322,7 +322,7 @@
       return asObject.apply(asObject, _.flatten([{}, args]))
     }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
-    exPages.combineWithLatestOf(sessions).throttle(3000).subscribeArgs(renderSingleExercise)
+    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // initiate loading and search
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
