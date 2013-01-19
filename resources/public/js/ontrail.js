@@ -242,7 +242,7 @@
     }
 
     loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
-      _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+      _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
     })
 
     loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
