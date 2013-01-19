@@ -155,7 +155,7 @@ article {
 @button-background-color: #ed391b;
 @button-gradient-start: #ed391b;
 @button-gradient-end: #ce1a00;
-@error-transparent-bg: rgb(206, 26, 0, 0.1);
+@error-transparent-bg: rgba(206, 26, 0, 0.1);
 
 #content a.button {
   color: @button-text-color;
@@ -451,5 +451,6 @@ body div[role="tooltip"] {
 }
 
 .has-error {
-  border: solid 2px @error-transparent-bg;
+  background: @error-transparent-bg;
+//  border: solid 2px @error-transparent-bg;
 }
