@@ -26,7 +26,11 @@
     "/img/drno.png"))
 
 (defn get-user [username]
-  (mc/find-one-as-map ONUSER {:username username}))
+  (let [lower-user (.toLowerCase username)
+        user (mc/find-one-as-map ONUSER {:username username})]
+    (if user
+      user
+      (mc/find-one-as-map ONUSER {:lusername lower-user}))))
 
 (defn get-user-list [rule page]
   (let [results (mq/with-collection ONUSER
@@ -36,11 +40,12 @@
     (.trace logger (str "Get user list " page " with " (count results) " results for " rule))
   (as-user-list results)))
 
-(defn create-user [username password email gravatar]
-  (let [profile {:resthr 42 :maxhr 192}]
+(defn create-user [^String username password email gravatar]
+  (let [profile {:resthr 42 :maxhr 192}
+        lower-user (.toLowerCase username)]
     (.info logger (str "creating user " username " with profile " profile))
     (if (and (not= username "") (not= username "nobody") (= nil (get-user username)))
-      (mc/insert-and-return ONUSER {:username username :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})
+      (mc/insert-and-return ONUSER {:username username :lusername lower-user :passwordHash (password-hash password) :email email :profile profile :gravatar (java.lang.Boolean. gravatar)})
       (do (.error logger (str "creating user failed " username " with profile " profile))
           nil))))
 
