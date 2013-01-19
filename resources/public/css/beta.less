@@ -28,13 +28,13 @@ body.login {
 
 body *[role] {
   display: none;
-  padding: 10px;
+//  padding: 10px;
   opacity: 0;
 }
 
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
-body[data-page="latest"] section[role="latest"],
+body[data-page="latest"] div[role="latest"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="users"] section[role="users"],
 body[data-page="profile"] section[role="profile"],
@@ -42,10 +42,10 @@ body[data-page="systemstats"] section[role="systemstats"],
 body[data-page="tagsummary"] section[role="tagsummary"],
 body[data-page="weeksummary"] section[role="weeksummary"],
 body[data-page="import"] section[role="import"],
-body[data-page="ex"] section[role="ex"],
+body[data-page="ex"] div[role="ex"],
 body[data-page="summary"] section[role="summary"],
-body[data-page="user"] section[role="content"],
-body[data-page="tags"] section[role="content"],
+body[data-page="user"] div[role="content"],
+body[data-page="tags"] div[role="content"],
 body[data-page="register"] section[role="register"],
 body[data-page="new-comments"] section[role="new-comments"],
 body[data-page="new-own-comments"] section[role="new-own-comments"],
@@ -114,10 +114,8 @@ article {
   }
 
   &.exercise {
-//    background: #ccc;
-    border-bottom: 1px dotted #ccc;
     p {
-      margin-bottom: 0;
+      margin: 20px 0 0;
     }
     margin-bottom: 1.5em;
   }

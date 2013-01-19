@@ -177,8 +177,8 @@
                 <div class="9u">
 
                     <!-- Main Content -->
-                    <section role="latest">
-                        <div class="logged-in">
+                    <div role="latest">
+                        <section class="logged-in">
                             <header>
                                 <h2>Lenkit</h2>
                                 <h3>Viimeksi lisätyt ja kommentoidut lenkit</h3>
@@ -186,9 +186,9 @@
                             </header>
                             <article>
                             </article>
-                        </div>
+                        </section>
                         <div id="entries"></div>
-                    </section>
+                    </div>
 
                     <section role="new-comments">
                         <div id="unread-entries"></div>
@@ -301,10 +301,10 @@
                         </article>
                     </section>
 
-                    <section role="content">
+                    <div role="content">
                         <div id="content-header"></div>
                         <div id="content-entries"></div>
-                    </section>
+                    </div>
 
                     <section role="summary" class="logged-in">
                         <div id="summary-header"></div>
@@ -333,9 +333,9 @@
                         </article>
                     </section>
 
-                    <section role="ex" class="full with-comments logged-in">
+                    <div role="ex" class="full with-comments logged-in">
                         <div id="exercise"></div>
-                    </section>
+                    </div>
 
                     <section role="addex" data-mode="add" class="logged-in">
                         <article class="edit-form">
@@ -481,6 +481,7 @@
 </script>
 <script id="exerciseTemplate" type="text/html">
     <div>
+    <section>
     <article data-id="{{id}}" class="preview exercise {{sport}}">
         <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
         <img class="avatar" src="{{avatar}}" width="48" height="48"><h3><a class="more" rel="ex/{{id}}">{{title}}</a></h3>
@@ -506,10 +507,12 @@
                 {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
         </div>
     </article>
+    </section>
     </div>
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
+    <section>
     <article data-id="{{id}}" class="full exercise {{sport}}">
         <a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
         <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
@@ -532,7 +535,6 @@
         <div>{{{body}}}</div>
     </article>
     {{/comments}}
-    </div>
     <article class="logged-in">
         <h4>Jätä oma kommenttisi</h4>
         {{^comments}}
@@ -552,6 +554,7 @@
     <article class="logged-out">
         Kirjaudu sisään kommentoidaksesi.
     </article>
+    </section>
 </script>
 
 <script id="sportsCreateTemplate" type="text/html">
