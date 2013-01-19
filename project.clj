@@ -28,7 +28,7 @@
   :js {:src "resources/public/js" :deploy "resources/public/minjs"
        :bundles ["min.js" ["handlebars-1.0.0.beta.6.js" "handlebars-helpers.js" "icanhaz-0.10.0.js" 
                            "jquery.address-1.5-30680d.min.js" "jquery.chosen.0.9.8.min.js" "jquery.continuous-calendar.js" 
-                           "jquery.cookie.js" "jquery.md5.js" "lodash-0.5.2.js" "ontrail-ui.js" "ontrail.js" "plugins.js" 
+                           "jquery.cookie.js" "jquery.md5.js" "lodash-1.0.0.rc3.js" "ontrail-ui.js" "ontrail.js" "plugins.js"
                            "rx-vsdoc.js" "rx.aggregates-vsdoc.js" "rx.aggregates.min.js" "rx.binding-vsdoc.js" "rx.binding.min.js" 
                            "rx.coincidence-vsdoc.js" "rx.coincidence.min.js" "rx.experimental-vsdoc.js" "rx.experimental.min.js" 
                            "rx.joinpatterns-vsdoc.js" "rx.joinpatterns.min.js" "rx.jquery.min.js" "rx.min.js" "rx.ontrail.backend.js" 
