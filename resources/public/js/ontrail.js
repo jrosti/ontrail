@@ -192,19 +192,18 @@
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
     var logouts = $("#logout").onAsObservable("click touchstart")
-    var loginClicks = $("#gotoLogin").onAsObservable("click touchstart")
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
     var loginRequests = $("#login").onAsObservable("click touchstart").merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    loginClicks.subscribe(function() {
+    $("#gotoLogin").onAsObservable("click touchstart").subscribe(function() {
       $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top }, 400)
     })
 
     var registerUsers = $('#register-user').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
-      .doAction(function() { $('#register-form')[0].reset() })
+      .doAction(function() {  $('#register-form')[0].reset() })
       .where(isSuccess).select(ajaxResponseData)
 
     // change password
@@ -291,6 +290,10 @@
       return (user && ["user", user]) || "latest"
     }
     var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
+
+    currentPages.whereArgs(partialEquals("register")).subscribe(function() {
+      $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
+    })
 
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
@@ -484,7 +487,6 @@
     var attachValidation = function(validator, error, field) {
       var validation = mkValidation($('#ex-' + field).changes(), validator)
       validation.subscribe(toggleEffect($("." + field + "-" + error)))
-      validation.subscribe(toggleClassEffect($('#ex-' + field), "has-error"))
       return validation
 
     }
@@ -565,19 +567,24 @@
     var changePasswordValidations = [updatePassword, requirePassword]
     combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
+    var passwordRequiredValidation = require("password")
     var pwdLengthValidation = attachValidation(minLengthV(6), 'too-short' ,'password')
+    combine([passwordRequiredValidation, pwdLengthValidation]).subscribe(toggleClassEffect($('#ex-password'), "has-error"))
+
     var emailValidation = attachValidation(emailV(), 'invalid' ,'email')
+    emailValidation.subscribe(toggleClassEffect($("#ex-email"), "has-error"))
 
     var samePassword = mkValidation($('#ex-password').changes().combineLatest($('#ex-password2').changes(), asArgs), matchingValuesV())
     samePassword.subscribe(toggleEffect($(".passwords-do-not-match")))
-    samePassword.subscribe(toggleClassEffect($('#ex-password2'), "has-error"))
+    combine([samePassword, pwdLengthValidation]).subscribe(toggleClassEffect($('#ex-password2'), "has-error"))
 
+    var usernameRequiredValidation = require('username')
     var usernameAvailableValidator = createAjaxValidator(OnTrail.rest.usernameV);
     var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation
     usernameExistsValidation.subscribe(toggleEffect($(".user-exists")))
-    usernameExistsValidation.subscribe(toggleClassEffect($('#ex-username'), "has-error"))
+    combine([usernameExistsValidation, usernameRequiredValidation]).subscribe(toggleClassEffect($('#ex-username'), "has-error"))
 
-    var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
+    var registerValidations = _.flatten([usernameRequiredValidation, passwordRequiredValidation, pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)

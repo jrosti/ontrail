@@ -927,5 +927,5 @@ body div[role="tooltip"] {
   font-weight: 700;
 }
 .has-error {
-  border: solid 2px #ce1a00;
+  background: rgba(206, 26, 0, 0.1);
 }
