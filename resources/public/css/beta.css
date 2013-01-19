@@ -996,8 +996,9 @@ body div[role="tooltip"] {
   position: relative;
 }
 #content-wrapper.scroll-overflow #content-top {
+  z-index: 20000;
   position: fixed;
-  top: 105px;
+  top: 140px;
   width: 100%;
   background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
   background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);

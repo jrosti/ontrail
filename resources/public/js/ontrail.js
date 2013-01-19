@@ -574,15 +574,14 @@
       if ($(window).scrollTop() > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#content-wrapper').addClass("scroll-overflow")
-        $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 152})
+        $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 187})
       } else {
         $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
         $('#content-wrapper').removeClass("scroll-overflow")
-        $('#sidemenu').addClass("3u")
       }
 
       if ($(window).scrollTop() > headerHeight) {
-        $('#sidemenu').css({ 'position': 'fixed', top: 145, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
+        $('#sidemenu').css({ 'position': 'fixed', top: 180, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
         $('#sidemenu').removeAttr("class")
       } else {
         $('#sidemenu').removeAttr("style")
