@@ -300,11 +300,16 @@
     })
 
     // filtering
+    var appendUser = function(args, currentUser) {
+      return (args.length > 1) ? args : args.concat(currentUser)
+    }
+
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(appendUser).subscribeArgs(function() {
+      console.log("blaa", arguments)
       if (arguments.length == 3) setFilter("by-year")
       else if (arguments.length == 4) setFilter("by-month")
-      else setFilter("")
+      else setFilter("by-month")
     })
 
     // back button handling
