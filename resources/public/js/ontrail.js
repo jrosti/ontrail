@@ -617,7 +617,7 @@
     var tabIsInFocus = rx.interval(3000).select(function() { return $("body").hasClass("visible") && document.hasFocus() }).where(identity).publish()
     tabIsInFocus.connect()
 
-    var loggedInPoller = loggedIns.merge(tabIsInFocus.doAction(_debug("focus")).selectMany(loggedIns).where(identity).sample(60000).doAction(_debug("buffatrigger"))).merge(exPagesWithComments).publish()
+    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(60000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
     loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
