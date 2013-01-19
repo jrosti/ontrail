@@ -155,6 +155,7 @@ article {
 @button-background-color: #ed391b;
 @button-gradient-start: #ed391b;
 @button-gradient-end: #ce1a00;
+@error-transparent-bg: rgb(206, 26, 0, 0.1);
 
 #content a.button {
   color: @button-text-color;
@@ -441,4 +442,14 @@ body div[role="tooltip"] {
   }
   width: 110px;
   margin: 0 auto;
+}
+
+.error {
+  color: @button-gradient-end;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+}
+
+.has-error {
+  border: solid 2px @error-transparent-bg;
 }
