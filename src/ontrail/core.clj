@@ -81,7 +81,7 @@
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
        (json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
 
-  (GET "/rest/v1/active-users" [] (json-response (active-users)))
+  (GET "/rest/v1/active-users" [] (json-response (nc/active-users)))
   
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer/valueOf year))))
@@ -189,8 +189,8 @@
 (defn -main [& args]
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
-  (newcomment-cache-restore-all)
-  (schedule-work newcomment-cache-store-all 60) ;; store new comment cache every 60 s
+  (nc/newcomment-cache-restore-all)
+  (schedule-work nc/newcomment-cache-store-all 240) ;; store new comment cache every 60 s
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head
