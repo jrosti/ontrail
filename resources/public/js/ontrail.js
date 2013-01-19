@@ -1,5 +1,7 @@
 (function() {
   $(document).ready(function() {
+    var clickEvent = Modernizr.touch ? "touchstart" : "click"
+    
     $.ajaxSetup({ cache: false })
 
     var entries = $("#entries")
@@ -87,6 +89,8 @@
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
+
+        console.log("append " + content);
         $(content).appendTo(elem)
       }, $(el))
     }
@@ -192,14 +196,14 @@
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
-    var logouts = $("#logout").onAsObservable("click touchstart")
+    var logouts = $("#logout").onAsObservable(clickEvent)
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onAsObservable("click touchstart").merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    $("#gotoLogin").onAsObservable("click touchstart").subscribe(function() {
+    $("#gotoLogin").onAsObservable(clickEvent).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top - 110 }, 1000)
     })
 
@@ -256,7 +260,7 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(targetLink)
+    var clickedLinks = $("body").onAsObservable(clickEvent, "a").select(targetLink)
     var clickedArticles = clickedLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
@@ -412,7 +416,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').onAsObservable("click touchstart").select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').onAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
@@ -462,14 +466,14 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable("click touchstart").subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onAsObservable(clickEvent).subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart")
+    var updateExercises = $('#edit-exercise').onAsObservable(clickEvent)
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
@@ -479,7 +483,7 @@
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onAsObservable("click touchstart").select(target).where(function(el) { return el.id === "add-comment"})
+    var addComments = $('#exercise').onAsObservable(clickEvent).select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
@@ -593,7 +597,7 @@
     var registerValidations = _.flatten([usernameRequiredValidation, passwordRequiredValidation, pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
-    var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var exPagesWithComments = $("body").onAsObservable(clickEvent, "a[data-new-comments]").selectMany(loggedIns).where(identity)
     var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
     loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
     loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
