@@ -174,10 +174,9 @@
     (do-user-action (partial change-password (user-from-cookie cookies)) params))
 
   (GET "/rest/v1/username-available/:username" [username]
-       (let [user (get-user username)]
-         (if (= user nil)
-           (json-response {:success true})
-           (json-response {:message "username-exists"} 400))))
+    (if-let [user (get-user username)]
+      (json-response {:message "username-exists"} 400)
+      (json-response {:success true})))
   
   (wrap-multipart-params
     (POST "/rest/v1/import" {params :params cookies :cookies}
