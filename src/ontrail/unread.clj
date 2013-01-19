@@ -22,9 +22,9 @@
 (defn comments-all [user]
   (ex/decorate-results user (take 100 (get-unread-objs user))))
 
-(defn is-own [user ex]
+(defn is-own? [user ex]
   (or (= user (:user ex))
       (contains? (set (map :user (:comments ex))) user)))
 
 (defn comments-own [user] 
-  (ex/decorate-results user (filter (partial is-own user) (get-unread-objs user))))
+  (ex/decorate-results user (filter (partial is-own? user) (get-unread-objs user))))

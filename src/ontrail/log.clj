@@ -129,6 +129,12 @@ logger for the application."
   "Like log4j-pre-logger, but doesn't log any ANSI color codes."
   (ansi/without-ansi (log4j-pre-logger id request)))
 
+(def nologs (set ["/rest/v1/ex-unread" "/rest/v1/system" "/rest/v1/ex-list-filter"
+                  "/rest/v1/ex-list-all"]))
+
+(defn nolog-uri [^String uri]
+  (some identity (map #(.startsWith uri %) nologs)))
+
 (defn- log4j-post-logger
   [id
    {:keys [request-method uri remote-addr] :as req}
@@ -171,7 +177,9 @@ Sends all log messages at \"info\" level to the Log4J logging
 
     (if (and (number? status) (>= status 500))
       (log/error log-message)
-      (log/info log-message))))
+      (if (and (<= totaltime 500) (nolog-uri uri))
+        (log/trace log-message)
+        (log/info log-message)))))
 
 (defn- log4j-colorless-post-logger
   [id request response totaltime]
