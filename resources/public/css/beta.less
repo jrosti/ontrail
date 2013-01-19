@@ -433,8 +433,13 @@ body div[role="tooltip"] {
   font-size: 12px;
 }
 
-#header-wrapper.scroll-overflow {
-  .scroll-overflow();
+
+@header-bg-color: rgb(59,67,70);
+@header-bg-color-bottom: rgba(59,67,70, 0.0);
+
+  #header-wrapper.scroll-overflow {
+  background: none;
+  .scroll-gradient(@header-bg-color, 147, @header-bg-color-bottom);
 }
 
 #sidemenu {
