@@ -99,8 +99,10 @@
 
 (defn store-cache [user]
   (if-let [ucache (@users-cache user)]
-    (do (dosync (apply alter ucache dissoc (dissoc-comment-keys @ucache)))
-        (mc/update NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))))
+    (let [dissoced-keys (dissoc-comment-keys @ucache)]
+      (dosync (apply alter ucache dissoc dissoced-keys))
+      (mc/update NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))
+    nil))
 
 (defn restore-cache [user]
   (let [cache (mc/find-one-as-map NCCACHE {:u user})]
@@ -109,7 +111,7 @@
 
 (defn newcomment-cache-store-all[]
   (let [res (count (filter (partial not= nil) (map store-cache (mc/distinct ONUSER "username" {}))))]
-    (.trace logger (str "Comment count cache stored " res " caches "))))
+    (.info logger (str "Comment count cache stored " res " caches "))))
 
 (defn newcomment-cache-restore-all[]
   (.info logger (str "Restored comment count cache for users " 
