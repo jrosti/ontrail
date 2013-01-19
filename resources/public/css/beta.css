@@ -916,14 +916,14 @@ body .by.year,
 body .by.month {
   display: none;
 }
-body[data-filter="by-year"] .by.year {
+body[data-filter="byyear"] .by.year {
   display: block;
   width: 100%;
   text-align: center;
   font-size: 20px;
   font-weight: bold;
 }
-body[data-filter="by-month"] .by.month {
+body[data-filter="bymonth"] .by.month {
   display: block;
   width: 100%;
   text-align: center;
