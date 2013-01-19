@@ -508,14 +508,24 @@ body div[role="tooltip"] {
   position: relative;
 }
 
-@scroll-overflow-height: "6px";
+@scroll-overflow-height: "12px";
 #content-wrapper.scroll-overflow {
   #content-top {
     position: fixed;
     top: 105px;
     width: 100%;
     .scroll-gradient(@header-bg-color, @header-bg-color-bottom, @scroll-overflow-height);
-    height: 6px;
+    height: 12px;
+  }
+}
+
+#user-menu-wrapper {
+  padding: 0;
+
+  strong {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 700;
+    padding-right: 2em;
   }
 }
 

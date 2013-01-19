@@ -66,7 +66,8 @@
 
                 <!-- Nav -->
                 <nav class="mobileUI-site-nav">
-                    <a rel="latest" class="pageLink mobileUI-site-name">Kaikki</a><
+                    <a class="pageLink" rel="latest">Kaikki</a>
+                    <a class="pageLink logged-in" rel="user">Omat</a>
                     <a class="pageLink logged-in" rel="new-comments">Uudet kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
                     <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
                     <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
@@ -168,7 +169,20 @@
     </div>
 </div>
 
+    <div id="user-menu-wrapper" class="logged-in features-wrapper">
+        <div id="user-menu" class="features">
+            <div class="5grid-layout">
+                <div class="row">
+                    <div class="12u">
+                        <section id="user-header"></section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 
 <!-- Content -->
 <div id="content-wrapper">
@@ -310,8 +324,6 @@
                     </section>
 
                     <div>
-                        <section role="user" id="user-header"></section>
-
 
                         <div role="content">
                             <div id="content-header"></div>
@@ -449,7 +461,7 @@
                         <ul class="link-list">
                             <li><a class="pageLink" rel="addex">Lisää lenkki</a></li>
                             <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-                            <li><a class="pageLink" rel="user" id="my-page">Omat lenkit</a></li>
+                            <li><a class="pageLink" rel="user">Omat lenkit</a></li>
                             <li><a class="pageLink" rel="summary">Yhteenvedot</a></li>
                             <li><a class="pageLink" rel="weeksummary">Harjoitusviikot</a></li>
                             <li><a class="pageLink" rel="tagsummary">Avainsanat</a></li>
@@ -587,11 +599,11 @@
     {{/users}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
-    <h2>{{data}}</h2>
     <p class="logged-in">
+        <strong>{{data}}</strong>
         <a class="pageLink" rel="user/{{data}}">Lenkit</a>
-        <a class="pageLink" rel="summary/{{data}}">Lajiyhteenvedot</a>
-        <a class="pageLink" rel="tagsummary/{{data}}">Avainsanayhteenvedot</a>
+        <a class="pageLink" rel="summary/{{data}}">Lajit</a>
+        <a class="pageLink" rel="tagsummary/{{data}}">Avainsanat</a>
         <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
     </p>
 </script>
@@ -689,7 +701,7 @@
     </td>
 </script>
 
-    <script id="loggedInStylesTemplate" type="text/html">
+<script id="loggedInStylesTemplate" type="text/html">
     <style id="logged-in-styles" type="text/css">
         a.delete, a.modify {
             visibility: hidden;

@@ -28,7 +28,7 @@ section:last-child
 		height: 155px;
 	}
 	
-	#features-wrapper
+	#features-wrapper, .features-wrapper
 	{
 		background: #353D40 url('images/bg02.jpg');
 		border-bottom: solid 1px #272e31;
@@ -120,24 +120,24 @@ section:last-child
 
 /* Features */
 
-	#features
+	#features,.features
 	{
 		color: #a0a8ab;
 	}
 	
-		#features h2
+		#features h2, .features h2
 		{
 			font-size: 1.25em;
 			color: #fff;
 			margin: 0 0 0.25em 0;
 		}
 
-		#features a
+		#features a, .features a
 		{
 			color: #e0e8eb;
 		}
 		
-		#features strong
+		#features strong, .features strong
 		{
 			color: #fff;
 		}
