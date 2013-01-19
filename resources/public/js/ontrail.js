@@ -573,7 +573,7 @@
       if ($(window).scrollTop() > menuOffsetTop) {
         $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#content-wrapper').addClass("scroll-overflow")
-        $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": 187})
+        $(isLoggedIn ? '#content' : "#features-wrapper" ).css({"margin-top": (isLoggedIn ? 187 : 152)})
       } else {
         $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
         $('#content-wrapper').removeClass("scroll-overflow")
