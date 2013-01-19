@@ -613,9 +613,15 @@
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
     var exPagesWithComments = $("body").onAsObservable(clickEvent, "a[data-new-comments]").selectMany(loggedIns).where(identity)
-    var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
-    loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
-    loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
+
+    var tabIsInFocus = rx.interval(3000).select(function() { return $("body").hasClass("visible") && document.hasFocus() }).where(identity).publish()
+    tabIsInFocus.connect()
+
+    var loggedInPoller = loggedIns.merge(tabIsInFocus.doAction(_debug("focus")).selectMany(loggedIns).where(identity).sample(60000).doAction(_debug("buffatrigger"))).merge(exPagesWithComments).publish()
+    loggedInPoller.connect()
+
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
 
 
     // run our function on load
