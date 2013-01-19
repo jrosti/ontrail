@@ -411,6 +411,10 @@ body {
     line-height: 40px;
   }
 
+  .by h2 {
+    font-size: 2.4em ! important;
+  }
+
   .by.year, .by.month {
     display: none
   }
@@ -435,6 +439,42 @@ body {
       font-weight: bold;
 
     }
+  }
+}
+
+a.prev {
+  margin: 0 0.3em 0 0.1em;
+
+  .arr {
+    .inline-block;
+    width: 0px;
+    height: 0px;
+    padding-right: 0.1em;
+    border-style: solid;
+    border-width: 8px 13.9px 8px 0;
+    border-color: transparent #ED391B transparent transparent;
+  }
+}
+
+a.next {
+  margin-left: 0.3em;
+
+  &.disabled {
+    color: #373f42 ! important;
+
+    .arr {
+      border-color: transparent transparent transparent #373f42;
+    }
+  }
+
+  .arr {
+    .inline-block;
+    padding-left: 0.1em;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 8px 0 8px 13.9px;
+    border-color: transparent transparent transparent #ED391B;
   }
 }
 

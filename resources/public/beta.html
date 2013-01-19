@@ -609,9 +609,10 @@
 <script id="hpkContentTemplate" type="text/html">
     <article>
         <div class="by year">
-            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}">&larr;</a>
-            {{year}}
-            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}">&rarr;</a> {{/hasNextYear}}
+            <h2>{{year}}</h2>
+            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><span class="arr"></span> {{prevYear}}</a>
+            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
         </div>
         {{> summaryTemplate}}
     </article>
@@ -631,9 +632,10 @@
 <script id="hpkMonthContentTemplate" type="text/html">
     <article>
         <div class="by month">
-            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth">&larr;</a>
-            Vuosi {{year}}
-            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth">&rarr;</a> {{/hasNextYear}}
+            <h2>{{year}}</h2>
+            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth"><span class="arr"></span> {{prevYear}}</a>
+            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
         </div>
         {{#months}}
         <h2 class="monthName">{{monthName}}</h2>

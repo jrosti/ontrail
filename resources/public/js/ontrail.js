@@ -142,13 +142,9 @@
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function(elem, summary) {
       var now = XDate.today();
-      var maxYear = $.isArray(summary) ? now.getFullYear() : now.getFullYear()
+      var maxYear = now.getFullYear()
       var utils = {
-        hasNextYear: function() {
-          return function(text, render) {
-            return this.year != maxYear ? render(text) : "<span style='visibility: none;'>&rarr; </span>"
-          }
-        },
+        hasNextYear: function() { return this.year != maxYear },
         nextYear: function() { return this.year + 1 },
         prevYear: function() { return this.year - 1 },
         kind: elem
