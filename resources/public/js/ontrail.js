@@ -517,11 +517,16 @@
 
     var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), '/rest/v1/parse-time/', serverTimeValidator).validation.repeat()
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
-    timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
 
     var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), '/rest/v1/parse-distance/', serverDistanceValidator).validation.repeat()
 
-    var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
+    var titleValidation = require("title")
+    titleValidation.subscribe(toggleClassEffect($("#ex-title"), 'has-error'))
+
+    var durationReqValidation = require("duration")
+    combine([durationReqValidation, timeValidation]).subscribe(toggleClassEffect($("#ex-duration"), 'has-error'))
+
+    var validations = _.flatten([titleValidation, durationReqValidation, timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 0, lastDate: "today", startField: $('#ex-date'), locale: DateLocale.FI })
