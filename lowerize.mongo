@@ -1,0 +1,1 @@
+ db.onuser.find().forEach(function(data) { db.onuser.update({_id: data._id}, {$set: {lusername: data.username.toLowerCase() }}) })
