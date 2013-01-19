@@ -56,7 +56,7 @@
   (let [midnight (time/date-time (time/year dt) (time/month dt) (time/day dt))
         dow (time/day-of-week midnight)
         week-starts (time/minus midnight (time/days (- dow 1)))
-        week-stops (time/plus midnight (time/days (- 8 dow)))]
+        week-stops (time/minus (time/plus midnight (time/days (- 8 dow))) (time/hours 5))]
     (time/interval week-starts week-stops)))
 
 (defn interval-query [user start end]
