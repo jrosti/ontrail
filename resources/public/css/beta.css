@@ -999,20 +999,28 @@ body div[role="tooltip"] {
   position: fixed;
   top: 105px;
   width: 100%;
-  background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -ms-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -o-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -ms-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: -o-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
-  background-image: linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 6px);
+  background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -ms-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -o-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -ms-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: -o-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
+  background-image: linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   background-repeat: repeat-x;
-  height: 6px;
+  height: 12px;
+}
+#user-menu-wrapper {
+  padding: 0;
+}
+#user-menu-wrapper strong {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+  padding-right: 2em;
 }
 #sidemenu header {
   margin-bottom: 1em;
