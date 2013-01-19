@@ -298,7 +298,6 @@
     var findUser = function(inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
       var userPos = _(args).indexOf("user")
-      console.log(args, userPos, currentUser, args.length)
       if (userPos >= 0 && userPos+1 < args.length)
         return args[userPos+1]
       var position = (pos || 0)
@@ -398,7 +397,7 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).combineWithLatestOf(sessions).doAction(_debug("laa")).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
     var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
