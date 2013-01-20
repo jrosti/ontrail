@@ -995,7 +995,7 @@ body div[role="tooltip"] {
 #content-wrapper {
   position: relative;
 }
-body.logged-out .scroll-overflow {
+body.logged-out #content-top {
   display: none;
 }
 #content-wrapper.scroll-overflow #content-top {
