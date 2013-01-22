@@ -96,7 +96,15 @@ img {
   }
 }
 
+@shadow-color: fade(black, 25%);
+@content-background: #FFF5F5;
+
+
 article {
+    .border-radius(10px);
+    .box-shadow(2px 2px 5px -3px fade(@shadow-color, 30%));
+    background: @content-background;
+
   *.full { display: none; }
 
   &.full {
