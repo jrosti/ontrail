@@ -307,7 +307,7 @@ section article.comment h4 {
 section article.exercise div table tr:first-child td,
 section article.comment div table tr:first-child td {
   font-size: 100%;
-  border-bottom: solid 2px #6678b1;
+  border-bottom: solid 2px #da7c0c;
 }
 section article.exercise div table td,
 section article.comment div table td {
@@ -319,17 +319,21 @@ section article img {
 }
 section table.details {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-  body-size: 12px;
+  font-size: 10px;
+  body-size: 10px;
   margin: 5px;
-  width: 640px;
+  width: 100%;
   text-align: left;
+}
+section table.details tr:nth-child(2n) {
+  background: rgba(218, 124, 12, 0.1);
 }
 section table.details th {
   font-size: 14px;
   font-weight: normal;
   color: #000;
   padding: 4px 10px;
-  border-bottom: 2px solid #6678b1;
+  border-bottom: 2px solid #da7c0c;
 }
 section table.details td {
   color: #000;
@@ -662,7 +666,7 @@ table.weekly th {
   font-weight: normal;
   color: #000;
   padding: 4px 10px 0 0;
-  border-bottom: 2px solid #6678b1;
+  border-bottom: 2px solid #da7c0c;
 }
 table.weekly th.day {
   width: 84px;

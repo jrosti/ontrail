@@ -18,7 +18,7 @@
   (:profile (get-onuser user)))
 
 (defn post-profile [user params]
-  (.debug logger (str "Updating profile for user " user " params " params))
+  (.info logger (str "Updating profile for user " user " params " params))
   (let [id (:_id (get-onuser user))
         {:keys [synopsis goals resthr maxhr aerk anaerk]} params]
     (mc/update-by-id ONUSER id
