@@ -1,7 +1,6 @@
 (function() {
   $(document).ready(function() {
-    var clickEvent = Modernizr.touch ? "touchstart" : "click"
-    
+    var clickEvent = "click touchstart"
     $.ajaxSetup({ cache: false })
 
     var entries = $("#entries")
@@ -14,8 +13,9 @@
 
     var doPostExercise = function(url) {
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
-      var values = $('#add-exercise-form').serialize()
-        + "&sport=" + renderSelection($('#ex-sport').select2("data"))
+      var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data", [ex.sport]) : $("#ex-sport").val();
+        var values = $('#add-exercise-form').serialize()
+        + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
 
@@ -192,23 +192,23 @@
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
-    var logouts = $("#logout").onAsObservable(clickEvent)
+    var logouts = $("#logout").onClickTouchAsObservable(clickEvent)
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onClickTouchAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    $("#gotoLogin").onAsObservable(clickEvent).subscribe(function() {
+    $("#gotoLogin").onClickTouchAsObservable(clickEvent).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top - 110 }, 1000)
     })
 
-    var registerUsers = $('#register-user').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
+    var registerUsers = $('#register-user').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
       .doAction(function() {  $('#register-form')[0].reset() })
       .where(isSuccess).select(ajaxResponseData)
 
     // change password
-    var changePasswords = $('#change-password').onAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled")))
+    var changePasswords = $('#change-password').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled")))
       .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
     changePasswords.subscribeArgs(renderChangePassword)
 
@@ -255,7 +255,8 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedLinks = $("body").onAsObservable(clickEvent, "a").select(targetLink)
+    var clickedLinks = $("body").onClickTouchAsObservable(clickEvent, "a").select(targetLink).publish()
+    clickedLinks.connect()
     var clickedArticles = clickedLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
@@ -432,7 +433,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').onAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
@@ -486,24 +487,24 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable(clickEvent).subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onClickTouchAsObservable(clickEvent).subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable(clickEvent)
+    var updateExercises = $('#edit-exercise').onClickTouchAsObservable(clickEvent)
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
     // update user profile
-    var updateProfiles = $('#update-profile').onAsObservable('click touchstart')
+    var updateProfiles = $('#update-profile').onClickTouchAsObservable(clickEvent)
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onAsObservable(clickEvent).select(target).where(function(el) { return el.id === "add-comment"})
+    var addComments = $('#exercise').onClickTouchAsObservable(clickEvent).select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
@@ -618,7 +619,7 @@
     var registerValidations = _.flatten([usernameRequiredValidation, passwordRequiredValidation, pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
-    var exPagesWithComments = $("body").onAsObservable(clickEvent, "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var exPagesWithComments = $("body").onClickTouchAsObservable(clickEvent, "a[data-new-comments]").selectMany(loggedIns).where(identity)
 
     var tabIsInFocus = rx.interval(3000).select(function() { return $("body").hasClass("visible") && document.hasFocus() }).where(identity).publish()
     tabIsInFocus.connect()
