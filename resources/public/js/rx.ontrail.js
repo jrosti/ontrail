@@ -57,6 +57,17 @@
       }
     })
   }
+
+  $.fn.onClickTouchAsObservable = function(events, selector, data) {
+    function removeDuplicates(acc, event) {
+      var target = targetLink(event)
+      if (acc.type && target == acc.target && acc.type != event.type)
+        return {target: target, type: event.type }
+      return {target: target, type: event.type, event: event }
+    }
+    function _event(item) { return item.event }
+     return this.onAsObservable(events, selector, data).scan({}, removeDuplicates).where(_event).select(_event)
+  }
 }());
 var rx = Rx.Observable;
 

@@ -6,6 +6,8 @@
     var entries = $("#entries")
     var userList = $("#user-results")
 
+      var clickType = Modernizr.touch ? "touchstart" : "click"
+    
     function selectionFormat(state) {
       if (!state.id) return state.toString();
       return state.text.toString();
@@ -193,10 +195,10 @@
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
-    var logouts = $("#logout").onAsObservable("click touchstart").throttle(200)
+    var logouts = $("#logout").onAsObservable(clickType)
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onAsObservable("click touchstart").throttle(200).merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onAsObservable(clickType).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
@@ -281,6 +283,7 @@
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
     var initialPage = function(user) {
       var address = $.address.value()
+      console.log("address", address, (address != ""))
       if (address && address != "") return splitM($.address.value())
       return (user && ["user", user]) || "latest"
     }
@@ -384,7 +387,7 @@
 
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
-    $('#login-link').onAsObservable("click touchstart").throttle(200).subscribe(function() {
+    $('#login-link').onAsObservable(clickType).subscribe(function() {
       $('body').toggleClass('login')
       $('#username').focus()
     })
@@ -407,7 +410,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').onAsObservable("click touchstart").throttle(200).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').onAsObservable(clickType).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
@@ -457,14 +460,14 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable("click touchstart").throttle(200).subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onAsObservable(clickType).subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable("click touchstart").throttle(200)
+    var updateExercises = $('#edit-exercise').onAsObservable(clickType)
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
@@ -474,7 +477,7 @@
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onAsObservable("click touchstart").throttle(200)
+    var addComments = $('#exercise').onAsObservable(clickType)
       .select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
