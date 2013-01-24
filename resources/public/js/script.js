@@ -2,12 +2,12 @@
 (function() {
   $(document).ready(function() {
     $.ajaxSetup({ cache: false })
-   
+
     var entries = $("#entries")
     var userList = $("#user-results")
 
-      var clickType = Modernizr.touch ? "touchstart" : "click"
-    
+    var clickType = Modernizr.touch ? "touchstart" : "click"
+
     function selectionFormat(state) {
       if (!state.id) return state.toString();
       return state.text.toString();
@@ -121,7 +121,7 @@
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
     var renderActiveUsersList = function(data) {
-       $("#active-users").text(data)
+      $("#active-users").text(data)
     }
 
     var renderChangePassword = function(data) {
@@ -174,7 +174,7 @@
         var resex = [];
         for (var i in _.range(0, 7))
           if (exs[i] === undefined) resex[i] = []; else resex[i] = exs[i];
-          exs = _.map(resex, function(item, index) {
+        exs = _.map(resex, function(item, index) {
           return {dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
@@ -202,12 +202,12 @@
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var registerUsers = $('#register-user').onClickTouchAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
+    var registerUsers = $('#register-user').onClickTouchAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
       .where(isSuccess).select(ajaxResponseData)
 
     // change password
-    var changePasswords = $('#change-password').onClickTouchAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled")))
+    var changePasswords = $('#change-password').onClickTouchAsObservable('click touchstart').select(target).where(_.compose(not, _hasClass("disabled")))
       .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
     changePasswords.subscribeArgs(renderChangePassword)
 
@@ -239,7 +239,7 @@
     })
 
     loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
-      $('#profile-email').text(result.email) 
+      $('#profile-email').text(result.email)
     })
 
     loggedIns.selectAjax(OnTrail.rest.avatarUrl).subscribe(function(avatar) {
@@ -264,8 +264,8 @@
       .select(function(el) { return attr("rel", el).split("-") })
     deleteClicks.selectMany(confirmDeleteEx).selectArgs(first)
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
-      $("*[data-id='" + data.id + "']").remove()
-    })
+        $("*[data-id='" + data.id + "']").remove()
+      })
     // show own delete buttons
     sessions.subscribe(function(user) {
       $('#logged-in-styles').replaceWith(ich.loggedInStylesTemplate({'user': user }))
@@ -339,7 +339,7 @@
       .selectArgs(function(pg, user) {
         var targetUser = user
         if (pg.length == 2) {
-           targetUser = pg[1]
+          targetUser = pg[1]
         }
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
       }).switchLatest()
@@ -352,10 +352,10 @@
     $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function(el) {
       var e = $(el.target)
       if (el.type === "mouseenter") {
-          e.tooltip({content: function() {
+        e.tooltip({content: function() {
           var distance = e.attr("data-distance") ? e.attr("data-distance").replace(" ", "&nbsp;") : ""
           var duration = e.attr("data-duration") ? e.attr("data-duration").replace(" ", "&nbsp;") : ""
-	        var pace = e.attr("data-pace") ? e.attr("data-pace").replace(" ", "&nbsp;") : ""
+          var pace = e.attr("data-pace") ? e.attr("data-pace").replace(" ", "&nbsp;") : ""
           return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")
@@ -417,18 +417,18 @@
     })
 
     currentPages.whereArgs(partialEquals("import")).subscribeArgs(function(page, args) {
-        var res = ["reset", ""]
-        if (args !== undefined) {
-            res = args.split('=')
-        }
-        if (res[0] === 'ok') {
-            $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
-        } if (res[0] === 'error') {
-            var errors = {"invalidFormat": "virheellinen tiedostomuoto", "alreadyExists": "harjoituspäiväkirja on jo tuotu"}
-            $("#import-result").html("<p class=\"error\">Virhe tuonnissa, syy: " + errors[res[1]] + " </p>")
-        } if (res[0] === "reset") {
-            $("#import-result").html("")
-        }
+      var res = ["reset", ""]
+      if (args !== undefined) {
+        res = args.split('=')
+      }
+      if (res[0] === 'ok') {
+        $("#import-result").html("<p>Tuonti onnistui: " + res[1] + " harjoitusta lisättiin harjoituspäiväkirjaan.</p>")
+      } if (res[0] === 'error') {
+        var errors = {"invalidFormat": "virheellinen tiedostomuoto", "alreadyExists": "harjoituspäiväkirja on jo tuotu"}
+        $("#import-result").html("<p class=\"error\">Virhe tuonnissa, syy: " + errors[res[1]] + " </p>")
+      } if (res[0] === "reset") {
+        $("#import-result").html("")
+      }
     })
 
     // muokkaa lenkkiä:
@@ -445,14 +445,14 @@
 
     var renderProfileUpdate = function(args) {
       var result = _.reduce(_.map([["synopsis", args.synopsis], ["leposyke", args.resthr], ["maksimisyke", args.maxhr],
-				   ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
-				  function(val) { 
-				    if (val[1]) { 
-				      return " " + val[0] + ": " + val[1] + " "
-				    } else {
-				      return "" 
-				    }}), 
-			    function(fst,snd) { return fst + snd })
+        ["anaerobinen kynnys", args.aerk], ["anaerobinen kynnys", args.anaerk]],
+        function(val) {
+          if (val[1]) {
+            return " " + val[0] + ": " + val[1] + " "
+          } else {
+            return ""
+          }}),
+        function(fst,snd) { return fst + snd })
       $("#profile-result").html("Profiili päivitetty tiedoilla: " + result)
     }
 
@@ -472,7 +472,7 @@
     updateExercises.subscribe(showExercise)
 
     // update user profile
-    var updateProfiles = $('#update-profile').onClickTouchAsObservable('click touchstart').throttle(200)
+    var updateProfiles = $('#update-profile').onClickTouchAsObservable('click touchstart')
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
@@ -498,8 +498,8 @@
       return function() {
         return function(value) {
           if ($.trim(value) == "") return Rx.Observable.returnValue([])
-          var request = restValidator(value) 
-          request.where(isSuccess).select(ajaxResponseData).subscribe(renderer) 
+          var request = restValidator(value)
+          request.where(isSuccess).select(ajaxResponseData).subscribe(renderer)
           return request.materialize()
             .select(convertToError)
             .dematerialize()
@@ -507,17 +507,17 @@
       }
     }
 
-    var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), 
-                                            '/rest/v1/parse-time/', 
-                                            serverExDataValidator(OnTrail.rest.durationV, renderDurationHint)).validation
+    var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300),
+      '/rest/v1/parse-time/',
+      serverExDataValidator(OnTrail.rest.durationV, renderDurationHint)).validation
 
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
     timeValidation.subscribe(toggleClassEffect($('#ex-duration'), "has-error"))
 
-    var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), 
-                                                  '/rest/v1/parse-distance/', 
-                                                  serverExDataValidator(OnTrail.rest.distanceV, renderDistanceHint)).validation
-  
+    var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300),
+      '/rest/v1/parse-distance/',
+      serverExDataValidator(OnTrail.rest.distanceV, renderDistanceHint)).validation
+
     var validations = _.flatten([_.map(['title', 'duration'], require), timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
 
@@ -526,7 +526,7 @@
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
         'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
-        minHeight: 200
+      minHeight: 200
     }
     $('#ex-body').redactor(editorSettings)
 
