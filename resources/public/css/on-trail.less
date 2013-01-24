@@ -54,9 +54,8 @@ body.login {
   }
 }
 
-body *[role] {
+section[role], div[role] {
   display: none;
-//  padding: 10px;
   opacity: 0;
 }
 
@@ -81,8 +80,8 @@ body[data-page="new-own-comments"][data-list-type="summary"] div[role="new-own-c
 body[data-page="latest"][data-list-type="list"] div[role="latest"] *[role="listview"],
 body[data-page="tags"][data-list-type="list"] div[role="content"] section[role="listview"],
 body[data-page="user"][data-list-type="list"] div[role="content"] section[role="listview"],
-body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"] section[role="listview"],
-body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"] section[role="listview"],
+body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"] *[role="listview"],
+body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"] *[role="listview"],
 
 // kaikki muut
 body[data-page="user"] section[role="user"],
