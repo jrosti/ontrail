@@ -151,7 +151,7 @@ section:last-child
 		#content section
 		{
 			background: #fff;
-			padding: 25px 20px 30px 20px;
+			padding: 25px 20px 15px 20px;
 			box-shadow: 2px 2px 2px 1px rgba(128,128,128,0.1);
 			margin: 0 0 10px 0;
 		}

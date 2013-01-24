@@ -130,28 +130,6 @@ img.avatar {
   float: left;
   vertical-align: bottom;
 }
-article {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  -webkit-background-clip: padding-box;
-  -moz-background-clip: padding;
-  background-clip: padding-box;
-  -webkit-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
-  background: #fff5f5;
-  padding: 8px 20px;
-}
 article *.full {
   display: none;
 }
