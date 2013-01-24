@@ -22,6 +22,20 @@ a:hover.button-big {
   color: white;
   text-decoration: none;
 }
+#content section {
+  -webkit-border-radius: 10px 0;
+  -moz-border-radius: 10px 0;
+  border-radius: 10px 0;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  -webkit-border-radius: 10px 0;
+  -moz-border-radius: 10px 0;
+  border-radius: 10px 0;
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+}
 #login-form input {
   display: block;
   width: 66%;
@@ -129,6 +143,7 @@ article {
   -moz-box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
   box-shadow: 2px 2px 5px -3px rgba(0, 0, 0, 0.3);
   background: #fff5f5;
+  padding: 8px 20px;
 }
 article *.full {
   display: none;
