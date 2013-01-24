@@ -18,11 +18,11 @@
   Pager.prototype.create = function(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
   OnTrail.pager = new Pager()
 
-  Rx.Observable.prototype.scrollWith = function(action, element) {
+  Rx.Observable.prototype.scrollWith = function(action, element, visibleElem) {
     return this.distinctUntilChanged().doAction(function() { element.html("") })
       .selectArgs(function() {
         var partialAppliedArgs = [action].concat(_.argsToArray(arguments))
-        return OnTrail.pager.create(_.partial.apply(_.partial, partialAppliedArgs), element)
+        return OnTrail.pager.create(_.partial.apply(_.partial, partialAppliedArgs), visibleElem || element)
       }).switchLatest()
   }
 })()

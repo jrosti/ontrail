@@ -369,7 +369,7 @@
       return asObject.apply(asObject, _.flatten([{}, args]))
     }).doAction(function() {
         $('*[role=content] *[role=table-entries]').html("")
-      }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
+      }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]")).subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
