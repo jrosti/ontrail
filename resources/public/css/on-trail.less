@@ -62,14 +62,26 @@ body *[role] {
 
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
-body[data-page="latest"] div[role="tableview"],
+
+// taulukkonäkymä lenkeistä
+body[data-page="latest"][data-list-type="summary"] div[role="tableview"],
+body[data-page="tags"][data-list-type="summary"] div[role="tableview"],
+body[data-page="user"][data-list-type="summary"] div[role="tableview"],
+
+// listanäkymä lenkeistä
+body[data-page="latest"][data-list-type="list"] div[role="latest"],
+body[data-page="tags"][data-list-type="list"] div[role="content"],
+body[data-page="user"][data-list-type="list"] div[role="content"],
+body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"],
+body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"],
+
+// kaikki muut
+body[data-page="user"] section[role="user"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="users"] section[role="users"],
 body[data-page="profile"] section[role="profile"],
 body[data-page="systemstats"] section[role="systemstats"],
 body[data-page="import"] section[role="import"],
-body[data-page="user"] div[role="content"],
-body[data-page="user"] section[role="user"],
 body[data-page="summary"] section[role="summary"],
 body[data-page="summary"] section[role="user"],
 body[data-page="tagsummary"] section[role="tagsummary"],
@@ -78,10 +90,7 @@ body[data-page="weeksummary"] section[role="weeksummary"],
 body[data-page="weeksummary"] section[role="user"],
 body[data-page="ex"] div[role="ex"],
 body[data-page="ex"] section[role="user"],
-body[data-page="tags"] div[role="content"],
 body[data-page="register"] section[role="register"],
-body[data-page="new-comments"] div[role="new-comments"],
-body[data-page="new-own-comments"] div[role="new-own-comments"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
@@ -103,6 +112,14 @@ body[data-page="new-comments"] a[rel="new-comments"],
 body[data-page="new-own-comments"] a[rel="new-own-comments"],
 body[data-page="main"] a[rel="main"] {
   font-weight: bold;
+}
+
+body[data-list-type="summary"] #summary-view {
+  display: none;
+}
+
+body[data-list-type="list"] #list-view {
+  display: none;
 }
 
 

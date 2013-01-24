@@ -53,7 +53,7 @@
 
     <style id="logged-in-styles" type="text/css"></style>
 </head>
-<body class="visible" style="position: relative">
+<body class="visible" style="position: relative" data-list-type="list">
 
 <div id="header-login-wrapper">
 <!-- Header -->
@@ -548,7 +548,7 @@
     <tbody>
     <tr>
         <td>{{date}}</td>
-        <td class="user">{{user}}</td>
+        <td class="user"><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
         <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
         <td class="sport">
             {{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
@@ -628,6 +628,10 @@
     {{/users}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
+    <span class="right">
+        <a id="summary-view" href="javascript:nothing()">Tiivistelmä</a>
+        <a id="list-view">Lista</a>
+    </span>
     <p class="logged-in">
         <strong>{{data}}</strong>
         <a class="pageLink" rel="user/{{data}}">Lenkit</a>
