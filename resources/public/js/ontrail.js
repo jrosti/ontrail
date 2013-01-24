@@ -381,7 +381,7 @@
       })
       .selectArgs(function(query) {
         if (query === "")
-          return OnTrail.pager.create(OnTrail.rest.latest, entries)
+          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
         else
           return OnTrail.rest.searchResults(query)
       })
