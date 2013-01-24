@@ -1067,9 +1067,6 @@ body.logged-out #content-top {
   padding: 0 ! important;
   line-height: 1.5em;
 }
-.link-list {
-  font-size: 80%;
-}
 .loading {
   width: 110px;
   margin: 0 auto;
