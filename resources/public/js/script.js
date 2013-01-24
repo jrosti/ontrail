@@ -195,19 +195,19 @@
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
-    var logouts = $("#logout").onAsObservable(clickType)
+    var logouts = $("#logout").onClickTouchAsObservable(clickType)
     var isEnter = function(event) { return event.keyCode == 13; }
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onAsObservable(clickType).merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onClickTouchAsObservable(clickType).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    var registerUsers = $('#register-user').onAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
+    var registerUsers = $('#register-user').onClickTouchAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
       .doAction(function() { $('#register-form')[0].reset() })
       .where(isSuccess).select(ajaxResponseData)
 
     // change password
-    var changePasswords = $('#change-password').onAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled")))
+    var changePasswords = $('#change-password').onClickTouchAsObservable('click touchstart').throttle(200).select(target).where(_.compose(not, _hasClass("disabled")))
       .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
     changePasswords.subscribeArgs(renderChangePassword)
 
@@ -252,7 +252,7 @@
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
-    var clickedLinks = $("body").onAsObservable("click touchstart", "a").select(targetLink)
+    var clickedLinks = $("body").onClickTouchAsObservable("click touchstart", "a").select(targetLink)
     var clickedArticles = clickedLinks.where(function(elem) { return $(elem).hasClass('more')}).select(parentArticle)
 
     var isArticleLoaded = function(el) { var $el = $(el); return $el.hasClass('full') || $el.hasClass('preview')}
@@ -387,7 +387,7 @@
 
 
     // Kirjaudu sisään clicks toggle password & login fields visibility
-    $('#login-link').onAsObservable(clickType).subscribe(function() {
+    $('#login-link').onClickTouchAsObservable(clickType).subscribe(function() {
       $('body').toggleClass('login')
       $('#username').focus()
     })
@@ -410,7 +410,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExercises = $('#add-exercise').onAsObservable(clickType).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
+    var addExercises = $('#add-exercise').onClickTouchAsObservable(clickType).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
@@ -460,24 +460,24 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onAsObservable(clickType).subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onClickTouchAsObservable(clickType).subscribe(renderAddExercise)
 
     var asExercise = function(__, exercise) { return ["ex", exercise] }
     var editExercise = currentPages.whereArgs(function(page, subPage) { return page === "addex" && subPage })
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onAsObservable(clickType)
+    var updateExercises = $('#edit-exercise').onClickTouchAsObservable(clickType)
       .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
     // update user profile
-    var updateProfiles = $('#update-profile').onAsObservable('click touchstart').throttle(200)
+    var updateProfiles = $('#update-profile').onClickTouchAsObservable('click touchstart').throttle(200)
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onAsObservable(clickType)
+    var addComments = $('#exercise').onClickTouchAsObservable(clickType)
       .select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
@@ -559,7 +559,7 @@
     var registerValidations = _.flatten([_.map(['username', 'password'], require), pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
-    var exPagesWithComments = $("body").onAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var exPagesWithComments = $("body").onClickTouchAsObservable("click touchstart", "a[data-new-comments]").selectMany(loggedIns).where(identity)
     var loggedInPoller = loggedIns.merge(rx.interval(60000).selectMany(loggedIns).where(identity)).merge(exPagesWithComments)
     loggedInPoller.selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
     loggedInPoller.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
