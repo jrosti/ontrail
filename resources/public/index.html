@@ -195,31 +195,43 @@
 
                     <!-- Main Content -->
                     <div role="latest">
-                        <section class="logged-in">
+                        <section role="listview" class="logged-in">
                             <header>
                                 <label for="search"><strong>Etsi lenkeistä: </strong></label> <input class="search" type="text" id="search"/>
                             </header>
                         </section>
-                        <div id="entries"></div>
+                        <div role="listview" id="entries"></div>
+                        <section role="tableview">
+                            <table class="details">
+                                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                                <tbody role="table-entries">
+                                </tbody>
+                            </table>
+                        </section>
                     </div>
 
                     <div role="new-comments">
                         <div id="unread-entries"></div>
+                        <section role="tableview">
+                            <table class="details">
+                                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                                <tbody role="table-entries">
+                                </tbody>
+                            </table>
+                        </section>
                     </div>
 
                     <div role="new-own-comments">
                         <div id="unread-own-entries"></div>
-                    </div>
-
-                    <div role="tableview">
-                        <section>
-                        <table class="details">
-                            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
-                            <tbody id="table-entries">
-                            </tbody>
-                        </table>
+                        <section role="tableview">
+                            <table class="details">
+                                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                                <tbody role="table-entries">
+                                </tbody>
+                            </table>
                         </section>
                     </div>
+
 
 
                     <section role="systemstats">
@@ -335,6 +347,13 @@
                         <div role="content">
                             <div id="content-header"></div>
                             <div id="content-entries"></div>
+                            <section role="tableview">
+                                <table class="details">
+                                    <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                                    <tbody role="table-entries">
+                                    </tbody>
+                                </table>
+                            </section>
                         </div>
 
                         <section role="summary" class="logged-in">
