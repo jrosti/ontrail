@@ -10,6 +10,18 @@ body.logged-in *.logged-out,
 body.login #login-link {
   display: none;
 }
+a {
+  text-decoration: none;
+  color: #ed391b;
+}
+a:hover {
+  text-decoration: underline;
+  color: #c52a10;
+}
+a:hover.button-big {
+  color: white;
+  text-decoration: none;
+}
 #login-form input {
   display: block;
   width: 66%;
