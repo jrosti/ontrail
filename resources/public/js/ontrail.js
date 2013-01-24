@@ -378,6 +378,7 @@
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         entries.html("")
+        $('*[role=latest] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
         if (query === "")
@@ -386,7 +387,7 @@
           return OnTrail.rest.searchResults(query)
       })
       .switchLatest()
-    latestScroll.subscribe(renderLatest(entries))
+    latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
