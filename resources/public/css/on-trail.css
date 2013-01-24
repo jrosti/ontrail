@@ -36,6 +36,13 @@ a:hover.button-big {
   -moz-background-clip: padding;
   background-clip: padding-box;
 }
+i {
+  font-style: italic;
+}
+strong {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: 700;
+}
 #login-form input {
   display: block;
   width: 66%;
