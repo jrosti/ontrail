@@ -17,6 +17,7 @@
     $.ajaxSetup({ cache: false })
 
     var entries = $("#entries")
+    var entriesShort = $("#table-entries")
     var userList = $("#user-results")
 
     function selectionFormat(state) {
@@ -87,7 +88,7 @@
       return { data: data, remaining: isLast ? 0 : (max-str.length) }
     }
 
-    var renderLatest = function(el) {
+    var renderLatest = function(el, tableEl) {
       var helpers = {
         trunc: function () {
           return function(text, render) {
@@ -98,12 +99,15 @@
           }
         }
       }
-      return _.partial(function(elem, data) {
+      return _.partial(function(elem, tableElem, data) {
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
         $(content).appendTo(elem)
-      }, $(el))
+
+        var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
+        $(tableContent).appendTo(tableElem)
+      }, $(el), $(tableEl))
     }
     var renderSingleExercise = function(exercise, me) {
       renderUserMenu(exercise.user)
@@ -242,7 +246,7 @@
           var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
           $(countEl).text(newComments).show()
           $(el).html("")
-          renderLatest($(el))(items)
+//          renderLatest($(el), undefined)(items)
         } else {
           $(countEl).hide()
           $(el).html("<article>Ei uusia kommentteja</article>")
@@ -371,12 +375,12 @@
       })
       .selectArgs(function(query) {
         if (query === "")
-          return OnTrail.pager.create(OnTrail.rest.latest, entries)
+          return OnTrail.pager.create(OnTrail.rest.latest, entriesShort)
         else
           return OnTrail.rest.searchResults(query)
       })
       .switchLatest()
-    latestScroll.subscribe(renderLatest(entries))
+    latestScroll.subscribe(renderLatest(entries, entriesShort))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
