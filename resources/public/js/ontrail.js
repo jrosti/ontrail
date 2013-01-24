@@ -1,5 +1,18 @@
 (function() {
   $(document).ready(function() {
+
+    var ww = $(window).width(), sw = screen.width, orientation = window.orientation;
+
+    // Fix: On iOS, screen.width is always the width of the device held in portrait mode.
+    // Android, however, sets it to the width of the device in its current orientation.
+    // This ends up breaking our detection on HD devices held in landscape mode, so we
+    // do a little trick here to detect this condition and make things right.
+    if (screen.width > screen.height
+      &&	Math.abs(orientation) == 90)
+      sw = screen.height;
+
+    var mobile = (ww <= 480 || sw <= 480);
+
     var clickEvent = "click touchstart"
     $.ajaxSetup({ cache: false })
 
@@ -631,8 +644,10 @@
     loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
 
 
+    console.log(mobile ? "playmobile" : "automobile")
+
     // run our function on load
-    if (!Modernizr.touch) {
+    if (!mobile) {
 
       // and run it again every time you scroll
       $(window).scrollAsObservable().startWith(0).selectMany(sessions).select(function(val) { return exists(val) ? true : false }).subscribe(fixMenuPosition)
