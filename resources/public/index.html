@@ -211,6 +211,16 @@
                         <div id="unread-own-entries"></div>
                     </div>
 
+                    <div role="tableview">
+                        <section>
+                        <table class="details">
+                            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                            <tbody id="table-entries">
+                            </tbody>
+                        </table>
+                        </section>
+                    </div>
+
 
                     <section role="systemstats">
                         <article>
@@ -534,6 +544,23 @@
     </div>
 </script>
 
+<script id="exerciseSummaryTemplate" type="text/html">
+    <tbody>
+    <tr>
+        <td>{{date}}</td>
+        <td class="user">{{user}}</td>
+        <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+        <td class="sport">
+            {{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
+            {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}
+        </td>
+        <td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{avghr}}</td><td>{{count}}</td>
+    </tr>
+    </tbody>
+</script>
+
+
+
 <script id="singleExerciseTemplate" type="text/html">
     <section>
     <article data-id="{{id}}" class="full exercise {{sport}}">
@@ -658,7 +685,7 @@
 
 <script id="summaryItemTemplate" type="text/html">
     <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
-        {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td>
+        {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td></tr>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">

@@ -1,6 +1,9 @@
 (function(){
   // todo: remove depsu to elementBottomIsAlmostVisible
-  var nextPage = function(elem) { return Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(elem, 100) }) }
+  var nextPage = function(elem) {
+    var e = ($.isFunction(elem)) ? elem() : elem
+    return Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(e, 100) })
+  }
 
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(res) {
