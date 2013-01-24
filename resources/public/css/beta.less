@@ -6,6 +6,24 @@ body.logged-out *.logged-in, body.logged-in *.logged-out, body.login #login-link
   display: none;
 }
 
+@link-color: #ED391B;
+
+a {
+  text-decoration: none;
+  color: @link-color;
+
+  &:hover {
+    text-decoration: underline;
+    color: darken(@link-color, 10%);
+
+    &.button-big {
+      color: white;
+      text-decoration: none;
+    }
+  }
+}
+
+
 #login-form {
   input {
     display: block;
