@@ -87,7 +87,7 @@
       return { data: data, remaining: isLast ? 0 : (max-str.length) }
     }
 
-    var renderLatest = function(el) {
+    var renderLatest = function(el, tableEl) {
       var helpers = {
         trunc: function () {
           return function(text, render) {
@@ -105,8 +105,9 @@
         $(content).appendTo(elem)
 
         var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
+        console.log("render taabel", tableContent)
         $(tableContent).appendTo(tableElem)
-      }, $(el), $("#table-entries"))
+      }, $(el), $(tableEl))
     }
     var renderSingleExercise = function(exercise, me) {
       renderUserMenu(exercise.user)
@@ -238,14 +239,14 @@
       $('.username').html(userId)
     })
 
-    function renderNewContent(el, countEl) {
+    function renderNewContent(el, countEl, tableEl) {
       return function(content) {
         var items = asArgs(content)
         if (asArgs(content).length > 0) {
           var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
           $(countEl).text(newComments).show()
           $(el).html("")
-          renderLatest($(el))(items)
+          renderLatest(el, tableEl)(items)
         } else {
           $(countEl).hide()
           $(el).html("<article>Ei uusia kommentteja</article>")
@@ -647,9 +648,13 @@
     var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(60000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
-
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).doAction(function() {
+      console.log("clear taabel", arguments)
+      $("*[role=new-comments] *[role=table-entries]").html("")
+    }).subscribe(renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]"))
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).doAction(function() {
+        $("*[role=new-own-comments] *[role=table-entries]").html("")
+      }).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]"))
 
     console.log(mobile ? "playmobile" : "automobile")
 
