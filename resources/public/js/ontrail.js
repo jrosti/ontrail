@@ -105,7 +105,6 @@
         $(content).appendTo(elem)
 
         var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
-        console.log("render taabel", tableElem)
         $(tableContent).appendTo(tableElem)
       }, $(el), $(tableEl))
     }
@@ -652,7 +651,6 @@
     loggedInPoller.connect()
 
     loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).doAction(function() {
-      console.log("clear taabel", arguments)
       $("*[role=new-comments] *[role=table-entries]").html("")
     }).subscribe(renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]"))
     loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).doAction(function() {
