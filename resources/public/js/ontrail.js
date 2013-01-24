@@ -105,7 +105,7 @@
         $(content).appendTo(elem)
 
         var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
-        console.log("render taabel", tableContent)
+        console.log("render taabel", tableElem)
         $(tableContent).appendTo(tableElem)
       }, $(el), $(tableEl))
     }
@@ -368,7 +368,9 @@
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
       return asObject.apply(asObject, _.flatten([{}, args]))
-    }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
+    }).doAction(function() {
+        $('*[role=content] *[role=table-entries]').html("")
+      }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
