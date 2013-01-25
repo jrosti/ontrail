@@ -236,6 +236,10 @@ table.details {
 
   tr {
     white-space: nowrap;
+
+    &.new td, &.new-comments td {
+      font-weight: bold;
+    }
   }
 
   tr:nth-child(2n) {
@@ -264,6 +268,10 @@ table.details {
       max-width: 60px;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    &.comments, &.hr {
+      text-align: right;
     }
   }
 }

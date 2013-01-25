@@ -203,7 +203,7 @@
     <div role="listview" id="entries"></div>
     <section role="tableview">
         <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
             <tbody role="table-entries">
             </tbody>
         </table>
@@ -214,7 +214,7 @@
     <div id="unread-entries" role="listview"></div>
     <section role="tableview">
         <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
             <tbody role="table-entries">
             </tbody>
         </table>
@@ -225,7 +225,7 @@
     <div id="unread-own-entries" role="listview"></div>
     <section role="tableview">
         <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
             <tbody role="table-entries">
             </tbody>
         </table>
@@ -349,7 +349,7 @@
         <div id="content-entries" role="listview"></div>
         <section role="tableview">
             <table class="details">
-                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th></tr></thead>
+                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
                 <tbody role="table-entries">
                 </tbody>
             </table>
@@ -555,8 +555,9 @@
 
                 {{> tagsExpandedTemplate}}
                 <div>
-                    <p class="full"><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a>
-                        {{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a></p>
+                    <p class="full"><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>
+                        {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
+                        </a></p>
                 </div>
             </article>
         </section>
@@ -565,7 +566,7 @@
 
 <script id="exerciseSummaryTemplate" type="text/html">
     <tbody>
-    <tr>
+    <tr class="{{#newComments}}new-comments{{/newComments}} {{#isNew}}new{{/isNew}}">
         <td>{{date}}</td>
         <td class="user"><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
         <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
@@ -573,7 +574,11 @@
             {{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
             {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}
         </td>
-        <td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{avghr}}</td><td>{{count}}</td>
+        <td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td class="hr">{{avghr}}</td>
+        <td class="comments">
+            {{^newComments}}<span>{{commentCount}}</span>{{/newComments}}{{#newComments}}<span>{{commentCount}}</span> / <span class="new">{{newComments}} uutta</span>{{/newComments}}
+        </td>
+
     </tr>
     </tbody>
 </script>

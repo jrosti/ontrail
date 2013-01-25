@@ -237,6 +237,10 @@ table.details {
 table.details tr {
   white-space: nowrap;
 }
+table.details tr.new td,
+table.details tr.new-comments td {
+  font-weight: bold;
+}
 table.details tr:nth-child(2n) {
   background: rgba(218, 124, 12, 0.1);
 }
@@ -260,6 +264,10 @@ table.details td.title {
   max-width: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+table.details td.comments,
+table.details td.hr {
+  text-align: right;
 }
 #content a.button {
   color: #ffffff;
