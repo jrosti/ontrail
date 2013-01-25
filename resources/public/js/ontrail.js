@@ -14,6 +14,7 @@
     var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
 
     var clickEvent = "click touchstart"
+    var clickType = Modernizr.touch ? "touchstart" : "click"
     $.ajaxSetup({ cache: false })
 
     var entries = $("#entries")
