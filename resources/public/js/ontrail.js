@@ -657,8 +657,6 @@
         $("*[role=new-own-comments] *[role=table-entries]").html("")
       }).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]"))
 
-    console.log(mobile ? "playmobile" : "automobile")
-
     // run our function on load
     if (!mobile) {
 
