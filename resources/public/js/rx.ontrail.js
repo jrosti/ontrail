@@ -59,14 +59,13 @@
   }
 
   $.fn.onClickTouchAsObservable = function(events, selector, data) {
-    function removeDuplicates(acc, event) {
+    function isDuplicate(event, newEvent) {
       var target = targetLink(event)
-      if (acc.type && target == acc.target && acc.type != event.type)
-        return {target: target, type: event.type }
-      return {target: target, type: event.type, event: event }
+      var newTarget = targetLink(newEvent)
+      return (target.rel === newTarget.rel && event.type != newEvent.type)
     }
     function _event(item) { return item.event }
-     return this.onAsObservable(events, selector, data).scan({}, removeDuplicates).where(_event).select(_event)
+     return this.onAsObservable(events, selector, data).distinctUntilChanged(_.identity, isDuplicate)
   }
 }());
 var rx = Rx.Observable;
