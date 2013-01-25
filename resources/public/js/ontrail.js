@@ -87,7 +87,7 @@
       return { data: data, remaining: isLast ? 0 : (max-str.length) }
     }
 
-    var renderLatest = function(el) {
+    var renderLatest = function(el, tableEl) {
       var helpers = {
         trunc: function () {
           return function(text, render) {
@@ -98,12 +98,15 @@
           }
         }
       }
-      return _.partial(function(elem, data) {
+      return _.partial(function(elem, tableElem, data) {
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
         $(content).appendTo(elem)
-      }, $(el))
+
+        var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
+        $(tableContent).appendTo(tableElem)
+      }, $(el), $(tableEl))
     }
     var renderSingleExercise = function(exercise, me) {
       renderUserMenu(exercise.user)
@@ -235,14 +238,14 @@
       $('.username').html(userId)
     })
 
-    function renderNewContent(el, countEl) {
+    function renderNewContent(el, countEl, tableEl) {
       return function(content) {
         var items = asArgs(content)
         if (asArgs(content).length > 0) {
           var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
           $(countEl).text(newComments).show()
           $(el).html("")
-          renderLatest($(el))(items)
+          renderLatest(el, tableEl)(items)
         } else {
           $(countEl).hide()
           $(el).html("<article>Ei uusia kommentteja</article>")
@@ -350,6 +353,10 @@
     }
     currentPages.merge(backPresses).subscribeArgs(showPage)
 
+    clickedLinks.where(_.compose(partialEqualsAny(["summary-view", "list-view"]), _attr("id"))).select(_attr("id"))
+        .subscribe(function(id) { $("body").attr("data-list-type", id.substr(0, id.length - 5))})
+
+
     function renderUserMenu(user) { $("#user-header").html(ich.userHeaderTemplate({"data": user})) }
 
     // update current user in the menu bar
@@ -360,7 +367,9 @@
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
       return asObject.apply(asObject, _.flatten([{}, args]))
-    }).scrollWith(OnTrail.rest.exercises, $("#content-entries")).subscribe(renderLatest($("#content-entries")))
+    }).doAction(function() {
+        $('*[role=content] *[role=table-entries]').html("")
+      }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]")).subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
@@ -368,15 +377,16 @@
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         entries.html("")
+        $('*[role=latest] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
         if (query === "")
-          return OnTrail.pager.create(OnTrail.rest.latest, entries)
+          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
         else
           return OnTrail.rest.searchResults(query)
       })
       .switchLatest()
-    latestScroll.subscribe(renderLatest(entries))
+    latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
@@ -640,9 +650,12 @@
     var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(60000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).subscribe(renderNewContent("#unread-entries", "#new-comments-count"))
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count"))
-
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).doAction(function() {
+      $("*[role=new-comments] *[role=table-entries]").html("")
+    }).subscribe(renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]"))
+    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).doAction(function() {
+        $("*[role=new-own-comments] *[role=table-entries]").html("")
+      }).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]"))
 
     console.log(mobile ? "playmobile" : "automobile")
 

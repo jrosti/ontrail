@@ -64,20 +64,34 @@ body.login #login-form {
 body.login #login-form * {
   display: inline-block;
 }
-body *[role] {
+section[role],
+div[role] {
   display: none;
   opacity: 0;
 }
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="latest"],
+body[data-page="tags"] div[role="content"],
+body[data-page="user"] div[role="content"],
+body[data-page="new-comments"] div[role="new-comments"],
+body[data-page="new-own-comments"] div[role="new-own-comments"],
+body[data-page="latest"][data-list-type="summary"] div[role="latest"] section[role="tableview"],
+body[data-page="tags"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="user"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="new-comments"][data-list-type="summary"] div[role="new-comments"] section[role="tableview"],
+body[data-page="new-own-comments"][data-list-type="summary"] div[role="new-own-comments"] section[role="tableview"],
+body[data-page="latest"][data-list-type="list"] div[role="latest"] *[role="listview"],
+body[data-page="tags"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="user"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"] *[role="listview"],
+body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"] *[role="listview"],
+body[data-page="user"] section[role="user"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="users"] section[role="users"],
 body[data-page="profile"] section[role="profile"],
 body[data-page="systemstats"] section[role="systemstats"],
 body[data-page="import"] section[role="import"],
-body[data-page="user"] div[role="content"],
-body[data-page="user"] section[role="user"],
 body[data-page="summary"] section[role="summary"],
 body[data-page="summary"] section[role="user"],
 body[data-page="tagsummary"] section[role="tagsummary"],
@@ -86,16 +100,13 @@ body[data-page="weeksummary"] section[role="weeksummary"],
 body[data-page="weeksummary"] section[role="user"],
 body[data-page="ex"] div[role="ex"],
 body[data-page="ex"] section[role="user"],
-body[data-page="tags"] div[role="content"],
 body[data-page="register"] section[role="register"],
-body[data-page="new-comments"] div[role="new-comments"],
-body[data-page="new-own-comments"] div[role="new-own-comments"],
 body[data-page="main"] div[role="main"] {
   display: block;
   opacity: 1;
 }
 body[data-page="login"] a[rel="login"],
-body[data-page="latest"] a[rel="latest"],
+body[data-page="latest"] a[rel="tableview"],
 body[data-page="summary"] a[rel="summary"],
 body[data-page="tagsummary"] a[rel="tagsummary"],
 body[data-page="weeksummary"] a[rel="weeksummary"],
@@ -110,6 +121,22 @@ body[data-page="new-comments"] a[rel="new-comments"],
 body[data-page="new-own-comments"] a[rel="new-own-comments"],
 body[data-page="main"] a[rel="main"] {
   font-weight: bold;
+}
+body[data-list-type="summary"] #summary-view {
+  display: none;
+}
+body[data-list-type="list"] #list-view {
+  display: none;
+}
+#view-toggles {
+  display: none;
+}
+body[data-page="latest"] #view-toggles,
+body[data-page="tags"] #view-toggles,
+body[data-page="user"] #view-toggles,
+body[data-page="new-comments"] #view-toggles,
+body[data-page="new-own-comments"] #view-toggles {
+  display: inline;
 }
 .right {
   float: right;
@@ -199,7 +226,7 @@ article img.avatar {
   -webkit-transform: none;
   transform: none;
 }
-article table.details {
+table.details {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
   font-size: 12px;
@@ -207,10 +234,17 @@ article table.details {
   width: 100%;
   text-align: left;
 }
-article table.details tr:nth-child(2n) {
+table.details tr {
+  white-space: nowrap;
+}
+table.details tr.new td,
+table.details tr.new-comments td {
+  font-weight: bold;
+}
+table.details tr:nth-child(2n) {
   background: rgba(218, 124, 12, 0.1);
 }
-article table.details th {
+table.details th {
   font-family: "Open Sans Condensed", sans-serif;
   font-weight: 700;
   font-size: 14px;
@@ -218,12 +252,22 @@ article table.details th {
   padding: 4px 10px;
   border-bottom: 2px solid #da7c0c;
 }
-article table.details h4 span {
+table.details h4 span {
   padding-right: 7px;
 }
-article table.details td {
+table.details td {
   color: #000;
   padding: 9px 18px 0px 10px;
+  white-space: nowrap;
+}
+table.details td.title {
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+table.details td.comments,
+table.details td.hr {
+  text-align: right;
 }
 #content a.button {
   color: #ffffff;
