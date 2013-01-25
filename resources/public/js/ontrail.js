@@ -11,7 +11,7 @@
       &&	Math.abs(orientation) == 90)
       sw = screen.height;
 
-    var mobile = (ww <= 480 || sw <= 480);
+    var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
 
     var clickEvent = "click touchstart"
     $.ajaxSetup({ cache: false })
