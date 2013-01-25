@@ -109,7 +109,8 @@
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
-      $('#ex-sport').select2({formatSelection: selectionFormat})
+      if(!Modernizr.touch)
+        $('#ex-sport').select2({formatSelection: selectionFormat})
     }
     var renderTags = function(data) {
       $('#ex-tags').select2({
@@ -439,7 +440,11 @@
       $("#ex-date").attr('value', ex.date)
       $("#ex-date").trigger("cal:changed")
       $("#ex-body").setCode(ex.body)
-      $("#ex-sport").select2("data", [ex.sport])
+      if (!Modernizr.touch)
+        $("#ex-sport").select2("data", [ex.sport])
+      else {
+        $("#ex-sport").val( ex.sport || "Juoksu" ).attr('selected',true);
+      }
       if (ex.tags && ex.tags.length > 0)
         $("#ex-tags").select2("data", ex.tags)
     }
