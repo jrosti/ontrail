@@ -62,7 +62,7 @@
     function isDuplicate(event, newEvent) {
       var target = targetLink(event)
       var newTarget = targetLink(newEvent)
-      return (target.rel === newTarget.rel && event.type != newEvent.type)
+      return (target && newTarget && target.rel === newTarget.rel && event.type != newEvent.type)
     }
     function _event(item) { return item.event }
      return this.onAsObservable(events, selector, data).distinctUntilChanged(_.identity, isDuplicate)
