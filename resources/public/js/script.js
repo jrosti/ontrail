@@ -15,8 +15,9 @@
 
     var doPostExercise = function(url) {
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
-      var values = $('#add-exercise-form').serialize()
-        + "&sport=" + renderSelection($('#ex-sport').select2("data"))
+      var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
+        var values = $('#add-exercise-form').serialize()
+        + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
 
