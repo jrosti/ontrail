@@ -1106,6 +1106,10 @@ body.logged-out #content-top {
 #user-menu-wrapper a {
   padding-left: 1em;
 }
+#user-menu-wrapper a:hover {
+  color: white;
+  text-decoration: none;
+}
 #sidemenu header {
   margin-bottom: 1em;
 }
