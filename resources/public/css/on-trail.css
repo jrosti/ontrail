@@ -1103,6 +1103,9 @@ body.logged-out #content-top {
   font-weight: 700;
   padding-right: 2em;
 }
+#user-menu-wrapper a {
+  padding-left: 1em;
+}
 #sidemenu header {
   margin-bottom: 1em;
 }
