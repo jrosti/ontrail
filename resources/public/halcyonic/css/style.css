@@ -21,11 +21,11 @@
 
 	body, input, textarea, select
 	{
-		color: #474f51;
+		color: #000000;
 		font-size: 13.5pt;
     font-family: 'Open Sans', sans-serif;
 		line-height: 1.85em;
-		font-weight: 300;
+		font-weight: 400;
 	}
 
 h1, h2, h3, h4, h5, h6
