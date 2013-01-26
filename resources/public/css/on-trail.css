@@ -1083,7 +1083,7 @@ body.logged-out #content-top {
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;
   position: fixed;
-  top: 140px;
+  top: 133px;
   width: 100%;
   background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
   background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
@@ -1098,7 +1098,7 @@ body.logged-out #content-top {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   background-repeat: repeat-x;
-  height: 12px;
+  height: 15px;
 }
 #user-menu-wrapper {
   padding: 0;
