@@ -69,6 +69,10 @@ div[role] {
   display: none;
   opacity: 0;
 }
+div[role="dialog"] {
+  display: block;
+  opacity: 1;
+}
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="latest"],
@@ -260,7 +264,8 @@ table.details td {
   padding: 9px 18px 0px 10px;
   white-space: nowrap;
 }
-table.details td.title {
+table.details td.title,
+table.details td.user {
   max-width: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
