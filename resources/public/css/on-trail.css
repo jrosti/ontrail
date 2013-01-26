@@ -1071,7 +1071,7 @@ body div[role="tooltip"] {
   z-index: 10001;
   opacity: 1;
   font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
+  font-weight: 500;
   font-size: 12px;
 }
 #content-wrapper {
@@ -1137,5 +1137,5 @@ body.logged-out #content-top {
   font-weight: 700;
 }
 .has-error {
-  background: rgba(206, 26, 0, 0.1);
+  background: rgba(226, 33, 33, 0.05);
 }
