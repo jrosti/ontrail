@@ -59,6 +59,11 @@ section[role], div[role] {
   opacity: 0;
 }
 
+div[role="dialog"] {
+  display: block;
+  opacity: 1;
+}
+
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 
@@ -264,7 +269,7 @@ table.details {
     color: #000; padding: 9px 18px 0px 10px;
     white-space: nowrap;
 
-    &.title {
+    &.title, &.user {
       max-width: 60px;
       overflow: hidden;
       text-overflow: ellipsis;

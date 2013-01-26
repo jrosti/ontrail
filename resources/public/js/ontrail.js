@@ -282,7 +282,7 @@
     // delete
     var deleteClicks = clickedLinks.combineWithLatestOf(sessions)
       .whereArgs(function(elem, user) { return $(elem).hasClass('delete') && user && $(elem).attr("data-user") == user})
-      .select(function(el) { return attr("rel", el).split("-") })
+      .select(function(el) { return attr("rel", el).split("/") })
     deleteClicks.selectMany(confirmDeleteEx).selectArgs(first)
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
         $("*[data-id='" + data.id + "']").remove()
@@ -295,7 +295,7 @@
     // delete comments
     var deleteCommentClicks = clickedLinks
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
-      .select(function(el) { return attr("rel", el).split("-") })
+      .select(function(el) { return attr("rel", el).split("/") })
     deleteCommentClicks.selectMany(confirmDeleteComment).selectArgs(first).selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
