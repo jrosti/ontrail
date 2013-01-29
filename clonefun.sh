@@ -5,7 +5,7 @@ function ontrailclone() {
     export LC_ALL=C
     B=`date +%s`
     ssh ontrail@ontrail.net mongodump 
-    mkdir -p ontrail.dumps/$B
+    mkdir -p $HOME/ontrail.dumps/$B
     scp -r ontrail@ontrail.net:dump ontrail.dumps/$B
     mongo ontrail --eval 'db.exercise.drop()'
     mongo ontrail --eval 'db.onuser.drop()'
