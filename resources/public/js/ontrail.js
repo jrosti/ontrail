@@ -530,7 +530,6 @@
     var renderMarkAllRead = function(args) {
       renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]")([])
       renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]")([])
-      console.log(args)
     }
 
     var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
