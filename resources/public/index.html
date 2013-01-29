@@ -490,6 +490,7 @@
             <li><a class="pageLink" rel="summary">Yhteenvedot</a></li>
             <li><a class="pageLink" rel="weeksummary">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary">Avainsanat</a></li>
+            <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
         </ul>
     </section>
     <section>
@@ -589,7 +590,7 @@
         <article data-id="{{id}}" class="full exercise {{sport}}">
             <a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-            <img class="avatar" src="{{avatar}}"  width="48" height="48"><h2>{{title}}</h2>
+            <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
             {{> exerciseDetailsTemplate}}
             <div>{{{body}}}

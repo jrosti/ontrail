@@ -35,6 +35,8 @@
     return getAsObservableResultData.apply(this, ["weekly-list", user].concat(nthMonth(n-1)))
   }
 
+  Rest.prototype.markAllRead = function() { return getAsObservableResultData("mark-all-read") }
+
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
