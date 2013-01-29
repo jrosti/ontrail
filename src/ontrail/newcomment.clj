@@ -88,7 +88,9 @@
   (dosync 
     (if-let [ucache (@users-cache user)]
       (let [lastvisit (:lastvisit @ucache)]
-        (alter users-cache assoc user (ref {:lastvisit lastvisit}))))))
+        (do (alter users-cache assoc user (ref {:lastvisit lastvisit}))
+          true))
+      false)))
 
 (defn dissoc-comment-keys [comment-cache]
   (let [max-age (* 1000 60 60 24 7)
