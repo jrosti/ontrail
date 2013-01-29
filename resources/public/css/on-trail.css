@@ -189,37 +189,8 @@ article .newEx {
   color: #ce1a00;
 }
 article img {
-  box-sizing: border-box;
   max-width: 100% ! important;
   padding: 10px 10px 25px 10px;
-  background: #efefef;
-  border: 1px solid #ccc;
-}
-article img:nth-child(2n + 2) {
-  -webkit-transform: rotate(-2deg);
-  -webkit-transform: rotate(-2deg);
-  -moz-transform: rotate(-2deg);
-  -ms-transform: rotate(-2deg);
-  -o-transform: rotate(-2deg);
-  transform: rotate(-2deg);
-  -webkit-transform: rotate(-2deg);
-  -moz-transform: rotate(-2deg);
-  -ms-transform: rotate(-2deg);
-  -o-transform: rotate(-2deg);
-  transform: rotate(-2deg);
-}
-article img:nth-child(2n + 1) {
-  -webkit-transform: rotate(1deg);
-  -webkit-transform: rotate(1deg);
-  -moz-transform: rotate(1deg);
-  -ms-transform: rotate(1deg);
-  -o-transform: rotate(1deg);
-  transform: rotate(1deg);
-  -webkit-transform: rotate(1deg);
-  -moz-transform: rotate(1deg);
-  -ms-transform: rotate(1deg);
-  -o-transform: rotate(1deg);
-  transform: rotate(1deg);
 }
 article img.avatar {
   box-sizing: content-box;
