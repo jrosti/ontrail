@@ -527,6 +527,15 @@
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
+    var renderMarkAllRead = function(args) {
+      renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]")([])
+      renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]")([])
+      console.log(args)
+    }
+
+    var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
+      .selectAjax(OnTrail.rest.markAllRead).subscribe(renderMarkAllRead)
+
     // Lisää kommentti
     var addComments = $('#exercise').onClickTouchAsObservable(clickEvent).select(target).where(function(el) { return el.id === "add-comment"})
       .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
