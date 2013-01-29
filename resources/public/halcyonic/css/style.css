@@ -44,9 +44,11 @@ h1, h2, h3, h4, h5, h6
   color: #c1cac5;
 }
 
-ul, ol, p, dl
+p { margin: 0 0 10px 0; }
+
+ul, ol, dl
 	{
-		margin: 0 0 10px 0;
+		margin: 0 0 2em 0;
 	}
 
 	a
