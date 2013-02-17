@@ -126,7 +126,7 @@
        (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (get-page params) {:creationDate -1})))
 
   (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
-  (GET "/rest/v1/list-tags-all" [] (json-response (get-distinct-tags {})))
+  (GET "/rest/v1/list-tags-all" {params :params cookies :cookies} (json-response (get-distinct-tags {:user (user-from-cookie cookies)})))
 
   (GET "/rest/v1/list-users/:page" [page] (json-response (user/get-user-list {} page)))
 
