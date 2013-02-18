@@ -25,6 +25,7 @@
                 :create-user ontrail.user
                 :import-images ontrail.imgimport}
   :main ontrail.core
+  ;:resource-paths ["extra-resources"]
   :js {:src "resources/public/js" :deploy "resources/public/minjs"
        :bundles ["min.js" ["handlebars-1.0.0.beta.6.js" "handlebars-helpers.js" "icanhaz-0.10.0.js" 
                            "jquery.address-1.5-30680d.min.js" "jquery.chosen.0.9.8.min.js" "jquery.continuous-calendar.js" 
