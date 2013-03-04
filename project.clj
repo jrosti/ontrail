@@ -2,7 +2,7 @@
   :description "A training blog."
   :dependencies [[org.clojure/clojure "1.5.0"]
   		          [com.draines/postal "1.9.2"]
-                [aleph "0.3.0-alpha2"]
+                [aleph "0.3.0-beta11"]
                 [compojure "1.1.5"]
                 [ring "1.1.6"]
                 [clj-time "0.4.4"]
@@ -10,7 +10,7 @@
                 [clj-json "0.4.3"]
                 [org.clojure/data.json "0.1.3"]
                 [com.lambdaworks/scrypt "1.3.3"]
-                [lamina "0.5.0-beta7"]
+                [lamina "0.5.0-beta10"]
                 [org.slf4j/slf4j-api "1.6.4"]
                 [ch.qos.logback/logback-classic "1.0.3"]
                 [commons-codec/commons-codec "1.6"]
