@@ -301,7 +301,7 @@
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
-    var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink')})
+    var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') || $(elem).hasClass('sportLink')})
     var initialPage = function(user) {
       var address = $.address.value()
       if (address && address != "") return splitM($.address.value())
@@ -364,13 +364,18 @@
     var currentPageLinkUsers = currentPages.distinctUntilChanged().combineWithLatestOf(sessions).selectArgs(_findUser(1));
     sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
-    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags"])).distinctUntilChanged()
+    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport"])).distinctUntilChanged()
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
-      var args = Array.prototype.slice.call(arguments)
-      return asObject.apply(asObject, _.flatten([{}, args]))
-    }).doAction(function() {
+        var args = Array.prototype.slice.call(arguments)
+        console.log(arguments)
+        console.log(args)
+        console.log(asObject.apply(asObject, _.flatten([{}, args])))
+        return asObject.apply(asObject, _.flatten([{}, args]))
+      }).doAction(function() {
         $('*[role=content] *[role=table-entries]').html("")
-      }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]")).subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
+      }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
+        .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
+
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 

@@ -77,16 +77,19 @@ body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="latest"],
 body[data-page="tags"] div[role="content"],
+body[data-page="sport"] div[role="content"],
 body[data-page="user"] div[role="content"],
 body[data-page="new-comments"] div[role="new-comments"],
 body[data-page="new-own-comments"] div[role="new-own-comments"],
 body[data-page="latest"][data-list-type="summary"] div[role="latest"] section[role="tableview"],
 body[data-page="tags"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="sport"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="user"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="new-comments"][data-list-type="summary"] div[role="new-comments"] section[role="tableview"],
 body[data-page="new-own-comments"][data-list-type="summary"] div[role="new-own-comments"] section[role="tableview"],
 body[data-page="latest"][data-list-type="list"] div[role="latest"] *[role="listview"],
 body[data-page="tags"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="sport"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="user"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"] *[role="listview"],
 body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"] *[role="listview"],
@@ -1037,6 +1040,10 @@ a.pageLink,
 a.more,
 a.mark {
   cursor: pointer;
+}
+a.sportLink {
+  float: right;
+  font-size: 14px;
 }
 body div[role="tooltip"] {
   display: block ! important;
