@@ -2,7 +2,7 @@
   :description "A training blog."
   :dependencies [[org.clojure/clojure "1.5.0"]
   		          [com.draines/postal "1.9.2"]
-                [aleph "0.3.0-beta11"]
+                [aleph "0.3.0-beta14"]
                 [compojure "1.1.5"]
                 [ring "1.1.6"]
                 [clj-time "0.4.4"]
@@ -16,7 +16,8 @@
                 [commons-codec/commons-codec "1.6"]
                 [com.novemberain/monger "1.4.2"]
                 [cheshire "5.0.2"]
-                [ring.middleware.logger "0.2.2"]]
+                [ring.middleware.logger "0.2.2"]
+                ]
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user
                 :import-images ontrail.imgimport}
