@@ -81,7 +81,7 @@
   ([viewing-user rule page sort-rule]
     (let [results (mq/with-collection EXERCISE
                      (mq/find rule)
-                     (mq/paginate :page (Integer. page) :per-page 20)
+                     (mq/paginate :page (Integer/valueOf page) :per-page 20)
                      (mq/sort sort-rule))
           decorated-results (decorate-results viewing-user results)]
       (nc/visit-now viewing-user)

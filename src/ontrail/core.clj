@@ -14,7 +14,8 @@
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          profile system tagsummary sportsummary weekly])
   (:gen-class)
-  (:require [ontrail.mutate :as mutate]
+  (:require [ontrail.mongerfilter :as mongerfilter]
+            [ontrail.mutate :as mutate]
             [ontrail.exercise :as ex]
             [ontrail.user :as user]
             [ontrail.newcomment :as nc]
@@ -58,9 +59,6 @@
   (fn [req]
     (handler
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
-
-(defn monger-filter-from [params]
-  (select-keys params [:user :tags :sport]))
 
 (defn get-page [params]
   (if (not= nil (:page params))
@@ -108,7 +106,7 @@
     (json-response (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) (monger-filter-from params) (get-page params) {:creationDate -1})))
+    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) (mongerfilter/from params) (get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
     (json-response (unread/comments-all (user-from-cookie cookies))))
