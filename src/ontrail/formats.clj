@@ -78,7 +78,7 @@
   (if (= nil date-time)
     ""
     (let [date-format (time-format/formatter "dd.MM.yyyy HH:mm")]
-      (time-format/unparse date-format (time/plus date-time (time/hours 2)))))) ;; we're +3h from UTC
+      (time-format/unparse date-format (time/plus date-time (time/hours 3)))))) ;; we're +3h from UTC
 
 (defn to-simple-date [date-time]
   (if (= nil date-time)
