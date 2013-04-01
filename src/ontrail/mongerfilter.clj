@@ -10,3 +10,8 @@
 (defn from [params]
   (let [query (select-keys params [:user :tags :sport])]
   	{$and (vec (map (partial apply or-filter) query))}))
+
+(defn sortby [params]
+	(if-let [sortkey (:sb params)]
+		{sortkey -1}
+		{:creationDate -1}))

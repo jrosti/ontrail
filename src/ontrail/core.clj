@@ -106,7 +106,8 @@
     (json-response (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) (mongerfilter/from params) (get-page params) {:creationDate -1})))
+    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) 
+      (mongerfilter/from params) (get-page params) (mongerfilter/sortby params))))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
     (json-response (unread/comments-all (user-from-cookie cookies))))
