@@ -367,8 +367,6 @@
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport"])).distinctUntilChanged()
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
         var args = Array.prototype.slice.call(arguments)
-        console.log(arguments)
-        console.log(args)
         console.log(asObject.apply(asObject, _.flatten([{}, args])))
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {

@@ -3,9 +3,15 @@
 	(:use [monger.operators])
 	(:require [clojure.string :as string]))
 
+(defn conv-fun [k]
+	(if (k #{:distance :duration})
+		(fn [val] (Long/valueOf val))
+		identity))
+
 (defn or-filter [k catval]
-	(let [vals (string/split catval #",")]
-		{$or (vec (map (fn [val] {k val}) vals))}))
+	(let [cfunk (conv-fun k)
+				vals (string/split catval #",")]
+		{$or (vec (map (fn [val] {k (cfunk val)}) vals))}))
 
 (defn from [params]
   (let [query (select-keys params [:user :tags :sport :distance :duration])]
