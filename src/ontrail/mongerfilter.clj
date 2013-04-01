@@ -8,7 +8,7 @@
 		{$or (vec (map (fn [val] {k val}) vals))}))
 
 (defn from [params]
-  (let [query (select-keys params [:user :tags :sport])]
+  (let [query (select-keys params [:user :tags :sport :distance :duration])]
   	{$and (vec (map (partial apply or-filter) query))}))
 
 (defn sortby [params]
