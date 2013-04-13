@@ -1,7 +1,15 @@
 (ns ontrail.mongerfilter
 	(:use [monger.operators])
-	(:require [clojure.string :as string]
-			  [clj-time.core :as time]))
+	(:require 	[clj-time.format :as format]
+				[clojure.string :as string]
+			  	[clj-time.core :as time]))
+
+(def multi-parser (format/formatter (time/default-time-zone)
+                                    "dd.MM.yyyy"
+                                    "MM.yyyy"
+                                    "yyyy"))
+
+(defn parse-date [val] (format/parse multi-parser val))
 
 (defn conv-fun [sport-key]
 	(if (sport-key #{:distance :duration})
@@ -16,23 +24,23 @@
 			{$or (vec (map query-fun vals))}
 			(query-fun (first vals)))))
 
-(defn to-monger-ltgte [k v]
+(defn to-monger-range [f k v]
 	(let [op (string/split (name k) #"_")]
-		{(str "$" (first op)) 
-			{(keyword (second op)) (time/date-time (Integer/valueOf v))}}))
+		{(keyword (second op))
+			{(str "$" (first op)) (f v)}}))
 
-(defn make-date-query [params]
+(defn make-range-query [value-converter params]
 	(if (> (count params) 0)
-		{$or (vec (map (partial apply to-monger-ltgte) params))}
+		(vec (map (partial apply (partial to-monger-range value-converter)) params))
 		[]))
 
+(defn make-basic-query [query-keys]
+	(vec (map (partial apply or-filter) query-keys)))
 
-(defn from [params]
-  (let [query-keys (select-keys params [:user :tags :sport :distance :duration])
-  		basic-query (vec (map (partial apply or-filter) query-keys))
-  		lte-keys (select-keys params [:lte_creationDate :gte_creationDate])
-  		lte-query (make-date-query lte-keys)]
-  	{$and (vec (concat basic-query lte-query))}))
+(defn make-query-from [params]
+  (let [basic-query (make-basic-query (select-keys params [:user :tags :sport :distance :duration]))
+  		date-range-query (make-range-query parse-date (select-keys params [:lte_creationDate :gte_creationDate]))]
+  	{$and (vec (concat basic-query date-range-query))}))
 
 (defn sortby [params]
 	(if-let [sortkey (:sb params)]
