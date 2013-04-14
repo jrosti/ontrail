@@ -73,6 +73,12 @@
       (json-response {"token" (auth-token user) "username" username} 200)
       (json-response {"token" nil "username" username} 404))))
 
+(defn do-group-oper [oper group-name user]
+  (let [response (oper group-name user)]
+    (if (:result response)
+      (json-response {:message (:descr response)})
+      (json-response {:message (:descr response)} 400))))
+
 (defroutes app-routes
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
@@ -177,15 +183,12 @@
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
   
-  (GET "/rest/v1/groups/:page" [page]
-    (json-response (group/as-list page)))
+  (GET "/rest/v1/groups/:page" {params :params cookies :cookies}
+    (json-response (group/as-list (:page params) (user-from-cookie cookies))))
 
   (POST "/rest/v1/groups/:name/join" {params :params cookies :cookies}
     (is-authenticated? cookies
-      (let [response (group/join-to (:name params) (user-from-cookie cookies))]
-        (if (:result response)
-          (json-response {:message (:descr response)})
-          (json-response {:message (:descr response)} 400)))))
+      (do-group-oper group/join-to (:name params) (user-from-cookie cookies))))
 
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
     (is-authenticated? cookies
