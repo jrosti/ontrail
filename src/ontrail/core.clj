@@ -192,10 +192,7 @@
 
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
     (is-authenticated? cookies
-      (let [response (group/part-from (:name params) (user-from-cookie cookies))]
-        (if (:result response)
-          (json-response {:message (:descr response)})
-          (json-response {:message (:descr response)} 400)))))
+      (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))
 
   (wrap-multipart-params
     (POST "/rest/v1/import" {params :params cookies :cookies}
