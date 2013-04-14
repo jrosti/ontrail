@@ -760,7 +760,7 @@
 </script>
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
-    <tr><td><a class="pageLink" rel="group/{{name}}">{{name}}</a></td><td>{{{description}}}</td>
+    <tr><td><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></td><td>{{{description}}}</td>
         <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a><br/> {{/users}}</td>
         <td class="buttons">
             {{#in}}<a class="leave button red" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
