@@ -40,6 +40,7 @@
   Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
   Rest.prototype.email = function() { return getAsObservableResultData("email") }
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
+
   Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
   Rest.prototype.newOwnComments = function() { return getAsObservableResultData("ex-unread-own-comments") }
 
@@ -61,7 +62,8 @@
   Rest.prototype.activeUsers = function() { return getAsObservableResultData("active-users") }
 
   Rest.prototype.groups = function(page) { return getAsObservableResultData("groups", page).selectArgs(_attr("groups")) }
-
+  Rest.prototype.ownGroups = function() { return getAsObservableResultData("own-groups") }
+  
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
     return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })

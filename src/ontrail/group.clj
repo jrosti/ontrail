@@ -42,8 +42,9 @@
       (assoc e :in false))))
 
 (defn own-as-list [user]
-  (let [results (mq/with-collection GROUPS
-                  (mq/find {:users user})
+  (let [condition (if (= user "nobody") {} {:users user})
+        results (mq/with-collection GROUPS
+                  (mq/find condition)
                   (mq/sort {:lname 1}))]
     {:groups (vec (map (fn [e] (:name e)) results))}))
 
