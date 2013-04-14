@@ -301,7 +301,7 @@
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
-    var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') || $(elem).hasClass('sportLink')})
+    var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') })
     var initialPage = function(user) {
       var address = $.address.value()
       if (address && address != "") return splitM($.address.value())
