@@ -1,6 +1,7 @@
 (ns ontrail.mongerfilter
 	(:use [monger.operators])
 	(:require 	[clj-time.format :as format]
+				[ontrail.group :as group]
 				[clojure.string :as string]
 			  	[clj-time.core :as time]))
 
@@ -46,6 +47,11 @@
 (defn make-basic-query [query-keys]
 	(vec (map (partial apply or-filter) query-keys)))
 
+(defn make-group-query [group-name]
+	(if-let [group (group/find-by-name group-name)]
+		[{$or (vec (map (fn [user] {:user user}) (:users group)))}]
+		[]))
+
 (defn long-cmp-keys[]
 	(vec (for [op ["lte" "gte" "lt" "gt"] qkey ["pace" "distance" "duration" "avghr"]]
 		(keyword (str op "_" qkey)))))
@@ -53,8 +59,9 @@
 (defn make-query-from [params]
   (let [basic-query (make-basic-query (select-keys params [:user :tags :sport :distance :duration]))
   		date-range-query (make-range-query parse-date (select-keys params [:lte_creationDate :gte_creationDate]))
-  		long-range-query (make-range-query parse-long (select-keys params (long-cmp-keys)))]
-  	{$and (vec (concat basic-query date-range-query long-range-query))}))
+  		long-range-query (make-range-query parse-long (select-keys params (long-cmp-keys)))
+  		group-query (make-group-query (:group params))]
+  	{$and (vec (concat basic-query date-range-query long-range-query group-query))}))
 
 (defn sortby [params]
 	(if-let [sortkey (:sb params)]
