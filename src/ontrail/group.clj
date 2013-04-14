@@ -41,11 +41,17 @@
       (assoc e :in true)
       (assoc e :in false))))
 
+(defn own-as-list [user]
+  (let [results (mq/with-collection GROUPS
+                  (mq/find {:users user})
+                  (mq/sort {:lname 1}))]
+    {:groups (vec (map (fn [e] (:name e)) results))}))
+
 (defn as-list [page user]
   (.info logger (str page "::" user))
   (let [results (mq/with-collection GROUPS
-                (mq/find {})
-                (mq/paginate :page (Integer/valueOf page) :per-page 20)
-                (mq/sort {:lname 1}))]
+                  (mq/find {})
+                  (mq/paginate :page (Integer/valueOf page) :per-page 20)
+                  (mq/sort {:lname 1}))]
     {:groups (vec (map (partial decorate user) results))}))
 
