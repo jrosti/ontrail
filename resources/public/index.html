@@ -244,9 +244,11 @@
 </div>
 
 <section role="groups" class="logged-in">
-    <article>
-        <div id="groups-results"></div>
-    </article>
+    <table class="details">
+        <thead><tr><th>Ryhmä</th><th class="user">Kuvaus</th><th class="title">Jäsenet</th><th>Toiminnot</th></tr></thead>
+        <tbody id="groups-content">
+        </tbody>
+    </table>
 </section>
 
 <section role="lists">
@@ -645,7 +647,7 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
-            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> Poista</a>
+            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
@@ -662,7 +664,7 @@
     {{#comments}}
     <section>
         <article class="comment" data-id="{{id}}">
-            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> Poista </a>{{/deleteComment}}
+            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
             <img class="avatar" src="{{avatar}}"  width="24" height="24">
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
             <div>{{{body}}}</div>
@@ -709,8 +711,14 @@
     {{/users}}
 </script>
 <script id="groupsTemplate" type="text/html">
+    jlkhljk
     {{#groups}}
-    <h4><a class="pageLink" rel="group/{{name}}">{{name}}</a></h4>
+    <tr><td><a class="pageLink" rel="group/{{name}}">{{name}}</a></td><td>{{description}}</td>
+        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</td>
+        <td class="buttons">
+            {{#in}}<a class="leave button red" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
+            {{^in}}<a class="join button green" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+        </td></tr>
     {{/groups}}
 </script>
 <script id="userHeaderTemplate" type="text/html">

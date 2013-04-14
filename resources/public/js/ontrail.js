@@ -19,7 +19,7 @@
 
     var entries = $("#entries")
     var userList = $("#user-results")
-    var groupsList = $("#groups-results")
+    var groupsList = $("#groups-content")
 
     function selectionFormat(state) {
       if (!state.id) return state.toString();
@@ -60,6 +60,10 @@
 
     var postRegisterUser = function() {
       return OnTrail.rest.postAsObservable("register", $('#register-form').serialize())
+    }
+
+    var postJoinOrLeaveGroup = function(group, action) {
+      return OnTrail.rest.postAsObservable("groups/" + group + "/" + action, {})
     }
 
     var confirmDelete = function(dialog, type, id) {
@@ -315,6 +319,11 @@
     deleteCommentClicks.selectMany(confirmDeleteComment).selectArgs(first).selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
+    // join groups
+    var joinsAndLeaves = clickedLinks
+      .whereArgs(function(elem) { return $(elem).is('.join,.leave')})
+      .select(function(el) { return attr("rel", el).split("/") }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
+
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') })
@@ -459,7 +468,7 @@
     usersScroll.subscribe(renderUserList)
 
     // group list scroll
-    var groupsScroll = currentPages.whereArgs(partialEquals("groups"))
+    var groupsScroll = currentPages.whereArgs(partialEquals("groups")).merge(joinsAndLeaves)
       .doAction(function() {  groupsList.html("") })
       .selectArgs(function(query) {
           return OnTrail.pager.create(OnTrail.rest.groups, groupsList)
