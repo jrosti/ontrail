@@ -182,6 +182,9 @@
     (if-let [user (user/get-case-user username)]
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
+
+  (GET "/rest/v1/own-groups" {params :params cookies :cookies}
+    (json-response (group/own-as-list (user-from-cookie cookies))))
   
   (GET "/rest/v1/groups/:page" {params :params cookies :cookies}
     (json-response (group/as-list (:page params) (user-from-cookie cookies))))
