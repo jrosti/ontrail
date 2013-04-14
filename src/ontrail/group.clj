@@ -17,6 +17,9 @@
 (defn add-group [group-name description]
 	(mc/insert-and-return GROUPS {:name group-name :description description :users [] :lname (.toLowerCase group-name)}))
 
+(defn find-by-name [group-name]
+  (mc/find-one-as-map GROUPS {:name group-name}))
+
 (defn do-group-user-op [oper valid-oper? group-name user]
   (if (or (nil? user) (= "nobody" user) (nil? group-name))
       {:result false :descr (str "User is not allowed to join" user group-name)}
