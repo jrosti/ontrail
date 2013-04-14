@@ -19,6 +19,7 @@
 
     var entries = $("#entries")
     var userList = $("#user-results")
+    var groupsList = $("#groups-results")
 
     function selectionFormat(state) {
       if (!state.id) return state.toString();
@@ -138,6 +139,12 @@
     var renderUserList = function(data) {
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
+    var renderGroupList = function(data) {
+      console.log(data)
+      ich.groupsTemplate({groups: data}).appendTo(groupsList)
+    }
+
+
     var renderActiveUsersList = function(data) {
       $("#active-users").text(data)
     }
@@ -451,6 +458,15 @@
       .switchLatest()
     usersScroll.subscribe(renderUserList)
 
+    // group list scroll
+    var groupsScroll = currentPages.whereArgs(partialEquals("groups"))
+      .doAction(function() {  groupsList.html("") })
+      .selectArgs(function(query) {
+          return OnTrail.pager.create(OnTrail.rest.groups, groupsList)
+      }).switchLatest()
+    groupsScroll.subscribe(renderGroupList)
+
+
     var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
     loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
@@ -679,7 +695,6 @@
 
     // run our function on load
     if (!mobile) {
-
       // and run it again every time you scroll
       $(window).scrollAsObservable().startWith(0).selectMany(sessions).select(function(val) { return exists(val) ? true : false }).subscribe(fixMenuPosition)
     }

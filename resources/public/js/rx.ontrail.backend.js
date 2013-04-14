@@ -60,6 +60,8 @@
   Rest.prototype.searchUsers = function(query, page) { return getAsObservableResultData("find-users", query, page ) }
   Rest.prototype.activeUsers = function() { return getAsObservableResultData("active-users") }
 
+  Rest.prototype.groups = function(page) { return getAsObservableResultData("groups", page).selectArgs(_attr("groups")) }
+
   // todo: move login and postExercise here also and make postAsObservable private
   Rest.prototype.postAsObservable = function(url, data) {
     return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })

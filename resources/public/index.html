@@ -105,7 +105,7 @@
                             <a href="#" class="bordered-feature-image"><img src="img/welcome/277/hiidenpata.jpg" alt="" /></a>
                             <h2>Tervetuloa On Trailiin</h2>
                             <p>
-                                Tämä on  <strong>On Trail</strong>, vähän liian iloinen harkkapäiväkirja kaikille liikkujille.
+                                Tämä on <strong>On Trail</strong>, vähän liian iloinen harkkapäiväkirja kaikille liikkujille.
                             </p>
                         </section>
 
@@ -243,19 +243,10 @@
     </section>
 </div>
 
-<section role="groups">
-  <article>
-    <h2>Testiryhmät</h2>
-        <p><a class="pageLink" rel="user/-James-,Jörö,Juupe">Ylästön lenkkikerho</a></p>
-        <p><a class="pageLink" rel="user/Pasi_P,SannaK,Peksu,jogo3000,Jukkis">Lompottelijat</a></p>
-        <p><a class="pageLink" rel="user/Pantse,Larry,LauraIsabella">Tour de Larrylaiset</a></p>
-        <p><a class="pageLink" rel="user/Geoeläin,Peppi,Lynx,Osku,Triina,Hähi,Jörö">Huvikumpu</a></p>
-        <p><a class="pageLink" rel="user/Pumppi60,Ursa Minor,niilos mc,Massa-Matti,Sissi von Vuorenpeikko">Seikkailijat</a></p>
-        <p><a class="pageLink" rel="user/jatossu,Hazel">Ultrakuntoilijoiden runoklubi</a></p>
-        <p><a class="pageLink" rel="user/Epunäiti,Tiiti54,rampako,meusi,ousi,mummi,Esteri,jarmila">Team Valkeakoski</a></p>
-        <p><a class="pageLink" rel="user/Lanttu,mala,Peppi,Geoeläin,Jagge,niilos mc,kirva,Lynx,Osku">Suunnistajat</a></p>
-        <p><a class="pageLink" rel="user/rauman,plouh,saarja,Peppi,Lanttu">Tavoitteena maraton</a></p>
-  </article>
+<section role="groups" class="logged-in">
+    <article>
+        <div id="groups-results"></div>
+    </article>
 </section>
 
 <section role="lists">
@@ -716,6 +707,11 @@
     <img class="avatar" src="{{avatar}}"  width="24" height="24">
     <h4><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
     {{/users}}
+</script>
+<script id="groupsTemplate" type="text/html">
+    {{#groups}}
+    <h4><a class="pageLink" rel="group/{{name}}">{{name}}</a></h4>
+    {{/groups}}
 </script>
 <script id="userHeaderTemplate" type="text/html">
     <span id="view-toggles" class="right">
