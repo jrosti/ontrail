@@ -7,6 +7,7 @@
 (def NCCACHE "nccache")
 (def EXERCISE "exercise")
 (def ONSPORT "onsport")
+(def GROUPS "groups")
 
 ;; Connect to localhost, default port
 (mg/connect!)
