@@ -15,11 +15,6 @@ a {
   &:hover {
     text-decoration: underline;
     color: darken(@link-color, 10%);
-
-    &.button-big {
-      color: white;
-      text-decoration: none;
-    }
   }
 }
 
@@ -287,20 +282,7 @@ table.details {
 @table-header-border-color: rgb(218, 124, 12);
 @table-zebra-color: rgba(218, 124, 12, 0.1);
 
-#content a.button {
-  color: @button-text-color;
-  text-decoration: none;
-}
-
 a.button {
-  .css-button(@button-text-color, @button-border-color, @button-background-color, @button-gradient-start, @button-gradient-end);
-  border: 0;
-  text-decoration: none;
-  font-size: 1em;
-  font-weight: bolder;
-  padding: 3px 30px;
-  outline: 0;
-  border-radius: 10px;
 
   &.disabled {
     .css-button(#e9e9e9, #555, #6e6e6e, #888888, #575757);
@@ -376,10 +358,6 @@ a.addExercise, a.editExercise, a.addComment, a.editComment {
         .box-sizing(content-box);
       }
     }
-  }
-
-  .buttons {
-    margin-top: 12px;
   }
 }
 
@@ -616,6 +594,13 @@ body.logged-out #content-top {
     .scroll-gradient(@header-bg-color, @header-bg-color-bottom, @scroll-overflow-height);
     height: 15px;
   }
+}
+
+#content a.button {
+  color: #fff;
+  font-weight: normal;
+  font-size: 13px;
+  text-shadow: none;
 }
 
 #user-menu-wrapper {

@@ -26,6 +26,7 @@
     <script src="halcyonic/css/5grid/init.js?use=desktop,1000px&amp;mobileUI=0"></script>
     <!--[if lte IE 9]><link rel="stylesheet" href="halcyonic/css/style-ie9.css" /><![endif]-->
 
+    <link rel="stylesheet" href="css/css3-buttons.css">
     <link rel="stylesheet" href="css/select2.css">
     <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
     <link rel="stylesheet" href="redactor/redactor.css">
@@ -638,7 +639,7 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
-            <a class="delete button" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
+            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
