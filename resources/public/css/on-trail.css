@@ -1024,15 +1024,15 @@ body.logged-out #content-top {
   background-repeat: repeat-x;
   height: 15px;
 }
-div.dropdown {
-  float: right;
-}
 #content a.button,
 #login-wrapper a.button {
   color: #fff;
   font-weight: normal;
   font-size: 13px;
   text-shadow: none;
+}
+.dropdown-slider {
+  z-index: 1;
 }
 #user-menu-wrapper {
   padding: 0;

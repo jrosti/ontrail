@@ -719,7 +719,7 @@
     $(document).onClickTouchAsObservable(clickEvent).subscribe(function (e) {
       var menu = $(e.target).closest(".dropdown")
 
-      if (menu[0] == undefined) {
+      if (menu[0] == undefined || $(e.target).hasClass('ddm')) {
         $('.dropdown-slider').slideUp()
         $('span.toggle').removeClass('active')
       }
