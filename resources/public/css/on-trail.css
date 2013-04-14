@@ -1015,7 +1015,8 @@ body.logged-out #content-top {
   background-repeat: repeat-x;
   height: 15px;
 }
-#content a.button {
+#content a.button,
+#login-wrapper a.button {
   color: #fff;
   font-weight: normal;
   font-size: 13px;

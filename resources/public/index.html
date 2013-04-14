@@ -166,7 +166,7 @@
                             <form id="login-form" method="post">
                                 <input id="username" name="username" type="text" placeholder="Username" />
                                 <input id="password" name="password" type="password" placeholder="Password"/>
-                                <a id="login" class="button-big login">Kirjaudu sisään!</a>
+                                <a id="login" class="button login red">Kirjaudu sisään!</a>
                             </form>
                         </fieldset>
 
@@ -362,7 +362,7 @@
                 </div>
                 <div class="buttons">
                     <label></label>
-                    <a id="update-profile" class="button login">Päivitä profiilitiedot</a>
+                    <a id="update-profile" class="button login green">Päivitä profiilitiedot</a>
                 </div>
             </form>
             <span id="profile-result"></span>
@@ -382,7 +382,7 @@
                 </div>
                 <div class="buttons">
                     <label></label>
-                    <a id="change-password" class="button change-password">Vaihda salasana</a>
+                    <a id="change-password" class="button change-password green">Vaihda salasana</a>
                 </div>
             </form>
             <p class="error"><span id="password-change-result"></span></p>
@@ -481,8 +481,8 @@
             </div>
             <div class="buttons">
                 <label></label>
-                <a id="add-exercise" class="button addExercise add">Lisää lenkki</a>
-                <a id="edit-exercise" class="button editExercise edit">Muokkaa lenkkiä</a>
+                <a id="add-exercise" class="button addExercise add green">Lisää lenkki</a>
+                <a id="edit-exercise" class="button editExercise edit green">Muokkaa lenkkiä</a>
             </div>
         </form>
     </article>
@@ -518,7 +518,7 @@
             </div>
             <div class="buttons">
                 <label></label>
-                <a id="register-user" class="button register">Rekisteröidy</a>
+                <a id="register-user" class="button register green">Rekisteröidy</a>
             </div>
         </form>
     </article>
@@ -639,7 +639,7 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
-            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}">Poista</a>
+            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> Poista</a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
@@ -656,7 +656,7 @@
     {{#comments}}
     <section>
         <article class="comment" data-id="{{id}}">
-            {{#deleteComment}}<a class="delete-comment button" rel="{{deleteRel}}" data-user="{{user}}">Poista</a>{{/deleteComment}}
+            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> Poista </a>{{/deleteComment}}
             <img class="avatar" src="{{avatar}}"  width="24" height="24">
             <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
             <div>{{{body}}}</div>
@@ -676,7 +676,7 @@
                 </div>
                 <div class="buttons">
                     <label> </label>
-                    <a id="add-comment" class="button addComment">Kommentoi</a>
+                    <a id="add-comment" class="button addComment green">Kommentoi</a>
                 </div>
             </form>
         </article>
