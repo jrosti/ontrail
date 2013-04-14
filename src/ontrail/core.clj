@@ -20,6 +20,7 @@
             [ontrail.user :as user]
             [ontrail.newcomment :as nc]
             [ontrail.unread :as unread]
+            [ontrail.group :as group]
             [ring.middleware.head :as ring-head]
             [clojure.stacktrace :as stacktrace]
             [compojure.handler :as handler]
@@ -176,6 +177,23 @@
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
   
+  (GET "/rest/v1/groups/:page" [page]
+    (json-response (group/as-list page)))
+
+  (POST "/rest/v1/groups/:name/join" {params :params cookies :cookies}
+    (is-authenticated? cookies
+      (let [response (group/join-to (:name params) (user-from-cookie cookies))]
+        (if (:result response)
+          (json-response {:message (:descr response)})
+          (json-response {:message (:descr response)} 400)))))
+
+  (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
+    (is-authenticated? cookies
+      (let [response (group/part-from (:name params) (user-from-cookie cookies))]
+        (if (:result response)
+          (json-response {:message (:descr response)})
+          (json-response {:message (:descr response)} 400)))))
+
   (wrap-multipart-params
     (POST "/rest/v1/import" {params :params cookies :cookies}
          (redirect (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
