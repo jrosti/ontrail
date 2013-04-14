@@ -11,14 +11,22 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+(defn calc-pace [duration distance]
+    (try
+      (int (Math/round (* (/ distance  duration) 360000.0)))
+    (catch Exception exception
+      (.info logger (str exception " with " duration distance))
+      nil)))
+
 (defn from-user-ex [user user-ex]
   (let [now (time/now)
         creation-date (parse-date (:date user-ex))
         last-modified (if (> (time/in-minutes (time/interval (parse-date (:date user-ex)) (time/plus now (time/days 1)))) 43200)
                         creation-date
                         now)
+        duration (parse-duration (:duration user-ex)) 
         bare-ex {:title (:title user-ex)
-                 :duration (parse-duration (:duration user-ex))
+                 :duration duration
                  :sport (:sport user-ex)
                  :creationDate creation-date
                  :lastModifiedDate last-modified
@@ -26,13 +34,15 @@
         body (if (nil? (:body user-ex)) "" (:body user-ex))
         tags (parse-tags (:tags user-ex))
         avghr (parse-natural (:avghr user-ex))
-        distance (parse-distance (:distance user-ex))]
+        distance (parse-distance (:distance user-ex))
+        pace (calc-pace duration distance)]
     (-> bare-ex
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
         (assoc :avghr avghr) 
-        (assoc :comments '()))))
+        (assoc :comments '())
+        (assoc :pace pace))))
 
 (defn delete-ex [user ex-id]
   (.trace logger (str "deleting " user " ex " ex-id))
