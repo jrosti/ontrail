@@ -1,5 +1,6 @@
 (ns ontrail.group
-  (:use monger.operators)
+  (:use monger.operators
+        ontrail.mongodb)
   (:require [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
@@ -7,8 +8,6 @@
             [clj-time.core :as time]
             [monger.joda-time])
   (:import [org.bson.types ObjectId]))
-
-(def GROUPS "groups")
 
 (defn add-group [group-name description]
 	(mc/insert-and-return GROUPS {:name group-name :description description :users [] :lname (.toLowerCase group-name)}))
@@ -28,7 +27,7 @@
 (defn part-from [group-name user]
   (do-group-user-op $pull (fn [user users] (not= (some #{user} users))) group-name user))
 
-(defn list-groups [page]
+(defn as-list [page]
   (let [results (mq/with-collection GROUPS
                 (mq/find {})
                 (mq/paginate :page (Integer/valueOf page) :per-page 20)
