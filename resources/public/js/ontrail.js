@@ -373,7 +373,7 @@
     var currentPageLinkUsers = currentPages.distinctUntilChanged().combineWithLatestOf(sessions).selectArgs(_findUser(1));
     sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
-    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport"])).distinctUntilChanged()
+    var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport", "group"])).distinctUntilChanged()
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
         var args = Array.prototype.slice.call(arguments)
         return asObject.apply(asObject, _.flatten([{}, args]))
