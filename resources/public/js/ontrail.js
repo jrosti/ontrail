@@ -168,14 +168,22 @@
         kind: elem
       }
 
+      function addFilter(summary) {
+        month = (summary.month || false) ? (summary.month+1) + "." + summary.year : summary.year + ""
+        nextMonth = (summary.month || false) ? (summary.month == 11 ? "1." + (summary.year + 1) : ( (summary.month+2) + "." + summary.year)) : (summary.year+1) + ""
+        summary.sports = _.map(summary.sports, function(item) { return _.extend(item, {sportsFilter: "lte_creationDate/" + nextMonth + "/gte_creationDate/" + month }) } )
+        return summary
+      }
+
       if ($.isArray(summary)) {
         var hasSports = function(item) { return item.sports.length > 0 }
-        var extendWithMonthName = function(item) { return _.extend(item, monthNames ) }
+        var extendWithMonthName = function(item) {
+          return _.extend(addFilter(item), monthNames ) }
         var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
         var sum = _.extend( { year: (summary[0].year) }, { months: sums, "user": summary[0].user }, utils)
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
       } else {
-        var sum = _.extend( { year: now.getFullYear() }, summary, utils)
+        var sum = _.extend( { year: now.getFullYear() }, addFilter(summary), utils)
         $("#" + elem + "-entries").html(ich.hpkContentTemplate(sum))
       }
       $("#" + elem + "-header").html(ich.hpkHeaderTemplate(sum))
@@ -367,7 +375,6 @@
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport"])).distinctUntilChanged()
     userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
         var args = Array.prototype.slice.call(arguments)
-        console.log(asObject.apply(asObject, _.flatten([{}, args])))
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
         $('*[role=content] *[role=table-entries]').html("")
