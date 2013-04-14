@@ -198,22 +198,6 @@
     <section role="listview" class="logged-in">
         <header>
             <label for="search"><strong>Etsi lenkeistä: </strong></label> <input class="search" type="text" id="search"/>
-            <div class="dropdown">
-                <a href="#" class="button"><span class="label">Valitse laji</span><span class="toggle"></span></a>
-                <div class="dropdown-slider">
-                    <a class="pageLink ddm" rel="sport/Juoksu"><span class="label">Juoksu</span></a>
-                    <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
-                    <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto"><span class="label">Hiihto</span></a>
-                    <a class="pageLink ddm" rel="sport/Pyöräily"><span class="label">Pyöräily</span></a>
-                    <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
-                </div> <!-- /.dropdown-slider -->
-            </div> <!-- /.dropdown -->
-            <div class="dropdown">
-                <a href="#" class="button"><span class="label">Valitse ryhmä</span><span class="toggle"></span></a>
-                <div class="dropdown-slider">
-                    <a class="pageLink ddm" rel="group/Ylästön lenkkikerho"><span class="label">Ylästön lenkkikerho</span></a>
-                </div> <!-- /.dropdown-slider -->
-            </div> <!-- /.dropdown -->
             </header>
         
     </section>
@@ -571,6 +555,29 @@
             <li><a class="pageLink" rel="tagsummary">Avainsanat</a></li>
             <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
         </ul>
+    </section>
+    <section class="logged-in">
+        <header>
+            <h2>Suodattimet</h2>
+            <div class="buttons">
+                <div class="dropdown">
+                    <a href="#" class="button"><span class="label">Valitse laji</span><span class="toggle"></span></a>
+                    <div class="dropdown-slider">
+                        <a class="pageLink ddm" rel="sport/Juoksu"><span class="label">Juoksu</span></a>
+                        <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
+                        <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto"><span class="label">Hiihto</span></a>
+                        <a class="pageLink ddm" rel="sport/Pyöräily"><span class="label">Pyöräily</span></a>
+                        <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
+                    </div> <!-- /.dropdown-slider -->
+                </div> <!-- /.dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="button"><span class="label">Valitse ryhmä</span><span class="toggle"></span></a>
+                    <div class="dropdown-slider">
+                        <a class="pageLink ddm" rel="group/Ylästön lenkkikerho"><span class="label">Ylästön lenkkikerho</span></a>
+                    </div> <!-- /.dropdown-slider -->
+                </div> <!-- /.dropdown -->
+            </div>
+        </header>
     </section>
     <section>
         <ul class="link-list">
