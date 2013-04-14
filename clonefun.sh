@@ -10,5 +10,6 @@ function ontrailclone() {
     mongo ontrail --eval 'db.exercise.drop()'
     mongo ontrail --eval 'db.onuser.drop()'
     mongo ontrail --eval 'db.nccache.drop()'
+#    mongo ontrail --eval 'db.groups.drop()'
     mongorestore $HOME/ontrail.dumps/$B/dump
 }

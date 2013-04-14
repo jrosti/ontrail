@@ -294,6 +294,13 @@
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2009/lte_creationDate/2010/sb/pace">2009</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2008/lte_creationDate/2009/sb/pace">2008</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2007/lte_creationDate/2008/sb/pace">2007</a>
+    <h3>Nopeimmat suunnistukset</h3>
+        <a class="pageLink" rel="sport/Suunnistus/lte_distance/5000/sb/pace">Alle 5 km.</a>
+        <a class="pageLink" rel="sport/Suunnistus/gt_distance/5000/sb/pace">Yli 5 km matka.</a>
+        <a class="pageLink" rel="sport/Suunnistus/sb/pace">Kaikki.</a>
+    <h3>Muut</h3>
+        <a class="pageLink" rel="sport/Juoksu/gt_pace/12000/sb/lastModifiedDate">Uusimmat juoksulenkit alle 5 min/km.</a><br>
+        <a class="pageLink" rel="user/Peppi,Geoeläin/duration/72000/sport/Juoksu/sb/pace">Peppi vastaan Geoeläin Cooperissa</a>
 </section>
 
 <section role="systemstats">
@@ -753,8 +760,8 @@
 <script id="groupsTemplate" type="text/html">
     jlkhljk
     {{#groups}}
-    <tr><td><a class="pageLink" rel="group/{{name}}">{{name}}</a></td><td>{{description}}</td>
-        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</td>
+    <tr><td><a class="pageLink" rel="group/{{name}}">{{name}}</a></td><td>{{{description}}}</td>
+        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a><br/> {{/users}}</td>
         <td class="buttons">
             {{#in}}<a class="leave button red" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
             {{^in}}<a class="join button green" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
