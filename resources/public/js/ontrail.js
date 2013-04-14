@@ -676,6 +676,23 @@
       $(window).scrollAsObservable().startWith(0).selectMany(sessions).select(function(val) { return exists(val) ? true : false }).subscribe(fixMenuPosition)
     }
 
+    $(document).onClickTouchAsObservable(clickEvent, ".dropdown .button, .dropdown button").subscribe(function (e) {
+      var menu = $(e.target).closest(".dropdown")
+      menu.find('.dropdown-slider').slideToggle('fast')
+      menu.find('span.toggle').toggleClass('active')
+      e.preventDefault()
+    })
+
+    // Close open dropdown slider/s by clicking elsewhwere on page
+    $(document).onClickTouchAsObservable(clickEvent).subscribe(function (e) {
+      var menu = $(e.target).closest(".dropdown")
+
+      if (menu[0] == undefined) {
+        $('.dropdown-slider').slideUp()
+        $('span.toggle').removeClass('active')
+      }
+    })
+
     // initiate current page
     currentPages.connect()
   })

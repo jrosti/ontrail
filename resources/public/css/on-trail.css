@@ -1015,6 +1015,9 @@ body.logged-out #content-top {
   background-repeat: repeat-x;
   height: 15px;
 }
+div.dropdown {
+  float: right;
+}
 #content a.button,
 #login-wrapper a.button {
   color: #fff;
