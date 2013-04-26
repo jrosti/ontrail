@@ -19,9 +19,8 @@
         count (int (get db-object :count))
         true-duration (get db-retmap :tdur)
         true-distance (get db-retmap :tdist)]
-    {:duration (to-human-time (get db-retmap :dur))
-     :distance (to-human-distance (get db-retmap :dist))
-     :numericalDuration (get db-retmap :dur)
+    {:duration (to-human-time (get db-retmap :dur)) :numericalDuration (get db-retmap :dur)
+     :distance (to-human-distance (get db-retmap :dist)) :numDistance (if (get db-retmap :dist) (get db-retmap :dist) 0)
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
      :avghr (int (+ 0.5 (avghr db-retmap)))
      :count count
