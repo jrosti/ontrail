@@ -56,3 +56,6 @@
                   (mq/sort {:lname 1}))]
     {:groups (vec (map (partial decorate user) results))}))
 
+(defn group-detail [name]
+  )
+

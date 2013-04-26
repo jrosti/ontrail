@@ -183,6 +183,9 @@
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
 
+  (GET "/rest/v1/group-detail/:name" [name]
+    (json-response (group/group-detail name)))
+
   (GET "/rest/v1/own-groups" {params :params cookies :cookies}
     (json-response (group/own-as-list (user-from-cookie cookies))))
   

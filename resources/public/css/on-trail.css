@@ -1004,6 +1004,10 @@ body div[role="tooltip"] {
 body.logged-out #content-top {
   display: none;
 }
+#search {
+  width: 200px;
+  margin-left: 5px;
+}
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;
   position: fixed;
