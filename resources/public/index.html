@@ -198,8 +198,7 @@
     <section role="listview" class="logged-in">
         <header>
             <label for="search"><strong>Etsi lenkeistä: </strong></label> <input class="search" type="text" id="search"/>
-            </header>
-        
+        </header>
     </section>
     <div role="listview" id="entries"></div>
     <section role="tableview">
@@ -811,6 +810,19 @@
         {{/sports}}
         </tbody>
     </table>
+</script>
+
+<script id="kilometrikisaTemplate" type="text/html">
+    <article>
+        <h2>Kilometrikisan tilanne</h2>
+        <table id="kmkisa" class="details">
+            <thead><tr><th>Käyttäjä</th><th>Matka</th><th>Kesto</th></th><th>Vauhti</th><th>Kertoja</th></tr></thead>
+            {{#res}}
+            <tr><td>{{user}}</td><td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{count}}</td></tr>
+            {{/res}}
+        </table>
+        <br/>
+    </article>
 </script>
 
 <script id="hpkMonthContentTemplate" type="text/html">
