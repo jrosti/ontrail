@@ -398,12 +398,13 @@
         .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
 
     var renderKilometrikisa = function(args) {
-      console.log("Render result")
-      ich.kilometrikisaTemplate({res: [{user: "SannaK", distance: "10km", duration: "2h", pace: "20 km/h", count: 10}]}).appendTo($('#content-header'))
+      console.log(args)
+      ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
     }
     userTagPages.whereArgs(function(group, tag) {
       return group == "group" && tag == "Kilometrikisa"
     }).selectArgs(second).selectAjax(OnTrail.rest.groupDetail).subscribeArgs(renderKilometrikisa)
+    userTagPages.whereArgs(function(_, tag) { return tag != "Kilometrikisa" }).subscribe(function() { $('#content-header').html("")})
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
