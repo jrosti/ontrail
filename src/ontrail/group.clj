@@ -2,6 +2,8 @@
   (:use monger.operators
         ontrail.mongodb)
   (:require [monger.collection :as mc]
+            [clj-time.core :as time]
+            [ontrail.summary :as summary]
             [monger.result :as mr]
             [monger.query :as mq]
             [monger.conversion]
@@ -57,6 +59,11 @@
     {:groups (vec (map (partial decorate user) results))}))
 
 (defn group-detail [name]
-  {:res [{:user "SannaK" :distance "20 km" :duration "2 h 20 min" :pace "20 km/h" :count 20}
-        {:user "Jörö" :distance "60 km" :duration "2 h 20 min" :pace "20 km/h" :count 10}]})
+  (let [users (:users (find-by-name name))
+        ranks (range 1 (inc (count users)))
+        condition-fn (fn[user] {:sport "Pyöräily" :user user :creationDate {"$gte" (time/date-time 2013 5 1 0 0)}})]
+    {:res (map (fn [rank summary] 
+                  (assoc summary :rank rank)) 
+            ranks 
+            (sort-by :numDistance > (map (fn[user] (assoc (summary/get-summary (condition-fn user) :sport "Pyöräily") :user user)) users)))}))
 

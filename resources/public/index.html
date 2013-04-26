@@ -814,11 +814,11 @@
 
 <script id="kilometrikisaTemplate" type="text/html">
     <article>
-        <h2>Kilometrikisan tilanne</h2>
+        <h3>Kilometrikisan tilanne: pyöräilykilometrit 1.5. alkaen</h3>
         <table id="kmkisa" class="details">
-            <thead><tr><th>Käyttäjä</th><th>Matka</th><th>Kesto</th></th><th>Vauhti</th><th>Kertoja</th></tr></thead>
+            <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Matka</th><th>Kesto</th></th><th>Vauhti</th><th>Kertoja</th></tr></thead>
             {{#res}}
-            <tr><td>{{user}}</td><td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{count}}</td></tr>
+            <tr><td>{{rank}}</td><td>{{user}}</td><td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{count}}</td></tr>
             {{/res}}
         </table>
         <br/>

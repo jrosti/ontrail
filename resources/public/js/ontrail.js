@@ -398,7 +398,7 @@
         .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
 
     var renderKilometrikisa = function(args) {
-      console.log(args)
+      $('#content-header').html("")
       ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
     }
     userTagPages.whereArgs(function(group, tag) {
