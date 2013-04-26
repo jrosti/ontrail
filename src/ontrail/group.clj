@@ -57,5 +57,6 @@
     {:groups (vec (map (partial decorate user) results))}))
 
 (defn group-detail [name]
-  )
+  {:res [{:user "SannaK" :distance "20 km" :duration "2 h 20 min" :pace "20 km/h" :count 20}
+        {:user "Jörö" :distance "60 km" :duration "2 h 20 min" :pace "20 km/h" :count 10}]})
 
