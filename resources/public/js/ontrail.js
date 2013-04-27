@@ -656,13 +656,6 @@
         $('#content-wrapper').removeClass("scroll-overflow")
       }
 
-    //  if ($(window).scrollTop() > headerHeight) {
-    //    $('#sidemenu').css({ 'position': 'fixed', top: 180, right: sideMenuOffsetRight, width: sideMenuOffsetWidth, "margin-left": "24px" } )
-    //    $('#sidemenu').removeAttr("class")
-    //  } else {
-    //    $('#sidemenu').removeAttr("style")
-    //    $('#sidemenu').addClass("3u")
-    //  }
     }
 
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
