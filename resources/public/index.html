@@ -412,7 +412,9 @@
 
 <div>
     <div role="content">
-        <div id="content-header"></div>
+        <section>
+            <div id="content-header"></div>
+        </section>
         <div id="content-entries" role="listview"></div>
         <section role="tableview">
             <table class="details">
@@ -823,7 +825,6 @@
         </table>
         <br/>
         {{{description}}}
-        <br/><br/>
     </header>
     </article>
 </script>
@@ -832,7 +833,7 @@
     <article>
         <header>
             <h3>{{target}}: {{description}}</h3>
-             <h7><td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</td></h7>
+            <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</td>
         </header>
     </article>
 </script>
@@ -842,7 +843,7 @@
     <header>
         <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
         {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}{{/profile.resthr}}</h6>
-        <h7><td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td></h7>
+            <td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td>
     </header>
     </article>
 </script>
