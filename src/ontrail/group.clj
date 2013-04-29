@@ -83,8 +83,7 @@
      :res (fetch-stats group-map)}))
 
 (defn user-detail [user-name]
-  (.info logger user-name)
-  {:action "user" :target user-name :profile (profile/get-profile user-name)})
+  (merge {:action "user" :target user-name :profile (profile/get-profile user-name)} (own-as-list user-name)))
 
 (defn other-detail [target]
   {:action "other" :target target})
