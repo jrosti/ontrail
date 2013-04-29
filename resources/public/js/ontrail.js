@@ -397,14 +397,21 @@
       }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
         .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
 
-    var renderKilometrikisa = function(args) {
+    var renderPageDetail = function(args) {
       $('#content-header').html("")
-      ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
+      console.log(args.data)
+      if (args.data.target == "Kilometrikisa") {
+        ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
+      } else if (args.data.action == "group" && args.data.target !== "Kilometrikisa") {
+        ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
+      } else if (args.data.action == "user") {
+        ich.userDetailTemplate(args.data).appendTo($('#content-header'))
+      }
     }
-    userTagPages.whereArgs(function(group, tag) {
-      return group == "group" && tag == "Kilometrikisa"
-    }).selectArgs(second).selectAjax(OnTrail.rest.groupDetail).subscribeArgs(renderKilometrikisa)
-    userTagPages.whereArgs(function(_, tag) { return tag != "Kilometrikisa" }).subscribe(function() { $('#content-header').html("")})
+
+    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
+      return [arguments[0], arguments[1]]
+    }).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)

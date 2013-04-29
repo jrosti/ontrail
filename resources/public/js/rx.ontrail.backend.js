@@ -56,7 +56,7 @@
   Rest.prototype.distanceV = function(distance) { return getAsObservable("parse-distance", distance) }
   Rest.prototype.usernameV = function(username) { return getAsObservable("username-available", username) }
 
-  Rest.prototype.groupDetail = function(groupDetail) { return getAsObservable("group-detail", groupDetail)}
+  Rest.prototype.pageDetail = function(action, target) { return getAsObservable("page-detail", action, target)}
   
   // user search
   Rest.prototype.users = function(page) { return getAsObservableResultData("list-users", page ) }
