@@ -1,25 +1,12 @@
-/*
-
-Copyright (c) Microsoft Open Technologies, Inc.  All rights reserved.
-Microsoft Open Technologies would like to thank its contributors, a list
-of whom are at http://aspnetwebstack.codeplex.com/wikipage?title=Contributors.
-
-Licensed under the Apache License, Version 2.0 (the "License"); you
-may not use this file except in compliance with the License. You may
-obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-implied. See the License for the specific language governing permissions
-and limitations under the License.
-*/
+// Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
 
 (function (root, factory) {
-    var freeExports = typeof exports == 'object' && exports &&
-    (typeof root == 'object' && root && root == root.global && (window = root), exports);
+    var freeExports = typeof exports == 'object' && exports,
+        freeModule = typeof module == 'object' && module && module.exports == freeExports && module,
+        freeGlobal = typeof global == 'object' && global;
+    if (freeGlobal.global === freeGlobal) {
+        window = freeGlobal;
+    }
 
     // Because of build optimizers
     if (typeof define === 'function' && define.amd) {
@@ -27,24 +14,24 @@ and limitations under the License.
             root.Rx = factory(root, exports, Rx);
             return root.Rx;
         });
-    } else if (typeof module == 'object' && module && module.exports == freeExports) {
+    } else if (typeof module === 'object' && module && module.exports === freeExports) {
         module.exports = factory(root, module.exports, require('./rx'));
     } else {
         root.Rx = factory(root, {}, root.Rx);
     }
-}(this, function (global, exp, root, undefined) {
+}(this, function (global, exp, Rx, undefined) {
     
-    var Observable = root.Observable,
-        CompositeDisposable = root.CompositeDisposable,
-        RefCountDisposable = root.RefCountDisposable,
-        SingleAssignmentDisposable = root.SingleAssignmentDisposable,
-        SerialDisposable = root.SerialDisposable,
-        Subject = root.Subject,
+    var Observable = Rx.Observable,
+        CompositeDisposable = Rx.CompositeDisposable,
+        RefCountDisposable = Rx.RefCountDisposable,
+        SingleAssignmentDisposable = Rx.SingleAssignmentDisposable,
+        SerialDisposable = Rx.SerialDisposable,
+        Subject = Rx.Subject,
         observableProto = Observable.prototype,
         observableEmpty = Observable.empty,
-        AnonymousObservable = root.Internals.AnonymousObservable,
-        observerCreate = root.Observer.create,
-        addRef = root.Internals.addRef;
+        AnonymousObservable = Rx.Internals.AnonymousObservable,
+        observerCreate = Rx.Observer.create,
+        addRef = Rx.Internals.addRef;
 
     // defaults
     function noop() { }
@@ -56,12 +43,11 @@ and limitations under the License.
     var duplicatekey = "duplicate key";
 
     function isPrime(candidate) {
-        var num1, num2;
         if (candidate & 1 === 0) {
             return candidate === 2;
         }
-        num1 = Math.sqrt(candidate);
-        num2 = 3;
+        var num1 = Math.sqrt(candidate),
+            num2 = 3;
         while (num2 <= num1) {
             if (candidate % num2 === 0) {
                 return false;
@@ -94,7 +80,7 @@ and limitations under the License.
 
         return function (obj) {
             var id;
-            if (obj === undefined)
+            if (obj == null)
                 throw new Error(noSuchkey);
             if (obj.getHashCode !== undefined) {
                 return obj.getHashCode();
@@ -136,9 +122,10 @@ and limitations under the License.
         return this._insert(key, value, true);
     };
     Dictionary.prototype._insert = function (key, value, add) {
-        if (this.buckets === undefined) {
+        if (!this.buckets) {
             this._initialize(0);
         }
+        var index3;
         var num = getHashCode(key) & 2147483647;
         var index1 = num % this.buckets.length;
         for (var index2 = this.buckets[index1]; index2 >= 0; index2 = this.entries[index2].next) {
@@ -151,7 +138,7 @@ and limitations under the License.
             }
         }
         if (this.freeCount > 0) {
-            var index3 = this.freeList;
+            index3 = this.freeList;
             this.freeList = this.entries[index3].next;
             --this.freeCount;
         } else {
@@ -189,6 +176,7 @@ and limitations under the License.
         this.buckets = numArray;
         this.entries = entryArray;
     };
+
     Dictionary.prototype.remove = function (key) {
         if (this.buckets !== undefined) {
             var num = getHashCode(key) & 2147483647;
@@ -215,6 +203,7 @@ and limitations under the License.
         }
         return false;
     };
+
     Dictionary.prototype.clear = function () {
         var index, len;
         if (this.size <= 0) {
@@ -229,6 +218,7 @@ and limitations under the License.
         this.freeList = -1;
         this.size = 0;
     };
+
     Dictionary.prototype._findEntry = function (key) {
         if (this.buckets !== undefined) {
             var num = getHashCode(key) & 2147483647;
@@ -240,9 +230,11 @@ and limitations under the License.
         }
         return -1;
     };
+
     Dictionary.prototype.count = function () {
         return this.size - this.freeCount;
     };
+
     Dictionary.prototype.tryGetEntry = function (key) {
         var entry = this._findEntry(key);
         if (entry >= 0) {
@@ -253,6 +245,7 @@ and limitations under the License.
         }
         return undefined;
     };
+
     Dictionary.prototype.getValues = function () {
         var index = 0, results = [];
         if (this.entries !== undefined) {
@@ -264,6 +257,7 @@ and limitations under the License.
         }
         return results;
     };
+
     Dictionary.prototype.get = function (key) {
         var entry = this._findEntry(key);
         if (entry >= 0) {
@@ -271,14 +265,24 @@ and limitations under the License.
         }
         throw new Error(noSuchkey);
     };
+
     Dictionary.prototype.set = function (key, value) {
         this._insert(key, value, false);
     };
+
     Dictionary.prototype.containskey = function (key) {
         return this._findEntry(key) >= 0;
     };
 
-    // Joins
+    /**
+     *  Correlates the elements of two sequences based on overlapping durations.
+     *  
+     *  @param {Observable} right The right observable sequence to join elements for.
+     *  @param {Function} leftDurationSelector A function to select the duration (expressed as an observable sequence) of each element of the left observable sequence, used to determine overlap.
+     *  @param {Function} rightDurationSelector A function to select the duration (expressed as an observable sequence) of each element of the right observable sequence, used to determine overlap.
+     *  @param {Function} resultSelector A function invoked to compute a result element for any two overlapping elements of the left and right observable sequences. The parameters passed to the function correspond with the elements from the left and right source sequences for which overlap occurs.
+     *  @returns {Observable} An observable sequence that contains result elements computed from source elements that have an overlapping duration.
+     */    
     observableProto.join = function (right, leftDurationSelector, rightDurationSelector, resultSelector) {
         var left = this;
         return new AnonymousObservable(function (observer) {
@@ -369,7 +373,15 @@ and limitations under the License.
         });
     };
 
-    // Group Join
+    /**
+     *  Correlates the elements of two sequences based on overlapping durations, and groups the results.
+     *  
+     *  @param {Observable} right The right observable sequence to join elements for.
+     *  @param {Function} leftDurationSelector A function to select the duration (expressed as an observable sequence) of each element of the left observable sequence, used to determine overlap.
+     *  @param {Function} rightDurationSelector A function to select the duration (expressed as an observable sequence) of each element of the right observable sequence, used to determine overlap.
+     *  @param {Function} resultSelector A function invoked to compute a result element for any element of the left sequence with overlapping elements from the right observable sequence. The first parameter passed to the function is an element of the left sequence. The second parameter passed to the function is an observable sequence with elements from the right sequence that overlap with the left sequence's element.
+     *  @returns {Observable} An observable sequence that contains result elements computed from source elements that have an overlapping duration.
+     */    
     observableProto.groupJoin = function (right, leftDurationSelector, rightDurationSelector, resultSelector) {
         var left = this;
         return new AnonymousObservable(function (observer) {
@@ -484,6 +496,13 @@ and limitations under the License.
         });
     };
     
+    /**
+     *  Projects each element of an observable sequence into zero or more buffers.
+     *  
+     *  @param {Mixed} bufferOpeningsOrClosingSelector Observable sequence whose elements denote the creation of new windows, or, a function invoked to define the boundaries of the produced windows (a new window is started when the previous one is closed, resulting in non-overlapping windows).
+     *  @param {Function} [bufferClosingSelector] A function invoked to define the closing of each produced window. If a closing selector function is specified for the first parameter, this parameter is ignored.
+     *  @returns {Observable} An observable sequence of windows.    
+     */
     observableProto.buffer = function (bufferOpeningsOrClosingSelector, bufferClosingSelector) {
         if (arguments.length === 1 && typeof arguments[0] !== 'function') {
             return observableWindowWithBounaries.call(this, bufferOpeningsOrClosingSelector).selectMany(function (item) {
@@ -499,6 +518,13 @@ and limitations under the License.
             });
     };
     
+    /**
+     *  Projects each element of an observable sequence into zero or more windows.
+     *  
+     *  @param {Mixed} windowOpeningsOrClosingSelector Observable sequence whose elements denote the creation of new windows, or, a function invoked to define the boundaries of the produced windows (a new window is started when the previous one is closed, resulting in non-overlapping windows).
+     *  @param {Function} [windowClosingSelector] A function invoked to define the closing of each produced window. If a closing selector function is specified for the first parameter, this parameter is ignored.
+     *  @returns {Observable} An observable sequence of windows.
+     */    
     observableProto.window = function (windowOpeningsOrClosingSelector, windowClosingSelector) {
         if (arguments.length === 1 && typeof arguments[0] !== 'function') {
             return observableWindowWithBounaries.call(this, windowOpeningsOrClosingSelector);
@@ -514,7 +540,7 @@ and limitations under the License.
         }, function (_, window) {
             return window;
         });
-    };
+    }
 
     function observableWindowWithBounaries(windowBoundaries) {
         var source = this;
@@ -592,7 +618,7 @@ and limitations under the License.
             createWindowClose();
             return r;
         });
-    };
+    }
 
-    return root;
+    return Rx;
 }));
