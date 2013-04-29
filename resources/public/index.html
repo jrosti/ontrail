@@ -817,9 +817,28 @@
         <table id="kmkisa" class="details">
             <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Matka</th><th>Kesto</th></th><th>Vauhti</th><th>Kertoja</th></tr></thead>
             {{#res}}
-            <tr><td>{{rank}}</td><td>{{user}}</td><td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{count}}</td></tr>
+            <tr><td>{{rank}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td><td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td>{{count}}</td></tr>
             {{/res}}
         </table>
+        <br/>
+        {{{description}}}
+        <br/><br/>
+    </article>
+</script>
+
+<script id="groupDetailTemplate" type="text/html">
+    <article>
+        <h3>{{target}}: {{description}}</h3>
+        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</td>
+        <br/>
+        <br/>
+    </article>
+</script>
+
+<script id="userDetailTemplate" type="text/html">
+    <article>
+        <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
+        {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}{{/profile.resthr}}</h6>
         <br/>
     </article>
 </script>

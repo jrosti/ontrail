@@ -183,8 +183,9 @@
       (json-response {:message "username-exists"} 400)
       (json-response {:success true})))
 
-  (GET "/rest/v1/group-detail/:name" [name]
-    (json-response (group/group-detail name)))
+  (GET "/rest/v1/page-detail/:action/:aname" [action aname]
+    (let [action-fn (case action "group" group/group-detail "user" group/user-detail group/other-detail)]
+      (json-response (action-fn aname))))
 
   (GET "/rest/v1/own-groups" {params :params cookies :cookies}
     (json-response (group/own-as-list (user-from-cookie cookies))))

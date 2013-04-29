@@ -4,6 +4,7 @@
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
             [ontrail.summary :as summary]
+            [ontrail.profile :as profile]
             [monger.result :as mr]
             [monger.query :as mq]
             [monger.conversion]
@@ -58,12 +59,32 @@
                   (mq/sort {:lname 1}))]
     {:groups (vec (map (partial decorate user) results))}))
 
-(defn group-detail [name]
-  (let [users (:users (find-by-name name))
-        ranks (range 1 (inc (count users)))
-        condition-fn (fn[user] {:sport "Pyöräily" :user user :creationDate {"$gte" (time/date-time 2013 5 1 0 0)}})]
-    {:res (map (fn [rank summary] 
-                  (assoc summary :rank rank)) 
-            ranks 
-            (sort-by :numDistance > (map (fn[user] (assoc (summary/get-summary (condition-fn user) :sport "Pyöräily") :user user)) users)))}))
+(defn stats-query [user] 
+  {:sport "Pyöräily" :user user :creationDate {"$gte" (time/date-time 2013 5 1 0 0)}})
 
+(defn fetch-stats [group-map]
+  (let [users (:users group-map)
+        ranks (range 1 (inc (count users)))]
+    (case (:name group-map)
+      "Kilometrikisa" (map (fn [rank summary] (assoc summary :rank rank)) 
+                    ranks 
+                    (sort-by :numDistance > 
+                      (map 
+                        (fn[user] (assoc (summary/get-summary (stats-query user) :sport "Pyöräily") :user user))
+                        users)))
+      [])))
+
+(defn group-detail [group-name]
+  (let [group-map (find-by-name group-name)]
+    {:action "group"
+     :target group-name
+     :description (:description group-map)
+     :users (:users group-map)
+     :res (fetch-stats group-map)}))
+
+(defn user-detail [user-name]
+  (.info logger user-name)
+  {:action "user" :target user-name :profile (profile/get-profile user-name)})
+
+(defn other-detail [target]
+  {:action "other" :target target})
