@@ -12,11 +12,11 @@ body.login #login-link {
 }
 a {
   text-decoration: none;
-  color: #ed391b;
+  color: #ff4030;
 }
 a:hover {
   text-decoration: underline;
-  color: #c52a10;
+  color: #fc1300;
 }
 #content section {
   -webkit-border-radius: 10px 0;
@@ -948,7 +948,7 @@ a.prev .arr {
   padding-right: 0.1em;
   border-style: solid;
   border-width: 8px 13.9px 8px 0;
-  border-color: transparent #ED391B transparent transparent;
+  border-color: transparent #ED991B transparent transparent;
 }
 a.next {
   margin-left: 0.3em;
@@ -970,7 +970,7 @@ a.next .arr {
   height: 0px;
   border-style: solid;
   border-width: 8px 0 8px 13.9px;
-  border-color: transparent transparent transparent #ED391B;
+  border-color: transparent transparent transparent #ED991B;
 }
 a.prev,
 a.next {
