@@ -18,7 +18,7 @@
 		 :profile (:profile user-map)
 		 :email (:email user-map)
 		 :avatarUrl (user/get-avatar-url user)
-		 :ownGroups (group/own-as-list user)
+		 :ownGroups (:groups (group/own-as-list user))
 		 :ownTags (tagsummary/get-distinct-tags {:user user})
 		 :sports nlp/sports
 		 }))

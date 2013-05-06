@@ -268,14 +268,7 @@
       }
     }
 
-    loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function(loggedIn) {
-      var profile = loggedIn.profile
-      _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
-      $('#profile-email').text(loggedIn.email)
-      $('#profile-avatar').attr("src", loggedIn.avatarUrl)
-      renderTags(loggedIn.ownTags)
-      renderSports(loggedIn.sports)
-    })
+
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
@@ -660,6 +653,17 @@
       }
 
     }
+
+    loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function(loggedIn) {
+      var profile = loggedIn.profile
+      _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+      $('#profile-email').text(loggedIn.email)
+      $('#profile-avatar').attr("src", loggedIn.avatarUrl)
+      renderTags(loggedIn.ownTags)
+      renderSports(loggedIn.sports)
+      console.log(loggedIn.ownGroups)
+      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
+    })
 
     var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
     var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
