@@ -397,7 +397,7 @@
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     var renderActiveUsersList = function(data) {
-      $("#active-users").text(data)
+      $("#active-users").html(ich.activeUsersTemplate({"users": data}))
     }
 
     var systemPages = currentPages.whereArgs(partialEquals("systemstats"))
@@ -661,7 +661,6 @@
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)
       renderTags(loggedIn.ownTags)
       renderSports(loggedIn.sports)
-      console.log(loggedIn.ownGroups)
       $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
     })
 
