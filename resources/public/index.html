@@ -242,39 +242,15 @@
 
 <section role="systemstats">
     <article>
-        <h3>Ontrail palvelimen tiedot</h3>
+        <h3>Käyttäjät ja palvelin</h3>
         <p>
             Muistia käytössä: <span id="sysheap"></span><br/>
-            Muistia varattu: <span id="sysmaxHeap"></span><br/>
             Palvelin käynnissä: <span id="sysuptime"></span><br/>
             Harjoituksia: <span id="sysexs"></span><br/>
             Käyttäjiä: <span id="sysusers"></span><br/>
         </p>
-        <p>Aktiiviset käyttäjät</p>
+        <p>Käyttäjät online</p>
         <p id="active-users" class="activeUserList"></p>
-    </article>
-</section>
-
-<section role="import" class="logged-in">
-    <article>
-        <h3>Harjoituspäiväkirjan tuonti Lenkkivihko-formaatista</h3>
-        1. Klikkaa Lenkkivihon etusivulta linkkiä "Tuo harjoitukset tiedostona".<br />
-        2. Tallenna tiedosto levylle. Älä avaa tiedostoa välillä Execelissä tai muussa ohjelmassa, vaan talleta se sellaisenaan.<br />
-        3. Liitä tuontitiedosto oheiseen lomakkeeseen. Paina "Lähetä linkkiä alla" ja odota rauhassa noin 10 sekuntia, kunnes
-        kaikki harjoitukset on tuotu.<br />
-
-        <form action="/rest/v1/import" class="edit-form" method="post" enctype="multipart/form-data">
-            <div>
-                <label>Valitse tiedosto:</label>
-                <input name="file" type="file" size="15" />
-            </div>
-
-            <div>
-                <label></label>
-                <input type="submit" name="submit" value="Lähetä harjoituspäiväkirja käsiteltäväksi." />
-            </div>
-        </form>
-        <span id="import-result"></span>
     </article>
 </section>
 
@@ -525,7 +501,7 @@
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <li><a class="pageLink" rel="lists">Listat</a></li>
-            <li class="loggedIn"><a class="pageLink" rel="systemstats">Ontrail palvelin</a></li>
+            <li class="loggedIn"><a class="pageLink" rel="systemstats">Käyttäjät ja palvelin</a></li>
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
@@ -563,6 +539,9 @@
     </div>
 </script>
 
+<script id="activeUsersTemplate" type="text/html">
+    <td>{{#users}}<a class="pageLink ddm" rel="user/{{.}}">{{.}}</a>{{/users}}</td>
+</script>
 
 <script id="tagsExpandedTemplate" class="partial" type="text/html">
     <div class="full">
