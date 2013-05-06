@@ -147,11 +147,6 @@
       ich.groupsTemplate({groups: data}).appendTo(groupsList)
     }
 
-
-    var renderActiveUsersList = function(data) {
-      $("#active-users").text(data)
-    }
-
     var renderChangePassword = function(data) {
       $("#change-password-form")[0].reset()
       if (data.username) {
@@ -273,20 +268,13 @@
       }
     }
 
-    loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
+    loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function(loggedIn) {
+      var profile = loggedIn.profile
       _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
-      $('#profile-email').text(result.email)
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.avatarUrl).subscribe(function(avatar) {
-      $('#profile-avatar').attr("src", avatar.url)
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(systemstats) {
-      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
+      $('#profile-email').text(loggedIn.email)
+      $('#profile-avatar').attr("src", loggedIn.avatarUrl)
+      renderTags(loggedIn.ownTags)
+      renderSports(loggedIn.sports)
     })
 
     // open single entries
@@ -399,7 +387,6 @@
 
     var renderPageDetail = function(args) {
       $('#content-header').html("")
-      console.log(args.data)
       if (args.data.target == "Kilometrikisa") {
         ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target !== "Kilometrikisa") {
@@ -415,6 +402,18 @@
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).doAction(function() { $('#exercise').html("<div class='loading'><img src='/img/loading.gif'/></div>")}).selectAjax(OnTrail.rest.details)
     exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+
+    var renderActiveUsersList = function(data) {
+      $("#active-users").text(data)
+    }
+
+    var systemPages = currentPages.whereArgs(partialEquals("systemstats"))
+
+    systemPages.selectAjax(OnTrail.rest.system).subscribe(function(system) {
+      var systemstats = system.systemstats
+      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
+      renderActiveUsersList(system.activeUsers)
+    })
 
     // initiate loading and search
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
@@ -492,10 +491,7 @@
 
 
     var onPageLoad = rx.empty().startWith("")
-    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
-    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
-
-    onPageLoad.selectAjax(OnTrail.rest.activeUsers).subscribe(renderActiveUsersList)
+    // onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(OnTrail.rest.sports)
 
     // Lisää lenkki
     var resetEditor = function() {
