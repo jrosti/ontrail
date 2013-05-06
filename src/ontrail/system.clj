@@ -18,7 +18,7 @@
 (defn count-users[]
   (mc/count ONUSER))
 
-(defn get-system-stats[]
+(defn stats[]
   {:sysheap (get-used-heap)
    :sysmaxHeap (get-max-heap)
    :sysuptime (get-uptime)

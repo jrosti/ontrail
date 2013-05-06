@@ -10,11 +10,14 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.parser :only (parse-duration parse-distance)]
-        [ontrail.import :only (import-from-tempfile)])
+        [ontrail.import :only (import-from-tempfile)]
+        [ontrail.profile :only (post-profile)]
+        )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
-         profile system tagsummary sportsummary weekly])
+         tagsummary sportsummary weekly])
   (:gen-class)
-  (:require [ontrail.mongerfilter :as mongerfilter]
+  (:require [ontrail.loggedin :as loggedin]
+            [ontrail.mongerfilter :as mongerfilter]
             [ontrail.mutate :as mutate]
             [ontrail.exercise :as ex]
             [ontrail.user :as user]
@@ -85,7 +88,7 @@
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
        (json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
 
-  (GET "/rest/v1/active-users" [] (json-response (nc/active-users)))
+  
   
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer/valueOf year))))
@@ -95,15 +98,14 @@
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
        (json-response (generate-month user (Integer/valueOf year) (Integer/valueOf month))))
   
-  (GET "/rest/v1/profile/:user" [user] (json-response (get-profile user)))
+  
   (POST "/rest/v1/profile" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (post-profile (user-from-cookie cookies) params))))
 
-  (GET "/rest/v1/email" {cookies :cookies} (json-response {:email (:email (user/get-user (user-from-cookie cookies)))}))
-  
-  (GET "/rest/v1/system" [] (json-response (get-system-stats)))
-  
-  (GET "/rest/v1/avatar/:user" [user] (json-response {:url (user/get-avatar-url user)}))
+  (GET "/rest/v1/system" [] (json-response (loggedin/system))) 
+
+  (GET "/rest/v1/logged-ins" {cookies :cookies} (json-response (loggedin/params (user-from-cookie cookies))))
+
   (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
@@ -131,14 +133,9 @@
   (GET "/rest/v1/ex-list-tag/:tag/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (get-page params) {:creationDate -1})))
 
-  (GET "/rest/v1/list-tags/:user" [user] (json-response (get-distinct-tags {:user user})))
-  (GET "/rest/v1/list-tags-all" {params :params cookies :cookies} (json-response (get-distinct-tags {:user (user-from-cookie cookies)})))
-
   (GET "/rest/v1/list-users/:page" [page] (json-response (user/get-user-list {} page)))
 
   (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
-
-  (GET "/rest/v1/sports" []  (json-response sports))
 
   (GET "/rest/v1/parse-time/:time" [time] 
     (let [duration (to-human-time (parse-duration time))]

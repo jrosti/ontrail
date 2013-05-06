@@ -37,8 +37,8 @@
 
   Rest.prototype.markAllRead = function() { return getAsObservableResultData("mark-all-read") }
 
-  Rest.prototype.avatarUrl = function(user) { return getAsObservableResultData("avatar", user) }
-  Rest.prototype.email = function() { return getAsObservableResultData("email") }
+  Rest.prototype.loggedIns = function() { return getAsObservableResultData("logged-ins") }
+
   Rest.prototype.latest = function(page) { return getAsObservableResultData("ex-list-all", page) }
 
   Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
@@ -47,11 +47,9 @@
   Rest.prototype.exercises = function(filter, page) { return getAsObservableResultData("ex-list-filter?" + [$.param(filter), "page=" + page].join("&")) }
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
-  Rest.prototype.sports = function() { return getAsObservableResultData("sports") }
+
   Rest.prototype.system = function() { return getAsObservableResultData("system") }
-  Rest.prototype.tags = function(user) { return getAsObservableResultData("list-tags", user) }
-  Rest.prototype.profile = function(user) { return getAsObservableResultData("profile", user) }
-  Rest.prototype.allTags = function() { return getAsObservableResultData("list-tags-all") }
+  
   Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
   Rest.prototype.distanceV = function(distance) { return getAsObservable("parse-distance", distance) }
   Rest.prototype.usernameV = function(username) { return getAsObservable("username-available", username) }
