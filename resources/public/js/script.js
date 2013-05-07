@@ -236,20 +236,14 @@
       }
     }
 
-    loggedIns.selectAjax(OnTrail.rest.profile).subscribe(function(profile) {
-      _.map(["synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.email).subscribe(function(result) {
-      $('#profile-email').text(result.email)
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.avatarUrl).subscribe(function(avatar) {
-      $('#profile-avatar').attr("src", avatar.url)
-    })
-
-    loggedIns.selectAjax(OnTrail.rest.system).subscribe(function(systemstats) {
-      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
+    loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function(loggedIn) {
+      var profile = loggedIn.profile
+      _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function(field) { $('#' + field).val(profile[field]) })
+      $('#profile-email').text(loggedIn.email)
+      $('#profile-avatar').attr("src", loggedIn.avatarUrl)
+      renderTags(loggedIn.ownTags)
+      renderSports(loggedIn.sports)
+      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
     })
 
     // open single entries
@@ -396,10 +390,10 @@
     loggedIns.subscribe(function() { $('body').toggleClass('login', false) })
 
     var onPageLoad = rx.empty().startWith("")
-    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
-    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
+//    onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(renderSports)
+//    loggedIns.selectAjax(OnTrail.rest.allTags).subscribe(renderTags)
 
-    onPageLoad.selectAjax(OnTrail.rest.activeUsers).subscribe(renderActiveUsersList)
+  //  onPageLoad.selectAjax(OnTrail.rest.activeUsers).subscribe(renderActiveUsersList)
 
     // Lisää lenkki
     var resetEditor = function() {
