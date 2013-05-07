@@ -243,7 +243,6 @@
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)
       renderTags(loggedIn.ownTags)
       renderSports(loggedIn.sports)
-      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
     })
 
     // open single entries
