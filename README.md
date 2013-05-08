@@ -18,7 +18,7 @@ Ennen launchia:
 * Omat tagit sivupalkkiin
 * -Lenkin tägit-
 * ~~Vuosi~~, ~~Kuukausi~~, Viikko -näkymä
-* Joko ryhmät tai kaverit
+* ~~Ryhmät~~
 
 Taustalla:
 
