@@ -104,7 +104,9 @@
           }
         }
       }
-      return _.partial(function(elem, tableElem, data) {
+      return function(data) {
+        var elem = $(el)
+        var tableElem = $(tableEl)
         if (!data || !data.length || data.length == 0) return;
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
@@ -112,7 +114,7 @@
 
         var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
         $(tableContent).appendTo(tableElem)
-      }, $(el), $(tableEl))
+      }
     }
     var renderSingleExercise = function(exercise, me) {
       renderUserMenu(exercise.user)
