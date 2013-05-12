@@ -1,6 +1,7 @@
 (ns ontrail.mutate
   (:use [ontrail mongodb search exercise user formats parser newcomment])
-  (:require [monger.collection :as mc]
+  (:require [ontrail.sportsummary :as sportsummary]
+            [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
             [monger.conversion]
@@ -45,6 +46,7 @@
         (assoc :pace pace))))
 
 (defn delete-ex [user ex-id]
+  (sportsummary/reset-memo-for user)
   (.trace logger (str "deleting " user " ex " ex-id))
   (let [ex (mc/find-one-as-map EXERCISE {:_id (ObjectId. ex-id)})
         ex-user (:user ex)
@@ -55,6 +57,7 @@
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
+  (sportsummary/reset-memo-for user)
   (.info logger (str (:user params) " creating ex " params))
   (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ret))]
@@ -63,6 +66,7 @@
     (as-ex-result ret)))
 
 (defn update-ex [user params]
+  (sportsummary/reset-memo-for user)
   (.trace logger (str (:user params) " updating ex " params))
   (if (= user (:user (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})))
     (do (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
