@@ -479,10 +479,9 @@
     </section>
     <section class="logged-in">
         <header>
-            <h2>Suodattimet</h2>
             <div class="buttons">
                 <div class="dropdown">
-                    <a href="#" class="button"><span class="label">Valitse laji</span><span class="toggle"></span></a>
+                    <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
                     <div class="dropdown-slider">
                         <a class="pageLink ddm" rel="sport/Juoksu"><span class="label">Juoksu</span></a>
                         <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
@@ -491,20 +490,30 @@
                         <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
                     </div> <!-- /.dropdown-slider -->
                 </div> <!-- /.dropdown -->
+                <br/><br/>
                 <div id="ownGroupsDropDown">
                 </div> <!-- /.dropdown -->
             </div>
         </header>
     </section>
     <section>
+        <h3>Toiminnot</h3>
         <ul class="link-list">
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <li><a class="pageLink" rel="lists">Listat</a></li>
-            <li class="loggedIn"><a class="pageLink" rel="systemstats">Käyttäjät ja palvelin</a></li>
+            <li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li>
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
+    <section>
+        <h3>Tapahtumaraportit</h3>
+        <ul class="link-list">
+            <li><a class="pageLink" rel="sport/Juoksu/gte_distance/20700/lte_distance/21100/gte_creationDate/4.5.2013/lt_creationDate/5.5.2013/sb/pace">Helsinki City Run 4.5.2013</a></li>
+            <li><a class="pageLink" rel="sport/Juoksu/gte_distance/17300/lte_distance/17400/gte_creationDate/21.4.2013/lt_creationDate/22.4.2013/sb/pace">Länsiväyläjuoksu 17.4.2013</a></li>
+        </ul>
+    </section>
+
 
 </div>
 </div>
@@ -529,14 +538,12 @@
 </script>
 
 <script id="ownGroupsTemplate" type="text/html">
-    <div class="dropdown">
-        <a href="#" class="button"><span class="label">Omat Ryhmät</span><span class="toggle"></span></a>
-        <div class="dropdown-slider">
-            {{#groups}}
-            <a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate"><span class="label">{{.}}</span></a>
-            {{/groups}}
-        </div> <!-- /.dropdown-slider -->
-    </div>
+    <h3>Omat ryhmät</h3>
+        <ul class="link-list">
+        {{#groups}}
+            <li><a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>
+        {{/groups}}
+        </ul>
 </script>
 
 <script id="activeUsersTemplate" type="text/html">
