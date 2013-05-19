@@ -92,7 +92,7 @@
   ([tags]
      (let [trim-tag #(-> % string/trim)]
        (if (string? tags)
-         (filter (partial not= "") (string/split (trim-tag tags) #","))
+         (filter (partial not= "") (map string/trim (string/split tags #",")))
          '()))))
 
 (defn parse-natural [hr]
