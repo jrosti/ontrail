@@ -86,27 +86,27 @@
 (defn records [user]
   [
   {:name "800 m" :rule {:distance 800 :user user :sport "Juoksu"} 
-    :filter (str "distance/800/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/800/user/" user "/sb/pace")}
   {:name "1500 m" :rule {:distance 1500 :user user :sport "Juoksu"}
-    :filter (str "distance/1500/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/1500/user/" user "/sb/pace")}
   {:name "Cooper" :rule {:duration 72000 :user user :sport "Juoksu"} :tb true
-    :filter (str "duration/7200/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/duration/72000/user/" user "/sb/pace")}
   {:name "3000 m" :rule {:distance 3000 :user user :sport "Juoksu"}
-    :filter (str "distance/3000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/3000/user/" user "/sb/pace")}
   {:name "5000 m" :rule {:distance 5000 :user user :sport "Juoksu"}
-    :filter (str "distance/5000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/5000/user/" user "/sb/pace")}
   {:name "10000 m" :rule {:distance 10000 :user user :sport "Juoksu"}
-    :filter (str "distance/10000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/10000/user/" user "/sb/pace")}
   {:name "1/2 maraton" :rule {:distance 21100 :user user :sport "Juoksu"}
-    :filter (str "distance/21100/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/21100/user/" user "/sb/pace")}
   {:name "maraton" :rule {:distance 42195 :user user :sport "Juoksu"}
-    :filter (str "distance/42195/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/42195/user/" user "/sb/pace")}
   {:name "100 km" :rule {:distance 100000 :user user :sport "Juoksu"}
-    :filter (str "distance/100000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/distance/100000/user/" user "/sb/pace")}
   {:name "12 h" :rule {:duration 4320000 :user user :sport "Juoksu"} :tb true
-    :filter (str "duration/4320000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/duration/4320000/user/" user "/sb/pace")}
   {:name "24 h" :rule {:duration 8640000 :user user :sport "Juoksu"} :tb true
-    :filter (str "duration/8640000/user/" user "/sport/Juoksu/sb/pace")}
+    :filter (str "sport/Juoksu/duration/8640000/user/" user "/sb/pace")}
   ])
 
 (defn get-record [record-entry]
@@ -126,7 +126,9 @@
   (seq (filter identity (map get-record (records username)))))
 
 (defn user-detail [username]
-  (merge {:action "user" :target username :records (get-records username) :profile (profile/get-profile username)} (own-as-list username)))
+  (let [records (get-records username)]
+    (merge {:action "user" :target username :hasRecords (not (empty? records)) :records records 
+            :profile (profile/get-profile username)} (own-as-list username))))
 
 (defn other-detail [target]
   {:action "other" :target target})

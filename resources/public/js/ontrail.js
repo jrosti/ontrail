@@ -388,6 +388,14 @@
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {
         ich.userDetailTemplate(args.data).appendTo($('#content-header'))
+        $("#recordsDiv").hide()
+        $("#toggleRecords").toggle(function() { 
+            $("#toggleRecords").text("Piilota ennätykset") 
+            $("#recordsDiv").show()
+        }, function() { 
+          $("#toggleRecords").text("Näytä ennätykset") 
+          $("#recordsDiv").hide()
+        })
       }
     }
 
