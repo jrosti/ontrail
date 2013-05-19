@@ -35,7 +35,7 @@
     "Sisäsoutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
-    ;; testing for tag pace suppport
+    ;; testing for tag pace support
     "CYCLO" to-human-pace-kmh
     "MAANTIE" to-human-pace-kmh
     "TYÖMATKAPYÖRÄILY" to-human-pace-kmh
