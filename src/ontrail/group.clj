@@ -125,7 +125,7 @@
       nil)))
 
 (defn get-records [username]
-  (seq (filter identity (map get-record (records username)))))
+  (filter identity (map get-record (records username))))
 
 (defn user-detail [username]
   (let [records (get-records username)]
