@@ -764,6 +764,18 @@
         <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
         {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}{{/profile.resthr}}</h6>
             <td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td>
+            {{#hasRecords}}
+            <br/><a id="toggleRecords" href="javascript:void(0);">Näytä nopeimmat juoksulenkit</a>
+            <div id="recordsDiv" style="width:300px">
+                <table id="records" class="details">
+                    {{#records}}
+                    <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
+                        <td>{{result}}</td>
+                        <td>{{pace}}</td>
+                    {{/records}}
+                </table>
+            </div>
+            {{/hasRecords}}
     </header>
     </article>
 </script>
