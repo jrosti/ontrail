@@ -390,10 +390,10 @@
         ich.userDetailTemplate(args.data).appendTo($('#content-header'))
         $("#recordsDiv").hide()
         $("#toggleRecords").toggle(function() { 
-            $("#toggleRecords").text("Piilota ennätykset") 
+            $("#toggleRecords").text("Piilota juoksuennätykset") 
             $("#recordsDiv").show()
         }, function() { 
-          $("#toggleRecords").text("Näytä ennätykset") 
+          $("#toggleRecords").text("Näytä juoksuennätykset") 
           $("#recordsDiv").hide()
         })
       }
