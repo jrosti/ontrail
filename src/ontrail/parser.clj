@@ -86,14 +86,15 @@
     (catch Exception exception
         0)))
   
+(defn cleanse-tag [str]
+  ((comp string/trim #(string/replace % #"/" "-")) str))
 
 (defn parse-tags
   ([] '())
   ([tags]
-     (let [trim-tag #(-> % string/trim)]
-       (if (string? tags)
-         (filter (partial not= "") (map string/trim (string/split tags #",")))
-         '()))))
+    (if (string? tags)
+      (filter (partial not= "") (map cleanse-tag (string/split tags #",")))
+      '())))
 
 (defn parse-natural [hr]
   (if-not (= nil hr)
