@@ -97,10 +97,12 @@
     :filter (str "sport/Juoksu/distance/5000/user/" user "/sb/pace")}
   {:name "10000 m" :rule {:distance 10000 :user user :sport "Juoksu"}
     :filter (str "sport/Juoksu/distance/10000/user/" user "/sb/pace")}
-  {:name "1/2 maraton" :rule {:distance 21100 :user user :sport "Juoksu"}
-    :filter (str "sport/Juoksu/distance/21100/user/" user "/sb/pace")}
-  {:name "maraton" :rule {:distance 42195 :user user :sport "Juoksu"}
-    :filter (str "sport/Juoksu/distance/42195/user/" user "/sb/pace")}
+  {:name "1/2 maraton" :rule {"$or" [{:distance 21100} {:distance 21090}] :user user :sport "Juoksu"}
+    :filter (str "sport/Juoksu/distance/21100,21090/user/" user "/sb/pace")}
+  {:name "maraton" :rule {"$or" [{:distance 42195} {:distance 42200}] :user user :sport "Juoksu"}
+    :filter (str "sport/Juoksu/distance/42195,42200/user/" user "/sb/pace")}
+  {:name "6 h" :rule {:duration 2160000 :user user :sport "Juoksu"} :tb true
+    :filter (str "sport/Juoksu/duration/2160000/user/" user "/sb/pace")}
   {:name "100 km" :rule {:distance 100000 :user user :sport "Juoksu"}
     :filter (str "sport/Juoksu/distance/100000/user/" user "/sb/pace")}
   {:name "12 h" :rule {:duration 4320000 :user user :sport "Juoksu"} :tb true
