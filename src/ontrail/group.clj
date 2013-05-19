@@ -1,6 +1,7 @@
 (ns ontrail.group
   (:use monger.operators
-        ontrail.mongodb)
+        ontrail.mongodb
+        ontrail.formats)
   (:require [monger.collection :as mc]
             [clj-time.core :as time]
             [ontrail.summary :as summary]
@@ -82,8 +83,50 @@
      :users (:users group-map)
      :res (fetch-stats group-map)}))
 
-(defn user-detail [user-name]
-  (merge {:action "user" :target user-name :profile (profile/get-profile user-name)} (own-as-list user-name)))
+(defn records [user]
+  [
+  {:name "800 m" :rule {:distance 800 :user user :sport "Juoksu"} 
+    :filter (str "distance/800/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "1500 m" :rule {:distance 1500 :user user :sport "Juoksu"}
+    :filter (str "distance/1500/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "Cooper" :rule {:duration 72000 :user user :sport "Juoksu"} :tb true
+    :filter (str "duration/7200/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "3000 m" :rule {:distance 3000 :user user :sport "Juoksu"}
+    :filter (str "distance/3000/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "5000 m" :rule {:distance 5000 :user user :sport "Juoksu"}
+    :filter (str "distance/5000/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "10000 m" :rule {:distance 10000 :user user :sport "Juoksu"}
+    :filter (str "distance/10000/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "1/2 maraton" :rule {:distance 21100 :user user :sport "Juoksu"}
+    :filter (str "distance/21100/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "maraton" :rule {:distance 42195 :user user :sport "Juoksu"}
+    :filter (str "distance/42195/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "100 km" :rule {:distance 100000 :user user :sport "Juoksu"}
+    :filter (str "distance/100000/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "12 h" :rule {:duration 4320000 :user user :sport "Juoksu"} :tb true
+    :filter (str "duration/4320000/user/" user "/sport/Juoksu/sb/pace")}
+  {:name "24 h" :rule {:duration 8640000 :user user :sport "Juoksu"} :tb true
+    :filter (str "duration/8640000/user/" user "/sport/Juoksu/sb/pace")}
+  ])
+
+(defn get-record [record-entry]
+  (let [record (mq/with-collection EXERCISE
+               (mq/fields [:duration :distance :sport])
+               (mq/find (:rule record-entry))
+               (mq/limit 1)
+               (mq/sort {:pace -1}))]
+    (if (seq record)
+      (let [result-fun (if (:tb record-entry) (fn [record] (to-human-distance (:distance (first record))))
+                                              (fn [record] (to-human-time (:duration (first record)))))]
+        {:name (:name record-entry) :result (result-fun record) :pace (get-pace (first record))
+         :filter (:filter record-entry)})
+      nil)))
+
+(defn get-records [username]
+  (seq (filter identity (map get-record (records username)))))
+
+(defn user-detail [username]
+  (merge {:action "user" :target username :records (get-records username) :profile (profile/get-profile username)} (own-as-list username)))
 
 (defn other-detail [target]
   {:action "other" :target target})

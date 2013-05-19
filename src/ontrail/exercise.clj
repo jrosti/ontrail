@@ -19,7 +19,7 @@
 
 (defn is-new [ex last-visit]
   (let [lmd (:lastModifiedDate ex)]
-    (if (and (not= nil lmd) (not= nil last-visit))
+    (if (and lmd last-visit)
       (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 1)))
       false)))
 
@@ -40,7 +40,6 @@
            bare-ex {:id id
                     :user user
                     :isNew (is-new exercise last-visit)
-                    :userProfile  user-profile
                     :distance distance
                     :title (:title exercise)
                     :body (:body exercise)
@@ -57,8 +56,7 @@
                     :commentCount comment-count
                     :comments comments
                     :lastModifiedDate (:lastModifiedDate exercise)
-                    :bpmdist bpmdist
-                    :synopsis (:synopsis user-profile)}]
+                    :bpmdist bpmdist}]
        (if (> new-comments 0)
          (assoc bare-ex :newComments new-comments)
          bare-ex))))
