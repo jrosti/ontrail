@@ -382,9 +382,9 @@
 
     var renderPageDetail = function(args) {
       $('#content-header').html("")
-      if (args.data.target == "Kilometrikisa") {
+      if (args.data.action == "group" && args.data.target == "Kilometrikisa") {
         ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group" && args.data.target !== "Kilometrikisa") {
+      } else if (args.data.action == "group") {
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {
         ich.userDetailTemplate(args.data).appendTo($('#content-header'))
@@ -396,6 +396,8 @@
           $("#toggleRecords").text("Näytä juoksuennätykset") 
           $("#recordsDiv").hide()
         })
+      } else {
+        ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
       }
     }
 

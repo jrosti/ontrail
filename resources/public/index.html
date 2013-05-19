@@ -768,16 +768,25 @@
             <br/><a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
             <div id="recordsDiv" style="width:300px">
                 <table id="records" class="details">
-                    <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></thead>
+                    <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
                     {{#records}}
                     <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
                         <td>{{result}}</td>
                         <td>{{pace}}</td>
+                    </tr>
                     {{/records}}
                 </table>
             </div>
             {{/hasRecords}}
     </header>
+    </article>
+</script>
+
+<script id="otherDetailTemplate" type="text/html">
+    <article>
+        <header>
+            <h3>{{target}}</h3>
+        </header>
     </article>
 </script>
 
