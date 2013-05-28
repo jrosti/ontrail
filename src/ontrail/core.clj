@@ -14,7 +14,7 @@
         [ontrail.profile :only (post-profile)]
         )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
-         tagsummary sportsummary weekly])
+         tagsummary sportsummary weekly mongodb])
   (:gen-class)
   (:require [ontrail.loggedin :as loggedin]
             [ontrail.mongerfilter :as mongerfilter]
@@ -209,7 +209,10 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (nc/newcomment-cache-restore-all)
-  (schedule-work nc/newcomment-cache-store-all 240) ;; store new comment cache every 60 s
+  (schedule-work nc/newcomment-cache-store-all 600)
+  (future (do (.info logger "Summary cache initialized") 
+              (time (doall (for [user (mc/distinct ONUSER "username" {})]
+                             (memoizes-after-reset user))))))
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head
