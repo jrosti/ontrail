@@ -43,7 +43,19 @@
   (dosync (let [summary-memo (memo-for user)]
     (summary-memo {}))))
 
+(defn do-month [user year month]
+  (doall (get-month-summary-sport user year month)))
+
+(defn memoizes-after-reset [user]
+  (let [now (time/now)
+        year (time/year now)
+        up-to-month (+ 2 (time/month now))]
+    (doall (get-overall-summary user))
+    (doall (get-year-summary-sport user year))
+    (doall (map (partial do-month user year) (range 1 up-to-month))))
+  nil)
+
 (defn reset-memo-for [user]
   (dosync (alter summary-memos dissoc user))
-  (future get-overall-summary user)
-  nil)
+  (future (memoizes-after-reset user)))
+
