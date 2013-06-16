@@ -1,7 +1,6 @@
 (ns ontrail.core
   (:use aleph.http
         compojure.core
-        ring.middleware.file
         ring.middleware.cookies
         [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
@@ -10,7 +9,6 @@
         [clojure.data.json :only (read-json json-str)]
         [ontrail.search :only (search-wrapper rebuild-index)]
         [ontrail.parser :only (parse-duration parse-distance)]
-        [ontrail.import :only (import-from-tempfile)]
         [ontrail.profile :only (post-profile)]
         )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
@@ -196,12 +194,7 @@
 
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
     (is-authenticated? cookies
-      (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))
-
-  (wrap-multipart-params
-    (POST "/rest/v1/import" {params :params cookies :cookies}
-         (redirect (import-from-tempfile (user-from-cookie cookies) (:tempfile (get params :file))))))
-  
+      (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))  
   (route/resources "/")
   (route/not-found {:status 404}))
 
