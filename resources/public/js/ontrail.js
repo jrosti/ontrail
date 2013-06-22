@@ -223,8 +223,7 @@
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
-    var renderDurationHint = function(duration) { $('#duration-hint').html(duration.time) }
-    var renderDistanceHint = function(distance) { $('#distance-hint').html(distance.distance) }
+    var renderHint = function(kind, item) { $("#" + kind + "-hint").html(item[kind])}
 
     // logged in state handling
     var doLogin = function() { return OnTrail.rest.postAsObservable("login", $('#login-form').serialize()) }
@@ -506,7 +505,7 @@
       $("#add-exercise-form .reset").attr('value', '')
       $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
       $("#ex-tags").select2("data", [])
-      $("#duration-hint").html("")
+      $("#time-hint").html("")
       $("#distance-hint").html("")
       $("#ex-body").setCode("<p>\n<br>\n</p>")
     }
@@ -599,29 +598,22 @@
     // luo lenkki -validaatio
     var require = _.partial(attachValidation, requiredV(), "required");
 
-    var serverTimeValidator = function() {
+    var serverSideValidator = function(kind) {
       return function(value) {
         if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        var request = OnTrail.rest.durationV(value)
-        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDurationHint)
+        var request = OnTrail.rest.serverParseV(kind, value)
+        request.where(isSuccess).select(ajaxResponseData).subscribeArgs(_.partial(renderHint, kind))
         return request.materialize()
           .select(convertToError)
           .dematerialize()
-      }}
+      }
+    }
 
-    var serverDistanceValidator = function() {
-      return function(value) {
-        if ($.trim(value) == "") return Rx.Observable.returnValue([])
-        var request = OnTrail.rest.distanceV(value)
-        request.where(isSuccess).select(ajaxResponseData).subscribe(renderDistanceHint)
-        return request.materialize()
-          .select(convertToError)
-          .dematerialize()
-      }}
+    var serverTimeValidator = _.partial(serverSideValidator, "time")
+    var serverDistanceValidator = _.partial(serverSideValidator, "distance")
 
     var timeValidation = mkServerValidation($('#ex-duration').changes().throttle(300), '/rest/v1/parse-time/', serverTimeValidator).validation.repeat()
     timeValidation.subscribe(toggleEffect($(".invalid-duration")))
-
     var distanceValidation = mkServerValidation($('#ex-distance').changes().throttle(300), '/rest/v1/parse-distance/', serverDistanceValidator).validation.repeat()
 
     var titleValidation = require("title")
@@ -671,14 +663,20 @@
       $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
     })
 
-    var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV())
-    var requirePassword = mkValidation($('#ch-password').changes(), requiredV())
-    var pwdChangeLengthValidation = mkValidation($('#ch-password').changes(),  minLengthV(6))
+
+    var oldPasswordMatchV = createAjaxValidator(OnTrail.rest.passwordV)
+    var oldPasswordMatch = mkServerValidation($('#ch-old-password').changes().throttle(300).combineWithLatestOf(loggedIns), '/rest/v1/login', oldPasswordMatchV).validation.repeat()
+    oldPasswordMatch.subscribe(toggleEffect($(".ch-old-password-doesnt-match")))
+    oldPasswordMatch.subscribe(toggleClassEffect($('#ch-old-password'), "has-error"))
+
+    var requirePassword = mkValidation($('#ch-password').changes(), requiredV("password-required"))
+    var pwdChangeLengthValidation = mkValidation($('#ch-password').changes(),  minLengthV(6, "password-too-short"))
     pwdChangeLengthValidation.subscribe(toggleEffect($(".ch-password-too-short")))
     pwdChangeLengthValidation.subscribe(toggleClassEffect($('#ch-password'), "has-error"))
+    var updatePassword = mkValidation($('#ch-password').changes().combineLatest($('#ch-password2').changes(), asArgs), matchingValuesV("passwords-dont-match"))
     updatePassword.subscribe(toggleEffect($(".ch-passwords-do-not-match")))
     updatePassword.subscribe(toggleClassEffect($('#ch-password2'), "has-error"))
-    var changePasswordValidations = [updatePassword, requirePassword, pwdChangeLengthValidation]
+    var changePasswordValidations = [pwdChangeLengthValidation, updatePassword, requirePassword, oldPasswordMatch]
     combine(changePasswordValidations).subscribe(toggleClassEffect($('#change-password'), "disabled"))
 
     var passwordRequiredValidation = require("password")
@@ -694,7 +692,7 @@
 
     var usernameRequiredValidation = require('username')
     var usernameAvailableValidator = createAjaxValidator(OnTrail.rest.usernameV);
-    var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation
+    var usernameExistsValidation = mkServerValidation($('#ex-username').changes(), '/rest/v1/username-available/', usernameAvailableValidator).validation.repeat()
     usernameExistsValidation.subscribe(toggleEffect($(".user-exists")))
     combine([usernameExistsValidation, usernameRequiredValidation]).subscribe(toggleClassEffect($('#ex-username'), "has-error"))
 
