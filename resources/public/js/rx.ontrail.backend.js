@@ -23,6 +23,17 @@
     return success(getAsObservable.apply(this, arguments))
   }
 
+  // todo: move login and postExercise here also and make postAsObservable private
+  var postAsObservable = function(url, data) {
+    return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })
+  }
+
+  var deleteAsObservable = function() {
+    var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
+    return ajaxWithErrorHandler({ type: 'DELETE', url: "/rest/v1/" + path })
+  }
+
+
   Rest.prototype.summary = function() { return getAsObservableResultData.apply(this, ["summary"].concat(_.argsToArray(arguments))) }
   Rest.prototype.tagsummary = function() { return getAsObservableResultData.apply(this, ["summary-tags"].concat(_.argsToArray(arguments))) }
   Rest.prototype.weeksummary = function(user, n) {
@@ -49,10 +60,12 @@
   Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
 
   Rest.prototype.system = function() { return getAsObservableResultData("system") }
-  
-  Rest.prototype.durationV = function(duration) { return getAsObservable("parse-time", duration) }
-  Rest.prototype.distanceV = function(distance) { return getAsObservable("parse-distance", distance) }
-  Rest.prototype.usernameV = function(username) { return getAsObservable("username-available", username) }
+
+
+  Rest.prototype.serverParseV = function(kind, item) { return getAsObservable("validate", kind, item) }
+
+  Rest.prototype.usernameV = function(username) { return getAsObservable("validate", "username", username) }
+  Rest.prototype.passwordV = function(password, username) { return postAsObservable("validate/login", { username: username, password: password }) }
 
   Rest.prototype.pageDetail = function(action, target) { return getAsObservable("page-detail", action, target)}
   
@@ -63,16 +76,10 @@
 
   Rest.prototype.groups = function(page) { return getAsObservableResultData("groups", page).selectArgs(_attr("groups")) }
   Rest.prototype.ownGroups = function() { return getAsObservableResultData("own-groups") }
-  
-  // todo: move login and postExercise here also and make postAsObservable private
-  Rest.prototype.postAsObservable = function(url, data) {
-    return ajaxWithErrorHandler({ type: 'POST', url: "/rest/v1/" + url, data: data })
-  }
 
-  Rest.prototype.deleteAsObservable = function() {
-    var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
-    return ajaxWithErrorHandler({ type: 'DELETE', url: "/rest/v1/" + path })
-  }
+  // todo: move login and postExercise here also and make postAsObservable private
+  Rest.prototype.postAsObservable = postAsObservable
+  Rest.prototype.deleteAsObservable = deleteAsObservable
 
   OnTrail.rest = new Rest();
 })()

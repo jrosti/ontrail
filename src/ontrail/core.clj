@@ -135,15 +135,25 @@
 
   (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
 
-  (GET "/rest/v1/parse-time/:time" [time] 
+  (GET "/rest/v1/validate/time/:time" [time]
     (let [duration (to-human-time (parse-duration time))]
       (if (= "" duration)
         (json-response {:message "invalid-duration"} 400)
         (json-response {:success true :time duration}))))
 
-  (GET "/rest/v1/parse-distance/:distance" [distance]
-       (json-response {:distance (to-human-distance (parse-distance distance))}))
-  
+  (GET "/rest/v1/validate/distance/:distance" [distance]
+       (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
+
+  (GET "/rest/v1/validate/username/:username" [username]
+    (if-let [user (user/get-case-user username)]
+      (json-response {:message "username-exists"} 400)
+      (json-response {:success true})))
+
+  (POST "/rest/v1/validate/login" [username password]
+    (if (authenticate username password)
+      (json-response {:success true})
+      (json-response {:message "wrong-password"} 400)))
+
   (POST "/rest/v1/login" [username password]
     (if (authenticate username password)
       (json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
@@ -172,11 +182,6 @@
 
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
     (do-user-action (partial user/change-password (user-from-cookie cookies)) params))
-
-  (GET "/rest/v1/username-available/:username" [username]
-    (if-let [user (user/get-case-user username)]
-      (json-response {:message "username-exists"} 400)
-      (json-response {:success true})))
 
   (GET "/rest/v1/page-detail/:action/:aname" [action aname]
     (let [action-fn (case action "group" group/group-detail "user" group/user-detail group/other-detail)]
