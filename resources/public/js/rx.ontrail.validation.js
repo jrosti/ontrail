@@ -63,9 +63,9 @@ $(function() {
 })
 
 // () -> (String -> ValidationResult)
-function requiredV() {
+function requiredV(name) {
   return function(x) {
-    return ($.trim(x).length > 0).orFailure("required")
+    return ($.trim(x).length > 0).orFailure(name || "required")
   }
 }
 
@@ -84,9 +84,10 @@ function minV(minVal) {
 }
 
 // Int -> (Num -> ValidationResult)
-function minLengthV(minLen) {
+function minLengthV(minLen, name) {
   return function(x) {
-    return (x.length >= minLen).orFailure("too_short")
+    console.log("X len is " + x.length + " should be " + minLen, (x.length >= minLen).orFailure("too_short"))
+    return (x.length >= minLen).orFailure(name || "too_short")
   }
 }
 
@@ -125,9 +126,10 @@ function orderV() {
 }
 
 // () -> ((String, String) -> ValidationResult)
-function matchingValuesV() {
+function matchingValuesV(name) {
   return function(x1, x2) {
-    return ($.trim(x1) === $.trim(x2)).orFailure("match")
+    console.log("match", x1, x2)
+    return ($.trim(x1) === $.trim(x2)).orFailure(name || "match")
   }
 }
 
