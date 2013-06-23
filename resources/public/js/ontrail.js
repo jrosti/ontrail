@@ -22,6 +22,15 @@
     }
     $.ajaxSetup({ cache: false })
 
+    function actionButton(btn, action) {
+      var button = $(btn)
+      var actionStream = button.onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled")))
+        .doAction(toggleClassEffect(button, 'disabled'))
+      return action(actionStream)
+        .doAction(toggleClassEffect(button, 'enabled'))
+    }
+
+
     var entries = $("#entries")
     var userList = $("#user-results")
     var groupsList = $("#groups-content")
@@ -519,13 +528,11 @@
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
     var addExerciseButton = $('#add-exercise')
-    var addExercises = addExerciseButton.onClickTouchAsObservable(clickEvent)
-      .select(target).where(_.compose(not, _hasClass("disabled")))
-      .doAction(toggleClassEffect(addExerciseButton, 'disabled'))
-      .combineWithLatestOf(sessions).selectArgs(second).where(exists)
-      .selectAjax(postAddExercise)
-      .doAction(toggleClassEffect(addExerciseButton, 'enabled'))
-      .where(isSuccess).select(ajaxResponseData)
+
+    var addExercises = actionButton('#add-exercise', function(instream) {
+      return instream.combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise)
+    }).where(isSuccess).select(ajaxResponseData)
+
     addExercises.subscribe(showExercise)
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
