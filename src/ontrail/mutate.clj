@@ -28,7 +28,7 @@
         duration (parse-duration (:duration user-ex)) 
         bare-ex {:duration duration
                  :sport (:sport user-ex)
-                 :title (if (> 0 (count (:title user-ex))) (:title user-ex) (:sport user-ex))
+                 :title (if (> (count (:title user-ex)) 0) (:title user-ex) (:sport user-ex))
                  :creationDate creation-date
                  :lastModifiedDate last-modified
                  :user user}
