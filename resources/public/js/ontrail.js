@@ -14,11 +14,10 @@
     var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
 
     if (mobile) {
-      var clickEvent = "touchend"
+      var clickEvent = "touchstart"
       $('#sportFilter').hide()
-      
     } else {
-      var clickEvent = "click touchend"
+      var clickEvent = "click"
     }
     $.ajaxSetup({ cache: false })
 
