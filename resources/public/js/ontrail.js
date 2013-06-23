@@ -15,6 +15,8 @@
 
     if (mobile) {
       var clickEvent = "touchend"
+      $('#sportFilter').hide()
+      
     } else {
       var clickEvent = "click touchend"
     }
@@ -496,8 +498,6 @@
       }).switchLatest()
     groupsScroll.subscribe(renderGroupList)
 
-
-    var onPageLoad = rx.empty().startWith("")
     // onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(OnTrail.rest.sports)
 
     // Lisää lenkki
