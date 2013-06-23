@@ -127,7 +127,9 @@
       return function(data) {
         var elem = $(el)
         var tableElem = $(tableEl)
-        if (!data || !data.length || data.length == 0) return;
+        if (!data || !data.length || data.length == 0) {
+          return
+        }
         var mappedData = _.map(data, function(item) { return _.extend(item, helpers)} )
         var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
         $(content).appendTo(elem)

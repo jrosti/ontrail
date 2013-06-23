@@ -7,10 +7,12 @@
 
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(res) {
-      if (res.length === 0)
+      if (res.length === 0) {
+        $("#content-spinner").html("Ei enempää suorituksia.") 
         return rx.empty()
-      else
+      } else {
         return rx.returnValue(res).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page+1, next) }))
+      }
     })
   }
 
