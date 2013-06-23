@@ -514,9 +514,9 @@
       $("#add-exercise-form .reset").attr('value', '')
       $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
       $("#ex-tags").select2("data", [])
-      $("#time-hint").html("")
-      $("#distance-hint").html("")
+      $("#time-hint, #distance-hint").html("")
       $("#ex-body").setCode("<p>\n<br>\n</p>")
+      $("#ex-title, #ex-duration").blur()
     }
 
     var disable = function(args) {
