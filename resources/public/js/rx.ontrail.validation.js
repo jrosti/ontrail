@@ -293,7 +293,7 @@ var createAjaxValidator = function(ajax) {
   return function() {
     return function(value) {
       if ($.trim(value) == "") return Rx.Observable.returnValue([])
-      var request = ajax.apply(this, value)
+      var request = ajax.apply(this, asArgs(value))
       return request.materialize().select(convertToError).dematerialize()
     }
   }

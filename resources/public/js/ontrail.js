@@ -21,15 +21,17 @@
     }
     $.ajaxSetup({ cache: false })
 
-    function actionButtonAsStream(btn, selector, _action) {
-      var action = (arguments.length == 2) ? selector : _action
-      var button;
+    function actionButtonAsStream(btn, _selector, _action) {
+      var action, selector, button
+      if (arguments.length == 3) {
+        action = _action
+        selector = _selector
+      } else if (arguments.length == 2) {
+        action = _selector
+      }
       var actionStream = $(btn).onClickTouchAsObservable(clickEvent, selector).select(targetLink).where(_.compose(not, _hasClass("disabled")))
-        .doAction(function(elem) { button = $(elem); button.addClass('disabled') }).doAction(_debug("before")).delay(1000)
-
-      return action(actionStream)
-        .doAction(_debug("middle after")).delay(1000).doAction(_debug("after"))
-        .doAction(function() { button.removeClass('disabled') })
+        .doAction(function(elem) { button = $(elem); button.addClass('disabled') })
+      return action(actionStream).doAction(function() { button.removeClass('disabled') })
     }
 
     function ajaxActionButtonAsStream(btn, ajaxAction) {
