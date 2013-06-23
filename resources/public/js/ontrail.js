@@ -511,6 +511,13 @@
       $("#ex-body").setCode("<p>\n<br>\n</p>")
     }
 
+    var disable = function(args) {
+      return this.doAction(function() {
+        var dbg = _debug(category)
+        dbg.apply(dbg, asArgs(arguments))
+      })
+    }
+
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
     var addExercises = $('#add-exercise').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise).where(isSuccess).select(ajaxResponseData)
     addExercises.subscribe(showExercise)
