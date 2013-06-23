@@ -184,7 +184,7 @@ var asObject = function(item, type, id) {
 }
 
 var targetLink = function(event) {
-    return findParent(target(event), isLink)
+  return findParent(target(event), isLink)
 }
 
 
@@ -195,3 +195,4 @@ var elementBottomIsAlmostVisible = function(el, margin) {
   var loadingPoint = el.offset().top + el.outerHeight()
   return (viewportBottom  + margin) >= loadingPoint
 }
+

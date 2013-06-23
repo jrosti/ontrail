@@ -22,12 +22,19 @@
     }
     $.ajaxSetup({ cache: false })
 
-    function actionButton(btn, action) {
-      var button = $(btn)
-      var actionStream = button.onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled")))
-        .doAction(toggleClassEffect(button, 'disabled'))
+    function actionButtonAsStream(btn, selector, _action) {
+      var action = (arguments.length == 2) ? selector : _action
+      var button;
+      var actionStream = $(btn).onClickTouchAsObservable(clickEvent, selector).select(targetLink).where(_.compose(not, _hasClass("disabled")))
+        .doAction(function(elem) { button = $(elem); button.addClass('disabled') }).doAction(_debug("before")).delay(1000)
+
       return action(actionStream)
-        .doAction(toggleClassEffect(button, 'enabled'))
+        .doAction(_debug("middle after")).delay(1000).doAction(_debug("after"))
+        .doAction(function() { button.removeClass('disabled') })
+    }
+
+    function ajaxActionButtonAsStream(btn, ajaxAction) {
+      return actionButtonAsStream(btn, function(instream) { return instream.selectAjax(ajaxAction) }).where(isSuccess).select(ajaxResponseData)
     }
 
 
@@ -249,13 +256,10 @@
       $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top - 110 }, 1000)
     })
 
-    var registerUsers = $('#register-user').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled"))).selectAjax(postRegisterUser)
-      .doAction(function() {  $('#register-form')[0].reset() })
-      .where(isSuccess).select(ajaxResponseData)
+    var registerUsers = ajaxActionButtonAsStream('#register-user', postRegisterUser).doAction(function() {  $('#register-form')[0].reset() })
 
     // change password
-    var changePasswords = $('#change-password').onClickTouchAsObservable(clickEvent).select(target).where(_.compose(not, _hasClass("disabled")))
-      .selectAjax(postChangePassword).where(isSuccess).select(ajaxResponseData)
+    var changePasswords = ajaxActionButtonAsStream('#change-password', postChangePassword)
     changePasswords.subscribeArgs(renderChangePassword)
 
     // create session
@@ -527,13 +531,12 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
-    var addExerciseButton = $('#add-exercise')
 
-    var addExercises = actionButton('#add-exercise', function(instream) {
+    var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise', function(instream) {
       return instream.combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise)
     }).where(isSuccess).select(ajaxResponseData)
-
     addExercises.subscribe(showExercise)
+
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function(page, exid) {
       if (exid === undefined) resetEditor()
     })
@@ -578,8 +581,9 @@
     editExercise.selectArgs(asExercise).selectAjax(OnTrail.rest.details).subscribe(renderEditExercise)
 
     // muokkauksen submit
-    var updateExercises = $('#edit-exercise').onClickTouchAsObservable(clickEvent)
-      .combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise).where(isSuccess).select(ajaxResponseData)
+    var updateExercises = actionButtonAsStream('#add-exercise-form', 'a.editExercise', function(clickStream) {
+      return clickStream.combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise)
+    }).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
 
     // update user profile
@@ -596,8 +600,9 @@
       .selectAjax(OnTrail.rest.markAllRead).subscribe(renderMarkAllRead)
 
     // Lisää kommentti
-    var addComments = $('#exercise').onClickTouchAsObservable(clickEvent).select(target).where(function(el) { return el.id === "add-comment"})
-      .combineWithLatestOf(exPages).selectArgs(second).select(id).selectAjax(postComment).where(isSuccess).select(ajaxResponseData)
+    var addComments = actionButtonAsStream('#exercise', "a.addComment", function( clickStream ) {
+      return clickStream.select(_attr("data-id")).selectAjax(postComment)
+    }).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
@@ -637,7 +642,7 @@
     combine([durationReqValidation, timeValidation]).subscribe(toggleClassEffect($("#ex-duration"), 'has-error'))
 
     var validations = _.flatten([titleValidation, durationReqValidation, timeValidation, distanceValidation])
-    combine(validations).subscribe(toggleClassEffect($('#add-exercise'), "disabled"))
+    combine(validations).subscribe(toggleClassEffect($('#add-exercise, #edit-exercise'), "disabled"))
 
     $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 1, startField: $('#ex-date'), locale: DateLocale.FI })
 
