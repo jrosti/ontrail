@@ -70,7 +70,7 @@
 
                     <!-- Nav -->
                     <nav class="mobileUI-site-nav">
-                        <a class="pageLink" rel="latest">Kaikki</a>
+                        <a class="pageLink" rel="latest">Viimeisimmät</a>
                         <a class="pageLink logged-in" rel="user">Omat</a>
                         <a class="pageLink logged-in" rel="new-comments">Kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
                         <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
@@ -110,7 +110,7 @@
 <div role="latest">
     <section role="listview" class="logged-in">
         <header>
-            <label for="search"><strong>Etsi lenkeistä: </strong></label> <input class="search" type="text" id="search"/>
+            <label for="search"><strong>Etsi: </strong></label> <input class="search" type="text" id="search"/>
         </header>
     </section>
     <div role="listview" id="entries"></div>
@@ -182,7 +182,7 @@
         <a class="pageLink" rel="sport/Pyöräily/gte_distance/20000/lt_distance/100000/sb/pace">20 - 100 km</a>
         <a class="pageLink" rel="sport/Pyöräily/gte_distance/100000/lt_distance/200000/sb/pace">100 km - 200 km</a>
         <a class="pageLink" rel="sport/Pyöräily/gte_distance/200000/sb/pace">Yli 200 km.</a>
-    <h3>Pisimmät lenkit lajeittain</h3>
+    <h3>Pisimmät suoritukset lajeittain</h3>
         <a class="pageLink" rel="sport/Juoksu/sb/distance">Juoksu</a>
         <a class="pageLink" rel="sport/Perinteinen hiihto/sb/distance">Perinteinen hiihto</a>
         <a class="pageLink" rel="sport/Luisteluhiihto/sb/distance">Luisteluhiihto</a>  
@@ -360,7 +360,7 @@
 
 <section role="addex" data-mode="add" class="logged-in">
     <article class="edit-form">
-        <h2>Lisää uusi lenkki</h2>
+        <h2>Lisää uusi suoritus</h2>
         <form id="add-exercise-form" method="post">
 
             <div>
@@ -403,7 +403,7 @@
             </div>
             <div class="buttons">
                 <label></label>
-                <a id="add-exercise" class="button addExercise add green">Lisää lenkki</a>
+                <a id="add-exercise" class="button addExercise add green">Lisää suoritus</a>
                 <a id="edit-exercise" class="button editExercise edit green">Muokkaa lenkkiä</a>
             </div>
         </form>
@@ -467,9 +467,9 @@
             <h2 class="username"></h2>
         </header>
         <ul class="link-list">
-            <li><a class="pageLink" rel="addex">Lisää lenkki</a></li>
+            <li><a class="pageLink" rel="addex">Lisää suoritus</a></li>
             <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-            <li><a class="pageLink" rel="user">Omat lenkit</a></li>
+            <li><a class="pageLink" rel="user">Omat suoritukset</a></li>
             <li><a class="pageLink" rel="summary">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary">Avainsanat</a></li>
@@ -868,7 +868,7 @@
     </style></script>
 
 
-<div id="dialog-delete-ex-confirm" title="Poista lenkki?" style="display: none">
+<div id="dialog-delete-ex-confirm" title="Poista suoritus?" style="display: none">
     <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.  Oletko varma?</p>
 </div>
 
