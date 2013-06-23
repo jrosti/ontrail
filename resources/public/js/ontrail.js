@@ -180,8 +180,8 @@
 
       function addFilter(summary) {
         if (!summary.year) return summary
-        month = (summary.month || false) ? (summary.month+1) + "." + summary.year : summary.year + ""
-        nextMonth = (summary.month || false) ? (summary.month == 11 ? "1." + (summary.year + 1) : ( (summary.month+2) + "." + summary.year)) : (summary.year+1) + ""
+        month = (summary.month >= 0 || false) ? (summary.month+1) + "." + summary.year : summary.year + ""
+        nextMonth = (summary.month >= 0 || false) ? (summary.month == 11 ? "1." + (summary.year + 1) : ( (summary.month+2) + "." + summary.year)) : (summary.year+1) + ""
         summary.sports = _.map(summary.sports, function(item) { return _.extend(item, {sportsFilter: "lte_creationDate/" + nextMonth + "/gte_creationDate/" + month }) } )
         return summary
       }
