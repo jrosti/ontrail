@@ -60,8 +60,11 @@
   (let [basic-query (make-basic-query (select-keys params [:user :tags :sport :distance :duration]))
   		date-range-query (make-range-query parse-date (select-keys params [:lt_creationDate :gt_creationDate :lte_creationDate :gte_creationDate]))
   		long-range-query (make-range-query parse-long (select-keys params (long-cmp-keys)))
-  		group-query (make-group-query (:group params))]
-  	{$and (vec (concat basic-query date-range-query long-range-query group-query))}))
+  		group-query (make-group-query (:group params))
+  		and-query (vec (concat basic-query date-range-query long-range-query group-query))]
+  	(if (> (count and-query) 0)
+  		{$and and-query}
+  		{})))
 
 (defn sortby [params]
 	(if-let [sortkey (:sb params)]

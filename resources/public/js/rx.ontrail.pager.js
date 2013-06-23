@@ -8,9 +8,7 @@
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(res) {
       if (res.length === 0) {
-        var noMore = "Ei enempää suorituksia."
-        $("#content-spinner-content").html(noMore) 
-        $("#content-spinner-latest").html(noMore) 
+        _.map(["#content-spinner-content", "#content-spinner-latest", "#content-spinner-new-comments"], function(elem) { $(elem).html("Ei enempää suorituksia") })
         return rx.empty()
       } else {
         return rx.returnValue(res).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page+1, next) }))
