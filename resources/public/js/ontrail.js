@@ -21,6 +21,8 @@
     }
     $.ajaxSetup({ cache: false })
 
+    var spinnerElements = ["#content-spinner-content", "#content-spinner-latest", "#content-spinner-new-comments"]
+
     function actionButtonAsStream(btn, _selector, _action) {
       var action, selector, button
       if (arguments.length == 3) {
@@ -283,6 +285,7 @@
           $(countEl).text(newComments).show()
           $(el).html("")
           renderLatest(el, tableEl)(items)
+          _.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
         } else {
           $(countEl).hide()
           $(el).html("<article>Ei uusia kommentteja</article>")
@@ -444,8 +447,7 @@
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         entries.html("")
-        $("#content-spinner-content").html("<div class='loading'><img src='/img/loading.gif'/></div>")
-        $("#content-spinner-latest").html("<div class='loading'><img src='/img/loading.gif'/></div>")
+        _.map(spinnerElements, function(elem) { spinner(elem)() })
         $('*[role=latest] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
