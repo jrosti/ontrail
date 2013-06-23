@@ -13,8 +13,11 @@
 
     var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
 
-    var clickEvent = "click touchstart"
-
+    if (mobile) {
+      var clickEvent = "touchend"
+    } else {
+      var clickEvent = "click touchend"
+    }
     $.ajaxSetup({ cache: false })
 
     var entries = $("#entries")
