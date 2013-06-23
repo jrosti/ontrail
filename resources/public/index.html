@@ -74,9 +74,8 @@
                         <a class="pageLink logged-in" rel="user">Omat</a>
                         <a class="pageLink logged-in" rel="new-comments">Kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
                         <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
-                        <a class="pageLink logged-in" id="logout" rel="latest">Kirjaudu ulos</a>
+                        <a class="pageLink logged-in" id="logout" rel="latest">Ulos</a>
                         <a class="pageLink logged-out" rel="register">Luo tunnus</a>
-                        <a class="pageLink logged-out" id="gotoLogin">Kirjaudu sisään</a>
                     </nav>
 
                 </div>
@@ -95,34 +94,6 @@
             </div>
         </div>
     </div>
-    <div id="login-wrapper">
-        <div id="banner" class="logged-out">
-            <div class="5grid-layout">
-                <div class="row">
-                    <div class="6u">
-
-                        <!-- Banner Copy -->
-                        <p>Polut tehdään kulkemalla</p>
-                        <fieldset>
-                            <form id="login-form" method="post">
-                                <input id="username" name="username" type="text" placeholder="Username" />
-                                <input id="password" name="password" type="password" placeholder="Password"/>
-                                <a id="login" class="button login red">Kirjaudu sisään!</a>
-                            </form>
-                        </fieldset>
-
-                    </div>
-                    <div class="6u">
-
-                        <!-- Banner Image -->
-                        <a href="#" class="bordered-feature-image"><img src="img/compass.jpg" alt="" /></a>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 
@@ -477,6 +448,16 @@
 </div>
 <div id="sidemenu" class="3u">
 
+    <section class="logged-out">
+        <div>
+        <form id="login-form" method="post">
+            <input id="username" name="username" type="text" placeholder="Username" />
+            <input id="password" name="password" type="password" placeholder="Password"/>
+            <a id="login" class="button login red">Kirjaudu sisään!</a>
+        </form>
+        </div>
+    </section>
+
     <!-- Sidebar -->
     <section class="logged-in">
         <header>
@@ -535,9 +516,6 @@
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
-
-
-
 </div>
 </div>
 </div>
