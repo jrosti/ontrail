@@ -440,6 +440,7 @@
     var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         entries.html("")
+        $("#content-spinner").html("<div class='loading'><img src='/img/loading.gif'/></div>")
         $('*[role=latest] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
