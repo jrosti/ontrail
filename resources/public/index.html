@@ -701,7 +701,7 @@
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
     <tr><td><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></td><td>{{{description}}}</td>
-        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a><br/> {{/users}}</td>
+        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</td>
         <td class="buttons">
             {{#in}}<a class="leave button red" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
             {{^in}}<a class="join button green" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
