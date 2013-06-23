@@ -38,6 +38,10 @@
     return merged
   }
 
+  Rx.Observable.prototype.spinnerAction = function(onElem) {
+    return this.doAction(spinner(onElem))
+  }
+
   Rx.Observable.prototype.combineWithLatestOf = function() {
     var first = this
     var args = arguments
@@ -107,6 +111,12 @@ var rx = Rx.Observable;
 })();
 
 var OnTrail = {}
+
+var spinner = function(onElem) { 
+  return function() {
+    $(onElem).html("<div class='loading'><img src='/img/loading.gif'/></div>")
+  }
+}
 
 // debugging and dummy subscribing
 var debug = function() {console.log("debug: ", arguments)}
