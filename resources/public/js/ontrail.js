@@ -46,7 +46,6 @@
     }
 
 
-    var entries = $("#entries")
     var userList = $("#user-results")
     var groupsList = $("#groups-content")
 
@@ -177,7 +176,6 @@
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
     var renderGroupList = function(data) {
-      console.log(data)
       ich.groupsTemplate({groups: data}).appendTo(groupsList)
     }
 
@@ -445,25 +443,24 @@
       renderActiveUsersList(system.activeUsers)
     })
 
+
     // initiate loading and search
-    var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
-        entries.html("")
+        $("#content-entries").html("")
         _.map(spinnerElements, function(elem) { spinner(elem)() })
-        $('*[role=latest] *[role=table-entries]').html("")
+        $('*[role=content] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
         if (query === "") {
           $('#searchSummary').html("")
           $('#search').val("")
-          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
-        }
-        else {
-          return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=latest]"))
-        }
+          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=content]"))
+        } else
+          return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=content]"))
       })
       .switchLatest()
-    latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))
+    latestScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("latest")))).repeat().subscribe(renderLatest($("#content-entries"), '*[role=latest] *[role=table-entries]'))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
@@ -475,7 +472,7 @@
         }
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
       }).switchLatest()
-    weeklyScroll.subscribe(renderWeeklySummary)
+    weeklyScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("weeksummary")))).repeat().subscribe(renderWeeklySummary)
 
     var formatToolTip = function(distance, duration, pace) {
       return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
@@ -505,7 +502,7 @@
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
-    var usersScroll = $("#search-users").valueAsObservable().merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
+    var usersScroll = $("#search-users").changes().skip(1).merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
       .doAction(function() { userList.html("") })
       .selectArgs(function(query) {
           if (query === "")
@@ -514,7 +511,7 @@
           return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), userList)
       })
       .switchLatest()
-    usersScroll.subscribe(renderUserList)
+    usersScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("users")))).repeat().subscribe(renderUserList)
 
     // group list scroll
     var groupsScroll = currentPages.whereArgs(partialEquals("groups")).merge(joinsAndLeaves)
@@ -522,9 +519,7 @@
       .selectArgs(function(query) {
           return OnTrail.pager.create(OnTrail.rest.groups, groupsList)
       }).switchLatest()
-    groupsScroll.subscribe(renderGroupList)
-
-    // onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(OnTrail.rest.sports)
+    groupsScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("groups")))).repeat().subscribe(renderGroupList)
 
     // Lisää lenkki
     var resetEditor = function() {
