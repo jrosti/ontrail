@@ -13,21 +13,20 @@
 
     var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
 
-    if (mobile) {
-      var clickEvent = "touchstart"
-      $('#sportFilter').hide()
-    } else {
-      var clickEvent = "click"
-    }
+    var clickEvent = "click touchstart"
 
-    
-    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
-      var clickEvent = "click touchstart"
+    if (mobile) {
+      $('#sportFilter').hide()
+    } 
+
+    // rx.ontrail: onClickTouchAsObservable should handle doubles on AppleWekKit. FIX.
+    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/)) {
+      var clickEvent = "touchstart"
     }
 
     $.ajaxSetup({ cache: false })
 
-    var spinnerElements = ["#content-spinner-content", "#content-spinner-latest", "#content-spinner-new-comments"]
+    var spinnerElements = ["#content-spinner-content", "#content-spinner-latest"]
 
     function actionButtonAsStream(btn, _selector, _action) {
       var action, selector, button
