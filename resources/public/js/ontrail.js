@@ -403,6 +403,7 @@
       }).doAction(function() {
         $('*[role=content] *[role=table-entries]').html("")
       }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
+        .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
         .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
 
     var renderPageDetail = function(args) {
