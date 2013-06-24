@@ -394,7 +394,6 @@
     clickedLinks.where(_.compose(partialEqualsAny(["summary-view", "list-view"]), _attr("id"))).select(_attr("id"))
         .subscribe(function(id) { $("body").attr("data-list-type", id.substr(0, id.length - 5))})
 
-
     function renderUserMenu(user) { $("#user-header").html(ich.userHeaderTemplate({"data": user})) }
 
     // update current user in the menu bar
@@ -443,10 +442,8 @@
     }
 
     var systemPages = currentPages.whereArgs(partialEquals("systemstats"))
-
     systemPages.selectAjax(OnTrail.rest.system).subscribe(function(system) {
-      var systemstats = system.systemstats
-      _.map(["sysheap", "sysmaxHeap", "sysuptime", "sysexs", "sysusers"], function(field) { $('#' + field).text(systemstats[field]) })
+      _.map(system.systemstats, function updateStats(value, field) { $('#' + field).text(value) })
       renderActiveUsersList(system.activeUsers)
     })
 
