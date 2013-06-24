@@ -19,6 +19,12 @@
     } else {
       var clickEvent = "click"
     }
+
+    
+    if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+      var clickEvent = "click touchstart"
+    }
+
     $.ajaxSetup({ cache: false })
 
     var spinnerElements = ["#content-spinner-content", "#content-spinner-latest", "#content-spinner-new-comments"]
