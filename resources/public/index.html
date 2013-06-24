@@ -106,25 +106,6 @@
 <div class="row">
 <div class="9u">
 
-<!-- Main Content -->
-<div role="latest">
-    <section role="listview" class="logged-in">
-        <header>
-            <label for="search"><strong>Etsi: </strong></label> <input class="search" style="width:350px;" type="text" id="search"/>
-        </header>
-            <p id="searchSummary"></p>
-    </section>
-    <div role="listview" id="entries"></div>
-    <section role="tableview">
-        <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-            <tbody role="table-entries">
-            </tbody>
-        </table>
-    </section>
-    <div id="content-spinner-latest"></div>
-</div>
-
 <section role="groups" class="logged-in">
     <table class="details">
         <thead><tr><th>Ryhmä</th><th class="user">Kuvaus</th><th class="title">Jäsenet</th><th>Toiminnot</th></tr></thead>
@@ -298,8 +279,15 @@
     </article>
 </section>
 
+<!-- Main Content -->
 <div>
     <div role="content">
+        <section role="listview" class="logged-in">
+            <header>
+                <label for="search"><strong>Etsi: </strong></label> <input class="search" type="text" id="search"/>
+            </header>
+            <p id="searchSummary"></p>
+        </section>
         <section>
             <div id="content-header"></div>
         </section>
