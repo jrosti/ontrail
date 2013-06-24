@@ -283,24 +283,22 @@
       $('.username').html(userId)
     })
 
-    function renderNewContent(el, countEl, tableEl) {
-      return function(content) {
-        var items = asArgs(content)
-        if (asArgs(content).length > 0) {
-          var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
-          $(countEl).text(newComments).show()
-          $(el).html("")
-          renderLatest(el, tableEl)(items)
-          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
-        } else {
-          $(countEl).hide()
-          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
-          $(el).html("<article>Ei uusia kommentteja</article>")
-        }
-      }
+    function renderNewComments(content) {
+      var items = asArgs(content)
+      $("#content-entries").html( items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
+      if (items.length > 0)
+        renderLatest("#content-entries", "*[role=table-entries]")(items)
     }
 
-
+    function renderCommentCount(elem) {
+      return function(content) {
+        var newComments = _(asArgs(content)).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
+        if (newComments > 0)
+          $(elem).text(newComments).show()
+        else
+          $(elem).hide()
+      }
+    }
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
@@ -739,12 +737,13 @@
     var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(30000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).doAction(function() {
-      $("*[role=new-comments] *[role=table-entries]").html("")
-    }).subscribe(renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]"))
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).doAction(function() {
-        $("*[role=new-own-comments] *[role=table-entries]").html("")
-      }).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]"))
+    var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments)
+    commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
+    currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second).subscribe(renderNewComments)
+
+    var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments)
+    commentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+    currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second).subscribe(renderNewComments)
 
     // run our function on load
     if (!mobile) {
