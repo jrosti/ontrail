@@ -670,8 +670,6 @@
     var menuOffsetTop = $('#header-wrapper').offset().top + 52
     var menuOffsetWidth = $('#header-wrapper').width()
     var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
-    var sideMenuOffsetRight = $('#sidemenu').position().left
-    var sideMenuOffsetWidth = $('#sidemenu').width()
 
     var fixMenuPosition = function(isLoggedIn) {
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
