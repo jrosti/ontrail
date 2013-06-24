@@ -1,8 +1,11 @@
 (function(){
+  var timer = Rx.Observable.interval(100).publish()
+  timer.connect()
+
   // todo: remove depsu to elementBottomIsAlmostVisible
   var nextPage = function(elem) {
     var e = ($.isFunction(elem)) ? elem() : elem
-    return Rx.Observable.interval(200).where(function() { return elementBottomIsAlmostVisible(e, 100) })
+    return timer.where(function() { return elementBottomIsAlmostVisible(e, 100) })
   }
 
   var pager = function(ajaxSearch, page, next) {
