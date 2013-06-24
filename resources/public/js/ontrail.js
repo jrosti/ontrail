@@ -280,7 +280,13 @@
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) {
+      function appendUser (_, _el) {
+        var el = $(_el)
+        var rel = el.attr("rel")
+        el.attr("rel", rel.split("/")[0] + "/" + userId)
+      }
       $('.username').html(userId)
+      $('*[data-user]').map(appendUser)
     })
 
     function renderNewComments(content) {
@@ -360,15 +366,9 @@
     }
     var _findUser = function(pos) { return function(args, currentUser) { return findUser(args, currentUser, pos )} }
 
-    var appendUser = function(args, currentUser, pos) {
-      return (args.length > (pos || 0)) ? args : args.concat(currentUser)
-    }
-    var _appendUser = function(pos) { return function(args, currentUser) { return appendUser(args, currentUser, pos )} }
-
-
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("byyear")
       else if (arguments.length == 4) setFilter("bymonth")
       else setFilter("")
@@ -399,7 +399,7 @@
     sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport", "group"])).distinctUntilChanged()
-    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
+    userTagPages.selectArgs(function() {
         var args = Array.prototype.slice.call(arguments)
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
@@ -428,7 +428,7 @@
       }
     }
 
-    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
+    userTagPages.selectArgs(function() {
       return [arguments[0], arguments[1]]
     }).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
@@ -498,10 +498,10 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").selectArgs(tail).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
-    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
