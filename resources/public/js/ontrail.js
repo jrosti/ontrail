@@ -285,9 +285,10 @@
           $(countEl).text(newComments).show()
           $(el).html("")
           renderLatest(el, tableEl)(items)
-          _.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
+          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
         } else {
           $(countEl).hide()
+          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
           $(el).html("<article>Ei uusia kommentteja</article>")
         }
       }
