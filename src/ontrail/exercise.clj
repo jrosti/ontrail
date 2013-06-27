@@ -39,6 +39,7 @@
            new-comments (newcomment-cache id)
            bare-ex {:id id
                     :user user
+                    :synopsis (:synopsis user-profile)
                     :isNew (is-new exercise last-visit)
                     :distance distance
                     :title (:title exercise)
