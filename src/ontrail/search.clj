@@ -28,6 +28,7 @@
 
 (defn to-bare-term-list [exercise] 
   (concat 
+   (to-term-seq (tags-to-strings (:tags exercise)))
    (to-term-seq (:user exercise))
    (to-term-seq (:body exercise))
    (to-term-seq (:title exercise))

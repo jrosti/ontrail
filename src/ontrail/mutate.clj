@@ -59,11 +59,11 @@
 (defn create-ex [user params]
   (sportsummary/reset-memo-for user)
   (.info logger (str (:user params) " creating ex " params))
-  (let [ret  (mc/insert-and-return EXERCISE (from-user-ex user params))
-        str-id (str (:_id ret))]
-    (insert-exercise-inmem-index ret)
-    (.trace logger (str (:user params) " created ex " ret " with id " str-id))
-    (as-ex-result ret)))
+  (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
+        str-id (str (:_id ex))]
+    (insert-exercise-inmem-index ex)
+    (.trace logger (str (:user params) " created ex " ex " with id " str-id))
+    (as-ex-result ex)))
 
 (defn update-ex [user params]
   (sportsummary/reset-memo-for user)
@@ -92,7 +92,9 @@
                                         :body (:body params)}}})
   (.info logger (str user " created comment " params))
   (newcount-comment-ex user (:id params))
-  (get-ex (:id params)))
+  (let [ex (get-ex (:id params))]
+    (insert-exercise-inmem-index ex)
+    ex))
 
 (defn delete-comment[ex-id rule]
   (newcount-uncomment-ex ex-id)
