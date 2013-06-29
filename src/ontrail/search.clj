@@ -135,5 +135,5 @@
         page (page-or-default query)
         terms (filter valid-term? (re-seq re-term (.toLowerCase query-string)))]
     (if (> (count terms) 0)
-      (search page terms)
-      [])))
+      {:results (search page terms)}
+      {:results []})))
