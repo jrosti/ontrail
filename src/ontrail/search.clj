@@ -109,8 +109,8 @@
   (let [result (memo-intersect terms)
         full-head (take (* page search-per-page) result)]
     (if (> (count full-head) (* search-per-page (dec page)))
-      {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count full-head)}
-      {:results [] :total 0})))
+      {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count result)}
+      {:results [] :total (count result)})))
   
 (defn try-get-one [id]
   (try 
