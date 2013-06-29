@@ -40,24 +40,22 @@
                      ))
 
 (defn get-ex-terms [exercise]
-  (let [ex-date (:creationDate exercise)
-        ex-distance (:distance exercise)
-        bare-term-list (to-bare-term-list exercise)
+  (let [bare-term-list (to-bare-term-list exercise)
         term-list (filter not-too-short-term? bare-term-list)]
     term-list))      
           
 (def inverted-index (atom {}))
 
-(defn insert-term [assoc-fn index ex-id term]
+(defn insert-term [assoc-fn ex-id index term]
   (if-let [postings (index term)]
-    (assoc-fn index term #{ex-id})
-    (let [new-val (conj (index term) ex-id)]
-      (assoc-fn index term new-val))))
+    (let [new-val (conj postings ex-id)]
+      (assoc-fn index term new-val))
+    (assoc-fn index term #{ex-id})))
 
 (defn insert-exercise-to-index [assoc-fn index ex]
   (let [terms (get-ex-terms ex)
-        ex-id (str (:_id ex))]
-    (reduce (partial insert-term assoc-fn index) terms)))
+        ex-id (str (:_id ex))] 
+    (reduce (partial insert-term assoc-fn ex-id) index terms)))
 
 (def insert-exercise-inmem-index
   (partial insert-exercise-to-index assoc @inverted-index))
@@ -69,7 +67,7 @@
 (defn search-ids [& terms]
   (let [filtered-terms (filter not-too-short-term? terms)]
     (if (> (count filtered-terms) 0)
-      (take search-limit (apply clojure.set/intersection (map #(get @inverted-index (.toLowerCase %)) filtered-terms)))
+      (take search-limit (apply clojure.set/intersection (map #(@inverted-index %) filtered-terms)))
       '())))
 
 (defn search [& terms]
