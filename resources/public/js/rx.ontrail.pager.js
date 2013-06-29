@@ -10,15 +10,21 @@
 
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(data) {
+      // I do not follow this code properly. FIXME this.
+      console.log(data.searchSummary)
+      if (data.searchSummary) {
+        $('#searchSummary').html(data.searchSummary)
+      }
+
       if (data.results.length === 0) {
         _.map(["#content-spinner-content", "#content-spinner-latest"], function(elem) { $(elem).html("Ei enempää suorituksia") })
         return rx.empty()
       } else {
-        return rx.returnValue(data.results).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page+1, next) }))
+        return rx.returnValue(data.results).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page + 1, next) }))
       }
     })
   }
-  
+
   var Pager = function() {}
   Pager.prototype.create = function(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
   OnTrail.pager = new Pager()

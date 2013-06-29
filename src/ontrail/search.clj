@@ -109,8 +109,8 @@
   (let [result (memo-intersect terms)
         full-head (take (* page search-per-page) result)]
     (if (> (count full-head) (* search-per-page (dec page)))
-      (take-last search-per-page (take (* page search-per-page) result))
-      [])))
+      {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count full-head)}
+      {:results [] :total 0})))
   
 (defn try-get-one [id]
   (try 
@@ -118,10 +118,14 @@
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
+(defn str-terms [terms] 
+  (reduce #(str % " " %2 (if (and (@term-freq %2) (> (@term-freq %2) 0)) (str " (" (@term-freq %2) ")") "")) "" terms))
+
 (defn search [page terms]
-  (let [ids  (search-ids page terms)]
-    (.debug logger (str "Terms " (reduce #(str % "[" %2 "]") "" terms) " page: " page " search result count: " (count ids)))
-    (as-ex-result-list (filter identity (map try-get-one ids)))))
+  (let [res (search-ids page terms)
+        ids (:results res)]
+    (.debug logger (str "Terms " (str-terms terms) " page: " page " search result count: " (count ids)))
+    {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total res)}))
 
 (defn page-or-default [query]
   (try 
@@ -130,10 +134,16 @@
       (.error logger (str "Q: " query " E: " e))
       1)))
 
+(defn format-summary [results terms query-string] 
+  (let [invalid (filter #(not (valid-term? %)) (re-seq re-term (.toLowerCase query-string)))]
+    (str "Löydettiin " (:total results) " tulosta hakusanoilla " (str-terms terms)
+         (if (> (count invalid) 0) (str " ei käytetty sanoja: " (str-terms invalid)) ""))))
+
 (defn search-wrapper [query]
   (let [query-string (:q query)
         page (page-or-default query)
         terms (filter valid-term? (re-seq re-term (.toLowerCase query-string)))]
     (if (> (count terms) 0)
-      {:results (search page terms)}
-      {:results []})))
+      (let [res (search page terms)]
+        {:results (:results res) :searchSummary (format-summary res terms query-string)})
+      {:results [] :searchSummary (str "Ei tuloksia hakuun: " query-string)})))
