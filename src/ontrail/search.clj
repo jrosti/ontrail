@@ -5,6 +5,7 @@
             [clj-time.core :as time]
             [clj-time.coerce :as cljc]
             [monger.result :as mr]
+            [clojure.core.memoize :as memo]
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
 
@@ -87,18 +88,25 @@
 (defn to-fast-order [terms]
   (let [freqs @term-freq
         count-term #(if (freqs %) (freqs %) 0)]
-    (sort-by count-term terms)))
+    (if (> (count terms) 2)
+      (sort-by count-term terms)
+      terms)))
 
-(defn intersect [terms]
+(defn intersect-and-sort [terms]
   (let [result (apply clojure.set/intersection (map #(@inverted-index %) (to-fast-order terms)))
         ts @timestamps
         sortfn #(if (ts %) (ts %) 0)
-        sorted-result (sort-by sortfn > result)] ;; todo use lazy sort
-    (.debug logger (str "Search intersection size: " (count sorted-result)))
+        sorted-result (sort-by sortfn > result)]
+    (.info logger (str "Intersect and sort hit: search intersection size: " (count sorted-result)))
     sorted-result))
 
+;; intersection is the heaviest operation, and it is memoized 60 seconds, in order not to redo this
+;; in infinite scroll
+(def memo-intersect
+  (memo/ttl intersect-and-sort :ttl/threshold (* 60 1000))) 
+
 (defn search-ids [page terms]
-  (let [result (intersect terms)
+  (let [result (memo-intersect terms)
         full-head (take (* page search-per-page) result)]
     (if (> (count full-head) (* search-per-page (dec page)))
       (take-last search-per-page (take (* page search-per-page) result))
