@@ -25,7 +25,7 @@
 (defn tags-to-string [tags]
   (apply str (interpose " " tags)))
 
-(def re-term #"[a-zåäö#0-9\-]+")
+(def re-term #"[a-zåäö#0-9\-_]+")
 
 (defn to-term-seq [^String words]
   (if words
@@ -94,13 +94,17 @@
         ts @timestamps
         sortfn #(if (ts %) (ts %) 0)
         sorted-result (sort-by sortfn > result)] ;; todo use lazy sort
+    (.debug logger (str "Search intersection size: " (count sorted-result)))
     sorted-result))
 
 (defn search-ids [page terms]
-  (let [result (intersect terms)]
-    (take-last search-per-page (take (* page search-per-page) result))))
-
-(defn get-one [id]
+  (let [result (intersect terms)
+        full-head (take (* page search-per-page) result)]
+    (if (> (count full-head) (* search-per-page (dec page)))
+      (take-last search-per-page (take (* page search-per-page) result))
+      [])))
+  
+(defn try-get-one [id]
   (try 
     (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
     (catch Exception exception
@@ -108,12 +112,20 @@
 
 (defn search [page terms]
   (let [ids  (search-ids page terms)]
-    (.debug logger (str "Terms " terms " search result count: " (count ids)))
-    (as-ex-result-list (filter identity (map get-one ids)))))
+    (.debug logger (str "Terms " (reduce #(str % "[" %2 "]") "" terms) " page: " page " search result count: " (count ids)))
+    (as-ex-result-list (filter identity (map try-get-one ids)))))
+
+(defn page-or-default [query]
+  (try 
+    (Integer/valueOf (:page query))
+    (catch Exception e
+      (.error logger (str "Q: " query " E: " e))
+      1)))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)
+        page (page-or-default query)
         terms (filter valid-term? (re-seq re-term (.toLowerCase query-string)))]
     (if (> (count terms) 0)
-      (search 1 terms)
+      (search page terms)
       [])))
