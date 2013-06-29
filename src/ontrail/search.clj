@@ -7,7 +7,7 @@
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
 
-(def minimum-term-length 3)
+(def minimum-term-length 2)
 (def search-limit 100)
 (def not-too-short-term? #(>= (count %) minimum-term-length))
 
@@ -19,44 +19,52 @@
 (defn kms[d]
   (str "km:" (quot d 1000)))
 
+(def re-term #"[a-zåäö#0-9\-]+")
+
+(defn to-term-seq [^String words]
+  (if words
+    (re-seq re-term (.toLowerCase (strip-html words)))
+    []))
+
+(defn to-bare-term-list [exercise] 
+  (concat 
+   (to-term-seq (:user exercise))
+   (to-term-seq (:body exercise))
+   (to-term-seq (:title exercise))
+   (to-term-seq (:sport exercise))
+   (to-term-seq (reduce (fn [a b] 
+                          (if (and b (:body b)) 
+                            (str a " " (:body b)) 
+                            a)) 
+                        "" (:comments exercise)))
+                     ))
+
 (defn get-ex-terms [exercise]
-  (let [part (partial get exercise)
-        ex-date (:creationDate exercise)
+  (let [ex-date (:creationDate exercise)
         ex-distance (:distance exercise)
-        words (.toLowerCase (str (part :user) " " (part :sport) " "
-                                 (part :body) " " (part :title) " "
-                                 (tags-to-string (part :tags))))
-        clean-words (string/replace (strip-html words) #"[^a-zåäö#0-9]+" " ")
-        bare-term-list (string/split clean-words #" +")
-        term-list (filter not-too-short-term? bare-term-list)
-        extra-terms (conj term-list
-                          (str "d:" (:distance exercise))
-                          (str "y:" (time/year ex-date))
-                          (str "m:" (time/month ex-date)))]
-    (if (number? ex-distance)
-      (conj extra-terms (kms ex-distance))
-      extra-terms)))
-      
+        bare-term-list (to-bare-term-list exercise)
+        term-list (filter not-too-short-term? bare-term-list)]
+    term-list))      
           
 (def inverted-index (atom {}))
 
-(defn fst [x y] x)
+(defn insert-term [assoc-fn index ex-id term]
+  (if-let [postings (index term)]
+    (assoc-fn index term #{ex-id})
+    (let [new-val (conj (index term) ex-id)]
+      (assoc-fn index term new-val))))
 
-(defn insert-term [ex-id term]
-  (let [index @inverted-index]
-    (if (not (contains? index term))
-      (fst 1 (swap! inverted-index assoc term #{ex-id}))
-      (fst 0 (let [new-val (clojure.set/union (get index term) #{ex-id})]
-        (swap! inverted-index assoc term new-val))))))
-
-(defn insert-exercise-inmem-index [ex]
+(defn insert-exercise-to-index [assoc-fn index ex]
   (let [terms (get-ex-terms ex)
         ex-id (str (:_id ex))]
-    (reduce + (map (partial insert-term ex-id) terms))))
+    (reduce (partial insert-term assoc-fn index) terms)))
 
+(def insert-exercise-inmem-index
+  (partial insert-exercise-to-index assoc @inverted-index))
+  
 (defn rebuild-index []
-  (do (reset! inverted-index {})
-      (apply + (map insert-exercise-inmem-index (mc/find-maps EXERCISE {})))))
+  (let [new-index (transient {})]
+    (count (do (reset! inverted-index (persistent! (reduce (partial insert-exercise-to-index assoc!) new-index (mc/find-maps EXERCISE {}))))))))
 
 (defn search-ids [& terms]
   (let [filtered-terms (filter not-too-short-term? terms)]
@@ -73,4 +81,4 @@
   (let [query-string (:q query)]
     (if (nil? query-string)
       '()
-      (apply search (string/split query-string #" +")))))
+      (apply search (re-seq re-term (.toLowerCase query-string))))))
