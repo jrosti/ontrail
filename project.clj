@@ -8,6 +8,7 @@
                 [clj-time "0.4.4"]
                 [enlive "1.0.1"]
                 [clj-json "0.4.3"]
+		[org.clojure/core.memoize "0.5.6"]
                 [org.clojure/data.json "0.1.3"]
                 [com.lambdaworks/scrypt "1.3.3"]
                 [lamina "0.5.0-beta15"]
