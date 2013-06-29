@@ -454,10 +454,14 @@
         $('*[role=latest] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
-        if (query === "")
+        if (query === "") {
+          $('#searchSummary').html("")
+          $('#search').val("")
           return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
-        else
+        }
+        else {
           return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=latest]"))
+        }
       })
       .switchLatest()
     latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))
