@@ -110,11 +110,13 @@
     (json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-    (json-response (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))))
+    (json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))}))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (json-response (ex/get-latest-ex-list (user-from-cookie cookies) 
-      (mongerfilter/make-query-from params) (get-page params) (mongerfilter/sortby params))))
+    (json-response {:results 
+                    (ex/get-latest-ex-list (user-from-cookie cookies) 
+                                           (mongerfilter/make-query-from params) (get-page params) 
+                                           (mongerfilter/sortby params))}))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
     (json-response (unread/comments-all (user-from-cookie cookies))))
@@ -131,9 +133,10 @@
   (GET "/rest/v1/ex-list-tag/:tag/:page" {params :params cookies :cookies}
        (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (get-page params) {:creationDate -1})))
 
-  (GET "/rest/v1/list-users/:page" [page] (json-response (user/get-user-list {} page)))
+  (GET "/rest/v1/list-users/:page" [page] (json-response {:results (user/get-user-list {} page)}))
 
-  (GET "/rest/v1/find-users/:term/:page" [term page] (json-response (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)))
+  (GET "/rest/v1/find-users/:term/:page" [term page] 
+       (json-response {:results (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)}))
 
   (GET "/rest/v1/validate/time/:time" [time]
     (let [duration (to-human-time (parse-duration time))]
