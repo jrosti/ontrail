@@ -457,7 +457,7 @@
         if (query === "")
           return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
         else
-          return OnTrail.rest.searchResults(query)
+          return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=latest]"))
       })
       .switchLatest()
     latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))

@@ -57,7 +57,7 @@
 
   Rest.prototype.exercises = function(filter, page) { return getAsObservableResultData("ex-list-filter?" + [$.param(filter), "page=" + page].join("&")) }
   Rest.prototype.details = function(kind, id) { return getAsObservableResultData(kind, id) }
-  Rest.prototype.searchResults = function(query) { return getAsObservableResultData("search?q=" + query ) }
+  Rest.prototype.searchResults = function(query, page) { return getAsObservableResultData("search?q=" + query + "&page=" + page) }
 
   Rest.prototype.system = function() { return getAsObservableResultData("system") }
 
