@@ -1,5 +1,7 @@
 (function(){
-  var timer = Rx.Observable.interval(100).publish()
+  var dataLoadEnd = new Rx.Subject()
+  var timer = dataLoadEnd.merge($(window).scrollAsObservable().throttle(150)).merge($(document).onAsObservable("ready")).doAction(_debug("tiemer tiecks")).publish()
+
   timer.connect()
 
   // todo: remove depsu to elementBottomIsAlmostVisible
@@ -14,6 +16,8 @@
       if (data && data.searchSummary) {
         $('#searchSummary').html(data.searchSummary)
       }
+
+      dataLoadEnd.onNext("")
 
       if (data.results.length === 0) {
         $("#content-spinner").html("Ei enempää suorituksia")
