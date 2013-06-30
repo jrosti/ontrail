@@ -738,7 +738,7 @@
     currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second).subscribe(renderNewComments)
 
     var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments)
-    commentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+    ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
     currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second).subscribe(renderNewComments)
 
     // run our function on load
