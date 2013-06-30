@@ -530,6 +530,7 @@
       $("#time-hint, #distance-hint").html("")
       $("#ex-body").setCode("<p>\n<br>\n</p>")
       $("#ex-title, #ex-duration").blur()
+      $("#ex-title").focus()
     }
 
     var disable = function(args) {
