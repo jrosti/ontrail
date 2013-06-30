@@ -291,7 +291,7 @@
       var items = asArgs(content)
       $("#content-entries").html( items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
       if (items.length > 0)
-        renderLatest("#content-entries", "*[role=table-entries]")(items)
+        renderLatest("#content-entries", "#table-entries")(items)
     }
 
     function renderCommentCount(elem) {
@@ -401,10 +401,10 @@
         var args = Array.prototype.slice.call(arguments)
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
-        $('*[role=content] *[role=table-entries]').html("")
+        $("#table-entries").html("")
       }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
         .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
-        .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
+        .subscribe(renderLatest("#content-entries", "#table-entries"))
 
     var renderPageDetail = function(args) {
       $('#content-header').html("")
@@ -450,7 +450,7 @@
       .doAction(function() {
         $("#content-entries").html("")
         spinner(spinnerElement)()
-        $('*[role=content] *[role=table-entries]').html("")
+        $("#table-entries").html("")
       })
       .selectArgs(function(query) {
         if (query === "") {
@@ -461,7 +461,7 @@
           return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=content]"))
       })
       .switchLatest()
-    latestScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("latest")))).repeat().subscribe(renderLatest($("#content-entries"), '*[role=latest] *[role=table-entries]'))
+    latestScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("latest")))).repeat().subscribe(renderLatest($("#content-entries"), '#table-entries'))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
@@ -602,8 +602,8 @@
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     var renderMarkAllRead = function(args) {
-      renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]")([])
-      renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]")([])
+      renderNewContent("#unread-entries", "#new-comments-count", "#table-entries")([])
+      renderNewContent("#unread-own-entries", "#new-own-comments-count", "#table-entries")([])
     }
 
     var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
