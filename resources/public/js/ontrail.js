@@ -446,7 +446,7 @@
 
 
     // initiate loading and search
-    var latestScroll = $("#search").changes().skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().skip(1).throttle(300).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         $("#content-entries").html("")
         _.map(spinnerElements, function(elem) { spinner(elem)() })
