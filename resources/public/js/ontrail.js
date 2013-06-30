@@ -735,11 +735,13 @@
 
     var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments)
     commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
-    currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second).subscribe(renderNewComments)
+    currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second)
+      .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-comments")))).repeat().subscribe(renderNewComments)
 
     var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments)
     ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
-    currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second).subscribe(renderNewComments)
+    currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second)
+      .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
 
     // run our function on load
     if (!mobile) {
