@@ -1007,6 +1007,21 @@ body.logged-out #content-top {
   width: 200px;
   margin-left: 5px;
 }
+#search-container {
+  display: none;
+}
+body[data-page="latest"] #search-container {
+  display: block;
+}
+#header-container {
+  display: none;
+}
+body[data-page="user"] #header-container,
+body[data-page="group"] #header-container,
+body[data-page="sport"] #header-container,
+body[data-page="tags"] #header-container {
+  display: block;
+}
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;
   position: fixed;
