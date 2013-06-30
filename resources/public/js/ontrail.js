@@ -734,14 +734,16 @@
     var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(30000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments)
+    var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
+    var commentsTicker = loggedInPoller.startWith(0).merge(commentPages).selectAjax(OnTrail.rest.newComments)
     commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
-    currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second)
+    commentPages.combineLatest(commentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-comments")))).repeat().subscribe(renderNewComments)
 
-    var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments)
+    var ownCommentPages = currentPages.whereArgs(partialEquals("new-own-comments"))
+    var ownCommentsTicker = loggedInPoller.startWith(0).merge(ownCommentPages).selectAjax(OnTrail.rest.newOwnComments)
     ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
-    currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second)
+    ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
 
     // run our function on load
