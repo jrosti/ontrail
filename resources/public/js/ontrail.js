@@ -26,7 +26,7 @@
 
     $.ajaxSetup({ cache: false })
 
-    var spinnerElements = ["#content-spinner-content", "#content-spinner-latest"]
+    var spinnerElement = "#content-spinner"
 
     function actionButtonAsStream(btn, _selector, _action) {
       var action, selector, button
@@ -449,7 +449,7 @@
     var latestScroll = $("#search").changes().skip(1).throttle(300).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         $("#content-entries").html("")
-        _.map(spinnerElements, function(elem) { spinner(elem)() })
+        spinner(spinnerElement)()
         $('*[role=content] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
