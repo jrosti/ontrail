@@ -58,7 +58,7 @@
                   (mq/find {})
                   (mq/paginate :page (Integer/valueOf page) :per-page 20)
                   (mq/sort {:lname 1}))]
-    {:groups (vec (map (partial decorate user) results))}))
+    {:results (vec (map (partial decorate user) results))}))
 
 (defn stats-query [user] 
   {:sport "Pyöräily" :user user :creationDate {"$gte" (time/date-time 2013 5 1 0 0)}})

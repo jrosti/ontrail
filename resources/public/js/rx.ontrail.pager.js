@@ -11,8 +11,7 @@
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(data) {
       // I do not follow this code properly. FIXME this.
-      console.log(data.searchSummary)
-      if (data.searchSummary) {
+      if (data && data.searchSummary) {
         $('#searchSummary').html(data.searchSummary)
       }
 

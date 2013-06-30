@@ -177,6 +177,7 @@
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
     var renderGroupList = function(data) {
+      console.log(data)
       ich.groupsTemplate({groups: data}).appendTo(groupsList)
     }
 
