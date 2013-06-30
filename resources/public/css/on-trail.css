@@ -71,26 +71,26 @@ div[role="dialog"] {
 }
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
-body[data-page="latest"] div[role="latest"],
+body[data-page="latest"] div[role="content"],
 body[data-page="tags"] div[role="content"],
 body[data-page="sport"] div[role="content"],
 body[data-page="user"] div[role="content"],
 body[data-page="group"] div[role="content"],
-body[data-page="new-comments"] div[role="new-comments"],
-body[data-page="new-own-comments"] div[role="new-own-comments"],
-body[data-page="latest"][data-list-type="summary"] div[role="latest"] section[role="tableview"],
+body[data-page="new-comments"] div[role="content"],
+body[data-page="new-own-comments"] div[role="content"],
+body[data-page="latest"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="tags"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="sport"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="user"][data-list-type="summary"] div[role="content"] section[role="tableview"],
-body[data-page="new-comments"][data-list-type="summary"] div[role="new-comments"] section[role="tableview"],
-body[data-page="new-own-comments"][data-list-type="summary"] div[role="new-own-comments"] section[role="tableview"],
-body[data-page="latest"][data-list-type="list"] div[role="latest"] *[role="listview"],
+body[data-page="new-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="new-own-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="latest"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="tags"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="sport"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="user"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="group"][data-list-type="list"] div[role="content"] *[role="listview"],
-body[data-page="new-comments"][data-list-type="list"] div[role="new-comments"] *[role="listview"],
-body[data-page="new-own-comments"][data-list-type="list"] div[role="new-own-comments"] *[role="listview"],
+body[data-page="new-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="new-own-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="user"] section[role="user"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="users"] section[role="users"],
@@ -1006,6 +1006,21 @@ body.logged-out #content-top {
 #search {
   width: 200px;
   margin-left: 5px;
+}
+#search-container {
+  display: none;
+}
+body[data-page="latest"] #search-container {
+  display: block;
+}
+#header-container {
+  display: none;
+}
+body[data-page="user"] #header-container,
+body[data-page="group"] #header-container,
+body[data-page="sport"] #header-container,
+body[data-page="tags"] #header-container {
+  display: block;
 }
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;

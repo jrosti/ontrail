@@ -46,7 +46,6 @@
     }
 
 
-    var entries = $("#entries")
     var userList = $("#user-results")
     var groupsList = $("#groups-content")
 
@@ -177,7 +176,6 @@
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
     var renderGroupList = function(data) {
-      console.log(data)
       ich.groupsTemplate({groups: data}).appendTo(groupsList)
     }
 
@@ -280,27 +278,31 @@
     // toggle logged-in and logged-out
     sessions.subscribe(function(userId) { $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId) })
     loggedIns.subscribe(function(userId) {
+      function appendUser (_, _el) {
+        var el = $(_el)
+        var rel = el.attr("rel")
+        el.attr("rel", rel.split("/")[0] + "/" + userId)
+      }
       $('.username').html(userId)
+      $('*[data-user]').map(appendUser)
     })
 
-    function renderNewContent(el, countEl, tableEl) {
-      return function(content) {
-        var items = asArgs(content)
-        if (asArgs(content).length > 0) {
-          var newComments = _(items).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
-          $(countEl).text(newComments).show()
-          $(el).html("")
-          renderLatest(el, tableEl)(items)
-          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
-        } else {
-          $(countEl).hide()
-          //_.map(["#content-spinner-new-comments"], function(elem) { $(elem).html("") })
-          $(el).html("<article>Ei uusia kommentteja</article>")
-        }
-      }
+    function renderNewComments(content) {
+      var items = asArgs(content)
+      $("#content-entries").html( items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
+      if (items.length > 0)
+        renderLatest("#content-entries", "*[role=table-entries]")(items)
     }
 
-
+    function renderCommentCount(elem) {
+      return function(content) {
+        var newComments = _(asArgs(content)).filter(_prop("newComments")).map(_prop("newComments")).reduce(function(a, b) { return a + b })
+        if (newComments > 0)
+          $(elem).text(newComments).show()
+        else
+          $(elem).hide()
+      }
+    }
 
     // open single entries
     var parentArticle = function(el) { return $(el).closest('article') }
@@ -362,15 +364,9 @@
     }
     var _findUser = function(pos) { return function(args, currentUser) { return findUser(args, currentUser, pos )} }
 
-    var appendUser = function(args, currentUser, pos) {
-      return (args.length > (pos || 0)) ? args : args.concat(currentUser)
-    }
-    var _appendUser = function(pos) { return function(args, currentUser) { return appendUser(args, currentUser, pos )} }
-
-
     // filtering
     var setFilter = function( filter ) { $("body").attr("data-filter", filter) }
-    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).subscribeArgs(function() {
+    var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function() {
       if (arguments.length == 3) setFilter("byyear")
       else if (arguments.length == 4) setFilter("bymonth")
       else setFilter("")
@@ -401,12 +397,13 @@
     sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport", "group"])).distinctUntilChanged()
-    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
+    userTagPages.selectArgs(function() {
         var args = Array.prototype.slice.call(arguments)
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
         $('*[role=content] *[role=table-entries]').html("")
       }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
+        .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
         .subscribe(renderLatest("#content-entries", "*[role=content] *[role=table-entries]"))
 
     var renderPageDetail = function(args) {
@@ -430,7 +427,7 @@
       }
     }
 
-    userTagPages.combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(function() {
+    userTagPages.selectArgs(function() {
       return [arguments[0], arguments[1]]
     }).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
@@ -447,25 +444,24 @@
       renderActiveUsersList(system.activeUsers)
     })
 
+
     // initiate loading and search
-    var latestScroll = $("#search").valueAsObservable().merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
-        entries.html("")
+        $("#content-entries").html("")
         _.map(spinnerElements, function(elem) { spinner(elem)() })
-        $('*[role=latest] *[role=table-entries]').html("")
+        $('*[role=content] *[role=table-entries]').html("")
       })
       .selectArgs(function(query) {
         if (query === "") {
           $('#searchSummary').html("")
           $('#search').val("")
-          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=latest]"))
-        }
-        else {
-          return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=latest]"))
-        }
+          return OnTrail.pager.create(OnTrail.rest.latest, $("*[role=content]"))
+        } else
+          return OnTrail.pager.create(_.partial(OnTrail.rest.searchResults, query), $("*[role=content]"))
       })
       .switchLatest()
-    latestScroll.subscribe(renderLatest(entries, '*[role=latest] *[role=table-entries]'))
+    latestScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("latest")))).repeat().subscribe(renderLatest($("#content-entries"), '*[role=latest] *[role=table-entries]'))
 
     var weeklyScroll = currentPages.whereArgs(partialEquals("weeksummary"))
       .doAction(function() { $("#weeksummary").html("") })
@@ -477,7 +473,7 @@
         }
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
       }).switchLatest()
-    weeklyScroll.subscribe(renderWeeklySummary)
+    weeklyScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("weeksummary")))).repeat().subscribe(renderWeeklySummary)
 
     var formatToolTip = function(distance, duration, pace) {
       return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
@@ -500,14 +496,14 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").selectArgs(tail).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
-    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).combineWithLatestOf(sessions).selectArgs(_appendUser(1)).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
-    var usersScroll = $("#search-users").valueAsObservable().merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
+    var usersScroll = $("#search-users").changes().skip(1).merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
       .doAction(function() { userList.html("") })
       .selectArgs(function(query) {
           if (query === "")
@@ -516,7 +512,7 @@
           return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), userList)
       })
       .switchLatest()
-    usersScroll.subscribe(renderUserList)
+    usersScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("users")))).repeat().subscribe(renderUserList)
 
     // group list scroll
     var groupsScroll = currentPages.whereArgs(partialEquals("groups")).merge(joinsAndLeaves)
@@ -524,9 +520,7 @@
       .selectArgs(function(query) {
           return OnTrail.pager.create(OnTrail.rest.groups, groupsList)
       }).switchLatest()
-    groupsScroll.subscribe(renderGroupList)
-
-    // onPageLoad.selectAjax(OnTrail.rest.sports).subscribe(OnTrail.rest.sports)
+    groupsScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("groups")))).repeat().subscribe(renderGroupList)
 
     // Lisää lenkki
     var resetEditor = function() {
@@ -739,12 +733,13 @@
     var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(30000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments).doAction(function() {
-      $("*[role=new-comments] *[role=table-entries]").html("")
-    }).subscribe(renderNewContent("#unread-entries", "#new-comments-count", "*[role=new-comments] *[role=table-entries]"))
-    loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments).doAction(function() {
-        $("*[role=new-own-comments] *[role=table-entries]").html("")
-      }).subscribe(renderNewContent("#unread-own-entries", "#new-own-comments-count", "*[role=new-own-comments] *[role=table-entries]"))
+    var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newComments)
+    commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
+    currentPages.whereArgs(partialEquals("new-comments")).combineLatest(commentsTicker, second).subscribe(renderNewComments)
+
+    var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newOwnComments)
+    commentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+    currentPages.whereArgs(partialEquals("new-own-comments")).combineLatest(ownCommentsTicker, second).subscribe(renderNewComments)
 
     // run our function on load
     if (!mobile) {

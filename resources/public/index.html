@@ -71,7 +71,7 @@
                     <!-- Nav -->
                     <nav class="mobileUI-site-nav">
                         <a class="pageLink" rel="latest">Viimeisimmät</a>
-                        <a class="pageLink logged-in" rel="user">Omat</a>
+                        <a class="pageLink logged-in" rel="user" data-user="">Omat</a>
                         <a class="pageLink logged-in" rel="new-comments">Kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
                         <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
                         <a class="pageLink logged-in" id="logout" rel="latest">Ulos</a>
@@ -105,48 +105,6 @@
 <div class="5grid-layout">
 <div class="row">
 <div class="9u">
-
-<!-- Main Content -->
-<div role="latest">
-    <section role="listview" class="logged-in">
-        <header>
-            <label for="search"><strong>Etsi: </strong></label> <input class="search" style="width:350px;" type="text" id="search"/>
-        </header>
-            <p id="searchSummary"></p>
-    </section>
-    <div role="listview" id="entries"></div>
-    <section role="tableview">
-        <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-            <tbody role="table-entries">
-            </tbody>
-        </table>
-    </section>
-    <div id="content-spinner-latest"></div>
-</div>
-
-<div role="new-comments">
-    <div id="unread-entries" role="listview"></div>
-    <section role="tableview">
-        <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-            <tbody role="table-entries">
-            </tbody>
-        </table>
-    </section>
-    <!--<div id="content-spinner-new-comments"></div>-->
-</div>
-
-<div role="new-own-comments">
-    <div id="unread-own-entries" role="listview"></div>
-    <section role="tableview">
-        <table class="details">
-            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-            <tbody role="table-entries">
-            </tbody>
-        </table>
-    </section>
-</div>
 
 <section role="groups" class="logged-in">
     <table class="details">
@@ -321,9 +279,16 @@
     </article>
 </section>
 
+<!-- Main Content -->
 <div>
     <div role="content">
-        <section>
+        <section id="search-container">
+            <header>
+                <label for="search"><strong>Etsi: </strong></label> <input class="search" type="text" id="search"/>
+            </header>
+            <p id="searchSummary"></p>
+        </section>
+        <section id="header-container">
             <div id="content-header"></div>
         </section>
 
@@ -481,10 +446,10 @@
         <ul class="link-list">
             <li><a class="pageLink" rel="addex">Lisää suoritus</a></li>
             <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-            <li><a class="pageLink" rel="user">Omat suoritukset</a></li>
-            <li><a class="pageLink" rel="summary">Lajit</a></li>
-            <li><a class="pageLink" rel="weeksummary">Harjoitusviikot</a></li>
-            <li><a class="pageLink" rel="tagsummary">Avainsanat</a></li>
+            <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
+            <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
+            <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+            <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
             <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
         </ul>
     </section>
