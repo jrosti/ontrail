@@ -1,8 +1,10 @@
 (function(){
   var dataLoadEnd = new Rx.Subject()
-  var timer = dataLoadEnd.merge($(window).scrollAsObservable().throttle(150)).merge($(document).onAsObservable("ready")).publish()
 
-  timer.connect()
+  var scrolls = $(window).scrollAsObservable().throttle(100)
+  var initialTimer = new Rx.Observable.interval(100).take(10)
+
+  var timer = dataLoadEnd.merge(initialTimer.merge(scrolls)).merge($(document).onAsObservable("ready")).publish().refCount()
 
   // todo: remove depsu to elementBottomIsAlmostVisible
   var nextPage = function(elem) {
@@ -16,8 +18,7 @@
       if (data && data.searchSummary) {
         $('#searchSummary').html(data.searchSummary)
       }
-
-      dataLoadEnd.onNext("")
+      dataLoadEnd.onNext("tick")
 
       if (data.results.length === 0) {
         $("#content-spinner").html("Ei enempää suorituksia")
