@@ -321,6 +321,13 @@
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
         $("*[data-id='" + data.id + "']").remove()
       })
+
+    // share
+    var shareClicks = clickedLinks.where(function(elem) { return $(elem).hasClass('share') }).select(function(el) { return attr("rel", el) })
+    shareClicks.subscribeArgs(function(url) {
+      window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent("http://ontrail.net/#" + url),'facebook-share-dialog','width=626,height=436')
+    })
+
     // show own delete buttons
     sessions.subscribe(function(user) {
       $('#logged-in-styles').replaceWith(ich.loggedInStylesTemplate({'user': user }))
