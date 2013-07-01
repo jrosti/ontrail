@@ -1,6 +1,6 @@
 (function(){
   var dataLoadEnd = new Rx.Subject()
-  var timer = dataLoadEnd.merge($(window).scrollAsObservable().throttle(150)).merge($(document).onAsObservable("ready")).doAction(_debug("tiemer tiecks")).publish()
+  var timer = dataLoadEnd.merge($(window).scrollAsObservable().throttle(150)).merge($(document).onAsObservable("ready")).publish()
 
   timer.connect()
 

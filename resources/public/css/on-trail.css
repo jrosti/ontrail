@@ -149,6 +149,10 @@ body[data-page="new-comments"] #view-toggles,
 body[data-page="new-own-comments"] #view-toggles {
   display: inline;
 }
+article.joined a.join,
+article.not-joined a.leave {
+  display: none;
+}
 .right {
   float: right;
 }
