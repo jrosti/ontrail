@@ -145,6 +145,8 @@ body[data-list-type="list"] #list-view {
 body[data-page="latest"] #view-toggles,
 body[data-page="tags"] #view-toggles,
 body[data-page="user"] #view-toggles,
+body[data-page="sport"] #view-toggles,
+body[data-page="group"] #view-toggles,
 body[data-page="new-comments"] #view-toggles,
 body[data-page="new-own-comments"] #view-toggles {
   display: inline;
