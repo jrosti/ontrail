@@ -321,6 +321,13 @@
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function(data) {
         $("*[data-id='" + data.id + "']").remove()
       })
+
+    // share
+    var shareClicks = clickedLinks.where(function(elem) { return $(elem).hasClass('share') }).select(function(el) { return attr("rel", el) })
+    shareClicks.subscribeArgs(function(url) {
+      window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent("http://ontrail.net/#" + url),'facebook-share-dialog','width=626,height=436')
+    })
+
     // show own delete buttons
     sessions.subscribe(function(user) {
       $('#logged-in-styles').replaceWith(ich.loggedInStylesTemplate({'user': user }))
@@ -334,19 +341,25 @@
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // join groups
-    var joinsAndLeaves = clickedLinks
-      .whereArgs(function(elem) { return $(elem).is('.join,.leave')})
-      .select(function(el) { return attr("rel", el).split("/") }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
+    var joinAndLeaveClicks = clickedLinks.whereArgs(function(elem) { return $(elem).is('.join,.leave')}).publish()
+    joinAndLeaveClicks.connect()
+    var joinsAndLeaves = joinAndLeaveClicks.select(function(el) { return attr("rel", el).split("/") }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
+
+    joinAndLeaveClicks.subscribe(function(elem) {
+      console.log(parentArticle(elem), $(elem).is('.join') ? "joined" : "not-joined")
+      parentArticle(elem).attr("class", $(elem).is('.join') ? "joined" : "not-joined")
+    })
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') })
     var initialPage = function(user) {
       var address = $.address.value()
-      if (address && address != "") return splitM($.address.value())
+      if (address && address != "") return splitM(address)
       return (user && ["user", user]) || "latest"
     }
-    var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
+
+    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
     currentPages.whereArgs(partialEquals("register")).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
@@ -374,7 +387,14 @@
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
-      var next = function() { observer.onNext($.address.value())}
+      var lastAddress = $.address.value();
+      var next = function() {
+        var address = $.address.value()
+        if (address != lastAddress) {
+          lastAddress = address
+          observer.onNext(address)
+        }
+      }
       $.address.init(next).change(next)
       return nothing()
     }).select(splitM)
