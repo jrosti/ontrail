@@ -199,6 +199,10 @@ article.exercise p {
 article .newEx {
   color: #ce1a00;
 }
+article .share img {
+  cursor: pointer;
+  padding: 4px 0 0 0;
+}
 article img {
   max-width: 100% ! important;
   padding: 10px 10px 25px 10px;
