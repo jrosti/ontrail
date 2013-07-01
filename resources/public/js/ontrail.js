@@ -343,10 +343,11 @@
     var pageLinks = clickedLinks.where(function(elem) { return $(elem).hasClass('pageLink') })
     var initialPage = function(user) {
       var address = $.address.value()
-      if (address && address != "") return splitM($.address.value())
+      if (address && address != "") return splitM(address)
       return (user && ["user", user]) || "latest"
     }
-    var currentPages = sessions.select(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
+
+    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
 
     currentPages.whereArgs(partialEquals("register")).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
@@ -374,7 +375,14 @@
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
-      var next = function() { observer.onNext($.address.value())}
+      var lastAddress = $.address.value();
+      var next = function() {
+        var address = $.address.value()
+        if (address != lastAddress) {
+          lastAddress = address
+          observer.onNext(address)
+        }
+      }
       $.address.init(next).change(next)
       return nothing()
     }).select(splitM)
