@@ -154,6 +154,11 @@ body[data-page="new-own-comments"] #view-toggles {
   display: inline;
 }
 
+article.joined a.join,
+article.not-joined a.leave
+{
+  display: none;
+}
 
 .right {
   float: right;
@@ -207,6 +212,11 @@ article {
 
   .newEx {
     color: @button-gradient-end;
+  }
+
+  .share img {
+    cursor: pointer;
+    padding: 4px 0 0 0;
   }
 
   img {

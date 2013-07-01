@@ -186,9 +186,9 @@
   (POST "/rest/v1/change-password" {params :params cookies :cookies}
     (do-user-action (partial user/change-password (user-from-cookie cookies)) params))
 
-  (GET "/rest/v1/page-detail/:action/:aname" [action aname]
-    (let [action-fn (case action "group" group/group-detail "user" group/user-detail group/other-detail)]
-      (json-response (action-fn aname))))
+  (GET "/rest/v1/page-detail/:action/:aname" {params :params cookies :cookies}
+    (let [action-fn (case (:action params) "group" group/group-detail "user" group/user-detail group/other-detail)]
+      (json-response (action-fn (:aname params) (user-from-cookie cookies)))))
 
   (GET "/rest/v1/own-groups" {params :params cookies :cookies}
     (json-response (group/own-as-list (user-from-cookie cookies))))

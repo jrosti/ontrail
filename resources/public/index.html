@@ -596,6 +596,7 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
+            <a class="share right" rel="ex/{{id}}"><img src="/img/social_facebook_box_blue_32.png" alt="Jaa Facebookissa"/></a>
             <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
@@ -731,10 +732,18 @@
 </script>
 
 <script id="groupDetailTemplate" type="text/html">
-    <article>
+    <article class="{{^in}}not-{{/in}}joined">
         <header>
-            <h3>{{target}}: {{description}}</h3>
-            <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</td>
+            <p class="right">
+                <a class="leave button red" rel="{{target}}/part"><span class="label">Poistu</span></a>
+                <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+            </p>
+
+            <h3>{{target}}</h3>
+            <h4>{{description}}</h4>
+            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</p>
+
+
         </header>
     </article>
 </script>

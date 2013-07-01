@@ -149,6 +149,10 @@ body[data-page="new-comments"] #view-toggles,
 body[data-page="new-own-comments"] #view-toggles {
   display: inline;
 }
+article.joined a.join,
+article.not-joined a.leave {
+  display: none;
+}
 .right {
   float: right;
 }
@@ -194,6 +198,10 @@ article.exercise p {
 }
 article .newEx {
   color: #ce1a00;
+}
+article .share img {
+  cursor: pointer;
+  padding: 4px 0 0 0;
 }
 article img {
   max-width: 100% ! important;
