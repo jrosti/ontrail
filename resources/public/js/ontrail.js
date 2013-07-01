@@ -290,6 +290,7 @@
     function renderNewComments(content) {
       var items = asArgs(content)
       $("#content-entries").html( items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
+      $("#table-entries").html( items.length > 0 ? "" : "<tr><td>Ei uusia kommentteja</td></tr>")
       if (items.length > 0)
         renderLatest("#content-entries", "#table-entries")(items)
     }
