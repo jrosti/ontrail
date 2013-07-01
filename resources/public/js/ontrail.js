@@ -334,9 +334,14 @@
       .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     // join groups
-    var joinsAndLeaves = clickedLinks
-      .whereArgs(function(elem) { return $(elem).is('.join,.leave')})
-      .select(function(el) { return attr("rel", el).split("/") }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
+    var joinAndLeaveClicks = clickedLinks.whereArgs(function(elem) { return $(elem).is('.join,.leave')}).publish()
+    joinAndLeaveClicks.connect()
+    var joinsAndLeaves = joinAndLeaveClicks.select(function(el) { return attr("rel", el).split("/") }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
+
+    joinAndLeaveClicks.subscribe(function(elem) {
+      console.log(parentArticle(elem), $(elem).is('.join') ? "joined" : "not-joined")
+      parentArticle(elem).attr("class", $(elem).is('.join') ? "joined" : "not-joined")
+    })
 
     // toggle pages when pageLink is clicked
     var pageAndArgs = _.compose(splitM, _.partial(attr, 'rel'))

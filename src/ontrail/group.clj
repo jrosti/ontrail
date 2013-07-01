@@ -75,13 +75,14 @@
                         users)))
       [])))
 
-(defn group-detail [group-name]
+(defn group-detail [group-name user]
   (let [group-map (find-by-name group-name)]
-    {:action "group"
-     :target group-name
-     :description (:description group-map)
-     :users (:users group-map)
-     :res (fetch-stats group-map)}))
+    (decorate user
+      {:action "group"
+       :target group-name
+       :description (:description group-map)
+      :users (:users group-map)
+      :res (fetch-stats group-map)})))
 
 (defn records [user]
   [
@@ -127,10 +128,10 @@
 (defn get-records [username]
   (filter identity (map get-record (records username))))
 
-(defn user-detail [username]
+(defn user-detail [username user]
   (let [records (get-records username)]
     (merge {:action "user" :target username :hasRecords (not (empty? records)) :records records 
             :profile (profile/get-profile username)} (own-as-list username))))
 
-(defn other-detail [target]
+(defn other-detail [target user]
   {:action "other" :target target})
