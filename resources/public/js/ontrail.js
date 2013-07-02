@@ -360,7 +360,14 @@
       return (user && ["user", user]) || "latest"
     }
 
-    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).publish()
+    // back button handling
+    var backPresses = Rx.Observable.create(function( observer ) {
+      var next = function() { observer.onNext($.address.value()) }
+      $.address.init(next).change(next)
+      return nothing()
+    }).select(splitM)
+
+    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).merge(backPresses).publish()
 
     currentPages.whereArgs(partialEquals("register")).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
@@ -386,27 +393,13 @@
       else setFilter("")
     })
 
-    // back button handling
-    var backPresses = Rx.Observable.create(function( observer ) {
-      var lastAddress = $.address.value();
-      var next = function() {
-        var address = $.address.value()
-        if (address != lastAddress) {
-          lastAddress = address
-          observer.onNext(address)
-        }
-      }
-      $.address.init(next).change(next)
-      return nothing()
-    }).select(splitM)
-
     var showPage = function() {
       var pages = _.argsToArray(arguments)
       $('body').attr('data-page', pages[0])
       $('#password').attr('value', '')
       $.address.value(pages.join("/"))
     }
-    currentPages.merge(backPresses).subscribeArgs(showPage)
+    currentPages.subscribeArgs(showPage)
 
     clickedLinks.where(_.compose(partialEqualsAny(["summary-view", "list-view"]), _attr("id"))).select(_attr("id"))
         .subscribe(function(id) { $("body").attr("data-list-type", id.substr(0, id.length - 5))})
