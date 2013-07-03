@@ -6,7 +6,7 @@
     var entries = $("#entries")
     var userList = $("#user-results")
 
-    var clickType = Modernizr.touch ? "touchstart" : "click"
+    var clickType = Modernizr.touch ? "click touchstart" : "click"
 
     function selectionFormat(state) {
       if (!state.id) return state.toString();
