@@ -2,7 +2,7 @@
 	(:require [ontrail.profile :as profile]
 			  [ontrail.user :as user]
 			  [ontrail.group :as group]
-			  [ontrail.tagsummary :as tagsummary]
+			  [ontrail.sportsummary :as sportsummary]
 			  [ontrail.newcomment :as nc]
 			  [ontrail.system :as system]
 			  [ontrail.nlp :as nlp]
@@ -19,7 +19,7 @@
 		 :email (:email user-map)
 		 :avatarUrl (user/get-avatar-url user)
 		 :ownGroups (:groups (group/own-as-list user))
-		 :ownTags (tagsummary/get-distinct-tags {:user user})
+		 :ownTags (sportsummary/get-distinct-tags {:user user})
 		 :sports nlp/sports
 		 }))
 
