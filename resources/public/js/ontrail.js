@@ -416,7 +416,7 @@
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
         $("#table-entries").html("")
-      }).throttle(101).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
+      }).throttle(30).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
         .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
         .subscribe(renderLatest("#content-entries", "#table-entries"))
 
@@ -445,8 +445,8 @@
       return [arguments[0], arguments[1]]
     }).throttle(101).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
-    var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').selectAjax(OnTrail.rest.details)
-    exPages.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
+    var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101).selectAjax(OnTrail.rest.details)
+    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
 
     var renderActiveUsersList = function(data) {
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
@@ -460,13 +460,13 @@
 
 
     // initiate loading and search
-    var latestScroll = $("#search").changes().skip(1).throttle(101).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         $("#content-entries").html("")
         spinner(spinnerElement)()
         $("#table-entries").html("")
       })
-      .throttle(101)
+      .throttle(30)
       .selectArgs(function(query) {
         if (query === "") {
           $('#searchSummary').html("")
