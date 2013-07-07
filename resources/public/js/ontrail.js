@@ -339,7 +339,7 @@
       .whereArgs(function(elem) { return $(elem).hasClass('delete-comment')})
       .select(function(el) { return attr("rel", el).split("/") })
     deleteCommentClicks.selectMany(confirmDeleteComment).selectArgs(first).selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData)
-      .combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+      .combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
 
     // join groups
     var joinAndLeaveClicks = clickedLinks.whereArgs(function(elem) { return $(elem).is('.join,.leave')}).publish()
@@ -416,7 +416,7 @@
         return asObject.apply(asObject, _.flatten([{}, args]))
       }).doAction(function() {
         $("#table-entries").html("")
-      }).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
+      }).throttle(101).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
         .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
         .subscribe(renderLatest("#content-entries", "#table-entries"))
 
@@ -443,10 +443,10 @@
 
     userTagPages.selectArgs(function() {
       return [arguments[0], arguments[1]]
-    }).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
+    }).throttle(101).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').selectAjax(OnTrail.rest.details)
-    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+    exPages.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
 
     var renderActiveUsersList = function(data) {
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
@@ -460,12 +460,13 @@
 
 
     // initiate loading and search
-    var latestScroll = $("#search").changes().skip(1).throttle(300).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().skip(1).throttle(101).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         $("#content-entries").html("")
         spinner(spinnerElement)()
         $("#table-entries").html("")
       })
+      .throttle(101)
       .selectArgs(function(query) {
         if (query === "") {
           $('#searchSummary').html("")
@@ -510,10 +511,10 @@
     })
 
     // initiate summary loading after login
-    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").selectArgs(tail).selectAjax(OnTrail.rest.summary)
+    var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").throttle(101).selectArgs(tail).selectAjax(OnTrail.rest.summary)
     summaries.subscribe(_.partial(renderSummary, "summary"))
 
-    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
+    var tagSummaries = currentPages.whereArgs(partialEquals("tagsummary")).spinnerAction("#tagsummary-entries").throttle(101).selectArgs(tail).selectAjax(OnTrail.rest.tagsummary)
     tagSummaries.subscribe(_.partial(renderSummary, "tagsummary"))
 
     // user search scroll
@@ -627,7 +628,7 @@
     var addComments = actionButtonAsStream('#exercise', "a.addComment", function( clickStream ) {
       return clickStream.select(_attr("data-id")).selectAjax(postComment)
     }).where(isSuccess).select(ajaxResponseData)
-    addComments.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+    addComments.combineWithLatestOf(sessions).throttle(300).subscribeArgs(renderSingleExercise)
 
     _.forEach($(".pageLink"), function(elem) { $(elem).attr('href', "javascript:nothing()") })
 
