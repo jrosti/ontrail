@@ -12,7 +12,7 @@
         [ontrail.profile :only (post-profile)]
         )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
-         tagsummary sportsummary weekly mongodb])
+         sportsummary weekly mongodb])
   (:gen-class)
   (:require [ontrail.loggedin :as loggedin]
             [ontrail.mongerfilter :as mongerfilter]
