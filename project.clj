@@ -1,6 +1,7 @@
 (defproject ontrail "0.0.1"
   :description "A training blog."
   :dependencies [[org.clojure/clojure "1.5.1"]
+  		[digest "1.4.3"]
   		[com.draines/postal "1.9.2"]
                 [aleph "0.3.0-beta15"]
                 [compojure "1.1.5"]
