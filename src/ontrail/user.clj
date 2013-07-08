@@ -1,6 +1,7 @@
 (ns ontrail.user
   (:use [ontrail crypto mongodb utils emails])
   (:require [monger.collection :as mc]
+            [digest :as digest]
             [monger.query :as mq]
             [monger.result :as mr]
             [postal.core :as postal]))
@@ -10,7 +11,7 @@
 (defn as-gravatar [user]
   (let [gravatar? (:gravatar user)
         email (.toLowerCase (get user :email))
-        gravatar-md5-hash (md5 email)]
+        gravatar-md5-hash (digest/md5 email)]
     (if gravatar?
       (str "http://www.gravatar.com/avatar/" gravatar-md5-hash "?d=monsterid&r=x")
       "/img/default-avatar.png")))
