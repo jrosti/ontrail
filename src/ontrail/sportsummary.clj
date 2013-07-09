@@ -94,5 +94,6 @@
   nil)
 
 (defn reset-memo-for [user]
-  (dosync (alter summary-memos dissoc user))
+  (dosync (alter summary-memos dissoc {:u user :f get-overall-summary-cond}))
+  (dosync (alter summary-memos dissoc {:u user :f get-overall-tags-cond}))
   (future (memoizes-after-reset user)))
