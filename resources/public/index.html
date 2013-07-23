@@ -284,7 +284,65 @@
     <div role="content">
         <section id="search-container">
             <header>
-                <label for="search"><strong>Etsi: </strong></label> <input class="search" type="text" id="search"/>
+                <div id="search-form" class="logged-in">
+                    <a id="show-filter" href="javascript:void(0)">Suodata</a> /
+                    <label for="search"><strong>Etsi: </strong></label> 
+                    <input class="search" type="text" id="search"/>
+                </div>
+                <div id="filter-form" style="display: none" class="logged-in">
+                    <a id="show-search" href="javascript:void(0)">Etsi</a> / 
+                    <strong>Suodata</strong>:
+                    <br/>
+                    <p>
+                        <label>Käyttäjät</label>
+                        <input id="filter-users" data-placeholder="Lisää käyttäjiä" multiple class="    chzn-select" style="width:350px;"/>
+                    </p>
+
+                    <p>
+                    <label>Laji</label>
+                    <select id="filter-sport" class="chzn-select" style="width:350px;">
+                    </select>
+                    </p>
+
+                    <p>
+                    <label>Matka vähintään</label>
+                    <input id="filter-mindistance" name="filter-mindistance" placeholder="metriä" maxlength="6" size="6"/>
+
+                    <label>Matka enintään</label>
+                    <input id="filter-maxdistance" name="filter-maxdistance" placeholder="metriä" maxlength="6" size="6"/></p>
+
+                    <p>
+                    <label>Syke vähintään</label>
+                    <input id="filter-minhr" name="filter-minhr" placeholder="min" maxlength="3" size="3"/>
+
+                    <label>Syke enintään</label>
+                    <input id="filter-maxhr" name="filter-maxhr" placeholder="max" maxlength="3" size="3"/></p>
+
+                    <p>
+                    
+                    <label>Alkaen</label>
+                    <div id="filter-continuous-start-date">
+                        
+                        <input style="display: none ! important" id="filter-start-date" name="date" placeholder="Alkaen?"/>
+                    </div>
+
+                    <label>Päättyen</label>
+                    <div id="filter-continuous-stop-date">
+                        <input style="display: none ! important" id="filter-stop-date" name="date" placeholder="Päättyen?"/>
+                    </div>
+
+                    </p>
+                    <p><label>Järjestä </label>
+                    <select id="filter-sort">
+                        <option value="avghr" selected>korkein syke ensin</option>
+                        <option value="pace">nopein ensin</option>
+                        <option value="distance">pisin ensin</option>
+                        <option value="duration">pitkäkestoisin ensin</option>
+                        <option value="creationDate">uusin ensin</option>
+                    </select></p>
+
+                    <br/><a id="filter-render" class="button green" href="javascript:void(0);">Listaa</a>
+                </div>
             </header>
             <p id="searchSummary"></p>
         </section>
