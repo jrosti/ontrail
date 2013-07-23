@@ -162,8 +162,11 @@
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
-      if(!Modernizr.touch)
+      ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#filter-sport'))
+      if(!Modernizr.touch) {
         $('#ex-sport').select2({formatSelection: selectionFormat})
+        $('#filter-sport').select2({formatSelection: selectionFormat})
+      }
     }
     var renderTags = function(data) {
       $('#ex-tags').select2({
@@ -172,6 +175,7 @@
         formatSelection: selectionFormat
       })
     }
+
     var renderUserList = function(data) {
       ich.usersCreateTemplate({users: data}).appendTo(userList)
     }
@@ -430,12 +434,12 @@
         ich.userDetailTemplate(args.data).appendTo($('#content-header'))
         $("#recordsDiv").hide()
         $("#toggleRecords").toggle(function() { 
-            $("#toggleRecords").text("Piilota juoksuennätykset") 
-            $("#recordsDiv").show()
-        }, function() { 
-          $("#toggleRecords").text("Näytä juoksuennätykset") 
-          $("#recordsDiv").hide()
-        })
+        $("#toggleRecords").text("Piilota juoksuennätykset") 
+        $("#recordsDiv").show()
+      }, function() { 
+        $("#toggleRecords").text("Näytä juoksuennätykset") 
+        $("#recordsDiv").hide()
+      })
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
       }
@@ -783,6 +787,62 @@
         $('span.toggle').removeClass('active')
       }
     })
+
+    var togglePairAction = function(a, b) {
+        return function() {
+          a.hide()
+          b.show()
+        }
+    }
+
+    // A static query using bit heavy mongodb offline query to suggest currently active users. 
+    // Must have a cached version of this in the server side. Chzn does not limit options, and
+    // thus we can drop users
+    var activeUsers = ["-James-","20660","Anttu","BirdiBlu","Duckbill","Elwood","Emo","Epunäiti","Esteri","Ewanator","Fransa","Geoeläin","Haapis","Hazel","Heidi","Hejkki","Hietsu","HiiNokka","Holle","Hopo","Hähi","Imatran Voima","Jagge","Jiihoo","JohannaLP","Jokiv","Jukkis","Justiina_","Juupe","Jörö","KapteeniSolisluu","Kerttu","Keura","Koskaanenjuokse","Lanttu","Larry","LauraIsabella","Leena51","Lynx","MariP","Massa-Matti","Nandi","Niina","Osku","Pantse","Pasi_P","Peksu","Peppi","Pohjan Tähti","Pumppi60","Päivi","SannaK","Sehnsucht","Silu","Sirpakka","Sissi von Vuorenpeikko","Soironen","Sope","Suski","TaijaO","Tapsajussi","Tasku67","Tatteus","Tero","Tiiti54","Triina","Tuomas","Turri","Ursa Minor","Vilivilperi","admin","anatooli","arddy","berniboy","ejex","erz","ese","hannikainen","herba63","isi","jamaatta","jamo57","jarmila","jatossu","jennirinne","jogo3000","jyri","kalervo1","kalman","kata","kettis","kirva","kriish","maja","mala","mana","meusi","miguel horsehead","miklai","muhola","mummi","niilos mc","oikakati","oskuman","ousi","pellervo","peta","pietro","plouh","poko","rampako","rauman","ritaatti","rote","saarja","saavape","sakke 2","sammatti","sanina","sava","ski","tatteus","tiinu","tuomasnu","wicca"]
+
+    var renderFilterValues = function() {
+      $('#filter-continuous-start-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-start-date'), locale: DateLocale.FI })
+      $('#filter-continuous-stop-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-stop-date'), locale: DateLocale.FI })
+
+      $('#filter-users').select2({
+        tags: activeUsers,
+        tokenSeparators: [","],
+        formatSelection: selectionFormat
+      })
+    }
+
+    var onPageLoad = rx.empty().startWith("")
+    onPageLoad.selectAjax(renderFilterValues)
+
+    var renderFilter = function() {
+      var toCriteria = function(comp, elName, keyword) {
+        var v = $(elName) ? $(elName).val() : ""
+        if (v.length > 0) {
+          return "/" + comp + "_" + keyword + "/" + val
+        } else {
+          return ""
+        }
+
+      }
+      var toUrl = 'sport/' + $('#filter-sport').val()
+      var users = _.filter(_.flatten(["", _.map($("#filter-users").select2("data"), selectionFormat)]))
+      if (users.length > 0) {
+        toUrl = toUrl + "/user/" + users.join(',')
+      }
+      toUrl = toUrl + toCriteria('gte', '#filter-minhr', 'avghr')
+      toUrl = toUrl + toCriteria('lte', '#filter-maxhr', 'avghr')
+      toUrl = toUrl + toCriteria('gte', '#filter-mindistance', 'distance')
+      toUrl = toUrl + toCriteria('lte', '#filter-maxdistance', 'distance')
+      toUrl = toUrl + toCriteria('gte', '#filter-start-date', 'creationDate')
+      toUrl = toUrl + toCriteria('lte', '#filter-stop-date', 'creationDate')
+
+      toUrl = toUrl + "/sb/" + $('#filter-sort').val()
+      $.address.value(toUrl)
+    }
+
+    $('#show-filter').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#search-form'), $('#filter-form')))
+    $('#show-search').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#filter-form'), $('#search-form')))
+    $('#filter-render').onClickTouchAsObservable(clickEvent).subscribe(renderFilter)
 
     // initiate current page
     currentPages.connect()
