@@ -827,10 +827,10 @@
       if (users.length > 0) {
         toUrl = toUrl + "/user/" + users.join(',')
       }
-      toUrl = toUrl + toCriteriaVal('gte', $('#filter-minhr').value, 'avghr')
-      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').value, 'avghr')
-      toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').value, 'distance')
-      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').value, 'distance')
+      toUrl = toUrl + toCriteriaVal('gte', $('#filter-minhr').val(), 'avghr')
+      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').val(), 'avghr')
+      toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').val(), 'distance')
+      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').val(), 'distance')
       console.log($('#filter-start-date')[0].value)
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
