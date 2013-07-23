@@ -815,26 +815,25 @@
     onPageLoad.selectAjax(renderFilterValues)
 
     var renderFilter = function() {
-      var toCriteria = function(comp, elName, keyword) {
-        var v = $(elName) ? $(elName).val() : ""
-        if (v.length > 0) {
-          return "/" + comp + "_" + keyword + "/" + val
+      var toCriteriaVal = function(comp, value, keyword) {
+        if (value && value.length > 0) {
+          return "/" + comp + "_" + keyword + "/" + value
         } else {
           return ""
         }
-
       }
       var toUrl = 'sport/' + $('#filter-sport').val()
       var users = _.filter(_.flatten(["", _.map($("#filter-users").select2("data"), selectionFormat)]))
       if (users.length > 0) {
         toUrl = toUrl + "/user/" + users.join(',')
       }
-      toUrl = toUrl + toCriteria('gte', '#filter-minhr', 'avghr')
-      toUrl = toUrl + toCriteria('lte', '#filter-maxhr', 'avghr')
-      toUrl = toUrl + toCriteria('gte', '#filter-mindistance', 'distance')
-      toUrl = toUrl + toCriteria('lte', '#filter-maxdistance', 'distance')
-      toUrl = toUrl + toCriteria('gte', '#filter-start-date', 'creationDate')
-      toUrl = toUrl + toCriteria('lte', '#filter-stop-date', 'creationDate')
+      toUrl = toUrl + toCriteriaVal('gte', $('#filter-minhr').value, 'avghr')
+      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').value, 'avghr')
+      toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').value, 'distance')
+      toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').value, 'distance')
+
+      toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
+      toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
 
       toUrl = toUrl + "/sb/" + $('#filter-sort').val()
       $.address.value(toUrl)
