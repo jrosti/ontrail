@@ -831,7 +831,7 @@
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').value, 'avghr')
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').value, 'distance')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').value, 'distance')
-
+      console.log($('#filter-start-date')[0].value)
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
 
@@ -842,7 +842,14 @@
     $('#show-filter').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#search-form'), $('#filter-form')))
     $('#show-search').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#filter-form'), $('#search-form')))
     $('#filter-render').onClickTouchAsObservable(clickEvent).subscribe(renderFilter)
-
+    $('#filter-reset-start').onClickTouchAsObservable(clickEvent).subscribe(function() {
+      $("#filter-start-date").attr('value', "1.1.1970")
+      $("#filter-start-date").trigger("cal:changed")
+    })
+    $('#filter-reset-stop').onClickTouchAsObservable(clickEvent).subscribe(function() {
+      $("#filter-stop-date").attr('value', "")
+      $("#filter-stop-date").trigger("cal:changed")
+    })
     // initiate current page
     currentPages.connect()
   })
