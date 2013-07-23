@@ -831,7 +831,7 @@
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').val(), 'avghr')
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').val(), 'distance')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').val(), 'distance')
-      console.log($('#filter-start-date')[0].value)
+
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
 
