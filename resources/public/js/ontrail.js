@@ -250,7 +250,9 @@
 
       var date = new XDate(summary[0].from)
       var month = date.getMonth()
-      var summaries =_.extend( {summary: _.map(summary, _.partial(toWeeklySummary, month)), month: month, year: date.getFullYear(), weeks: (summary.length*2) + 1}, monthNames)
+      var summaries =_.extend( {summary: 
+        _.map(summary, _.partial(toWeeklySummary, month)), month: month, 
+        year: date.getFullYear(), weeks: (summary.length*2) + 1}, monthNames)
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
     }
 
