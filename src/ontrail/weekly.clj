@@ -1,5 +1,5 @@
 (ns ontrail.weekly
-  (:use [ontrail mongodb formats exercise formats]
+  (:use [ontrail mongodb formats exercise]
         monger.operators)
   (:require [monger.core]
             [monger.conversion]
@@ -19,16 +19,16 @@
   (["maanantai" "tiistai" "keskiviikko" "torstai" "perjantai" "lauantai" "sunnuntai"]
      (to-week-day-idx date)))
 
-(defn to-weekly-duration [duration]
-  (if (or (= nil duration) (= 0 duration))
-    ""
-    (let [minutes (mod (int (/ duration 6000)) 60)
-          hours (int (/ duration 360000))
-          seconds (mod (int (/ duration 100)) 60)]
-      (format "%d.%02d" hours minutes))))
-
 (defn sport-id [sport]
   (string/replace sport #"[^a-z09A-Z]+" "_"))
+
+(defn to-stats-pace [pace] 
+ (if (> (count pace) 0) (string/replace pace #" min/km" "/km") nil))
+
+(defn to-human-stats-duration [duration]
+  (let [minutes (mod (int (/ duration 6000)) 60)
+        hours (int (/ duration 360000))]
+    (format "%02d:%02d" hours minutes)))
 
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
@@ -36,7 +36,8 @@
         user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
         distance (to-human-distance (:distance exercise))
-        creation-date (:creationDate exercise)]        
+        creation-date (:creationDate exercise)
+        pace  (get-pace exercise)]        
     {:id id
      :distance distance
      :title (:title exercise)
@@ -50,7 +51,10 @@
      :day (to-week-day creation-date)
      :avghr (:avghr exercise)
      :hrReserve heart-rate-reserve
-     :pace (get-pace exercise)})) 
+     :pace pace
+     :statspace (to-stats-pace pace)
+     :statsduration (to-human-stats-duration (:duration exercise))
+     })) 
 
 (defn week-period [dt]
   (let [midnight (time/date-time (time/year dt) (time/month dt) (time/day dt))
@@ -82,8 +86,9 @@
     totals))
 
 (defn humanize [coll]
-  (let [pace (get-pace (assoc coll :duration (:tduration coll)))]
-    (assoc coll :pace pace :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll)))))
+  (let [pace (get-pace (assoc coll :duration (:tduration coll)))
+        statspace (to-stats-pace pace)]
+    (assoc coll :statspace statspace :pace pace :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll)))))
 
 (defn zero-result[sport] {:sport sport :distance 0 :duration 0 :tduration 0})
 
@@ -96,8 +101,9 @@
 
 (defn weekly-sums [results]
   (let [sport-all "Kaikki"
-        summary-all (humanize (reduce (partial accumulate sport-all)
-                                      (cons (zero-result sport-all) results)))]        
+        summary-all (assoc (humanize (reduce (partial accumulate sport-all)
+                                      (cons (zero-result sport-all) results)))
+                      :total true)]        
     (cons summary-all (summary-distinct-sports results))))
 
 (defn interval-as-exlist [user week-interval]

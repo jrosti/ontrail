@@ -6,12 +6,18 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(defn get-heart-rate-reserve [exercise user-profile]
+(defn get-hres-percentage [exercise user-profile]
   (let [resthr (get user-profile :resthr)
         maxhr (get user-profile :maxhr)
         avghr (get exercise :avghr)]
-    (if (and (not= nil user-profile) (positive-numbers? (list resthr maxhr avghr)) (not= maxhr resthr))
-      (str (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr))))) "%")
+    (if (and user-profile (positive-numbers? (list resthr maxhr avghr)) (not= maxhr resthr))
+      (int (+ 0.5 (* 100.0 (/ (- avghr resthr) (- maxhr resthr)))))
+      0)))
+
+(defn get-heart-rate-reserve [exercise user-profile]
+  (let [res (get-hres-percentage exercise user-profile)]
+    (if (> res 0) 
+      (str res "%")
       "")))
 
 (defn to-human-pace-minkm [duration distance]
@@ -35,7 +41,6 @@
     "Sisäsoutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
-    ;; testing for tag pace support
     "CYCLO" to-human-pace-kmh
     "MAANTIE" to-human-pace-kmh
     "TYÖMATKAPYÖRÄILY" to-human-pace-kmh
