@@ -466,7 +466,7 @@
 
 
     // initiate loading and search
-    var latestScroll = $("#search").changes().skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
+    var latestScroll = $("#search").changes().throttle(300).skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function() {
         $("#content-entries").html("")
         spinner(spinnerElement)()
@@ -772,6 +772,9 @@
     ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
 
+    var mostCommentPages = currentPages.whereArgs(partialEquals("most-comments")).selectAjax(OnTrail.rest.mostComments)
+    mostCommentPages.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("most-comments")))).repeat().subscribe(renderNewComments)
+
     // run our function on load
     if (!mobile) {
       // and run it again every time you scroll
@@ -863,7 +866,7 @@
     // autosave, nor onchange event did not work. 
     rx.interval(30000).subscribe(function() {
       var bodyText = $('#ex-body').val()
-      if (bodyText.length > 15) {
+      if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
         console.log("autosave stored")
         localStorage.setItem('ex-body', bodyText)
       }
