@@ -864,10 +864,10 @@
 
     // Autosave the exercise XXX: this shoud be bound to onchange, but redactor
     // autosave, nor onchange event did not work. 
-    rx.interval(30000).subscribe(function() {
-      var bodyText = $('#ex-body').val()
+    rx.interval(10000).subscribe(function() {
+      var bodyText = $('#ex-body').getCode()
+      console.log("autosave called")
       if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
-        console.log("autosave stored")
         localStorage.setItem('ex-body', bodyText)
       }
     })
