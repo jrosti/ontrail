@@ -124,6 +124,9 @@
   (GET "/rest/v1/ex-unread-own-comments" {params :params cookies :cookies}
     (json-response (unread/comments-own (user-from-cookie cookies))))  
 
+  (GET "/rest/v1/ex-most-comments" {params :params cookies :cookies}
+    (json-response (unread/most-comments (user-from-cookie cookies))))
+
   (GET "/rest/v1/mark-all-read" {params :params cookies :cookies}
     (json-response (nc/mark-all-read (user-from-cookie cookies))))
 

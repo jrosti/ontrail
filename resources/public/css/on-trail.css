@@ -78,12 +78,14 @@ body[data-page="user"] div[role="content"],
 body[data-page="group"] div[role="content"],
 body[data-page="new-comments"] div[role="content"],
 body[data-page="new-own-comments"] div[role="content"],
+body[data-page="most-comments"] div[role="content"],
 body[data-page="latest"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="tags"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="sport"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="user"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="new-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="new-own-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="most-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
 body[data-page="latest"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="tags"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="sport"][data-list-type="list"] div[role="content"] *[role="listview"],
@@ -91,6 +93,7 @@ body[data-page="user"][data-list-type="list"] div[role="content"] *[role="listvi
 body[data-page="group"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="new-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="new-own-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="most-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
 body[data-page="user"] section[role="user"],
 body[data-page="addex"] section[role="addex"],
 body[data-page="users"] section[role="users"],
@@ -130,6 +133,7 @@ body[data-page="addex"] a[rel="addex"],
 body[data-page="register"] a[rel="register"],
 body[data-page="new-comments"] a[rel="new-comments"],
 body[data-page="new-own-comments"] a[rel="new-own-comments"],
+body[data-page="most-comments"] a[rel="most-comments"],
 body[data-page="main"] a[rel="main"] {
   font-weight: bold;
 }
@@ -148,6 +152,7 @@ body[data-page="user"] #view-toggles,
 body[data-page="sport"] #view-toggles,
 body[data-page="group"] #view-toggles,
 body[data-page="new-comments"] #view-toggles,
+body[data-page="most-comments"] #view-toggles,
 body[data-page="new-own-comments"] #view-toggles {
   display: inline;
 }
