@@ -10,7 +10,7 @@
 
 (defn avghr [db-retmap]
   (let [hrcount (:hrcount db-retmap)]
-    (if (and (not (nil? hrcount)) (> hrcount 0))
+    (if (and hrcount (> hrcount 0))
       (/ (:tavghr db-retmap) hrcount)
       0)))
 

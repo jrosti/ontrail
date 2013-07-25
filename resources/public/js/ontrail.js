@@ -61,7 +61,7 @@
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
-
+      localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
       return OnTrail.rest.postAsObservable(url, values)
     }
 
@@ -549,7 +549,8 @@
       $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
       $("#ex-tags").select2("data", [])
       $("#time-hint, #distance-hint").html("")
-      $("#ex-body").setCode("<p>\n<br>\n</p>")
+      var autoSavedText = localStorage.getItem("ex-body")
+      $("#ex-body").setCode(autoSavedText)
       $("#ex-title, #ex-duration").blur()
       $("#ex-title").focus()
     }
@@ -680,7 +681,11 @@
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
         'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
-      minHeight: 200
+      minHeight: 200,
+      setCodeTextarea: function(code) {
+        console.log("foo")
+        this.$el.val(code).trigger('change')
+      }
     }
     $('#ex-body').redactor(editorSettings)
 
@@ -797,7 +802,7 @@
         }
     }
 
-    // A static query using bit heavy mongodb offline query to suggest currently active users. 
+    // A static user list using bit heavy mongodb offline query to suggest currently active users. 
     // Must have a cached version of this in the server side. Chzn does not limit options, and
     // thus this affects only to the autocomplete feature of selecting users.
     var activeUsers = ["-James-","20660","Anttu","BirdiBlu","Duckbill","Elwood","Emo","Epunäiti","Esteri","Ewanator","Fransa","Geoeläin","Haapis","Hazel","Heidi","Hejkki","Hietsu","HiiNokka","Holle","Hopo","Hähi","Imatran Voima","Jagge","Jiihoo","JohannaLP","Jokiv","Jukkis","Justiina_","Juupe","Jörö","KapteeniSolisluu","Kerttu","Keura","Koskaanenjuokse","Lanttu","Larry","LauraIsabella","Leena51","Lynx","MariP","Massa-Matti","Nandi","Niina","Osku","Pantse","Pasi_P","Peksu","Peppi","Pohjan Tähti","Pumppi60","Päivi","SannaK","Sehnsucht","Silu","Sirpakka","Sissi von Vuorenpeikko","Soironen","Sope","Suski","TaijaO","Tapsajussi","Tasku67","Tatteus","Tero","Tiiti54","Triina","Tuomas","Turri","Ursa Minor","Vilivilperi","admin","anatooli","arddy","berniboy","ejex","erz","ese","hannikainen","herba63","isi","jamaatta","jamo57","jarmila","jatossu","jennirinne","jogo3000","jyri","kalervo1","kalman","kata","kettis","kirva","kriish","maja","mala","mana","meusi","miguel horsehead","miklai","muhola","mummi","niilos mc","oikakati","oskuman","ousi","pellervo","peta","pietro","plouh","poko","rampako","rauman","ritaatti","rote","saarja","saavape","sakke 2","sammatti","sanina","sava","ski","tatteus","tiinu","tuomasnu","wicca"]
@@ -816,6 +821,7 @@
     var onPageLoad = rx.empty().startWith("")
     onPageLoad.selectAjax(renderFilterValues)
 
+    // Suodata / Filter -view
     var renderFilter = function() {
       var toCriteriaVal = function(comp, value, keyword) {
         if (value && value.length > 0) {
@@ -851,6 +857,16 @@
     $('#filter-reset-stop').onClickTouchAsObservable(clickEvent).subscribe(function() {
       $("#filter-stop-date").attr('value', "")
       $("#filter-stop-date").trigger("cal:changed")
+    })
+
+    // Autosave the exercise XXX: this shoud be bound to onchange, but redactor
+    // autosave, nor onchange event did not work. 
+    rx.interval(30000).subscribe(function() {
+      var bodyText = $('#ex-body').val()
+      if (bodyText.length > 15) {
+        console.log("autosave stored")
+        localStorage.setItem('ex-body', bodyText)
+      }
     })
     // initiate current page
     currentPages.connect()
