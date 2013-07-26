@@ -88,7 +88,12 @@
 (defn humanize [coll]
   (let [pace (get-pace (assoc coll :duration (:tduration coll)))
         statspace (to-stats-pace pace)]
-    (assoc coll :statspace statspace :pace pace :distance (to-human-distance (:distance coll)) :duration (to-human-time (:duration coll)))))
+    (assoc coll 
+      :statspace statspace 
+      :pace (string/replace pace #" " "")
+      :distance (string/replace (to-human-distance (:distance coll)) #" " "")
+      :duration (to-human-time (:duration coll))
+      :statsduration (to-human-stats-duration (:duration coll)))))
 
 (defn zero-result[sport] {:sport sport :distance 0 :duration 0 :tduration 0})
 
