@@ -413,7 +413,7 @@ table.weekly th {
   border-bottom: 2px solid #da7c0c;
 }
 table.weekly th.day {
-  width: 84px;
+  width: 84 px;
 }
 table.weekly td {
   padding: 3px 2px;
