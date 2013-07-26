@@ -1,6 +1,7 @@
 (ns ontrail.unread
   (:use [ontrail mongodb])
   (:require [ontrail.newcomment :as nc]
+            [clojure.core.memoize :as memo]
             [ontrail.exercise :as ex]
             [monger.collection :as mc]
             [monger.joda-time]
@@ -32,10 +33,15 @@
   (ex/decorate-results user (filter (partial is-own? user) (get-unread-objs user))))
 
 (defn most-comments-oids []
-  (let [four-weeks-ago (time/minus (time/now) (time/days 30))]
+  (let [four-weeks-ago (time/minus (time/now) (time/days 28))]
     (mc/aggregate "exercise" [{"$match" {:lastModifiedDate {"$gte" four-weeks-ago}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 100}])))
 
-(defn most-comments [user]
-  (ex/decorate-results user (map (comp find-exercise :_id) (most-comments-oids))))
+;; Most comments aggregate is memoized for six hours. 
+(def memo-most-comments-oids
+  (memo/ttl most-comments-oids :ttl/threshold (* 6 60 60 1000))) 
 
+(defn most-comments [user]
+  (ex/decorate-results user (map (comp find-exercise :_id) (memo-most-comments-oids))))
+
+;; Aggregate command for the 
 ;; db.exercise.aggregate([{$match: { creationDate: {$gte: ISODate("2013-06-18T00:00:00Z")}}}, {$unwind: "$comments"}, {$group: {_id:"$_id", size: {$sum:1}}}, {$sort: {size: 1}}])
