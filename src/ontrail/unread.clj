@@ -36,8 +36,8 @@
 
 (defn most-comments-oids []
   (.info logger "Aggregating comment counts")
-  (let [four-weeks-ago (time/minus (time/now) (time/days 28))]
-    (mc/aggregate "exercise" [{"$match" {:lastModifiedDate {"$gte" four-weeks-ago}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 50}])))
+  (let [four-weeks-ago (time/minus (time/now) (time/days 14))]
+    (mc/aggregate "exercise" [{"$match" {:lastModifiedDate {"$gte" four-weeks-ago}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 100}])))
 
 (defn most-comments [user]
   (ex/decorate-results user (map (comp find-exercise :_id) (most-comments-oids))))
