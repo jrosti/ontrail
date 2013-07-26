@@ -8,6 +8,8 @@
             [clj-time.core :as time])
   (:import [org.bson.types ObjectId]))
 
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+
 (defn object-id [^String s] 
   (ObjectId. s))
 
@@ -33,8 +35,9 @@
   (ex/decorate-results user (filter (partial is-own? user) (get-unread-objs user))))
 
 (defn most-comments-oids []
+  (.info logger "Aggregating comment counts")
   (let [four-weeks-ago (time/minus (time/now) (time/days 28))]
-    (mc/aggregate "exercise" [{"$match" {:lastModifiedDate {"$gte" four-weeks-ago}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 100}])))
+    (mc/aggregate "exercise" [{"$match" {:lastModifiedDate {"$gte" four-weeks-ago}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 50}])))
 
 ;; Most comments aggregate is memoized for six hours. 
 (def memo-most-comments-oids

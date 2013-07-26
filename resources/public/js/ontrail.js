@@ -772,8 +772,8 @@
     ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
 
-    var mostCommentsPages = currentPages.whereArgs(partialEquals("most-comments")).selectAjax(OnTrail.rest.mostComments)
-    mostCommentsPages.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("most-comments")))).repeat().throttle(101).subscribe(renderNewComments)
+    var mostCommentsPages = currentPages.whereArgs(partialEquals("most-comments")).throttle(101).selectAjax(OnTrail.rest.mostComments)
+    mostCommentsPages.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("most-comments")))).repeat().subscribe(renderNewComments)
 
     // run our function on load
     if (!mobile) {
