@@ -62,6 +62,7 @@
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
       localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
+      $("#ex-body").setCode("<p>\n<br>\n</p>")
       return OnTrail.rest.postAsObservable(url, values)
     }
 
@@ -550,7 +551,8 @@
       $("#ex-tags").select2("data", [])
       $("#time-hint, #distance-hint").html("")
       var autoSavedText = localStorage.getItem("ex-body")
-      $("#ex-body").setCode(autoSavedText)
+      var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n<br>\n</p>"
+      $("#ex-body").setCode(text)
       $("#ex-title, #ex-duration").blur()
       $("#ex-title").focus()
     }
