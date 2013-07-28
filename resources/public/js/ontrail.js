@@ -57,7 +57,7 @@
     var doPostExercise = function(url) {
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
       var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
-        var values = $('#add-exercise-form').serialize()
+      var values = $('#add-exercise-form').serialize()
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
@@ -114,22 +114,14 @@
       return $(template(data)[0]).html()
     }
 
-    var takeMax = function(renderer, left, str) {
-      if (left.remaining == 0 || str === undefined) return left
-      var max = left.remaining
-      var isLast = str.length > max+3
-      var data = left.data + renderer(isLast ? str.substring(0, max) + "..." : str)
-      return { data: data, remaining: isLast ? 0 : (max-str.length) }
-    }
-
     var renderLatest = function(el, tableEl) {
       var helpers = {
         trunc: function () {
           return function(text, render) {
-            var body = $('<div></div>').html(this.body);
-            var wrapWithParagraph = function(item) { return "<p>" + item + "</p>" }
-            var iText = function(item) { return $(item).text() }
-            return _.reduce(_.map(body.children("*"), iText), _.partial(takeMax, wrapWithParagraph), { data: "", remaining: 150 }).data
+            var body = $('<div></div>').html(this.body)
+            var text = body.text()
+            var more = text.length > 150 ? "..." : ""
+            return "<p>" + body.text().substring(0,150) + more + "</p>"
           }
         }
       }
