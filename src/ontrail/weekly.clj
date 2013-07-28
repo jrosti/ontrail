@@ -91,7 +91,8 @@
     (assoc coll 
       :statspace statspace 
       :pace (string/replace pace #" " "")
-      :distance (string/replace (to-human-distance (:distance coll)) #" " "")
+      :distance (string/replace (to-human-distance (:distance coll))
+      #" " "")
       :duration (to-human-time (:duration coll))
       :statsduration (to-human-stats-duration (:duration coll)))))
 
