@@ -120,8 +120,9 @@
           return function(text, render) {
             var body = $('<div></div>').html(this.body)
             var text = body.text()
-            var more = text.length > 150 ? "..." : ""
-            return "<p>" + body.text().substring(0,150) + more + "</p>"
+            var truncOn = 100
+            var more = text.length > truncOn ? "..." : ""
+            return "<p>" + body.text().substring(0, truncOn - 1) + more + "</p>"
           }
         }
       }
