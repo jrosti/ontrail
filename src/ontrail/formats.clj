@@ -32,7 +32,7 @@
 
 (defn to-human-pace-kmh [duration distance]
   (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
-        fraction (int (* 10 (- speed (int speed))))]
+        fraction (int (* 10 (- (+ 0.05 speed) (int speed))))]
     (str (int speed) "," (format "%01d" fraction) " km/h")))
 
 (defn pace-conversion-fun [^String sport]
