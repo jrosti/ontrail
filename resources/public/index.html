@@ -513,6 +513,20 @@
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
         </ul>
     </section>
+    <section>
+        <header></header>
+        <article>
+        <div id="rhsidenavi" class="rhleft">
+            <a href="http://runhigh.fi"><img src="img/runhigh-small.png" /></a>
+            <ul class="link-list">
+        </div>
+        <ul class="link-list">
+            <li> 
+                <a class="pageLink" rel="group/RunnersHigh">Tilaa valmennus Runner's High -juoksukoulusta!</a>
+            </li>
+        </ul>
+        </article>
+    </section>
     <section class="logged-in">
         <div id="fastSelections">
             <h3>Kommentit</h3>
@@ -804,6 +818,31 @@
     </header>
     </article>
 </script>
+
+<script id="runnersHighTemplate" type="text/html">
+    <article class="{{^in}}not-{{/in}}joined">
+        <header>
+            <p class="right">
+                <a class="leave button red" rel="{{target}}/part"><span class="label">Poistu</span></a>
+                <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+            </p>
+
+            <div>
+                <div class="rhleft"><img src="img/runhigh-small.png" /></div>
+                <div class="rhleft">
+                Runner's High on viiden nuoren nykyisen ja entisen urheilijan yritys, 
+                joka tarjoaa laadukkaat juoksuvalmennuspalvelut kaikentasoisille kilpa- ja 
+                kuntojuoksijoille. eLue lisää Runner's High:n <a href="runhigh.fi">nettisivuilta</a>.
+                </div>
+            </div>
+            <h4>Jäsenet</h4>
+            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</p>
+            </div>
+
+        </header>
+    </article>
+</script>
+
 
 <script id="groupDetailTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
