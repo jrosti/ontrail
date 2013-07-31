@@ -1,0 +1,1 @@
+(add-group "RunnersHigh" "Runner's High on viiden nuoren nykyisen ja entisen urheilijan yritys, joka tarjoaa laadukkaat juoksuvalmennuspalvelut kaikentasoisille kilpa- ja kuntojuoksijoille. Lue lisää Runner's High:n <a href=\"http://runhigh.fi\">nettisivuilta</a>.")
