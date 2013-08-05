@@ -167,10 +167,16 @@ h4 span {
   padding-right: 7px;
 }
 .rhleft {
-  background: red;
-  border: 1px solid black;
-  margin: 20px;
   float: left;
+  max-width: 75%;
+  margin-right: 15px;
+}
+.rhleft img {
+  padding: 0;
+}
+.clearfix {
+  clear: both;
+  margin-bottom: 20px;
 }
 img {
   -webkit-box-sizing: content-box;
