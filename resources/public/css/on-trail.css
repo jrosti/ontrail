@@ -166,6 +166,18 @@ article.not-joined a.leave {
 h4 span {
   padding-right: 7px;
 }
+.rhleft {
+  float: left;
+  max-width: 75%;
+  margin-right: 15px;
+}
+.rhleft img {
+  padding: 0;
+}
+.clearfix {
+  clear: both;
+  margin-bottom: 20px;
+}
 img {
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
