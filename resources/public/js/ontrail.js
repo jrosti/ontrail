@@ -362,7 +362,7 @@
 
     // back button handling
     var backPresses = Rx.Observable.create(function( observer ) {
-      var next = function() { observer.onNext($.address.value()) }
+      var next = function() { observer.onNext(decodeURIComponent($.address.value())) }
       $.address.init(next).change(next)
       return nothing()
     }).select(splitM)
