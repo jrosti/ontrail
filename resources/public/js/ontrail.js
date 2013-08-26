@@ -153,6 +153,12 @@
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
       $('#comment-body').redactor(editorSettings)
+      $('body').scrollTop(0)
+      $('#scrollBottom').click(function() {
+        $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
+
+      })
+
     }
     var renderSports = function(data) {
       ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
@@ -560,6 +566,7 @@
     }
 
     var showExercise = function(ex) { showPage("ex", ex.id); renderSingleExercise(ex) }
+
 
     var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise', function(instream) {
       return instream.combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise)

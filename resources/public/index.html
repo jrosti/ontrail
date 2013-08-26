@@ -737,7 +737,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             {{> tagsExpandedTemplate}}
         </article>
     </section>
-    <h3>Kommentit:</h3>
+    <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
     {{#comments}}
     <section>
         <article class="comment" data-id="{{id}}">
@@ -749,6 +749,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </section>
     {{/comments}}
     <section>
+      <a id="scrollTop" href="javascript:void(0);">&lt;&lt;</a>
         <article class="logged-in">
             <h4>Jätä oma kommenttisi</h4>
             {{^comments}}
