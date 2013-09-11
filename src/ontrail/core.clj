@@ -4,6 +4,7 @@
         ring.middleware.cookies
         [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
+        [ring.middleware.json :only (wrap-json-response)]
         [ring.middleware.params :only (wrap-params)]
         [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]

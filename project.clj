@@ -6,6 +6,7 @@
                 [aleph "0.3.0"]
                 [compojure "1.1.5"]
                 [ring "1.2.0"]
+                [ring/ring-core "1.2.0"]
                 [clj-time "0.5.1"]
                 [enlive "1.0.1"]
                 [clj-json "0.5.3"]
@@ -19,6 +20,7 @@
                 [com.novemberain/monger "1.6.0"]
                 [cheshire "5.2.0"]
                 [ring.middleware.logger "0.2.2"]
+                [ring/ring-json "0.2.0"]
                 ]
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user
