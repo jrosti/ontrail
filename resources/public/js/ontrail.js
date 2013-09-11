@@ -332,7 +332,7 @@
     // share
     var shareClicks = clickedLinks.where(function(elem) { return $(elem).hasClass('share') }).select(function(el) { return attr("rel", el) })
     shareClicks.subscribeArgs(function(url) {
-      window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent("http://ontrail.net/#" + url),'facebook-share-dialog','width=626,height=436')
+      window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent("http://ontrail.net/view/" + url),'facebook-share-dialog','width=626,height=436')
     })
 
     // show own delete buttons
