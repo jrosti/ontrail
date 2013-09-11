@@ -3,7 +3,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
   		[digest "1.4.3"]
   		[com.draines/postal "1.10.2"]
-                [aleph "0.3.0-rc1"]
+                [aleph "0.3.0"]
                 [compojure "1.1.5"]
                 [ring "1.2.0"]
                 [clj-time "0.5.1"]
