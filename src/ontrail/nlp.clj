@@ -7,6 +7,7 @@
                "Jumppa" "jumppasi" 
                "Juoksu" "juoksi" 
                "Jääkiekko" "jääkiekkoili" 
+               "Kahvakuula" "kahvakuulaili" 
                "Kamppailulaji" "kamppaili" 
                "Kaukalopallo" "kaukalopalloili" 
                "Kickbike" "kikkaili" 
