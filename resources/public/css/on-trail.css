@@ -518,6 +518,16 @@ table.weekly .sport.J__kiekko {
   width: 20px;
   height: 20px;
 }
+table.weekly .sport.Kahvakuula {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -122px -60px;
+  width: 21px;
+  height: 20px;
+}
 table.weekly .sport.Kamppailulaji {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
