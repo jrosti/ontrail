@@ -153,7 +153,6 @@
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
       $('#comment-body').redactor(editorSettings)
-      $('body').scrollTop(0)
       $('#scrollBottom').click(function() {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
 
@@ -378,7 +377,9 @@
     currentPages.whereArgs(partialEquals("register")).subscribe(function() {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
-
+    currentPages.subscribe(function() {
+        $('html, body').scrollTop(0)
+    })
     var findUser = function(inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
       var userPos = _(args).indexOf("user")
