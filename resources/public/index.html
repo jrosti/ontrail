@@ -296,12 +296,12 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 	  </div>
             <header>
-                <div id="search-form" class="logged-in">
+                <div id="search-form">
                     <a id="show-filter" href="javascript:void(0)">Suodata</a> /
                     <label for="search"><strong>Etsi: </strong></label> 
                     <input class="search" type="text" id="search"/>
                 </div>
-                <div id="filter-form" style="display: none" class="logged-in">
+                <div id="filter-form" style="display: none">
                     <a id="show-search" href="javascript:void(0)">Etsi</a> / 
                     <strong>Suodata</strong>:
                     <br/>
@@ -553,16 +553,16 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         </ul>
     </section>
 
-    <section class="logged-in">
+    <section>
+        <div id="ownGroupsDropDown">
+        </div> 
         <div id="fastSelections">
             <h3>Kommentit</h3>
             <ul class="link-list">  
                 <li><a class="pageLink" rel="most-comments">Kommentoiduimmat</a></li>
-                <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li>
+                <div class="logged-in"><li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li></div>
             </ul>
         </div>
-        <div id="ownGroupsDropDown">
-        </div> 
         <!-- /.dropdown -->
         <div id="sportFilter" class="buttons">
             <div class="dropdown">
