@@ -923,11 +923,12 @@
     // Must have a cached version of this in the server side. Chzn does not limit options, and
     // thus this affects only to the autocomplete feature of selecting users.
     var activeUsers = ["-James-", "20660", "Anttu", "BirdiBlu", "Bråoddvar", "Duckbill", "Elwood", "Emo", "Epunäiti", "Esteri", "Ewanator", "Fransa", "Geoeläin", "Haapis", "Hazel", "Heidi", "Hejkki", "Hietsu", "HiiNokka", "Holle", "Hopo", "Hähi", "Imatran Voima", "Jagge", "Jiihoo", "JohannaLP", "Jokiv", "Jukkis", "Justiina_", "Juupe", "Jörö", "KapteeniSolisluu", "Kerttu", "Keura", "Koskaanenjuokse", "Lanttu", "Larry", "LauraIsabella", "Leena51", "Lynx", "MariP", "Massa-Matti", "Nandi", "Niina", "Osku", "Pantse", "Pasi_P", "Peksu", "Peppi", "Pohjan Tähti", "Pumppi60", "Päivi", "SannaK", "Sehnsucht", "Silu", "Sirpakka", "Sissi von Vuorenpeikko", "Soironen", "Sope", "Suski", "TaijaO", "Tapsajussi", "Tasku67", "Tatteus", "Tero", "Tiiti54", "Triina", "Tuomas", "Turri", "Ursa Minor", "Vilivilperi", "admin", "anatooli", "arddy", "berniboy", "ejex", "erz", "ese", "hannikainen", "herba63", "isi", "jamaatta", "jamo57", "jarmila", "jatossu", "jennirinne", "jogo3000", "jyri", "kalervo1", "kalman", "kata", "kettis", "kirva", "kriish", "maja", "mala", "mana", "meusi", "miguel horsehead", "miklai", "muhola", "mummi", "niilos mc", "oikakati", "oskuman", "ousi", "pellervo", "peta", "pietro", "plouh", "poko", "rampako", "rauman", "ritaatti", "rote", "saarja", "saavape", "sakke 2", "sammatti", "sanina", "sava", "ski", "tatteus", "tiinu", "tuomasnu", "wicca"]
-
+    // anonymous users get a restricted view of the sports choices
+    var defaultSports = ["Juoksu", "Pyöräily", "Uinti", "Perinteinen hiihto", "Luisteluhiihto"]
     var renderFilterValues = function () {
       $('#filter-continuous-start-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-start-date'), locale: DateLocale.FI })
       $('#filter-continuous-stop-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-stop-date'), locale: DateLocale.FI })
-
+      ich.sportsCreateTemplate({sports: _.filter(defaultSports, identity)}).appendTo($('#filter-sport'))
       $('#filter-users').select2({
         tags: activeUsers,
         tokenSeparators: [","],
