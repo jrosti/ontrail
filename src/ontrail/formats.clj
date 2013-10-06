@@ -38,6 +38,7 @@
 (defn pace-conversion-fun [^String sport]
   (case sport
     "Pyöräily" to-human-pace-kmh
+    "tmp" to-human-pace-kmh
     "Sisäsoutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
