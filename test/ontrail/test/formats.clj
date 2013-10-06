@@ -28,7 +28,7 @@
 
 (deftest test-kmh-pace-from-exercise
   (let [ex {:duration (* 210 100 60) :distance 42195 :sport "Pyöräily"}]
-    (is (= "12,0 km/h" (get-pace ex)) "Driving marathon 3:30 time.")))
+    (is (= "12,1 km/h" (get-pace ex)) "Driving marathon 3:30 time.")))
 
 (deftest test-user-time-format
   (is (= "11.05.1978" (to-human-date (time/date-time 1978 5 11))) "Default formatting for exercise date"))
