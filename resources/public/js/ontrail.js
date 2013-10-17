@@ -804,7 +804,7 @@
     var fixMenuPosition = function (isLoggedIn) {
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
       if ($(window).scrollTop() > menuOffsetTop) {
-        $('#header-wrapper').css({ position: 'fixed', top: '-50px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
+        $('#header-wrapper').css({ position: 'fixed', top: '-4px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#content-wrapper').addClass("scroll-overflow")
         $(isLoggedIn ? '#content' : "#features-wrapper").css({"margin-top": (isLoggedIn ? 187 : 152)})
       } else {
