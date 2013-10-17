@@ -17,7 +17,8 @@ section:last-child
 
 	#header-wrapper, #login-wrapper
 	{
-		background: #3B4346 url('images/bg01.jpg');
+		background: rgb(255, 254, 250);
+        opacity: 0.9;
 		border-bottom: solid 1px #272d30;
 		box-shadow: inset 0px -1px 0px 0px #51575a;
 		text-shadow: -1px -1px 1px rgba(0,0,0,0.75);
@@ -25,12 +26,12 @@ section:last-child
 
 	.subpage #header-wrapper
 	{
-		height: 155px;
+		height: 90px;
 	}
 	
 	#features-wrapper, .features-wrapper
 	{
-		background: #353D40 url('images/bg02.jpg');
+		background: rgb(253, 252, 248);
 		border-bottom: solid 1px #272e31;
 		padding: 45px 0 45px 0;
 		text-shadow: -1px -1px 1px rgba(0,0,0,0.75);
@@ -53,7 +54,7 @@ section:last-child
 
 	#header
 	{
-		min-height: 155px;
+		min-height: 80px;
 		position: relative;
 	}
 
@@ -61,14 +62,14 @@ section:last-child
 		{
 			position: absolute;
 			left: 0;
-			bottom: 35px;
+			bottom: 15px;
 			font-family: 'Lobster', sans-serif;
 			font-size: 2.75em;
 		}
 	
 			#header h1 a
 			{
-				color: #fff;
+				color: #3d45f8;
 				text-decoration: none;
 			}
 
@@ -76,22 +77,22 @@ section:last-child
 		{
 			position: absolute;
 			right: 0;
-			bottom: 35px;
+			bottom: 20px;
 			font-weight: 200;
 		}
 	
 			#header nav a
 			{
-				color: #c6c8c8;
+				color: #3d45f8;
 				text-decoration: none;
-				font-size: 1.4em;
+				font-size: 1.2em;
 				margin-left: 30px;
 				outline: 0;
 			}
 
 			#header nav a:hover
 			{
-				color: #f6f8f8;
+				color: #0000ee;
 			}
 
 /* Banner */
@@ -122,24 +123,29 @@ section:last-child
 
 	#features,.features
 	{
-		color: #a0a8ab;
+		color: #a3abab;
 	}
 	
 		#features h2, .features h2
 		{
 			font-size: 1.25em;
-			color: #fff;
+			color: #4e85c8;
 			margin: 0 0 0.25em 0;
 		}
 
 		#features a, .features a
 		{
-			color: #e0e8eb;
+			color: #4e85c8;
 		}
-		
+
+        #features a, .features a:hover
+        {
+            color: #40daf8;
+        }
+
 		#features strong, .features strong
 		{
-			color: #fff;
+			color: #3e6a9f;
 		}
 
 /* Content */

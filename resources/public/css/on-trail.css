@@ -425,7 +425,7 @@ table.weekly th {
   border-bottom: 2px solid #da7c0c;
 }
 table.weekly th.day {
-  width: 84 px;
+  width: 84px;
 }
 table.weekly td {
   padding: 3px 2px;
@@ -1062,7 +1062,7 @@ body[data-page="tags"] #header-container {
 #content-wrapper.scroll-overflow #content-top {
   z-index: 20000;
   position: fixed;
-  top: 133px;
+  top: 105px;
   width: 100%;
   background-image: -webkit-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
   background-image: -moz-linear-gradient(top ,#51575a 0, rgba(247, 247, 247, 0) 12px);
@@ -1077,7 +1077,7 @@ body[data-page="tags"] #header-container {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#51575a', EndColorStr='rgba(247, 247, 247, 0)');
   background-repeat: repeat-x;
-  height: 15px;
+  height: 12px;
 }
 #content a.button,
 #login-wrapper a.button {
@@ -1101,7 +1101,7 @@ body[data-page="tags"] #header-container {
   padding-left: 1em;
 }
 #user-menu-wrapper a:hover {
-  color: white;
+  color: #0000ee;
   text-decoration: none;
 }
 #sidemenu header {
