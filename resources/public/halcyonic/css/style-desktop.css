@@ -19,20 +19,20 @@ section:last-child
 	{
 		background: rgb(255, 254, 250);
         opacity: 0.9;
-		border-bottom: solid 1px #272d30;
+		border-bottom: solid 1px rgb(128, 127, 123);
 		box-shadow: inset 0px -1px 0px 0px #51575a;
 		/*text-shadow: -1px -1px 1px rgba(0,0,0,0.75);*/
 	}
 
 	.subpage #header-wrapper
 	{
-		height: 90px;
+		height: 88px;
 	}
 	
 	#features-wrapper, .features-wrapper
 	{
-		background: rgb(253, 252, 248);
-		border-bottom: solid 1px #272e31;
+		background: rgb(251, 250, 246);
+		border-bottom: solid 1px rgb(251, 250, 246);
 		padding: 45px 0 45px 0;
 		/*text-shadow: -1px -1px 1px rgba(0,0,0,0.75);*/
 	}
@@ -54,7 +54,7 @@ section:last-child
 
 	#header
 	{
-		min-height: 80px;
+		min-height: 79px;
 		position: relative;
 	}
 
