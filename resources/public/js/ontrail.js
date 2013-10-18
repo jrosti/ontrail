@@ -797,7 +797,7 @@
     }
     $('#ex-body').redactor(editorSettings)
 
-    var menuOffsetTop = $('#header-wrapper').offset().top + 52
+    var menuOffsetTop = $('#header-wrapper').offset().top
     var menuOffsetWidth = $('#header-wrapper').width()
     var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
 

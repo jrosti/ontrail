@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9b3596f-faa5-46ec-9d41-bed80b699ca7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/clojure_1_4_0.xml" afterPath="$PROJECT_DIR$/.idea/libraries/clojure_1_4_0.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ontrail.iml" afterPath="$PROJECT_DIR$/ontrail.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/sass_stdlib.xml" afterPath="$PROJECT_DIR$/.idea/libraries/sass_stdlib.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/js/ontrail.js" afterPath="$PROJECT_DIR$/resources/public/js/ontrail.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/halcyonic/css/style-desktop.css" afterPath="$PROJECT_DIR$/resources/public/halcyonic/css/style-desktop.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/public/halcyonic/css/style.css" afterPath="$PROJECT_DIR$/resources/public/halcyonic/css/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ontrail.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -93,16 +92,34 @@
       <file leaf-file-name="ontrail.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/public/js/ontrail.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="68" selection-start="547" selection-end="547" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="14985">
+            <state line="804" column="88" selection-start="32560" selection-end="32560" vertical-scroll-proportion="-8.153846" vertical-offset="11848" max-vertical-offset="14985">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="style-desktop.css" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="style-desktop.css" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/css/style-desktop.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="36" column="56" selection-start="932" selection-end="932" vertical-scroll-proportion="0.7557252" vertical-offset="45" max-vertical-offset="3450">
+            <state line="29" column="5" selection-start="753" selection-end="753" vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="3450">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/css/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="272" column="25" selection-start="5869" selection-end="5869" vertical-scroll-proportion="0.46042004" vertical-offset="3795" max-vertical-offset="4695">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="on-trail.less" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/public/css/on-trail.less">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="619" column="0" selection-start="13746" selection-end="13746" vertical-scroll-proportion="-386.875" vertical-offset="0" max-vertical-offset="10980">
               <folding />
             </state>
           </provider>
@@ -174,8 +191,10 @@
         <option value="$PROJECT_DIR$/resources/public/index.html" />
         <option value="$PROJECT_DIR$/resources/public/js/script.js" />
         <option value="$PROJECT_DIR$/resources/public/js/rx.ontrail.js" />
+        <option value="$PROJECT_DIR$/resources/public/css/on-trail.less" />
         <option value="$PROJECT_DIR$/resources/public/js/ontrail.js" />
         <option value="$PROJECT_DIR$/resources/public/halcyonic/css/style-desktop.css" />
+        <option value="$PROJECT_DIR$/resources/public/halcyonic/css/style.css" />
       </list>
     </option>
   </component>
@@ -508,6 +527,35 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="name" value="Dart" />
+      <option name="saveOutputToFile" value="false" />
+      <option name="showConsoleOnStdErr" value="false" />
+      <option name="showConsoleOnStdOut" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <browser start="false" url="" with-js-debugger="false" />
+      <method />
+    </configuration>
     <list size="0" />
     <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
@@ -591,13 +639,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/public/js/jquery.continuous-calendar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="21195">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/threecolumn.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="62" column="87" selection-start="1817" selection-end="6439" vertical-scroll-proportion="0.0" vertical-offset="930" max-vertical-offset="3495">
@@ -620,11 +661,6 @@
     <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/twocolumn1.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="46" column="34" selection-start="1856" selection-end="6660" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="201" column="0" selection-start="3264" selection-end="3264" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
@@ -683,14 +719,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/js/ontrail.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="68" selection-start="547" selection-end="547" vertical-scroll-proportion="0.0" vertical-offset="45" max-vertical-offset="14985">
+        <state line="804" column="88" selection-start="32560" selection-end="32560" vertical-scroll-proportion="-8.153846" vertical-offset="11848" max-vertical-offset="14985">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/css/on-trail.less">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="619" column="0" selection-start="13746" selection-end="13746" vertical-scroll-proportion="-386.875" vertical-offset="0" max-vertical-offset="10980">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/css/style-desktop.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="56" selection-start="932" selection-end="932" vertical-scroll-proportion="0.7557252" vertical-offset="45" max-vertical-offset="3450">
+        <state line="29" column="5" selection-start="753" selection-end="753" vertical-scroll-proportion="0.0" vertical-offset="105" max-vertical-offset="3450">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/public/halcyonic/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="272" column="25" selection-start="5869" selection-end="5869" vertical-scroll-proportion="0.46042004" vertical-offset="3795" max-vertical-offset="4695">
           <folding />
         </state>
       </provider>
