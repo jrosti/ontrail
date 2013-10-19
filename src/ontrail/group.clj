@@ -133,5 +133,3 @@
     (merge {:action "user" :target username :hasRecords (not (empty? records)) :records records 
             :profile (profile/get-profile username)} (own-as-list username))))
 
-(defn other-detail [target user]
-  {:action "other" :target target})

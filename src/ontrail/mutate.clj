@@ -58,7 +58,7 @@
 
 (defn create-ex [user params]
   (sportsummary/reset-memo-for user)
-  (.info logger (str (:user params) " creating ex " params))
+  (.info logger (str (:user params) " creating ex " (dissoc params :body)))
   (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ex))]
     (insert-exercise-inmem-index ex)

@@ -957,7 +957,19 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <script id="otherDetailTemplate" type="text/html">
     <article>
         <header>
-            <h3>{{target}}</h3>
+            <h3>Haku lajille {{target}}</h3>
+            {{#stats}}
+            <table class="details">
+                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th><th>Keskisyke</th><th>Kertoja</th></tr></thead>
+                <tr>
+                    <td>{{stats.distance}}</td>
+                    <td>{{stats.duration}}</td>
+                    <td>{{stats.pace}}</td>
+                    <td>{{stats.avghr}}</td>
+                    <td>{{stats.count}}</td>
+                </tr>
+            </table>
+            {{/stats}}
         </header>
     </article>
 </script>
@@ -978,8 +990,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
 <script id="summaryItemTemplate" type="text/html">
-    <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
-        {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td></tr>
+    <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}}
+        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td></tr>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
