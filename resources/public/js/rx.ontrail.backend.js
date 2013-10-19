@@ -62,13 +62,12 @@
 
   Rest.prototype.system = function() { return getAsObservableResultData("system") }
 
-
   Rest.prototype.serverParseV = function(kind, item) { return getAsObservable("validate", kind, item) }
 
   Rest.prototype.usernameV = function(username) { return getAsObservable("validate", "username", username) }
   Rest.prototype.passwordV = function(password, username) { return postAsObservable("validate/login", { username: username, password: password }) }
 
-  Rest.prototype.pageDetail = function(action, target) { return getAsObservable("page-detail", action, target)}
+  Rest.prototype.pageDetail = function(filter) { return getAsObservable("page-detail?" + $.param(filter))}
   
   // user search
   Rest.prototype.users = function(page) { return getAsObservableResultData("list-users", page ) }

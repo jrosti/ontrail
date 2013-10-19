@@ -186,6 +186,21 @@ var asFilter = function(el) {
   return _.extend.apply(_.extend, _($(el)[0].attributes).chain().filter(isFilterItem).map(asFilterItem).value())
 }
 
+var partition = function(arr, length) {
+  var result = []
+  for(var i = 0; i < arr.length; i++) {
+    if(i % length === 0) result.push([])
+    result[result.length - 1].push(arr[i])
+  }
+  return result
+}
+
+var pairsAsAssocMap = function () {
+  var args = Array.prototype.slice.call(arguments)
+  var pairs = partition(args, 2)
+  return _.zipObject(pairs)
+}
+
 var asObject = function(item, type, id) {
   if (type == undefined || id == undefined) return item
   item[type] = id
