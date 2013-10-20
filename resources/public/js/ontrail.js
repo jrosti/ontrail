@@ -957,7 +957,7 @@
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
 
-      toUrl = toUrl + "/sb/" + $('#filter-sort').val()
+      toUrl = toUrl + "/sb/" + $('#filter-sort').val() + "/stats/true"
       $.address.value(toUrl)
     }
 
