@@ -53,7 +53,7 @@
   (to-stats-summary (get-stats-summary query) sport))
 
 (defn sport-detail [params sport user]
-  (if ("true" (params :stats))
+  (if (= "true" (params :stats))
     (let [monger-filter (make-query-from params)
         stats (get-stats monger-filter sport)]
       (.info logger (str monger-filter " " " for sport " sport " for user " user))

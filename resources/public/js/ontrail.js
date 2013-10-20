@@ -944,6 +944,13 @@
           return ""
         }
       }
+
+      var kmhToInternal = function(value) {
+        var kmh = parseFloat(value)
+        console.log("kmh" + kmh)
+        return Math.round(1000*kmh)
+      }
+
       var toUrl = 'sport/' + $('#filter-sport').val()
       var users = _.filter(_.flatten(["", _.map($("#filter-users").select2("data"), selectionFormat)]))
       if (users.length > 0) {
@@ -953,6 +960,9 @@
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxhr').val(), 'avghr')
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-mindistance').val(), 'distance')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-maxdistance').val(), 'distance')
+      toUrl = toUrl + toCriteriaVal('gte', kmhToInternal($('#filter-minpace').val()), 'pace')
+      toUrl = toUrl + toCriteriaVal('lte', kmhToInternal($('#filter-maxpace').val()), 'pace')
+
 
       toUrl = toUrl + toCriteriaVal('gte', $('#filter-start-date')[0].value, 'creationDate')
       toUrl = toUrl + toCriteriaVal('lte', $('#filter-stop-date')[0].value, 'creationDate')
