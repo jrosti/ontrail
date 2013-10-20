@@ -947,8 +947,11 @@
 
       var kmhToInternal = function(value) {
         var kmh = parseFloat(value)
-        console.log("kmh" + kmh)
-        return Math.round(1000*kmh)
+        if (!isNaN(kmh)) {
+          return (1000 * kmh).toString()
+        } else {
+          return ""
+        }
       }
 
       var toUrl = 'sport/' + $('#filter-sport').val()
