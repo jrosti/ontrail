@@ -671,7 +671,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <table class="details full">
         <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th></tr></thead>
         <tr>
-            <td>{{sport}}</td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
+            <td><a rel="sport/{{sport}}/user/{{user}}/stats/true">{{sport}}</a></td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
             <td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{bpmdist}}</td>
         </tr>
     </table>
@@ -705,7 +705,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                 <a href="{{avatar}}&s=500" target="_blank"><img class="avatar" src="{{avatar}}" width="62" height="62"></a><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
                 <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
                 <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
-                    {{did}} {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
+                    <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
                 {{> exerciseDetailsTemplate}}
 
                 <div class="preview">
