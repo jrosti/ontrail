@@ -82,7 +82,7 @@
         minkm (/ 60.0 kmh)
         min (int minkm)
         s (int (* 60.0 (- minkm min)))]
-    (str min "." s " min/km")))
+    (str min "." (format "%02d" s) " min/km")))
 
 (defn get-percentiles [stats]
   (try (let [c (cumul (:paceHist stats))
