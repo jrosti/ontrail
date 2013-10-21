@@ -28,8 +28,8 @@
        :paceHist (:paceHist db-retmap)
        :paceHistBins (:paceHistBins db-retmap)}))
 
-(def hist-paces 30)
-(def paces (map #(- 7 (* % 0.15)) (range hist-paces)))
+(def hist-paces 40)
+(def paces (map #(- 7 (* % 0.1)) (range hist-paces)))
 (def comp-unit-paces (map #(* (/ 60 %) 1000) paces))
 
 (defn cumul [pace-hist]
@@ -74,11 +74,35 @@
 (defn get-stats [query sport pace-histogram]
   (to-stats-summary (get-stats-summary query pace-histogram) sport))
 
+(defn get-p-idx [indexed-cumul p]
+  (first (first (filter #(> (second %) p) indexed-cumul))))
+
+(defn pacetominkm [cpace]
+  (let [kmh (/ cpace 1000.0)
+        minkm (/ 60.0 kmh)
+        min (int minkm)
+        s (int (* 60.0 (- minkm min)))]
+    (str min "." s " min/km")))
+
+(defn get-percentiles [stats]
+  (try (let [c (cumul (:paceHist stats))
+             indexed-cumul (map-indexed vector c)
+             f80idx (get-p-idx indexed-cumul 0.8)
+             f95idx (get-p-idx indexed-cumul 0.95)
+             pace80 (nth (:paceHistBins stats) f80idx)
+             pace95 (nth (:paceHistBins stats) f95idx)]
+      {:f80 (pacetominkm pace80)
+       :f95 (pacetominkm pace95)} )
+    (catch Exception e
+      (.info logger (str e " in percentiles"))
+      {})))
+
 (defn sport-detail [params sport user]
   (if (= "true" (params :stats))
     (let [monger-filter (make-query-from params)
           pacehist (if (= sport "Juoksu") comp-unit-paces [])
-          stats (get-stats monger-filter sport pacehist)]
+          stats (get-stats monger-filter sport pacehist)
+          percentile-vals (if (= sport "Juoksu") (get-percentiles stats) {})]
       (.info logger (str monger-filter " " " for sport " sport " for user " user))
-      {:action "other" :target sport :stats stats })
+      {:action "other" :target sport :stats (merge stats percentile-vals) })
     {:action "other" :target sport}))
