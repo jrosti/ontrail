@@ -24,9 +24,19 @@
        :distance (to-human-distance (get db-retmap :dist)) :numDistance (if (get db-retmap :dist) (get db-retmap :dist) 0)
        :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
        :avghr (int (+ 0.5 (stats-avghr db-retmap)))
-       :count count}))
+       :count count
+       :paceHist (:paceHist db-retmap)
+       :paceHistBins (:paceHistBins db-retmap)}))
 
-(defn get-stats-summary [condition]
+(def hist-paces 30)
+(def paces (map #(- 7 (* % 0.15)) (range hist-paces)))
+(def comp-unit-paces (map #(* (/ 60 %) 1000) paces))
+
+(defn cumul [pace-hist]
+  (let [last-elem (last pace-hist)]
+    (map #(/ % last-elem) pace-hist)))
+
+(defn get-stats-summary [condition pace-histogram]
   (let [js-reduce "function(exercise, prev) {
                      if (exercise.distance > 0 && exercise.duration > 0) {
                         prev.tdist += exercise.distance;
@@ -36,6 +46,16 @@
                         prev.tavghr += exercise.avghr;
                         prev.hrcount += 1;
                       }
+                      var i = 0;
+                      if (prev.paceHistBins.length > 0) {
+                          for (i = 0; i < prev.paceHistBins.length; i++) {
+                              if (exercise.pace < prev.paceHistBins[i]) {
+                                  prev.paceHist[i] += exercise.distance;
+                              }
+                          }
+                      }
+                      exercise.paceHist = prev.paceHist
+                      exercise.paceHistBins = prev.paceHistBins
                       prev.dist += exercise.distance;
                       prev.dur += exercise.duration }"]
     (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
@@ -46,16 +66,19 @@
                                                                               :dist 0
                                                                               :dur 0
                                                                               :tdist 0
-                                                                              :tdur 0}}})
+                                                                              :tdur 0
+                                                                              :paceHistBins pace-histogram
+                                                                              :paceHist (take hist-paces (repeat 0))}}})
       true)))
 
-(defn get-stats [query sport]
-  (to-stats-summary (get-stats-summary query) sport))
+(defn get-stats [query sport pace-histogram]
+  (to-stats-summary (get-stats-summary query pace-histogram) sport))
 
 (defn sport-detail [params sport user]
   (if (= "true" (params :stats))
     (let [monger-filter (make-query-from params)
-        stats (get-stats monger-filter sport)]
+          pacehist (if (= sport "Juoksu") comp-unit-paces [])
+          stats (get-stats monger-filter sport pacehist)]
       (.info logger (str monger-filter " " " for sport " sport " for user " user))
-      {:action "other" :target sport :stats stats})
+      {:action "other" :target sport :stats stats })
     {:action "other" :target sport}))
