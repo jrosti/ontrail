@@ -967,11 +967,15 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <h3>Haku lajille {{target}}</h3>
             {{#stats}}
             <table class="details">
-                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th><th>Keskisyke</th><th>Kertoja</th></tr></thead>
+                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th>{{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}<th>Keskisyke</th><th>Kertoja</th></tr></thead>
                 <tr>
                     <td>{{stats.distance}}</td>
                     <td>{{stats.duration}}</td>
                     <td>{{stats.pace}}</td>
+                    {{#stats.f80}}
+                    <td>{{stats.f80}}</td>
+                    <td>{{stats.f95}}</td>
+                    {{/stats.f80}}
                     <td>{{stats.avghr}}</td>
                     <td>{{stats.count}}</td>
                 </tr>
