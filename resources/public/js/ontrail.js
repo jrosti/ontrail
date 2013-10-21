@@ -794,12 +794,12 @@
     $('#ex-body').redactor(editorSettings)
 
     var menuOffsetTop = $('#header-wrapper').offset().top
-    var menuOffsetWidth = $('#header-wrapper').width()
-    var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
 
     var fixMenuPosition = function (isLoggedIn) {
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
       if ($(window).scrollTop() > menuOffsetTop) {
+        var menuOffsetWidth = $('#header-wrapper').width()
+        var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
         $('#header-wrapper').css({ position: 'fixed', top: '-4px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
         $('#content-wrapper').addClass("scroll-overflow")
         $('#content').css({"margin-top": (isLoggedIn ? 110 : 82)})
