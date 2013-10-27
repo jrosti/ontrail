@@ -497,8 +497,20 @@
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"])))).repeat()
       .subscribe(renderLatest("#content-entries", "#table-entries"))
 
+    var recordToggeler = function() {
+      $("#recordsDiv").hide()
+      $("#toggleRecords").toggle(function () {
+        $("#toggleRecords").text("Piilota juoksuennätykset")
+        $("#recordsDiv").show()
+      }, function () {
+        $("#toggleRecords").text("Näytä juoksuennätykset")
+        $("#recordsDiv").hide()
+      })
+    }
+
     var renderPageDetail = function (args) {
       $('#content-header').html("")
+
       if (args.data.action == "group" && args.data.target == "Marrasputki") {
         ich.marrasputkiTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target == "RunnersHigh") {
@@ -507,16 +519,9 @@
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {
         ich.userDetailTemplate(args.data).appendTo($('#content-header'))
-        $("#recordsDiv").hide()
-        $("#toggleRecords").toggle(function () {
-          $("#toggleRecords").text("Piilota juoksuennätykset")
-          $("#recordsDiv").show()
-        }, function () {
-          $("#toggleRecords").text("Näytä juoksuennätykset")
-          $("#recordsDiv").hide()
-        })
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
+        recordToggeler()
       }
     }
 
