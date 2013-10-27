@@ -67,7 +67,7 @@
   (let [users (:users group-map)
         ranks (range 1 (inc (count users)))]
     (case (:name group-map)
-      "Kilometrikisa" (map (fn [rank summary] (assoc summary :rank rank)) 
+      "Marrasputki" (map (fn [rank summary] (assoc summary :rank rank)) 
                     ranks 
                     (sort-by :numDistance > 
                       (map 
