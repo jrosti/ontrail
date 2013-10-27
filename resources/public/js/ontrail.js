@@ -499,8 +499,8 @@
 
     var renderPageDetail = function (args) {
       $('#content-header').html("")
-      if (args.data.action == "group" && args.data.target == "Kilometrikisa") {
-        ich.kilometrikisaTemplate(args.data).appendTo($('#content-header'))
+      if (args.data.action == "group" && args.data.target == "Marrasputki") {
+        ich.marrasputkiTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target == "RunnersHigh") {
         ich.runnersHighTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group") {
