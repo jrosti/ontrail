@@ -60,16 +60,37 @@
                   (mq/sort {:lname 1}))]
     {:results (vec (map (partial decorate user) results))}))
 
-(defn stats-query [user] 
-  {:sport "Pyöräily" :user user :creationDate {"$gte" (time/date-time 2013 5 1 0 0)}})
+(defn stats-query [users] 
+  {:sport "Juoksu" "$or" (vec (map (partial assoc {} :user) users)) :duration {"$gte" (* 25 60 100)} 
+  :creationDate {"$gte" (time/date-time 2013 10 1 0 0)}})
+  
+(defn continuous-results [users]
+  (let [query (stats-query users)]
+    (mq/with-collection EXERCISE
+       (mq/find query) 
+       (mq/fields [:creationDate :duration])
+       (mq/sort {:creationDate 1}))))
+
+(defn analyze-results [all-results user]
+  (let [day-now (time/day (time/now))
+        results (filter #(= user (:user all-results)))
+        dates (set (map (comp (partial time/day) :creationDate) results))
+        days (range 1 day-now)
+        has-all (every? identity (map (partial contains? dates) days))
+        jog-count (count dates)]
+    {:user user :isGood has-all :jogCount jog-count}))
+
+(def res-for-user [user])
 
 (defn fetch-stats [group-map]
   (let [users (:users group-map)
         ranks (range 1 (inc (count users)))]
     (case (:name group-map)
-      "Marrasputki" (map (fn [rank summary] (assoc summary :rank rank)) 
+      "Marrasputki" 
+        (let [all-results (continuous-results users)]
+      (map (fn [rank summary] (assoc summary :rank rank)) 
                     ranks 
-                    (sort-by :numDistance > 
+                    (sort-by :count > 
                       (map 
                         (fn[user] (assoc (summary/get-summary (stats-query user) :sport "Pyöräily") :user user))
                         users)))
