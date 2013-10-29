@@ -63,14 +63,14 @@
 ;; marrasputki
 (def min-jog-time (* 25 60 100)) ; 25 minutes
 
-(defn november-stats-query [users] 
+(defn november-stats-query [users last-day] 
   {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
    "$and" [{:creationDate {"$gte" (time/date-time 2012 11 1 0 0)}}
-           {:creationDate {"$lte" (time/date-time 2012 12 1 0 0)}}] 
+           {:creationDate {"$lte" (time/date-time 2012 11 last-day 0 0)}}] 
    })
 
-(defn jogs-from-beginning-of-november [users]
-  (let [query (november-stats-query users)]
+(defn jogs-from-beginning-of-november [users last-day]
+  (let [query (november-stats-query users last-day)]
     (mq/with-collection EXERCISE
        (mq/find query) 
        (mq/fields [:creationDate :duration :user])
@@ -80,12 +80,13 @@
   (let [results (filter #(= user (:user %)) all-results)
         dates (set (map (comp (partial time/day) :creationDate) results))
         has-all (every? identity (map (partial contains? dates) days))
-        jog-count (count dates)]
+        jog-count (count results)]
     {:user user :isGood has-all :jogCount jog-count}))
 
 (defn november-race-stats-with-day [day-now users]
-  (let [days (range 1 (inc day-now))
-        all-results (jogs-from-beginning-of-november users)]
+  (let [last-day (inc day-now)
+        days (range 1 last-day)
+        all-results (jogs-from-beginning-of-november users last-day)]
     (mapv (partial analyze-jogs all-results days) users)))
 
 (def november-race-stats 
