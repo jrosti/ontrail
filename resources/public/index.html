@@ -883,13 +883,18 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
 <script id="marrasputkiTemplate" type="text/html">
-    <article>
+    <article class="{{^in}}not-{{/in}}joined">
     <header>
-        <h3>Marrasputken  tilanne.</h3>
-        <table id="marrasputki" class="details">
-            <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kertoja</th></tr></thead>
+        <h3>Marrasputken  tilanne</h3>
+        <p class="right">
+            <a class="leave button red" rel="{{target}}/part"><span class="label">Poistu</span></a>
+            <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+        </p>
+        <table id="marrasputki" class="ranking">
+            <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kertoja lenkillä</th></tr></thead>
             {{#res}}
-            <tr><td>{{rank}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td><td>{{jogCount}}</td></tr>
+            <tr {{#isGood}}class="in"{{/isGood}}><td>{{#isGood}}{{rank}}{{/isGood}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
+            <td>{{#isGood}}{{resultCount}}{{/isGood}}{{^isGood}}<p>Katkolla.</p>{{/isGood}}</td></tr>
             {{/res}}
         </table>
     </header>
