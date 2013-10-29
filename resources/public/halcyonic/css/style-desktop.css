@@ -17,7 +17,7 @@ section:last-child
 
 	#header-wrapper, #login-wrapper
 	{
-		background: rgb(246, 245, 241);
+		background: rgb(244, 243, 239);
         /*opacity: 0.9;*/
 		border-bottom: solid 1px rgb(128, 127, 123);
 		box-shadow: inset 0px -1px 0px 0px #51575a;
@@ -31,8 +31,8 @@ section:last-child
 	
 	#features-wrapper, .features-wrapper
 	{
-		background: rgb(240, 239, 235);
-		border-bottom: solid 1px rgb(251, 250, 246);
+		background: rgb(233, 232, 228);
+		border-bottom: solid 1px rgb(236, 235, 231);
 		padding: 45px 0 45px 0;
 		/*text-shadow: -1px -1px 1px rgba(0,0,0,0.75);*/
 	}
