@@ -22,7 +22,8 @@
 (defn from-user-ex [user user-ex]
   (let [now (time/now)
         creation-date (parse-date (:date user-ex))
-        last-modified (if (> (time/in-minutes (time/interval (parse-date (:date user-ex)) (time/plus now (time/days 1)))) 43200)
+        ;; allow 5 days dates in the future.
+        last-modified (if (> (time/in-minutes (time/interval (parse-date (:date user-ex)) (time/plus now (time/days 5)))) 43200)
                         creation-date
                         now)
         duration (parse-duration (:duration user-ex)) 
