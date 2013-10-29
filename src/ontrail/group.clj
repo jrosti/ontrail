@@ -65,8 +65,8 @@
 
 (defn november-stats-query [users days] 
   {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
-   "$and" [{:creationDate {"$gte" (time/date-time 2013 10 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2013 10 1 0 0) (time/days days))}}] 
+   "$and" [{:creationDate {"$gte" (time/date-time 2013 11 1 0 0)}}
+           {:creationDate {"$lte" (time/plus (time/date-time 2013 11 1 0 0) (time/days days))}}] 
    })
 
 (defn jogs-from-beginning-of-november [users last-day]
@@ -79,13 +79,12 @@
 (defn analyze-jogs [all-results days user]
   (let [results (filter #(= user (:user %)) all-results)
         dates (set (map (comp (partial time/day) :creationDate) results))
-        has-all (every? identity (map (partial contains? dates) days))
-        result-count (if has-all (count results) 0)]
-    {:user user :isGood has-all :resultCount result-count}))
+        has-jogged-everyday (every? identity (map (partial contains? dates) days))
+        result-count (if has-jogged-everyday (count results) 0)]
+    {:user user :isGood has-jogged-everyday :resultCount result-count}))
 
 (defn november-race-stats-with-day [day-now users]
-  (let [last-day (inc day-now)
-        days (range 1 last-day)
+  (let [days (range 1 (inc day-now))
         all-results (jogs-from-beginning-of-november users day-now)]
     (mapv (partial analyze-jogs all-results days) users)))
 
@@ -93,7 +92,7 @@
   (let [now (time/now)
         month-now (time/month now)
         ranks (range 1 (inc (count users)))
-        day-now (if (= month-now 10) (time/day now) 1)]
+        day-now (if (= month-now 11) (time/day now) 1)]
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
