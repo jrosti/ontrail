@@ -66,7 +66,7 @@
 (defn november-stats-query [users days] 
   {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
    "$and" [{:creationDate {"$gte" (time/date-time 2012 11 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2012 11 0 0) (time/days days))}}] 
+           {:creationDate {"$lte" (time/plus (time/date-time 2012 11 1 0 0) (time/days days))}}] 
    })
 
 (defn jogs-from-beginning-of-november [users last-day]
