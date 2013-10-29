@@ -58,42 +58,43 @@
                   (mq/find {})
                   (mq/paginate :page (Integer/valueOf page) :per-page 20)
                   (mq/sort {:lname 1}))]
-    {:results (vec (map (partial decorate user) results))}))
+    {:results (mapv (partial decorate user) results)}))
 
-(defn stats-query [users] 
-  {:sport "Juoksu" "$or" (vec (map (partial assoc {} :user) users)) :duration {"$gte" (* 25 60 100)} 
-  :creationDate {"$gte" (time/date-time 2013 10 1 0 0)}})
-  
-(defn continuous-results [users]
-  (let [query (stats-query users)]
+;; marrasputki
+(def min-jog-time (* 25 60 100)) ; 25 minutes
+
+(defn november-stats-query [users] 
+  {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
+   "$and" [{:creationDate {"$gte" (time/date-time 2012 11 1 0 0)}}
+           {:creationDate {"$lte" (time/date-time 2012 12 1 0 0)}}] 
+   })
+
+(defn jogs-from-beginning-of-november [users]
+  (let [query (november-stats-query users)]
     (mq/with-collection EXERCISE
        (mq/find query) 
-       (mq/fields [:creationDate :duration])
+       (mq/fields [:creationDate :duration :user])
        (mq/sort {:creationDate 1}))))
 
-(defn analyze-results [all-results user]
-  (let [day-now (time/day (time/now))
-        results (filter #(= user (:user all-results)))
+(defn analyze-jogs [all-results days user]
+  (let [results (filter #(= user (:user %)) all-results)
         dates (set (map (comp (partial time/day) :creationDate) results))
-        days (range 1 day-now)
         has-all (every? identity (map (partial contains? dates) days))
         jog-count (count dates)]
     {:user user :isGood has-all :jogCount jog-count}))
 
-(def res-for-user [user])
+(defn november-race-stats-with-day [day-now users]
+  (let [days (range 1 (inc day-now))
+        all-results (jogs-from-beginning-of-november users)]
+    (mapv (partial analyze-jogs all-results days) users)))
+
+(def november-race-stats 
+  (partial november-race-stats (time/day (time/now))))
 
 (defn fetch-stats [group-map]
-  (let [users (:users group-map)
-        ranks (range 1 (inc (count users)))]
+  (let [users (:users group-map)]
     (case (:name group-map)
-      "Marrasputki" 
-        (let [all-results (continuous-results users)]
-      (map (fn [rank summary] (assoc summary :rank rank)) 
-                    ranks 
-                    (sort-by :count > 
-                      (map 
-                        (fn[user] (assoc (summary/get-summary (stats-query user) :sport "Pyöräily") :user user))
-                        users)))
+      "Marrasputki" (november-race-stats users)
       [])))
 
 (defn group-detail [group-name user]
