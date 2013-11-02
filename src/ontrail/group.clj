@@ -79,9 +79,11 @@
 (defn analyze-jogs [all-results days user]
   (let [results (filter #(= user (:user %)) all-results)
         dates (set (map (comp (partial time/day) :creationDate) results))
-        has-jogged-everyday (every? identity (map (partial contains? dates) days))
+        has-days (fn [days] (every? identity (map (partial contains? dates) days)))
+        has-jogged-everyday (has-days days)
+        last-missing (has-days (drop-last days))
         result-count (if has-jogged-everyday (count results) 0)]
-    {:user user :isGood has-jogged-everyday :resultCount result-count}))
+    {:user user :isGood has-jogged-everyday :lastMissing last-missing :resultCount result-count :count (count results)}))
 
 (defn november-race-stats-with-day [day-now users]
   (let [days (range 1 (inc day-now))
@@ -96,7 +98,7 @@
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
-        (sort-by :resultCount > (november-race-stats-with-day day-now users)))))
+        (reverse (sort-by (juxt :resultCount :count) (november-race-stats-with-day day-now users))))))
 
 (defn fetch-group-stats [group-map]
   (let [users (:users group-map)]
@@ -110,8 +112,8 @@
       {:action "group"
        :target group-name
        :description (:description group-map)
-      :users (:users group-map)
-      :res (fetch-group-stats group-map)})))
+       :users (:users group-map)
+       :res (fetch-group-stats group-map)})))
 
 (defn records [user]
   [

@@ -292,6 +292,9 @@ table.ranking tr {
 table.ranking tr.in td {
   background-color: rgba(18, 255, 3, 0.2);
 }
+table.ranking tr.inDanger td {
+  background-color: rgba(255, 233, 0, 0.2);
+}
 table.ranking th {
   border-left: 1px solid #ccc;
   border-top: 1px solid #ccc;
