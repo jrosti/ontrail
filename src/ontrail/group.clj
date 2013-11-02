@@ -98,7 +98,7 @@
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
-        (sort-by :resultCount > (november-race-stats-with-day day-now users)))))
+        (sort-by (juxt :resultCount :count) (fn [a b] (compare b a)) (november-race-stats-with-day day-now users)))))
 
 (defn fetch-group-stats [group-map]
   (let [users (:users group-map)]
