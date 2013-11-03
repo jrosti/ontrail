@@ -1,5 +1,6 @@
 (ns ontrail.imgimport
-  (:use [ontrail mongodb])
+  (:use [ontrail mongodb mongerfilter])
+  (:use clojure.java.io)
   (:require [clojure.java.io :as io]
             [monger.collection :as mc]
             [monger.result :as mr]
@@ -10,15 +11,35 @@
             [monger.joda-time])
   (:import [java.io File]))
 
+(defn imgs[body]
+  (let [body-html (html/html-snippet body)]
+    (mapv (comp :src :attrs) (flatten (html/select body-html [:img])))))
+
+(def qfilter (make-query-from {:gte_creationDate "1.11.2013"}))
+
 (defn find-all-imgs[]
-  (let [bodies (map :body (mc/find-maps EXERCISE {}))
-        body-htmls (map html/html-snippet bodies)
-        img-tags (flatten (map #(html/select % [:img]) body-htmls))]
-    (map (comp :src :attrs) img-tags)))    
-    
+  (let [bodies (map (fn [res] {:id (:_id res) :body (:body res)}) (mc/find-maps EXERCISE qfilter))]
+    (filter :id (mapv (fn [res] 
+                        (let [imglist (imgs (:body res))]
+                          (if (> (count imglist) 0)
+                            {:id (:id res) :imgs (imgs (:body res))}
+                            {}))) bodies))))
+
 (defn print-all[]
-  (doall (for [img (find-all-imgs)] (printf "%s\n" img))))
+   (let [results (find-all-imgs)]
+     (flatten 
+      (mapv (fn [result] 
+              (let [id-string (.toString (:id result))
+                    imagelist (:imgs result)]
+                (mapv 
+                 (fn [img] 
+                   (format "<a href=\"/#ex/%s\"><img width=\"500\" src=\"%s\"</img></a>\n" 
+                           id-string img))
+                 imagelist))) results)))) 
+   
+   
 
+(defn write-result [] 
+  (with-open [wrtr (writer "kollaasi.html")]
+    (mapv #(.write wrtr %) (print-all))))
 
-(defn -main [& args]
-  (print-all))
