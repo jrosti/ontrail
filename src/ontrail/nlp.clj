@@ -27,6 +27,7 @@
                "Muu merkintä" "merkitsi jotain muuta" 
                "Nyrkkeily" "nyrkkeili" 
                "Perinteinen hiihto" "hiihti"
+               "Pilates" "harrasti pilatesta"  
                "Potkukelkkailu" "potkukelkkaili"  
                "Pyöräily" "pyöräili" 
                "Ratsastus" "ratsasti"
