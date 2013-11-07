@@ -27,15 +27,15 @@
 
 (defn print-all[]
    (let [results (find-all-imgs)]
-     (flatten 
+     (reverse (flatten 
       (mapv (fn [result] 
               (let [id-string (.toString (:id result))
-                    imagelist (reverse (:imgs result))]
+                    imagelist (:imgs result)]
                 (mapv 
                  (fn [img] 
                    (format "<a href=\"/#ex/%s\"><img width=\"500\" src=\"%s\"</img></a>\n" 
                            id-string img))
-                 imagelist))) results)))) 
+                 imagelist))) results)))))
    
    
 
