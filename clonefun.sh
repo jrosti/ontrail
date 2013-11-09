@@ -12,4 +12,7 @@ function ontrailclone() {
     mongo ontrail --eval 'db.nccache.drop()'
     mongo ontrail --eval 'db.groups.drop()'
     mongorestore $HOME/ontrail.dumps/$B/dump
+
+    lein run -m ontrail.imgimport/-main
+    scp kollaasi.html ontrail@ontrail.net:ontrail/resources/public/p/
 }

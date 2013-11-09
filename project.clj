@@ -23,6 +23,6 @@
                 ]
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user
-                :import-images ontrail.imgimport}
+                :import-images [ontrail.imgimport -main]}
   :main ontrail.core)
 

@@ -33,7 +33,7 @@
                     imagelist (:imgs result)]
                 (mapv 
                  (fn [img] 
-                   (format "<a href=\"/#ex/%s\"><img width=\"500\" src=\"%s\"</img></a>\n" 
+                   (format "<a href=\"/#ex/%s\"><img height=\"700\" src=\"%s\"</img></a>\n" 
                            id-string img))
                  imagelist))) results)))))
    
@@ -43,3 +43,5 @@
   (with-open [wrtr (writer "kollaasi.html")]
     (mapv #(.write wrtr %) (print-all))))
 
+(defn -main [& args]
+  (write-result))
