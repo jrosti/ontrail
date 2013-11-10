@@ -13,6 +13,7 @@
 (defn exs [query]
   (mq/with-collection EXERCISE 
     (mq/find query)
+    (mq/fields [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags])
     (mq/sort {:creationDate 1})
     (mq/batch-size 1000)))
 
