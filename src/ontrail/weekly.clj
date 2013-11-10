@@ -26,9 +26,11 @@
  (if (> (count pace) 0) (string/replace pace #" min/km" "/km") nil))
 
 (defn to-human-stats-duration [duration]
-  (let [minutes (mod (int (/ duration 6000)) 60)
-        hours (int (/ duration 360000))]
-    (format "%02d:%02d" hours minutes)))
+  (try 
+    (let [minutes (mod (int (/ duration 6000)) 60)
+          hours (int (/ duration 360000))]
+      (format "%02d:%02d" hours minutes))
+    (catch Exception e (format "00:00"))))
 
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))

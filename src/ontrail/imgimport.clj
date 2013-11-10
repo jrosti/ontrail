@@ -22,7 +22,7 @@
     (filter :id (mapv (fn [res] 
                         (let [imglist (imgs (:body res))]
                           (if (> (count imglist) 0)
-                            {:id (:id res) :imgs (imgs (:body res))}
+                            {:id (:id res) :imgs (flatten (concat (imgs (:body res)) (mapv imgs (res (comp :body :comments)))))}
                             {}))) bodies))))
 
 (defn print-all[]
