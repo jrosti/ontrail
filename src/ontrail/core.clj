@@ -14,7 +14,8 @@
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          sportsummary weekly mongodb])
   (:gen-class)
-  (:require [ontrail.stats :as stats]
+  (:require [ontrail.csv :as csv]
+            [ontrail.stats :as stats]
             [ontrail.loggedin :as loggedin]
             [ontrail.mongerfilter :as mongerfilter]
             [ontrail.mutate :as mutate]
@@ -82,6 +83,12 @@
       (json-response {:message (:descr response)} 400))))
 
 (defroutes app-routes
+
+  (GET "/rest/v1/export.csv" {params :params}
+       {:status 200
+        :headers {"Content-Type" "application/csv"}
+        :body (csv/export params)})
+
   (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
