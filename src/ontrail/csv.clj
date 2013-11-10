@@ -14,7 +14,7 @@
   (mq/with-collection EXERCISE 
     (mq/find query)
     (mq/sort {:creationDate 1})
-    (mq/batch-size 5000)))
+    (mq/batch-size 1000)))
 
 (defn csv-escape [field]
   (let [s (str field)]
@@ -52,8 +52,8 @@
                      get-pace
                      tags])))
 
-(def ex-filter 
-  {:creationDate {"$gte" (time/date-time 2013 1 1)}})
+(defn ex-filter [year user]
+  {"$and" [{:creationDate {"$gte" (time/date-time year 1 1)}} {:creationDate {"$lt" (time/date-time (inc year) 1 1)}} {:user user}]})
 
 (defn to-csv [exs] 
   (str
@@ -63,5 +63,6 @@
 (defn export [params]
   (.info logger (str "Exporting csv " params))
   (if-let [user (:user params)]
-    (to-csv (exs (assoc ex-filter :user user)))
+    (let [year (if (:year params) (Integer/valueOf (:year params)) (time/year (time/now)))]
+      (to-csv (exs (ex-filter year user))))
     ""))
