@@ -36,33 +36,40 @@
       (join-with ";" tags)
       (first tags))
     ""))
-      
-(def extract-fields
+
+(def extract-funs
+  {"date" (comp to-csv-date :creationDate) 
+   "title" :title 
+   "sport" :sport 
+   "distance" :distance 
+   "duration" :duration 
+   "pace" :pace
+   "avghr" :avghr
+   "url" (comp as-link :_id)
+   "distancetext" (comp to-human-distance :distance)
+   "durationtext" (comp to-human-time :duration)
+   "pacetext" get-pace
+   "tags" tags})
+
+(def default-keys
+  ["date" "title" "sport" "distance" "duration" "pace" "avghr" "url" "distancetext" "durationtext" "pacetext" "tags"])
+
+(defn extract-fields [keys]
   (apply juxt (mapv #(comp csv-escape %) 
-                    [(comp to-csv-date :creationDate) 
-                     :title 
-                     :sport 
-                     :distance 
-                     :duration 
-                     :pace
-                     :avghr
-                     (comp as-link :_id)
-                     (comp to-human-distance :distance)
-                     (comp to-human-time :duration)
-                     get-pace
-                     tags])))
+                    (mapv (partial get extract-funs) keys))))
 
 (defn ex-filter [year user]
   {"$and" [{:creationDate {"$gte" (time/date-time year 1 1)}} {:creationDate {"$lt" (time/date-time (inc year) 1 1)}} {:user user}]})
 
-(defn to-csv [exs] 
+(defn to-csv [keys exs] 
   (str
-   "date,title,sport,distance,duration,pace,avghr,url,distancetext,durationtext,pacetext,tags\r\n"
-   (join-with "\r\n" (map (partial join-with ",") (map extract-fields exs)))))
+   (join-with "," keys) "\r\n"
+   (join-with "\r\n" (map (partial join-with ",") (map (extract-fields keys) exs)))))
 
 (defn export [params]
   (.info logger (str "Exporting csv " params))
   (if-let [user (:user params)]
-    (let [year (if (:year params) (Integer/valueOf (:year params)) (time/year (time/now)))]
-      (to-csv (exs (ex-filter year user))))
+    (let [keys (if (:format params) (string/split (:format params) #",") default-keys)
+          year (if (:year params) (Integer/valueOf (:year params)) (time/year (time/now)))]
+      (to-csv keys (exs (ex-filter year user))))
     ""))
