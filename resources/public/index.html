@@ -848,6 +848,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <script id="hpkContentTemplate" type="text/html">
     <article>
         <div class="by year">
+            <div style="text-align: left; font-size: 70%;">
+                <a href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
+            </div>
             <h2>{{year}}</h2>
             <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><span class="arr"></span> {{prevYear}}</a>
             {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
@@ -925,8 +928,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <h3>{{target}}</h3>
             <h4>{{description}}</h4>
             <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</p>
-
-
         </header>
     </article>
 </script>
