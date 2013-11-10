@@ -15,7 +15,7 @@
   (let [body-html (html/html-snippet body)]
     (mapv (comp :src :attrs) (flatten (html/select body-html [:img])))))
 
-(def qfilter (make-query-from {:gte_creationDate "1.11.1972"}))
+(def qfilter (make-query-from {:gte_creationDate "1.11.2013"}))
 
 (defn find-all-imgs[]
   (let [bodies (map (fn [res] {:id (:_id res) :body (:body res)}) (mc/find-maps EXERCISE qfilter))]
