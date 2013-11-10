@@ -62,7 +62,7 @@
 
 (defn as-double-km [str]
   (let [x (string/replace str #"," ".")]
-    (int (* 1000 (Double. x)))))
+    (Math/round (* 1000 (Double/valueOf x)))))
 
 (def distance-regexps
   [{:re #"^([0-9]+)$" :conv as-double-km}
