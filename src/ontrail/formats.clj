@@ -87,9 +87,7 @@
     (let [date-format (time-format/formatter "dd.MM.yyyy")]
       (str (time-format/unparse date-format date-time)
            " "
-           (time/hour date-time) 
-           ":"
-           (time/minute date-time)))))
+           (format "%02d:%02d" (time/hour date-time) (time/minute date-time))))))
 
 (defn to-simple-date [date-time]
   (if (= nil date-time)

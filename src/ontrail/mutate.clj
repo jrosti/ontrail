@@ -94,7 +94,7 @@
                                         :body (:body params)}}})
   (.info logger (str user " created comment " params))
   (newcount-comment-ex user (:id params))
-  (let [ex (get-ex (:id params))]
+  (let [ex (get-ex "zxcv" (:id params))]
     (insert-exercise-inmem-index ex)
     ex))
 
@@ -104,7 +104,7 @@
     (ObjectId. ex-id)
     { "$set" {:lastModifiedDate (time/now)}
       "$pull" rule})
-  (get-ex ex-id))
+  (get-ex "zxcv" ex-id))
 
 (defn delete-own-comment [user ex-id comment-id]
   (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
@@ -112,7 +112,7 @@
 
 (defn delete-own-ex-comment [user ex-id comment-id]
   (.trace logger (str user " deleting comment " comment-id " from own ex " ex-id))
-  (let [ex (get-ex ex-id)]
+  (let [ex (get-ex "zxcv" ex-id)]
     (if (= (:user ex) user)
       (delete-comment ex-id {:comments {:_id (ObjectId. comment-id)}})
       (.error logger (str user " trying to delete " comment-id " from ex " ex-id )))))
