@@ -97,10 +97,11 @@
   ([viewing-user id]
      (.info logger (str "User " viewing-user " getting ex with id " id))
      (nc/newcount-reset viewing-user id)
-     (get-ex id))
-  ([id]
      (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
        (.trace logger (format " get ex=%s" id))
        (if (nil? exercise)
          {:error "No such id"}
-         (as-ex-result exercise)))))
+         (let [ex (as-ex-result exercise)]
+           (if (= "nobody" viewing-user)
+             (dissoc ex :comments)
+             ex))))))
