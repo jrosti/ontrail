@@ -68,5 +68,5 @@
 
 (defn sortby [params]
 	(if-let [sortkey (:sb params)]
-		{sortkey -1}
-		{:creationDate -1}))
+		(merge {:lastModifiedDate -1} {sortkey -1})
+		{:creationDate -1 :lastModifiedDate -1}))
