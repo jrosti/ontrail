@@ -84,8 +84,12 @@
 (defn to-human-comment-date [date-time]
   (if (= nil date-time)
     ""
-    (let [date-format (time-format/formatter "dd.MM.yyyy HH:mm")]
-      (time-format/unparse date-format (time/plus date-time (time/hours 3)))))) ;; we're +3h from UTC
+    (let [date-format (time-format/formatter "dd.MM.yyyy")]
+      (str (time-format/unparse date-format date-time)
+           " "
+           (time/hour date-time) 
+           ":"
+           (time/minute date-time)))))
 
 (defn to-simple-date [date-time]
   (if (= nil date-time)

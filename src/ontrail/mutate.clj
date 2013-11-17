@@ -6,6 +6,7 @@
             [monger.query :as mq]
             [monger.conversion]
             [clj-time.core :as time]
+            [clj-time.local :as local]
             ;; for date serialization to mongo.
             [monger.joda-time])
   (:import [org.bson.types ObjectId]))
@@ -88,7 +89,7 @@
                    {"$set" {:lastModifiedDate (time/now)}
                     "$push" {:comments {:_id (ObjectId.)
                                         :avatar (get-avatar-url user)
-                                        :date (to-human-comment-date (time/now))
+                                        :date (to-human-comment-date (local/local-now))
                                         :user user
                                         :body (:body params)}}})
   (.info logger (str user " created comment " params))
