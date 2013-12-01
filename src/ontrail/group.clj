@@ -92,9 +92,9 @@
 
 (defn november-race-stats [users]
   (let [now (time/now)
-        month-now (time/month now)
+        month-now 11
         ranks (range 1 (inc (count users)))
-        day-now (if (= month-now 11) (time/day now) 1)]
+        day-now 30]
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
