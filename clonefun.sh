@@ -2,6 +2,7 @@ export JAVA_OPTS="-Xmx820m -Xms820m"
 export JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
 
 function ontrailclone() {
+    mongod&
     export LC_ALL=C
     B=`date +%s`
     ssh ontrail@ontrail.net mongodump 
