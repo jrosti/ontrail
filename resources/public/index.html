@@ -517,6 +517,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <div class="buttons">
                 <a id="login" class="button login red">Kirjaudu sisään!</a>
             </div>
+            <div> <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Syötä%20tunnus%20ja%20rekkauspostiosoite%20paina%20send." target="_top">
+                Unohtuiko salasana?</a> </div>
         </form>
         </div>
     </section>
@@ -536,7 +538,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         </ul>
     </section>
 
-    <section>
+    <!--<section>
         <article>
             <a class="pageLink" rel="group/Marrasputki/sport/Juoksu/sb/lastModifiedDate"><h3 style="color: #ff5700">Marrasputken kunniataulukko</h3></a>
             <h3 style="color: #ff5700">
@@ -549,7 +551,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
             <iframe src="http://snapwidget.com/in/?h=bWFycmFzcHV0a2kyMDEzfGlufDEwMHwyfDJ8fG5vfDV8bm9uZXxvblN0YXJ0fHllcw==&v=81113" title="Instagram Widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:210px; height:210px"></iframe>
         </article>
-    </section>
+    </section>-->
 
     <section>
         <div id="ownGroupsDropDown">
@@ -562,7 +564,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             </ul>
         </div>
         <!-- /.dropdown -->
-        <div id="sportFilter" class="buttons">
+        <div id="sportFilter" class="buttons" class="logged-in">
             <div class="dropdown">
                 <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
                 <div class="dropdown-slider">
@@ -583,7 +585,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <h3>Tulevat tapahtumat</h3>
         <div class="logged-in">
             <ul class="link-list">
-                <li><a href class="pageLink" rel="ex/526e1a970cf29dad6d3f1e6a">Pikkujoulut 23.11</a></li>
+                Mättöä Maltsussa 6.12.2013.
                 <li><a href class="pageLink" rel="ex/524142ba0cf22d3b9cb4e138">Kalevan kierros 2014</a></li>
             </ul>
         </div>
@@ -592,10 +594,10 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <section>
         <h3>Toiminnot</h3>
         <ul class="link-list">
-            <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+            <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <li><a class="pageLink" rel="lists">Listat</a></li>
-            <li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li>
+            <div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
@@ -716,10 +718,17 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
                 </div>
-                <div class="full">{{{body}}}
-                    <p class="signature">
-                        {{synopsis}}
-                    </p>
+
+                    <div class="full">
+                        <div class="logged-in">{{{body}}}
+                            <p class="signature">
+                                {{synopsis}}
+                            </p>
+                        </div>
+                        <div class="logged-out">
+                            Kirjaudu sisään nähdäksesi raportit.
+                        </div>
+                    </div>
                 </div>
 
                 {{> tagsExpandedTemplate}}
