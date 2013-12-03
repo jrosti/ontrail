@@ -707,8 +707,10 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
                 <div class="preview">
                     {{#trunc}}{{/trunc}}
-                    <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+                    <div class="logged-in">
+                        <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
+                    </div>
                 </div>
 
                 <div class="full">
