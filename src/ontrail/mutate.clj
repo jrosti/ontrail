@@ -20,13 +20,21 @@
       (.info logger (str exception " with " duration distance))
       nil)))
 
+(defn get-last-modified [creation-date]
+  (let [now (time/now)]
+    (try
+      (if (> (time/in-minutes (time/interval creation-date now)) 
+             43200)
+        creation-date
+        now)
+      (catch Exception ex
+        (.info logger (str creation-date " in future"))
+        now))))
+
 (defn from-user-ex [user user-ex]
-  (let [now (time/now)
+  (let [;; allow 5 days dates in the future.
         creation-date (parse-date (:date user-ex))
-        ;; allow 5 days dates in the future.
-        last-modified (if (> (time/in-minutes (time/interval (parse-date (:date user-ex)) (time/plus now (time/days 5)))) 43200)
-                        creation-date
-                        now)
+        last-modified (get-last-modified creation-date) 
         duration (parse-duration (:duration user-ex)) 
         bare-ex {:duration duration
                  :sport (:sport user-ex)
