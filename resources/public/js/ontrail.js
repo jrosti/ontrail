@@ -780,7 +780,7 @@
     var validations = _.flatten([titleValidation, durationReqValidation, timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise, #edit-exercise'), "disabled"))
 
-    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 1, startField: $('#ex-date'), locale: DateLocale.FI })
+    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 5, startField: $('#ex-date'), locale: DateLocale.FI })
 
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
