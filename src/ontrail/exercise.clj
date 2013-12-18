@@ -93,6 +93,12 @@
   ([viewing-user rule page]
      (get-latest-ex-list viewing-user rule page {:lastModifiedDate -1})))
 
+(defn comment-hiding? [viewing-user ex]
+  (let [user (:user ex)]
+        (or (= "nobody" viewing-user)
+            (and (= "LauraIsabella" viewing-user) (= "Ursa Minor" (:user ex)))
+            (and (= "LauraIsabella" viewing-user) (= "Peppi" (:user ex))))))
+
 (defn get-ex
   ([viewing-user id]
      (.info logger (str "User " viewing-user " getting ex with id " id))
@@ -102,6 +108,6 @@
        (if (nil? exercise)
          {:error "No such id"}
          (let [ex (as-ex-result exercise)]
-           (if (= "nobody" viewing-user)
+           (if (comment-hiding? viewing-user ex)
              (dissoc ex :comments)
              ex))))))
