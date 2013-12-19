@@ -95,9 +95,7 @@
 
 (defn comment-hiding? [viewing-user ex]
   (let [user (:user ex)]
-        (or (= "nobody" viewing-user)
-            (and (= "LauraIsabella" viewing-user) (= "Ursa Minor" (:user ex)))
-            (and (= "LauraIsabella" viewing-user) (= "Peppi" (:user ex))))))
+    (or (= "nobody" viewing-user))))
 
 (defn get-ex
   ([viewing-user id]
