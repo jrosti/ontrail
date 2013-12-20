@@ -66,7 +66,8 @@
   ([results]
      (as-ex-result-list (time/now) nc/zero-cache results))
   ([last-visit new-comment-cache results]
-     (map (partial as-ex-result last-visit new-comment-cache) results)))
+     (map (comp (fn [ex] (dissoc ex :comments)) 
+                (partial as-ex-result last-visit new-comment-cache)) results)))
 
 (defn decorate-results [viewing-user results]
   (let [last-visit (if (not= viewing-user "nobody")
