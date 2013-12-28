@@ -1,6 +1,6 @@
 (ns ontrail.nlp)
 
-(def verb-map {"Crossfit" "crosfittaili"
+(def verb-map {"Crossfit" "crossfittasi"
                "Cyclocross" "cyclocrossaili"
                "Golf" "golffasi" 
                "Hieronta" "oli hierottavana" 
