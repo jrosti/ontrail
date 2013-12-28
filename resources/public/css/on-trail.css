@@ -1096,11 +1096,11 @@ body[data-page="latest"] #search-container {
   clear: both;
 }
 #right-addex-container {
-  width: 200px;
+  width: 170px;
   float: right;
 }
 #left-addex-container {
-  width: 70%;
+  width: 80%;
   float: left;
 }
 .small-input {
