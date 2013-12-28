@@ -664,7 +664,7 @@
     // muokkaa lenkkiä:
     var renderEditExercise = function (ex) {
       $("[role='addex']").attr('data-mode', 'edit')
-      _.map(["title", "duration", "distance", "avghr"], function (field) {
+      _.map(["title", "duration", "distance", "avghr", "detailRepeats", "detailVolume", "detailElevation"], function (field) {
         $('#ex-' + field).val(ex[field]).keyup()
       })
       $("#ex-date").attr('value', ex.date)
@@ -985,6 +985,13 @@
     $('#filter-reset-stop').onClickTouchAsObservable(clickEvent).subscribe(function () {
       $("#filter-stop-date").attr('value', "")
       $("#filter-stop-date").trigger("cal:changed")
+    })
+
+    $("#ex-numeric-details").hide()
+    $("#toggle-numeric-details").toggle(function () {
+      $("#ex-numeric-details").show()
+    }, function () {
+      $("#ex-numeric-details").hide()
     })
 
     // Autosave the exercise XXX: this shoud be bound to onchange, but redactor

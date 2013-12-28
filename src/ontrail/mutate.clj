@@ -34,7 +34,7 @@
 (defn positive-short [^String input] 
   (try 
     (let [value (Short/valueOf input)] 
-      (if (> value 0)
+      (if (>= value 0)
         value
         nil))
     (catch Exception ex
