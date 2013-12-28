@@ -457,17 +457,20 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     </div>
                 </div>
                 <div id="right-addex-container">
-                    <div>
-                        <label>Toistot:</label>
-                        <input class="small-input" id="ex-repeats" size="5"  maxlength="5" name="detailRepeats" class="reset" placeholder="kpl"/>
-                    </div>
-                    <div>
-                        <label>Volyymi:</label>
-                        <input class="small-input" id="ex-volume" size="5"  maxlength="5" name="detailVolume" class="reset" placeholder="kg"/>
-                    </div>
-                    <div>
-                        <label>Nousumetrit:</label>
-                        <input class="small-input" id="ex-elevation" size="5"  maxlength="5" name="detailElevation" class="reset" placeholder="m"/>
+                    <a id="toggle-numeric-details" href="javascript:void(0);">Lisää...</a>
+                    <div id="ex-numeric-details">
+                        <div>
+                            <label>Toistot:</label>
+                            <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" placeholder="kpl"/>
+                        </div>
+                        <div>
+                            <label>Volyymi:</label>
+                            <input class="small-input reset" id="ex-detailVolume" size="5"  maxlength="5" name="detailVolume" placeholder="kg"/>
+                        </div>
+                        <div>
+                            <label>Nousumetrit:</label>
+                            <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" placeholder="m"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -893,7 +896,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <script id="summaryTemplate" type="text/html">
     <table id="homies" class="details">
-        <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th><th>Kertoja</th></tr></thead>
+        <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th>
+            <th>Toistot</th>
+            <th>Nousu</th>
+            <th>Kerrat</th>
+        </tr></thead>
         <tbody>
         {{#sports}}
         {{> summaryItemTemplate}}
@@ -1003,7 +1010,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td>
             {{#hasRecords}}
             <br/><a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
-            <div id="recordsDiv" style="width:300px">
+            <div id="recordsDiv" style="width:350px">
                 <table id="records" class="details">
                     <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
                     {{#records}}
@@ -1060,7 +1067,16 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 <script id="summaryItemTemplate" type="text/html">
     <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}}
-        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td><td>{{distance}}</td> <td>{{pace}}</td><td>{{duration}}</td><td>{{avghr}}</td><td>{{count}}</td></tr>
+        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td>
+        <td>{{distance}}</td>
+        <td>{{pace}}</td>
+        <td>{{duration}}</td>
+        <td>{{avghr}}</td>
+        <td>{{repeats}}</td>
+        <td>{{elevation}}</td>
+        <td>{{count}}</td>
+
+    </tr>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">

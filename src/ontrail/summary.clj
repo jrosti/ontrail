@@ -11,8 +11,8 @@
 (defn avghr [db-retmap]
   (let [hrcount (:hrcount db-retmap)]
     (if (and hrcount (> hrcount 0))
-      (/ (:tavghr db-retmap) hrcount)
-      0)))
+      (int (+ 0.5 (/ (:tavghr db-retmap) hrcount)))
+      "")))
 
 (defn to-summary [db-object key sport] 
   (let [db-retmap (first (get db-object :retval))
@@ -22,7 +22,10 @@
     {:duration (to-human-time (get db-retmap :dur)) :numericalDuration (get db-retmap :dur)
      :distance (to-human-distance (get db-retmap :dist)) :numDistance (if (get db-retmap :dist) (get db-retmap :dist) 0)
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
-     :avghr (int (+ 0.5 (avghr db-retmap)))
+     :avghr (avghr db-retmap)
+     :volume (if (> (:volume db-retmap) 0) (:volume db-retmap) nil)
+     :repeats (if (> (:repeats db-retmap) 0) (:repeats db-retmap) nil)
+     :elevation (if (> (:elevation db-retmap) 0) (:elevation db-retmap) nil)
      :count count
      key sport}))
 
@@ -41,7 +44,10 @@
                         prev.hrcount += 1;  
                       }
                       prev.dist += exercise.distance;
-                      prev.dur += exercise.duration }"]
+                      prev.dur += exercise.duration;
+                      if (exercise.detailVolume > 0) prev.volume += exercise.detailVolume;
+                      if (exercise.detailRepeats > 0) prev.repeats += exercise.detailRepeats;
+                      if (exercise.detailElevation > 0) prev.elevation += exercise.detailElevation;}"]
     (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
                                                                     :cond condition 
                                                                     :$reduce js-reduce
@@ -50,7 +56,10 @@
                                                                               :dist 0
                                                                               :dur 0
                                                                               :tdist 0
-                                                                              :tdur 0}}})
+                                                                              :tdur 0
+                                                                              :volume 0
+                                                                              :repeats 0
+                                                                              :elevation 0}}})
                                       true)))
   
 (defn get-summary [condition key sport]
