@@ -419,48 +419,69 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <article class="edit-form">
         <h2>Lisää uusi suoritus</h2>
         <form id="add-exercise-form" method="post">
-            <div>
-                <label>Otsikko</label>
-                <input id="ex-title" name="title" class="reset" placeholder="Otsikko"/>
-                <em class="error title-required">Lisää otsikko</em>
-            </div>
-            <div>
-                <label>Laji</label>
-                <select id="ex-sport" class="chzn-select" style="width:350px;">
-                </select>
-            </div>
-            <div>
-                <label>Kesto</label>
-                <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="time-hint"></span>
-                <em class="error duration-required">Lenkin kesto vaaditaan</em>
-                <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
-            </div>
-            <div>
-                <label>Matka</label>
-                <input id="ex-distance" name="distance" class="reset" placeholder="Matka (esim 2km, 3250m)"/> <span id="distance-hint"></span>
-            </div>
-            <div>
-                <label>Keskisyke</label>
-                <input id="ex-avghr" name="avghr" class="reset" placeholder="Keskisyke"/>
-            </div>
-            <div>
-                <label>Päivä</label>
-                <div id="ex-continuous-date">
-                    <input style="display: none ! important" id="ex-date" name="date" placeholder="Milloin?"/>
+            <div id="details-container">
+                <div id="left-addex-container">
+                    <div>
+                        <label>Otsikko</label>
+                        <input id="ex-title" name="title" class="reset" placeholder="Otsikko"/>
+                        <em class="error title-required">Lisää otsikko</em>
+                    </div>
+                    <div>
+                        <label>Laji</label>
+                        <select id="ex-sport" class="chzn-select" style="width:350px;">
+                        </select>
+                    </div>
+                    <div>
+                        <label>Kesto</label>
+                        <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="time-hint"></span>
+                        <em class="error duration-required">Lenkin kesto vaaditaan</em>
+                        <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
+                    </div>
+                    <div>
+                        <label>Matka</label>
+                        <input id="ex-distance" name="distance" class="reset" placeholder="Matka (esim 2km, 3250m)"/> <span id="distance-hint"></span>
+                    </div>
+                    <div>
+                        <label>Keskisyke</label>
+                        <input id="ex-avghr" name="avghr" class="reset" placeholder="Keskisyke"/>
+                    </div>
+                    <div>
+                        <label>Päivä</label>
+                        <div id="ex-continuous-date">
+                            <input style="display: none ! important" id="ex-date" name="date" placeholder="Milloin?"/>
+                        </div>
+                    </div>
+                    <div id="add-tags-select">
+                        <label>Avainsanat</label>
+                        <input id="ex-tags" data-placeholder="Lisää avainsanoja..." multiple class="chzn-select"/>
+                    </div>
+                </div>
+                <div id="right-addex-container">
+                    <div>
+                        <label>Toistot:</label>
+                        <input class="small-input" id="ex-repeats" size="5"  maxlength="5" name="detailRepeats" class="reset" placeholder="kpl"/>
+                    </div>
+                    <div>
+                        <label>Volyymi:</label>
+                        <input class="small-input" id="ex-volume" size="5"  maxlength="5" name="detailVolume" class="reset" placeholder="kg"/>
+                    </div>
+                    <div>
+                        <label>Nousumetrit:</label>
+                        <input class="small-input" id="ex-elevation" size="5"  maxlength="5" name="detailElevation" class="reset" placeholder="m"/>
+                    </div>
                 </div>
             </div>
-            <div id="add-tags-select">
-                <label>Avainsanat</label>
-                <input id="ex-tags" data-placeholder="Lisää avainsanoja..." multiple class="chzn-select"/>
-            </div>
+            <div class="clear"></div>
             <div>
-                <label>Kuvaus</label>
-                <div id="ex-body"></div>
-            </div>
-            <div class="buttons">
-                <label></label>
-                <a id="add-exercise" class="button addExercise add green">Lisää suoritus</a>
-                <a id="edit-exercise" class="button editExercise edit green">Muokkaa lenkkiä</a>
+                <div>
+                    <label>Kuvaus</label>
+                    <div id="ex-body"></div>
+                </div>
+                <div class="buttons">
+                    <label></label>
+                    <a id="add-exercise" class="button addExercise add green">Lisää suoritus</a>
+                    <a id="edit-exercise" class="button editExercise edit green">Muokkaa lenkkiä</a>
+                </div>
             </div>
         </form>
     </article>
@@ -657,10 +678,17 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <!-- templates -->
 <script id="exerciseDetailsTemplate" class="partial" type="text/html">
     <table class="details full">
-        <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th></tr></thead>
+        <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th>
+        {{#detailRepeats}}<th>Toistot</th>{{/detailRepeats}}
+        {{#detailElevation}}<th>Nousu</th>{{/detailElevation}}
+        {{#detailVolume}}<th>Volyymi</th>{{/detailVolume}}
+        </tr></thead>
         <tr>
             <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
             <td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{bpmdist}}</td>
+            {{#detailRepeats}}<td>{{detailRepeats}}</td>{{/detailRepeats}}
+            {{#detailElevation}}<td>{{detailElevation}}</td>{{/detailElevation}}
+            {{#detailVolume}}<td>{{detailVolume}}</td>{{/detailVolume}}
         </tr>
     </table>
 </script>
@@ -813,6 +841,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <h4><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
     {{/users}}
 </script>
+
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
     <tr><td><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></td><td>{{{description}}}</td>
@@ -823,6 +852,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         </td></tr>
     {{/groups}}
 </script>
+
 <script id="userHeaderTemplate" type="text/html">
     <span id="view-toggles" class="right">
         <a id="summary-view" href="javascript:nothing()">Tiivistelmä</a>
@@ -836,6 +866,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
     </p>
 </script>
+
 <script id="hpkHeaderTemplate" type="text/html">
     <div class="subnavi">
         <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a>
@@ -918,8 +949,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <td>17</td><td><a class="pageLink" rel="user/Hähi">Hähi</a></td><td>	30</td></tr>
             <tr class="in">
             <td>18</td><td><a class="pageLink" rel="user/tuomasnu">tuomasnu</a></td><td>	30</td></tr>
-            <tr class="in">
-            <td>19</td><td><a class="pageLink" rel="user/Soironen">Soironen</a></td><td>	30</td></tr>
         </table>
         <a class="pageLink" rel="ex/52702c080cf29dad6d3f1f42">Lue lisää Marrasputkesta.</a>
     </header>

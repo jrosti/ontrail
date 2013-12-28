@@ -20,6 +20,7 @@
                "Kävely" "käveli" 
                "Laskettelu" "lasketteli" 
                "Lentopallo" "lentopalloili" 
+               "Leuanveto" "veti leukoja" 
                "Luistelu" "luisteli" 
                "Luisteluhiihto" "luisteluhiihti" 
                "Lumikenkäily" "lumikenkäili" 
