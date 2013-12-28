@@ -31,6 +31,28 @@
         (.info logger (str creation-date " in future"))
         now))))
 
+(defn positive-short [^String input] 
+  (try 
+    (let [value (Short/valueOf input)] 
+      (if (> value 0)
+        value
+        nil))
+    (catch Exception ex
+      (.debug logger (str "[" input "] cannot parse as short integer"))
+      nil)))
+
+;; { :detail.a "12" :detail.b "" } -> { :detail.a 12 }
+(defn extract-details [db-ex user-ex] 
+  (let [detail-keys (filter (fn [detail-key] 
+                              (.startsWith (name detail-key) "detail"))
+                            (keys user-ex))]
+    (reduce (fn [ex keyword]
+              (if-let [value (positive-short (user-ex keyword))]
+                (assoc ex keyword value)
+                ex))
+            db-ex
+            detail-keys)))
+
 (defn from-user-ex [user user-ex]
   (let [;; allow 5 days dates in the future.
         creation-date (parse-date (:date user-ex))
@@ -46,8 +68,9 @@
         tags (parse-tags (:tags user-ex))
         avghr (parse-natural (:avghr user-ex))
         distance (parse-distance (:distance user-ex))
-        pace (calc-pace duration distance)]
-    (-> bare-ex
+        pace (calc-pace duration distance)
+        with-details (extract-details bare-ex user-ex)]
+    (-> with-details
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)

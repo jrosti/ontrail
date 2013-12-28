@@ -57,10 +57,12 @@
                     :commentCount comment-count
                     :comments comments
                     :lastModifiedDate (:lastModifiedDate exercise)
-                    :bpmdist bpmdist}]
+                    :bpmdist bpmdist}
+           details (select-keys exercise (filter (fn [k] (.startsWith (name k) "detail")) (keys exercise)))
+           with-details (merge bare-ex details)]
        (if (> new-comments 0)
-         (assoc bare-ex :newComments new-comments)
-         bare-ex))))
+         (assoc with-details :newComments new-comments)
+         with-details))))
   
 (defn as-ex-result-list
   ([results]
