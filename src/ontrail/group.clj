@@ -100,10 +100,49 @@
         ranks 
         (sort-by (juxt :resultCount :count) (fn [a b] (compare b a)) (november-race-stats-with-day day-now users)))))
 
+;; Leuanvetohaaste 2014
+(def start-date-time (time/date-time 2014 1 1 0 0))
+
+(defn chinup-stats-query [users days] 
+  {:sport "Leuanveto" "$or" (mapv (partial assoc {} :user) users)
+   "$and" [{:creationDate {"$gte" (time/date-time 2014 1 1 0 0)}}
+           {:creationDate {"$lte" (time/plus (time/date-time 2013 11 1 0 0) (time/days days))}}] 
+   })
+
+(defn year-day-number [date-time]
+  (inc (time/in-days (time/interval start-date-time date-time))))
+
+(defn chinups-per-day-map [chinup-exs]
+  (loop [accumulator {}
+         i 1
+         exs chinup-exs]
+    (if (empty? exs) 
+      accumulator
+      (let [current (first exs)
+            current-day (year-day-number (:creationDate current))]
+        (if (> current-day i) ;; check if more results for today, if not accumulate next day
+          (recur accumulator (inc i) exs)
+          (let [current-value (if (contains? accumulator i) (get accumulator i) 0)
+                new-value (assoc accumulator i (+ current-value (if-let [value (:detailRepeats current)] value 0)))]
+            (recur new-value i (rest exs))))))))
+
+(defn all-chinups [users day-number]
+  (let [query (chinup-stats-query users day-number)]
+    (mq/with-collection EXERCISE
+       (mq/find query) 
+       (mq/fields [:creationDate :detailRepeats :user])
+       (mq/sort {:creationDate 1}))))
+
+(defn analyze-chinups [results day-number user])
+
+(defn chinup-race-stats [users] {})
+
+
 (defn fetch-group-stats [group-map]
   (let [users (:users group-map)]
     (case (:name group-map)
-      "Marrasputki" (november-race-stats users)
+;;      "Marrasputki" (november-race-stats users)
+      "lvhaaste2014" (chinup-race-stats users)
       [])))
 
 (defn group-detail [group-name user]
