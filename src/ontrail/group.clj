@@ -98,7 +98,8 @@
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
-        (sort-by (juxt :resultCount :count) (fn [a b] (compare b a)) (november-race-stats-with-day day-now users)))))
+        (sort-by (juxt :resultCount :count) 
+                 (fn [a b] (compare b a)) (november-race-stats-with-day day-now users)))))
 
 ;; Leuanvetohaaste 2014
 (def start-date-time (time/date-time 2014 1 1 0 0))
@@ -106,24 +107,25 @@
 (defn chinup-stats-query [users days] 
   {:sport "Leuanveto" "$or" (mapv (partial assoc {} :user) users)
    "$and" [{:creationDate {"$gte" (time/date-time 2014 1 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2013 11 1 0 0) (time/days days))}}] 
+           {:creationDate {"$lte" (time/plus (time/date-time 2014 1 1 0 0) (time/days days))}}] 
    })
 
 (defn year-day-number [date-time]
   (inc (time/in-days (time/interval start-date-time date-time))))
 
-(defn chinups-per-day-map [chinup-exs]
+(defn accumulate-repeats-map [exs-list]
   (loop [accumulator {}
          i 1
-         exs chinup-exs]
-    (if (empty? exs) 
+         exs exs-list]
+    (if (or (empty? exs) (> i 365)) 
       accumulator
-      (let [current (first exs)
-            current-day (year-day-number (:creationDate current))]
-        (if (> current-day i) ;; check if more results for today, if not accumulate next day
+      (let [current-ex (first exs)
+            current-day-idx (year-day-number (:creationDate current-ex))]
+        (if (> current-day-idx i) ;; check if more results for today, if not accumulate next day
           (recur accumulator (inc i) exs)
-          (let [current-value (if (contains? accumulator i) (get accumulator i) 0)
-                new-value (assoc accumulator i (+ current-value (if-let [value (:detailRepeats current)] value 0)))]
+          (let [new-value (merge-with + 
+                                      accumulator  
+                                      {i (if-let [value (:detailRepeats current-ex)] value 0)})]
             (recur new-value i (rest exs))))))))
 
 (defn all-chinups [users day-number]
@@ -133,9 +135,19 @@
        (mq/fields [:creationDate :detailRepeats :user])
        (mq/sort {:creationDate 1}))))
 
-(defn analyze-chinups [results day-number user])
+(defn analyze-chinups [user]
+  (let [now (time/date-time 2014 1 4 10 0)
+        day-number (year-day-number now)
+        all-results (all-chinups ["Jörö"] day-number)
+        results (filter #(= user (:user %)) all-results)
+        reps-map (accumulate-repeats-map results)
+        day-range (vec (range 1 (inc day-number)))
+        total (reduce + (vals reps-map))
+        ok? (every? identity (mapv (fn [day] (>= (if-let [reps (reps-map day)] reps 0) day)) day-range))]
+    {:user user :ok ok? :total total :ttotal (if ok? total 0)}))
 
-(defn chinup-race-stats [users] {})
+(defn chinup-race-stats [users] 
+  {})
 
 
 (defn fetch-group-stats [group-map]
