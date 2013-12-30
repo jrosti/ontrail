@@ -135,19 +135,28 @@
        (mq/fields [:creationDate :detailRepeats :user])
        (mq/sort {:creationDate 1}))))
 
-(defn analyze-chinups [user]
-  (let [now (time/date-time 2014 1 4 10 0)
-        day-number (year-day-number now)
-        all-results (all-chinups ["Jörö"] day-number)
-        results (filter #(= user (:user %)) all-results)
+(defn analyze-chinups [day-number all-results user]
+  (.info logger (str day-number))
+  (let [results (filter #(= user (:user %)) all-results)
         reps-map (accumulate-repeats-map results)
         day-range (vec (range 1 (inc day-number)))
         total (reduce + (vals reps-map))
         ok? (every? identity (mapv (fn [day] (>= (if-let [reps (reps-map day)] reps 0) day)) day-range))]
     {:user user :ok ok? :total total :ttotal (if ok? total 0)}))
 
-(defn chinup-race-stats [users] 
-  {})
+(defn challenge-results [users]
+  (let [now_ (time/now)
+        now (if (>= (compare now_ start-date-time) 0) now_ start-date-time)  
+        day-number (year-day-number now)
+        all-results (all-chinups users day-number)]
+    (mapv (partial analyze-chinups day-number all-results) users)))
+
+(defn chinup-race-stats [users]
+  (let [ranks (range 1 (inc (count users)))]
+    (mapv (fn [rank elem] (assoc elem :rank rank)) 
+         ranks 
+         (sort-by (juxt :ttotal :total) 
+                  (fn [a b] (compare b a)) (challenge-results users)))))
 
 
 (defn fetch-group-stats [group-map]
