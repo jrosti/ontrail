@@ -909,6 +909,29 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </table>
 </script>
 
+<script id="lvhaaste2014Template" type="text/html">
+    <article class="{{^in}}not-{{/in}}joined">
+        <header>
+            <h3>Leuanvetohaaste 2014</h3>
+            <div class="logged-in">
+                <p class="right">
+                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                </p>
+            </div>
+            <table id="lvhaaste" class="ranking">
+                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Vetoja</th></tr></thead>
+                {{#res}}
+                <tr {{#ok}}class="in"{{/ok}}>
+                    <td>{{#ok}}{{rank}}{{/ok}}</td>
+                    <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                    <td>{{total}}</td>
+                </tr>
+                {{/res}}
+            </table>
+        </header>
+    </article>
+</script>
+
 <script id="marrasputkiTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
     <header>
