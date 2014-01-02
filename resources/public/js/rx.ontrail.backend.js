@@ -36,14 +36,15 @@
 
   Rest.prototype.summary = function() { return getAsObservableResultData.apply(this, ["summary"].concat(_.argsToArray(arguments))) }
   Rest.prototype.tagsummary = function() { return getAsObservableResultData.apply(this, ["summary-tags"].concat(_.argsToArray(arguments))) }
-  Rest.prototype.weeksummary = function(user, n) {
+  Rest.prototype.weeksummary = function(user, year, month, n) {
+    console.log(user, year, month, n)
     var nthMonth = function(n) {
       var now = XDate.today()
-      monthsTotal = now.getFullYear() * 12 + (now.getMonth()) - n
-      return [Math.floor(monthsTotal/12), monthsTotal % 12 + 1]
+      monthsTotal = year * 12 + month - n
+      return [Math.floor(monthsTotal / 12), monthsTotal % 12 + 1]
     }
 
-    return getAsObservableResultData.apply(this, ["weekly-list", user].concat(nthMonth(n-1)))
+    return getAsObservableResultData.apply(this, ["weekly-list", user].concat(nthMonth(n - 1)))
   }
 
   Rest.prototype.markAllRead = function() { return getAsObservableResultData("mark-all-read") }

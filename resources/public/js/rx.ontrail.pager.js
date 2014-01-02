@@ -14,7 +14,7 @@
 
   var pager = function(ajaxSearch, page, next) {
     return ajaxSearch(page).selectMany(function(data) {
-      // I do not follow this code properly. FIXME this.
+
       if (data && data.searchSummary) {
         $('#searchSummary').html(data.searchSummary)
       }
@@ -24,7 +24,9 @@
         $("#content-spinner").html("Ei enempää suorituksia")
         return rx.empty()
       } else {
-        return rx.returnValue(data.results).concat(next.take(1).selectMany(function() { return pager(ajaxSearch, page + 1, next) }))
+        return rx.returnValue(data.results).concat(next.take(1).selectMany(function() {
+          return pager(ajaxSearch, page + 1, next)
+        }))
       }
     })
   }
