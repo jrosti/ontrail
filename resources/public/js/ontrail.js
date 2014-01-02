@@ -570,10 +570,16 @@
       .combineWithLatestOf(sessions)
       .selectArgs(function (pg, user) {
         var targetUser = user
-        if (pg.length == 2) {
+        var year = XDate.today().getFullYear()
+        var month = XDate.today().getMonth()
+        if (pg.length >= 2) {
           targetUser = pg[1]
         }
-        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser), $("#weeksummary"))
+        if (pg.length == 4) {
+          year = parseInt(pg[2])
+          month = parseInt(pg[3])
+        }
+        return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser, year, month), $("#weeksummary"))
       }).switchLatest()
     weeklyScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("weeksummary")))).repeat().subscribe(renderWeeklySummary)
 
