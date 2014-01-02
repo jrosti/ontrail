@@ -32,6 +32,7 @@
   }
 
   var Pager = function() {}
+
   Pager.prototype.create = function(ajaxQuery, elem) { return pager(ajaxQuery, 1, nextPage(elem)) }
   OnTrail.pager = new Pager()
 
