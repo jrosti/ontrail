@@ -136,7 +136,6 @@
        (mq/sort {:creationDate 1}))))
 
 (defn analyze-chinups [day-number all-results user]
-  (.info logger (str day-number))
   (let [results (filter #(= user (:user %)) all-results)
         reps-map (accumulate-repeats-map results)
         day-range (vec (range 1 (inc day-number)))
