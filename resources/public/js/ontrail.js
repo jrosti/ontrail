@@ -380,9 +380,19 @@
       return $(elem).hasClass('share')
     }).select(function (el) {
         return attr("rel", el)
-      })
+    })
+
     shareClicks.subscribeArgs(function (url) {
       window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent("http://ontrail.net/#" + url), 'facebook-share-dialog', 'width=626,height=436')
+    })
+
+    var windowLinks = clickedLinks.where(function (elem) {
+      return $(elem).hasClass('windowLink')
+    }).select(function (el) {
+        return attr("rel", el)
+    })
+    windowLinks.subscribeArgs(function(url) {
+      window.open('#' + url, 'ontrail', 'width=830,height=800')
     })
 
     // show own delete buttons
@@ -420,6 +430,7 @@
     var pageLinks = clickedLinks.where(function (elem) {
       return $(elem).hasClass('pageLink')
     })
+
     var initialPage = function (user) {
       var address = $.address.value()
       if (address && address != "") return splitM(address)
@@ -569,10 +580,10 @@
       })
       .combineWithLatestOf(sessions)
       .selectArgs(function (pg, user) {
-        var targetUser = user,
-            year = XDate.today().getFullYear(),
-            month = XDate.today().getMonth()
-        
+        var targetUser = user
+        var year = XDate.today().getFullYear()
+        var month = XDate.today().getMonth()
+
         if (pg.length >= 2) {
           targetUser = pg[1]
         }
