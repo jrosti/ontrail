@@ -547,6 +547,16 @@ table.weekly .sport.Juoksu {
   width: 21px;
   height: 20px;
 }
+table.weekly .sport.Maastojuoksu {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -143px -20px;
+  width: 21px;
+  height: 20px;
+}
 table.weekly .sport.J__kiekko {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
@@ -667,6 +677,16 @@ table.weekly .sport.Lentopallo {
   width: 20px;
   height: 20px;
 }
+table.weekly .sport.Leuanveto {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -122px -60px;
+  width: 21px;
+  height: 20px;
+}
 table.weekly .sport.Luistelu {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
@@ -748,6 +768,36 @@ table.weekly .sport.Perinteinen_hiihto {
   height: 20px;
 }
 table.weekly .sport.Py_r_ily {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -41px -79px;
+  width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Maantiepy_r_ily {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -41px -79px;
+  width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Cyclocross {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -41px -79px;
+  width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Maastopy_r_ily {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
 
