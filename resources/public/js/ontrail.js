@@ -606,7 +606,8 @@
           var distance = e.attr("data-distance").replace(" ", "&nbsp;")
           var duration = e.attr("data-duration").replace(" ", "&nbsp;")
           var pace = e.attr("data-pace").replace(" ", "&nbsp;")
-          return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace)
+          var repeats = e.attr("data-repeats") !== undefined && e.attr("data-repeats") !== "" ? "<br/>" + e.attr("data-repeats") + "&nbsp;toistoa" : ""
+          return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace) + repeats
         }, "items": "[data-sport]", show: false, hide: false})
         e.tooltip("open")
       } else if (el.type === "mouseleave") {

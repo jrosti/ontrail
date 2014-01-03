@@ -30,7 +30,7 @@
     (let [minutes (mod (int (/ duration 6000)) 60)
           hours (int (/ duration 360000))]
       (format "%02d:%02d" hours minutes))
-    (catch Exception e (format "00:00"))))
+    (catch Exception e "")))
 
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
