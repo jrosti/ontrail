@@ -54,6 +54,7 @@
      :avghr (:avghr exercise)
      :hrReserve heart-rate-reserve
      :pace pace
+     :repeats (:detailRepeats exercise)
      :statspace (to-stats-pace pace)
      :statsduration (to-human-stats-duration (:duration exercise))
      })) 

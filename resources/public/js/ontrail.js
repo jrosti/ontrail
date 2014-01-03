@@ -569,9 +569,10 @@
       })
       .combineWithLatestOf(sessions)
       .selectArgs(function (pg, user) {
-        var targetUser = user
-        var year = XDate.today().getFullYear()
-        var month = XDate.today().getMonth()
+        var targetUser = user,
+            year = XDate.today().getFullYear(),
+            month = XDate.today().getMonth()
+        
         if (pg.length >= 2) {
           targetUser = pg[1]
         }
