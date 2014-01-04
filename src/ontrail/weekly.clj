@@ -118,8 +118,10 @@
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
-      {:week (week-number week-interval)
+      {:user user
+       :week (week-number week-interval)
        :from start
+       :to end
        :summary (weekly-sums results)
        :exs (map simple-result results)}))
        

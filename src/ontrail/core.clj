@@ -102,7 +102,7 @@
        (json-response (get-season-months get-month-summary-tags user (Integer/valueOf year))))
 
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
-       (json-response {:results (generate-month user (Integer/valueOf year) (Integer/valueOf month))}))
+       (json-response {:results (generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
   
   
   (POST "/rest/v1/profile" {params :params cookies :cookies}
