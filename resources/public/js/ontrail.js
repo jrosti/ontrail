@@ -591,8 +591,16 @@
           year = parseInt(pg[2])
           month = parseInt(pg[3])
         }
+        var nextYear = year === XDate.today().getFullYear() ? year : year + 1
+        var nextMonth = year === XDate.today().getFullYear() - 1 ? XDate.today().getMonth() :
+          (year === XDate.today().getFullYear() ? XDate.today().getMonth() : 11)
+
+        $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: user,
+                                                              prevYear: year - 1, prevMonth: 11,
+                                                              nextYear: nextYear, nextMonth: nextMonth}))
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser, year, month), $("#weeksummary"))
-      }).switchLatest()
+      })
+      .switchLatest()
     weeklyScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("weeksummary")))).repeat().subscribe(renderWeeklySummary)
 
     var formatToolTip = function (distance, duration, pace) {

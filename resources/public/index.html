@@ -397,6 +397,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <div id="weeksummary-header">
             <h2>Viikoittainen harjoitusyhteenveto</h2>
         </div>
+        <div id="weeklyNavigate"></div>
         <div>
             <article id="weeksummary">
             </article>
@@ -585,7 +586,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <a class="pageLink ddm" rel="sport/Triathlon"><span class="label">Triathlon</span></a>
                     <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto,Rullahiihto"><span class="label">Hiihto</span></a>
                     <a class="pageLink ddm" rel="sport/Soutu,Sisäsoutu"><span class="label">Soutu</span></a>
-                    <a class="pageLink ddm" rel="sport/Kuntosali,Kahvakuula,Kuntopiiri"><span class="label">Voimailu</span></a>
+                    <a class="pageLink ddm" rel="sport/Kuntosali,Kahvakuula,Kuntopiiri,Leuanveto"><span class="label">Voimailu</span></a>
                 </div> <!-- /.dropdown-slider -->
             </div> <!-- /.dropdown -->
         </div>
@@ -1102,8 +1103,14 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </tr>
 </script>
 
-<script id="hpkWeeklyContentTemplate" type="text/html">
+<script id="weeklyNavigateTemplate" type="text/html">
+    <div class="right">
+        <a class="pageLink prev" rel="weeksummary/{{user}}/{{prevYear}}/{{prevMonth}}"><span class="arr"></span> {{prevYear}}</a>
+        <a class="pageLink next" rel="weeksummary/{{user}}/{{nextYear}}/{{nextMonth}}">{{nextYear}} <span class="arr"></span></a>
+    </div>
+</script>
 
+<script id="hpkWeeklyContentTemplate" type="text/html">
     <h2 class="monthName">{{monthName}} {{year}}</h2>
     <table class="weekly">
         <thead>
