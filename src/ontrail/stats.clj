@@ -31,8 +31,8 @@
        :paceHist (:paceHist db-retmap)
        :paceHistBins (:paceHistBins db-retmap)}))
 
-(def hist-paces 40)
-(def paces (map #(- 7 (* % 0.1)) (range hist-paces)))
+(def hist-paces 70)
+(def paces (map #(- 10 (* % 0.1)) (range hist-paces)))
 (def comp-unit-paces (map #(* (/ 60 %) 1000) paces))
 
 (defn cumul [pace-hist]

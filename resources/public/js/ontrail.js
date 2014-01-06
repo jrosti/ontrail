@@ -282,6 +282,7 @@
 
     // logged in state handling
     var doLogin = function () {
+      $('#login-form').submit(function(event){event.preventDefault();})
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }
     var logouts = $("#logout").onClickTouchAsObservable(clickEvent)
@@ -291,6 +292,7 @@
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
     var loginRequests = $("#login").onClickTouchAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
+
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
     $("#gotoLogin").onClickTouchAsObservable(clickEvent).subscribe(function () {
@@ -538,6 +540,8 @@
         })
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
+        console.log(args.data.stats.paceHist)
+        addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
       }
     }
 
