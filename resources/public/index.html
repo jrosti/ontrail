@@ -690,9 +690,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <tr>
             <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
             <td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{bpmdist}}</td>
-            {{#detailRepeats}}<td>{{detailRepeats}}</td>{{/detailRepeats}}
-            {{#detailElevation}}<td>{{detailElevation}}</td>{{/detailElevation}}
-            {{#detailVolume}}<td>{{detailVolume}}</td>{{/detailVolume}}
+            {{#detailRepeats}}<td>{{detailRepeats}}&nbsp;kpl</td>{{/detailRepeats}}
+            {{#detailElevation}}<td>{{detailElevation}}&nbsp;m</td>{{/detailElevation}}
+            {{#detailVolume}}<td>{{detailVolume}}&nbsp;kg</td>{{/detailVolume}}
         </tr>
     </table>
 </script>
@@ -910,6 +910,19 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     </table>
 </script>
 
+<script id="summaryItemTemplate" type="text/html">
+    <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}}
+        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td>
+        <td>{{distance}}</td>
+        <td>{{pace}}</td>
+        <td>{{duration}}</td>
+        <td>{{avghr}}</td>
+        <td>{{repeats}}</td>
+        <td>{{elevation}}</td>
+        <td>{{count}}</td>
+    </tr>
+</script>
+
 <script id="lvhaaste2014Template" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
         <header>
@@ -1056,7 +1069,17 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <h3>Haku lajille {{target}}</h3>
             {{#stats}}
             <table class="details">
-                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th>{{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}<th>Keskisyke</th><th>Kertoja</th></tr></thead>
+                <thead><tr>
+                    <th>Matka</th>
+                    <th>Aika</th>
+                    <th>Keskivauhti</th>
+                    {{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}
+                    <th>Keskisyke</th>
+                    <th>Volyymi (kg)</th>
+                    <th>Nousu (m)</th>
+                    <th>Toistot (kpl)</th>
+                    <th>Kertoja (kpl)</th>
+                </tr></thead>
                 <tr>
                     <td>{{stats.distance}}</td>
                     <td>{{stats.duration}}</td>
@@ -1066,6 +1089,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <td>{{stats.f95}}</td>
                     {{/stats.f80}}
                     <td>{{stats.avghr}}</td>
+                    <td>{{stats.volume}}</td>
+                    <td>{{stats.repeats}}</td>
+                    <td>{{stats.elevation}}</td>
                     <td>{{stats.count}}</td>
                 </tr>
             </table>
@@ -1087,20 +1113,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         {{> summaryTemplate}}
         {{/months}}
     </article>
-</script>
-
-<script id="summaryItemTemplate" type="text/html">
-    <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}}
-        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td>
-        <td>{{distance}}</td>
-        <td>{{pace}}</td>
-        <td>{{duration}}</td>
-        <td>{{avghr}}</td>
-        <td>{{repeats}}</td>
-        <td>{{elevation}}</td>
-        <td>{{count}}</td>
-
-    </tr>
 </script>
 
 <script id="weeklyNavigateTemplate" type="text/html">

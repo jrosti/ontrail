@@ -25,6 +25,9 @@
        :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
        :avghr (int (+ 0.5 (stats-avghr db-retmap)))
        :count count
+       :volume (if (> (:volume db-retmap) 0) (:volume db-retmap) nil)
+       :repeats (if (> (:repeats db-retmap) 0) (:repeats db-retmap) nil)
+       :elevation (if (> (:elevation db-retmap) 0) (:elevation db-retmap) nil)
        :paceHist (:paceHist db-retmap)
        :paceHistBins (:paceHistBins db-retmap)}))
 
@@ -57,7 +60,11 @@
                       exercise.paceHist = prev.paceHist
                       exercise.paceHistBins = prev.paceHistBins
                       prev.dist += exercise.distance;
-                      prev.dur += exercise.duration }"]
+                      prev.dur += exercise.duration;
+                      if (exercise.detailVolume > 0) prev.volume += exercise.detailVolume;
+                      if (exercise.detailRepeats > 0) prev.repeats += exercise.detailRepeats;
+                      if (exercise.detailElevation > 0) prev.elevation += exercise.detailElevation;
+                   }"]
     (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
                                                                     :cond condition
                                                                     :$reduce js-reduce
@@ -67,6 +74,9 @@
                                                                               :dur 0
                                                                               :tdist 0
                                                                               :tdur 0
+                                                                              :volume 0
+                                                                              :repeats 0
+                                                                              :elevation 0
                                                                               :paceHistBins pace-histogram
                                                                               :paceHist (take hist-paces (repeat 0))}}})
       true)))

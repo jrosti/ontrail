@@ -2,6 +2,7 @@
 
 (def verb-map {"Crossfit" "crossfittasi"
                "Cyclocross" "cyclocrossaili"
+               "Crosstrainer" "tyllerövispilöi"
                "Golf" "golffasi" 
                "Hieronta" "oli hierottavana" 
                "Jalkapallo" "jalkapalloili" 
@@ -51,6 +52,7 @@
                "Sulkapallo" "pelasi sulista" 
                "Suunnistus" "suunnisti" 
                "Sähly" "pelasi sählyä" 
+               "Salibandy" "pelasi salibandya" 
                "Tanssi" "tanssi"
                "Tapahtuma" "loi tapahtuman"  
                "Tennis" "pelasi tennistä"
