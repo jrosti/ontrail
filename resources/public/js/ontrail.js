@@ -454,6 +454,14 @@
     currentPages.subscribe(function () {
       $('html, body').scrollTop(0)
     })
+
+    // Every click on page updates comment counts.
+    var newCommentsOnClick = currentPages.selectAjax(OnTrail.rest.newComments)
+    newCommentsOnClick.subscribe(renderCommentCount("#new-comments-count"))
+    
+    var ownCommentsOnClick = currentPages.selectAjax(OnTrail.rest.newOwnComments)
+    ownCommentsOnClick.subscribe(renderCommentCount("#new-own-comments-count"))
+
     var findUser = function (inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
       var userPos = _(args).indexOf("user")
@@ -766,7 +774,7 @@
     var addComments = actionButtonAsStream('#exercise', "a.addComment",function (clickStream) {
       return clickStream.select(_attr("data-id")).selectAjax(postComment)
     }).where(isSuccess).select(ajaxResponseData)
-    addComments.combineWithLatestOf(sessions).throttle(300).subscribeArgs(renderSingleExercise)
+    addComments.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
 
     _.forEach($(".pageLink"), function (elem) {
       $(elem).attr('href', "javascript:nothing()")
