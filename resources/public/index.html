@@ -1042,23 +1042,34 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <script id="userDetailTemplate" type="text/html">
     <article>
     <header>
-        <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
-        {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}{{/profile.resthr}}</h6>
-            <td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td>
-            {{#hasRecords}}
-            <br/><a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
-            <div id="recordsDiv" style="width:350px">
-                <table id="records" class="details">
-                    <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
-                    {{#records}}
-                    <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
-                        <td>{{result}}</td>
-                        <td>{{pace}}</td>
-                    </tr>
-                    {{/records}}
-                </table>
+        <div>
+            <div id="left-detail-container">
+                <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
+                {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</h6>{{/profile.resthr}}
+                    <table><tr></tr><td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td></tr></table>
+                    {{#hasRecords}}
+                        <a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
+                        <div id="recordsDiv" style="width:350px">
+                            <table id="records" class="details">
+                                <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
+                                {{#records}}
+                                <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
+                                    <td>{{result}}</td>
+                                    <td>{{pace}}</td>
+                                </tr>
+                                {{/records}}
+                            </table>
+                        </div>
+                    {{/hasRecords}}
             </div>
-            {{/hasRecords}}
+            <div id="right-detail-container">
+                <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a>
+            </div>
+            <div class="clear"></div>
+        </div>
     </header>
     </article>
 </script>
