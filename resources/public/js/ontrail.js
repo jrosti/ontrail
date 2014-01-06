@@ -520,6 +520,7 @@
 
     var renderPageDetail = function (args) {
       $('#content-header').html("")
+      $('#graph-container').hide()
       if (args.data.action == "group" && args.data.target == "Marrasputki") {
         ich.marrasputkiTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target == "lvhaaste2014") {
@@ -540,8 +541,11 @@
         })
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
-        console.log(args.data.stats.paceHist)
-        addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
+        if (args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
+          console.log(args.data.stats.paceHist)
+          $('#graph-container').show();
+          addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
+        }
       }
     }
 

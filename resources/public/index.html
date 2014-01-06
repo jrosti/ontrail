@@ -365,14 +365,17 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                         <option value="avghr">korkein syke ensin</option>
                     </select></p>
 
-                    <br/><a id="filter-render" 
-                        class="button green" href="javascript:void(0);">Suodata</a>
+                    <br/>
+                    <a id="filter-render" class="button green" href="javascript:void(0);">Suodata</a>
                 </div>
             </header>
             <p id="searchSummary"></p>
         </section>
         <section id="header-container">
             <div id="content-header"></div>
+            <div id="graph-container">
+                <svg id="paceHistogram" width="0px" height="0px"></svg>
+            </div>
         </section>
 
         <div id="content-entries" role="listview"></div>
@@ -1091,8 +1094,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <th>Aika</th>
                     <th>Keskivauhti</th>
                     {{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}
-                    <th>Keskisyke</th>
-                    <th>Volyymi (kg)</th>
+                    <th>Syke</th>
                     <th>Nousu (m)</th>
                     <th>Toistot (kpl)</th>
                     <th>Kertoja (kpl)</th>
@@ -1106,7 +1108,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <td>{{stats.f95}}</td>
                     {{/stats.f80}}
                     <td>{{stats.avghr}}</td>
-                    <td>{{stats.volume}}</td>
                     <td>{{stats.repeats}}</td>
                     <td>{{stats.elevation}}</td>
                     <td>{{stats.count}}</td>
@@ -1114,7 +1115,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             </table>
             {{/stats}}
         </header>
-        <svg id="test1"></svg>
     </article>
 </script>
 
