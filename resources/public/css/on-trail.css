@@ -398,10 +398,10 @@ a.editComment {
 
   zoom: 1;
   *display: inline;
-  width: 350px;
+  width: 290px;
 }
 .edit-form #ex-continuous-date {
-  width: 350px;
+  width: 290px;
 }
 .edit-form em {
   width: inherit;
@@ -428,7 +428,7 @@ a.editComment {
   margin-top: 15px;
 }
 .edit-form #add-tags-select .select2-container-multi {
-  width: 350px ! important;
+  width: 290px ! important;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -439,7 +439,7 @@ a.editComment {
 }
 .edit-form #add-tags-select .select2-container-multi input {
   height: 25px;
-  width: 350px ! important;
+  width: 290px ! important;
 }
 .edit-form #add-tags-select .select2-container-multi * {
   -webkit-box-sizing: content-box;
@@ -495,6 +495,26 @@ table.weekly .sport.Golf {
   *display: inline;
   background: url(../img/icons_20.png) no-repeat 0px 0px;
   width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Crossfit {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat 0px 0px;
+  width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Crosstrainer {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -20px -40px;
+  width: 21px;
   height: 20px;
 }
 table.weekly .sport.Hieronta {
@@ -927,6 +947,16 @@ table.weekly .sport.S_hly {
   width: 20px;
   height: 20px;
 }
+table.weekly .sport.Salibandy {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat 0px -80px;
+  width: 20px;
+  height: 20px;
+}
 table.weekly .sport.Tanssi {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
@@ -1150,7 +1180,7 @@ body[data-page="latest"] #search-container {
   float: right;
 }
 #left-addex-container {
-  width: 80%;
+  width: 70%;
   float: left;
 }
 .small-input {
