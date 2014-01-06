@@ -38,6 +38,8 @@
     <script src="halcyonic/css/5grid/init.js?use=desktop,1000px&amp;mobileUI=0"></script>
     <!--[if lte IE 9]><link rel="stylesheet" href="halcyonic/css/style-ie9.css" /><![endif]-->
 
+    <link href="n/src/nv.d3.css" rel="stylesheet" type="text/css">
+
     <link rel="stylesheet" href="css/css3-buttons.css">
     <link rel="stylesheet" href="css/select2.css">
     <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
@@ -56,7 +58,8 @@
     <style id="logged-in-styles" type="text/css"></style>
 </head>
 <body class="visible" style="position: relative" data-list-type="list">
-
+<iframe src="/blank.html" id="loginTarget" name="loginTarget" style="display:none">
+</iframe>
 <div id="header-login-wrapper">
     <!-- Header -->
     <div id="header-wrapper">
@@ -508,7 +511,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
     <section class="logged-out">
         <div>
-        <form id="login-form" method="post">
+        <form id="login-form" method="post" action="/blank.html" target="loginTarget">
             <input id="username" name="username" type="email" placeholder="Tunnus" />
             <input id="password" name="password" type="password" placeholder="Salasana"/>
             <div class="buttons">
@@ -967,7 +970,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <h3>Haku lajille {{target}}</h3>
             {{#stats}}
             <table class="details">
-                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th>{{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}<th>Keskisyke</th><th>Kertoja</th></tr></thead>
+                <thead><tr><th>Matka</th><th>Aika</th><th>Keskivauhti</th>{{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}<!--<th>Keskisyke</th>--><th>Kertoja</th></tr></thead>
                 <tr>
                     <td>{{stats.distance}}</td>
                     <td>{{stats.duration}}</td>
@@ -976,12 +979,13 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                     <td>{{stats.f80}}</td>
                     <td>{{stats.f95}}</td>
                     {{/stats.f80}}
-                    <td>{{stats.avghr}}</td>
+                    <!--<td>{{stats.avghr}}</td>-->
                     <td>{{stats.count}}</td>
                 </tr>
             </table>
             {{/stats}}
         </header>
+        <svg id="test1"></svg>
     </article>
 </script>
 
@@ -1101,6 +1105,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 <script src="js/rx.ontrail.session.js?_=UID"></script>
 <script src="js/jquery.continuous-calendar.js?_=UID"></script>
 <script src="redactor/redactor.min.js?_=UID"></script>
+
+<script src="n/lib/d3.v3.js"></script>
+<script src="n/nv.d3.js"></script>
+<script src="js/chart.js"></script>
+<script src="n/src/utils.js"></script>
 
 <!-- scripts concatenated and minified via build script -->
 <script src="js/plugins.js?_=UID"></script>
