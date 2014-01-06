@@ -14,19 +14,18 @@
 
 /* Basic */
 
-	body
-	{
-		background: #D4D9DD url('images/bg03.jpg');
-	}
+body
+{
+    background: #D4D9DD url('images/bg03.jpg');
+}
 
-	body, input, textarea, select
-	{
-		color: #000000;
-		font-size: 13.3pt;
-        font-family: 'Open Sans', sans-serif;
-		line-height: 1.65em;
-		font-weight: 340;
-	}
+body, input, textarea, select
+{
+    color: #000000;
+    font-size: 13.3pt;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.65em;
+}
 
 h1, h2, h3, h4, h5, h6
 {
@@ -233,6 +232,7 @@ ul, ol, dl
 		background-image: -webkit-linear-gradient(top, #ed391b, #ce1a00);
 		background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ed391b), to(#ce1a00));
 		background-image: -ms-linear-gradient(top, #ed391b, #ce1a00);
+    }
 
 .button-big:hover
 {
@@ -243,12 +243,10 @@ ul, ol, dl
     background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fd492b), to(#de2a10));
     background-image: -ms-linear-gradient(top, #fd492b, #de2a10);
     background-image: -o-linear-gradient(top, #fd492b, #de2a10);
-		background-image: -o-linear-gradient(top, #ed391b, #ce1a00);
-		background-image: linear-gradient(top, #ed391b, #ce1a00);
-		text-shadow: -1px -1px 1px rgba(0,0,0,0.5);
-	}
-		background-image: linear-gradient(top, #fd492b, #de2a10);
-	}
+    background-image: -o-linear-gradient(top, #ed391b, #ce1a00);
+    background-image: linear-gradient(top, #ed391b, #ce1a00);
+    text-shadow: -1px -1px 1px rgba(0,0,0,0.5);
+}
 
 	.button-big:active
 	{

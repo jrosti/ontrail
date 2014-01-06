@@ -1138,7 +1138,8 @@ a.delete-comment {
 }
 a.pageLink,
 a.more,
-a.mark {
+a.mark,
+a.windowLink {
   cursor: pointer;
 }
 a.sportLink {
@@ -1222,13 +1223,13 @@ body[data-page="tags"] #header-container {
 }
 #content a.button,
 #login-wrapper a.button {
-  color: #ff5700 ! important;
+  color: #fff;
   font-weight: normal;
   font-size: 13px;
   text-shadow: none;
 }
 #right-detail-container a.button {
-  color: #fff;
+  color: #ff5700 ! important;
   font-weight: normal;
   font-size: 10px;
   text-shadow: none;
