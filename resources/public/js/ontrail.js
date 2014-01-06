@@ -581,19 +581,19 @@
       .combineWithLatestOf(sessions)
       .selectArgs(function (pg, user) {
         var targetUser = user
-        var year = XDate.today().getFullYear()
-        var month = XDate.today().getMonth()
+        var now = XDate.today()
+        var year = now.getFullYear()
+        var month = now.getMonth()
 
         if (pg.length >= 2) {
           targetUser = pg[1]
         }
-        if (pg.length == 4) {
+        if (pg.length == 4) { // url scheme weeksummary/User/year/month
           year = parseInt(pg[2])
           month = parseInt(pg[3])
         }
-        var nextYear = year === XDate.today().getFullYear() ? year : year + 1
-        var nextMonth = year === XDate.today().getFullYear() - 1 ? XDate.today().getMonth() :
-          (year === XDate.today().getFullYear() ? XDate.today().getMonth() : 11)
+        var nextYear = year === now.getFullYear() ? year : year + 1
+        var nextMonth = year === now.getFullYear() - 1 ? now.getMonth() : (year === now.getFullYear() ? now.getMonth() : 11)
 
         $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: user,
                                                               prevYear: year - 1, prevMonth: 11,
