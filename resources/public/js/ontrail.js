@@ -541,7 +541,7 @@
         })
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
-        if (args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
+        if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
           console.log(args.data.stats.paceHist)
           $('#graph-container').show();
           addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
