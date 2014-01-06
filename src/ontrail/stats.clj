@@ -111,7 +111,8 @@
   (if (= "true" (params :stats))
     (let [monger-filter (make-query-from params)
           pacehist (if (= sport "Juoksu") comp-unit-paces [])
-          stats (get-stats monger-filter sport pacehist)
+          stats-all (get-stats monger-filter sport pacehist)
+          stats (if (= sport "Juoksu") stats-all (dissoc stats-all :paceHistBins :paceHist))
           percentile-vals (if (= sport "Juoksu") (get-percentiles stats) {})]
       (.info logger (str monger-filter " " " for sport " sport " for user " user))
       {:action "other" :target sport :stats (merge stats percentile-vals) })
