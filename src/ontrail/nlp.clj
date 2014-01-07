@@ -18,6 +18,7 @@
                "Koripallo" "koripalloili" 
                "Kuntopiiri" "teki kuntopiiriä" 
                "Kuntosali" "kävi kuntosalilla" 
+               "Kuntopyörä" "kuntopyöräili" 
                "Kävely" "käveli" 
                "Laskettelu" "lasketteli" 
                "Lentopallo" "lentopalloili" 
