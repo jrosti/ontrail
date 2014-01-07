@@ -40,8 +40,11 @@
     "Pyöräily" to-human-pace-kmh
     "tmp" to-human-pace-kmh
     "Sisäsoutu" to-human-pace-500m
+    "Soutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
+    "Cyclocross" to-human-pace-kmh
+    "Maantiepyöräily" to-human-pace-kmh
     "CYCLO" to-human-pace-kmh
     "MAANTIE" to-human-pace-kmh
     "TYÖMATKAPYÖRÄILY" to-human-pace-kmh
