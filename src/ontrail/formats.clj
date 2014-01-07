@@ -45,7 +45,7 @@
     "Rullahiihto" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
     "Cyclocross" to-human-pace-kmh
-    "Kuntopyöräily" to-human-pace-kmh
+    "Kuntopyörä" to-human-pace-kmh
     "Maantiepyöräily" to-human-pace-kmh
     "CYCLO" to-human-pace-kmh
     "MAANTIE" to-human-pace-kmh
