@@ -133,7 +133,8 @@
     (mq/with-collection EXERCISE
        (mq/find query) 
        (mq/fields [:creationDate :detailRepeats :user])
-       (mq/sort {:creationDate 1}))))
+       (mq/sort {:creationDate 1})
+       (mq/batch-size 2000))))
 
 (defn analyze-chinups [day-number all-results user]
   (let [results (filter #(= user (:user %)) all-results)
