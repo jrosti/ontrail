@@ -47,6 +47,7 @@
     "Cyclocross" to-human-pace-kmh
     "Kuntopyörä" to-human-pace-kmh
     "Maantiepyöräily" to-human-pace-kmh
+    "Maastopyöräily" to-human-pace-kmh
     "CYCLO" to-human-pace-kmh
     "MAANTIE" to-human-pace-kmh
     "TYÖMATKAPYÖRÄILY" to-human-pace-kmh
