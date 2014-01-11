@@ -57,7 +57,7 @@ function genValues(paces, vals) {
       return mins + secs
     }
     for (var i = 15; i < vals.length - 2; i++) {
-      xy.push({x: toMinkm(paces[i+1]), y: (vals[i] - vals[i -1 ])/1000})
+      xy.push({x: toMinkm(paces[i]), y: (vals[i] - vals[i -1 ])/1000})
     }
 
     return [
