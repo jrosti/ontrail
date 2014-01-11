@@ -15,15 +15,14 @@ function addGraph(dataGenerator) {
           .delay(0)
           .rotateLabels(45)
           .groupSpacing(0.1)
-        ;
 
       chart.yAxis
-        .tickFormat(d3.format('.1f'));
+        .tickFormat(d3.format('.1f'))
 
       chart.xAxis
         .axisLabel("Vauhti")
         .showMaxMin(true)
-        .tickFormat(d3.format('.2f'));
+        .tickFormat(d3.format('.2f'))
 
       d3.select("#paceHistogram")
         .attr('width', width)
@@ -36,9 +35,9 @@ function addGraph(dataGenerator) {
     },
     callback: function (graph) {
       window.onresize = function () {
-      };
+      }
     }
-  });
+  })
 }
 
 /*(defn pacetominkm [cpace]
@@ -58,7 +57,7 @@ function genValues(paces, vals) {
       return mins + secs
     }
     for (var i = 15; i < vals.length - 2; i++) {
-      xy.push({x: toMinkm(paces[i+1]), y: (vals[i+2] - vals[i -1 ])/1000});
+      xy.push({x: toMinkm(paces[i+1]), y: (vals[i] - vals[i -1 ])/1000})
     }
 
     return [
