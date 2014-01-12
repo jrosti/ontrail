@@ -457,10 +457,7 @@
       $('html, body').scrollTop(0)
     })
 
-    // Every click on page updates comment counts.
-    var newCommentsOnClick = currentPages.selectAjax(OnTrail.rest.newComments)
-    newCommentsOnClick.subscribe(renderCommentCount("#new-comments-count"))
-
+    // Every click on page updates own comment counts.
     var ownCommentsOnClick = currentPages.selectAjax(OnTrail.rest.newOwnComments)
     ownCommentsOnClick.subscribe(renderCommentCount("#new-own-comments-count"))
 
