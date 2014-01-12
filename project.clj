@@ -9,7 +9,6 @@
                 [clj-time "0.5.1"]
                 [enlive "1.0.1"]
                 [clj-json "0.5.3"]
-                [clojure-csv/clojure-csv "2.0.1"]
 		[org.clojure/core.memoize "0.5.6"]
                 [org.clojure/data.json "0.1.3"]
                 [com.lambdaworks/scrypt "1.3.3"]
