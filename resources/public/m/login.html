@@ -46,6 +46,10 @@
             "app": "../app",
             "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min",
             "bacon": "//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min"
+        },
+        "shim": {
+            "jquery.cookie": ["jquery"],
+            "bacon.jquery": ["jquery", "bacon"]
         }
     })
 

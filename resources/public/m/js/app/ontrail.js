@@ -6,7 +6,7 @@ define(["jquery", "bacon", "bacon.jquery", "jquery.cookie"], function($, Bacon, 
         document.location = "login.html"
     }
 
-    if (!$.cookie("authUser")) {
+    if (!$.cookie("authToken")) {
         OnTrail.logout()
     }
 })
