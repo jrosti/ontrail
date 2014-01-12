@@ -5,6 +5,7 @@
   		[com.draines/postal "1.10.2"]
                 [aleph "0.3.0-rc1"]
                 [compojure "1.1.5"]
+		[stencil "0.3.3"]	   
                 [ring "1.2.0"]
                 [clj-time "0.5.1"]
                 [enlive "1.0.1"]
