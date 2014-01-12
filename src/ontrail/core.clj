@@ -179,8 +179,8 @@
               {:status 301
                :headers {"Content-Type" "text/html"
                          "Location" redirect-location}
-               :cookies {"authToken" {:value authToken :max-age (* 60 60 24 2 365) }
-                         "authUser" {:value authUser :max-age  (* 60 60 24 2 365) }}
+               :cookies {"authToken" {:value authToken :max-age (* 60 60 24 2 365) :path "/" }
+                         "authUser" {:value authUser :max-age  (* 60 60 24 2 365) :path "/" }}
                :body ""
                })
             {:status 301
