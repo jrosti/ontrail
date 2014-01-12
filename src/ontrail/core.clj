@@ -90,8 +90,8 @@
     (webutil/json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-    (webutil/json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (webutil/get-page params))})
-)
+    (webutil/json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (webutil/get-page params))}))
+
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
     (webutil/json-response {:results 
                     (ex/get-latest-ex-list (user-from-cookie cookies) 
