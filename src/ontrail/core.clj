@@ -14,7 +14,9 @@
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          sportsummary weekly mongodb])
   (:gen-class)
-  (:require [ontrail.csv :as csv]
+  (:require [ontrail.v2routes :as v2routes]
+            [ontrail.webutil :as webutil]
+            [ontrail.csv :as csv]
             [ontrail.stats :as stats]
             [ontrail.loggedin :as loggedin]
             [ontrail.mongerfilter :as mongerfilter]
@@ -25,7 +27,6 @@
             [ontrail.unread :as unread]
             [ontrail.group :as group]
             [ring.middleware.head :as ring-head]
-            [clojure.stacktrace :as stacktrace]
             [compojure.handler :as handler]
             [compojure.route :as route]
             [monger.collection :as mc]
@@ -35,192 +36,132 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 (def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
 
-(defmacro json-response [data & [status]]
-  `(try
-     {:status (or ~status 200)
-      :headers {"Content-Type" "application/json"}
-      :body (json-str ~data)}
-     (catch Exception exception#
-       (.error logger (str exception#))
-       (stacktrace/print-stack-trace exception# 100)
-       {:status 500
-        :headers {"Content-Type" "application/json"}
-        :body (str exception#)})))
-
-(defmacro is-authenticated? [cookies action]
-  `(try
-     (if (valid-auth-token? (:value (~cookies "authToken")))
-       ~action
-       (json-response {"error" "Authentication required"} 401))
-     (catch Exception exception#
-       (.error logger (str exception#))
-       (stacktrace/print-stack-trace exception# 100)
-       {:status 500
-        :headers {"Content-Type" "application/text"}
-        :body (str exception#)})))
-
 (defn wrap-dir-index [handler]
   (fn [req]
     (handler
       (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
 
-(defn get-page [params]
-  (if (not= nil (:page params))
-    (:page params)
-    1))
-
 (defn do-user-action [user-action params]
   (let [user (user-action params)
         username (:username user)]
-    (if (and (not= nil username) (not= "nobody" username)) 
-      (json-response {"token" (auth-token user) "username" username} 200)
-      (json-response {"token" nil "username" username} 404))))
+    (if (and username (not= "nobody" username)) 
+      (webutil/json-response {"token" (auth-token user) "username" username} 200)
+      (webutil/json-response {"token" nil "username" username} 404))))
 
 (defn do-group-oper [oper group-name user]
   (let [response (oper group-name user)]
     (if (:result response)
-      (json-response {:message (:descr response)})
-      (json-response {:message (:descr response)} 400))))
+      (webutil/json-response {:message (:descr response)})
+      (webutil/json-response {:message (:descr response)} 400))))
 
-(defroutes app-routes
+(defroutes v1routes
 
   (GET "/rest/v1/export.csv" {params :params}
        {:status 200
         :headers {"Content-Type" "application/csv"}
         :body (csv/export params)})
 
-  (GET "/rest/v1/summary/:user" [user] (json-response (get-overall-summary user)))  
-  (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
+  (GET "/rest/v1/summary/:user" [user] (webutil/json-response (get-overall-summary user)))  
+  (GET "/rest/v1/summary/:user/:year" [user year] (webutil/json-response (get-year-summary-sport user (Integer/valueOf year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
-       (json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
+       (webutil/json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
 
   
   
-  (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
-  (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer/valueOf year))))
+  (GET "/rest/v1/summary-tags/:user" [user] (webutil/json-response (get-overall-tags-summary user)))
+  (GET "/rest/v1/summary-tags/:user/:year" [user year] (webutil/json-response (get-year-summary-tags user (Integer/valueOf year))))
   (GET "/rest/v1/summary-tags/:user/:year/bymonth" [user year]
-       (json-response (get-season-months get-month-summary-tags user (Integer/valueOf year))))
+       (webutil/json-response (get-season-months get-month-summary-tags user (Integer/valueOf year))))
 
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
-       (json-response {:results (generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
+       (webutil/json-response {:results (generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
   
   
   (POST "/rest/v1/profile" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (post-profile (user-from-cookie cookies) params))))
+    (webutil/is-authenticated? cookies (webutil/json-response (post-profile (user-from-cookie cookies) params))))
 
-  (GET "/rest/v1/system" [] (json-response (loggedin/system))) 
+  (GET "/rest/v1/system" [] (webutil/json-response (loggedin/system))) 
 
-  (GET "/rest/v1/logged-ins" {cookies :cookies} (json-response (loggedin/params (user-from-cookie cookies))))
+  (GET "/rest/v1/logged-ins" {cookies :cookies} (webutil/json-response (loggedin/params (user-from-cookie cookies))))
 
-  (GET "/rest/v1/search" {params :params} (json-response (search-wrapper params)))
+  (GET "/rest/v1/search" {params :params} (webutil/json-response (search-wrapper params)))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
-    (json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
+    (webutil/json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
   
   (GET "/rest/v1/ex-list-all/:page" {params :params cookies :cookies}
-    (json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (get-page params))}))
-
+    (webutil/json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (webutil/get-page params))})
+)
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (json-response {:results 
+    (webutil/json-response {:results 
                     (ex/get-latest-ex-list (user-from-cookie cookies) 
-                                           (mongerfilter/make-query-from params) (get-page params) 
+                                           (mongerfilter/make-query-from params) (webutil/get-page params) 
                                            (mongerfilter/sortby params))}))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
-    (json-response (unread/comments-all (user-from-cookie cookies))))
+    (webutil/json-response (unread/comments-all (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-unread-own-comments" {params :params cookies :cookies}
-    (json-response (unread/comments-own (user-from-cookie cookies))))  
+    (webutil/json-response (unread/comments-own (user-from-cookie cookies))))  
 
   (GET "/rest/v1/ex-most-comments" {params :params cookies :cookies}
-    (json-response (unread/most-comments (user-from-cookie cookies))))
+    (webutil/json-response (unread/most-comments (user-from-cookie cookies))))
 
   (GET "/rest/v1/mark-all-read" {params :params cookies :cookies}
-    (json-response (nc/mark-all-read (user-from-cookie cookies))))
+    (webutil/json-response (nc/mark-all-read (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (get-page params) {:creationDate -1})))
+       (webutil/json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (webutil/get-page params) {:creationDate -1})))
   
   (GET "/rest/v1/ex-list-tag/:tag/:page" {params :params cookies :cookies}
-       (json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (get-page params) {:creationDate -1})))
+       (webutil/json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (webutil/get-page params) {:creationDate -1})))
 
-  (GET "/rest/v1/list-users/:page" [page] (json-response {:results (user/get-user-list {} page)}))
+  (GET "/rest/v1/list-users/:page" [page] (webutil/json-response {:results (user/get-user-list {} page)}))
 
   (GET "/rest/v1/find-users/:term/:page" [term page] 
-       (json-response {:results (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)}))
+       (webutil/json-response {:results (user/get-user-list {:lusername {$regex (str "^" (.toLowerCase term))}} page)}))
 
   (GET "/rest/v1/validate/time/:time" [time]
     (let [duration (to-human-time (parse-duration time))]
       (if (= "" duration)
-        (json-response {:message "invalid-duration"} 400)
-        (json-response {:success true :time duration}))))
+        (webutil/json-response {:message "invalid-duration"} 400)
+        (webutil/json-response {:success true :time duration}))))
 
   (GET "/rest/v1/validate/distance/:distance" [distance]
-       (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
+       (webutil/json-response {:success true :distance (to-human-distance (parse-distance distance))}))
 
   (GET "/rest/v1/validate/username/:username" [username]
     (if-let [user (user/get-case-user username)]
-      (json-response {:message "username-exists"} 400)
-      (json-response {:success true})))
+      (webutil/json-response {:message "username-exists"} 400)
+      (webutil/json-response {:success true})))
 
   (POST "/rest/v1/validate/login" [username password]
     (if (authenticate username password)
-      (json-response {:success true})
-      (json-response {:message "wrong-password"} 400)))
-
-  (POST "/rest/v2/login" {params :params headers :headers}
-        (let [username (:username params)
-              password (:password params)
-              redirect-location (if-let [referer (headers "referer")] referer "/m/index.html")]
-          (if (authenticate username password)
-            (let [case-user (user/get-case-user username)
-                  authToken (auth-token case-user)
-                  authUser (:username (user/get-case-user username))]
-              {:status 301
-               :headers {"Content-Type" "text/html"
-                         "Location" redirect-location}
-               :cookies {"authToken" {:value authToken :max-age (* 60 60 24 2 365) :path "/" }
-                         "authUser" {:value authUser :max-age  (* 60 60 24 2 365) :path "/" }}
-               :body ""
-               })
-            {:status 301
-             :headers {"Content-Type" "text/html"
-                       "Location" (str redirect-location "?status=login_failed")
-                       "X-Ontrail-Status" "login-failed"}
-             :body ""
-             })))
-
-  (POST "/rest/v2/logout" {headers :headers}
-        (let [redirect-location (if-let [referer (headers "referer")] referer "/m/index.html")]
-          {:status 301
-           :headers {"Content-Type" "text/html"
-                     "Location" redirect-location}
-           :cookies {"authToken" {:value "" :max-age 0 :path "/"}
-                     "authUser" {:value "" :max-age  0 :path "/"}}
-           :body ""}))
+      (webutil/json-response {:success true})
+      (webutil/json-response {:message "wrong-password"} 400)))
 
   (POST "/rest/v1/login" [username password]
         (if (authenticate username password)
-          (json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
-          (json-response {:error "Authentication failed"} 401)))
+          (webutil/json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
+          (webutil/json-response {:error "Authentication failed"} 401)))
   
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/comment-ex (user-from-cookie cookies) params))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/comment-ex (user-from-cookie cookies) params))))
   
   (POST "/rest/v1/update/:id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/update-ex (user-from-cookie cookies) params))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/update-ex (user-from-cookie cookies) params))))
   
   (DELETE "/rest/v1/ex/:ex-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/delete-ex (user-from-cookie cookies) (:ex-id params)))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/delete-ex (user-from-cookie cookies) (:ex-id params)))))
 
   (DELETE "/rest/v1/ex/:ex-id/own/comment/:comment-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/delete-own-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (DELETE "/rest/v1/own/ex/:ex-id/comment/:comment-id" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/delete-own-ex-comment (user-from-cookie cookies) (:ex-id params) (:comment-id params)))))
 
   (POST "/rest/v1/ex/:user" {params :params cookies :cookies}
-    (is-authenticated? cookies (json-response (mutate/create-ex (user-from-cookie cookies) params))))
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/create-ex (user-from-cookie cookies) params))))
 
   (POST "/rest/v1/register" {params :params cookies :cookies}
     (do-user-action user/register-user params))
@@ -232,23 +173,27 @@
     (let [action (keyword (:action params))
           target (action params)
           action-fn (case action :group group/group-detail :user group/user-detail (partial stats/sport-detail params))]
-      (json-response (action-fn target (user-from-cookie cookies)))))
+      (webutil/json-response (action-fn target (user-from-cookie cookies)))))
 
   (GET "/rest/v1/own-groups" {params :params cookies :cookies}
-    (json-response (group/own-as-list (user-from-cookie cookies))))
+    (webutil/json-response (group/own-as-list (user-from-cookie cookies))))
   
   (GET "/rest/v1/groups/:page" {params :params cookies :cookies}
-    (json-response (group/as-list (:page params) (user-from-cookie cookies))))
+    (webutil/json-response (group/as-list (:page params) (user-from-cookie cookies))))
 
   (POST "/rest/v1/groups/:name/join" {params :params cookies :cookies}
-    (is-authenticated? cookies
+    (webutil/is-authenticated? cookies
       (do-group-oper group/join-to (:name params) (user-from-cookie cookies))))
 
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
-    (is-authenticated? cookies
+    (webutil/is-authenticated? cookies
       (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))  
   (route/resources "/")
   (route/not-found {:status 404}))
+
+(def app-routes
+  (routes v2routes/v2routes 
+          v1routes))
 
 (defn -main [& args]
   (.info logger "Starting to build index")
