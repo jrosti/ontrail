@@ -44,7 +44,7 @@
        (.error logger (str exception#))
        (stacktrace/print-stack-trace exception# 100)
        {:status 500
-        :headers {"Content-Type" "application/text"}
+        :headers {"Content-Type" "application/json"}
         :body (str exception#)})))
 
 (defmacro is-authenticated? [cookies action]
@@ -168,10 +168,24 @@
       (json-response {:success true})
       (json-response {:message "wrong-password"} 400)))
 
+  (POST "/rest/v2/login" [username password location]
+        (if (authenticate username password)
+          (let [case-user (user/get-case-user username)
+                authToken (auth-token case-user)
+                authUser (:username (user/get-case-user username))]
+            {:status 301
+             :headers {"Content-Type" "text/html"
+                       "Location" location}
+             :cookies {"authToken" {:value authToken}
+                       "authUser" {:value authUser}}
+             :body ""
+             })
+          (json-response {:error "Authentication failed"} 401)))
+
   (POST "/rest/v1/login" [username password]
-    (if (authenticate username password)
-      (json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
-      (json-response {:error "Authentication failed"} 401)))
+        (if (authenticate username password)
+          (json-response {:token (auth-token (user/get-case-user username)) :username (:username (user/get-case-user username))} 200)
+          (json-response {:error "Authentication failed"} 401)))
   
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (mutate/comment-ex (user-from-cookie cookies) params))))
