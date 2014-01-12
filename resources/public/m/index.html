@@ -24,20 +24,22 @@
 <body>
 Sisältö
 </body>
+<script src="js/lib/require.js"></script>
+<script>
+    requirejs.config({
+        "baseUrl": "js/lib",
+        "main": "login",
+        "paths": {
+            "app": "../app",
+            "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min",
+            "bacon": "//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min"
+        },
+        "shim": {
+            "jquery.cookie": ["jquery"],
+            "bacon.jquery": ["jquery", "bacon"]
+        }
+    })
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min.js" type="text/javascript"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-<script src="js/lib/bacon.jquery.js" type="text/javascript"></script>
-<script src="/js/jquery.cookie.js" type="text/javascript"></script>
-<script type="text/javascript">
-    var OnTrail = {}
-
-    OnTrail.logout = function() {
-        document.location = "login.html"
-    }
-
-    if (!$.cookie("authUser")) {
-        OnTrail.logout()
-    }
+    requirejs(["app/ontrail"]);
 </script>
 </html>
