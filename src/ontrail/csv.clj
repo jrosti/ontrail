@@ -7,7 +7,6 @@
             [clj-time.core :as time]
             [monger.joda-time]))
 
-
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn exs [query]
