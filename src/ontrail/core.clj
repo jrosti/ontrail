@@ -16,6 +16,7 @@
   (:gen-class)
   (:require [ontrail.v2routes :as v2routes]
             [ontrail.webutil :as webutil]
+            [ontrail.pages :as pages]
             [ontrail.csv :as csv]
             [ontrail.stats :as stats]
             [ontrail.loggedin :as loggedin]
@@ -193,6 +194,7 @@
 
 (def app-routes
   (routes v2routes/v2routes 
+          pages/templates
           v1routes))
 
 (defn -main [& args]
