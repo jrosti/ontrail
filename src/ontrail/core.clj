@@ -169,7 +169,6 @@
       (json-response {:message "wrong-password"} 400)))
 
   (POST "/rest/v2/login" {params :params headers :headers}
-        (.info logger (str headers))
         (let [username (:username params)
               password (:password params)
               new-location (if-let [referer (headers "referer")] referer "/m/index.html")]
@@ -180,8 +179,8 @@
               {:status 301
                :headers {"Content-Type" "text/html"
                          "Location" new-location}
-               :cookies {"authToken" {:value authToken}
-                         "authUser" {:value authUser}}
+               :cookies {"authToken" {:value authToken :max-age (* 60 60 24 2 365) }
+                         "authUser" {:value authUser :max-age  (* 60 60 24 2 365) }}
                :body ""
                })
             {:status 301
@@ -190,6 +189,15 @@
                        "X-Ontrail-Status" "login-failed"}
              :body ""
              })))
+
+  (POST "/rest/v2/logout" {headers :headers}
+        (let [new-location (if-let [referer (headers "referer")] referer "/m/index.html")]
+          {:status 301
+           :headers {"Content-Type" "text/html"
+                     "Location" new-location}
+           :cookies {"authToken" {:value "" :max-age 0}
+                     "authUser" {:value "" :max-age  0 }}
+           :body ""}))
 
   (POST "/rest/v1/login" [username password]
         (if (authenticate username password)
