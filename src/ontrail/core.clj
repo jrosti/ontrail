@@ -168,19 +168,28 @@
       (json-response {:success true})
       (json-response {:message "wrong-password"} 400)))
 
-  (POST "/rest/v2/login" [username password location]
-        (if (authenticate username password)
-          (let [case-user (user/get-case-user username)
-                authToken (auth-token case-user)
-                authUser (:username (user/get-case-user username))]
+  (POST "/rest/v2/login" {params :params headers :headers}
+        (.info logger (str headers))
+        (let [username (:username params)
+              password (:password params)
+              new-location (if-let [referer (headers "referer")] referer "/m/index.html")]
+          (if (authenticate username password)
+            (let [case-user (user/get-case-user username)
+                  authToken (auth-token case-user)
+                  authUser (:username (user/get-case-user username))]
+              {:status 301
+               :headers {"Content-Type" "text/html"
+                         "Location" new-location}
+               :cookies {"authToken" {:value authToken}
+                         "authUser" {:value authUser}}
+               :body ""
+               })
             {:status 301
              :headers {"Content-Type" "text/html"
-                       "Location" location}
-             :cookies {"authToken" {:value authToken}
-                       "authUser" {:value authUser}}
+                       "Location" (str new-location "?status=login_failed")
+                       "X-Ontrail-Status" "login-failed"}
              :body ""
-             })
-          (json-response {:error "Authentication failed"} 401)))
+             })))
 
   (POST "/rest/v1/login" [username password]
         (if (authenticate username password)
