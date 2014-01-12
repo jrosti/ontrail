@@ -1,4 +1,9 @@
-define(["jquery", "bacon", "bacon.jquery"], function($, Bacon, bjq) {
+define(["jquery", "bacon", "bacon.jquery", "jquery.cookie"], function($, Bacon, bjq) {
+    if ($.cookie("authToken")) {
+        document.location = "index.html"
+        return {}
+    }
+
     var usernames = bjq.textFieldValue($("#username"))
     var passwords = bjq.textFieldValue($("#password"))
 
