@@ -195,8 +195,8 @@
           {:status 301
            :headers {"Content-Type" "text/html"
                      "Location" redirect-location}
-           :cookies {"authToken" {:value "" :max-age 0}
-                     "authUser" {:value "" :max-age  0 }}
+           :cookies {"authToken" {:value "" :max-age 0 :path "/"}
+                     "authUser" {:value "" :max-age  0 :path "/"}}
            :body ""}))
 
   (POST "/rest/v1/login" [username password]
