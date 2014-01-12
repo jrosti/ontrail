@@ -21,6 +21,36 @@
         })();
     </script>
 </head>
+<script></script>
 <body>
+
+    <section class="logged-out">
+        <div>
+            <form id="login-form" method="post">
+                <input id="username" name="username" type="email" placeholder="Tunnus" />
+                <input id="password" name="password" type="password" placeholder="Salasana"/>
+                <div class="buttons">
+                    <a id="login">Kirjaudu sisään!</a>
+                </div>
+                <div> <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                    Unohtuiko salasana?</a> </div>
+            </form>
+        </div>
+    </section>
+
 </body>
+<script src="js/lib/require.js"></script>
+<script>
+    requirejs.config({
+        "baseUrl": "js/lib",
+        "main": "login",
+        "paths": {
+            "app": "../app",
+            "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min",
+            "bacon": "//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min"
+        }
+    })
+
+    requirejs(["app/login"]);
+</script>
 </html>
