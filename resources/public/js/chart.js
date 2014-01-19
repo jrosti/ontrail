@@ -47,7 +47,7 @@ function weeklyChartConfig(containerId, data) {
       var width = 700,
           height = 300;
       var chart;
-      chart = nv.models.multiBarChart()
+      chart = nv.models.multiBarChart().stacked(true)
         .margin({bottom: 50})
         .transitionDuration(300)
       ;
@@ -113,7 +113,6 @@ function getSportSums(sport, sums) {
     var sportSummary = _.filter(v.summary, function(val) {
       return val.sport === sport
     })
-    console.log(sportSummary, sportSummary.length)
     if (sportSummary.length === 1) {
       distance = sportSummary[0].tdistance / 1000
     } else {
@@ -121,15 +120,29 @@ function getSportSums(sport, sums) {
     }
     return {x: v.week, y: distance}
   })
-  return {key: sport, values: values}
+  var total = _.reduce(values, function(total, obj) {
+    if (obj.y > 0) {
+      return total + obj.y
+    } else {
+      return total
+    }
+  }, 0)
+  return {key: sport, values: values, total: total}
 }
 
 
 function weeklySummaryGraph(elemId, sums) {
-  console.log(sums)
-  var d = [ getSportSums("Juoksu", sums)
-          , getSportSums("Pyöräily", sums)
-          , getSportSums("Uinti", sums)
-          ]
-  weeklyChartConfig("#weekly-sums", d)
+  var sports = ["Juoksu", "Pyöräily", "Uinti",
+                "Perinteinen hiihto", "Luisteluhiihto",
+                "Kävely", "Suunnistus"]
+  var dataSets = []
+  _.each(sports, function(sport) {
+    sportSum = getSportSums(sport, sums)
+    if (sportSum.total > 0) {
+      dataSets.push(sportSum)
+    }
+  })
+  if (dataSets.length > 0) {
+    weeklyChartConfig("#weekly-sums", dataSets)
+  }
 }
