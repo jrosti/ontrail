@@ -389,6 +389,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
     <section role="summary" class="logged-in">
         <div id="summary-header"></div>
+        <div id="weekly-graph-container">
+            <svg id="weekly-sums" width="0px" height="0px"></svg>
+        </div>
         <div id="summary-entries"></div>
     </section>
 
@@ -901,7 +904,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <div>
             {{#results}}
                 <hr/>
-                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Viikko {{week}}, {{from}} - {{to}}</a>
+                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDatefsummary">Viikko {{week}}, {{from}} - {{to}}</a>
                 <table class="details">
                     {{#summary}}
                     <tr>
