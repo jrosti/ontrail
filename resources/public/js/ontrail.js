@@ -210,6 +210,7 @@
 
     // filters: {year: yyyy, month: mm, week: ww }
     var renderSummary = function (elem, summary) {
+      $('#weekly-graph-container').hide()
       var now = XDate.today();
       var maxYear = now.getFullYear()
       var utils = {
@@ -248,6 +249,8 @@
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
       } else if ($.isArray(summary.results)) { //render weekly summary
         var sum = _.extend(summary, utils)
+        $('#weekly-graph-container').show()
+        weeklySummaryGraph("#weekly-sums", sum.results)
         $("#" + elem + "-entries").html(ich.hpkWeeklySummaryContentTemplate(sum))
       } else {
         var sum = _.extend({ year: now.getFullYear() }, addFilter(summary), utils)

@@ -80,7 +80,9 @@
 (defn accumulate [sport totals result]
   (let [distance (get-entry result :distance)
         true-duration (if (> distance 0) (get-entry result :duration) 0)]
-  {:sportId (sport-id sport) :sport sport :distance (+ (:distance totals) (get-entry result :distance))
+  {:sportId (sport-id sport) 
+   :sport sport 
+   :distance (+ (:distance totals) (get-entry result :distance))
    :duration (+ (:duration totals) (get-entry result :duration))
    :tduration (+ (:tduration totals) true-duration)}))
 
@@ -95,6 +97,7 @@
     (assoc coll 
       :statspace statspace 
       :pace (string/replace pace #" " "")
+      :tdistance (:distance coll)
       :distance (string/replace (to-human-distance (:distance coll))
       #" " "")
       :duration (to-human-time (:duration coll))

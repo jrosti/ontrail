@@ -40,6 +40,43 @@ function addGraph(dataGenerator) {
   })
 }
 
+
+function weeklyChartConfig(containerId, data) {
+  nv.addGraph({
+    generate: function () {
+      var width = 700,
+          height = 300;
+      var chart;
+      chart = nv.models.multiBarChart()
+        .margin({bottom: 100})
+        .transitionDuration(300)
+      ;
+
+      chart.options({delay: 800});
+      chart.multibar
+        .hideable(true);
+
+      chart.xAxis
+        .axisLabel("Viikkonumero")
+        .showMaxMin(true)
+        .tickFormat(d3.format(',0f'));
+
+      chart.yAxis
+        .tickFormat(d3.format(',.1f'));
+
+      d3.select(containerId)
+        .attr('width', width)
+        .attr('height', height)
+        .datum(data)
+        .call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+    }
+  })
+}
+
 /*(defn pacetominkm [cpace]
   (let [kmh (/ cpace 1000.0)
 minkm (/ 60.0 kmh)
@@ -68,4 +105,31 @@ function genValues(paces, vals) {
       }
     ];
   }
+}
+
+function getSportSums(sport, sums) {
+  var values = _.map(sums, function(v) {
+    var distance = null
+    var sportSummary = _.filter(v.summary, function(val) {
+      return val.sport === sport
+    })
+    console.log(sportSummary, sportSummary.length)
+    if (sportSummary.length === 1) {
+      distance = sportSummary[0].tdistance / 1000
+    } else {
+      distance = 0
+    }
+    return {x: v.week, y: distance}
+  })
+  return {key: sport, values: values}
+}
+
+
+function weeklySummaryGraph(elemId, sums) {
+  console.log(sums)
+  var d = [ getSportSums("Juoksu", sums)
+          , getSportSums("Pyöräily", sums)
+          , getSportSums("Uinti", sums)
+          ]
+  weeklyChartConfig("#weekly-sums", d)
 }
