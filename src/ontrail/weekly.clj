@@ -128,14 +128,22 @@
 (defn weeks-from [date-time]
   (cons (week-period date-time) (lazy-seq (weeks-from (time/plus date-time (time/days 7))))))
 
-(defn week-intervals [year month]
+(defn week-intervals [first-day last-day]
+    (for [week (weeks-from first-day) :while (not (time/after? (.getStart week) last-day))]
+      week))
+
+(defn month-interval [year month]
   (let [first-day (time/date-time year month 1)
         last-day (-> first-day (.dayOfMonth) (.withMaximumValue))]
-    (for [week (weeks-from first-day) :while (not (time/after? (.getStart week) last-day))]
-      week)))
-  
+    (week-intervals first-day last-day)))
+
+(defn generate-year [user year]
+  (let [first-day (time/date-time year 1 1)
+        last-day (time/date-time year 12 31)]
+      (reverse (map (partial interval-as-exlist user) (week-intervals first-day last-day)))))
+
 (defn generate-month [user year month]
-  (reverse (map (partial interval-as-exlist user) (week-intervals year month))))
+  (reverse (map (partial interval-as-exlist user) (month-interval year month))))
 
 (defn weekly-wrapper [params]
   {})

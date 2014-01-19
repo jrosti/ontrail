@@ -12,10 +12,11 @@
         [ontrail.profile :only (post-profile)]
         )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
-         sportsummary weekly mongodb])
+         sportsummary mongodb])
   (:gen-class)
   (:require [ontrail.csv :as csv]
             [ontrail.stats :as stats]
+            [ontrail.weekly :as weekly]
             [ontrail.loggedin :as loggedin]
             [ontrail.mongerfilter :as mongerfilter]
             [ontrail.mutate :as mutate]
@@ -93,8 +94,9 @@
   (GET "/rest/v1/summary/:user/:year" [user year] (json-response (get-year-summary-sport user (Integer/valueOf year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
        (json-response (get-season-months get-month-summary-sport user (Integer/valueOf year))))
-
-  
+  (GET "/rest/v1/summary/:user/:year/by/week" [user year]
+       (let [year-int (Integer/valueOf year)]
+         (json-response {:year year-int :results (weekly/generate-year user year-int) :user user})))
   
   (GET "/rest/v1/summary-tags/:user" [user] (json-response (get-overall-tags-summary user)))
   (GET "/rest/v1/summary-tags/:user/:year" [user year] (json-response (get-year-summary-tags user (Integer/valueOf year))))
@@ -102,9 +104,8 @@
        (json-response (get-season-months get-month-summary-tags user (Integer/valueOf year))))
 
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
-       (json-response {:results (generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
-  
-  
+       (json-response {:results (weekly/generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
+
   (POST "/rest/v1/profile" {params :params cookies :cookies}
     (is-authenticated? cookies (json-response (post-profile (user-from-cookie cookies) params))))
 
@@ -223,7 +224,7 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (nc/newcomment-cache-restore-all)
-  (schedule-work nc/newcomment-cache-store-all 600)
+  (schedule-work nc/newcomment-cache-store-all 1200)
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head

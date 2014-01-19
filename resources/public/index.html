@@ -887,6 +887,17 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <h2>Yhteenveto harjoituksista</h2>
 </script>
 
+<script id="hpkWeeklySummaryContentTemplate" type="text/html">
+    <article>
+        <div class="by year">
+            <h2>{{year}}</h2>
+            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><span class="arr"></span> {{prevYear}}</a>
+            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+        </div>
+    </article>
+</script>
+
 <script id="hpkContentTemplate" type="text/html">
     <article>
         <div class="by year">
