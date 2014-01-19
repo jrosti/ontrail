@@ -48,7 +48,7 @@ function weeklyChartConfig(containerId, data) {
           height = 300;
       var chart;
       chart = nv.models.multiBarChart()
-        .margin({bottom: 100})
+        .margin({bottom: 50})
         .transitionDuration(300)
       ;
 
