@@ -246,13 +246,15 @@
         var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
         var sum = _.extend({ year: (summary[0].year) }, { months: sums, "user": summary[0].user }, utils)
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
-      } else if ($.isArray(summary.results)) {
+      } else if ($.isArray(summary.results)) { //render weekly summary
         var sum = _.extend(summary, utils)
         $("#" + elem + "-entries").html(ich.hpkWeeklySummaryContentTemplate(sum))
-        console.log("render full year:" + elem, summary.year)
       } else {
         var sum = _.extend({ year: now.getFullYear() }, addFilter(summary), utils)
         $("#" + elem + "-entries").html(ich.hpkContentTemplate(sum))
+      }
+      if (sum.kind === "summary") {
+        sum = _.extend({hasWeekly: true}, sum)
       }
       $("#" + elem + "-header").html(ich.hpkHeaderTemplate(sum))
     }
