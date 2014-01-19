@@ -147,7 +147,7 @@
 (defn generate-year [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-    (map (partial interval-as-exlist user) (week-intervals first-day last-day))))
+    (drop-last (map (partial interval-as-exlist user) (week-intervals first-day last-day)))))
 
 (defn generate-month [user year month]
   (reverse (map (partial interval-as-exlist user) (month-interval year month))))
