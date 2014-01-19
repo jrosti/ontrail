@@ -143,7 +143,7 @@ function weeklySummaryGraph(elemId, sums) {
       dataSets.push(sportSum)
     }
   })
-  if (dataSets.length > 0) {
-    weeklyChartConfig("#weekly-sums", dataSets)
-  }
+
+  weeklyChartConfig("#weekly-sums", dataSets)
+
 }
