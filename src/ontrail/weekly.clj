@@ -4,6 +4,7 @@
   (:require [monger.core]
             [monger.conversion]
             [clj-time.core :as time]
+            [clj-time.format :as format]
             [monger.collection :as mc]
             [monger.query :as mq]
             [clojure.string :as string]
@@ -115,13 +116,16 @@
                       :total true)]        
     (cons summary-all (summary-distinct-sports results))))
 
+(def date-formatter (format/formatter "dd.MM.yyyy"))
+(def format-week-date (partial format/unparse date-formatter))
+
 (defn interval-as-exlist [user week-interval]
     (let [start (.getStart week-interval) end (.getEnd week-interval)
           results (interval-query user start end)]                    
       {:user user
        :week (week-number week-interval)
-       :from start
-       :to end
+       :from (format-week-date start)
+       :to (format-week-date end)
        :summary (weekly-sums results)
        :exs (map simple-result results)}))
        
@@ -129,8 +133,8 @@
   (cons (week-period date-time) (lazy-seq (weeks-from (time/plus date-time (time/days 7))))))
 
 (defn week-intervals [first-day last-day]
-    (for [week (weeks-from first-day) :while (not (time/after? (.getStart week) last-day))]
-      week))
+  (for [week (weeks-from first-day) :while (not (time/after? (.getStart week) last-day))]
+    week))
 
 (defn month-interval [year month]
   (let [first-day (time/date-time year month 1)
@@ -140,7 +144,7 @@
 (defn generate-year [user year]
   (let [first-day (time/date-time year 1 1)
         last-day (time/date-time year 12 31)]
-      (reverse (map (partial interval-as-exlist user) (week-intervals first-day last-day)))))
+    (map (partial interval-as-exlist user) (week-intervals first-day last-day))))
 
 (defn generate-month [user year month]
   (reverse (map (partial interval-as-exlist user) (month-interval year month))))

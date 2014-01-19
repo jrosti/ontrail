@@ -883,6 +883,9 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a>
         <a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a>
         <a class="pageLink bymonth" data-filter="bymonth" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a>
+        {{#hasWeekly}}
+        <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a>
+        {{/hasWeekly}}
     </div>
     <h2>Yhteenveto harjoituksista</h2>
 </script>
@@ -894,6 +897,21 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><span class="arr"></span> {{prevYear}}</a>
             {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
             {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+        </div>
+        <div>
+            {{#results}}
+                <hr/>
+                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Viikko {{week}}, {{from}} - {{to}}</a>
+                <table class="details">
+                    {{#summary}}
+                    <tr>
+                        <td>{{sport}}</td>
+                        <td>{{distance}}</td>
+                        <td>{{duration}}</td>
+                    </tr>
+                    {{/summary}}
+                </table>
+            {{/results}}
         </div>
     </article>
 </script>
