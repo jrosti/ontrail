@@ -236,6 +236,7 @@
       }
 
       if ($.isArray(summary)) {
+        var sum = null
         var hasSports = function (item) {
           return item.sports.length > 0
         }
@@ -245,6 +246,10 @@
         var sums = _.map(_.filter(summary, hasSports), extendWithMonthName)
         var sum = _.extend({ year: (summary[0].year) }, { months: sums, "user": summary[0].user }, utils)
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
+      } else if ($.isArray(summary.results)) {
+        var sum = _.extend(summary, utils)
+        $("#" + elem + "-entries").html(ich.hpkWeeklySummaryContentTemplate(sum))
+        console.log("render full year:" + elem, summary.year)
       } else {
         var sum = _.extend({ year: now.getFullYear() }, addFilter(summary), utils)
         $("#" + elem + "-entries").html(ich.hpkContentTemplate(sum))
@@ -484,6 +489,7 @@
     var filters = currentPages.whereArgs(partialEqualsAny(["summary", "tagsummary"])).subscribeArgs(function () {
       if (arguments.length == 3) setFilter("byyear")
       else if (arguments.length == 4) setFilter("bymonth")
+      else if (arguments.length == 5) setFilter("byyear")
       else setFilter("")
     })
 
