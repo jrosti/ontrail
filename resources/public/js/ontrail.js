@@ -779,8 +779,8 @@
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     var renderMarkAllRead = function (args) {
-      renderNewContent("#unread-entries", "#new-comments-count", "#table-entries")([])
-      renderNewContent("#unread-own-entries", "#new-own-comments-count", "#table-entries")([])
+      $("#new-comments-count").hide()
+      $("#new-own-comments-count").hide()
     }
 
     var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
