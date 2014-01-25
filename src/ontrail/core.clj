@@ -224,7 +224,7 @@
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
   (nc/newcomment-cache-restore-all)
-  (schedule-work nc/newcomment-cache-store-all 1200)
+  (schedule-work nc/newcomment-cache-store-all 2400)
   (start-http-server (-> app-routes
                          handler/site
                          ring-head/wrap-head

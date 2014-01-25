@@ -918,7 +918,7 @@
     }).where(identity).publish()
     tabIsInFocus.connect()
 
-    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(30000)).merge(exPagesWithComments).publish()
+    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(60000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
     var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
