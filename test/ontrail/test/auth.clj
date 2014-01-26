@@ -13,7 +13,3 @@
 
 (deftest auth-token-can-be-decrypted
   (is (= "Esko|RXNrbw##" (decrypt (auth-token {:username "Esko" :passwordHash "RXNrbw##"})))))
-
-(deftest valid-auth-token-matches
-  (let [user (get-user "zxcv")]
-    (is (valid-auth-token? (encrypt (str "zxcv|" (hash-part (:passwordHash user)) ))))))
