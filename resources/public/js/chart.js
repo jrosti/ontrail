@@ -6,12 +6,12 @@ function addGraph(dataGenerator) {
         height = 300;
 
       var chart = nv.models.multiBarChart()
-          .barColor(d3.scale.category20().range())
-          .margin({bottom: 100})
-          .transitionDuration(300)
-          .delay(0)
-          .rotateLabels(45)
-          .groupSpacing(0.1)
+        .barColor(d3.scale.category20().range())
+        .margin({bottom: 100})
+        .transitionDuration(300)
+        .delay(0)
+        .rotateLabels(45)
+        .groupSpacing(0.1)
 
       chart.yAxis
         .tickFormat(d3.format('.1f'))
@@ -42,7 +42,7 @@ function weeklyChartConfig(containerId, data) {
   nv.addGraph({
     generate: function () {
       var width = 700,
-          height = 300;
+        height = 300;
       var chart;
       chart = nv.models.multiBarChart()
         .stacked(true)
@@ -76,11 +76,11 @@ function weeklyChartConfig(containerId, data) {
 }
 
 /*(defn pacetominkm [cpace]
-  (let [kmh (/ cpace 1000.0)
-minkm (/ 60.0 kmh)
-min (int minkm)
-s (int (* 60.0 (- minkm min)))]
-(str min "." (format "%02d" s) " min/km")))*/
+ (let [kmh (/ cpace 1000.0)
+ minkm (/ 60.0 kmh)
+ min (int minkm)
+ s (int (* 60.0 (- minkm min)))]
+ (str min "." (format "%02d" s) " min/km")))*/
 function genValues(paces, vals) {
   return function() {
     var xy = [];
