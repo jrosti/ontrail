@@ -1,6 +1,3 @@
-/**
- * Created by jro on 10/22/13.
- */
 
 function addGraph(dataGenerator) {
   nv.addGraph({
@@ -95,7 +92,7 @@ function genValues(paces, vals) {
       return mins + secs
     }
     for (var i = 15; i < vals.length - 2; i++) {
-      xy.push({x: toMinkm(paces[i]), y: (vals[i] - vals[i -1 ])/1000})
+      xy.push({x: toMinkm(paces[i]), y: (vals[i] - vals[i - 1])/1000})
     }
 
     return [
@@ -108,42 +105,33 @@ function genValues(paces, vals) {
   }
 }
 
-function getSportSums(sport, sums) {
+function getSportSums(key, filter, sums) {
   var values = _.map(sums, function(v) {
-    var distance = null
-    var sportSummary = _.filter(v.summary, function(val) {
-      return val.sport === sport
-    })
-    if (sportSummary.length === 1) {
-      distance = sportSummary[0].tdistance / 1000
-    } else {
-      distance = 0
-    }
+    var sportSummary = _.filter(v.summary, filter)
+    var distance = sportSummary.length === 1 ? sportSummary[0].tdistance / 1000 : 0
     return {x: v.week, y: distance}
   })
   var total = _.reduce(values, function(total, obj) {
-    if (obj.y > 0) {
-      return total + obj.y
-    } else {
-      return total
-    }
+    return obj.y > 0 ? total + obj.y : total
   }, 0)
-  return {key: sport, values: values, total: total}
+  return {key: key, values: values, total: total}
 }
 
-
 function weeklySummaryGraph(elemId, sums) {
-  var sports = ["Juoksu", "Pyöräily", "Uinti",
-                "Perinteinen hiihto", "Luisteluhiihto",
-                "Kävely", "Suunnistus"]
+  var sports = _.filter(_.uniq(_.flatten(_.map(sums, function(summary) {
+    return _.map(summary.summary, function(item) {
+      return item.sport
+    })
+  }))), function(val) { return val !== "Kaikki" })
   var dataSets = []
   _.each(sports, function(sport) {
-    sportSum = getSportSums(sport, sums)
+    sportSum = getSportSums(sport, function(val) {
+      return val.sport === sport
+    }, sums)
     if (sportSum.total > 0) {
       dataSets.push(sportSum)
     }
   })
-
   weeklyChartConfig("#weekly-sums", dataSets)
 
 }
