@@ -13,3 +13,6 @@
 (mg/connect!)
 (mg/set-db! (mg/get-db DB))
 
+;;(mg/connect!)
+;;(mg/authenticate (mg/get-db DB) "xxx" "xxxxpppp")
+;;(mg/set-db! (mg/get-db DB))
