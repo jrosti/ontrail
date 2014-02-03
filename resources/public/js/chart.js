@@ -37,44 +37,6 @@ function addGraph(dataGenerator) {
   })
 }
 
-
-function weeklyChartConfig(containerId, data) {
-  nv.addGraph({
-    generate: function () {
-      var width = 700,
-        height = 300;
-      var chart;
-      chart = nv.models.multiBarChart()
-        .stacked(true)
-        .margin({bottom: 50})
-        .transitionDuration(300)
-      ;
-
-      chart.options({delay: 800});
-      chart.multibar
-        .hideable(true);
-
-      chart.xAxis
-        .axisLabel("Viikkonumero")
-        .showMaxMin(true)
-        .tickFormat(d3.format(',0f'));
-
-      chart.yAxis
-        .tickFormat(d3.format(',.1f'));
-
-      d3.select(containerId)
-        .attr('width', width)
-        .attr('height', height)
-        .datum(data)
-        .call(chart);
-
-      nv.utils.windowResize(chart.update);
-
-      return chart;
-    }
-  })
-}
-
 /*(defn pacetominkm [cpace]
  (let [kmh (/ cpace 1000.0)
  minkm (/ 60.0 kmh)
@@ -105,11 +67,49 @@ function genValues(paces, vals) {
   }
 }
 
-function getSportSums(key, filter, sums) {
+function weeklyChartConfig(containerId, data, yTitle) {
+  nv.addGraph({
+    generate: function () {
+      var width = 700,
+        height = 300;
+      var chart;
+      chart = nv.models.multiBarChart()
+        .stacked(true)
+        .margin({bottom: 50})
+        .transitionDuration(300)
+      ;
+
+      chart.options({delay: 800});
+      chart.multibar
+        .hideable(true);
+
+      chart.xAxis
+        .axisLabel("Viikkonumero")
+        .showMaxMin(true)
+        .tickFormat(d3.format(',0f'));
+
+      chart.yAxis
+        .axisLabel(yTitle)
+        .tickFormat(d3.format(',.1f'));
+
+      d3.select(containerId)
+        .attr('width', width)
+        .attr('height', height)
+        .datum(data)
+        .call(chart);
+
+      nv.utils.windowResize(chart.update);
+
+      return chart;
+    }
+  })
+}
+
+function getSportSums(key, filter, dataExtract, sums) {
   var values = _.map(sums, function(v) {
     var sportSummary = _.filter(v.summary, filter)
-    var distance = sportSummary.length === 1 ? sportSummary[0].tdistance / 1000 : 0
-    return {x: v.week, y: distance}
+    var yData = dataExtract(sportSummary)
+    return {x: v.week, y: yData}
   })
   var total = _.reduce(values, function(total, obj) {
     return obj.y > 0 ? total + obj.y : total
@@ -117,21 +117,34 @@ function getSportSums(key, filter, sums) {
   return {key: key, values: values, total: total}
 }
 
-function weeklySummaryGraph(elemId, sums) {
+function weeklySummaryGraph(elemId, sums, config) {
   var sports = _.filter(_.uniq(_.flatten(_.map(sums, function(summary) {
     return _.map(summary.summary, function(item) {
       return item.sport
     })
   }))), function(val) { return val !== "Kaikki" })
+
+  var distanceExtract = function(sportSummary) {
+    return sportSummary.length === 1 ? sportSummary[0].tdistance / 1000 : 0
+  }
+
+  var durationExtract = function(sportSummary) {
+    return sportSummary.length === 1 ? sportSummary[0].tduration / (100 * 60 * 60) : 0
+  }
+
   var dataSets = []
   _.each(sports, function(sport) {
-    sportSum = getSportSums(sport, function(val) {
+
+    var sportFilter = function(val) {
       return val.sport === sport
-    }, sums)
+    }
+
+    var dataExtractFun = config && config.duration !== undefined ? durationExtract  : distanceExtract
+
+    sportSum = getSportSums(sport, sportFilter, dataExtractFun, sums)
     if (sportSum.total > 0) {
       dataSets.push(sportSum)
     }
   })
-  weeklyChartConfig("#weekly-sums", dataSets)
-
+  weeklyChartConfig(elemId, dataSets, config.title)
 }

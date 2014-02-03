@@ -250,7 +250,10 @@
       } else if ($.isArray(summary.results)) { //render weekly summary
         var sum = _.extend(summary, utils)
         $('#weekly-graph-container').show()
-        weeklySummaryGraph("#weekly-sums", sum.results)
+        weeklySummaryGraph("#weekly-sums", sum.results, {title: "Matka (km)"})
+        weeklySummaryGraph("#weekly-sums-time", sum.results, {title: "Aika (h)", duration: true})
+
+
         $("#" + elem + "-entries").html(ich.hpkWeeklySummaryContentTemplate(sum))
       } else {
         var sum = _.extend({ year: now.getFullYear() }, addFilter(summary), utils)
