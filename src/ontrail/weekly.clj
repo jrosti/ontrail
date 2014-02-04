@@ -101,6 +101,7 @@
       :distance (string/replace (to-human-distance (:distance coll))
       #" " "")
       :duration (to-human-time (:duration coll))
+      :tduration (:duration coll)
       :statsduration (to-human-stats-duration (:duration coll)))))
 
 (defn zero-result[sport] {:sport sport :distance 0 :duration 0 :tduration 0})
