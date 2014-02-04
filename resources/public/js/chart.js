@@ -75,7 +75,9 @@ function weeklyChartConfig(containerId, data, yTitle) {
       var chart;
       chart = nv.models.multiBarChart()
         .stacked(true)
-        .margin({bottom: 50})
+        .margin({left: 80, bottom: 50})
+        .showXAxis(true)
+        .showYAxis(true)
         .transitionDuration(300)
       ;
 
@@ -85,8 +87,7 @@ function weeklyChartConfig(containerId, data, yTitle) {
 
       chart.xAxis
         .axisLabel("Viikkonumero")
-        .showMaxMin(true)
-        .tickFormat(d3.format(',0f'));
+        .tickFormat(d3.format(',0f'))
 
       chart.yAxis
         .axisLabel(yTitle)
@@ -125,7 +126,6 @@ function weeklySummaryGraph(elemId, sums, config) {
   }))), function(val) { return val !== "Kaikki" })
 
   var distanceExtract = function(sportSummary) {
-    console.log(sportSummary[0])
     return sportSummary.length === 1 ? sportSummary[0].tdistance / 1000 : 0
   }
 
