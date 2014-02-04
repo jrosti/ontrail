@@ -125,6 +125,7 @@ function weeklySummaryGraph(elemId, sums, config) {
   }))), function(val) { return val !== "Kaikki" })
 
   var distanceExtract = function(sportSummary) {
+    console.log(sportSummary[0])
     return sportSummary.length === 1 ? sportSummary[0].tdistance / 1000 : 0
   }
 
