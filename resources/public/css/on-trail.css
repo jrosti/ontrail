@@ -453,7 +453,7 @@ table.weekly {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 10px;
   margin: 5px 0 0 30px;
-  width: 97%;
+  width: 98%;
   text-align: left;
 }
 table.weekly th {
@@ -464,7 +464,7 @@ table.weekly th {
   border-bottom: 2px solid #da7c0c;
 }
 table.weekly th.day {
-  width: 80px;
+  width: 65px;
 }
 table.weekly td {
   padding: 3px 2px;

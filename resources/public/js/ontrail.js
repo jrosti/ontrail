@@ -622,7 +622,7 @@
         var nextYear = year === now.getFullYear() ? year : year + 1
         var nextMonth = year === now.getFullYear() - 1 ? now.getMonth() : (year === now.getFullYear() ? now.getMonth() : 11)
 
-        $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: user,
+        $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: targetUser,
                                                               prevYear: year - 1, prevMonth: 11,
                                                               nextYear: nextYear, nextMonth: nextMonth}))
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser, year, month), $("#weeksummary"))
