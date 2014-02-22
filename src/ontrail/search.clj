@@ -11,11 +11,24 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+;; MongoDB full text search for the exercise collection. Maintains in-memory search
+;; structure for retrieving all exercises containing all search terms in the query. 
+;; Results are paged and sorted by :lastModifiedDate of the exercise. 
+
+;; Ref to associative map from a term to set of document id:s where 
+;; a search term occurred, that is "posting list" or postings of a search term. 
+(def inverted-index (ref {}))
+
+;; Timestamp structure for sorting the index. Atom is used, because
+(def timestamps (atom {}))
+
 (def min-term-length 2)
 (def max-term-length 15)
 
 (def search-per-page 20)
 
+;; Common words have been extracted from term-frequency manually, because some words have large postings, 
+;; like sport "Juoksu", and user still wants it to be included in the search result.
 (def common-word #{"ja" "ei"})
 
 (defn valid-term? [term] 
@@ -29,34 +42,18 @@
 (def re-term #"[a-zåäö#0-9\-_]+")
 
 (defn to-term-seq [^String words]
-  (if words
+  (if (string? words)
     (filter valid-term? (re-seq re-term (.toLowerCase (strip-html words))))
     []))
 
-(defn to-term-list [exercise] 
+(defn exercise-to-terms [exercise] 
   (concat 
    (to-term-seq (tags-to-string (:tags exercise)))
    (to-term-seq (:user exercise))
    (to-term-seq (:body exercise))
    (to-term-seq (:title exercise))
    (to-term-seq (:sport exercise))
-   (to-term-seq (reduce (fn [a b] 
-                          (if (and b (:body b)) 
-                            (str a " " (:body b)) 
-                            a)) 
-                        "" (:comments exercise)))
-                     ))
-
-(defn get-ex-terms [exercise]
-    (to-term-list exercise))
-          
-(def inverted-index (ref {}))
-
-;; Timetamp structure
-(def timestamps (atom {}))
-
-;; Optional structure to speed up searches by sorting the term list according to the frequency.
-(def term-freq (atom {}))
+   (to-term-seq (reduce (fn [result comment] (str result " " (:body comment) " " (:user comment))) "" (:comments exercise)))))
 
 (defn insert-term [assoc-fn ex-id index term]
   (if-let [postings (index term)]
@@ -64,46 +61,41 @@
       (assoc-fn index term new-val))
     (assoc-fn index term #{ex-id})))
 
+(defn get-last-modified-date [ex]
+  (if-let [last-modified-date (:lastModifiedDate ex)]
+    last-modified-date
+    (do (.error logger (str "Inconsistent exercise: " (:_id ex) " without last modified timestamp"))
+        (time/now))))
+
 (defn insert-exercise-to-index [assoc-fn index ex]
-  (let [terms (get-ex-terms ex)
+  (let [terms (exercise-to-terms ex)
         ex-id (str (:_id ex))]
-    (swap! timestamps assoc ex-id (cljc/to-long (:lastModifiedDate ex)))
+    (swap! timestamps assoc ex-id (cljc/to-long (get-last-modified-date ex)))
     (reduce (partial insert-term assoc-fn ex-id) index terms)))
 
 (defn insert-exercise-inmem-index [ex]
   (count (dosync (alter inverted-index (partial insert-exercise-to-index assoc) ex))))
 
-(defn count-freqs [] 
-  (let [freqs (reduce (fn [res entry] (assoc res (first entry) (count (second entry)))) {} @inverted-index)]
-    (count (reset! term-freq freqs))))
-
 (defn rebuild-index []
-  (let [new-index (transient {})]
-     (dosync 
-       (ref-set inverted-index 
-               (persistent! 
-                (reduce (partial insert-exercise-to-index assoc!) new-index (mc/find-maps EXERCISE {}))))))
-  (count-freqs))
-
-(defn to-fast-order [terms]
-  (let [freqs @term-freq
-        count-term #(if (freqs %) (freqs %) 0)]
-    (if (> (count terms) 2)
-      (sort-by count-term terms)
-      terms)))
+  (let [new-index (transient {})
+        updated-index (persistent! 
+                       (reduce 
+                        (partial insert-exercise-to-index assoc!) new-index (mc/find-maps EXERCISE {})))]
+    (do (dosync (ref-set inverted-index updated-index))
+        "done")))
 
 (defn intersect-and-sort [terms]
-  (let [result (apply clojure.set/intersection (map #(@inverted-index %) (to-fast-order terms)))
-        ts @timestamps
-        sortfn #(if (ts %) (ts %) 0)
-        sorted-result (sort-by sortfn > result)]
+  (let [result (apply clojure.set/intersection (map @inverted-index terms))
+        my-timestamps @timestamps
+        sort-key-fn #(if-let [timestamp (my-timestamps %)] timestamp 0)
+        sorted-result (sort-by sort-key-fn > result)]
     (.info logger (str "Intersect and sort hit: search intersection size: " (count sorted-result)))
     sorted-result))
 
-;; intersection is the heaviest operation, and it is memoized 60 seconds, in order not to redo this
+;; intersection is the heaviest operation, and it is memoized 120 seconds, in order not to redo this
 ;; in infinite scroll
 (def memo-intersect
-  (memo/ttl intersect-and-sort :ttl/threshold (* 60 1000))) 
+  (memo/ttl intersect-and-sort :ttl/threshold (* 120 1000))) 
 
 (defn search-ids [page terms]
   (let [result (memo-intersect terms)
@@ -118,13 +110,20 @@
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
-(defn str-terms [terms] 
-  (reduce #(str % " " %2 (if (and (@term-freq %2) (> (@term-freq %2) 0)) (str " (" (@term-freq %2) ")") "")) "" terms))
+(defn stringify-terms 
+  ([terms] 
+     (stringify-terms @inverted-index terms))
+  ([index terms]
+     (reduce 
+      (fn [result term] 
+        (let [occurrences (count (index term))]
+          (str result " " term " (" occurrences ")")))
+      "" terms)))
 
 (defn search [page terms]
   (let [res (search-ids page terms)
         ids (:results res)]
-    (.debug logger (str "Terms " (str-terms terms) " page: " page " search result count: " (count ids)))
+    (.debug logger (str "Terms " (stringify-terms terms) " page: " page " search result count: " (count ids)))
     {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total res)}))
 
 (defn page-or-default [query]
@@ -135,9 +134,9 @@
       1)))
 
 (defn format-summary [results terms query-string] 
-  (let [invalid (filter #(not (valid-term? %)) (re-seq re-term (.toLowerCase query-string)))]
-    (str "Löydettiin " (:total results) " tulosta hakusanoilla " (str-terms terms)
-         (if (> (count invalid) 0) (str " ei käytetty sanoja: " (str-terms invalid)) ""))))
+  (let [invalid-terms (filter (comp not valid-term?) (re-seq re-term (.toLowerCase query-string)))]
+    (str "Löydettiin " (:total results) " tulosta hakusanoilla " (stringify-terms terms)
+         (if (> (count invalid-terms) 0) (str " ei käytetty sanoja: " (stringify-terms invalid-terms)) ""))))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)
