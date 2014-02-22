@@ -13,13 +13,15 @@
 
 ;; MongoDB full text search for the exercise collection. Maintains in-memory search
 ;; structure for retrieving all exercises containing all search terms in the query. 
-;; Results are paged and sorted by :lastModifiedDate of the exercise. 
+;; Results are paged and sorted by :lastModifiedDate of the exercise map. 
 
 ;; Ref to associative map from a term to set of document id:s where 
 ;; a search term occurred, that is "posting list" or postings of a search term. 
 (def inverted-index (ref {}))
 
 ;; Timestamp structure for sorting the index. Atom is used, because
+;; the existence timetamp is not required to be synchronized with
+;; the search term index (inverted-index).
 (def timestamps (atom {}))
 
 (def min-term-length 2)
@@ -77,10 +79,9 @@
   (count (dosync (alter inverted-index (partial insert-exercise-to-index assoc) ex))))
 
 (defn rebuild-index []
-  (let [new-index (transient {})
-        updated-index (persistent! 
+  (let [updated-index (persistent! 
                        (reduce 
-                        (partial insert-exercise-to-index assoc!) new-index (mc/find-maps EXERCISE {})))]
+                        (partial insert-exercise-to-index assoc!) (transient {}) (mc/find-maps EXERCISE {})))]
     (do (dosync (ref-set inverted-index updated-index))
         "done")))
 
@@ -92,18 +93,21 @@
     (.info logger (str "Intersect and sort hit: search intersection size: " (count sorted-result)))
     sorted-result))
 
-;; intersection is the heaviest operation, and it is memoized 120 seconds, in order not to redo this
-;; in infinite scroll
-(def memo-intersect
+;; intersection and sort is the heaviest operation, and it is memoized 120 seconds, in order not to redo this
+;; in the infinite scroll of search results.
+(def memo-intersect-and-sort
   (memo/ttl intersect-and-sort :ttl/threshold (* 120 1000))) 
 
-(defn search-ids [page terms]
-  (let [result (memo-intersect terms)
-        full-head (take (* page search-per-page) result)]
-    (if (> (count full-head) (* search-per-page (dec page)))
-      {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count result)}
-      {:results [] :total (count result)})))
-  
+(defn search-ids
+  ([page terms] 
+     (search-ids memo-intersect-and-sort page terms))
+  ([intersect-fn terms page]
+     (let [result (intersect-fn terms)
+           full-head (take (* page search-per-page) result)]
+       (if (> (count full-head) (* search-per-page (dec page)))
+         {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count result)}
+         {:results [] :total (count result)}))))
+
 (defn try-get-one [id]
   (try 
     (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
@@ -120,8 +124,8 @@
           (str result " " term " (" occurrences ")")))
       "" terms)))
 
-(defn search [page terms]
-  (let [res (search-ids page terms)
+(defn search [terms page]
+  (let [res (search-ids terms page)
         ids (:results res)]
     (.debug logger (str "Terms " (stringify-terms terms) " page: " page " search result count: " (count ids)))
     {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total res)}))
@@ -143,6 +147,6 @@
         page (page-or-default query)
         terms (filter valid-term? (re-seq re-term (.toLowerCase query-string)))]
     (if (> (count terms) 0)
-      (let [res (search page terms)]
+      (let [res (search terms page)]
         {:results (:results res) :searchSummary (format-summary res terms query-string)})
       {:results [] :searchSummary (str "Ei tuloksia hakuun: " query-string)})))

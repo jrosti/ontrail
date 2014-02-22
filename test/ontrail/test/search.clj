@@ -16,7 +16,7 @@
 (deftest term-tokenization
   (is (= '("hello", "world") 
        (to-term-seq "<p>Hello World!</p>"))
-      "tokenization to terms strips html, finds words and lowercases."))
+      "tokenization to terms strips html, finds words and lowercases terms."))
 
 (def date-time (time/date-time 1990 3 22))
 (def date-time-long (cljc/to-long date-time))
@@ -54,10 +54,11 @@
   (is (instance? DateTime (get-last-modified-date {:_id "(invalid exercise, omit error)"}))
       "if :lastModifiedDate keyword does not exist, we should get the datetime instance"))
 
-;; Insertion mutates the global state (sort by date index), and inverted-index reference.
+;; Insertion mutates the global state (sort by date index, and term index), and inverted-index 
+;; reference.
 ;;
 ;; Following tests are written so that as long as atoms are not reseted, and same id:s are
-;; not reused, multiple threads can execute tests. 
+;; not reused, multiple threads can execute these tests. 
 
 (deftest inserting-exercise-to-index
   (let [new-index (insert-exercise-to-index assoc {} exercise)]
@@ -76,7 +77,7 @@
     (is (= #{unique-exercise-id} (@inverted-index "unique"))
         "as a side effect inverted-index ref is updated")))
 
-(deftest intersect-and-sorting
+(deftest intersection-and-sorting
   (let [uid1 "intersect-and-sort1" 
         uid2 "intersect-and-sort2"
         ex1 {:_id uid1 :body "word1 word2 word3" :lastModifiedDate (time/date-time 2000 1 1)}
@@ -91,4 +92,20 @@
 (deftest test-stringify
   (let [index {"word1" #{"id1" "id2"}}]
     (is (= " word1 (2)" (stringify-terms index ["word1"])))))
+ 
+(deftest getting-page-or-default
+  (is (= 2 (page-or-default {:page 2})))
+  (is (= 1 (page-or-default {}))))
+
+(deftest paging
+  (let [infinite-list (reductions + (repeat 1))
+        intersection-fn (fn [_] (take (dec search-per-page) infinite-list))
+        search-page (partial search-ids intersection-fn [])]
+    (is (= (dec search-per-page) (last (:results (search-page 1))))
+        "Last result is one minus number of results per page")
+    (is (= [] (:results (search-page 2)))
+        "second page is empty, because we took one minus results per page results")))
         
+    
+    
+    
