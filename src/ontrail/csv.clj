@@ -24,7 +24,6 @@
 (defn to-csv-date [datetime]
   (str (time/year datetime) "-" (time/month datetime) "-" (time/day datetime)))
 
-
 (defn join-with [separator elements] 
   (reduce (fn [a b] (str a separator b)) elements))
 
