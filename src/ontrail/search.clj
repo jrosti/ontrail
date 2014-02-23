@@ -10,11 +10,12 @@
   (:import [org.bson.types ObjectId]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+(set! *warn-on-reflection* true)
 
 ;; MongoDB full text search for the exercise collection. 
 ;;
 ;; Maintains in-memory structures for indexing all documents in "exercise" collection.
-;; Exercises are tokenized to lower case search terms, and index is created at the 
+;; Exercises are tokenized to lower case search terms, and the index is created at the 
 ;; startup. Updates are added incrementally. Deletions, or destructive modifications
 ;; are not updated to the index.
 ;;
@@ -66,7 +67,8 @@
    (to-term-seq 
     (reduce 
      (fn [result comment] 
-       (str result " " (:body comment) " " (:user comment))) "" (:comments exercise)))))
+       (str result " " (:body comment) " " (:user comment))) 
+     "" (:comments exercise)))))
 
 (defn insert-term [assoc-fn ex-id index term]
   (if-let [postings (index term)]
@@ -83,10 +85,10 @@
 (defn insert-exercise-to-index [assoc-fn index ex]
   (let [terms (exercise-to-terms ex)
         ex-id (str (:_id ex))]
-    (swap! timestamps assoc ex-id (cljc/to-long (get-last-modified-date ex)))
     (reduce (partial insert-term assoc-fn ex-id) index terms)))
 
 (defn insert-exercise-inmem-index [ex]
+  (swap! timestamps assoc (str (:_id ex)) (cljc/to-long (get-last-modified-date ex)))
   (count (dosync (alter inverted-index (partial insert-exercise-to-index assoc) ex))))
 
 (defn rebuild-index []
@@ -119,12 +121,9 @@
          {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count result)}
          {:results [] :total (count result)}))))
 
-(defn object-id [^String]
-  (ObjectId. id))
-
 (defn try-get-one [id]
   (try 
-    (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})
+    (mc/find-one-as-map EXERCISE {:_id (ObjectId. ^String id)})
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
@@ -152,14 +151,14 @@
       1)))
 
 (defn format-summary [results terms query-string] 
-  (let [invalid-terms (filter (comp not valid-term?) (re-seq re-term (.toLowerCase query-string)))]
+  (let [invalid-terms (filter (comp not valid-term?) (re-seq re-term (to-lower query-string)))]
     (str "Löydettiin " (:total results) " tulosta hakusanoilla " (stringify-terms terms)
          (if (> (count invalid-terms) 0) (str " ei käytetty sanoja: " (stringify-terms invalid-terms)) ""))))
 
 (defn search-wrapper [query]
   (let [query-string (:q query)
         page (page-or-default query)
-        terms (filter valid-term? (re-seq re-term (.toLowerCase query-string)))]
+        terms (filter valid-term? (re-seq re-term (to-lower query-string)))]
     (if (> (count terms) 0)
       (let [res (search terms page)]
         {:results (:results res) :searchSummary (format-summary res terms query-string)})
