@@ -1,9 +1,15 @@
 (ns ontrail.mongerfilter
   (:use [monger.operators])
-  (:require 	[clj-time.format :as format]
-                [ontrail.group :as group]
-                [clojure.string :as string]
-                [clj-time.core :as time]))
+  (:require [clj-time.format :as format]
+            [ontrail.group :as group]
+            [clojure.string :as string]
+            [clj-time.core :as time]))
+
+;; Converts query parameters to MongoDB filter. 
+;;
+;; Example: URL ontrail.net/#sport/Juoksu/gte_distance/42195/sb/duration is mapped to
+;; query parameters ?sport=Juoksu&gte_distance=42195&sb=duration, and converted to monger query
+;; {"$and" [{:sport "Juoksu"} {:distance {"$gte" 42195}}]}
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 (set! *warn-on-reflection* true)
@@ -22,13 +28,13 @@
       (.info logger (str exception " with " val))
       0)))
 
-(defn conv-fun [sport-key]
+(defn value-conversion-fun [sport-key]
   (if (sport-key #{:distance :duration})
-    (fn [val] (Long/valueOf val))
+    (fn [^String val] (Long/valueOf val))
     identity))
 
 (defn or-filter [sport-key catenated-value]
-  (let [convert-value (conv-fun sport-key)
+  (let [convert-value (value-conversion-fun sport-key)
         vals (string/split catenated-value #",")
         query-fun (fn [val] {sport-key (convert-value val)})]
     (if (> (count vals) 1)
@@ -70,7 +76,7 @@
       {$and and-query}
       {})))
 
-(defn order-by [sort-order]
+(defn order-by [^String sort-order]
   (if (.startsWith sort-order "+")
     {(apply str (rest sort-order)) 1}
     {sort-order -1}))

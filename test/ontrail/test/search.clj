@@ -14,7 +14,7 @@
       "does not accept too common word"))
 
 (deftest term-tokenization
-  (is (= '("hello", "world") 
+  (is (= ["hello", "world"]
        (to-term-seq "<p>Hello World!</p>"))
       "tokenization to terms strips html, finds proper words as search term, and lowercases terms."))
 
@@ -25,18 +25,19 @@
                :user "Joe"
                :title "Just a call."
                :body "<p>Hello Mike</p>"
+               :tags ["bug"]
                :comments [{:body "Hello Joe, system working?" :user "Mike_"}
                           {:body "seems to be"}]
                :lastModifiedDate date-time})
 
 (def exercise-terms  
-  ["mike" "mike_" "hello" "joe" "system" "working" "just" "call" "seems" "to" "be"])
+  ["mike" "mike_" "hello" "joe" "system" "working" "just" "call" "seems" "to" "be" "bug"])
 
 (deftest term-list-from-exercise
   (is (every? 
        (set (exercise-to-terms exercise))
       exercise-terms)
-      "terms are found from comments, body, title and user."))
+      "terms are found properly from different fields."))
 
 (deftest inserting-term
   (let [term "search-term"
@@ -70,8 +71,7 @@
   (is (= 1 (page-or-default {}))))
 
 (deftest pagination
-  (let [naturals (reductions + (repeat 1))
-        intersection-fn (fn [_] (take (dec search-per-page) naturals))
+  (let [intersection-fn (fn [_] (range 1 search-per-page))
         search-page (partial search-ids intersection-fn [])]
     (is (= (dec search-per-page) (last (:results (search-page 1))))
         "last result of the first page is last element of [1...search-per-page - 1")
@@ -103,5 +103,5 @@
         "modify refs.")
     (is (< 0 (insert-exercise-inmem-index! ex2))
         "modify refs.")
-    (is (= [uid2 uid1] (vec (intersect-and-sort ["word2" "word3"])))
+    (is (= [uid2 uid1] (intersect-and-sort ["word2" "word3"]))
         "word2 and word3 matched to both documents")))
