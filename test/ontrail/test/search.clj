@@ -16,7 +16,7 @@
 (deftest term-tokenization
   (is (= '("hello", "world") 
        (to-term-seq "<p>Hello World!</p>"))
-      "tokenization to terms strips html, finds words and lowercases terms."))
+      "tokenization to terms strips html, finds proper words as search term, and lowercases terms."))
 
 (def date-time (time/date-time 1990 3 22))
 (def date-time-long (cljc/to-long date-time))
@@ -78,12 +78,11 @@
     (is (= [] (:results (search-page 2)))
         "second page is empty, because next page pegins at search-per-page")))
 
-;; Insertion mutates the global state: sort by date index, and term index
+;; Insertion mutates the global state: sort by date index, and term index. 
 ;;
-;; Following tests are written so that as long as atoms are not reseted, and same id:s are
-;; not reused, multiple threads can execute these tests. 
-
-
+;; Following tests mutate the global state. Tests are written so that as long as 
+;; atoms or refs are not reseted, and same id:s are not reused, multiple threads 
+;; can execute these tests. 
 (deftest inserting-exercise-to-ref-index
   (let [unique-exercise-id "(inserting-exercise-to-ref-index)"
         my-exercise {:_id unique-exercise-id :body "four unique search terms" 
@@ -106,7 +105,3 @@
         "modify refs.")
     (is (= [uid2 uid1] (vec (intersect-and-sort ["word2" "word3"])))
         "word2 and word3 matched to both documents")))
-
-    
-    
-    
