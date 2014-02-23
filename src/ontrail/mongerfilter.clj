@@ -7,8 +7,10 @@
 
 ;; Converts query parameters to MongoDB filter. 
 ;;
-;; Example: URL ontrail.net/#sport/Juoksu/gte_distance/42195/sb/duration is mapped to
-;; query parameters ?sport=Juoksu&gte_distance=42195&sb=duration, and converted to monger query
+;; Example: URL http://ontrail.net/#sport/Juoksu/gte_distance/42195/sb/duration 
+;; is mapped to query parameters:
+;;  ?sport=Juoksu&gte_distance=42195&sb=duration 
+;; and converted to monger query
 ;; {"$and" [{:sport "Juoksu"} {:distance {"$gte" 42195}}]}
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -21,7 +23,7 @@
 
 (defn parse-date [val] (format/parse multi-parser val))
 
-(defn parse-long [val]
+(defn parse-long [^String val]
   (try
     (Long/valueOf val)
     (catch Exception exception
@@ -41,10 +43,10 @@
       {$or (vec (map query-fun vals))}
       (query-fun (first vals)))))
 
-(defn to-monger-range [f k v]
-  (let [op (string/split (name k) #"_")]
-    {(keyword (second op))
-     {(str "$" (first op)) (f v)}}))
+(defn to-monger-range [conv kw val]
+  (let [[operator query-key] (string/split (name kw) #"_")]
+    {(keyword query-key)
+     {(str "$" operator) (conv val)}}))
 
 (defn make-range-query [value-converter params]
   (if (> (count params) 0)
@@ -54,10 +56,13 @@
 (defn make-basic-query [query-keys]
   (vec (map (partial apply or-filter) query-keys)))
 
-(defn make-group-query [group-name]
-  (if-let [group (group/find-by-name group-name)]
-    [{$or (vec (map (fn [user] {:user user}) (:users group)))}]
-    []))
+(defn make-group-query 
+  ([group-name]
+     (make-group-query #(group/find-by-name %) group-name))
+  ([group-fn group-name]
+     (if-let [group (group-fn group-name)]
+       [{$or (vec (map (fn [user] {:user user}) (:users group)))}]
+       [])))
 
 (defn long-cmp-keys[]
   (vec (for [op ["lte" "gte" "lt" "gt"] qkey ["pace" "distance" "duration" "avghr"]]
@@ -78,7 +83,7 @@
 
 (defn order-by [^String sort-order]
   (if (.startsWith sort-order "+")
-    {(apply str (rest sort-order)) 1}
+    {(keyword (apply str (rest sort-order))) 1}
     {sort-order -1}))
 
 (defn sortby [params]
