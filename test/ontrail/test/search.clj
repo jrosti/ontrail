@@ -54,8 +54,7 @@
   (is (instance? DateTime (get-last-modified-date {:_id "(invalid exercise, omit error)"}))
       "if :lastModifiedDate keyword does not exist, we should get the datetime instance"))
 
-;; Insertion mutates the global state (sort by date index, and term index), and inverted-index 
-;; reference.
+;; Insertion mutates the global state: sort by date index, and term index
 ;;
 ;; Following tests are written so that as long as atoms are not reseted, and same id:s are
 ;; not reused, multiple threads can execute these tests. 
@@ -75,7 +74,7 @@
     (is (< 0 (insert-exercise-inmem-index my-exercise))
         "the result of insertion is number of search terms in the index")
     (is (= #{unique-exercise-id} (@inverted-index "unique"))
-        "as a side effect inverted-index ref is updated")))
+        "as a side effect the inverted-index ref is updated")))
 
 (deftest intersection-and-sorting
   (let [uid1 "intersect-and-sort1" 

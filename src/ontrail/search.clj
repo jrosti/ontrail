@@ -11,12 +11,20 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-;; MongoDB full text search for the exercise collection. Maintains in-memory search
-;; structure for retrieving all exercises containing all search terms in the query. 
-;; Results are paged and sorted by :lastModifiedDate of the exercise map. 
+;; MongoDB full text search for the exercise collection. 
+;;
+;; Maintains in-memory structures for indexing all documents in "exercise" collection.
+;; Exercises are tokenized to lower case search terms, and index is created at the 
+;; startup. Updates are added incrementally. Deletions, or destructive modifications
+;; are not updated to the index.
+;;
+;; Results set are paginated, and the result set is sorted by :lastModifiedDate 
+;; -field of the exercise.
+;; 
 
-;; Ref to associative map from a term to set of document id:s where 
-;; a search term occurred, that is "posting list" or postings of a search term. 
+;; Ref to associative map from a search term to set of document id:s where 
+;; search term occurred. Set of document ids is referred later postings of 
+;; a search term. 
 (def inverted-index (ref {}))
 
 ;; Timestamp structure for sorting the index. Atom is used, because
@@ -29,7 +37,7 @@
 
 (def search-per-page 20)
 
-;; Common words have been extracted from term-frequency manually, because some words have large postings, 
+;; Common words have been decided by observing the index manually, because some words have large postings, 
 ;; like sport "Juoksu", and user still wants it to be included in the search result.
 (def common-word #{"ja" "ei"})
 
@@ -45,7 +53,7 @@
 
 (defn to-term-seq [^String words]
   (if (string? words)
-    (filter valid-term? (re-seq re-term (.toLowerCase (strip-html words))))
+    (filter valid-term? (re-seq re-term (to-lower (strip-html words))))
     []))
 
 (defn exercise-to-terms [exercise] 
@@ -55,7 +63,10 @@
    (to-term-seq (:body exercise))
    (to-term-seq (:title exercise))
    (to-term-seq (:sport exercise))
-   (to-term-seq (reduce (fn [result comment] (str result " " (:body comment) " " (:user comment))) "" (:comments exercise)))))
+   (to-term-seq 
+    (reduce 
+     (fn [result comment] 
+       (str result " " (:body comment) " " (:user comment))) "" (:comments exercise)))))
 
 (defn insert-term [assoc-fn ex-id index term]
   (if-let [postings (index term)]
@@ -93,8 +104,8 @@
     (.info logger (str "Intersect and sort hit: search intersection size: " (count sorted-result)))
     sorted-result))
 
-;; intersection and sort is the heaviest operation, and it is memoized 120 seconds, in order not to redo this
-;; in the infinite scroll of search results.
+;; Intersection and sort is memoized 120 seconds, in order not to redo this
+;; operation in the infinite scroll of search results.
 (def memo-intersect-and-sort
   (memo/ttl intersect-and-sort :ttl/threshold (* 120 1000))) 
 
@@ -107,6 +118,9 @@
        (if (> (count full-head) (* search-per-page (dec page)))
          {:results (take-last search-per-page (take (* page search-per-page) result)) :total (count result)}
          {:results [] :total (count result)}))))
+
+(defn object-id [^String]
+  (ObjectId. id))
 
 (defn try-get-one [id]
   (try 
@@ -125,10 +139,10 @@
       "" terms)))
 
 (defn search [terms page]
-  (let [res (search-ids terms page)
-        ids (:results res)]
+  (let [result (search-ids terms page)
+        ids (:results result)]
     (.debug logger (str "Terms " (stringify-terms terms) " page: " page " search result count: " (count ids)))
-    {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total res)}))
+    {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total result)}))
 
 (defn page-or-default [query]
   (try 
