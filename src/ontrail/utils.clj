@@ -11,5 +11,8 @@
 (defn positive-numbers? [vals]
   (reduce #(and %1 %2) (map #(and (not= nil %) (> % 0)) vals)))
 
-(defn strip-html [val]
+(defn strip-html [^String val]
    (string/replace val #"<[^>]*>" " "))
+
+(defn to-lower [^String value]
+  (.toLowerCase value))
