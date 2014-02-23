@@ -54,27 +54,46 @@
   (is (instance? DateTime (get-last-modified-date {:_id "(invalid exercise, omit error)"}))
       "if :lastModifiedDate keyword does not exist, we should get the datetime instance"))
 
-;; Insertion mutates the global state: sort by date index, and term index
-;;
-;; Following tests are written so that as long as atoms are not reseted, and same id:s are
-;; not reused, multiple threads can execute these tests. 
-
 (deftest inserting-exercise-to-index
   (let [new-index (insert-exercise-to-index assoc {} exercise)]
     (is (every?
          (fn [term] (= #{"id1"} (new-index term)))
          exercise-terms)
-        "for every search term, the posting list contains single id1 exercise id")
-    (is (= date-time-long (@timestamps "id1"))
-        "as a side of the insertion effect, timestamps atom is updated to correspond exercise.")))
+        "for every search term, the posting list contains single id1 exercise id")))
+
+(deftest test-stringify
+  (let [index {"word1" #{"id1" "id2"}}]
+    (is (= " word1 (2)" (stringify-terms index ["word1"])))))
+ 
+(deftest getting-page-or-default
+  (is (= 2 (page-or-default {:page 2})))
+  (is (= 1 (page-or-default {}))))
+
+(deftest pagination
+  (let [naturals (reductions + (repeat 1))
+        intersection-fn (fn [_] (take (dec search-per-page) naturals))
+        search-page (partial search-ids intersection-fn [])]
+    (is (= (dec search-per-page) (last (:results (search-page 1))))
+        "last result of the first page is last element of [1...search-per-page - 1")
+    (is (= [] (:results (search-page 2)))
+        "second page is empty, because next page pegins at search-per-page")))
+
+;; Insertion mutates the global state: sort by date index, and term index
+;;
+;; Following tests are written so that as long as atoms are not reseted, and same id:s are
+;; not reused, multiple threads can execute these tests. 
+
 
 (deftest inserting-exercise-to-ref-index
   (let [unique-exercise-id "(inserting-exercise-to-ref-index)"
-        my-exercise {:_id unique-exercise-id :body "four unique search terms"}]
+        my-exercise {:_id unique-exercise-id :body "four unique search terms" 
+                     :lastModifiedDate date-time}]
     (is (< 0 (insert-exercise-inmem-index my-exercise))
         "the result of insertion is number of search terms in the index")
     (is (= #{unique-exercise-id} (@inverted-index "unique"))
-        "as a side effect the inverted-index ref is updated")))
+        "as a side effect the inverted-index ref is updated")
+    (is (= date-time-long (@timestamps unique-exercise-id))
+        "as a side of the insertion effect, timestamps atom is updated to correspond exercise.")))
 
 (deftest intersection-and-sorting
   (let [uid1 "intersect-and-sort1" 
@@ -88,23 +107,6 @@
     (is (= [uid2 uid1] (vec (intersect-and-sort ["word2" "word3"])))
         "word2 and word3 matched to both documents")))
 
-(deftest test-stringify
-  (let [index {"word1" #{"id1" "id2"}}]
-    (is (= " word1 (2)" (stringify-terms index ["word1"])))))
- 
-(deftest getting-page-or-default
-  (is (= 2 (page-or-default {:page 2})))
-  (is (= 1 (page-or-default {}))))
-
-(deftest paging
-  (let [infinite-list (reductions + (repeat 1))
-        intersection-fn (fn [_] (take (dec search-per-page) infinite-list))
-        search-page (partial search-ids intersection-fn [])]
-    (is (= (dec search-per-page) (last (:results (search-page 1))))
-        "Last result is one minus number of results per page")
-    (is (= [] (:results (search-page 2)))
-        "second page is empty, because we took one minus results per page results")))
-        
     
     
     

@@ -6,6 +6,7 @@
                 [clj-time.core :as time]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+(set! *warn-on-reflection* true)
 
 (def multi-parser (format/formatter (time/default-time-zone)
                                     "dd.MM.yyyy"
