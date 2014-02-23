@@ -76,7 +76,7 @@
     (is (= (dec search-per-page) (last (:results (search-page 1))))
         "last result of the first page is last element of [1...search-per-page - 1")
     (is (= [] (:results (search-page 2)))
-        "second page is empty, because next page pegins at search-per-page")))
+        "second page is empty, because there are search-per-page minus one results.")))
 
 ;; Insertion mutates the global state: sort by date index, and term index. 
 ;;

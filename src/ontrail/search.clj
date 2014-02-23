@@ -13,17 +13,17 @@
 
 ;; MongoDB full text search for the exercise collection. 
 ;;
-;; Maintains in-memory structures for indexing all documents in "exercise" collection.
+;; Maintains in-memory structures for indexing all documents in "exercise" mongo collection.
 ;; Exercises are tokenized to lower case search terms, and the index is created at the 
 ;; startup. Updates are added incrementally. Deletions, or destructive modifications
-;; are not updated to the index.
+;; are not maintained in the index.
 ;;
-;; Results set are paginated, and the result set is sorted by :lastModifiedDate 
-;; -field of the exercise, so that the latest is first search result.
+;; Results set is paginated, and it is sorted by :lastModifiedDate 
+;; -field of the exercise, so that the latest exercise is the first search result.
 ;; 
 
 ;; Ref to associative map from a search term to set of document id:s where 
-;; search term occurred. Set of document ids is referred later postings of 
+;; search term occurred. Set of document ids is referred later as "postings" of 
 ;; a search term. 
 (def inverted-index (ref {}))
 
@@ -38,7 +38,7 @@
 (def search-per-page 20)
 
 ;; Common words have been decided by observing the index manually, because some words have large postings, 
-;; like sport "Juoksu", and user still wants it to be included in the search result.
+;; like sport "Juoksu", and user still wants searc term to be used in the search.
 (def common-word #{"ja" "ei"})
 
 (defn valid-term? [term] 
