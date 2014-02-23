@@ -83,25 +83,25 @@
 ;; Following tests mutate the global state. Tests are written so that as long as 
 ;; atoms or refs are not reseted, and same id:s are not reused, multiple threads 
 ;; can execute these tests. 
-(deftest inserting-exercise-to-ref-index
+(deftest inserting-exercise-to-ref-index!
   (let [unique-exercise-id "(inserting-exercise-to-ref-index)"
         my-exercise {:_id unique-exercise-id :body "four unique search terms" 
                      :lastModifiedDate date-time}]
-    (is (< 0 (insert-exercise-inmem-index my-exercise))
+    (is (< 0 (insert-exercise-inmem-index! my-exercise))
         "the result of insertion is number of search terms in the index")
     (is (= #{unique-exercise-id} (@inverted-index "unique"))
         "as a side effect the inverted-index ref is updated")
     (is (= date-time-long (@timestamps unique-exercise-id))
         "as a side of the insertion effect, timestamps atom is updated to correspond exercise.")))
 
-(deftest intersection-and-sorting
+(deftest intersection-and-sorting!
   (let [uid1 "intersect-and-sort1" 
         uid2 "intersect-and-sort2"
         ex1 {:_id uid1 :body "word1 word2 word3" :lastModifiedDate (time/date-time 2000 1 1)}
         ex2 {:_id uid2 :body "word2 word3 word4" :lastModifiedDate (time/date-time 2001 1 1)}]
-    (is (< 0 (insert-exercise-inmem-index ex1))
+    (is (< 0 (insert-exercise-inmem-index! ex1))
         "modify refs.")
-    (is (< 0 (insert-exercise-inmem-index ex2))
+    (is (< 0 (insert-exercise-inmem-index! ex2))
         "modify refs.")
     (is (= [uid2 uid1] (vec (intersect-and-sort ["word2" "word3"])))
         "word2 and word3 matched to both documents")))
