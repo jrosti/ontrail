@@ -10,7 +10,6 @@
   (:import [org.bson.types ObjectId]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
-(set! *warn-on-reflection* true)
 
 ;; MongoDB full text search for the exercise collection. 
 ;;

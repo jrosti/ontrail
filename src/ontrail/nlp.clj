@@ -29,7 +29,7 @@
                "Lumilautailu" "lumilautaili"
                "Maantiepyöräily" "maantiepyöräili"
                "Maastojuoksu" "juoksi maastossa"
-               "Maastopyöräili" "pyöräili maastossa"
+               "Maastopyöräily" "pyöräili maastossa"
                "Melonta" "meloi" 
                "Muu laji" "teki jotain muuta" 
                "Muu merkintä" "merkitsi jotain muuta" 
