@@ -20,7 +20,7 @@
 ;; are not updated to the index.
 ;;
 ;; Results set are paginated, and the result set is sorted by :lastModifiedDate 
-;; -field of the exercise.
+;; -field of the exercise, so that the latest is first search result.
 ;; 
 
 ;; Ref to associative map from a search term to set of document id:s where 
