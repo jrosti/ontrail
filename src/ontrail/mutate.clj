@@ -94,7 +94,7 @@
   (.info logger (str (:user params) " creating ex " (dissoc params :body)))
   (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ex))]
-    (insert-exercise-inmem-index ex)
+    (insert-exercise-inmem-index! ex)
     (.trace logger (str (:user params) " created ex " ex " with id " str-id))
     (as-ex-result ex)))
 
@@ -126,7 +126,7 @@
   (.info logger (str user " created comment " params))
   (newcount-comment-ex user (:id params))
   (let [ex (get-ex "zxcv" (:id params))]
-    (insert-exercise-inmem-index ex)
+    (insert-exercise-inmem-index! ex)
     ex))
 
 (defn delete-comment[ex-id rule]

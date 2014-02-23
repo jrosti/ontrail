@@ -86,16 +86,22 @@
         ex-id (str (:_id ex))]
     (reduce (partial insert-term assoc-fn ex-id) index terms)))
 
-(defn insert-exercise-inmem-index [ex]
-  (swap! timestamps assoc (str (:_id ex)) (cljc/to-long (get-last-modified-date ex)))
+(defn update-sort-index! [ex]
+  (swap! timestamps assoc (str (:_id ex)) (cljc/to-long (get-last-modified-date ex))))
+
+(defn insert-exercise-inmem-index! [ex]
+  (update-sort-index! ex)
   (count (dosync (alter inverted-index (partial insert-exercise-to-index assoc) ex))))
 
-(defn rebuild-index []
+(defn rebuild-index! []
   (let [updated-index (persistent! 
-                       (reduce 
-                        (partial insert-exercise-to-index assoc!) (transient {}) (mc/find-maps EXERCISE {})))]
+                       (reduce
+                        (fn [index ex] 
+                          (update-sort-index! ex)
+                          (insert-exercise-to-index assoc! index ex)) 
+                        (transient {}) (mc/find-maps EXERCISE {})))]
     (do (dosync (ref-set inverted-index updated-index))
-        "done")))
+        (count @inverted-index))))
 
 (defn intersect-and-sort [terms]
   (let [result (apply clojure.set/intersection (map @inverted-index terms))

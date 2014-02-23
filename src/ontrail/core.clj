@@ -7,7 +7,7 @@
         [ring.middleware.params :only (wrap-params)]
         [ring.middleware.multipart-params :only (wrap-multipart-params)]
         [clojure.data.json :only (read-json json-str)]
-        [ontrail.search :only (search-wrapper rebuild-index)]
+        [ontrail.search :only (search-wrapper rebuild-index!)]
         [ontrail.parser :only (parse-duration parse-distance)]
         [ontrail.profile :only (post-profile)]
         )
@@ -222,7 +222,7 @@
 
 (defn -main [& args]
   (.info logger "Starting to build index")
-  (future (.info logger (str "Search terms in index: " (time (rebuild-index)))))
+  (future (.info logger (str "Search terms in index: " (time (rebuild-index!)))))
   (nc/newcomment-cache-restore-all)
   (schedule-work nc/newcomment-cache-store-all 2400)
   (start-http-server (-> app-routes
