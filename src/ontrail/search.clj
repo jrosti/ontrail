@@ -9,8 +9,6 @@
             [clojure.string :as string])
   (:import [org.bson.types ObjectId]))
 
-(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
-
 ;; MongoDB full text search for the exercise collection. 
 ;;
 ;; Maintains in-memory structures for indexing all documents in "exercise" mongo collection.
@@ -21,6 +19,8 @@
 ;; Results set is paginated, and it is sorted by :lastModifiedDate 
 ;; -field of the exercise, so that the latest exercise is the first search result.
 ;; 
+
+(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 ;; Ref to associative map from a search term to set of document id:s where 
 ;; search term occurred. Set of document ids is referred later as "postings" of 
@@ -49,7 +49,7 @@
 (defn tags-to-string [tags]
   (apply str (interpose " " tags)))
 
-(def re-term #"[a-zåäö#0-9\-_]+")
+(def re-term #"[a-zåäö#:0-9\-_]+")
 
 (defn to-term-seq [^String words]
   (if (string? words)
@@ -66,7 +66,7 @@
    (to-term-seq 
     (reduce 
      (fn [result comment] 
-       (str result " " (:body comment) " " (:user comment))) 
+       (str result " " (:body comment) " c:"(:user comment))) 
      "" (:comments exercise)))))
 
 (defn insert-term [assoc-fn ex-id index term]
