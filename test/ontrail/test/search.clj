@@ -31,7 +31,7 @@
                :lastModifiedDate date-time})
 
 (def exercise-terms  
-  ["mike" "mike_" "hello" "joe" "system" "working" "just" "call" "seems" "to" "be" "bug"])
+  ["mike" "c:mike_" "hello" "joe" "system" "working" "just" "call" "seems" "to" "be" "bug"])
 
 (deftest term-list-from-exercise
   (is (every? 
