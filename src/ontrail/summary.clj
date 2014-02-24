@@ -29,9 +29,11 @@
      key sport}))
 
 ;; Example of db.group -command in mongodb format.
-;; db.exercise.group({cond: {user: "username"}, reduce: function(obj, prev) { prev.csum += obj.distance }, initial: {csum: 0 }});
+;; db.exercise.group({cond: {user: "username"}, 
+;; reduce: function(obj, prev) { prev.csum += obj.distance }, initial: {csum: 0 }});
 (defn get-db-summary [condition]
-    ;; Pace computation uses exercises, where both distance and duration are known. Those sums are recorded to tdur and tdist
+  ;; Pace computation uses exercises, where both distance and duration are known. 
+  ;; Those sums are recorded to tdur and tdist
   ;; while reducing, and dist and dur are plain sums over the db values.
   (let [js-reduce "function(exercise, prev) {
                      if (exercise.distance > 0 && exercise.duration > 0) {
