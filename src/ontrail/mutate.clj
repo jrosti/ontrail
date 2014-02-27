@@ -79,33 +79,33 @@
         (assoc :pace pace))))
 
 (defn delete-ex [user ex-id]
-  (sportsummary/reset-memo-for user)
   (.trace logger (str "deleting " user " ex " ex-id))
   (let [ex (mc/find-one-as-map EXERCISE {:_id (ObjectId. ex-id)})
         ex-user (:user ex)
         exists? (identity ex)]
     (if (and exists? (= user ex-user))
       (let [delete-ok? (mr/ok? (mc/remove-by-id EXERCISE (ObjectId. ex-id)))]
+        (sportsummary/reset-memo-for user)
         {:result delete-ok? :message (str user" deleted " " exercise " ex-id) :type "ex" :id ex-id})
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
-  (sportsummary/reset-memo-for user)
   (.info logger (str (:user params) " creating ex " (dissoc params :body)))
   (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ex))]
     (insert-exercise-inmem-index! ex)
+    (sportsummary/reset-memo-for user)
     (.trace logger (str (:user params) " created ex " ex " with id " str-id))
     (as-ex-result ex)))
 
 (defn update-ex [user params]
-  (sportsummary/reset-memo-for user)
   (.trace logger (str (:user params) " updating ex " params))
   (if (= user (:user (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})))
     (do (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
                                             {"$set" (dissoc (from-user-ex user params)
                                                             :comments
                                                             :lastModifiedDate)})]
+          (sportsummary/reset-memo-for user)
           (.trace logger (str "Updated " (:id params) " with status "  write-result)))
         (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
           (.info logger (str "Updated " (:id params) user res))
