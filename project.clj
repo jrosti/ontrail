@@ -1,28 +1,32 @@
 (defproject ontrail "0.0.1"
   :description "A training blog."
-  :dependencies [[org.clojure/clojure "1.5.1"]
-  		[digest "1.4.3"]
-  		[com.draines/postal "1.10.2"]
-                [aleph "0.3.0-rc1"]
-                [compojure "1.1.5"]
-                [ring "1.2.0"]
-                [clj-time "0.5.1"]
-                [enlive "1.0.1"]
-                [clj-json "0.5.3"]
-                [clojure-csv/clojure-csv "2.0.1"]
-		[org.clojure/core.memoize "0.5.6"]
-                [org.clojure/data.json "0.1.3"]
-                [com.lambdaworks/scrypt "1.3.3"]
-                [lamina "0.5.0-beta15"]
-                [org.slf4j/slf4j-api "1.6.4"]
-                [ch.qos.logback/logback-classic "1.0.3"]
-                [commons-codec/commons-codec "1.6"]
-                [com.novemberain/monger "1.6.0"]
-                [cheshire "5.2.0"]
-                [ring.middleware.logger "0.2.2"]
+  :dependencies [
+                 [org.clojure/clojure "1.5.1"]
+                 [digest "1.4.3"]
+                 [com.draines/postal "1.10.2"]
+                 [aleph "0.3.0"]
+                 [compojure "1.1.5"]
+                 [stencil "0.3.3"]	   
+                 [ring "1.2.1"]
+                 [clj-time "0.5.1"]
+                 [enlive "1.0.1"]
+                 [clj-json "0.5.3"]
+                 [org.clojure/core.memoize "0.5.6"]
+                 [org.clojure/data.json "0.2.4"]
+                 [com.lambdaworks/scrypt "1.3.3"]
+                 [lamina "0.5.0"]
+                 [org.slf4j/slf4j-api "1.6.4"]
+                 [ch.qos.logback/logback-classic "1.0.3"]
+                 [commons-codec/commons-codec "1.6"]
+                 [com.novemberain/monger "1.7.0"]
+                 [cheshire "5.3.1"]
+                 [ring.middleware.logger "0.2.2"]
+                 [hiccup "1.0.5"]
                 ]
+
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user
                 :import-images [ontrail.imgimport -main]}
+  :aot  [ontrail.core]
   :main ontrail.core)
 
