@@ -111,12 +111,6 @@
   (GET "/rest/v1/mark-all-read" {params :params cookies :cookies}
     (webutil/json-response (nc/mark-all-read (user-from-cookie cookies))))
 
-  (GET "/rest/v1/ex-list-user/:user/:page" {params :params cookies :cookies}
-       (webutil/json-response (get-latest-ex-list (user-from-cookie cookies) {:user (:user params)} (webutil/get-page params) {:creationDate -1})))
-  
-  (GET "/rest/v1/ex-list-tag/:tag/:page" {params :params cookies :cookies}
-       (webutil/json-response (get-latest-ex-list (user-from-cookie cookies) {:tags (:tag params)} (webutil/get-page params) {:creationDate -1})))
-
   (GET "/rest/v1/list-users/:page" [page] (webutil/json-response {:results (user/get-user-list {} page)}))
 
   (GET "/rest/v1/find-users/:term/:page" [term page] 
