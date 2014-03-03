@@ -23,7 +23,8 @@
                  [ring.middleware.logger "0.2.2"]
                  [hiccup "1.0.5"]
                 ]
-
+  :plugins [[lein-ring "0.8.10"]]
+  :ring {:handler ontrail.core/app}
   :run-aliases {:import ontrail.import
                 :create-user ontrail.user
                 :import-images [ontrail.imgimport -main]}

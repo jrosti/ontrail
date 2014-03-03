@@ -1,11 +1,11 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
+    font-size: 14px;
 }
 
 p {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 td {
@@ -18,29 +18,4 @@ th {
     font-size: 13px;
 }
 
-.avatar {
-    float: left;
-}
 
-.medium {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px; font-weight: bold;
-}
-
-.mediumwhite{
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    color: #FFF;
-}
-
-.big {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px; font-weight: bold;
-}
-
-.xbig {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 24px;
-    font-weight: bold;
-}
