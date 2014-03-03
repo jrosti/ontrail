@@ -1,6 +1,7 @@
 (ns ontrail.core
   (:use aleph.http
         compojure.core
+        [compojure.handler :as handler]
         ring.middleware.cookies
         [monger.operators :only ($regex)]
         [ring.util.response :only (redirect)]
@@ -194,16 +195,21 @@
           pages/templates
           v1routes))
 
+(def ring-handler
+  (-> app-routes
+      handler/site
+      ring-head/wrap-head
+      wrap-cookies
+      wrap-with-logger
+      wrap-dir-index
+      wrap-ring-handler))
+
+(def app (-> (handler/site app-routes)))
+
 (defn -main [& args]
   (.info logger "Starting to build index")
   (future (.info logger (str "Search terms in index: " (time (rebuild-index!)))))
   (nc/newcomment-cache-restore-all)
   (schedule-work nc/newcomment-cache-store-all 2400)
-  (start-http-server (-> app-routes
-                         handler/site
-                         ring-head/wrap-head
-                         wrap-cookies
-                         wrap-with-logger
-                         wrap-dir-index
-                         wrap-ring-handler)
+  (start-http-server ring-handler                     
                      {:host "localhost" :port 8080 :websocket true}))
