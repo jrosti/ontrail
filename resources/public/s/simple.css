@@ -8,6 +8,65 @@ p {
     font-size: 14px;
 }
 
+.listAvatar {
+    float: left;
+    margin-right: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.currentPage {
+    font-size: 24px;
+}
+
+.addexLink {
+    font-size: 20px;
+    border-bottom: 2px solid;
+}
+
+.topmenu {
+    border-bottom: 1px solid green;
+}
+
+.naviLink {
+    font-size: 24px;
+    border-bottom: 2px solid;
+}
+
+.currentUser {
+    float: right;
+    font-size: 20px;
+    color: blue;
+    margin-right: 15px;
+}
+
+.commentCount {
+    margin-top: 5px;
+    color: #ff560d !important;
+}
+
+.listHead {
+    margin-bottom: -10px;
+}
+
+.listContent {
+    margin-left: 10px;
+}
+
+.shortEx {
+    margin-bottom: 5px;
+}
+
+.listEntry {
+    margin-left: 15px;
+    border-bottom: 1px solid;
+}
+
+a {
+    color: #391617;
+    text-decoration: none;
+}
+
 td {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;

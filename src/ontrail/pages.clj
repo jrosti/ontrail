@@ -16,12 +16,20 @@
 
 (defn truncate 
   ([str] 
-     (truncate str 50))
+     (truncate str 100))
   ([str n]
      (subs str 0 (min (count str) n))))
 
 (defn topmenu []
-  [:div.topmenu [:p.menu [:a {:href "/latest/1"} "Viimeisimmät"] [:a {:href "/addex"} "Lisää lenkki"]]])
+  [:div.topmenu [:p.menu [:a.addexLink {:href "/addex"} "Lisää lenkki"]]])
+
+(defn current-user [user]
+  (if (= "nobody" user) 
+    [:div.currentUser [:a {:href "/s/login.html"} "Kirjaudu"]]
+    [:div.currentUser [:p.currentUser user]]))
+
+(defn logo []
+  [:div.logo [:a {:href "/latest/1"} [:img {:src "/img/logo.png"}]]])
 
 (defn head [title]
   [:head 
@@ -32,34 +40,46 @@
   [:table 
    [:tr [:th "Laji"] [:th "Aika"] [:th "Matka"] [:th "Vauhti"]]  
    [:tr [:td (:sport ex)] [:td (:duration ex)] [:td (:distance ex)]  [:td (:pace ex)]]])
-  
+
+(defn action [ex]
+  (str (:user ex) " " (:did ex) " "  (:duration ex) 
+       (if (and (:distance ex) (not= (:distance ex) "")) 
+         (str (:distance ex) " vauhdilla " (:pace ex)) "")))
+
 (defn latest-list-entry [ex]
   [:div.listEntry
-   [:h2.listHead [:a.exLink {:href (str "/ex/" (:id ex))} (:title ex)]]
-   [:p [:span.date (:date ex)] " " [:span.user (str (:user ex)) ]]
-   (details-table ex)
-   [:div.shortEx (-> ex :body utils/strip-html truncate)]
-   [:div.comments [:p [:span (str (:commentCount ex) " kommenttia")]]]
+   [:a.exLink {:href (str "/ex/" (:id ex))}
+    [:img.listAvatar {:src (:avatar ex)}]
+    [:div.listContent     
+     [:h4.listHead  (:title ex)]
+     [:p [:span.date (:date ex)] [:br] 
+      (action ex) [:br]
+      [:span.commentCount (str (:commentCount ex) " kommenttia" (if-let [new (:newComments ex)] (str ", " new " uutta") ""))]
+      ]
+     [:div.shortEx (-> ex :body utils/strip-html truncate)]]]
    ])
 
 (defn as-link [page]
   [:a.naviLink {:href (str "/latest/" page)} (str page)])
 
 (defn latest-paging [page current-count]
-  (let [pages 1
+  (let [pages 2
         next-pages (if (> current-count 0) (range (inc page) (+ page (inc pages))) [])
         start-page (- page pages)
         prev-pages (if (> start-page 0) (range start-page page) (range 1 page))
-        p  (vec (conj (concat (map as-link prev-pages) [[:span (str " " page " ")]] (map as-link next-pages)) :div))]
-    (.info logger (str "page" (vec next-pages) "count::" current-count " p:: " p))
-    p))
+        navigation  (vec (conj (concat (interpose [:span "&nbsp;&nbsp;"] (map as-link prev-pages)) 
+                                       [[:span.currentPage (str " " page " ")]] 
+                                       (interpose [:span "&nbsp;&nbsp;"] (map as-link next-pages))) :div.pageNavi))]
+    navigation))
 
 ;; Complete HTML Pages
 
-(defn single-exercise [ex]
+(defn single-exercise [{ex :ex user :user}]
   [:html 
    (head (:title ex))
    [:body
+    (current-user user)
+    (logo)
     (topmenu)
     [:div#exHead
      [:h2 (:title ex)]
@@ -76,10 +96,12 @@
         [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
         [:p (:body comment)]])]]])
 
-(defn addex [_]
+(defn addex [{params :params user :user sports :sports}]
   [:html
    (head "Kirjoita viesti")
    [:body
+    (current-user user)
+    (logo)
     (topmenu)
     [:h2 "Lisää uusi suoritus"]
     [:form {:method "POST" :action "/addex"}
@@ -94,10 +116,12 @@
 
      ]]])
               
-(defn latest [page res]
+(defn latest [page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
     [:body 
+     (current-user user)
+     (logo)
      (topmenu)
      (latest-paging page (count res))
      (for [entry res] (latest-list-entry entry))
@@ -117,18 +141,23 @@
 (defroutes templates
 
   (GET "/latest/:page" {params :params cookies :cookies}
-       (let [page (Integer/parseInt ^String (webutil/get-page params))]
+       (let [page (Integer/parseInt ^String (webutil/get-page params))
+             user (auth/user-from-cookie cookies)]
          (render-with (partial latest page)
-                      (ex/get-latest-ex-list-default-order 
-                       (auth/user-from-cookie cookies) 
-                       {} page))))
+                      {:exs (ex/get-latest-ex-list-default-order 
+                             user
+                             {} 
+                             page)
+                       :user user})))
   
   (GET "/ex/:id" {params :params cookies :cookies}
-       (render-with single-exercise  
-                    (ex/get-ex (auth/user-from-cookie cookies) (:id params))))       
+       (let [user (auth/user-from-cookie cookies)]
+         (render-with single-exercise  
+                      {:ex (ex/get-ex user (:id params)) :user user})))       
 
-  (GET "/addex" {params :params cookies :cookies}
-       (render-with addex {}))
+  (GET "/addex" {params :params cookies :cookies} ;;addex
+       (let [user (auth/user-from-cookie cookies)]
+         (render-with addex {:params params :sports nlp/sports :user user})))
 
   (POST "/addex" {params :params cookies :cookies}
         (if (auth/valid-auth-token? (:value (cookies "authToken")))
@@ -141,6 +170,18 @@
            :headers {"Content-Type" "text/html"
                      "Location" "/s/login.html"}
            :body ""}))
+
+  (GET "/s" {cookies :cookies}
+       (if (not= "nobody" (auth/user-from-cookie cookies))
+            {:status 301
+             :headers {"Content-Type" "text/html"
+                       "Location" "/latest/1"}
+             :body ""}
+            {:status 301
+             :headers {"Content-Type" "text/html"
+                       "Location" "/s/login.html"}
+             :body ""}))
+         
   
   )
   
