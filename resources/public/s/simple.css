@@ -23,6 +23,10 @@ p {
     margin-bottom: 15px;
 }
 
+.articleHeading {
+    min-height: 150px;
+}
+
 .currentPage {
     font-size: 24px;
 }
@@ -30,6 +34,10 @@ p {
 .addexLink {
     font-size: 20px;
     border-bottom: 2px solid;
+}
+.comment {
+    border-bottom: 1px solid;
+    max-width: 90%;
 }
 
 .fieldDescription {
