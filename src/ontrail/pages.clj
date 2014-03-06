@@ -21,8 +21,10 @@
 
 (defn parse-int [^String int-str]
   (try
+    (.info logger int-str)
     (Integer/parseInt int-str)
     (catch Exception e
+      (.info logger (str e))
       0)))
 
 (defn truncate 
@@ -42,9 +44,13 @@
         :body (str exception#)})))
 
 (defn to-dur-str [params]
-  (str (parse-int (:duration.h params)) "h"
-       (parse-int (:duration.m params)) "m"
-       (parse-int (:duration.s params)) "s"))
+  (.info logger (str params))
+  (.info logger (str (str (parse-int (params "duration.h")) "h"
+       (parse-int (params "duration.m")) "m"
+       (parse-int (params "duration.s")) "s")))
+  (str (str (parse-int (params "duration.h")) "h"
+            (parse-int (params "duration.m")) "m"
+            (parse-int (params "duration.s")) "s")))
 
 (defn redirect [page]
   {:status 301
@@ -169,8 +175,9 @@
      [:input {:name "duration.h" :type "number" :max "99" :min "0"}] "h"
      [:input {:name "duration.m" :type "number" :max "59" :min "0"}] "m"
      [:input {:name "duration.s" :type "number" :max "59" :min "0"}] "s" [:br]
-     (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] [:br]
      (span-w "Matka: ") [:input {:name "distance"}] [:br]
+
+     (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] [:br]
      (span-w "Päivä: ") [:input {:name "date" :type "date" :value "today"}] [:br]
      "Kuvaus:" [:br]
      [:textarea {:name "body" :rows "8" :cols "25"}]
@@ -218,10 +225,11 @@
          (render-with addex {:params params :sports nlp/sports :user user})))
 
   (POST "/sp/addex" {params :params cookies :cookies}
+        (.info logger (str params))
         (if (auth/valid-auth-token? (:value (cookies "authToken")))
           (let [params-with-dur (assoc params :duration (to-dur-str params))
                 posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
-            (redirect (url "/sp/ex/" (:id  posted))))
+            (redirect (url "/ex/" (:id  posted))))
           (redirect "/s/login.html")))
 
   (GET "/sp" {cookies :cookies}
