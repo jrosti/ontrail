@@ -85,6 +85,14 @@ p {
     margin-bottom: 5px;
 }
 
+.body {
+    margin-left: 15px;
+}
+
+.articleHeading {
+    margin-left: 15px;
+}
+
 .listEntry {
     margin-left: 15px;
     border-bottom: 1px solid;
