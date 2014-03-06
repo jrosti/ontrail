@@ -1,6 +1,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
+    background-color: #ffffff;
 }
 
 p {
@@ -9,6 +10,13 @@ p {
 }
 
 .listAvatar {
+    float: left;
+    margin-right: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.avatar {
     float: left;
     margin-right: 15px;
     border-radius: 10px;
@@ -24,8 +32,16 @@ p {
     border-bottom: 2px solid;
 }
 
+.fieldDescription {
+    width: 80px;
+    display: inline-block;
+}
+
 .topmenu {
     border-bottom: 1px solid green;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-bottom: 15px;
 }
 
 .naviLink {

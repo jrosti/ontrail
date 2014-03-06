@@ -6,7 +6,7 @@
 
 (def multi-parser (format/formatter (time/default-time-zone)
                                     "dd.MM.yyyy"
-                                    "dd-MM-yyyy"
+                                    "yyyy-MM-dd"
                                     "dd/MM/yyyy"
                                     "yyyy/MM/dd"))
 
