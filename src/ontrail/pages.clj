@@ -6,8 +6,9 @@
    [ontrail.exercise :as ex]
    [ontrail.mutate :as mutate]
    [ontrail.webutil :as webutil]
-   [hiccup.form :as form]
    [ontrail.auth :as auth]
+
+   [hiccup.form :as form]
    [hiccup.core :as hiccup]
    [stencil.core :as stencil]
    [clojure.string :as string]
@@ -115,27 +116,37 @@
    (logo)
    (topmenu)])
 
-;; Complete HTML Pages
+
+(defn comment-div [id]
+  [:div.postComment 
+   [:form {:method "POST" :action (url "/comment/" id)}
+    [:input {:type "hidden" :name id}]
+    [:textarea {:name "body" :rows "2" :cols "25"}] [:br]
+    [:input {:type "submit" :value "Kommentoi"}]
+   ]])
+
 
 (defn single-exercise [{ex :ex user :user}]
   [:html 
    (head (:title ex))
    [:body
     (header user)
-    [:div#exHead
-     [:h2 (:title ex)]
-     [:img.avatar {:src (:avatar ex)}]
-     [:p.username (:user ex)]]
+    [:article.articleHeading
+     [:h2 (:title ex)] 
+     [:img.avatar {:src (str (:avatar ex) "&s=150")}]
+     [:p.username (:user ex)]
      [:p.date (:date ex)]
-    [:div#exDetail.exDetail (details-table ex)]
-    [:div#exBody (:body ex)]
+     [:div#exDetail.exDetail (details-table ex)]]
+    [:article.body (:body ex)]
+    (comment-div (:id ex))
     [:div.commentContainer
      [:h3.commentHeading "Kommentit"]
      (for [comment (reverse (:comments ex))]
-       [:div 
-        [:img.avatar {:src (:avatar comment)}]
-        [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
-        [:p (:body comment)]])]]])
+       [:article.comment 
+        [:img.avatar {:src (str (:avatar comment) "&s=30")}]
+        [:div.commentDiv 
+         [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
+         [:p.commentBody (:body comment)]]])]]])
 
 
 
@@ -194,6 +205,13 @@
        (let [user (auth/user-from-cookie cookies)]
          (render-with single-exercise  
                       {:ex (ex/get-ex user (:id params)) :user user})))       
+
+  (POST "/sp/comment/:id" {params :params cookies :cookies}
+        (if (auth/valid-auth-token? (:value (cookies "authToken")))                 
+          (let [user (auth/user-from-cookie cookies)
+                comment (mutate/comment-ex user params)]
+            (redirect (url "/ex/" (:id params))))
+          (redirect "/sp/login.html")))
 
   (GET "/sp/addex" {params :params cookies :cookies} ;;addex
        (let [user (auth/user-from-cookie cookies)]
