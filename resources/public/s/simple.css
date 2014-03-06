@@ -24,11 +24,15 @@ p {
 }
 
 .articleHeading {
-    min-height: 150px;
+    min-height: 210px;
 }
 
 .currentPage {
     font-size: 24px;
+}
+
+.postComment {
+    margin-top: 30px;
 }
 
 .addexLink {
