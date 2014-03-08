@@ -5,6 +5,18 @@
 (defn file-exists? [^String filename]
   (.exists (File. filename)))
 
+(defn parse-int [^String int-str]
+  (try
+    (Integer/parseInt int-str)
+    (catch Exception e
+      0)))
+
+(defn truncate 
+  ([str] 
+     (truncate str 100))
+  ([str n]
+     (subs str 0 (min (count str) n))))
+
 (defn float= [x y]
   (<= (Math/abs (- x y)) 0.00001))
 

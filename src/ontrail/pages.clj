@@ -1,5 +1,6 @@
 (ns ontrail.pages
   (:use [compojure.core :only (defroutes PUT GET POST DELETE)])
+  (:use ontrail.utils)
   (:require 
    [ontrail.nlp :as nlp]
    [ontrail.utils :as utils]
@@ -21,20 +22,6 @@
 (defn url[& parts] 
   (apply (partial str "/sp") parts))
 
-(defn parse-int [^String int-str]
-  (try
-    (.info logger int-str)
-    (Integer/parseInt int-str)
-    (catch Exception e
-      (.info logger (str e))
-      0)))
-
-(defn truncate 
-  ([str] 
-     (truncate str 100))
-  ([str n]
-     (subs str 0 (min (count str) n))))
-
 (defmacro render-with [render-fn data & [status]]
   `(try 
      {:status (or ~status 200)
@@ -46,13 +33,9 @@
         :body (str exception#)})))
 
 (defn to-dur-str [params]
-  (.info logger (str params))
-  (.info logger (str (str (parse-int (params "duration.h")) "h"
+  (str (parse-int (params "duration.h")) "h"
        (parse-int (params "duration.m")) "m"
-       (parse-int (params "duration.s")) "s")))
-  (str (str (parse-int (params "duration.h")) "h"
-            (parse-int (params "duration.m")) "m"
-            (parse-int (params "duration.s")) "s")))
+       (parse-int (params "duration.s")) "s"))
 
 (defn redirect [page]
   {:status 301
@@ -108,22 +91,23 @@
      [:h4.listHead  (:title ex)]
      [:p [:span.date (:date ex)] [:br] 
       (action ex) [:br]
-      [:span.commentCount (str (:commentCount ex) " kommenttia" (if-let [new (:newComments ex)] (str ", " new " uutta") ""))]
+      [:span.commentCount (str (:commentCount ex) " kommenttia" 
+                               (if-let [new (:newComments ex)] (str ", " new " uutta") ""))]
       ]
      [:div.shortEx (-> ex :body utils/strip-html truncate)]]]
    ])
 
-(defn as-link [page]
-  [:a.naviLink {:href (url "/latest/" page)} (str page)])
+(defn as-link [name page]
+  [:a.naviLink {:href (url "/latest/" page)} (str name)])
 
 (defn latest-paging [page current-count]
   (let [pages 1
         next-pages (if (> current-count 0) (range (inc page) (+ page (inc pages))) [])
         start-page (- page pages)
         prev-pages (if (> start-page 0) (range start-page page) (range 1 page))
-        navigation  (vec (conj (concat (interpose [:span "&nbsp;&nbsp;"] (map as-link prev-pages)) 
+        navigation  (vec (conj (concat (map (partial as-link "edellinen") prev-pages) 
                                        [[:span.currentPage (str " " page " ")]] 
-                                       (interpose [:span "&nbsp;&nbsp;"] (map as-link next-pages))) :div.pageNavi))]
+                                       (map (partial as-link "seuraava") next-pages)) :div.pageNavi))]
     navigation))
 
 (defn header [user]
@@ -134,39 +118,39 @@
 
 (defn comment-div [id]
   [:div.postComment 
-   [:form {:method "POST" :action (url "/comment/" id)}
+   [:form {:accept-charset "UTF-8" :method "POST" :action (url "/comment/" id)}
     [:input {:type "hidden" :name id}]
     [:textarea {:name "body" :rows "2" :cols "25"}] [:br]
     [:input {:type "submit" :value "Kommentoi"}]
    ]])
 
-
+;; renders /sp/ex/<id>
 (defn single-exercise [{ex :ex user :user}]
   [:html 
    (head (:title ex))
-   [:body [:div.main
-    (header user)
-    [:article.articleHeading
-     [:h2 (:title ex)] 
-     [:img.avatar {:src (str (:avatar ex) "&s=150")}]
-     [:p.username (:user ex)]
-     [:p.date (:date ex)]
-     [:div#exDetail.exDetail (details-table ex)]]
-    [:article.body (:body ex)]
-    (comment-div (:id ex))
-    [:div.commentContainer
-     [:h3.commentHeading "Kommentit"]
-     (for [comment (reverse (:comments ex))]
-       [:article.comment 
-        [:img.avatar {:src (str (:avatar comment) "&s=30")}]
-        [:div.commentDiv 
-         [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
-         [:p.commentBody (:body comment)]]])]]]])
-
-
+   [:body 
+    [:div.main
+     (header user)
+     [:article.articleHeading
+      [:h2 (:title ex)] 
+      [:img.avatar {:src (str (:avatar ex) "&s=150")}]
+      [:p.username (:user ex)]
+      [:p.date (:date ex)]
+      [:div#exDetail.exDetail (details-table ex)]]
+     [:article.body (:body ex)]
+     (comment-div (:id ex))
+     (if (> (:commentCount ex) 0)
+       [:div.commentContainer [:h3.commentHeading "Kommentit"]
+        (for [comment (reverse (:comments ex))]
+          [:article.comment 
+           [:img.avatar {:src (str (:avatar comment) "&s=30")}]
+           [:div.commentDiv 
+            [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
+            [:p.commentBody (:body comment)]]])]
+       [:div.commentContainer "Ei kommentteja"])]]])
 
 (defn span-w [text]
-  [:span.fieldDescription text])
+  [:span.addexField text])
 
 (defn today []
   (formats/to-human-date (time/now)))
@@ -177,7 +161,7 @@
    [:body [:div.main
     (header user)
     [:h2 "Lisää uusi suoritus"]
-    [:form {:method "POST" :action (url "/addex")}
+    [:form.addex {:accept-charset "UTF-8" :method "POST" :action (url "/addex")}
      (span-w "Otsikko: ") [:input {:name "title"}] [:br]
      (span-w "Laji: ") [:select {:name "sport" :required "required"}
       (form/select-options sports)
@@ -189,14 +173,17 @@
      [:input {:name "duration.s" :type "number" :max "59" :min "0"}] "s" [:br]
      (span-w "Matka: ") [:input {:name "distance"}] [:br]
 
-     (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] [:br]
+     (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] "/min" [:br]
      (span-w "Päivä: ") [:input {:name "date" :type "date" :value (today)}] [:br]
+     (span-w "Toistot: ") [:input {:name "detailRepeats" :type "number" :min "0" :max "99999"}] " kpl" [:br]
+     (span-w "Nousu: ") [:input {:name "detailRepeats" :type "number" :min "0" :max "99999"}] "m " [:br]
      "Kuvaus:" [:br]
      [:textarea {:name "body" :rows "8" :cols "25"}]
      [:input {:type "submit" :value "Lisää lenkki"}]
 
      ]]]])
-              
+
+;; renders /sp/latest/1
 (defn latest [page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
@@ -206,7 +193,6 @@
      (for [entry res] (latest-list-entry entry))
      (latest-paging page (count res))
      ]]])
-
 
 (defroutes templates
 
