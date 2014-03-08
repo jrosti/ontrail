@@ -7,7 +7,9 @@
    [ontrail.mutate :as mutate]
    [ontrail.webutil :as webutil]
    [ontrail.auth :as auth]
+   [ontrail.formats :as formats]
 
+   [clj-time.core :as time]
    [hiccup.form :as form]
    [hiccup.core :as hiccup]
    [stencil.core :as stencil]
@@ -72,6 +74,17 @@
 (defn head [title]
   [:head 
    [:link {:rel "stylesheet" :href "/s/simple.css"}]
+   [:meta {:http-equiv "Content-Type" :content "text/html; charset=utf-8"}]
+   [:meta {:charset "utf-8"}]
+   [:script {:type "text/javascript"}
+"var _gaq = _gaq || [];
+ _gaq.push(['_setAccount', 'UA-34593654-1']);
+ _gaq.push(['_trackPageview']);
+(function() {
+ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();"]
    [:title title]])
 
 (defn row [value]
@@ -135,7 +148,7 @@
 (defn single-exercise [{ex :ex user :user}]
   [:html 
    (head (:title ex))
-   [:body
+   [:body [:div.main
     (header user)
     [:article.articleHeading
      [:h2 (:title ex)] 
@@ -152,17 +165,20 @@
         [:img.avatar {:src (str (:avatar comment) "&s=30")}]
         [:div.commentDiv 
          [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
-         [:p.commentBody (:body comment)]]])]]])
+         [:p.commentBody (:body comment)]]])]]]])
 
 
 
 (defn span-w [text]
   [:span.fieldDescription text])
 
+(defn today []
+  (formats/to-human-date (time/now)))
+
 (defn addex [{params :params user :user sports :sports}]
   [:html
    (head "Lisää")
-   [:body
+   [:body [:div.main
     (header user)
     [:h2 "Lisää uusi suoritus"]
     [:form {:method "POST" :action (url "/addex")}
@@ -178,22 +194,22 @@
      (span-w "Matka: ") [:input {:name "distance"}] [:br]
 
      (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] [:br]
-     (span-w "Päivä: ") [:input {:name "date" :type "date" :value "today"}] [:br]
+     (span-w "Päivä: ") [:input {:name "date" :type "date" :value (today)}] [:br]
      "Kuvaus:" [:br]
      [:textarea {:name "body" :rows "8" :cols "25"}]
      [:input {:type "submit" :value "Lisää lenkki"}]
 
-     ]]])
+     ]]]])
               
 (defn latest [page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
-    [:body 
+    [:body [:div.main
      (header user)
      (latest-paging page (count res))
      (for [entry res] (latest-list-entry entry))
      (latest-paging page (count res))
-     ]])
+     ]]])
 
 
 (defroutes templates
@@ -235,8 +251,7 @@
   (GET "/sp" {cookies :cookies}
        (if (not= "nobody" (auth/user-from-cookie cookies))
          (redirect "/sp/latest/1")
-         (redirect "/sp/login.html")))
-         
+         (redirect "/s/login.html")))
   
   )
   
