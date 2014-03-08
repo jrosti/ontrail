@@ -61,15 +61,12 @@
    :body ""})
 
 (defn topmenu []
-  [:nav.topmenu [:a.addexLink {:href (url "/addex")} "Lisää lenkki"]])
+  [:nav.topmenu  [:a.logo {:href (url "/latest/1")} [:img.logiImg {:src "/img/logo.png"}]] [:a.addexLink {:href (url "/addex")} "lisää lenkki"]])
 
 (defn current-user [user]
   (if (= "nobody" user) 
     [:div.currentUser [:a {:href "/s/login.html"} "Kirjaudu"]]
     [:div.currentUser [:p.currentUser user]]))
-
-(defn logo []
-  [:div.logo [:a {:href (url "/latest/1")} [:img {:src "/img/logo.png"}]]])
 
 (defn head [title]
   [:head 
@@ -132,7 +129,6 @@
 (defn header [user]
   [:header
    (current-user user)
-   (logo)
    (topmenu)])
 
 
