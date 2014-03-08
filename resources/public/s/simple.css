@@ -10,6 +10,25 @@ p {
     font-size: 14px;
 }
 
+.addexLink {
+    font-size: 20px;
+    border: 1px solid;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    padding: 8px;
+    border-radius: 10px;
+    background-color: #ffb200;
+    margin-left: 20px;
+    margin-top: 5px;
+    position: absolute;
+    font-size: 15px;
+}
+
+a:hover.addexLink {
+    text-decoration: underline;
+    background-color: #ffe900;
+}
+
 .listAvatar {
     float: left;
     margin-right: 15px;
@@ -41,10 +60,7 @@ p {
     margin-top: 30px;
 }
 
-.addexLink {
-    font-size: 20px;
-    border-bottom: 2px solid;
-}
+
 .comment {
     border-bottom: 1px solid;
     max-width: 90%;
@@ -108,6 +124,8 @@ a {
     color: #391617;
     text-decoration: none;
 }
+
+
 
 td {
     font-family: Arial, Helvetica, sans-serif;
