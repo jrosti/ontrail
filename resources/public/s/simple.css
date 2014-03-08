@@ -3,12 +3,12 @@
 }
 body {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.1em;
+    font-size: 1.2em;
     background-color: #ffffff;
 }
 p {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.1em;
+    font-size: 1.2em;
 }
 
 .body img {
@@ -16,8 +16,13 @@ p {
 }
 
 .postComment form textarea {
-    width: 500px;
+    width: 400px;
     height: 50px;
+}
+
+.addex textarea {
+    width: 400px;
+    height: 200px;
 }
 
 .addexLink {
@@ -37,6 +42,10 @@ p {
 a:hover.addexLink {
     text-decoration: underline;
     background-color: #ffe900;
+}
+
+a:hover.naviLink {
+    text-decoration: underline;
 }
 
 .listAvatar {
@@ -76,7 +85,7 @@ a:hover.addexLink {
     max-width: 90%;
 }
 
-.fieldDescription {
+.addexField {
     width: 80px;
     display: inline-block;
 }
@@ -90,7 +99,6 @@ a:hover.addexLink {
 
 .naviLink {
     font-size: 24px;
-    border-bottom: 2px solid;
 }
 
 .currentUser {
@@ -128,14 +136,13 @@ a:hover.addexLink {
 .listEntry {
     margin-left: 15px;
     border-bottom: 1px solid;
+    min-height: 100px;
 }
 
 a {
     color: #391617;
     text-decoration: none;
 }
-
-
 
 td {
     font-family: Arial, Helvetica, sans-serif;
@@ -153,6 +160,9 @@ th {
 @media (min-width:801px) {  }
 @media (min-width:1025px) {  } */
 @media (min-width:801px) {
+    .main {
+        max-width: 800px;
+    }
     /* hi-res laptops and desktops */
     body {
         font-family: Arial, Helvetica, sans-serif;
