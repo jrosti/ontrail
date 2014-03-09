@@ -20,6 +20,7 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+;; (urlp {:a "b" :c "d"}) ===> "?a=b&c=d"
 (defn urlp [params]
   (if (empty? params)
     ""
@@ -29,7 +30,8 @@
                  (map (fn [param] (str (-> param first name) "=" (-> param second URLEncoder/encode)))
                    params))))))
 
-;; (url {:a "b" :c "d"} "/list/" page) = /list/page?a=b&c=d
+;; (url {:a "b" :c "d"} "/list/" page) ==> /sp/list/page?a=b&c=d
+;; (url "latest" page) ===> /sp/latest/page
 (defn url[maybe-params & parts] 
   (if (map? maybe-params)
     (let [params (urlp maybe-params)]
@@ -193,14 +195,14 @@
      (span-w "Syke: ") [:input {:name "avghr" :type "number" :min "0" :max "200"}] "/min" [:br]
      (span-w "Päivä: ") [:input {:name "date" :type "date" :value (today)}] [:br]
      (span-w "Toistot: ") [:input {:name "detailRepeats" :type "number" :min "0" :max "99999"}] " kpl" [:br]
-     (span-w "Nousu: ") [:input {:name "detailRepeats" :type "number" :min "0" :max "99999"}] "m " [:br]
+     (span-w "Nousu: ") [:input {:name "detailElevation" :type "number" :min "0" :max "99999"}] "m " [:br]
      "Kuvaus:" [:br]
-     [:textarea {:name "body" :rows "8" :cols "25"}]
+     [:textarea {:name "body" :rows "8" :cols "25"}] [:br]
      [:input {:type "submit" :value "Lisää lenkki"}]
 
      ]]]])
 
-;; renders /sp/latest/1
+;; renders /sp/latest/1 and /sp/list/1?<filter-map>
 (defn latest [url-fn page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
