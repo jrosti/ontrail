@@ -192,12 +192,11 @@ a {
 @media (min-width:480px) {  }
 @media (min-width:600px) {  }
 @media (min-width:801px) {  }
-@media (min-width:1025px) {  } */
+@media (min-width:1025px) {  }
 @media (min-width:801px) {
     .main {
         max-width: 800px;
     }
-    /* hi-res laptops and desktops */
     body {
         font-family: Arial, Helvetica, sans-serif;
         font-size: 14px;
@@ -209,6 +208,6 @@ a {
         font-size: 14px;
     }
 
-}
+} */
 
 
