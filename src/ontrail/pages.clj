@@ -28,8 +28,9 @@
     (str "?"
          (apply str 
                 (interpose "&"
-                 (map (fn [param] (str (-> param first name) "=" (-> param second URLEncoder/encode)))
-                   params))))))
+                 (map (fn [param] 
+                        (str (-> param first name) "=" (-> param second URLEncoder/encode)))
+                      params))))))
 
 ;; (url {:a "b" :c "d"} "/list/" page) ==> /sp/list/page?a=b&c=d
 ;; (url "latest" page) ===> /sp/latest/page
@@ -49,6 +50,7 @@
         :headers {"Content-Type" "text/html"}
         :body (str exception#)})))
 
+;; {...} ===> "1h2m3s"
 (defn to-dur-str [params]
   (str (parse-int (params "duration.h")) "h"
        (parse-int (params "duration.m")) "m"
@@ -73,7 +75,7 @@
 (defn current-user [user]
   (if (= "nobody" user) 
     [:div.currentUser [:a {:href "/s/login.html"} "Kirjaudu"]]
-    [:div.currentUser [:p.currentUser user]]))
+    [:div.currentUser [:a {:href "/rest/v2/logout?referer=/s/login.html"} [:p.currentUser user]]]))
 
 (defn head [title]
   [:head 
@@ -91,19 +93,8 @@
 })();"]
    [:title title]])
 
-(defn row [value]
-  [:tr.detailsTd [:td.detailsTr value]])
-
-(defn details-table [ex]
-  [:table.details 
-   (row (:sport ex)) 
-   (row (:duration ex))
-   (row (:distance ex)) 
-   (row (:pace ex))
-   (row (:avghr ex))])
-
 (defn action [ex]
-  (str (:user ex) " " (:did ex) 
+  (str (:user ex) " " (:did ex) " "
        (if (and (:distance ex) (not= (:distance ex) "")) 
          (str " " (:distance ex) " ajassa " (:duration ex) " vauhdilla " (:pace ex)) 
          (if (= "0 min" (:duration ex)) 
@@ -145,6 +136,12 @@
    (topmenu user)])
 
 
+(defn footer [] 
+  [:footer [:a {:href "http://ontrail.net"} "Ontrail - täysi versio"]])
+
+(defn clear []
+  [:div {:style "clear:both;"}])
+
 (defn comment-div [id]
   [:div.postComment 
    [:form {:accept-charset "UTF-8" :method "POST" :action (url "/comment/" id)}
@@ -152,6 +149,24 @@
     [:textarea {:name "body" :rows "2" :cols "25"}] [:br]
     [:input {:type "submit" :value "Kommentoi"}]
    ]])
+
+(defn row [value]
+  [:tr [:td value]])
+
+(defn details-table [ex]
+  [:table.details 
+   (row (:sport ex)) 
+   (row (:duration ex))
+   (row (:distance ex)) 
+   (row (:pace ex))
+   (row (str (:avghr ex) " " (:hrReserve ex)))])
+
+(defn more-details [ex]
+  [:table.details
+   (if-let [elevation  (:detailElevation ex)] 
+     (row (str "Nousu: " (formats/to-human-distance elevation)))
+     (row ""))
+   (if-let [reps (:detailRepeats ex)] (row (str reps " toistoa")) (row ""))])
 
 ;; renders /sp/ex/<id>
 (defn single-exercise [{ex :ex user :user}]
@@ -162,10 +177,11 @@
      (header user)
      [:article.articleHeading
       [:h2 (:title ex)] 
-      [:img.avatar {:src (str (:avatar ex) "&s=150")}]
-      [:p.username (:user ex)]
       [:p.date (:date ex)]
-      [:div#exDetail.exDetail (details-table ex)]]
+      [:img.avatar {:src (str (:avatar ex) "&s=170")}]
+      [:p.username (:user ex)]
+      [:div#exDetail.exDetail (details-table ex) (more-details ex)]]
+     (clear)
      [:article.body (:body ex)]
      (comment-div (:id ex))
      (if (> (:commentCount ex) 0)
@@ -174,7 +190,7 @@
           [:article.comment 
            [:img.avatar {:src (str (:avatar comment) "&s=30")}]
            [:div.commentDiv 
-            [:p [:span.date (:date comment)] " " [:span.user (str (:user comment)) ]]
+            [:p [:span.date (:date comment)] " " [:span.username (str (:user comment)) ]]
             [:p.commentBody (:body comment)]]])]
        [:div.commentContainer "Ei kommentteja"])]]])
 
@@ -213,6 +229,7 @@
      ]]]])
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
+;; if url-fn is nil paging is not required. 
 (defn latest [url-fn page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
@@ -224,7 +241,8 @@
         [:span "Ei harjoituksia"]
         (for [entry res] (latest-list-entry entry)))
       (if url-fn (latest-paging url-fn page (count res)))
-      ]]])
+      ]
+     (footer)]])
 
 (defroutes templates
 

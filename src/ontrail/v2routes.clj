@@ -29,8 +29,19 @@
              :body ""
              })))
 
-  (POST "/rest/v2/logout" {headers :headers}
-        (let [redirect-location (if-let [referer (headers "referer")] referer "/m/index.html")]
+  (GET "/rest/v2/logout" {params :params headers :headers}
+        (let [redirect-location (if-let [param-referer (:referer params)] param-referer
+                                         (if-let [referer (headers "referer")] referer "/m/index.html"))]
+          {:status 301
+           :headers {"Content-Type" "text/html"
+                     "Location" redirect-location}
+           :cookies {"authToken" {:value "" :max-age 0 :path "/"}
+                     "authUser" {:value "" :max-age  0 :path "/"}}
+           :body ""}))
+
+  (POST "/rest/v2/logout" {params :params headers :headers}
+        (let [redirect-location (if-let [param-referer (:referer params)] param-referer
+                                         (if-let [referer (headers "referer")] referer "/m/index.html"))]
           {:status 301
            :headers {"Content-Type" "text/html"
                      "Location" redirect-location}
