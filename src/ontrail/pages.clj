@@ -59,8 +59,13 @@
              "Location" page}
    :body ""})
 
-(defn topmenu []
-  [:nav.topmenu  [:a.logo {:href (url "/latest/1")} [:img.logiImg {:src "/img/logo.png"}]] [:a.addexLink {:href (url "/addex")} "lisää lenkki"]])
+(defn topmenu [user]
+  [:nav.topmenu  
+   [:a.logo {:href (url "/latest/1")} 
+    [:img.logiImg {:src "/img/logo.png"}]] 
+   [:a.addexLink {:href (url "/addex")} "lisää"]
+   [:a.ownLink {:href (url {:user user} "/list/1")} "omat"]
+   ])
 
 (defn current-user [user]
   (if (= "nobody" user) 
@@ -124,15 +129,17 @@
         next-pages (if (> current-count 0) (range (inc page) (+ page (inc pages))) [])
         start-page (- page pages)
         prev-pages (if (> start-page 0) (range start-page page) (range 1 page))
-        navigation  (vec (conj (concat (map (partial as-link url-fn "edellinen") prev-pages) 
-                                       [[:span.currentPage (str " " page " ")]] 
-                                       (map (partial as-link url-fn "seuraava") next-pages)) :div.pageNavi))]
+        navigation  (vec (conj (concat
+                                (map (partial as-link url-fn "edellinen") prev-pages) 
+                                (map (partial as-link url-fn "seuraava") next-pages)
+                                [[:span.pageMark (str "Sivu " page)]]
+                                ) :div.pageNavi))]
     navigation))
 
 (defn header [user]
   [:header
    (current-user user)
-   (topmenu)])
+   (topmenu user)])
 
 
 (defn comment-div [id]
