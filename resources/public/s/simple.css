@@ -33,7 +33,7 @@ p {
     height: 200px;
 }
 
-.addexLink, .ownLink {
+.addexLink, .ownLink, .owncLink, .allcLink {
     font-size: 20px;
     border: 1px solid;
     border-bottom: 2px solid;
@@ -50,6 +50,15 @@ p {
 .ownLink {
     margin-left: 80px;
 }
+
+.owncLink {
+    margin-left: 140px;
+}
+
+.allcLink {
+    margin-left: 220px;
+}
+
 
 .pageNavi {
     float: right;
@@ -70,7 +79,7 @@ p {
 }
 
 
-a:hover.addexLink, a:hover.ownLink, a:hover.naviLink {
+a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.allcLink {
     text-decoration: underline;
     background-color: #ffe900;
 }
