@@ -5,6 +5,7 @@
    [ontrail.nlp :as nlp]
    [ontrail.utils :as utils]
    [ontrail.exercise :as ex]
+   [ontrail.unread :as unread]
    [ontrail.mutate :as mutate]
    [ontrail.webutil :as webutil]
    [ontrail.auth :as auth]
@@ -65,6 +66,8 @@
     [:img.logiImg {:src "/img/logo.png"}]] 
    [:a.addexLink {:href (url "/addex")} "lisää"]
    [:a.ownLink {:href (url {:user user} "/list/1")} "omat"]
+   [:a.owncLink {:href (url {:user user} "/unread/own")} "seuratut"]
+   [:a.allcLink {:href (url {:user user} "/unread/all")} "kaikki"]
    ])
 
 (defn current-user [user]
@@ -213,12 +216,15 @@
 (defn latest [url-fn page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
-    [:body [:div.main
-     (header user)
-     (latest-paging url-fn page (count res))
-     (for [entry res] (latest-list-entry entry))
-     (latest-paging url-fn page (count res))
-     ]]])
+    [:body 
+     [:div.main
+      (header user)
+      (if url-fn (latest-paging url-fn page (count res)))
+      (if (= 0 (count res))
+        [:span "Ei harjoituksia"]
+        (for [entry res] (latest-list-entry entry)))
+      (if url-fn (latest-paging url-fn page (count res)))
+      ]]])
 
 (defroutes templates
 
@@ -240,6 +246,13 @@
                                                     (mongerfilter/make-query-from params) 
                                                     (webutil/get-page params) 
                                            (mongerfilter/sortby params))
+                       :user user})))
+
+  (GET "/sp/unread/:target" {params :params cookies :cookies} 
+       (let [user (auth/user-from-cookie cookies)
+             unread-fn (if (= (:target params) "own") unread/comments-own unread/comments-all)]
+         (render-with (partial latest nil nil)
+                      {:exs (unread-fn user)
                        :user user})))
 
   (GET "/sp/ex/:id" {params :params cookies :cookies}
