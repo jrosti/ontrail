@@ -9,18 +9,32 @@
    [ontrail.webutil :as webutil]
    [ontrail.auth :as auth]
    [ontrail.formats :as formats]
+   [ontrail.mongerfilter :as mongerfilter]
 
    [clj-time.core :as time]
    [hiccup.form :as form]
    [hiccup.core :as hiccup]
    [stencil.core :as stencil]
-   [clojure.string :as string]
-   ))
+   [clojure.string :as string])
+  (:import [java.net URLEncoder]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(defn url[& parts] 
-  (apply (partial str "/sp") parts))
+(defn urlp [params]
+  (if (empty? params)
+    ""
+    (str "?"
+         (apply str 
+                (interpose "&"
+                 (map (fn [param] (str (-> param first name) "=" (-> param second URLEncoder/encode)))
+                   params))))))
+
+;; (url {:a "b" :c "d"} "/list/" page) = /list/page?a=b&c=d
+(defn url[maybe-params & parts] 
+  (if (map? maybe-params)
+    (let [params (urlp maybe-params)]
+      (apply (partial str "/sp") (concat parts [params])))
+    (apply (partial str "/sp" maybe-params) parts)))
 
 (defmacro render-with [render-fn data & [status]]
   `(try 
@@ -79,9 +93,12 @@
    (row (:avghr ex))])
 
 (defn action [ex]
-  (str (:user ex) " " (:did ex) " "  (:duration ex) 
+  (str (:user ex) " " (:did ex) 
        (if (and (:distance ex) (not= (:distance ex) "")) 
-         (str (:distance ex) " vauhdilla " (:pace ex)) "")))
+         (str " " (:distance ex) " ajassa " (:duration ex) " vauhdilla " (:pace ex)) 
+         (if (= "0 min" (:duration ex)) 
+           ""
+           (:duration ex)))))
 
 (defn latest-list-entry [ex]
   [:article.listEntry
@@ -97,17 +114,17 @@
      [:div.shortEx (-> ex :body utils/strip-html truncate)]]]
    ])
 
-(defn as-link [name page]
-  [:a.naviLink {:href (url "/latest/" page)} (str name)])
+(defn as-link [url-fn name page]
+  [:a.naviLink {:href (url-fn page)} (str name)])
 
-(defn latest-paging [page current-count]
+(defn latest-paging [url-fn page current-count]
   (let [pages 1
         next-pages (if (> current-count 0) (range (inc page) (+ page (inc pages))) [])
         start-page (- page pages)
         prev-pages (if (> start-page 0) (range start-page page) (range 1 page))
-        navigation  (vec (conj (concat (map (partial as-link "edellinen") prev-pages) 
+        navigation  (vec (conj (concat (map (partial as-link url-fn "edellinen") prev-pages) 
                                        [[:span.currentPage (str " " page " ")]] 
-                                       (map (partial as-link "seuraava") next-pages)) :div.pageNavi))]
+                                       (map (partial as-link url-fn "seuraava") next-pages)) :div.pageNavi))]
     navigation))
 
 (defn header [user]
@@ -184,14 +201,14 @@
      ]]]])
 
 ;; renders /sp/latest/1
-(defn latest [page {res :exs user :user}]
+(defn latest [url-fn page {res :exs user :user}]
    [:html 
     (head (str "ontrail.net :: " page))
     [:body [:div.main
      (header user)
-     (latest-paging page (count res))
+     (latest-paging url-fn page (count res))
      (for [entry res] (latest-list-entry entry))
-     (latest-paging page (count res))
+     (latest-paging url-fn page (count res))
      ]]])
 
 (defroutes templates
@@ -199,13 +216,23 @@
   (GET "/sp/latest/:page" {params :params cookies :cookies}
        (let [page (Integer/parseInt ^String (webutil/get-page params))
              user (auth/user-from-cookie cookies)]
-         (render-with (partial latest page)
+         (render-with (partial latest (partial url "/latest/") page)
                       {:exs (ex/get-latest-ex-list-default-order 
                              user
                              {} 
                              page)
                        :user user})))
   
+  (GET "/sp/list/:page" {params :params cookies :cookies}
+       (let [page (Integer/parseInt ^String (webutil/get-page params))
+             user (auth/user-from-cookie cookies)]
+         (render-with (partial latest (partial url (dissoc params :page) "/list/") page)
+                      {:exs  (ex/get-latest-ex-list user 
+                                                    (mongerfilter/make-query-from params) 
+                                                    (webutil/get-page params) 
+                                           (mongerfilter/sortby params))
+                       :user user})))
+
   (GET "/sp/ex/:id" {params :params cookies :cookies}
        (let [user (auth/user-from-cookie cookies)]
          (render-with single-exercise  
@@ -216,7 +243,7 @@
           (let [user (auth/user-from-cookie cookies)
                 comment (mutate/comment-ex user params)]
             (redirect (url "/ex/" (:id params))))
-          (redirect "/sp/login.html")))
+          (redirect "/s/login.html")))
 
   (GET "/sp/addex" {params :params cookies :cookies} ;;addex
        (let [user (auth/user-from-cookie cookies)]
@@ -233,7 +260,5 @@
   (GET "/sp" {cookies :cookies}
        (if (not= "nobody" (auth/user-from-cookie cookies))
          (redirect "/sp/latest/1")
-         (redirect "/s/login.html")))
-  
-  )
+         (redirect "/s/login.html"))))
   
