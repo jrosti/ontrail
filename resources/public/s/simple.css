@@ -19,11 +19,6 @@ p {
     margin: 1em;
 }
 
-#login {
-    height: 2em;
-    width: 5em;
-}
-
 #login-form input {
     font-size: 1.5em;
 }
@@ -38,7 +33,7 @@ p {
     height: 200px;
 }
 
-.addexLink {
+.addexLink, .ownLink {
     font-size: 20px;
     border: 1px solid;
     border-bottom: 2px solid;
@@ -52,13 +47,32 @@ p {
     font-size: 15px;
 }
 
-a:hover.addexLink {
-    text-decoration: underline;
-    background-color: #ffe900;
+.ownLink {
+    margin-left: 80px;
 }
 
-a:hover.naviLink {
+.pageNavi {
+    float: right;
+}
+
+.naviLink {
+    font-size: 20px;
+    border: 1px solid;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+    padding: 8px;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-right: 5px;
+    border-radius: 10px;
+    background-color: #ffb200;
+    font-size: 15px;
+}
+
+
+a:hover.addexLink, a:hover.ownLink, a:hover.naviLink {
     text-decoration: underline;
+    background-color: #ffe900;
 }
 
 .listAvatar {
@@ -108,10 +122,6 @@ a:hover.naviLink {
     margin-bottom: 10px;
     margin-top: 10px;
     padding-bottom: 15px;
-}
-
-.naviLink {
-    font-size: 24px;
 }
 
 .currentUser {
