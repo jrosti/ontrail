@@ -59,7 +59,9 @@ p {
     margin-left: 220px;
 }
 
-
+.commentContainer {
+    margin-left: 40px;
+}
 .pageNavi {
     float: right;
 }
