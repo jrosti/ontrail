@@ -1,6 +1,7 @@
 (ns ontrail.mutate
   (:use [ontrail mongodb search exercise user formats parser newcomment])
   (:require [ontrail.sportsummary :as sportsummary]
+            [ontrail.websocket :as websocket]
             [monger.collection :as mc]
             [monger.result :as mr]
             [monger.query :as mq]
@@ -95,6 +96,7 @@
         str-id (str (:_id ex))]
     (insert-exercise-inmem-index! ex)
     (sportsummary/reset-memo-for user)
+    (websocket/submit :create-ex user ex)
     (.trace logger (str (:user params) " created ex " ex " with id " str-id))
     (as-ex-result ex)))
 
@@ -127,6 +129,7 @@
   (newcount-comment-ex user (:id params))
   (let [ex (get-ex "zxcv" (:id params))]
     (insert-exercise-inmem-index! ex)
+    (websocket/submit :comment-ex user ex)
     ex))
 
 (defn delete-comment[ex-id rule]

@@ -23,6 +23,10 @@
       var clickEvent = "touchstart"
     }
 
+    var isEnter = function (event) {
+      return event.keyCode == 13;
+    }
+
     $.ajaxSetup({ cache: false })
 
     var spinnerElement = "#content-spinner"
@@ -43,6 +47,28 @@
       return action(actionStream).doAction(function () {
         button.removeClass('disabled')
       })
+    }
+
+    var $messages = $('#messages')
+    var $chatInput = $('#chatInput')
+    if ("WebSocket" in window && !mobile) {
+      var webSocket = new WebSocket('ws://' + location.hostname + ':' + location.port + '/rest/v1/async')
+      webSocket.onopen = function () {
+        webSocket.send(JSON.stringify({action: "liittyi joukkoon", message: ""}))
+      }
+      $chatInput.keyup(function(event) {
+        if (event.keyCode === 13) {
+          webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
+          $chatInput.val('')
+        }
+      })
+
+      webSocket.onmessage = function(event) {
+        var message = JSON.parse(event.data)
+        var templateMsg = ich.chatMessageTemplate(message)
+        console.log(templateMsg)
+        $messages.prepend(templateMsg)
+      }
     }
 
     function ajaxActionButtonAsStream(btn, ajaxAction) {
@@ -299,9 +325,7 @@
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }
     var logouts = $("#logout").onClickTouchAsObservable(clickEvent)
-    var isEnter = function (event) {
-      return event.keyCode == 13;
-    }
+
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
     var loginRequests = $("#login").onClickTouchAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)

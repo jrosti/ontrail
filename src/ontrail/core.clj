@@ -1,6 +1,5 @@
 (ns ontrail.core
-  (:use aleph.http
-        compojure.core
+  (:use compojure.core
         [compojure.handler :as handler]
         ring.middleware.cookies
         [monger.operators :only ($regex)]
@@ -15,8 +14,10 @@
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
          sportsummary mongodb])
   (:gen-class)
-  (:require [ontrail.v2routes :as v2routes]
+  (:require [aleph.http :as aleph]
+            [ontrail.v2routes :as v2routes]
             [ontrail.webutil :as webutil]
+            [ontrail.websocket :as websocket]
             [ontrail.pages :as pages]
             [ontrail.csv :as csv]
             [ontrail.stats :as stats]
@@ -191,18 +192,19 @@
   (route/not-found {:status 404}))
 
 (def app-routes
-  (routes v2routes/v2routes 
-          pages/templates
-          v1routes))
+  (routes              
+   websocket/async
+   v2routes/v2routes 
+   pages/templates
+   v1routes))
 
 (def ring-handler
   (-> app-routes
       handler/site
-      ring-head/wrap-head
-      wrap-cookies
-      wrap-with-logger
       wrap-dir-index
-      wrap-ring-handler))
+      ring-head/wrap-head
+;;      wrap-with-logger ;; removed because there is quite redundant nginx logging.
+      aleph/wrap-ring-handler))
 
 (def app (-> (handler/site app-routes)))
 
@@ -211,5 +213,5 @@
   (future (.info logger (str "Search terms in index: " (time (rebuild-index!)))))
   (nc/newcomment-cache-restore-all)
   (schedule-work nc/newcomment-cache-store-all 2400)
-  (start-http-server ring-handler                     
+  (aleph/start-http-server ring-handler
                      {:host "localhost" :port 8080 :websocket true}))
