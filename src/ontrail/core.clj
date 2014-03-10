@@ -214,4 +214,4 @@
   (nc/newcomment-cache-restore-all)
   (schedule-work nc/newcomment-cache-store-all 2400)
   (aleph/start-http-server ring-handler
-                     {:host "ontrail.net" :port 8080 :websocket true}))
+                     {:port 8080 :websocket true}))
