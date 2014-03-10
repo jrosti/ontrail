@@ -14,7 +14,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn message-init [ch]
-  (lamina/receive-all ch #(.info logger (str "chatty message: " %))))
+  (lamina/receive-all ch #(.info logger (str "chat message: " (json/read-str %)))))
 
 (def message-channel (lamina/named-channel "messages" message-init))
 

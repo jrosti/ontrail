@@ -91,7 +91,7 @@
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
-  (.info logger (str (:user params) " creating ex " (dissoc params :body)))
+  (.trace logger (str (:user params) " creating ex " (dissoc params :body)))
   (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
         str-id (str (:_id ex))]
     (insert-exercise-inmem-index! ex)
@@ -125,7 +125,7 @@
                                         :date (to-human-comment-date (local/local-now))
                                         :user user
                                         :body (:body params)}}})
-  (.info logger (str user " created comment " params))
+  (.trace logger (str user " created comment " params))
   (newcount-comment-ex user (:id params))
   (let [ex (get-ex "zxcv" (:id params))]
     (insert-exercise-inmem-index! ex)
