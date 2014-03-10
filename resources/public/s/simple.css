@@ -1,11 +1,12 @@
 .main {
-    max-width: 600px;
+    max-width: 550px;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.2em;
     background-color: #ffffff;
+    max-width: 570px;
 }
 
 p {
