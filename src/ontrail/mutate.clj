@@ -55,8 +55,7 @@
             detail-keys)))
 
 (defn from-user-ex [user user-ex]
-  (let [;; allow 5 days dates in the future.
-        creation-date (parse-date (:date user-ex))
+  (let [creation-date (parse-date (:date user-ex))
         last-modified (get-last-modified creation-date) 
         duration (parse-duration (:duration user-ex)) 
         bare-ex {:duration duration
