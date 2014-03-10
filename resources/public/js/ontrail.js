@@ -49,28 +49,6 @@
       })
     }
 
-    var $messages = $('#messages')
-    var $chatInput = $('#chatInput')
-    if ("WebSocket" in window) {
-      var webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
-      webSocket.onopen = function () {
-        webSocket.send(JSON.stringify({action: "liittyi joukkoon", message: ""}))
-      }
-      $chatInput.keyup(function(event) {
-        if (event.keyCode === 13) {
-          webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
-          $chatInput.val('')
-        }
-      })
-
-      webSocket.onmessage = function(event) {
-        var message = JSON.parse(event.data)
-        var templateMsg = ich.chatMessageTemplate(message)
-        console.log(templateMsg)
-        $messages.prepend(templateMsg)
-      }
-    }
-
     function ajaxActionButtonAsStream(btn, ajaxAction) {
       return actionButtonAsStream(btn,function (instream) {
         return instream.selectAjax(ajaxAction)
@@ -361,6 +339,40 @@
 
       $('.username').html(userId)
       $('*[data-user]').map(appendUser)
+    })
+
+    var webSocket;
+    var $messages = $('#messages')
+    var $chatInput = $('#chatInput')
+
+    logouts.subscribe(function() {
+      webSocket.onclose = function () {}
+      webSocket.close()
+      $chatInput.unbind('keyup')
+    })
+
+    loggedIns.subscribe(function (userId) {
+
+      if ("WebSocket" in window) {
+        if (webSocket) { webSocket.close() }
+        webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
+        webSocket.onopen = function () {
+          webSocket.send(JSON.stringify({action: "liittyi joukkoon", message: ""}))
+        }
+        $chatInput.keyup(function(event) {
+          if (event.keyCode === 13) {
+            webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
+            $chatInput.val('')
+          }
+        })
+
+        webSocket.onmessage = function(event) {
+          var message = JSON.parse(event.data)
+          var templateMsg = ich.chatMessageTemplate(message)
+          console.log(templateMsg)
+          $messages.prepend(templateMsg)
+        }
+      }
     })
 
     function renderNewComments(content) {
