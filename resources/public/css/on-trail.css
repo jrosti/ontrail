@@ -49,8 +49,9 @@ strong {
 }
 .chatMsg {
   font-size: 0.8em;
-  margin-bottom: -5px !important;
+  margin-bottom: 5px !important;
   padding: 0px !important;
+  line-height: 110%;
 }
 .chatUser {
   margin-right: 3px;

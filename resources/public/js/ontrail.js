@@ -51,7 +51,7 @@
 
     var $messages = $('#messages')
     var $chatInput = $('#chatInput')
-    if ("WebSocket" in window && !mobile) {
+    if ("WebSocket" in window) {
       var webSocket = new WebSocket('ws://' + location.hostname + ':' + location.port + '/rest/v1/async')
       webSocket.onopen = function () {
         webSocket.send(JSON.stringify({action: "liittyi joukkoon", message: ""}))
