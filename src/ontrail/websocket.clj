@@ -55,7 +55,7 @@
 
 (defn server-message [type user value]
   (condp = type
-    :comment-ex {:user user :action "kommentoi viestiä" :message (:title value) :link (ex-link value)}
+    :comment-ex {:user user :action (str "kommentoi käyttäjän " (:user value) " harjoitusta") :message (:title value) :link (ex-link value)}
     :create-ex {:user user 
                 :action "kirjasi harjoituksen" 
                 :message (:title value) 
