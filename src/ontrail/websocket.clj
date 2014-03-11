@@ -13,8 +13,18 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
+(def message-buffer-size 30)
+
+(def message-ring (atom (clojure.lang.PersistentQueue/EMPTY)))
+
 (defn message-init [ch]
-  (lamina/receive-all ch #(.info logger (str "chat message: " (json/read-str %)))))
+  (lamina/receive-all 
+   ch
+   (fn [message]
+     (.info logger (str "chat message: " message))
+     (swap! message-ring conj message)
+     (if (> (count @message-ring) message-buffer-size)
+       (swap! message-ring pop)))))
 
 (def message-channel (lamina/named-channel "messages" message-init))
 
@@ -27,11 +37,21 @@
                                       :message (formats/to-human-comment-date (local/local-now))})))
    3600)) ;; seconds
 
+(defn process-user-message [user json]
+  (try 
+    (let [as-json (json/read-str json)]
+      (json/write-str (merge as-json {:user user})))
+    (catch Exception e
+      (.error logger (str e ":" json ":"))
+      nil)))
+
 (defn message-handler [user ch]
-  (let [user-channel (lamina/map* (fn [json]
-                                    (let [value (json/read-str json)]
-                                      (json/write-str (merge value {:user user}))))
-                                  ch)]
+  (let [user-channel (lamina/filter*
+                      identity 
+                      (lamina/map* 
+                       (partial process-user-message user) 
+                       ch))]
+    (mapv (partial lamina/enqueue ch) @message-ring)
     (lamina/siphon user-channel message-channel)
     (lamina/siphon message-channel ch)))
 
