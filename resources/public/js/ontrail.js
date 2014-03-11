@@ -366,7 +366,6 @@
         webSocket.onmessage = function(event) {
           var message = JSON.parse(event.data)
           var templateMsg = ich.chatMessageTemplate(message)
-          console.log(templateMsg)
           $messages.prepend(templateMsg)
         }
       }
