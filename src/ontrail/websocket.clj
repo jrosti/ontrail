@@ -13,7 +13,7 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(def message-buffer-size 30)
+(def message-buffer-size 100)
 
 (def message-ring (atom (clojure.lang.PersistentQueue/EMPTY)))
 
