@@ -42,6 +42,12 @@ strong {
 #messageBox input {
   width: 90%;
 }
+#messages {
+  width: 190px;
+  height: 250px;
+  overflow: -moz-scrollbars-vertical;
+  overflow-y: auto;
+}
 #login-form input {
   display: block;
   width: 66%;

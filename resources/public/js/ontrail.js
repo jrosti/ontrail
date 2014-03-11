@@ -344,18 +344,24 @@
     var webSocket;
     var $messages = $('#messages')
     var $chatInput = $('#chatInput')
+    var webSocketPollerActive = false
 
-    logouts.subscribe(function() {
+    var closeWebSocket = function() {
       webSocket.onclose = function () {}
       webSocket.close()
       $chatInput.unbind('keyup')
-    })
+      webSocketPollerActive = false
+    }
 
-    loggedIns.subscribe(function (userId) {
-
-      if ("WebSocket" in window) {
-        if (webSocket) { webSocket.close() }
+    var openWebSocket = function (userId) {
+      webSocketPollerActive = true
+      if ("WebSocket" in window && webSocket === undefined ||
+          (webSocket.readyState === undefined || webSocket.readyState > 1)) {
         webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
+
+        $messages.empty()
+        $chatInput.unbind('keyup')
+
         $chatInput.keyup(function(event) {
           if (event.keyCode === 13) {
             webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
@@ -368,8 +374,19 @@
           var templateMsg = ich.chatMessageTemplate(message)
           $messages.prepend(templateMsg)
         }
+        setInterval(function() {
+          if (webSocketPollerActive) {
+            openWebSocket()
+          }
+        }, 5000)
       }
-    })
+    }
+
+
+
+    logouts.subscribe(closeWebSocket)
+
+    loggedIns.subscribe(openWebSocket)
 
     function renderNewComments(content) {
       var items = asArgs(content)
@@ -468,7 +485,6 @@
     }).selectAjax(postJoinOrLeaveGroup).where(isSuccess)
 
     joinAndLeaveClicks.subscribe(function (elem) {
-      console.log(parentArticle(elem), $(elem).is('.join') ? "joined" : "not-joined")
       parentArticle(elem).attr("class", $(elem).is('.join') ? "joined" : "not-joined")
     })
 
@@ -585,7 +601,6 @@
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
         if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
-          console.log(args.data.stats.paceHist)
           $('#graph-container').show();
           addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
         }
@@ -875,7 +890,6 @@
         'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
       minHeight: 200,
       setCodeTextarea: function (code) {
-        console.log("foo")
         this.$el.val(code).trigger('change')
       }
     }
@@ -1086,7 +1100,6 @@
     // autosave, nor onchange event did not work.
     rx.interval(10000).subscribe(function () {
       var bodyText = $('#ex-body').getCode()
-      console.log("autosave called")
       if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
         localStorage.setItem('ex-body', bodyText)
       }
