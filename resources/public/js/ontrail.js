@@ -356,9 +356,6 @@
       if ("WebSocket" in window) {
         if (webSocket) { webSocket.close() }
         webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
-        webSocket.onopen = function () {
-          webSocket.send(JSON.stringify({action: "liittyi joukkoon", message: ""}))
-        }
         $chatInput.keyup(function(event) {
           if (event.keyCode === 13) {
             webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
