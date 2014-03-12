@@ -358,7 +358,7 @@
     var openWebSocket = function (userId) {
       webSocketPollerActive = true
       if ("WebSocket" in window && webSocket === undefined ||
-          (webSocket.readyState === undefined || webSocket.readyState > 1)) {
+          (webSocket && (webSocket.readyState === undefined || webSocket.readyState > 1))) {
         webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
 
         $messages.empty()
