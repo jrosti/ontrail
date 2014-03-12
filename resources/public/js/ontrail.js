@@ -347,10 +347,12 @@
     var webSocketPollerActive = false
 
     var closeWebSocket = function() {
-      webSocket.onclose = function () {}
-      webSocket.close()
-      $chatInput.unbind('keyup')
-      webSocketPollerActive = false
+      if ("WebSocket" in window && webSocket) {
+        webSocket.onclose = function () {}
+        webSocket.close()
+        $chatInput.unbind('keyup')
+        webSocketPollerActive = false
+      }
     }
 
     var openWebSocket = function (userId) {
