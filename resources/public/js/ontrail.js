@@ -19,7 +19,7 @@
     }
 
     // rx.ontrail: onClickTouchAsObservable should handle doubles on AppleWekKit. FIX.
-    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/)) {
+    if (navigator.userAgent.match(/(iPod|iPhone)/) && navigator.userAgent.match(/AppleWebKit/)) {
       var clickEvent = "touchstart"
     }
 
