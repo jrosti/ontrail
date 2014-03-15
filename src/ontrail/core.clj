@@ -99,16 +99,21 @@
     (webutil/json-response {:results (ex/get-latest-ex-list-default-order (user-from-cookie cookies) {} (webutil/get-page params))}))
 
   (GET "/rest/v1/ex-list-filter" {params :params cookies :cookies}
-    (webutil/json-response {:results 
-                    (ex/get-latest-ex-list (user-from-cookie cookies) 
-                                           (mongerfilter/make-query-from params) (webutil/get-page params) 
-                                           (mongerfilter/sortby params))}))
+       (webutil/json-response 
+        {:results 
+         (ex/get-latest-ex-list (user-from-cookie cookies) 
+                                (mongerfilter/make-query-from params) (webutil/get-page params) 
+                                (mongerfilter/sortby params))}))
   
   (GET "/rest/v1/ex-unread-comments" {params :params cookies :cookies}
-    (webutil/json-response (unread/comments-all (user-from-cookie cookies))))
+       (webutil/json-response (unread/comments-all (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-unread-own-comments" {params :params cookies :cookies}
-    (webutil/json-response (unread/comments-own (user-from-cookie cookies))))  
+       (webutil/json-response (unread/comments-own (user-from-cookie cookies))))  
+
+  (GET "/rest/v1/ex-unread-count/:type" {params :params cookies :cookies}
+       (webutil/json-response (unread/count-new (keyword (:type params)) 
+                                                (user-from-cookie cookies))))
 
   (GET "/rest/v1/ex-most-comments" {params :params cookies :cookies}
     (webutil/json-response (unread/most-comments (user-from-cookie cookies))))

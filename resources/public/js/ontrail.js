@@ -355,6 +355,25 @@
       }
     }
 
+    function renderNewComments(content) {
+      console.log(content)
+      var items = asArgs(content)
+      $("#content-entries").html(items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
+      $("#table-entries").html(items.length > 0 ? "" : "<tr><td>Ei uusia kommentteja</td></tr>")
+      if (items.length > 0)
+        renderLatest("#content-entries", "#table-entries")(items)
+    }
+
+    function renderCommentCount(elem) {
+      return function (result) {
+        var newComments = result.count
+        if (newComments > 0)
+          $(elem).text(newComments).show()
+        else
+          $(elem).hide()
+      }
+    }
+
     var openWebSocket = function (userId) {
       webSocketPollerActive = true
       if ("WebSocket" in window && webSocket === undefined ||
@@ -371,11 +390,27 @@
           }
         })
 
-        webSocket.onmessage = function(event) {
-          var message = JSON.parse(event.data)
-          var templateMsg = ich.chatMessageTemplate(message)
-          $messages.prepend(templateMsg)
-        }
+
+        var onMessage = Rx.Observable.create(function (observer) {
+          var next = function () {
+            observer.onNext("")
+          }
+
+          webSocket.onmessage = function(event) {
+            var message = JSON.parse(event.data)
+            if (message.action && message.action.indexOf("kommentoi") === 0) {
+              next()
+            }
+
+            var templateMsg = ich.chatMessageTemplate(message)
+            $messages.prepend(templateMsg)
+          }
+          return nothing()
+        })
+        var published = onMessage.publish()
+        published.connect()
+        published.throttle(10000).selectAjax(OnTrail.rest.newCommentCountAll).log().subscribe(renderCommentCount("#new-comments-count"))
+        published.throttle(10000).selectAjax(OnTrail.rest.newCommentCountOwn).log().subscribe(renderCommentCount("#new-own-comments-count"))
         setInterval(function() {
           if (webSocketPollerActive) {
             openWebSocket()
@@ -384,31 +419,11 @@
       }
     }
 
-
-
     logouts.subscribe(closeWebSocket)
 
     loggedIns.subscribe(openWebSocket)
 
-    function renderNewComments(content) {
-      var items = asArgs(content)
-      $("#content-entries").html(items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
-      $("#table-entries").html(items.length > 0 ? "" : "<tr><td>Ei uusia kommentteja</td></tr>")
-      if (items.length > 0)
-        renderLatest("#content-entries", "#table-entries")(items)
-    }
 
-    function renderCommentCount(elem) {
-      return function (content) {
-        var newComments = _(asArgs(content)).filter(_prop("newComments")).map(_prop("newComments")).reduce(function (a, b) {
-          return a + b
-        })
-        if (newComments > 0)
-          $(elem).text(newComments).show()
-        else
-          $(elem).hide()
-      }
-    }
 
     // open single entries
     var parentArticle = function (el) {
@@ -519,10 +534,6 @@
     currentPages.subscribe(function () {
       $('html, body').scrollTop(0)
     })
-
-    // Every click on page updates own comment counts.
-    var ownCommentsOnClick = currentPages.selectAjax(OnTrail.rest.newOwnComments)
-    ownCommentsOnClick.subscribe(renderCommentCount("#new-own-comments-count"))
 
     var findUser = function (inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
@@ -969,18 +980,21 @@
     }).where(identity).publish()
     tabIsInFocus.connect()
 
-    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(60000)).merge(exPagesWithComments).publish()
+    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(180000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
-    var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
-    var commentsTicker = loggedInPoller.startWith(0).merge(commentPages).selectAjax(OnTrail.rest.newComments)
+    var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newCommentCountAll)
     commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
-    commentPages.combineLatest(commentsTicker, second)
-      .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-comments")))).repeat().subscribe(renderNewComments)
+    var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newCommentCountOwn)
+    ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+
+    var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
+    commentPages.selectAjax(OnTrail.rest.newComments).subscribe(renderNewComments)
 
     var ownCommentPages = currentPages.whereArgs(partialEquals("new-own-comments"))
-    var ownCommentsTicker = loggedInPoller.startWith(0).merge(ownCommentPages).selectAjax(OnTrail.rest.newOwnComments)
-    ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+    ownCommentPages.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewComments)
+
+
     ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
 
