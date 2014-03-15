@@ -54,6 +54,10 @@
 
   Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
   Rest.prototype.newOwnComments = function() { return getAsObservableResultData("ex-unread-own-comments") }
+
+  Rest.prototype.newCommentCountOwn = function() { return getAsObservableResultData("ex-unread-count", "own")}
+  Rest.prototype.newCommentCountAll = function() { return getAsObservableResultData("ex-unread-count", "all")}
+
   Rest.prototype.mostComments = function() { return getAsObservableResultData("ex-most-comments") }
 
   Rest.prototype.exercises = function(filter, page) { return getAsObservableResultData("ex-list-filter?" + [$.param(filter), "page=" + page].join("&")) }
