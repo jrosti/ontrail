@@ -9,6 +9,14 @@
 (def pasi_p (get-profile "SannaK"))
 (def pasiex (with-collection "exercise" (find {:user "SannaK" :sport "Juoksu"}) (sort {:creationDate 1}) (batch-size 5000)))
 
+(def maratonit (with-collection "exercise" (find {"$and" [{:sport "Juoksu"} {:avghr {"$gte" 100}} {:distance {"$gte" 42000}} {:distance {"$lte" 42200}}]}) (sort {:creationDate 1}) (batch-size 5000)))
+
+(def kympit (with-collection "exercise" (find {"$and" [{:sport "Juoksu"} {:avghr {"$gte" 100}} {:distance 10000} ]}) (sort {:creationDate 1}) (batch-size 5000)))
+
+
+(defn get-res[ex]
+  (let [profile (get-profile (:user ex))]
+    (get-hres-percentage ex profile)))
 
 (defn get-bpmdist-raw2 [exercise profile]
   (let [{:keys [duration distance avghr]} exercise
