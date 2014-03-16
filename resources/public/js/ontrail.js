@@ -980,7 +980,7 @@
     }).where(identity).publish()
     tabIsInFocus.connect()
 
-    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(180000)).merge(exPagesWithComments).publish()
+    var loggedInPoller = loggedIns.merge(tabIsInFocus.selectMany(loggedIns).where(identity).sample(5000000)).merge(exPagesWithComments).publish()
     loggedInPoller.connect()
 
     var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newCommentCountAll)
@@ -990,10 +990,11 @@
 
     var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
     commentPages.selectAjax(OnTrail.rest.newComments).subscribe(renderNewComments)
+    commentPages.selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
 
     var ownCommentPages = currentPages.whereArgs(partialEquals("new-own-comments"))
     ownCommentPages.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewComments)
-
+    ownCommentPages.selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
 
     ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
