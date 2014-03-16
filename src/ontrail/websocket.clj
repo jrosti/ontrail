@@ -68,11 +68,7 @@
     (let [as-json (json/read-str json)]
       (json/write-str (merge as-json {:user user})))
     (catch Exception e
-      (.error logger (str e ":" json ":" user))
-      (try
-        (.info logger (str (.getMessage json))) ;; might work on Mobile IE 10
-        (catch Exception e
-          (.error logger (str e " <---" ))))
+      (.trace logger (str e ":" json ":" user))
       nil)))
 
 (defn message-handler [user ch]
