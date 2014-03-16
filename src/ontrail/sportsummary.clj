@@ -87,7 +87,7 @@
   (let [now (time/now)
         year (time/year now)
         up-to-month (+ 2 (time/month now))]
-    (.info logger (str "memoizing after reset for: " user))
+    (.trace logger (str "memoizing after reset for: " user))
     (doall (get-overall-summary user))
     (doall (get-overall-tags-summary user))
     (doall (get-year-summary-sport user year))
