@@ -17,7 +17,7 @@
       :body (json/json-str ~data)}
      (catch Exception exception#
        (.error logger (str exception#))
-       (stacktrace/print-stack-trace exception# 100)
+;;       (stacktrace/print-stack-trace exception# 100)
        {:status 500
         :headers {"Content-Type" "application/json"}
         :body (str exception#)})))

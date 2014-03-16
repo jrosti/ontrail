@@ -39,7 +39,7 @@
         value
         nil))
     (catch Exception ex
-      (.debug logger (str "[" input "] cannot parse as short integer"))
+      (.trace logger (str "[" input "] cannot parse as short integer"))
       nil)))
 
 ;; { :detail.a "12" :detail.b "" } -> { :detail.a 12 }
