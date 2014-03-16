@@ -32,7 +32,7 @@
 ;; messages to user channels. 
 (def message-channel (lamina/named-channel "messages" message-init))
 
-(def heartbeat 
+(defn heartbeat []
   (scheduler/schedule-work 
    (fn [] 
      (lamina/enqueue message-channel 

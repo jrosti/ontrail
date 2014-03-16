@@ -409,8 +409,8 @@
         })
         var published = onMessage.publish()
         published.connect()
-        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).log().subscribe(renderCommentCount("#new-comments-count"))
-        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountOwn).log().subscribe(renderCommentCount("#new-own-comments-count"))
+        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
+        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
         setInterval(function() {
           if (webSocketPollerActive) {
             openWebSocket()
