@@ -6,12 +6,11 @@
 
 (def sport-mapping {"Avokanootti" {:tags "avokanootti" :sport "Muu laji"}
                     "Etunojapunnerrus" {:sport "Kuntopiiri" :tags "etunojapunnerrus"}
-                    "Fitnesspallo" {:sport "Muu laji" :tags "fitnesspallo"}
+                    "Fitnesspallo" {:sport "Jumppa" :tags "fitnesspallo"}
                     "Halonhakkuu" {:sport "Kuntopiiri" :tags "halonhakkuu"}
-                    "Hiihto" {:sport "Perinteinen hiihto"}
                     "Keppijumppa" {:sport "Kuntopiiri" :tags "keppijumppa"}
                     "Liikkuvuusharjoitteet" {:sport "Venyttely" :tags "liikkuvuusharjoitteet"}
-                    "Paino" {:ignore true}
+                    "Paino:" {:ignore true}
                     "Portaiden nousu" {:sport "Kävely" :tags "porraskävely"}
                     "Sairauspäivä" {:sport "Sairaus"}
                     "Sienestys" {:sport "Kävely" :tags "sienestys"}
@@ -32,8 +31,8 @@
 (defn import-json [user filename]
   (let [exs (json/read-str (slurp filename))]
     (doseq [ex exs]
-      (prn ex)
-      (mc/insert-and-return "exercise" (m/from-user-ex user (transform ex))))))
+      (mc/insert-and-return "exercise" (merge (m/from-user-ex user (transform ex))
+                                              {:hid (Long/parseLong (ex "hid"))})))))
         
 (defn main- [user filename]
   (import-json user filename))
