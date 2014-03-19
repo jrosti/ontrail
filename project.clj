@@ -25,7 +25,7 @@
                 ]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler ontrail.core/app}
-  :run-aliases {:import ontrail.import
+  :run-aliases {:import [ontrail.heiaimport -main]
                 :create-user ontrail.user
                 :import-images [ontrail.imgimport -main]}
   :aot  [ontrail.core]
