@@ -63,12 +63,11 @@
   (lamina/enqueue message-channel (json/write-str (server-message type user value))))
 
 (defn process-user-message [user json]
-  (.info logger (str "user send a message " (class json)))
+  (.trace logger (str "user send a message " (class json)))
   (try 
     (let [as-json (json/read-str json)]
       (json/write-str (merge as-json {:user user})))
     (catch Exception e
-      (.trace logger (str e ":" json ":" user))
       nil)))
 
 (defn message-handler [user ch]
