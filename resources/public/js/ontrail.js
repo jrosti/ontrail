@@ -20,7 +20,12 @@
 
     // rx.ontrail: onClickTouchAsObservable should handle doubles on AppleWekKit. FIX.
     if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/)) {
-      var clickEvent = "touchstart"
+      clickEvent = "touchstart"
+    }
+
+    var enableWebSocket = true
+    if (navigator.userAgent.match(/Lumia/)) {
+      enableWebSocket = false
     }
 
     var isEnter = function (event) {
@@ -71,7 +76,11 @@
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
-      localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
+      try {
+        localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
+      } catch(err) {
+        console.log("reset autosave content failed", err)
+      }
       $("#ex-body").setCode("<p>\n<br>\n</p>")
       return OnTrail.rest.postAsObservable(url, values)
     }
@@ -347,7 +356,7 @@
     var webSocketPollerActive = false
 
     var closeWebSocket = function() {
-      if ("WebSocket" in window && webSocket) {
+      if (enableWebSocket && "WebSocket" in window && webSocket) {
         webSocket.onclose = function () {}
         webSocket.close()
         $chatInput.unbind('keyup')
@@ -376,7 +385,7 @@
 
     var openWebSocket = function (userId) {
       webSocketPollerActive = true
-      if ("WebSocket" in window && webSocket === undefined ||
+      if (enableWebSocket && "WebSocket" in window && webSocket === undefined ||
           (webSocket && (webSocket.readyState === undefined || webSocket.readyState > 1))) {
         webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
 
@@ -1118,7 +1127,11 @@
     rx.interval(10000).subscribe(function () {
       var bodyText = $('#ex-body').getCode()
       if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
-        localStorage.setItem('ex-body', bodyText)
+        try {
+          localStorage.setItem('ex-body', bodyText)
+        } catch(err) {
+          console.log("autosave item failed", err)
+        }
       }
     })
     // initiate current page
