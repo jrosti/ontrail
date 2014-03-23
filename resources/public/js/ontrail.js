@@ -347,20 +347,6 @@
       $('*[data-user]').map(appendUser)
     })
 
-    var webSocket;
-    var $messages = $('#messages')
-    var $chatInput = $('#chatInput')
-    var webSocketPollerActive = false
-
-    var closeWebSocket = function() {
-      if (enableWebSocket && "WebSocket" in window && webSocket) {
-        webSocket.onclose = function () {}
-        webSocket.close()
-        $chatInput.unbind('keyup')
-        webSocketPollerActive = false
-      }
-    }
-
     function renderNewComments(content) {
       console.log(content)
       var items = asArgs(content)
@@ -380,6 +366,27 @@
       }
     }
 
+    var webSocket
+    var $messages = $('#messages')
+    var $chatInput = $('#chatInput')
+    var webSocketPollerActive = false
+    var lastPongEpoch = new Date().getTime()
+    var webSocketRetriesCount = 0
+
+    var closeWebSocket = function() {
+      if (enableWebSocket && "WebSocket" in window && webSocket) {
+        try {
+          webSocket.onclose = function () {}
+          webSocket.close()
+          $chatInput.unbind('keyup')
+          webSocketPollerActive = false
+          webSocket === undefined
+        } catch(err) {
+          console.log("onclose")
+        }
+      }
+    }
+
     var openWebSocket = function (userId) {
       webSocketPollerActive = true
       if (enableWebSocket && "WebSocket" in window && webSocket === undefined ||
@@ -387,12 +394,18 @@
         webSocket = new WebSocket('ws://' + location.hostname + ':8080/rest/v1/async')
 
         $messages.empty()
+        $messages.prepend('<p class="chatMsg">yhdistetään...</p>')
         $chatInput.unbind('keyup')
 
         $chatInput.keyup(function(event) {
           if (event.keyCode === 13) {
-            webSocket.send(JSON.stringify({action: "sanoi", message: $chatInput.val()}))
-            $chatInput.val('')
+            var chatInputMessage = $chatInput.val();
+            if (chatInputMessage.indexOf("/") === 0) {
+              webSocket.send(JSON.stringify({action: "server", message: chatInputMessage}))
+            } else {
+              webSocket.send(JSON.stringify({action: "sanoi", message: chatInputMessage}))
+            }
+            $chatInput.val("")
           }
         })
 
@@ -404,6 +417,12 @@
 
           webSocket.onmessage = function(event) {
             var message = JSON.parse(event.data)
+
+            if (message.action && message.action === "server" && message.message === "pong") {
+              lastPongEpoch = new Date().getTime();
+              return
+            }
+
             if (message.action && message.action.indexOf("kommentoi") === 0) {
               next()
             }
@@ -413,17 +432,31 @@
           }
           return nothing()
         })
-        var published = onMessage.publish()
-        published.connect()
-        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
-        published.throttle(1000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
-        setInterval(function() {
-          if (webSocketPollerActive) {
-            openWebSocket()
-          }
-        }, 5000)
+        var commentPublished = onMessage.publish()
+        commentPublished.connect()
+        commentPublished.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
+        commentPublished.throttle(1000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
+
       }
     }
+
+
+    setInterval(function() {
+      if (webSocketPollerActive && webSocketRetriesCount < 10) {
+        if (new Date().getTime() - lastPongEpoch > 15000) {
+          console.log(webSocketRetriesCount + 'th reopening')
+          closeWebSocket()
+          openWebSocket()
+          webSocketRetriesCount++
+          lastPongEpoch = new Date().getTime()
+        }
+        try {
+          if (webSocket && webSocket.readyState === 1)
+            webSocket.send(JSON.stringify({action: "server", message: "ping"}))
+        } catch (err) {
+        }
+      }
+    }, 4000)
 
     logouts.subscribe(closeWebSocket)
 
