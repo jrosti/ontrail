@@ -441,10 +441,11 @@
     }
 
 
+    var pingInterval = 4000, openWhenPingMissedIn = 15000, maxReopenCount = 20
+
     setInterval(function() {
-      if (webSocketPollerActive && webSocketRetriesCount < 10) {
-        if (new Date().getTime() - lastPongEpoch > 15000) {
-          console.log(webSocketRetriesCount + 'th reopening')
+      if (webSocketPollerActive && webSocketRetriesCount < maxReopenCount) {
+        if (new Date().getTime() - lastPongEpoch > openWhenPingMissedIn) {
           closeWebSocket()
           openWebSocket()
           webSocketRetriesCount++
@@ -456,7 +457,7 @@
         } catch (err) {
         }
       }
-    }, 4000)
+    }, pingInterval)
 
     logouts.subscribe(closeWebSocket)
 
