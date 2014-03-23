@@ -24,9 +24,6 @@
     }
 
     var enableWebSocket = true
-    if (navigator.userAgent.match(/Lumia/)) {
-      enableWebSocket = false
-    }
 
     var isEnter = function (event) {
       return event.keyCode == 13;
