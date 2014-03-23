@@ -19,6 +19,10 @@
 ;; conjoining to end, popping from beginning.
 (def message-ring (atom (clojure.lang.PersistentQueue/EMPTY)))
 
+
+;; user to ping epoch
+(def last-ping (atom {}))
+
 (defn message-init [ch]
   (lamina/receive-all 
    ch
@@ -30,12 +34,12 @@
 
 ;; All websockets from users are connected to message channel, which distributes
 ;; messages to user channels. 
-(def message-channel (lamina/named-channel "messages" message-init))
+(def broadcast-channel (lamina/named-channel "messages" message-init))
 
 (defn heartbeat []
   (scheduler/schedule-work 
    (fn [] 
-     (lamina/enqueue message-channel 
+     (lamina/enqueue broadcast-channel 
                      (json/write-str {:user "Ontrail" 
                                       :action "sanoi" 
                                       :message (formats/to-human-comment-date (local/local-now))})))
@@ -60,26 +64,57 @@
 
 ;; submits server messages to all users
 (defn submit [type user value]
-  (lamina/enqueue message-channel (json/write-str (server-message type user value))))
+  (lamina/enqueue broadcast-channel (json/write-str (server-message type user value))))
 
 (defn process-user-message [user json]
-  (.trace logger (str "user send a message " (class json)))
+  (.trace logger (str "user sent a message " (class json)))
   (try 
     (let [as-json (json/read-str json)]
-      (json/write-str (merge as-json {:user user})))
+      (if (= (as-json "action") "server")
+        nil
+        (json/write-str (merge as-json {:user user}))))
+    (catch Exception e
+      nil)))
+
+;; WIP: combine this to user channel
+(defn to-server-channel [user json]
+  (try 
+    (let [as-json (json/read-str json)]
+      (if (not= (as-json "action") "server")
+        nil
+        (condp = (as-json "message")
+          "ping" (do (.trace logger (str "ping by " user))
+                     (swap! last-ping assoc user (System/currentTimeMillis))
+                     (json/write-str {:action "server" :message "pong"}))
+          "/who" (do 
+                   (.info logger (str "/who by " user))
+                   (let [now (System/currentTimeMillis)
+                         active-users (keys (into {}
+                                                  (filter (fn [entry] (< (- now (last entry)) 8000))
+                                                          @last-ping)))]
+                     (json/write-str {:user "Ontrail" 
+                                      :action "sanoi"
+                                      :message (str "Käyttäjät: " 
+                                                    (apply str (interpose ", " active-users)))})))
+          nil)))
     (catch Exception e
       nil)))
 
 (defn message-handler [user ch]
-  (let [user-channel (lamina/filter*
+  (let [server-channel (lamina/filter* 
+                        identity
+                        (lamina/map*
+                         (partial to-server-channel user)
+                         ch))
+        user-channel (lamina/filter*
                       identity 
                       (lamina/map* 
                        (partial process-user-message user) 
                        ch))]
     (mapv (partial lamina/enqueue ch) @message-ring)
-    (lamina/siphon user-channel message-channel)
-    (lamina/siphon message-channel ch)))
-
+    (lamina/siphon server-channel ch)
+    (lamina/siphon user-channel broadcast-channel)
+    (lamina/siphon broadcast-channel ch)))
 
 (defn connect-message [user ch request]
   (if (:websocket request)
