@@ -43,7 +43,7 @@
                      (json/write-str {:user "Ontrail" 
                                       :action "sanoi" 
                                       :message (formats/to-human-comment-date (local/local-now))})))
-   1800)) ;; seconds
+   3600)) ;; seconds
 
 (defn ex-link [ex]
   (str "ex/" 
