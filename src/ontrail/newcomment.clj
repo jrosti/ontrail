@@ -40,7 +40,8 @@
         (if (contains? user-cache id-key)
           (alter user-cache-ref dissoc id-key))))))
 
-(defn cache-mod[f t val] (assoc (merge-with f val {:c 1}) :ts t))
+(defn cache-mod [f t val] 
+  (assoc (merge-with f val {:c 1}) :ts t))
 
 (defn newcount-cache-mod [mod id user]
   (dosync

@@ -37,9 +37,15 @@
 (defn count-comments [ex] 
   (:newComments ex))
 
+(defn count-all [user]
+  (let [uc (nc/get-user-cache user)]
+    (reduce 
+     + 0 
+     (filter identity (map (fn [e] (-> e second :c)) uc)))))
+
 (defn count-new [type user]
   (condp = type
-    :all {:count (reduce + (map count-comments (comments-all user)))}
+    :all {:count (count-all user)}
     :own {:count (reduce + (map count-comments (comments-own user)))}))
 
 (defn most-comments-oids []
