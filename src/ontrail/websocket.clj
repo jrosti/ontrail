@@ -20,8 +20,16 @@
 (def message-ring (atom (clojure.lang.PersistentQueue/EMPTY)))
 
 
-;; user to ping epoch
+;; user -> last ping epoch
 (def last-ping (atom {}))
+
+(def active-user-last-ping-millis 8000)
+
+(defn get-active-users []
+  (let [now (System/currentTimeMillis)]
+    (keys (into {}
+                (filter (fn [entry] (< (- now (last entry)) active-user-last-ping-millis))
+                        @last-ping)))))
 
 (defn message-init [ch]
   (lamina/receive-all 
@@ -74,9 +82,9 @@
         nil
         (json/write-str (merge as-json {:user user}))))
     (catch Exception e
+      (.trace logger (str "process user message ") e)
       nil)))
 
-;; WIP: combine this to user channel
 (defn to-server-channel [user json]
   (try 
     (let [as-json (json/read-str json)]
@@ -88,16 +96,13 @@
                      (json/write-str {:action "server" :message "pong"}))
           "/who" (do 
                    (.info logger (str "/who by " user))
-                   (let [now (System/currentTimeMillis)
-                         active-users (keys (into {}
-                                                  (filter (fn [entry] (< (- now (last entry)) 8000))
-                                                          @last-ping)))]
-                     (json/write-str {:user "Ontrail" 
-                                      :action "sanoi"
-                                      :message (str "Käyttäjät: " 
-                                                    (apply str (interpose ", " active-users)))})))
+                   (json/write-str {:user "Ontrail" 
+                                    :action "sanoi"
+                                    :message (str "Käyttäjät: " 
+                                                  (apply str (interpose ", " (get-active-users))))}))
           nil)))
     (catch Exception e
+      (.trace logger (str "process user message ") e)
       nil)))
 
 (defn message-handler [user ch]

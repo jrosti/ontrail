@@ -348,7 +348,6 @@
     })
 
     function renderNewComments(content) {
-      console.log(content)
       var items = asArgs(content)
       $("#content-entries").html(items.length > 0 ? "" : "<article>Ei uusia kommentteja</article>")
       $("#table-entries").html(items.length > 0 ? "" : "<tr><td>Ei uusia kommentteja</td></tr>")
@@ -435,7 +434,7 @@
         var commentPublished = onMessage.publish()
         commentPublished.connect()
         commentPublished.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
-        commentPublished.throttle(1000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
+        commentPublished.throttle(4000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
 
       }
     }
