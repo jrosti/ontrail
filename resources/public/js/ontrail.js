@@ -372,6 +372,10 @@
     var lastPongEpoch = new Date().getTime()
     var webSocketRetriesCount = 0
 
+    if (!("WebSocket" in window)) {
+      $('#chatSection').hide()
+    }
+
     var closeWebSocket = function() {
       if (enableWebSocket && "WebSocket" in window && webSocket) {
         try {
