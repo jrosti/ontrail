@@ -31,7 +31,7 @@
                     "Avantouinti" {:sport "Muu merkintä" :tags "avantouinti"}
                     "Jalkakyykky" {:sport "Kuntosali" :tags "jalkakyykky"}
                     "Leijahiihto" {:sport "Muu laji" :tags "kite"}
-                    "Lenkkeily" {:sport "Maastojuoksu"}
+                    "Lenkkeily" {:sport "Juoksu"}
                     "BodyPump" {:sport "Pumppi"}
                     "Avokanootti" {:sport "Melonta" :tags "avokanootti"}
                     "Kuntopallo" {:sport "Jumppa" :tags "deadball"}
