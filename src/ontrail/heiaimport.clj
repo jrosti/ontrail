@@ -6,7 +6,8 @@
             [clojure.string :as string]
             ))
 
-(def sport-mapping {                    
+(def sport-mapping {
+                    "Rantalentopallo" {:sport "Beach volley"}
                     "Fitnesspallo" {:sport "Jumppa" :tags "fitnesspallo"}
                     "Halonhakkuu" {:sport "Kuntopiiri" :tags "halonhakkuu"}
                     "Keppijumppa" {:sport "Kuntopiiri" :tags "keppijumppa"}
@@ -22,6 +23,7 @@
                                                   :tags "toiminnallinen"}
                     "Tuomarointi" {:sport "Muu merkintä" :tags "tuomarointi"}
                     "Kajakki" {:sport "Melonta" :tags "kajakki"}
+                    "Koiran ulkoiluttaminen" {:sport "Juoksu" :tags "koira"}
                     "Hiihto" {:sport "Luisteluhiihto"}
                     "Kehonpainoharjoitus" {:sport "Kuntopiiri" :tags "kehonpaino"}
                     "Trail running" {:sport "Maastojuoksu"}
