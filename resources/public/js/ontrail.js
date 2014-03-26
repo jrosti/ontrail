@@ -433,9 +433,8 @@
         })
         var commentPublished = onMessage.publish()
         commentPublished.connect()
-        commentPublished.throttle(1000).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
-        commentPublished.throttle(4000).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
-
+        commentPublished.throttle(1500).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
+        commentPublished.throttle(3500).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
       }
     }
 

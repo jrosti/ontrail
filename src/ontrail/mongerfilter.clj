@@ -2,6 +2,7 @@
   (:use [monger.operators])
   (:require [clj-time.format :as format]
             [ontrail.group :as group]
+            [ontrail.favourite :as favourite]
             [clojure.string :as string]
             [clj-time.core :as time]))
 
@@ -64,6 +65,11 @@
        [{$or (vec (map (fn [user] {:user user}) (:users group)))}]
        [])))
 
+(defn make-fav-query [user]
+  (if user
+    [{$or (vec (map (fn [u] {:user u}) (favourite/favourites-of user)))}]
+    []))
+  
 (defn long-cmp-keys[]
   (vec (for [op ["lte" "gte" "lt" "gt"] qkey ["pace" "distance" "duration" "avghr"]]
          (keyword (str op "_" qkey)))))
@@ -76,7 +82,10 @@
                                                                            :gte_creationDate]))
         long-range-query (make-range-query parse-long (select-keys params (long-cmp-keys)))
         group-query (make-group-query (:group params))
-        and-query (vec (concat basic-query date-range-query long-range-query group-query))]
+        fav-query (make-fav-query (:fav params))
+        and-query (vec (concat basic-query date-range-query 
+                               long-range-query group-query
+                               fav-query))]
     (if (> (count and-query) 0)
       {$and and-query}
       {})))
