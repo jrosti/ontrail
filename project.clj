@@ -22,6 +22,7 @@
                  [cheshire "5.3.1"]
                  [ring.middleware.logger "0.2.2"]
                  [hiccup "1.0.5"]
+                 [markdown-clj "0.9.41"]
                 ]
   :plugins [[lein-ring "0.8.10"]]
   :ring {:handler ontrail.core/app}

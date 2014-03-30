@@ -34,7 +34,7 @@ p {
 
 .postComment form textarea {
     width: 400px;
-    height: 50px;
+    height: 100px;
 }
 
 .addex textarea {
@@ -45,8 +45,8 @@ p {
 .addexLink, .ownLink, .owncLink, .allcLink {
     font-size: 20px;
     border: 1px solid;
-    border-bottom: 2px solid;
-    border-right: 2px solid;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
     padding: 8px;
     border-radius: 10px;
     background-color: #ffb200;
@@ -78,8 +78,8 @@ p {
 .naviLink {
     font-size: 20px;
     border: 1px solid;
-    border-bottom: 2px solid;
-    border-right: 2px solid;
+    border-bottom: 2px solid #000000;
+    border-right: 2px solid #000000;
     padding: 8px;
     margin-left: 5px;
     margin-top: 10px;
@@ -129,7 +129,7 @@ a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.
 
 
 .comment {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #000000;
     max-width: 90%;
 }
 
@@ -142,7 +142,7 @@ a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.
     border-bottom: 1px solid green;
     margin-bottom: 10px;
     margin-top: 10px;
-    padding-bottom: 15px;
+    padding-bottom: 25px;
 }
 
 .currentUser {
@@ -179,7 +179,7 @@ a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.
 
 .listEntry {
     margin-left: 15px;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #000000;
     min-height: 100px;
 }
 
