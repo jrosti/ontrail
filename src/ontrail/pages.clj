@@ -11,11 +11,12 @@
    [ontrail.auth :as auth]
    [ontrail.formats :as formats]
    [ontrail.mongerfilter :as mongerfilter]
-
+   [markdown.core :as md]
    [clj-time.core :as time]
    [hiccup.form :as form]
    [hiccup.core :as hiccup]
    [stencil.core :as stencil]
+   [clojure.stacktrace :as stacktrace]
    [clojure.string :as string])
   (:import [java.net URLEncoder]))
 
@@ -34,7 +35,7 @@
 
 ;; (url {:a "b" :c "d"} "/list/" page) ==> /sp/list/page?a=b&c=d
 ;; (url "latest" page) ===> /sp/latest/page
-(defn url[maybe-params & parts] 
+(defn url [maybe-params & parts] 
   (if (map? maybe-params)
     (let [params (urlp maybe-params)]
       (apply (partial str "/sp") (concat parts [params])))
@@ -46,9 +47,10 @@
       :headers {"Content-Type" "text/html"}
       :body (hiccup/html (~render-fn ~data))}
      (catch Exception exception#
+       (stacktrace/print-stack-trace exception#)
        {:status 500
         :headers {"Content-Type" "text/html"}
-        :body (str exception#)})))
+        :body (str "E:" exception#)})))
 
 ;; {...} ===> "1h2m3s"
 (defn to-dur-str [params]
@@ -146,7 +148,7 @@
   [:div.postComment 
    [:form {:accept-charset "UTF-8" :method "POST" :action (url "/comment/" id)}
     [:input {:type "hidden" :name id}]
-    [:textarea {:name "body" :rows "2" :cols "25"}] [:br]
+    [:textarea {:name "mdbody" :rows "4" :cols "25"}] [:br]
     [:input {:type "submit" :value "Kommentoi"}]
    ]])
 
@@ -223,53 +225,63 @@
      (span-w "Toistot: ") [:input {:name "detailRepeats" :type "number" :min "0" :max "99999"}] " kpl" [:br]
      (span-w "Nousu: ") [:input {:name "detailElevation" :type "number" :min "0" :max "99999"}] "m " [:br]
      "Kuvaus:" [:br]
-     [:textarea {:name "body" :rows "8" :cols "25"}] [:br]
+     [:textarea {:name "mdbody" :rows "8" :cols "25"}] [:br]
      [:input {:type "submit" :value "Lisää lenkki"}]
 
      ]]]])
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
 ;; if url-fn is nil paging is not required. 
-(defn latest [url-fn page {res :exs user :user}]
-   [:html 
-    (head (str "ontrail.net :: " page))
-    [:body 
-     [:div.main
-      (header user)
+(defn listing [url-fn page {res :exs user :user}]
+  [:html 
+   (head (str "ontrail.net :: " page))
+   [:body 
+    [:div.main
+     (header user)
+     (if url-fn (latest-paging url-fn page (count res)))
+     (if (= 0 (count res))
+       [:span "Ei harjoituksia"]
+       (for [entry res] (latest-list-entry entry)))
       (if url-fn (latest-paging url-fn page (count res)))
-      (if (= 0 (count res))
-        [:span "Ei harjoituksia"]
-        (for [entry res] (latest-list-entry entry)))
-      (if url-fn (latest-paging url-fn page (count res)))
-      ]
-     (footer)]])
+     ]
+    (footer)]])
+
+(defn render-listing-page [url-fn listing-fn user filter page]
+  (.info logger (str filter " " page))
+  (render-with (partial listing url-fn page)
+               {:exs (listing-fn user
+                                 filter 
+                                 page)
+                :user user}))
 
 (defroutes templates
 
   (GET "/sp/latest/:page" {params :params cookies :cookies}
        (let [page (Integer/parseInt ^String (webutil/get-page params))
              user (auth/user-from-cookie cookies)]
-         (render-with (partial latest (partial url "/latest/") page)
-                      {:exs (ex/get-latest-ex-list-default-order 
-                             user
-                             {} 
-                             page)
-                       :user user})))
+         (render-listing-page (partial url "/latest/") 
+                              ex/get-latest-ex-list-default-order
+                              user
+                              {}
+                              page)))
   
   (GET "/sp/list/:page" {params :params cookies :cookies}
        (let [page (Integer/parseInt ^String (webutil/get-page params))
              user (auth/user-from-cookie cookies)]
-         (render-with (partial latest (partial url (dissoc params :page) "/list/") page)
-                      {:exs  (ex/get-latest-ex-list user 
-                                                    (mongerfilter/make-query-from params) 
-                                                    (webutil/get-page params) 
-                                           (mongerfilter/sortby params))
-                       :user user})))
+         (render-listing-page (partial url (dissoc params :page) "/list/")
+                              (fn [user filter page]
+                                (ex/get-latest-ex-list user
+                                                       filter
+                                                       page
+                                                       (mongerfilter/sortby params)))
+                              user 
+                              (mongerfilter/make-query-from params) 
+                              page)))
 
   (GET "/sp/unread/:target" {params :params cookies :cookies} 
        (let [user (auth/user-from-cookie cookies)
              unread-fn (if (= (:target params) "own") unread/comments-own unread/comments-all)]
-         (render-with (partial latest nil nil)
+         (render-with (partial listing nil nil)
                       {:exs (unread-fn user)
                        :user user})))
 
@@ -281,7 +293,8 @@
   (POST "/sp/comment/:id" {params :params cookies :cookies}
         (if (auth/valid-auth-token? (:value (cookies "authToken")))                 
           (let [user (auth/user-from-cookie cookies)
-                comment (mutate/comment-ex user params)]
+                with-body (assoc params :body (md/md-to-html-string (params :mdbody)))
+                comment (mutate/comment-ex user with-body)]
             (redirect (url "/ex/" (:id params))))
           (redirect "/s/login.html")))
 
@@ -292,7 +305,7 @@
   (POST "/sp/addex" {params :params cookies :cookies}
         (.info logger (str params))
         (if (auth/valid-auth-token? (:value (cookies "authToken")))
-          (let [params-with-dur (assoc params :duration (to-dur-str params))
+          (let [params-with-dur (assoc params :duration (to-dur-str params) :body (md/md-to-html-string (params :mdbody)))
                 posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
             (redirect (url "/ex/" (:id  posted))))
           (redirect "/s/login.html")))

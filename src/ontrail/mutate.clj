@@ -69,8 +69,11 @@
         avghr (parse-natural (:avghr user-ex))
         distance (parse-distance (:distance user-ex))
         pace (calc-pace duration distance)
-        with-details (extract-details bare-ex user-ex)]
-    (-> with-details
+        with-details (extract-details bare-ex user-ex)
+        with-markdown-body (if-let [mdbody (:mdbody user-ex)]
+                             (assoc with-details :mdbody mdbody)
+                             with-details)]
+    (-> with-markdown-body
         (assoc :body body)
         (assoc :tags tags)
         (assoc :distance distance)
