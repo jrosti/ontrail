@@ -709,8 +709,9 @@
 <script id="ownGroupsTemplate" type="text/html">
     <h3>Omat ryhmät</h3>
         <ul class="link-list">
+            <li><a class="pageLink ddm" rel="group/Suosikit/fav/{{user}}/sb/lastModifiedDate">Suosikit</a></li>
         {{#groups}}
-            <li><a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>
+            <li><a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
         {{/groups}}
         </ul>
 </script>
@@ -1072,6 +1073,16 @@
         </header>
     </article>
 </script>
+
+<script id="favGroupTemplate" type="text/html">
+    <article>
+        <header>
+            <h3>Käyttäjän {{description}} suosikit</h3>
+            <p>{{#users}}<a class="pageLink" rel="group/Suosikit/fav/{{.}}/sb/lastModifiedDate"><span style="font-size: 0.8em">{{.}}&nbsp;</span></a>{{/users}}</p>
+        </header>
+    </article>
+</script>
+
 
 <script id="userDetailTemplate" type="text/html">
     <article>

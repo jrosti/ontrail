@@ -641,6 +641,8 @@
         ich.lvhaaste2014Template(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target == "RunnersHigh") {
         ich.runnersHighTemplate(args.data).appendTo($('#content-header'))
+      } else if (args.data.action == "group" && args.data.target == "Suosikit") {
+        ich.favGroupTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group") {
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {
@@ -985,7 +987,7 @@
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)
       renderTags(loggedIn.ownTags)
       renderSports(loggedIn.sports)
-      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({'groups': loggedIn.ownGroups}))
+      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({user: loggedIn.user, 'groups': loggedIn.ownGroups}))
     })
 
 
