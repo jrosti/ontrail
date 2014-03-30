@@ -35,7 +35,7 @@
                     {:pace {"$gte" 5000}}]}
            (make-query-from query))
       "query extracted from query params")
-    (is (= {:creationDate 1, :lastModifiedDate -1} 
+    (is (= {:creationDate 1} 
            (sortby query))
         "sort order extracted from query")))
   
