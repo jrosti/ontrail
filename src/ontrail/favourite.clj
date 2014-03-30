@@ -46,5 +46,5 @@
        (map :to) 
        (filter #(not= user %))
        (filter  #(not= "admin" %))
-       (take 10)))
+       (take 18)))
   

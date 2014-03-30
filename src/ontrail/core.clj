@@ -178,7 +178,7 @@
   (GET "/rest/v1/page-detail" {params :params cookies :cookies}
     (let [action (keyword (:action params))
           target (action params)
-          action-fn (case action :group group/group-detail :user group/user-detail (partial stats/sport-detail params))]
+          action-fn (case action :group (partial group/group-detail params) :user group/user-detail (partial stats/sport-detail params))]
       (webutil/json-response (action-fn target (user-from-cookie cookies)))))
 
   (GET "/rest/v1/own-groups" {params :params cookies :cookies}

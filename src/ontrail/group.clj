@@ -2,15 +2,17 @@
   (:use monger.operators
         ontrail.mongodb
         ontrail.formats)
-  (:require [monger.collection :as mc]
-            [clj-time.core :as time]
-            [ontrail.summary :as summary]
-            [ontrail.profile :as profile]
-            [monger.result :as mr]
-            [monger.query :as mq]
-            [monger.conversion]
-            [clj-time.core :as time]
-            [monger.joda-time])
+  (:require 
+   [ontrail.favourite :as favourite]
+   [monger.collection :as mc]
+   [clj-time.core :as time]
+   [ontrail.summary :as summary]
+   [ontrail.profile :as profile]
+   [monger.result :as mr]
+   [monger.query :as mq]
+   [monger.conversion]
+   [clj-time.core :as time]
+   [monger.joda-time])
   (:import [org.bson.types ObjectId]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -50,7 +52,7 @@
         results (mq/with-collection GROUPS
                   (mq/find condition)
                   (mq/sort {:lname 1}))]
-    {:groups (vec (map (fn [e] (:name e)) results))}))
+    {:user user :groups (vec (map (fn [e] (:name e)) results))}))
 
 (defn as-list [page user]
   (.info logger (str page "::" user))
@@ -166,13 +168,17 @@
       "lvhaaste2014" (chinup-race-stats users)
       [])))
 
-(defn group-detail [group-name user]
+(defn group-detail [params group-name user]
   (let [group-map (find-by-name group-name)]
     (decorate user
       {:action "group"
-       :target group-name
-       :description (:description group-map)
-       :users (:users group-map)
+       :target group-name 
+       :description (case group-name 
+                      "Suosikit" (:fav params) 
+                      (:description group-map))
+       :users (case group-name 
+                "Suosikit" (favourite/favourites-of (:fav params))
+                (:users group-map))
        :res (fetch-group-stats group-map)})))
 
 (defn records [user]
