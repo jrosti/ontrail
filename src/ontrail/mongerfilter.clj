@@ -97,5 +97,5 @@
 
 (defn sortby [params]
   (if-let [sort-order (:sb params)]
-    (merge {:lastModifiedDate -1} (order-by sort-order))
-    {:creationDate -1 :lastModifiedDate -1}))
+    (order-by sort-order)
+    {:lastModifiedDate -1}))
