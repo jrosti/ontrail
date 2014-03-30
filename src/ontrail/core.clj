@@ -15,6 +15,7 @@
          sportsummary mongodb])
   (:gen-class)
   (:require [aleph.http :as aleph]
+            [ontrail.races :as races]
             [ontrail.v2routes :as v2routes]
             [ontrail.webutil :as webutil]
             [ontrail.websocket :as websocket]
@@ -193,6 +194,15 @@
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
     (webutil/is-authenticated? cookies
       (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))  
+
+  (POST "/rest/v1/races" {params :params cookies :cookies}
+        (webutil/is-authenticated? 
+         cookies
+         (webutil/json-response (races/insert params))))
+
+  (GET "/rest/v1/races" {} 
+       (webutil/json-response (races/find-all)))
+
   (route/resources "/")
   (route/not-found {:status 404}))
 
