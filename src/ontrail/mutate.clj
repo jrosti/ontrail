@@ -104,43 +104,41 @@
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
-  (if (= user (:user (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})))
-    (do (let [write-result (mc/update-by-id EXERCISE (ObjectId. (:id params))
-                                            {"$set" (dissoc (from-user-ex user params)
-                                                            :comments
-                                                            :lastModifiedDate)})]
-          (sportsummary/reset-memo-for user)
-          (.trace logger (str "Updated " (:id params) " with status "  write-result)))
-        (let [res (mc/find-one-as-map EXERCISE {:_id (ObjectId. (:id params))})]
-          (.info logger (str "Updated " (:id params) user res))
-          (as-ex-result res)))
-    (.error logger (str user " does not own exercise, which is under mofidication."))))
-  
+  (let [ex (mc/find-and-modify EXERCISE 
+                               {:_id (ObjectId. (:id params)) :user user}
+                               {"$set" (dissoc (from-user-ex user params)
+                                               :comments
+                                               :lastModifiedDate)}
+                               :return-new true)]
+    (sportsummary/reset-memo-for user)
+    (.info logger (str user " updated " (:id params)))
+    (as-ex-result ex)))  
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))
-  (mc/update-by-id EXERCISE
-                   (ObjectId. (:id params))
-                   {"$set" {:lastModifiedDate (time/now)}
-                    "$push" {:comments {:_id (ObjectId.)
-                                        :avatar (get-avatar-url user)
-                                        :date (to-human-comment-date (local/local-now))
-                                        :user user
-                                        :body (:body params)}}})
-  (.trace logger (str user " created comment " params))
-  (newcount-comment-ex user (:id params))
-  (let [ex (get-ex "zxcv" (:id params))]
+  (let [ex (mc/find-and-modify EXERCISE
+                               {:_id (ObjectId. (:id params))}
+                               {"$set" {:lastModifiedDate (time/now)}
+                                "$push" {:comments {:_id (ObjectId.)
+                                                    :avatar (get-avatar-url user)
+                                                    :date (to-human-comment-date (local/local-now))
+                                                    :user user
+                                                    :body (:body params)}}}
+                               :return-new true)]
+    (.info logger (str user " created comment " params))
+    (newcount-comment-ex user (:id params))
     (insert-exercise-inmem-index! ex)
     (websocket/submit :comment-ex user ex)
-    ex))
+    (as-ex-result ex)))
 
 (defn delete-comment[ex-id rule]
   (newcount-uncomment-ex ex-id)
-  (mc/update-by-id EXERCISE
-    (ObjectId. ex-id)
-    { "$set" {:lastModifiedDate (time/now)}
-      "$pull" rule})
-  (get-ex "zxcv" ex-id))
+  (let [ex (mc/find-and-modify EXERCISE
+                               {:_id (ObjectId. ex-id)}
+                               { "$set" {:lastModifiedDate (time/now)}
+                                 "$pull" rule}
+                               :return-new true)]
+    (as-ex-result ex)))
 
 (defn delete-own-comment [user ex-id comment-id]
   (.trace logger (str user " deleting own comment " comment-id " from ex " ex-id ))
