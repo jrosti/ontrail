@@ -662,6 +662,15 @@
       }
     }
 
+    var $raceReports = $('#raceReports2013')
+    $().hide()
+    $("#toggleReports2013").toggle(function () {
+      $($raceReports).show()
+    }, function () {
+      $($raceReports).hide()
+    })
+
+
     userTagPages.selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
       var pairs = partition(args, 2)
