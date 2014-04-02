@@ -681,8 +681,10 @@
       return _.extend({action: args[0]}, _.zipObject(pairs))
     }).throttle(101).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
-    var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101).selectAjax(OnTrail.rest.details)
-    exPages.combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+    var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101)
+    exPages.selectAjax(OnTrail.rest.details).combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
+    exPages.throttle(300).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
+    exPages.throttle(150).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
 
     var renderActiveUsersList = function (data) {
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
