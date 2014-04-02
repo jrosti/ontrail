@@ -78,7 +78,7 @@
         (str km " km")
         (str km "," (string/replace (format "%03d" m) #"0+$" "") " km"))
       (if (> m 0)
-        (str (int m) "m")
+        (str (int m) " m")
         "")))))
 
 (defn to-human-date [date-time]

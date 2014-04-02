@@ -643,6 +643,8 @@
         ich.runnersHighTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group" && args.data.target == "Suosikit") {
         ich.favGroupTemplate(args.data).appendTo($('#content-header'))
+      } else if (args.data.action == "group" && args.data.target == "Huippuhuhtikuu") {
+        ich.elevationGroupTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "group") {
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {

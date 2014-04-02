@@ -981,6 +981,29 @@
     </article>
 </script>
 
+<script id="elevationGroupTemplate" type="text/html">
+    <article class="{{^in}}not-{{/in}}joined">
+        <header>
+            <h3>Huippuhuhtikuu 2014!</h3>
+            <div class="logged-in">
+                <p class="right">
+                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                </p>
+            </div>
+            <table id="lvhaaste" class="ranking">
+                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Nousua</th></tr></thead>
+                {{#res}}
+                <tr>
+                <td>{{rank}}</td>
+                <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                <td>{{elevation}}</td>
+                </tr>
+                {{/res}}
+            </table>
+        </header>
+    </article>
+</script>
+
 <script id="marrasputkiTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
     <header>
