@@ -71,7 +71,7 @@
     []))
   
 (defn long-cmp-keys[]
-  (vec (for [op ["lte" "gte" "lt" "gt"] qkey ["pace" "distance" "duration" "avghr"]]
+  (vec (for [op ["lte" "gte" "lt" "gt"] qkey ["pace" "distance" "duration" "avghr" "detailElevation"]]
          (keyword (str op "_" qkey)))))
 
 (defn make-query-from [params]

@@ -20,7 +20,7 @@
   (is (= "1,001 km" (to-human-distance 1001)) "meters"))
 
 (deftest test-to-human-distance-800
-  (is (= (to-human-distance 800) "800m") "800m does not show km:s"))
+  (is (= (to-human-distance 800) "800 m") "800 m does not show km:s"))
 
 (deftest test-pace-from-exercise
   (let [ex {:duration 30000 :distance 1000}] ;; is 5min/km
