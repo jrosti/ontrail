@@ -7,6 +7,7 @@
    [monger.collection :as mc]
    [clj-time.core :as time]
    [ontrail.summary :as summary]
+   [ontrail.sportsummary :as sportsummary]
    [ontrail.profile :as profile]
    [monger.result :as mr]
    [monger.query :as mq]
@@ -160,10 +161,29 @@
          (sort-by (juxt :ttotal :total) 
                   (fn [a b] (compare b a)) (challenge-results users)))))
 
+;; elevation gain challenge
+(def elevation-year 2014)
+(def elevation-month 4)
+(defn elevation-user [user]
+  (let [result {:user user 
+                :elevationNum (-> (sportsummary/get-month-summary-sport user elevation-year elevation-month)
+                                  :sports
+                                  last
+                                  :elevation)}]
+    (assoc result :elevation (to-human-distance (:elevationNum result)))))
+
+(defn elevation-results [users]
+  (let [ranks (range 1 (inc (count users)))
+        results (map elevation-user users)]
+    (mapv (fn [rank elem] (assoc elem :rank rank)) 
+          ranks 
+          (sort-by (juxt :elevationNum) 
+                   (fn [a b] (compare b a)) results))))
 
 (defn fetch-group-stats [group-map]
   (let [users (:users group-map)]
     (case (:name group-map)
+      "Huippuhuhtikuu" (elevation-results users)
 ;;      "Marrasputki" (november-race-stats users)
       "lvhaaste2014" (chinup-race-stats users)
       [])))
