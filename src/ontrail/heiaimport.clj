@@ -30,7 +30,16 @@
                     "Etunojapunnerrus" {:sport "Kuntopiiri" :tags "punnerrus"}
                     "Terapeuttinen harjoittelu" {:sport "Jumppa"
                                                  :tags "kuntoutus"}
-                    "Avantouinti" {:sport "Muu merkintä" :tags "avantouinti"}
+                    "Avantouinti" {:sport "Uinti" :tags "avantouinti"}
+                    "Lumikenkäkävely" {:sport "Lumikenkäily"}
+                    "Vuorikiipeily" {:sport "Kiipeily" :tags "vuorikiipeily"}
+                    "Moottoripyöräily" {:sport "Muu merkintä" :tags "moottoripyöräily"}
+                    "Potkypyöräily" {:sport "Kickbike"}
+                    "Rakennustyöt" {:sport "Muu merkintä" :tags "rakentaminen"}
+                    "Remontointi" {:sport "Muu merkintä" :tags "remontointi"}
+                    "Rogaining" {:sport "Suunnistus" :tags "rogaining"}
+                    "Suoritin" {:sport "Muu merkintä"}
+                    "Avovestiuinti" {:sport "Uiniti" :tags "avovesi"}
                     "Jalkakyykky" {:sport "Kuntosali" :tags "jalkakyykky"}
                     "Leijahiihto" {:sport "Muu laji" :tags "kite"}
                     "Lenkkeily" {:sport "Juoksu"}
