@@ -671,7 +671,7 @@
     }
 
     var $raceReports = $('#raceReports2013')
-    $().hide()
+    $($raceReports).hide()
     $("#toggleReports2013").toggle(function () {
       $($raceReports).show()
     }, function () {
