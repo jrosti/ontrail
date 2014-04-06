@@ -50,6 +50,7 @@
                     :avatar avatar
                     :date date
                     :duration (to-human-time (:duration exercise))
+                    :tduration (:duration exercise)
                     :creationDate (to-human-date (:creationDate exercise))
                     :avghr (:avghr exercise)
                     :hrReserve heart-rate-reserve

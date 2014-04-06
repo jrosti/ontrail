@@ -902,18 +902,51 @@
         </div>
         <div>
             {{#results}}
-                <hr/>
-                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Viikko {{week}}, {{from}} - {{to}}</a>
-                <table class="details">
+            <hr/>
+
+
+            <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Viikko {{week}}, {{from}} - {{to}}</a>
+            <div id="week-content">
+                <h3>Harjoitukset</h3>
+                <table class="simpleExs">
+                    <tr>
+                        <th>Päivä</th>
+                        <th>Laji</th>
+                        <th>Otsikko</th>
+                        <th>Kesto</th>
+                        <th>Matka</th>
+                        <th>Vauhti</th>
+                        <th>Syke</th>
+                    </tr>
+                    {{#exs}}
+                    <tr>
+                        <td>{{day}}</td>
+                        <td>{{sport}}</td>
+                        <td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+                        <td>{{duration}}</td>
+                        <td>{{distance}}</td>
+                        <td>{{pace}}</td>
+                        <td>{{avghr}}</td>
+                    </tr>
+                    {{/exs}}
+                </table>
+                <br />
+                <h3>Viikkoyhteenveto</h3>
+                <table class="simpleExs">
+                    <th>Laji</th>
+                    <th>Kesto</th>
+                    <th>Matka</th>
+                    <th>Vauhti</th>
                     {{#summary}}
                     <tr>
                         <td>{{sport}}</td>
-                        <td>{{distance}}</td>
                         <td>{{duration}}</td>
+                        <td>{{distance}}</td>
                         <td>{{pace}}</td>
                     </tr>
                     {{/summary}}
                 </table>
+            </div>
             {{/results}}
         </div>
     </article>
@@ -1140,9 +1173,12 @@
                 <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
                 <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
                 <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a><br/>
+                <a class="pageLink" rel="summary/{{user}}/2014/by/week">Viikkoyhteenveto</a>
+
             </div>
             <div class="clear"></div>
+
         </div>
     </header>
     </article>
