@@ -258,6 +258,32 @@ article img.avatar {
   -webkit-transform: none;
   transform: none;
 }
+#week-content {
+  margin-left: 30px;
+}
+table.simpleExs {
+  margin-top: 8px;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px solid;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+table.simpleExs th {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #dedede;
+}
+table.simpleExs td {
+  border-width: 1px;
+  padding: 8px;
+  border-style: solid;
+  border-color: #666666;
+  background-color: #ffffff;
+}
 table.details {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
@@ -711,6 +737,16 @@ table.weekly .sport.Laskettelu {
   height: 20px;
 }
 table.weekly .sport.Lentopallo {
+  display: inline-block;
+  /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+  zoom: 1;
+  *display: inline;
+  background: url(../img/icons_20.png) no-repeat -20px 0px;
+  width: 20px;
+  height: 20px;
+}
+table.weekly .sport.Beach_volley {
   display: inline-block;
   /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
 

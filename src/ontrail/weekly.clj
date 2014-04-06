@@ -132,7 +132,7 @@
        :from (format-week-date start)
        :to (format-week-date end)
        :summary (weekly-sums results)
-       :exs (map simple-result results)}))
+       :exs (sort-by :dayIndex (map simple-result results))}))
        
 (defn weeks-from [date-time]
   (cons (week-period date-time) (lazy-seq (weeks-from (time/plus date-time (time/days 7))))))
