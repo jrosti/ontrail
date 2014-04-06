@@ -1,4 +1,4 @@
-(ns ontrail.mongerfilter
+<(ns ontrail.mongerfilter
   (:use [monger.operators])
   (:require [clj-time.format :as format]
             [ontrail.group :as group]
@@ -98,4 +98,4 @@
 (defn sortby [params]
   (if-let [sort-order (:sb params)]
     (order-by sort-order)
-    {:lastModifiedDate -1}))
+    {:creationDate -1}))
