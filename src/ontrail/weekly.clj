@@ -56,6 +56,7 @@
      :hrReserve heart-rate-reserve
      :pace pace
      :repeats (:detailRepeats exercise)
+     :elevation (:detailElevation exercise)
      :statspace (to-stats-pace pace)
      :statsduration (to-human-stats-duration (:duration exercise))
      })) 

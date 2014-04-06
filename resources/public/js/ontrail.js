@@ -263,7 +263,11 @@
         weeklySummaryGraph("#weekly-sums", sum.results, {title: "Matka (km)"})
         weeklySummaryGraph("#weekly-sums-time", sum.results, {title: "Aika (h)", duration: true})
 
+        var filteredResults = _.filter(sum.results, function(val) {
+          return val.summary[0].tduration > 0
+        }).reverse()
 
+        sum.results = filteredResults
         $("#" + elem + "-entries").html(ich.hpkWeeklySummaryContentTemplate(sum))
       } else {
         var sum = _.extend({ year: now.getFullYear() }, addFilter(summary), utils)
