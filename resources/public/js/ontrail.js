@@ -73,12 +73,6 @@
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').getCode())
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
-      try {
-        localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
-      } catch(err) {
-        console.log("reset autosave content failed", err)
-      }
-      $("#ex-body").setCode("<p>\n<br>\n</p>")
       return OnTrail.rest.postAsObservable(url, values)
     }
 
@@ -828,11 +822,21 @@
       renderSingleExercise(ex)
     }
 
+    var doClearAutoSave = function() {
+      try {
+        localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
+      } catch(err) {
+        console.log("reset autosave content failed", err)
+      }
+      $("#ex-body").setCode("<p>\n<br>\n</p>")
+    }
 
     var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise',function (instream) {
       return instream.combineWithLatestOf(sessions).selectArgs(second).where(exists).selectAjax(postAddExercise)
     }).where(isSuccess).select(ajaxResponseData)
+
     addExercises.subscribe(showExercise)
+    addExercises.subscribe(doClearAutoSave)
 
     currentPages.whereArgs(partialEquals("addex")).subscribeArgs(function (page, exid) {
       if (exid === undefined) resetEditor()
@@ -896,6 +900,7 @@
       return clickStream.combineWithLatestOf(editExercise).selectArgs(_.compose(second, second)).selectAjax(postEditExercise)
     }).where(isSuccess).select(ajaxResponseData)
     updateExercises.subscribe(showExercise)
+    updateExercises.subscribe(doClearAutoSave)
 
     // update user profile
     var updateProfiles = $('#update-profile').onClickTouchAsObservable(clickEvent)
