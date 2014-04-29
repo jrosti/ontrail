@@ -8,6 +8,8 @@
 
 (def sport-mapping {
                     "Rantalentopallo" {:sport "Beach volley"}
+                    "Taido" {:sport "Kamppailulaji" :tags "taido"}
+                    "Taekwondo" {:sport "Kamppailulaji" :tags "taekwondo"}
                     "Fitnesspallo" {:sport "Jumppa" :tags "fitnesspallo"}
                     "Halonhakkuu" {:sport "Kuntopiiri" :tags "halonhakkuu"}
                     "Keppijumppa" {:sport "Kuntopiiri" :tags "keppijumppa"}
