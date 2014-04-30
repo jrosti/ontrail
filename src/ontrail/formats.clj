@@ -31,9 +31,8 @@
     (str (int pace) "." (format "%02d" secs) " min/500m")))
 
 (defn to-human-pace-kmh [duration distance]
-  (let [speed (/ (/ distance 1000.0) (/ duration 360000.0))
-        fraction (int (* 10 (- (+ 0.05 speed) (int speed))))]
-    (str (int speed) "," (format "%01d" fraction) " km/h")))
+  (let [speed (+ 0.05 (/ (/ distance 1000.0) (/ duration 360000.0)))]
+    (format "%1.1f km/h" speed)))
 
 (defn pace-conversion-fun [^String sport]
   (case sport
