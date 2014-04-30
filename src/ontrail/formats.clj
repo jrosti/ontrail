@@ -32,7 +32,7 @@
 
 (defn to-human-pace-kmh [duration distance]
   (let [speed (+ 0.05 (/ (/ distance 1000.0) (/ duration 360000.0)))]
-    (format "%1.1f km/h" speed)))
+    (string/replace (format "%1.1f km/h" speed) #"\." ",")))
 
 (defn pace-conversion-fun [^String sport]
   (case sport
