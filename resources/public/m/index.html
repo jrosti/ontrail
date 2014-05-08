@@ -8,6 +8,7 @@
     <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
 
     <link rel="image_src" href="img/share.jpg" >
+    <link rel="stylesheet" href="css/app.css" >
 
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -22,14 +23,28 @@
     </script>
 </head>
 <body>
-    <form name="logout" method="post" action="/rest/v2/logout">
-        <input id="logout" type="submit" value="Kirjaudu ulos"/>
-    </form>
-    Sisältö
+    <section class="logged-out">
+        <div>
+            <form id="login-form">
+                <input id="username" name="username" aplaceholder="Tunnus" />
+                <input id="password" name="password" type="password" placeholder="Salasana"/>
+                <div class="buttons">
+                    <input id="login" type="button" value="Kirjaudu sisään" disabled="true">
+                </div>
+            </form>
+        </div>
+    </section>
 
-    <div id="content">
+    <section class="logged-in">
+        <form name="logout">
+            <input id="logout" type="button" value="Kirjaudu ulos"/>
+        </form>
+        Sisältö
 
-    </div>
+        <div id="content">
+
+        </div>
+    </section>
 </body>
 <script src="js/lib/require.js"></script>
 <script>

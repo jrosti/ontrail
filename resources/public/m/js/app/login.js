@@ -12,10 +12,6 @@ define(["jquery", "lodash", "bacon", "bacon.jquery", "jquery.cookie"], function(
         return Bacon.$.lazyAjax( { type: "post", url: "/rest/v1/login", data: params } )
     }
 
-    function logoutReq() {
-        return Bacon.$.lazyAjax( { type: "post", url: "/rest/v1/logout" })
-    }
-
     function profileReq(username) {
         return Bacon.$.lazyAjax( "/rest/v1/logged-ins" ).map(_.partial(_.extend, {username: username}))
     }
@@ -30,10 +26,25 @@ define(["jquery", "lodash", "bacon", "bacon.jquery", "jquery.cookie"], function(
         $.cookie("authUser", login.username, { expires: 365, path: "/" } )
     }
 
+    function clearPassword() {
+        $("#password").value("")
+    }
+
     var loginRequests = logins.sampledBy($("#login").clickE()).flatMapLatest(loginReq)
     var loginErrors = loginRequests.errors().map({})
     var loggedIns = loginRequests.filter(_.identity).doAction(setLoginCookie).map(".username").flatMapLatest(profileReq)
-    var loggedOuts = $("#logout").clickE().merge(loginErrors).flatMapLatest(logoutReq).doAction(clearLoginCookie)
+    var loggedOuts = $("#logout").clickE().merge(loginErrors).doAction(clearLoginCookie)
+    var loginFromCookie = Bacon.once($.cookie("authUser")).filter(_.identity).flatMapLatest(profileReq)
 
-    return loggedIns.merge(loggedOuts)
+    // individual streams
+    var logins = loggedIns.merge(loginFromCookie)
+    var logouts = loggedOuts.merge(Bacon.once($.cookie("authUser")).filter(_.isEmpty))
+
+    // toggle correct body class
+    logins.map("logged-in").merge(logouts.map("logged-out")).toProperty().assign($("body"), "attr", "class")
+
+    return {
+        logins: logins.toProperty(),
+        logouts: logouts.toProperty()
+    }
 })
