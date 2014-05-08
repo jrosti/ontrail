@@ -26,11 +26,11 @@
 
     <section class="logged-out">
         <div>
-            <form id="login-form" method="post" action="/rest/v2/login">
+            <form id="login-form">
                 <input id="username" name="username" aplaceholder="Tunnus" />
                 <input id="password" name="password" type="password" placeholder="Salasana"/>
                 <div class="buttons">
-                    <input id="login" type="submit" value="Kirjaudu sisään" disabled="true">
+                    <input id="login" type="button" value="Kirjaudu sisään" disabled="true">
                 </div>
             </form>
         </div>
@@ -41,11 +41,11 @@
 <script>
     requirejs.config({
         "baseUrl": "js/lib",
-        "main": "login",
         "paths": {
             "app": "../app",
             "jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min",
-            "bacon": "//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min"
+            "bacon": "//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.0/Bacon.min",
+            "lodash": "//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.mobile.min"
         },
         "shim": {
             "jquery.cookie": ["jquery"],
@@ -53,6 +53,13 @@
         }
     })
 
-    requirejs(["app/login"]);
+    require(["bacon", "app/login"], function(Bacon, login) {
+        login.onValue(function() {
+            document.location = "index.html"
+        })
+        login.onError(function() {
+            alert("login failed")
+        })
+    });
 </script>
 </html>
