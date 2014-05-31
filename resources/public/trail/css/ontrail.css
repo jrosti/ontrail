@@ -1,0 +1,158 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: "museo-slab",serif;
+  font-size: 1.2em;
+  background: #f8f8f8;
+}
+
+header {
+  color: white;
+  font-family: "jaf-facitweb",sans-serif;
+  position: relative;
+  height: 80%;
+  background: url(header.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+header div.overlay {
+  position: absolute;
+  background: rgba(10, 10, 10, 0.75);
+  width: 100%;
+  height: 100%;
+}
+
+.content {
+  width: 800px;
+  margin: 0 auto;
+  padding-bottom: 6em;
+}
+
+header div.title {
+  position: absolute;
+  top: 76%;
+  left: 15%;
+}
+
+h1 {
+  color: white;
+  text-align: left;
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1.2em;
+}
+
+header h3 {
+  font-size: 1.4em;
+  color: #cccccc;
+  display: block;
+}
+
+header span {
+  display: inline;
+}
+
+#author span {
+  font-size: 24px;
+}
+
+#author {
+  font-size: 12px;
+  position: absolute;
+  top: 6em;
+  left: 6em;
+}
+
+#overview {
+  font-size: 24px;
+  position: absolute;
+  top: 3em;
+  right: 3em;
+  text-align: right;
+}
+
+section {
+  position: relative;
+  margin-top: 3em;
+  /*text-align: justify;*/
+}
+
+blockquote {
+  background: #eee;
+  margin-left: 2em;
+  padding: 1em;
+  color: #333;
+  font-style: italic;
+  font-size: 0.85em;
+}
+
+blockquote:before {
+  position: absolute;
+  font-family: sans-serif;
+  font-style: normal;
+  display: block;
+  content: '\201c';
+  left: -18px;
+  top: 0;
+  font-size: 5em;
+}
+
+img {
+  display: block;
+  max-width: 800px;
+}
+
+.sidebar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50% 50%;
+}
+
+.sidebar.left {
+  float: left;
+  margin-top: 3em;
+  margin-left: -200px;
+}
+
+figcaption {
+  border-top: 1px solid #999;
+  position: absolute;
+  top: 0px;
+  right: -200px;
+  width: 182px;
+  padding: 1em 0 0 54px;
+  font-size: 0.60em;
+  font-style: italic;
+  text-align: right;
+}
+
+section.image {
+  width: auto;
+  float: right;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0 3em 3em;
+}
+
+section.image + section.image {
+  margin-top: 0;
+}
+
+div.divider {
+  font-family: "jaf-facitweb", sans-serif;
+  font-weight: bold;
+  font-size: 1.75em;
+  width: 1200px;
+  margin: 3em -200px 0;
+  border-bottom: solid 1px #999;
+}
