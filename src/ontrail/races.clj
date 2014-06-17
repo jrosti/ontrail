@@ -1,4 +1,5 @@
 (ns ontrail.races
+  (:use [ontrail mongodb])
   (:require 
    [monger.collection :as mc]
    [monger.query :as mq]
@@ -11,7 +12,7 @@
   (let [with-parsed-date (-> params
                              (select-keys [:title :date :filter])
                              (assoc :jodaDate (parser/parse-date (:date params))))]
-    (-> (mc/insert-and-return races-coll with-parsed-date)
+    (-> (mc/insert-and-return *db* RACES with-parsed-date)
         (dissoc :_id))))
 
 (defn find-all []
