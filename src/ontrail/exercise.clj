@@ -28,7 +28,7 @@
   ([last-visit newcomment-cache exercise]
      (let [id (str (:_id exercise))
            user (:user exercise)
-           user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
+           user-profile (:profile (mc/find-one-as-map *db* ONUSER {:username user}))
            heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
            comments (map as-comment (:comments exercise))
            distance (to-human-distance (:distance exercise))
@@ -82,7 +82,7 @@
   ([rule page sort-rule]
      (get-latest-ex-list "nobody" rule page sort-rule))
   ([viewing-user rule page sort-rule]
-    (let [results (mq/with-collection EXERCISE
+    (let [results (mq/with-collection *db* EXERCISE
                      (mq/find rule)
                      (mq/paginate :page (Integer/valueOf page) :per-page 20)
                      (mq/sort sort-rule))
@@ -105,7 +105,7 @@
   ([viewing-user id]
      (.info logger (str "User " viewing-user " getting ex with id " id))
      (nc/newcount-reset viewing-user id)
-     (let [exercise (mc/find-one-as-map EXERCISE {:_id (ObjectId. id)})]
+     (let [exercise (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. id)})]
        (.trace logger (format " get ex=%s" id))
        (if (nil? exercise)
          {:error "No such id"}

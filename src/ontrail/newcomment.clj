@@ -2,7 +2,6 @@
   (:use [ontrail mongodb])
   (:require [monger.collection :as mc]
             [monger.result :as mr]
-            [monger.query :as mq]
             [monger.conversion]
             [clj-time.core :as time]
             ;; for date serialization to mongo.
@@ -67,7 +66,7 @@
                                 (count (map (partial newcount-cache-inc id) users)))))))
 
 (defn newcount-uncomment-ex [id]
-  (let [users (mc/distinct ONUSER "username" {})]
+  (let [users (mc/distinct *db* ONUSER "username" {})]
     (future (.debug logger (str "Comment cache reset. " id "Distributed to: "
                                 (count (map #(newcount-reset % id) users)))))))
 
@@ -83,7 +82,7 @@
 
 (defn active-users []
   (let [active-time (time/minus (time/now) (time/minutes 25))]
-    (filter #(time/after? (get-last-visit %) active-time) (mc/distinct ONUSER "username"))))
+    (filter #(time/after? (get-last-visit %) active-time) (mc/distinct *db* ONUSER "username"))))
 
 (defn mark-all-read [user]
   (dosync 
@@ -104,19 +103,19 @@
   (if-let [ucache (@users-cache user)]
     (let [dissoced-keys (dissoc-comment-keys @ucache)]
       (dosync (apply alter ucache dissoc dissoced-keys))
-      (mc/update NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))
+      (mc/update *db* NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))
     nil))
 
 (defn restore-cache [user]
-  (let [cache (mc/find-one-as-map NCCACHE {:u user})]
+  (let [cache (mc/find-one-as-map *db* NCCACHE {:u user})]
     (if (not= cache nil)
       (dosync (alter users-cache assoc user (ref (:ref cache)))))))
 
 (defn newcomment-cache-store-all[]
-  (let [res (count (filter (partial not= nil) (map store-cache (mc/distinct ONUSER "username" {}))))]
+  (let [res (count (filter (partial not= nil) (map store-cache (mc/distinct *db* ONUSER "username" {}))))]
     (.info logger (str "Comment count cache stored " res " caches "))))
 
 (defn newcomment-cache-restore-all[]
   (.info logger (str "Restored comment count cache for users " 
-    (count (map restore-cache (mc/distinct ONUSER "username" {}))))))
+    (count (map restore-cache (mc/distinct *db* ONUSER "username" {}))))))
 

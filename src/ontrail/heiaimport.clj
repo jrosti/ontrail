@@ -1,4 +1,5 @@
 (ns ontrail.heiaimport
+  (:use [ontrail mongodb])
   (:require [ontrail.mutate :as m]
             [clojure.data.json :as json]
             [monger.collection :as mc]
@@ -74,8 +75,8 @@
   (let [exs (json/read-str (slurp filename))
         clean-exs (filter identity (map transform exs))]
     (doseq [ex clean-exs]
-      (mc/insert-and-return "exercise" (merge (m/from-user-ex user ex)
-                                              {:hid (Long/parseLong (ex :hid))})))))
-        
+      (mc/insert-and-return *db* EXERCISE (merge (m/from-user-ex user ex)
+                                                 {:hid (Long/parseLong (ex :hid))})))))
+
 (defn main- [user filename]
   (import-json user filename))

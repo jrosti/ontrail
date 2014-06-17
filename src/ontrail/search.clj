@@ -99,7 +99,7 @@
                         (fn [index ex] 
                           (update-sort-index! ex)
                           (insert-exercise-to-index assoc! index ex)) 
-                        (transient {}) (mc/find-maps EXERCISE {})))]
+                        (transient {}) (mc/find-maps *db* EXERCISE {})))]
     (do (dosync (ref-set inverted-index updated-index))
         (count @inverted-index))))
 
@@ -128,7 +128,7 @@
 
 (defn try-get-one [id]
   (try 
-    (mc/find-one-as-map EXERCISE {:_id (ObjectId. ^String id)})
+    (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. ^String id)})
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 

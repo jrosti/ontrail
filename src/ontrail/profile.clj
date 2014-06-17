@@ -12,7 +12,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn get-onuser [user]
-  (mc/find-one-as-map ONUSER {:username user}))
+  (mc/find-one-as-map *db* ONUSER {:username user}))
 
 (defn get-profile [user]
   (:profile (get-onuser user)))
@@ -21,7 +21,7 @@
   (.info logger (str "Updating profile for user " user " params " params))
   (let [id (:_id (get-onuser user))
         {:keys [synopsis goals resthr maxhr aerk anaerk]} params]
-    (mc/update-by-id ONUSER id
+    (mc/update-by-id *db* ONUSER id
                      {"$set" {:profile {:goals goals 
                                         :synopsis synopsis
                                         :resthr (parse-natural resthr)

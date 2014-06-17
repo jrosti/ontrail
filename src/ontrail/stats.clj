@@ -65,21 +65,21 @@
                       if (exercise.detailRepeats > 0) prev.repeats += exercise.detailRepeats;
                       if (exercise.detailElevation > 0) prev.elevation += exercise.detailElevation;
                    }"]
-    (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
-                                                                    :cond condition
-                                                                    :$reduce js-reduce
-                                                                    :initial {:tavghr 0
-                                                                              :hrcount 0
-                                                                              :dist 0
-                                                                              :dur 0
-                                                                              :tdist 0
-                                                                              :tdur 0
-                                                                              :volume 0
-                                                                              :repeats 0
-                                                                              :elevation 0
-                                                                              :paceHistBins pace-histogram
-                                                                              :paceHist (take hist-paces (repeat 0))}}})
-      true)))
+    (monger.conversion/from-db-object (monger.core/command *db* {:group {:ns EXERCISE
+                                                                         :cond condition
+                                                                         :$reduce js-reduce
+                                                                         :initial {:tavghr 0
+                                                                                   :hrcount 0
+                                                                                   :dist 0
+                                                                                   :dur 0
+                                                                                   :tdist 0
+                                                                                   :tdur 0
+                                                                                   :volume 0
+                                                                                   :repeats 0
+                                                                                   :elevation 0
+                                                                                   :paceHistBins pace-histogram
+                                                                                   :paceHist (take hist-paces (repeat 0))}}})
+                                      true)))
 
 (defn get-stats [query sport pace-histogram]
   (to-stats-summary (get-stats-summary query pace-histogram) sport))

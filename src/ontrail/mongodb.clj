@@ -1,17 +1,17 @@
 (ns ontrail.mongodb (:require [monger.core :as mg]))
 
-(def DB "ontrail")
+(def ^:const DB "ontrail")
 
 ;; Mongo collection names
-(def ONUSER "onuser")
-(def NCCACHE "nccache")
-(def EXERCISE "exercise")
-(def ONSPORT "onsport")
-(def GROUPS "groups")
+(def ^:const ONUSER "onuser")
+(def ^:const NCCACHE "nccache")
+(def ^:const EXERCISE "exercise")
+(def ^:const ONSPORT "onsport")
+(def ^:const GROUPS "groups")
 
 ;; Connect to localhost, default port
-(mg/connect!)
-(mg/set-db! (mg/get-db DB))
+(def ^:dynamic *conn* (mg/connect))
+(def ^:dynamic *db* (mg/get-db *conn* DB))
 
 ;;(mg/connect!)
 ;;(mg/authenticate (mg/get-db DB) "xxx" "xxxxpppp")

@@ -11,11 +11,11 @@
 (def summary-memos (ref {}))
 
 (defn get-distinct-tags [condition]
-  (filter (partial not= nil) (mc/distinct EXERCISE "tags" condition)))
+  (filter (partial not= nil) (mc/distinct *db* EXERCISE "tags" condition)))
 
 (defn get-overall-summary-cond [user condition]
   (let [cond-with-user (assoc condition :user user)
-        all-distinct-sports (mc/distinct EXERCISE "sport" cond-with-user)
+        all-distinct-sports (mc/distinct *db* EXERCISE "sport" cond-with-user)
         summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) :sport %) all-distinct-sports))]
     (if (> (count summary-sports) 1) 
       {:user user :sports (concat summary-sports [(get-summary cond-with-user :sport "YHTEENSÄ")])}

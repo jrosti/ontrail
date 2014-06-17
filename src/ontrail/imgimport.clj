@@ -18,7 +18,7 @@
 (def qfilter (make-query-from {:gte_creationDate "1.11.2013"}))
 
 (defn find-all-imgs[]
-  (let [bodies (map (fn [res] {:id (:_id res) :body (:body res)}) (mc/find-maps EXERCISE qfilter))]
+  (let [bodies (map (fn [res] {:id (:_id res) :body (:body res)}) (mc/find-maps *db* EXERCISE qfilter))]
     (filter :id (mapv (fn [res] 
                         (let [imglist (imgs (:body res))]
                           (if (> (count imglist) 0)
