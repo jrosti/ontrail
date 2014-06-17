@@ -5,7 +5,7 @@
    [ontrail.parser :as parser]
    [monger.joda-time]))
 
-(def races-coll "races")
+(def ^:const RACES "races")
 
 (defn insert [params]
   (let [with-parsed-date (-> params
@@ -15,7 +15,7 @@
         (dissoc :_id))))
 
 (defn find-all []
-  (->> (mq/with-collection races-coll
+  (->> (mq/with-collection *db* RACES
          (mq/find {})
          (mq/sort {:jodaDate -1}))
        (map #(dissoc % :_id))))

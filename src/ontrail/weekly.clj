@@ -36,7 +36,7 @@
 (defn simple-result [exercise]
   (let [id (str (:_id exercise))
         user (:user exercise)
-        user-profile (:profile (mc/find-one-as-map ONUSER {:username user}))
+        user-profile (:profile (mc/find-one-as-map *db* ONUSER {:username user}))
         heart-rate-reserve (get-heart-rate-reserve exercise user-profile)
         distance (to-human-distance (:distance exercise))
         creation-date (:creationDate exercise)
@@ -69,7 +69,7 @@
     (time/interval week-starts week-stops)))
 
 (defn interval-query [user start end]
-  (mq/with-collection EXERCISE
+  (mq/with-collection *db* EXERCISE
     (mq/find {:user user :creationDate {:$gte start :$lte end}})
     (mq/sort {:lastModifiedDate 1})))
 

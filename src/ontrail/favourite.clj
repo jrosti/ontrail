@@ -1,4 +1,5 @@
 (ns ontrail.favourite 
+  (:use [ontrail mongodb])
   (:require [monger.collection :as mc]))
 
 (defn commenters [ex]
@@ -9,7 +10,7 @@
     [commenter writer]))
 
 (defn all-pairs []
-  (apply concat (filter (comp not empty?) (map observe (mc/find-maps "exercise" {})))))
+  (apply concat (filter (comp not empty?) (map observe (mc/find-maps *db* EXERCISE {})))))
 
 (defn assoc-count [accumulator pair]
   (if-let [v (accumulator pair)]
@@ -23,7 +24,7 @@
   (memoize reduce-counts))
 
 (defn users [] 
-  (->> (mc/find-maps "onuser" {}) 
+  (->> (mc/find-maps *db* ONUSER {}) 
        (map :username)))
 
 (def users-memo

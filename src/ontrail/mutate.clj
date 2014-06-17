@@ -83,18 +83,18 @@
 
 (defn delete-ex [user ex-id]
   (.trace logger (str "deleting " user " ex " ex-id))
-  (let [ex (mc/find-one-as-map EXERCISE {:_id (ObjectId. ex-id)})
+  (let [ex (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. ex-id)})
         ex-user (:user ex)
         exists? (identity ex)]
     (if (and exists? (= user ex-user))
-      (let [delete-ok? (mr/ok? (mc/remove-by-id EXERCISE (ObjectId. ex-id)))]
+      (let [delete-ok? (mr/ok? (mc/remove-by-id *db* EXERCISE (ObjectId. ex-id)))]
         (sportsummary/reset-memo-for user)
         {:result delete-ok? :message (str user" deleted " " exercise " ex-id) :type "ex" :id ex-id})
         {:result false :message (str "refused-to-delete " user " " ex-id " user-ex [" ex-user "] ex-exists? " exists?)})))
 
 (defn create-ex [user params]
   (.trace logger (str (:user params) " creating ex " (dissoc params :body)))
-  (let [ex  (mc/insert-and-return EXERCISE (from-user-ex user params))
+  (let [ex  (mc/insert-and-return *db* EXERCISE (from-user-ex user params))
         str-id (str (:_id ex))]
     (insert-exercise-inmem-index! ex)
     (sportsummary/reset-memo-for user)
@@ -104,7 +104,7 @@
 
 (defn update-ex [user params]
   (.trace logger (str (:user params) " updating ex " params))
-  (let [ex (mc/find-and-modify EXERCISE 
+  (let [ex (mc/find-and-modify *db* EXERCISE 
                                {:_id (ObjectId. (:id params)) :user user}
                                {"$set" (dissoc (from-user-ex user params)
                                                :comments
@@ -116,7 +116,7 @@
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))
-  (let [ex (mc/find-and-modify EXERCISE
+  (let [ex (mc/find-and-modify *db* EXERCISE
                                {:_id (ObjectId. (:id params))}
                                {"$set" {:lastModifiedDate (time/now)}
                                 "$push" {:comments {:_id (ObjectId.)
@@ -133,7 +133,7 @@
 
 (defn delete-comment[ex-id rule]
   (newcount-uncomment-ex ex-id)
-  (let [ex (mc/find-and-modify EXERCISE
+  (let [ex (mc/find-and-modify *db* EXERCISE
                                {:_id (ObjectId. ex-id)}
                                { "$set" {:lastModifiedDate (time/now)}
                                  "$pull" rule}

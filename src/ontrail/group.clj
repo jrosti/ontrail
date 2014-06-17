@@ -22,18 +22,18 @@
   (some #{x} xs))
 
 (defn add-group [group-name description]
-	(mc/insert-and-return GROUPS {:name group-name :description description :users [] :lname (.toLowerCase group-name)}))
+	(mc/insert-and-return *db* GROUPS {:name group-name :description description :users [] :lname (.toLowerCase group-name)}))
 
 (defn find-by-name [group-name]
-  (mc/find-one-as-map GROUPS {:name group-name}))
+  (mc/find-one-as-map *db* GROUPS {:name group-name}))
 
 (defn do-group-user-op [oper valid-oper? group-name user]
   (if (or (nil? user) (= "nobody" user) (nil? group-name))
       {:result false :descr (str "User is not allowed to join" user group-name)}
-      (if-let [group (mc/find-one-as-map GROUPS {:name group-name})]
+      (if-let [group (mc/find-one-as-map *db* GROUPS {:name group-name})]
         (if (valid-oper? user (:users group))
           {:result false :descr (str "User op invalid for the g:" group-name " u:" user)}
-          {:result (mr/ok? (mc/update-by-id GROUPS (:_id group) {oper {:users user}})) :descr (str "DB update g:" group-name " u:" user)})
+          {:result (mr/ok? (mc/update-by-id *db* GROUPS (:_id group) {oper {:users user}})) :descr (str "DB update g:" group-name " u:" user)})
         {:result false :descr "Group does not exist"})))
 
 (defn join-to [group-name user]
@@ -50,14 +50,14 @@
 
 (defn own-as-list [user]
   (let [condition (if (= user "nobody") {} {:users user})
-        results (mq/with-collection GROUPS
+        results (mq/with-collection *db* GROUPS
                   (mq/find condition)
                   (mq/sort {:lname 1}))]
     {:user user :groups (vec (map (fn [e] (:name e)) results))}))
 
 (defn as-list [page user]
   (.info logger (str page "::" user))
-  (let [results (mq/with-collection GROUPS
+  (let [results (mq/with-collection *db* GROUPS
                   (mq/find {})
                   (mq/paginate :page (Integer/valueOf page) :per-page 20)
                   (mq/sort {:lname 1}))]
@@ -74,7 +74,7 @@
 
 (defn jogs-from-beginning-of-november [users last-day]
   (let [query (november-stats-query users last-day)]
-    (mq/with-collection EXERCISE
+    (mq/with-collection *db* EXERCISE
        (mq/find query) 
        (mq/fields [:creationDate :duration :user])
        (mq/sort {:creationDate 1}))))
@@ -133,7 +133,7 @@
 
 (defn all-chinups [users day-number]
   (let [query (chinup-stats-query users day-number)]
-    (mq/with-collection EXERCISE
+    (mq/with-collection *db* EXERCISE
        (mq/find query) 
        (mq/fields [:creationDate :detailRepeats :user])
        (mq/sort {:creationDate 1})
@@ -230,7 +230,7 @@
   ])
 
 (defn get-record [record-entry]
-  (let [record (mq/with-collection EXERCISE
+  (let [record (mq/with-collection *db* EXERCISE
                (mq/fields [:duration :distance :sport])
                (mq/find (:rule record-entry))
                (mq/limit 1)

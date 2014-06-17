@@ -48,17 +48,17 @@
                       prev.dur += exercise.duration;
                       if (exercise.detailRepeats > 0) prev.repeats += exercise.detailRepeats;
                       if (exercise.detailElevation > 0) prev.elevation += exercise.detailElevation;}"]
-    (monger.conversion/from-db-object (monger.core/command {:group {:ns EXERCISE
-                                                                    :cond condition 
-                                                                    :$reduce js-reduce
-                                                                    :initial {:tavghr 0
-                                                                              :hrcount 0
-                                                                              :dist 0
-                                                                              :dur 0
-                                                                              :tdist 0
-                                                                              :tdur 0
-                                                                              :repeats 0
-                                                                              :elevation 0}}})
+    (monger.conversion/from-db-object (monger.core/command *db* {:group {:ns EXERCISE
+                                                                         :cond condition 
+                                                                         :$reduce js-reduce
+                                                                         :initial {:tavghr 0
+                                                                                   :hrcount 0
+                                                                                   :dist 0
+                                                                                   :dur 0
+                                                                                   :tdist 0
+                                                                                   :tdur 0
+                                                                                   :repeats 0
+                                                                                   :elevation 0}}})
                                       true)))
   
 (defn get-summary [condition key sport]

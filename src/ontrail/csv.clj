@@ -10,7 +10,7 @@
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
 (defn exs [query]
-  (mq/with-collection EXERCISE 
+  (mq/with-collection *db* EXERCISE 
     (mq/find query)
     (mq/fields [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags])
     (mq/sort {:creationDate 1})

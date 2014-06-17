@@ -40,8 +40,8 @@
 (defn get-or-create-sport [exercise]
   ;; XXX: todo this properly.
   (let [sport-id (html/text (nth exercise 2))
-        _sport-id (mc/find-one ONSPORT {:_id sport-id})]
-    (if (= nil _sport-id) (mc/insert ONSPORT {:_id sport-id}))
+        _sport-id (mc/find-one *db* ONSPORT {:_id sport-id})]
+    (if (= nil _sport-id) (mc/insert *db* ONSPORT {:_id sport-id}))
     sport-id))
 
 (defn get-report [exercise]
@@ -77,7 +77,7 @@
       (list one-tag))))
 
 (defn insert [login-id exercise]
-  (mc/insert EXERCISE
+  (mc/insert *db* EXERCISE
              {:creationDate (get-timestamp exercise),
               :lastModifiedDate (get-timestamp exercise),
               :user login-id,

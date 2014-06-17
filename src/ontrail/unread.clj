@@ -14,7 +14,7 @@
   (ObjectId. s))
 
 (defn find-exercise [oid]
-  (mc/find-one-as-map EXERCISE {:_id oid}))
+  (mc/find-one-as-map *db* EXERCISE {:_id oid}))
 
 (defn get-oids [user]
   (let [id-keys (filter (partial not= :lastvisit) (keys (nc/get-user-cache user)))]
@@ -51,7 +51,10 @@
 (defn most-comments-oids []
   (.info logger "Aggregating comment counts")
   (let [comments-from (time/minus (time/now) (time/days 14))]
-    (mc/aggregate "exercise" [{"$match" {:creationDate {"$gte" comments-from}}} {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} {"$sort" {"size" -1}} {"$limit" 100}])))
+    (mc/aggregate *db* EXERCISE 
+                  [{"$match" {:creationDate {"$gte" comments-from}}} 
+                   {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} 
+                   {"$sort" {"size" -1}} {"$limit" 100}])))
 
 (defn most-comments [user]
   (ex/decorate-results user (map (comp find-exercise :_id) (most-comments-oids))))
