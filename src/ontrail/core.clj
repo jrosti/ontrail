@@ -218,7 +218,7 @@
       handler/site
       wrap-dir-index
       ring-head/wrap-head
-;;      wrap-with-logger ;; removed because there is quite redundant nginx logging.
+      wrap-with-logger ;; removed because there is quite redundant nginx logging.
       aleph/wrap-ring-handler))
 
 (def app (-> (handler/site app-routes)))
