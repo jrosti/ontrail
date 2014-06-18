@@ -109,10 +109,10 @@
                                {"$set" (dissoc (from-user-ex user params)
                                                :comments
                                                :lastModifiedDate)}
-                               :return-new true)]
+                               {:return-new true})]
     (sportsummary/reset-memo-for user)
     (.info logger (str user " updated " (:id params)))
-    (as-ex-result ex)))  
+    (as-ex-result ex)))
 
 (defn comment-ex [user params]
   (.trace logger (str user " creating comment " params))
@@ -124,7 +124,7 @@
                                                     :date (to-human-comment-date (local/local-now))
                                                     :user user
                                                     :body (:body params)}}}
-                               :return-new true)]
+                               {:return-new true})]
     (.info logger (str user " created comment " params))
     (newcount-comment-ex user (:id params))
     (insert-exercise-inmem-index! ex)
@@ -137,7 +137,7 @@
                                {:_id (ObjectId. ex-id)}
                                { "$set" {:lastModifiedDate (time/now)}
                                  "$pull" rule}
-                               :return-new true)]
+                               {:return-new true})]
     (as-ex-result ex)))
 
 (defn delete-own-comment [user ex-id comment-id]

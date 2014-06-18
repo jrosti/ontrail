@@ -17,7 +17,7 @@
       :body (json/json-str ~data)}
      (catch Exception exception#
        (.trace logger (str exception#))
-;;       (stacktrace/print-stack-trace exception# 100)
+       (stacktrace/print-stack-trace exception# 100)
        {:status 500
         :headers {"Content-Type" "application/json"}
         :body (str exception#)})))
@@ -29,7 +29,7 @@
        (json-response {"error" "Authentication required"} 401))
      (catch Exception exception#
        (.trace logger (str exception#))
-       ;;(stacktrace/print-stack-trace exception# 100)
+       (stacktrace/print-stack-trace exception# 100)
        {:status 500
         :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
