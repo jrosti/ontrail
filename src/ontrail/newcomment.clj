@@ -103,7 +103,7 @@
   (if-let [ucache (@users-cache user)]
     (let [dissoced-keys (dissoc-comment-keys @ucache)]
       (dosync (apply alter ucache dissoc dissoced-keys))
-      (mc/update *db* NCCACHE {:u user} {"$set" {:ref @ucache}} :upsert true))
+      (mc/update *db* NCCACHE {:u user} {"$set" {:ref @ucache}} {:upsert true}))
     nil))
 
 (defn restore-cache [user]
