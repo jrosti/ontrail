@@ -8,8 +8,6 @@
 <head>
     <title>ontrail.net</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="title" content="Ontrail" >
-    <meta name="description" content="Sosiaalinen harjoituspäiväkirja." >
     <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
 
     <link rel="image_src" href="img/share.jpg" >
@@ -19,7 +17,7 @@
     <link rel="stylesheet" href="halcyonic/css/5grid/core-1200px.css" />
     <link rel="stylesheet" href="halcyonic/css/5grid/core-noscript.css" />
     <link rel="stylesheet" href="halcyonic/css/style.css" />
-    <link rel="stylesheet" href="halcyonic/css/style-desktop.css" /></noscript>
+    <link rel="stylesheet" href="halcyonic/css/style-desktop.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js?_=UID"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js?_=UID"></script>
     <script src="halcyonic/css/5grid/init.js?use=desktop,1000px&amp;mobileUI=0"></script>
@@ -166,6 +164,7 @@
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2008/lte_creationDate/2009/sb/distance">2008</a>
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2007/lte_creationDate/2008/sb/distance">2007</a>
     <h3>Nopeimmat maratonit vuosittain</h3>
+        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2014</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2013</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2012/lte_creationDate/2013/sb/pace">2012</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2011/lte_creationDate/2012/sb/pace">2011</a>
@@ -195,18 +194,11 @@
     </article>
 </section>
 
-<section role="searches">
-    <article>
-        <h3>Hakuja</h3>
-        <a class="pageLink" rel="latest">Latest</a>
-    </article>
-</section>
-
 <section role="profile" class="logged-in">
     <article>
-        <h2><a href="http://www.gravatar.com"><img id="profile-avatar" /></a>  Muokkaa profiilia</h2>
+        <h2><a href="http://www.gravatar.com"><img id="profile-avatar" src="img/share.jpg" /></a>Muokkaa profiilia</h2>
         <div class="details">
-            <p/>
+            <p></p>
             <h3>Henkilökohtaiset tiedot</h3>
             <div class="edit-form">
                 Sähköposti: <span id="profile-email"></span>
@@ -215,7 +207,7 @@
                     sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
                     ylläpitäjän pyynnostä.</small></i></div>
             </div>
-            <p/>
+            <p></p>
             <h3>Profiilin tiedot</h3>
             <form id="profile-form" class="edit-form" method="post">
                 <div>
@@ -248,7 +240,7 @@
                 </div>
             </form>
             <span id="profile-result"></span>
-            <p/>
+            <p></p>
             <h3>Vaihda salasana</h3>
             <form id="change-password-form" class="edit-form" method="post">
                 <div>
@@ -293,61 +285,63 @@
                     <br/>
                     <h6>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jos et halua käyttää jotain kenttää suodatuksessa, jätä se täyttämättä.</h6>
                     <br/>
+
                     <p>
                         <label>Käyttäjät</label>
                         <input id="filter-users" data-placeholder="" multiple class="chzn-select" style="width:290px;height:22px"/>
                     </p>
 
                     <p>
-                    <label>Laji</label>
-                    <select id="filter-sport" class="chzn-select" style="width:290px;">
-                    </select>
+                        <label>Laji</label>
+                        <select id="filter-sport" class="chzn-select" style="width:290px;">
+                        </select>
                     </p>
 
                     <p>
-                    <label>Matka vähintään</label>
-                    <input id="filter-mindistance" name="filter-mindistance" placeholder="metriä" maxlength="6" size="6"/>
+                        <label>Matka vähintään</label>
+                        <input id="filter-mindistance" name="filter-mindistance" placeholder="metriä" maxlength="6" size="6"/>
 
-                    <label>enintään</label>
-                    <input id="filter-maxdistance" name="filter-maxdistance" placeholder="metriä" maxlength="6" size="6"/></p>
-
-                    <p>
-                    <label>Vauhti vähintään</label>
-                    <input id="filter-minpace" name="filter-minpace" placeholder="km/h" maxlength="6" size="6"/>
-
-                    <label>enintään</label>
-                    <input id="filter-maxpace" name="filter-maxpace" placeholder="km/h" maxlength="6" size="6"/></p>
-
+                        <label>enintään</label>
+                        <input id="filter-maxdistance" name="filter-maxdistance" placeholder="metriä" maxlength="6" size="6"/>
+                    </p>
 
                     <p>
-                    <label>Syke vähintään</label>
-                    <input id="filter-minhr" name="filter-minhr" placeholder="min" maxlength="3" size="3"/>
+                        <label>Vauhti vähintään</label>
+                        <input id="filter-minpace" name="filter-minpace" placeholder="km/h" maxlength="6" size="6"/>
 
-                    <label>enintään</label>
-                    <input id="filter-maxhr" name="filter-maxhr" placeholder="max" maxlength="3" size="3"/></p>
+                        <label>enintään</label>
+                        <input id="filter-maxpace" name="filter-maxpace" placeholder="km/h" maxlength="6" size="6"/>
+                    </p>
+
 
                     <p>
-                    
+                        <label>Syke vähintään</label>
+                        <input id="filter-minhr" name="filter-minhr" placeholder="min" maxlength="3" size="3"/>
+
+                        <label>enintään</label>
+                        <input id="filter-maxhr" name="filter-maxhr" placeholder="max" maxlength="3" size="3"/>
+                    </p>
+
                     <label>Alkaen (<a href="javascript:void(0)" id="filter-reset-start">aikojen alusta</a>)</label>
                     <div id="filter-continuous-start-date">
-                        <input style="display: none ! important" id="filter-start-date" name="date" placeholder="Alkaen?"/>
+                        <input style="display: none ! important" id="filter-start-date" name="date" placeholder="Alkaen?" />
                     </div>
 
                     <label>Päättyen (<a href="javascript:void(0)" id="filter-reset-stop">loppuun</a>)</label>
                     <div id="filter-continuous-stop-date">
-                        <input style="display: none ! important" id="filter-stop-date" name="date" placeholder="Päättyen?"/>
+                        <input style="display: none ! important" id="filter-stop-date" name="date" placeholder="Päättyen?" />
                     </div>
 
+                    <p>
+                        <label>Järjestä </label>
+                        <select id="filter-sort">
+                            <option value="pace" selected>nopein ensin</option>
+                            <option value="distance">pisin ensin</option>
+                            <option value="duration">pitkäkestoisin ensin</option>
+                            <option value="creationDate">uusin ensin</option>
+                            <option value="avghr">korkein syke ensin</option>
+                        </select>
                     </p>
-                    <p><label>Järjestä </label>
-                    <select id="filter-sort">
-                        <option value="pace" selected>nopein ensin</option>                        
-                        <option value="distance">pisin ensin</option>
-                        <option value="duration">pitkäkestoisin ensin</option>
-                        <option value="creationDate">uusin ensin</option>
-                        <option value="avghr">korkein syke ensin</option>
-                    </select></p>
-
                     <br/>
                     <a id="filter-render" class="button green" href="javascript:void(0);">Suodata</a>
                 </div>
@@ -560,7 +554,7 @@
         <article>
             <div id="messageBox">
                 <span style="font-size: 0.6em;color: gray">Kirjoita viesti</span>
-                <input id="chatInput" type="textfield" />
+                <input id="chatInput" type="text" />
                 <div id="messages">
                 </div>
             </div>
@@ -568,12 +562,7 @@
     </section>
 
     <section>
-        <div>
-            <h3>Uutta!</h3>
-            <a class="pageLink" rel="group/Huippuhuhtikuu">Huippu-huhtikuu</a>
-        </div>
-        <div id="ownGroupsDropDown">
-        </div> 
+        <div id="ownGroupsDropDown"></div>
         <div id="fastSelections" class="logged-in">
             <h3>Kommentit</h3>
             <ul class="link-list">
@@ -581,12 +570,11 @@
                 <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li>
             </ul>
         </div>
-        <!-- /.dropdown -->
         <div>
             <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
         </div>
         <h3>Pikalinkit</h3>
-        <div id="sportFilter" class="buttons" class="logged-in">
+        <div id="sportFilter" class="buttons logged-in">
             <div class="dropdown">
                 <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
                 <div class="dropdown-slider">
@@ -614,7 +602,7 @@
             <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <li><a class="pageLink" rel="lists">Listat</a></li>
-            <div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>
+            <!--<div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>-->
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
@@ -624,15 +612,15 @@
         <a id="toggleReports2013" href="javascript:void(0);">2013</a>
         <div id="raceReports2013">
             <table class="details">
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/16.11.2013/lt_creationDate/17.11.2013/distance/10000/sb/pace">Aktia-cup 16.11.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/distance/21090,21097,21100,21110,42200,42195,42234/sb/pace">Rautaveden maraton 2.11.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/sb/pace">Raatojuoksu 2.11.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/distance/42195,42200/sb/distance">Kaarinan syysmara 26.10.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/gt_distance/42200/sb/distance">Mammuttimarssi 26.10.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/19.10.2013/lt_creationDate/20.10.2013/gte_distance/42195/sb/distance">Wihan kilometrit 19.10.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/13.10.2013/lt_creationDate/14.10.2013/distance/21090,21097,21100,42195,42200,42196/sb/distance">Gardajärvi ja Vantaa maraton 13.10.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/gt_distance/20000/sb/distance">Jämi Mini-Mega 12.10.</a></tr></td>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/lt_distance/20000/sb/distance">Manna-suunnistus 12.10.</a></tr></td>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/16.11.2013/lt_creationDate/17.11.2013/distance/10000/sb/pace">Aktia-cup 16.11.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/distance/21090,21097,21100,21110,42200,42195,42234/sb/pace">Rautaveden maraton 2.11.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/sb/pace">Raatojuoksu 2.11.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/distance/42195,42200/sb/distance">Kaarinan syysmara 26.10.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/gt_distance/42200/sb/distance">Mammuttimarssi 26.10.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/19.10.2013/lt_creationDate/20.10.2013/gte_distance/42195/sb/distance">Wihan kilometrit 19.10.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/13.10.2013/lt_creationDate/14.10.2013/distance/21090,21097,21100,42195,42200,42196/sb/distance">Gardajärvi ja Vantaa maraton 13.10.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/gt_distance/20000/sb/distance">Jämi Mini-Mega 12.10.</a></td></tr>
+                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/lt_distance/20000/sb/distance">Manna-suunnistus 12.10.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu,Kävely/gte_creationDate/6.10.2013/lt_creationDate/7.10.2013/gt_distance/32000/lt_distance/33400/sb/pace">Pirkan hölkkä 6.10.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu,Vaellus,Kävely/gte_creationDate/5.10.2013/lt_creationDate/7.10.2013/gte_distance/42500/sb/pace">Vaarojen maraton 5.10.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/29.9.2013/lt_creationDate/30.9.2013/distance/10550,21090,21097,21100,21110/sb/pace">Pääkaupunkijuoksu 29.9.</a></td></tr>
@@ -643,8 +631,7 @@
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.9.2013/lt_creationDate/16.9.2013/distance/21090,21097,21100,21110/user/tuomasnu,oikakati/sb/pace">Kaisaniemi juoksu 15.9.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.9.2013/lt_creationDate/16.9.2013/distance/21090,21097,21100,21110/user/Jukkis/sb/pace">Tampere puolikas 15.9.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/14.9.2013/lt_creationDate/15.9.2013/distance/21090,21097,21100/sb/pace">Maisermatiemaraton 14.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/14.9.2013/lt_creationDate/15.9.2013/distance/20000/sb/pace">Eeron Extriimi 14.9.</a></td></tr>
-
+                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/14.9.2013/lt_creationDate/15.9.2013/distance/20000/sb/pace">Eeron Extriimi 14.9.</a</td>><tr>
                <tr><td><a class="pageLink" rel="sport/Pyöräily/gte_creationDate/1.9.2013/lt_creationDate/2.9.2013/gt_distance/100000/sb/pace">Tour de Helsinki 1.9.</a></td></tr>
                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/31.8.2013/lt_creationDate/1.9.2013/distance/42195,42200,42196/sb/pace">Nuuksio Classic Marathon 31.8.</a></td></tr>
                <tr><td><a class="pageLink" rel="sport/Vaellus/gte_creationDate/26.8.2013/lt_creationDate/27.8.2013/gt_distance/100000/sb/pace"><b>UTMB / PTL 23.8</b></a></td></tr>
@@ -653,10 +640,7 @@
                <tr><td><a class="pageLink" rel="sport/Seikkailu-urheilu/gte_creationDate/18.8.2013/lt_creationDate/19.8.2013/gte_distance/10000/sb/pace">Snowflakes Adventure 18.8.</a></td></tr>
                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/17.8.2013/lt_creationDate/19.8.2013/distance/42195,42200,42196/sb/pace">Helsinki City Marathon 17.8.</a></td></tr>
                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/16.8.2013/lt_creationDate/18.8.2013/gte_distance/60000/sb/pace">Oxroad ultra 16.8.</a></td></tr>
-
-
                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/10.8.2013/lt_creationDate/12.8.2013/gte_distance/20000/sb/pace">Retki Rogaining 10.8.</a></td></tr>
-
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/10.8.2013/lt_creationDate/11.8.2013/distance/21090,21097,21100,21110,10000/user/Peppi,Pasi_P/sb/pace">Runner's Twilight 10.8.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/27.7.2013/lt_creationDate/28.7.2013/gte_distance/20000/sb/pace">Somero yö-rogaining 27.7.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Triathlon/gte_creationDate/20.7.2013/lt_creationDate/21.7.2013/sb/pace">Joroinen Triathlon 20.7.</a></td></tr>
@@ -670,9 +654,7 @@
                 <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/15.6.2013/lt_creationDate/17.6.2013/sb/pace">Jukolan ja Venlojen viesti 16.6.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.6.2013/lt_creationDate/16.6.2013/sb/pace/distance/42200,42195,21090,21100,21095,10000">Forssa 15.6.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Pyöräily/gte_creationDate/26.5.2013/lt_creationDate/27.5.2013/sb/pace/distance/111000">Giro d'Espoo 26.5.</a></td></tr>
-
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/25.5.2013/lt_creationDate/27.5.2013/sb/pace/distance/21100,21090,42195,42200">Terwa, Ponnenjärvi 25-26.5.</a></td></tr>
-
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/19.5.2013/lt_creationDate/20.5.2013/sb/pace/distance/21100,21090,42195,42200">Puistopuolikas, Köpis 19.5.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/18.5.2013/lt_creationDate/19.5.2013/sb/pace/distance/21100,42195,42200,21098">Haka-maraton, Västilä ja Yyteri 18.5.</a></td></tr>
                 <tr><td><a class="pageLink" rel="sport/Juoksu/gte_distance/20700/lte_distance/21100/gte_creationDate/4.5.2013/lt_creationDate/5.5.2013/sb/pace">Helsinki City Run 4.5.</a></td></tr>
@@ -689,7 +671,7 @@
 
 <!-- Copyright -->
 <div id="copyright">
-    &copy; ontrail.net. | <a href="http://html5up.net">HTML5 Up!</a> | Kuvat: <a href="http://fotogrph.com">Fotogrph</a> met plouh
+    &copy; ontrail.net. | <a href="http://html5up.net">HTML5 Up!</a>
 </div>
 
 <!-- templates -->
@@ -790,7 +772,6 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
-            <a class="share right" rel="ex/{{id}}"><img src="/img/social_facebook_box_blue_32.png" alt="Jaa Facebookissa"/></a>
             <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
