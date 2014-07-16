@@ -1,6 +1,6 @@
 db.exercise.ensureIndex({creationDate: 1});
-db.exercise.ensureIndex({creationDate: 1, lastModifiedDate: 1});
-db.exercise.ensureIndex({lastModifiedDate: 1, creationDate: 1});
+db.exercise.ensureIndex({creationDate: -1, lastModifiedDate: -1});
+db.exercise.ensureIndex({lastModifiedDate: -1, creationDate: -1});
 db.exercise.ensureIndex({lastModifiedDate: 1});
 db.exercise.ensureIndex({user: 1}) ;
 db.exercise.ensureIndex({sport: 1});
