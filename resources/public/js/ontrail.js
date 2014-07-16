@@ -7,10 +7,11 @@
     // Android, however, sets it to the width of the device in its current orientation.
     // This ends up breaking our detection on HD devices held in landscape mode, so we
     // do a little trick here to detect this condition and make things right.
-    if (screen.width > screen.height && Math.abs(orientation) == 90)
-      sw = screen.height;
+    if (screen.width > screen.height && Math.abs(orientation) == 90) {
+      sw = screen.height
+    }
 
-    var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch;
+    var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch
 
     var clickEvent = "click touchstart"
 
@@ -18,7 +19,6 @@
       $('#sportFilter').hide()
     }
 
-    // rx.ontrail: onClickTouchAsObservable should handle doubles on AppleWekKit. FIX.
     if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/)) {
       clickEvent = "touchstart"
     }
@@ -353,14 +353,28 @@
         renderLatest("#content-entries", "#table-entries")(items)
     }
 
-    function renderCommentCount(elem) {
-      return function (result) {
-        var newComments = result.count
-        if (newComments > 0)
-          $(elem).text(newComments).show()
-        else
-          $(elem).hide()
+    function doUpdateElemCount(elem, newComments) {
+      if (newComments > 0)
+        $(elem).text(newComments).show()
+      else
+        $(elem).hide()
+    }
+
+    function doUpdateTitle(newComments) {
+      if (newComments > 0) {
+        document.title = "(" + newComments + ")" + " ontrail.net"
+      } else {
+        document.title = "ontrail.net"
       }
+    }
+
+    function renderOwnCommentCount(result) {
+      doUpdateTitle(result.count)
+      doUpdateElemCount('#new-own-comments-count', result.count)
+    }
+
+    function renderCommentCount(result) {
+      doUpdateElemCount('#new-comments-count', result.count)
     }
 
     var webSocket
@@ -435,8 +449,8 @@
         })
         var commentPublished = onMessage.publish()
         commentPublished.connect()
-        commentPublished.throttle(1500).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
-        commentPublished.throttle(3500).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
+        commentPublished.throttle(1500).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount)
+        commentPublished.throttle(3500).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderOwnCommentCount)
       }
     }
 
@@ -571,8 +585,26 @@
     currentPages.whereArgs(partialEquals("register")).subscribe(function () {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
-    currentPages.subscribe(function () {
-      $('html, body').scrollTop(0)
+
+    currentPages.subscribe(function (args) {
+      try {
+        var $body = $('body')
+        var prevPage = $body.attr("last-page")
+        var scrollTo = parseInt($body.attr("page-pos-" + args[0]))
+        var pos = $('html, body').scrollTop()
+        $body.attr('page-pos-' + prevPage, pos)
+        $body.attr('last-page', args[0])
+        console.log("Pushing page position:", prevPage, pos)
+        if ("latest" === args[0] && prevPage === "ex") {
+          console.log("Scrolling to position:", scrollTo)
+          $('html, body').animate({scrollTop: scrollTo}, scrollTo/10)
+        } else {
+          $('html, body').scrollTop(0)
+        }
+      } catch(err) {
+        $('html body').scrollTop(0)
+        console.log("scrolling to zero pos", err)
+      }
     })
 
     var findUser = function (inArgs, currentUser, pos) {
@@ -681,8 +713,8 @@
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101)
     exPages.selectAjax(OnTrail.rest.details).combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
-    exPages.throttle(300).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
-    exPages.throttle(150).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
+    exPages.throttle(300).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount)
+    exPages.throttle(150).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderOwnCommentCount)
 
     var renderActiveUsersList = function (data) {
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
@@ -854,7 +886,7 @@
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])
       else {
-        $("#ex-sport").val(ex.sport || "Juoksu").attr('selected', true);
+        $("#ex-sport").val(ex.sport || "Juoksu").attr('selected', true)
       }
       if (ex.tags && ex.tags.length > 0)
         $("#ex-tags").select2("data", ex.tags)
@@ -1050,17 +1082,17 @@
     loggedInPoller.connect()
 
     var commentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newCommentCountAll)
-    commentsTicker.subscribe(renderCommentCount("#new-comments-count"))
+    commentsTicker.subscribe(renderCommentCount)
     var ownCommentsTicker = loggedInPoller.startWith(0).selectAjax(OnTrail.rest.newCommentCountOwn)
-    ownCommentsTicker.subscribe(renderCommentCount("#new-own-comments-count"))
+    ownCommentsTicker.subscribe(renderOwnCommentCount)
 
     var commentPages = currentPages.whereArgs(partialEquals("new-comments"))
     commentPages.selectAjax(OnTrail.rest.newComments).subscribe(renderNewComments)
-    commentPages.selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount("#new-comments-count"))
+    commentPages.selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount)
 
     var ownCommentPages = currentPages.whereArgs(partialEquals("new-own-comments"))
     ownCommentPages.selectAjax(OnTrail.rest.newOwnComments).subscribe(renderNewComments)
-    ownCommentPages.selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount("#new-own-comments-count"))
+    ownCommentPages.selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderOwnCommentCount)
 
     ownCommentPages.combineLatest(ownCommentsTicker, second)
       .takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("new-own-comments")))).repeat().subscribe(renderNewComments)
