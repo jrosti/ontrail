@@ -586,26 +586,46 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-    currentPages.subscribe(function (args) {
+
+    var $htmlBody = $('html, body')
+    var $body = $('body')
+
+    function scrollToPosition(idx, requiredPosition) {
+      var currentScrollTop = $(document).scrollTop()
+      console.log("scrolling..., ", idx, requiredPosition, currentScrollTop)
+      if (requiredPosition - currentScrollTop > 100 && idx < 10) {
+        $htmlBody.animate({scrollTop: requiredPosition}, 10, _.partial(scrollToPosition, idx + 1, requiredPosition))
+      } else {
+        console.log("Scrolling terminated after " + idx + " rounds")
+      }
+    }
+
+    function scrollPositionMemo(args) {
       try {
-        var $body = $('body')
+        //var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport']
         var prevPage = $body.attr('last-page')
         var scrollTo = parseInt($body.attr("page-pos-" + args[0]))
         var pos = $(document).scrollTop()
         $body.attr('page-pos-' + prevPage, pos)
         $body.attr('last-page', args[0])
-        console.log("Pushing page position:", prevPage, pos)
-        if ("latest" === args[0] && prevPage === "ex") {
-          console.log("Scrolling to position:", scrollTo)
-          $('html, body').animate({scrollTop: scrollTo}, scrollTo/10)
+        console.log('Pushing page position:', prevPage, pos)
+        if (scrollTo &&
+            ('latest' === args[0] ||
+             'user' === args[0]   ||
+             'sport' === args[0])  &&
+             prevPage === "ex") {
+          console.log('Scrolling to position:', scrollTo)
+          scrollToPosition(0, scrollTo)
         } else {
-          $('html, body').scrollTop(0)
+          $htmlBody.scrollTop(0)
         }
       } catch(err) {
-        $('html body').scrollTop(0)
-        console.log("scrolling to zero pos", err)
+        $htmlBody.scrollTop(0)
+        console.log('Scrolling to zero pos due to error: ', err)
       }
-    })
+    }
+
+    currentPages.subscribe(scrollPositionMemo)
 
     var findUser = function (inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
@@ -713,8 +733,8 @@
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101)
     exPages.selectAjax(OnTrail.rest.details).combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
-    exPages.throttle(300).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderCommentCount)
-    exPages.throttle(150).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderOwnCommentCount)
+    exPages.throttle(300).selectAjax(OnTrail.rest.newCommentCountOwn).subscribe(renderOwnCommentCount)
+    exPages.throttle(150).selectAjax(OnTrail.rest.newCommentCountAll).subscribe(renderCommentCount)
 
     var renderActiveUsersList = function (data) {
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
