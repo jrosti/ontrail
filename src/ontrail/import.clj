@@ -108,7 +108,6 @@
           (try 
             (let [res (import-user-and-file user (str "imports/" (.getName import-file)))
                   fres (frequencies res)]
-              (send-import-msg user fres)
               (if (> (fres \+) 0)
                 (str "/#import/ok=" (fres \+))
                 (do (.delete import-file) "/#import/error=invalidFormat")))
