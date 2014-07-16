@@ -31,7 +31,7 @@
 
     $.ajaxSetup({ cache: false })
 
-    var spinnerElement = "#content-spinner"
+    var $spinnerElement = "#content-spinner"
 
     function actionButtonAsStream(btn, _selector, _action) {
       var action, selector, button
@@ -58,8 +58,8 @@
     }
 
 
-    var userList = $("#user-results")
-    var groupsList = $("#groups-content")
+    var $userList = $("#user-results")
+    var $groupsList = $("#groups-content")
 
     function selectionFormat(state) {
       if (!state.id) return state.toString();
@@ -191,10 +191,10 @@
     }
 
     var renderUserList = function (data) {
-      ich.usersCreateTemplate({users: data}).appendTo(userList)
+      ich.usersCreateTemplate({users: data}).appendTo($userList)
     }
     var renderGroupList = function (data) {
-      ich.groupsTemplate({groups: data}).appendTo(groupsList)
+      ich.groupsTemplate({groups: data}).appendTo($groupsList)
     }
 
     var renderChangePassword = function (data) {
@@ -353,14 +353,14 @@
         renderLatest("#content-entries", "#table-entries")(items)
     }
 
-    function doUpdateElemCount(elem, newComments) {
+    function renderUpdateElemCount(elem, newComments) {
       if (newComments > 0)
         $(elem).text(newComments).show()
       else
         $(elem).hide()
     }
 
-    function doUpdateTitle(newComments) {
+    function renderUpdateTitleWithComments(newComments) {
       if (newComments > 0) {
         document.title = "(" + newComments + ")" + " ontrail.net"
       } else {
@@ -369,12 +369,12 @@
     }
 
     function renderOwnCommentCount(result) {
-      doUpdateTitle(result.count)
-      doUpdateElemCount('#new-own-comments-count', result.count)
+      renderUpdateTitleWithComments(result.count)
+      renderUpdateElemCount('#new-own-comments-count', result.count)
     }
 
     function renderCommentCount(result) {
-      doUpdateElemCount('#new-comments-count', result.count)
+      renderUpdateElemCount('#new-comments-count', result.count)
     }
 
     var webSocket
@@ -589,9 +589,9 @@
     currentPages.subscribe(function (args) {
       try {
         var $body = $('body')
-        var prevPage = $body.attr("last-page")
+        var prevPage = $body.attr('last-page')
         var scrollTo = parseInt($body.attr("page-pos-" + args[0]))
-        var pos = $('html, body').scrollTop()
+        var pos = $(document).scrollTop()
         $body.attr('page-pos-' + prevPage, pos)
         $body.attr('last-page', args[0])
         console.log("Pushing page position:", prevPage, pos)
@@ -696,12 +696,12 @@
       }
     }
 
-    var $raceReports = $('#raceReports2013')
-    $($raceReports).hide()
+    var $raceReports2013 = $('#raceReports2013')
+    $($raceReports2013).hide()
     $("#toggleReports2013").toggle(function () {
-      $($raceReports).show()
+      $($raceReports2013).show()
     }, function () {
-      $($raceReports).hide()
+      $($raceReports2013).hide()
     })
 
 
@@ -733,7 +733,7 @@
     var latestScroll = $("#search").changes().throttle(300).skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function () {
         $("#content-entries").html("")
-        spinner(spinnerElement)()
+        spinner($spinnerElement)()
         $("#table-entries").html("")
       })
       .throttle(30)
@@ -808,13 +808,13 @@
     // user search scroll
     var usersScroll = $("#search-users").changes().skip(1).merge(currentPages.whereArgs(partialEquals("users")).select(always("")))
       .doAction(function () {
-        userList.html("")
+        $userList.html("")
       })
       .selectArgs(function (query) {
         if (query === "")
-          return OnTrail.pager.create(OnTrail.rest.users, userList)
+          return OnTrail.pager.create(OnTrail.rest.users, $userList)
         else
-          return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), userList)
+          return OnTrail.pager.create(_.partial(OnTrail.rest.searchUsers, query), $userList)
       })
       .switchLatest()
     usersScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("users")))).repeat().subscribe(renderUserList)
@@ -822,10 +822,10 @@
     // group list scroll
     var groupsScroll = currentPages.whereArgs(partialEquals("groups")).merge(joinsAndLeaves)
       .doAction(function () {
-        groupsList.html("")
+        $groupsList.html("")
       })
       .selectArgs(function (query) {
-        return OnTrail.pager.create(OnTrail.rest.groups, groupsList)
+        return OnTrail.pager.create(OnTrail.rest.groups, $groupsList)
       }).switchLatest()
     groupsScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("groups")))).repeat().subscribe(renderGroupList)
 
@@ -840,13 +840,6 @@
       $("#ex-body").setCode(text)
       $("#ex-title, #ex-duration").blur()
       $("#ex-title").focus()
-    }
-
-    var disable = function (args) {
-      return this.doAction(function () {
-        var dbg = _debug(category)
-        dbg.apply(dbg, asArgs(arguments))
-      })
     }
 
     var showExercise = function (ex) {
@@ -942,6 +935,7 @@
     var renderMarkAllRead = function (args) {
       $("#new-comments-count").hide()
       $("#new-own-comments-count").hide()
+      document.title = 'ontrail.net'
     }
 
     var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
@@ -1162,7 +1156,7 @@
         }
       }
 
-      var kmhToInternal = function(value) {
+      var kmhToInternal = function (value) {
         var kmh = parseFloat(value)
         if (!isNaN(kmh)) {
           return (1000 * kmh).toString()
