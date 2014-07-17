@@ -611,7 +611,7 @@
         $body.attr('last-page', args[0])
         console.log('Pushing page position:', prevPage, pos)
         if (scrollTo &&
-            _.contains(memoizePositionOnPages, args[0] &&
+            _.contains(memoizePositionOnPages, args[0]) &&
             prevPage === "ex") {
           console.log('Scrolling to position:', scrollTo)
           scrollToPosition(0, scrollTo)
