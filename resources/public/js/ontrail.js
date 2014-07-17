@@ -593,16 +593,17 @@
     function scrollToPosition(idx, requiredPosition) {
       var currentScrollTop = $(document).scrollTop()
       if (requiredPosition - currentScrollTop > 100 && idx < 10) {
-        $htmlBody.animate({scrollTop: requiredPosition}, 10, _.partial(scrollToPosition, idx + 1, requiredPosition))
+        $htmlBody.animate({scrollTop: requiredPosition}, 1, _.partial(scrollToPosition, idx + 1, requiredPosition))
       } else {
         console.log("Scrolling terminated after " + idx + " rounds")
       }
+      console.log("round " + idx + " exit")
     }
 
     function scrollPositionMemo(args) {
       try {
         var pos = $(document).scrollTop()
-        //var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport']
+        var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport', 'group']
         var prevPage = $body.attr('last-page')
         var scrollTo = parseInt($body.attr("page-pos-" + args[0]))
 
@@ -610,10 +611,8 @@
         $body.attr('last-page', args[0])
         console.log('Pushing page position:', prevPage, pos)
         if (scrollTo &&
-            ('latest' === args[0] ||
-             'user' === args[0]   ||
-             'sport' === args[0])  &&
-             prevPage === "ex") {
+            _.contains(memoizePositionOnPages, args[0] &&
+            prevPage === "ex") {
           console.log('Scrolling to position:', scrollTo)
           scrollToPosition(0, scrollTo)
         } else {
@@ -625,7 +624,7 @@
       }
     }
 
-    currentPages.subscribe(scrollPositionMemo)
+    currentPages.distinctUntilChanged().subscribe(scrollPositionMemo)
 
     var findUser = function (inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
