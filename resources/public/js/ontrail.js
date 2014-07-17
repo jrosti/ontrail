@@ -592,7 +592,7 @@
 
     function scrollToPosition(idx, requiredPosition) {
       var currentScrollTop = $(document).scrollTop()
-      if (requiredPosition - currentScrollTop > 100 && idx < 10) {
+      if (requiredPosition - currentScrollTop > 8 && idx < 9) {
         $htmlBody.animate({scrollTop: requiredPosition}, 1, _.partial(scrollToPosition, idx + 1, requiredPosition))
       } else {
         console.log("Scrolling terminated after " + idx + " rounds")
