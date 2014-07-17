@@ -586,14 +586,24 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-
-    var $htmlBody = $('html, body')
+    // Recursive animation needs exactly one target, otherwise animation complete will grow
+    // stack exponentially on each animation step.
+    var $scrollTopTarget = $('html, body')
     var $body = $('body')
 
     function scrollToPosition(idx, requiredPosition) {
-      var currentScrollTop = $(document).scrollTop()
-      if (requiredPosition - currentScrollTop > 20 && idx < 9) {
-        $htmlBody.animate({scrollTop: requiredPosition}, 1, _.partial(scrollToPosition, idx + 1, requiredPosition))
+      try {
+        var currentScrollTop = $(document).scrollTop()
+        console.log('Scroll to position :', idx, currentScrollTop, requiredPosition)
+        if (requiredPosition - currentScrollTop > 50 && idx < 300) {
+          $scrollTopTarget.animate({scrollTop: requiredPosition}, 200).promise().done(function() {
+            scrollToPosition(idx + 1, requiredPosition)
+          })
+        } else {
+          // X
+        }
+      } catch (err) {
+        console.log("rec scroll failed", err)
       }
     }
 
@@ -611,10 +621,11 @@
             prevPage === "ex") {
           scrollToPosition(0, scrollTo)
         } else {
-          $htmlBody.scrollTop(0)
+          console.log(args[0], "zero scroll")
+          $scrollTopTarget.scrollTop(0)
+
         }
       } catch(err) {
-        $htmlBody.scrollTop(0)
         console.log('Scrolling to zero pos due to error: ', err)
       }
     }
