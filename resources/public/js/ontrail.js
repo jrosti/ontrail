@@ -594,10 +594,7 @@
       var currentScrollTop = $(document).scrollTop()
       if (requiredPosition - currentScrollTop > 20 && idx < 9) {
         $htmlBody.animate({scrollTop: requiredPosition}, 1, _.partial(scrollToPosition, idx + 1, requiredPosition))
-      } else {
-        console.log("Scrolling terminated after " + idx + " rounds")
       }
-      console.log("round " + idx + " exit")
     }
 
     function scrollPositionMemo(args) {
@@ -609,11 +606,9 @@
 
         $body.attr('page-pos-' + prevPage, pos)
         $body.attr('last-page', args[0])
-        console.log('Pushing page position:', prevPage, pos)
         if (scrollTo &&
             _.contains(memoizePositionOnPages, args[0]) &&
             prevPage === "ex") {
-          console.log('Scrolling to position:', scrollTo)
           scrollToPosition(0, scrollTo)
         } else {
           $htmlBody.scrollTop(0)
