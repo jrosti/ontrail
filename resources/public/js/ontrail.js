@@ -623,7 +623,6 @@
         } else {
           console.log(args[0], "zero scroll")
           $scrollTopTarget.scrollTop(0)
-
         }
       } catch(err) {
         console.log('Scrolling to zero pos due to error: ', err)
