@@ -14,9 +14,9 @@
        "sähköpostia osoitteeseen ontrail@ontrail.net\n\n"
 
        "Yleisimmin kysyttyihin kysymyksiin löydät vastauksia ylläpitäjän sivuilta ontrailista osoitteesta\n\n"
-       "http://ontrail.net/#user/admin"
+       "http://ontrail.net/#user/admin\n\n"
 
-       "Ystävällisin terveisin, Ontrail-tiimi"))
+       "--\nYstävällisin terveisin, Ontrail-tiimi"))
 
 (defn send-register-msg [user email]
   (try
