@@ -594,7 +594,6 @@
     function scrollToPosition(idx, requiredPosition) {
       try {
         var currentScrollTop = $(document).scrollTop()
-        console.log('Scroll to position :', idx, currentScrollTop, requiredPosition)
         if (requiredPosition - currentScrollTop > 50 && idx < 300) {
           $scrollTopTarget.animate({scrollTop: requiredPosition}, 200).promise().done(function() {
             scrollToPosition(idx + 1, requiredPosition)
@@ -621,7 +620,6 @@
             prevPage === "ex") {
           scrollToPosition(0, scrollTo)
         } else {
-          console.log(args[0], "zero scroll")
           $scrollTopTarget.scrollTop(0)
         }
       } catch(err) {

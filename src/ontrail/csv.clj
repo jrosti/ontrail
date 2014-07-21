@@ -12,7 +12,7 @@
 (defn exs [query]
   (mq/with-collection *db* EXERCISE
                       (mq/find query)
-                      (mq/fields [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags :elevation])
+                      (mq/fields [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags :detailElevation])
                       (mq/sort {:creationDate 1})
                       (mq/batch-size 1000)))
 
@@ -42,7 +42,7 @@
    "sport"        :sport
    "distance"     :distance
    "duration"     :duration
-   "elevation"    :elevation
+   "elevation"    :detailElevation
    "pace"         :pace
    "avghr"        :avghr
    "url"          (comp as-link :_id)
@@ -52,7 +52,7 @@
    "tags"         tags})
 
 (def default-keys
-  ["date" "title" "sport" "distance" "duration" "pace" "avghr" "url" "distancetext" "durationtext" "pacetext" "tags"])
+  ["date" "title" "sport" "distance" "duration" "pace" "avghr" "url" "elevation" "distancetext" "durationtext" "pacetext" "tags"])
 
 (defn extract-fields [keys]
   (apply juxt (mapv #(comp csv-escape %)

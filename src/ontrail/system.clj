@@ -13,10 +13,10 @@
   (format "%.0fM" (/ (.maxMemory (Runtime/getRuntime)) (* 1024 1024.0))))
 
 (defn count-exs[]
-  (mc/count EXERCISE))
+  (mc/count *db* EXERCISE))
 
 (defn count-users[]
-  (mc/count ONUSER))
+  (mc/count *db* ONUSER))
 
 (defn stats[]
   {:sysheap (get-used-heap)
