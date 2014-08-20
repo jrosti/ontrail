@@ -726,10 +726,8 @@
 
                 <div class="preview">
                     {{#trunc}}{{/trunc}}
-                    <div class="logged-in">
-                        <p><a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+                        <p><a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
-                    </div>
                 </div>
 
                 <div class="full">
@@ -741,8 +739,8 @@
                 </div>
 
                 <p class="full">
-                    <a class="windowLink" rel="ex/{{id}}">+□</a>
-                    <a class="pageLink" rel="ex/{{id}}" {{#newComments}}data-new-comments="true"{{/newComments}}>
+                    <a class="windowLink" rel="ex/{{id}}">□</a>
+                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                     {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
                     </a>
                 </p>
@@ -988,7 +986,7 @@
             <table id="lvhaaste" class="ranking">
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Vetoja</th></tr></thead>
                 {{#res}}
-                <tr {{#ok}}class="in"{{/ok}}>
+                <tr class="{{#ok}}in{{/ok}}">
                     <td>{{#ok}}{{rank}}{{/ok}}</td>
                     <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
                     <td>{{total}}</td>
@@ -1012,7 +1010,7 @@
                     <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
                 </p>
             </div>
-            <table id="lvhaaste" class="ranking">
+            <table id="elevationChallengeTable" class="ranking">
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kokonaisnousu</th></tr></thead>
                 {{#res}}
                 <tr>
@@ -1038,7 +1036,7 @@
         <table id="marrasputki" class="ranking">
             <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
             <tr class="in">
-            <td>1</td><td><a class ="pageLink" rel="user/Ursa Minor">Ursa Minor</td><td>102</td></tr>
+            <td>1</td><td><a class ="pageLink" rel="user/Ursa Minor">Ursa Minor</a></td><td>102</td></tr>
             <tr class="in">
             <td>2</td><td><a class="pageLink" rel="user/Asiak">Asiak</a></td><td>88</td></tr>
             <tr class="in">
