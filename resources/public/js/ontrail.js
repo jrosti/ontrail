@@ -514,7 +514,7 @@
     var shareClicks = clickedLinks.where(function (elem) {
       return $(elem).hasClass('share')
     }).select(function (el) {
-        return attr("rel", el)
+      return attr("rel", el)
     })
 
     shareClicks.subscribeArgs(function (url) {
@@ -610,11 +610,11 @@
       try {
         var pos = $(document).scrollTop()
         var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport', 'group']
-        var prevPage = $body.attr('last-page')
-        var scrollTo = parseInt($body.attr("page-pos-" + args[0]))
+        var prevPage = $body.attr('data-last-page')
+        var scrollTo = parseInt($body.attr('data-page-pos-' + args[0]))
 
-        $body.attr('page-pos-' + prevPage, pos)
-        $body.attr('last-page', args[0])
+        $body.attr('data-page-pos-' + prevPage, pos)
+        $body.attr('data-last-page', args[0])
         if (scrollTo &&
             _.contains(memoizePositionOnPages, args[0]) &&
             prevPage === "ex") {
@@ -627,7 +627,7 @@
       }
     }
 
-    currentPages.distinctUntilChanged().subscribe(scrollPositionMemo)
+    currentPages.subscribe(scrollPositionMemo)
 
     var findUser = function (inArgs, currentUser, pos) {
       var args = asArgs(inArgs)
