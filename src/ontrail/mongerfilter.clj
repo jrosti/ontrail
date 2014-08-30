@@ -98,4 +98,4 @@
 (defn sortby [params]
   (if-let [sort-order (:sb params)]
     (order-by sort-order)
-    {:creationDate -1 :lastModifiedDate -1}))
+    (array-map :creationDate -1 :lastModifiedDate -1)))
