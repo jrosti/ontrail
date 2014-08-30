@@ -88,7 +88,7 @@
                      (mq/sort sort-rule))
           decorated-results (decorate-results viewing-user results)]
       (nc/visit-now viewing-user)
-      (.info logger (str "Ex-list " rule " for " viewing-user " at page " page))
+      (.info logger (str "Ex-list " rule " for " viewing-user " at page " page " using " sort-rule))
       decorated-results)))
 
 (defn get-latest-ex-list-default-order
