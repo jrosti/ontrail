@@ -66,8 +66,8 @@
 ;; marrasputki
 (def min-jog-time (* 25 60 100)) ; 25 minutes
 
-(defn november-stats-query [users days] 
-  {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
+(defn november-stats-query [users days]
+  {:sport {"$in" ["Juoksu" "Maastojuoksu"]} "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time}
    "$and" [{:creationDate {"$gte" (time/date-time 2014 11 1 0 0)}}
            {:creationDate {"$lte" (time/plus (time/date-time 2014 11 1 0 0) (time/days days))}}]
    })
@@ -77,7 +77,8 @@
     (mq/with-collection *db* EXERCISE
        (mq/find query) 
        (mq/fields [:creationDate :duration :user])
-       (mq/sort {:creationDate 1}))))
+       (mq/sort {:creationDate 1})
+       (mq/batch-size 5000))))
 
 (defn analyze-jogs [all-results days user]
   (let [results (filter #(= user (:user %)) all-results)
@@ -95,9 +96,11 @@
 
 (defn november-race-stats [users]
   (let [now (time/now)
-        month-now 11
+        month-now (time/month now)
         ranks (range 1 (inc (count users)))
-        day-now 30]
+        day-now (cond (< month-now 11) 1
+                      (= month-now 11) (time/day now)
+                      (> month-now 11) 30)]
     (map (fn [rank elem] 
       (assoc elem :rank rank)) 
         ranks 
