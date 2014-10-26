@@ -68,8 +68,8 @@
 
 (defn november-stats-query [users days] 
   {:sport "Juoksu" "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time} 
-   "$and" [{:creationDate {"$gte" (time/date-time 2013 11 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2013 11 1 0 0) (time/days days))}}] 
+   "$and" [{:creationDate {"$gte" (time/date-time 2014 11 1 0 0)}}
+           {:creationDate {"$lte" (time/plus (time/date-time 2014 11 1 0 0) (time/days days))}}]
    })
 
 (defn jogs-from-beginning-of-november [users last-day]
@@ -184,7 +184,7 @@
   (let [users (:users group-map)]
     (case (:name group-map)
       "Huippuhuhtikuu" (elevation-results users)
-;;      "Marrasputki" (november-race-stats users)
+      "Marrasputki" (november-race-stats users)
       "lvhaaste2014" (chinup-race-stats users)
       [])))
 
