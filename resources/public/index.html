@@ -1,9 +1,4 @@
 <!DOCTYPE HTML>
-<!--
-	Halcyonic 2.5 by HTML5 Up!
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
 <head>
     <title>ontrail.net</title>
@@ -92,7 +87,6 @@
 
     </div>
 </div>
-
 
 <!-- Content -->
 <div id="content-wrapper">
@@ -1026,54 +1020,22 @@
 
 <script id="marrasputkiTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
-    <header>
-        <h3>Marrasputken  Kunniataulukko</h3>
-        <div class="logged-in">
-            <p class="right">
-                <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
-            </p>
-        </div>
-        <table id="marrasputki" class="ranking">
-            <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
-            <tr class="in">
-            <td>1</td><td><a class ="pageLink" rel="user/Ursa Minor">Ursa Minor</a></td><td>102</td></tr>
-            <tr class="in">
-            <td>2</td><td><a class="pageLink" rel="user/Asiak">Asiak</a></td><td>88</td></tr>
-            <tr class="in">
-            <td>3</td><td><a class="pageLink" rel="user/Hazel">Hazel</a></td><td>	84</td></tr>
-            <tr class="in">
-            <td>4</td><td><a class="pageLink" rel="user/niilos mc">niilos mc</a></td><td>	57</td></tr>
-            <tr class="in">
-            <td>5</td><td><a class="pageLink" rel="user/jatossu">jatossu</a></td><td>	56</td></tr>
-            <tr class="in">
-            <td>6</td><td><a class="pageLink" rel="user/Peksu">Peksu</a></td><td>	52</td></tr>
-            <tr class="in">
-            <td>7</td><td><a class="pageLink" rel="user/20660">20660</a></td><td>	50</td></tr>
-            <tr class="in">
-            <td>8</td><td><a class="pageLink" rel="user/Peppi">Peppi</a></td><td>	45</td></tr>
-            <tr class="in">
-            <td>9</td><td><a class="pageLink" rel="user/Flipper">Flipper</a></td><td>	40</td></tr>
-            <tr class="in">
-            <td>10</td><td><a class="pageLink" rel="user/kanto5">kanto5</a></td><td>	40</td></tr>
-            <tr class="in">
-            <td>11</td><td><a class="pageLink" rel="user/-James-">-James-</a></td><td>	39</td></tr>
-            <tr class="in">
-            <td>12</td><td><a class="pageLink" rel="user/Jörö">Jörö</a></td><td>	37</td></tr>
-            <tr class="in">
-            <td>13</td><td><a class="pageLink" rel="user/Lanttu">Lanttu</a></td><td>	36</td></tr>
-            <tr class="in">
-            <td>14</td><td><a class="pageLink" rel="user/Tatteus">Tatteus</a></td><td>	34</td></tr>
-            <tr class="in">
-            <td>15</td><td><a class="pageLink" rel="user/JussiM">JussiM</a></td><td>	34</td></tr>
-            <tr class="in">
-            <td>16</td><td><a class="pageLink" rel="user/Holle">Holle</a></td><td>	33</td></tr>
-            <tr class="in">
-            <td>17</td><td><a class="pageLink" rel="user/Hähi">Hähi</a></td><td>	30</td></tr>
-            <tr class="in">
-            <td>18</td><td><a class="pageLink" rel="user/tuomasnu">tuomasnu</a></td><td>	30</td></tr>
-        </table>
-        <a class="pageLink" rel="ex/52702c080cf29dad6d3f1f42">Lue lisää Marrasputkesta.</a>
-    </header>
+        <header>
+            <h3>Marrasputken  Kunniataulukko</h3>
+            <div class="logged-in">
+                <p class="right">
+                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                </p>
+            </div>
+            <table id="marrasputki" class="ranking">
+                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
+                {{#res}}
+                <tr {{#isGood}}class="in"{{/isGood}}{{^isGood}}{{#lastMissing}}class="inDanger"{{/lastMissing}}{{/isGood}}><td>{{#isGood}}{{rank}}{{/isGood}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                <td>{{#lastMissing}}{{count}}{{/lastMissing}}{{^lastMissing}}<p>katkolla</p>{{/lastMissing}}</td></tr>
+                {{/res}}
+            </table>
+            <a class="pageLink" rel="ex/52702c080cf29dad6d3f1f42">Lue lisää Marrasputkesta.</a>
+        </header>
     </article>
 </script>
 
@@ -1303,10 +1265,6 @@
     <p>Kommentti poistetaan lopullisesti, eikä sitä voi palauttaa.  Oletko varma?</p>
 </div>
 
-
-<!-- JavaScript at the bottom for fast page loading -->
-
-<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
 <script src="js/select2.min.js?_=UID"></script>
 <script src="js/jquery.cookie.js?_=UID"></script>
 <script src="js/jquery.md5.js?_=UID"></script>
@@ -1316,12 +1274,6 @@
 <script src="js/xdate-0.7.js?_=UID"></script>
 
 <script src="js/rx.all.min.js?_=UID"></script>
-<!--
-<script src="js/rx.min.js?_=UID"></script>
-<script src="js/rx.binding.min.js?_=UID"></script>
-<script src="js/rx.time.min.js?_=UID"></script>
-<script src="js/rx.joinpatterns.min.js?_=UID"></script>
--->
 
 <script src="js/rx.jquery.min.js?_=UID"></script>
 <script src="js/rx.ontrail.js?_=UID"></script>
@@ -1338,7 +1290,6 @@
 <script src="js/chart.js"></script>
 <script src="n/src/utils.js"></script>
 
-<!-- scripts concatenated and minified via build script -->
 <script src="js/plugins.js?_=UID"></script>
 <script src="js/ontrail.js?_=UID"></script>
 
