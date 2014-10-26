@@ -10,8 +10,8 @@
   (str "Hei " user "!\n\n"
        "Tervetuloa käyttämään Ontrailia!\n\n"
 
-       "Ontrailin ylläpidon tavoittaa Facebook-ryhmässä: https://www.facebook.com/groups/ontrail/ tai lähettämällä"
-       "sähköpostia osoitteeseen ontrail@ontrail.net\n\n"
+       "Ontrailin ylläpidon tavoittaa Facebook-ryhmässä: https://www.facebook.com/groups/ontrail/\n"
+       "tai lähettämällä sähköpostia osoitteeseen ontrail@ontrail.net\n\n"
 
        "Yleisimmin kysyttyihin kysymyksiin löydät vastauksia ylläpitäjän sivuilta ontrailista osoitteesta\n\n"
        "http://ontrail.net/#user/admin\n\n"
