@@ -477,9 +477,9 @@
 </section>
 
 <section id="register-wrapper" role="register" data-mode="add" class="logged-in">
-    <article class="edit-form">
+	Rekisteröinti tilapäisesti suljettu.
+    <article class="edit-form" style="display:none">
         <h2>Rekisteröidy käyttäjäksi</h2>
-        <form id="register-form" method="post">
             <div>
                 <label>Käyttäjätunnus</label>
                 <input id="ex-username" name="username" class="reset" placeholder="Käyttäjätunnus"/>
@@ -778,16 +778,18 @@
         </article>
     </section>
     <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
-    {{#comments}}
-    <section>
+    <div class="logged-in">
+      {{#comments}}
+      <section>
         <article class="comment" data-id="{{id}}">
-            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
-            <img class="avatar" src="{{avatar}}"  width="24" height="24">
-            <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
-            <div>{{{body}}}</div>
+          {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
+          <img class="avatar" src="{{avatar}}"  width="24" height="24">
+          <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
+          <div>{{{body}}}</div>
         </article>
-    </section>
-    {{/comments}}
+      </section>
+      {{/comments}}
+    </div>
     <section>
         <article class="logged-in">
             <h4>Jätä oma kommenttisi</h4>
