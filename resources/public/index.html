@@ -778,8 +778,7 @@
         </article>
     </section>
     <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
-    <div class="logged-in">
-      {{#comments}}
+    {{#comments}}
       <section>
         <article class="comment" data-id="{{id}}">
           {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
@@ -788,8 +787,7 @@
           <div>{{{body}}}</div>
         </article>
       </section>
-      {{/comments}}
-    </div>
+    {{/comments}}
     <section>
         <article class="logged-in">
             <h4>Jätä oma kommenttisi</h4>
