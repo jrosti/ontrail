@@ -99,7 +99,7 @@
 
 (defn comment-hiding? [viewing-user ex]
   (let [user (:user ex)]
-    (and (= "nobody" viewing-user) (not= "admin" user))))
+    (= "nobody" viewing-user)))
 
 (defn get-ex
   ([viewing-user id]
