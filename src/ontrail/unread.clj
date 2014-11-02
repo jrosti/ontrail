@@ -35,7 +35,9 @@
   (ex/decorate-results user (filter (partial is-own? user) (get-unread-objs user))))
 
 (defn count-comments [ex] 
-  (:newComments ex))
+  (if-let [c (:newComments ex)] 
+    c
+    0))
 
 (defn count-all [user]
   (let [uc (nc/get-user-cache user)]
@@ -46,7 +48,7 @@
 (defn count-new [type user]
   (condp = type
     :all {:count (count-all user)}
-    :own {:count (reduce + (map count-comments (comments-own user)))}))
+    :own {:count (reduce + 0 (map count-comments (comments-own user)))}))
 
 (defn most-comments-oids []
   (.info logger "Aggregating comment counts")
