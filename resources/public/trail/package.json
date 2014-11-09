@@ -4,6 +4,8 @@
   "dependencies": {
     "lodash": "2.4.1",
     "jquery": "2.1.1",
+    "rx": "2.3.14",
+    "rx-jquery": "1.1.7 ",
     "medium-editor": "1.9.8"
   },
   "engines": {
