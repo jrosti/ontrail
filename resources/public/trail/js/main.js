@@ -1,9 +1,9 @@
 
 var $ = require("jquery")
 var _ = require("lodash")
-
+var MediumEditor = require("medium-editor")
 var ex = require("./exercise")
 
 $(document).ready(function() {
-  ex.render("ontrail.json")
+  var editor = new MediumEditor(".editable");
 })
