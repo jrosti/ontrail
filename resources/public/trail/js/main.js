@@ -2,8 +2,11 @@
 var $ = require("jquery")
 var _ = require("lodash")
 var MediumEditor = require("medium-editor")
-var ex = require("./exercise")
+var dialog = require("./editor/dialog")
 
 $(document).ready(function() {
-  var editor = new MediumEditor(".editable");
+  var contentEditor = new MediumEditor(".editable") // instantiate content editor
+
+  var dlg = dialog.create()
+
 })
