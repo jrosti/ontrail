@@ -159,6 +159,14 @@ div.divider {
   border-bottom: solid 1px #999;
 }
 
+footer {
+  margin: 0 auto;
+  color: #888;
+  font-size: 70%;
+  padding: 2em;
+  text-align: center;
+}
+
 #show-details-dialog {
   display: inline-block;
   width: 34px;
@@ -175,6 +183,10 @@ div.divider {
   border-width: 2px;
   line-height: 30px;
   cursor: pointer;
+}
+
+#details-dialog {
+  display: none;
 }
 
 .dialog {
@@ -196,4 +208,9 @@ div.divider {
   margin: auto auto;
   padding: 2em;
   border: solid .3em #0075ea;
+}
+
+.medium-editor-placeholder:after {
+  color: #999;
+
 }
