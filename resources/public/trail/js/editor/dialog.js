@@ -23,13 +23,11 @@ var parseValidationResult = function(n) {
 }
 
 function validate(field, dist) {
-  console.log("dist is " + dist)
   return Rx.Observable.onErrorResumeNext(
     $.getJSONAsObservable('/rest/v1/validate/' + field + '/' + dist)
       .materialize()
       .select(parseValidationResult)
       .dematerialize()
-      .doAction(function(a) { console.log("validationResult", a) })
   )
 }
 
