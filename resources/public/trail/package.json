@@ -24,10 +24,10 @@
     "url": "ssh://github.com/jrosti/ontrail"
   },
   "browser": {
-    "jquery-timeago": "./js/lib/jquery/jquery.timeago.js"
+    "livestamp": "./js/lib/jquery/jquery.livestamp.js"
   },
   "browserify-shim": {
-    "jquery-timeago": {
+    "livestamp": {
       "depends": "jquery"
     }
   },
