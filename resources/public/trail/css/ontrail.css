@@ -70,15 +70,23 @@ header span {
 #author {
   font-size: 12px;
   position: absolute;
-  top: 6em;
-  left: 6em;
+  top: 24px;
+  left: 48px;
+}
+
+#menu {
+  position: absolute;
+  top: 1em;
+  right: 48px;
+  width: 34px;
+  text-align: center;
 }
 
 #overview {
   font-size: 24px;
   position: absolute;
-  top: 3em;
-  right: 3em;
+  top: 1em;
+  right: 48px;
   text-align: right;
 }
 
@@ -167,26 +175,22 @@ footer {
   text-align: center;
 }
 
-#show-details-dialog {
+.circle {
   display: inline-block;
   width: 34px;
   height: 34px;
-  border: solid 0.1em #0075ea;
-  border-radius: 20px;
   font-size: 14px;
+  border-radius: 17px;
   line-height: 32px;
+  border: solid 0.1em #0075ea;
   text-align: center;
   vertical-align: text-bottom;
 }
 
-#show-details-dialog:hover {
+.circle:hover {
   border-width: 2px;
   line-height: 30px;
   cursor: pointer;
-}
-
-#details-dialog {
-  display: none;
 }
 
 .dialog {
@@ -212,5 +216,22 @@ footer {
 
 .medium-editor-placeholder:after {
   color: #999;
+}
 
+.pure-menu {
+  height: 40px;
+  vertical-align: center;
+}
+
+.pure-menu ul {
+
+}
+
+.pure-menu .pure-menu-heading.draft {
+  height: 30px;
+  line-height: 18px;
+  padding-left: 1em;
+  border-left: 1px solid #777;
+  text-transform: lowercase;
+  vertical-align: middle;
 }

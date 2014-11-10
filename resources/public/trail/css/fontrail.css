@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'ontrail';
-  src: url('ontrail.eot?98295321');
-  src: url('ontrail.eot?98295321#iefix') format('embedded-opentype'),
-       url('ontrail.woff?98295321') format('woff'),
-       url('ontrail.ttf?98295321') format('truetype'),
-       url('ontrail.svg?98295321#ontrail') format('svg');
+  src: url('ontrail.eot?15634372');
+  src: url('ontrail.eot?15634372#iefix') format('embedded-opentype'),
+       url('ontrail.woff?15634372') format('woff'),
+       url('ontrail.ttf?15634372') format('truetype'),
+       url('ontrail.svg?15634372#ontrail') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -14,7 +14,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'ontrail';
-    src: url('../font/ontrail.svg?98295321#ontrail') format('svg');
+    src: url('../font/ontrail.svg?15634372#ontrail') format('svg');
   }
 }
 */
@@ -75,3 +75,4 @@
 .icon-vimeo-squared:before { content: '\e816'; } /* '' */
 .icon-trash:before { content: '\e817'; } /* '' */
 .icon-pencil:before { content: '\e818'; } /* '' */
+.icon-floppy:before { content: '\e819'; } /* '' */
