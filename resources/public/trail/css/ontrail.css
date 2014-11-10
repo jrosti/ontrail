@@ -47,8 +47,13 @@ header.image div.overlay {
 
 header div.title {
   position: absolute;
-  top: 55%;
-  left: 10%;
+  bottom: 10%;
+  width: 100%;
+}
+
+header div.title > * {
+  display: block;
+  margin: 0.25em auto;
 }
 
 header.image h1 {
