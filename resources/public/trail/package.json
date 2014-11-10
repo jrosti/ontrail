@@ -24,11 +24,19 @@
     "url": "ssh://github.com/jrosti/ontrail"
   },
   "browser": {
-    "livestamp": "./js/lib/jquery/jquery.livestamp.js"
+    "livestamp": "./js/lib/jquery/jquery.livestamp.js",
+    "medium-editor-insert-plugin": "./js/lib/medium-editor/medium-editor-insert-plugin.min.js",
+    "medium-editor-insert-images": "./js/lib/medium-editor/medium-editor-insert-images.min.js"
   },
   "browserify-shim": {
     "livestamp": {
       "depends": "jquery"
+    },
+    "medium-editor-insert-plugin": {
+      "depends": ["jquery", "medium-editor"]
+    },
+    "medium-editor-insert-images": {
+      "depends": ["jquery", "medium-editor", "medium-editor-insert-plugin"]
     }
   },
   "browserify": {
