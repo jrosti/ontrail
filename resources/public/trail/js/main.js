@@ -1,13 +1,19 @@
 
 var $ = require("jquery")
 var _ = require("lodash")
+var Rx = require('rx')
 var MediumEditor = require("medium-editor")
 var dialog = require("./editor/dialog")
 var moment = require('moment')
+
+// shims
 window.jQuery = $
 window.moment = moment
-var livestamp = require('livestamp')
-var Rx = require('rx')
+window.MediumEditor = MediumEditor
+$.fn.MediumEditor = MediumEditor
+require('livestamp')
+require("medium-editor-insert-plugin")
+require("medium-editor-insert-images")
 
 var editorOpts = {
   cleanPastedHTML: true,
@@ -29,6 +35,15 @@ var dates = new Rx.Subject()
 $(document).ready(function() {
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
   var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
+
+  $('.editable').mediumInsert({
+    editor: contentEditor,
+    addons: {
+      images: {
+        imagesUploadScript: 'http://ontrail.net/file-upload/put'
+      }
+    }
+  });
 
   dates.subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp()
