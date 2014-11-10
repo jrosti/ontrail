@@ -23,8 +23,7 @@ header {
   color: white;
   font-family: "jaf-facitweb",sans-serif;
   position: relative;
-  height: 80%;
-  background: url(header.png);
+  height: 50%;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
@@ -45,8 +44,8 @@ header div.overlay {
 
 header div.title {
   position: absolute;
-  top: 76%;
-  left: 15%;
+  top: 55%;
+  left: 10%;
 }
 
 h1 {
