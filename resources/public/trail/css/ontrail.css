@@ -159,6 +159,24 @@ div.divider {
   border-bottom: solid 1px #999;
 }
 
+#show-details-dialog {
+  display: inline-block;
+  width: 34px;
+  height: 34px;
+  border: solid 0.1em #0075ea;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 32px;
+  text-align: center;
+  vertical-align: text-bottom;
+}
+
+#show-details-dialog:hover {
+  border-width: 2px;
+  line-height: 30px;
+  cursor: pointer;
+}
+
 .dialog {
   position: absolute;
   top: 0;

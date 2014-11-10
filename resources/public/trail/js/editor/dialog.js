@@ -58,10 +58,19 @@ function createValidatable(field) {
 }
 
 exports.create = function() {
-  createValidatable("distance")
-  createValidatable("time")
+  var distance = createValidatable("distance")
+  var time = createValidatable("time")
 
   $("#details-save").onAsObservable("click").subscribe(function() {
     $("#details-dialog").hide()
   })
+
+  $("#show-details-dialog").onAsObservable("click").subscribe(function() {
+    $("#details-dialog").show()
+  })
+
+  return {
+    distance: distance,
+    time: time
+  }
 }
