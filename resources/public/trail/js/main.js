@@ -17,7 +17,8 @@ require("medium-editor-insert-images")
 
 var editorOpts = {
   cleanPastedHTML: true,
-  placeholder: "Kerro jotain lenkistäsi ..."
+  placeholder: "Kerro jotain lenkistäsi ...",
+  buttonLabels: 'fontawesome'
 }
 
 var titleEditorOpts = {
