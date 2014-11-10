@@ -5,7 +5,8 @@ var MediumEditor = require("medium-editor")
 var dialog = require("./editor/dialog")
 var moment = require('moment')
 window.jQuery = $
-var timeago = require('jquery-timeago')
+window.moment = moment
+var livestamp = require('livestamp')
 var Rx = require('rx')
 
 var editorOpts = {
@@ -29,12 +30,11 @@ $(document).ready(function() {
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
   var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
-  dates.subscribe(function(dateStr) {
-    $("#ex-date").attr("title", dateStr).timeago()
+  dates.subscribe(function(date) {
+    $("#ex-date").attr("data-timestamp", date).livestamp()
   })
 
-  var now = moment().utc().format("YYYY-MM-DD\THH:mm:SS") + "Z";
-  dates.onNext(now)
+  dates.onNext(moment())
 
   var dlg = dialog.create()
 })
