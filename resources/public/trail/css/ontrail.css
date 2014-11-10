@@ -20,7 +20,6 @@ body {
 }
 
 header {
-  color: white;
   font-family: "jaf-facitweb",sans-serif;
   position: relative;
   height: 50%;
@@ -29,7 +28,11 @@ header {
   background-position: 50% 50%;
 }
 
-header div.overlay {
+header.image {
+    color: white;
+}
+
+header.image div.overlay {
   position: absolute;
   background: rgba(10, 10, 10, 0.75);
   width: 100%;
@@ -48,18 +51,24 @@ header div.title {
   left: 10%;
 }
 
+header.image h1 {
+    color: white;
+}
+
 h1 {
-  color: white;
   text-align: left;
   font-size: 2em;
   font-weight: 700;
-  line-height: 1.2em;
+  line-height: 1.1em;
+  padding: 0;
+  margin-bottom: 0;
 }
 
 header h3 {
-  font-size: 1.4em;
+  padding: 0;
   color: #cccccc;
   display: block;
+  margin-top: 0.3em;
 }
 
 header span {
