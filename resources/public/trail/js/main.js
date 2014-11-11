@@ -4,6 +4,7 @@ var _ = require("lodash")
 var Rx = require('rx')
 var MediumEditor = require("medium-editor")
 var dialog = require("./editor/dialog")
+var entry = require("./blog/entry")
 var moment = require('moment')
 
 // shims
@@ -30,6 +31,10 @@ var titleEditorOpts = {
   disableToolbar: true,
   placeholder: "Naseva otsikko lenkillesi!"
 }
+
+entry.drafts.subscribe(function(ev) {
+  console.log("entry is ", ev)
+})
 
 var dates = new Rx.Subject()
 
