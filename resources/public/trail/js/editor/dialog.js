@@ -53,7 +53,7 @@ function createValidatable(field, saves) {
   var validations = changes.flatMapLatest(_.partial(validate, field))
   validations.subscribe(_.partial(toggle, field))
 
-  validations.sample(saves).subscribe(function (v) { $("#ex-" + field).val(v[field]) })
+  validations.sample(saves).subscribe(function (v) { $("#ex-" + field).val(v[field]).change() })
 
   return validations.map(function(res) { return res.success })
 }
