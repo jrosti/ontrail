@@ -46,7 +46,7 @@ $(document).ready(function() {
     editor: contentEditor,
     addons: {
       images: {
-        imagesUploadScript: 'http://ontrail.net/file-upload/put'
+        imagesUploadScript: 'http://localhost:8081/file-upload/put'
       }
     }
   });
