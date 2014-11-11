@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <style type="text/css">
+  html, body, body > div {
+      height: 100%;
+      width: 100%;
+      min-height: 520px;
+      min-width: 260px;
+      top: 0;
+      position: absolute;
+  }
+
+  html {
+      background: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+  }
+
+  body {
+
+      background: white 50% 50%;
+      background-size: cover;
+  }
+
+  body.uploaded > div > div {
+      background: #232323;
+      color: white;
+      padding: 20px 35px;
+      height: 140px;
+      top: 50%;
+      margin-top: -70px;
+      position: absolute;
+      right: 0;
+      left: 0;
+      z-index: 20;
+  }
+
+  body.uploaded div.url {
+      display: block;
+      line-height: 60px;
+      padding: 0 150px 0 0;
+      white-space: nowrap;
+      background: white;
+      color: black;
+      position: relative;
+  }
+
+  body.uploaded div.url:after {
+
+      top: 16px;
+      left: -30px;
+      bottom: auto;
+      border-width: 0px 30px 20px 0px;
+      border-color: transparent white;
+
+      content: "";
+      position: absolute;
+      border-style: solid;
+      display: block;
+      width: 0;
+  }
+
+  body.uploaded div.url input {
+      width: 100%;
+      padding: 0 30px;
+      line-height: 42px;
+      height: 58px;
+      overflow-x: auto;
+      display: block;
+      border: none;
+  }
+
+  body.uploaded div.url button {
+      width: 150px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      padding: 0 35px;
+  }
+
+  body > div > form {
+      background: black;
+      color: white;
+      width: 260px;
+      height: 432px;
+      margin: -216px -130px 0;
+      top: 50%;
+      left: 50%;
+      position: absolute;
+      z-index: 30;
+  }
+
+  #thumbnail {
+      width: 260px;
+      overflow:hidden;
+      display: none;
+  }
+
+  #thumbnail img.preview {
+      display: block;
+      margin: 10px auto;
+      width: auto;
+      max-width: 240px;
+      max-height: 200px;
+      height: auto;
+  }
+
+  #thumbnail .image-info {
+
+  }
+
+  body.previewing #thumbnail {
+      display: block;
+  }
+
+  body.previewing #drop-area,
+  body.previewing div.details {
+      display: none;
+  }
+
+
+  .drop-area {
+      background: white;
+      color: #B4485C;
+      margin: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+  }
+
+  .drop-area .instructions {
+      margin: 0;
+      padding: 40px 10px;
+      display: block;
+      border: dotted 2px #62ABB2;
+      text-align: center;
+      text-transform: uppercase;
+  }
+
+  .drop-area.pulse .instructions {
+      border-style: dashed;
+  }
+
+  .drop-area input {
+      z-index: 100;
+      text-align: left;
+      color: transparent;
+      background: transparent;
+
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      height: 161px;
+      width: 240px;
+
+      font-size: 132px;
+
+      opacity: 0.0;
+      filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0.0);
+
+      -moz-opacity:0.0;
+      cursor: pointer;
+  }
+
+  .drop-area input::-webkit-file-upload-button {
+      visibility: hidden;
+  }
+
+  .details, #thumbnail .image-info {
+      padding: 10px 20px;
+      font-weight: 400;
+      font-size: 13px;
+  }
+
+  .details h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 18px;
+      text-transform: uppercase;
+  }
+
+  .details p, #thumbnail .image-info {
+      color: #DBDBDB;
+      margin: 10px 0 30px;
+  }
+  body.uploaded div.url button,
+  form > button {
+      background: #22B9C1;
+      color: white;
+      border: none;
+      outline: 0;
+      line-height: 60px;
+      text-transform: uppercase;
+  }
+
+  form > button {
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+      right: 0;
+  }
+
+  form > button:hover,
+  body.uploaded div.url button.hover {
+      background: #1FA4AB;
+  }
+
+  form > button:active,
+  body.uploaded div.url button.active {
+      background: #1B8C92;
+  }
+
+  form > button[disabled],
+  body.uploaded div.url button[disabled] {
+      background: #CECECE;
+  }
+
+  form > a.cancel, form > a.cancel:visited {
+      font-size: 13px;
+      text-shadow: 1px 1px 1px #000;
+      color: #FFF;
+      text-decoration: none;
+      right: 0;
+      position: absolute;
+      bottom: -18px;
+      display: none;
+  }
+
+  body.previewing form > a.cancel {
+      display: block;
+  }
+
+  body.black form > a.cancel, body.black form > a.cancel:visited {
+      color: black;
+      text-shadow: 1px 1px 1px white;
+  }
+
+  form > a.cancel:hover {
+      text-decoration: underline;
+  }
+
+  body.black footer a, body.black footer a:visited {
+      color: black;
+      text-shadow: 1px 1px 1px white;
+  }
+
+  body.tos > div > div,
+  body.privacy-policy > div > div,
+  body.about > div > div {
+      text-shadow: 1px 1px 1px black;
+      position: absolute;
+      padding: 30px;
+      left: 30px;
+      right: 30px;
+      top: 30px;
+      bottom: 30px;
+      background: black;
+      color: white;
+      background: rgba(0,0,0,0.4);
+      font-size: 13px;
+  }
+
+  @media all and (max-height: 432px) {
+      body > div > form {
+          margin: 0 -130px 0;
+          top: 57px;
+          position: absolute;
+      }
+  }
+
+
+  noindex:-o-prefocus, #drop-area .instructions {
+      font-size: 0px;
+  }
+
+
+  noindex:-o-prefocus, #drop-area .instructions:after {
+      white-space: pre;
+      font-size: 16px !important;
+      content: "Click here \a to \a browse an image";
+  }
+
+
+  .hidden { display: none; opacity: 0; }
+
+  .back { color: white; }
+  </style>
+</head>
+<body>
+<div>
+    <form action="/file-upload/put" method="post" enctype="multipart/form-data">
+        <div class="drop-area" id="drop-area">
+            <p class="instructions">
+                Pudota kuva t&auml;h&auml;n tai klikkaa valitaksesi levylt&auml;.
+
+            </p>
+            <input type="file" name="image" id="file"/>
+        </div>
+        <div id="thumbnail"><img class="preview" alt="Preview"/><div class="image-info"><p>Image name:<br><span class="name">Unknown</span></p><p>Width: <span class="width">unknown </span>px<br>Height: <span class="height">unkown </span>px<br>Size: <span class="size">unknown</span> MB</p></div></div>
+        <div class="details">
+            <h1>Tallenna kuva</h1>
+            <p>Kuvasi tallennetaan Ontrailin k&auml;ytt&auml;j&auml;kohtaiseen kotihakemistoon.</p>
+        </div>
+        <button type="submit">Tallenna!</button>
+        <a href="/" class="cancel" title="Peruuta">Peruuta</a>
+    </form>
+</div>
+</body>
+<script>
+$(document).ready(function() {
+
+    var uploading = false;
+
+    var orig = qParam("o");
+    if (orig) copyToClipboard(orig);
+
+    $('form > a.cancel').click(function(e) {
+        if (!uploading) {
+            e.preventDefault();
+            $('.drop-area input').val("");
+            $('body').removeClass('previewing');
+            $('form > button').attr('disabled', 'disabled');
+        }
+    });
+
+    $('form button[type=submit]').click(function(e) {
+        e.preventDefault();
+        $(this).text("Converting...");
+        $(this).attr("disabled", "disabled");
+        // Don't use $(this) here or the form won't work
+        uploading = true;
+        $('form').trigger('submit');
+    });
+
+    $('footer a.wallpaper').hover(function() {
+        $('body').addClass("wallpaper");
+    }, function() {
+        $('body').removeClass("wallpaper");
+    });
+
+    $('form > button').attr('disabled', 'disabled');
+    if ($('.drop-area input').val() != "") {
+        $('.drop-area input').val("");
+    }
+
+    $('.drop-area input').change(function(e) {
+        //console.log($('.drop-area input').val());
+        if ($('.drop-area input').val() != "") {
+            PreviewImage();
+            $('body').addClass('previewing');
+            $('form > button').removeAttr('disabled');
+        } else {
+            $('body').removeClass('previewing');
+            $('form > button').attr('disabled', 'disabled');
+        }
+    });
+
+    $('.drop-area input').hover(function() {
+        $('.drop-area').addClass("pulse");
+    }, function() {
+        $('.drop-area').removeClass("pulse");
+    });
+
+    $('#drop-area p.instructions').click(function(e) {
+        $('#file').trigger('click');
+    });
+
+});
+
+function PreviewImage() {
+    rFilter = /^(?:image\/gif|image\/png|image\/jpeg|image\/jpg)$/i;
+    oFReader = new FileReader();
+    oFReader.readAsDataURL(document.getElementById("file").files[0]);
+
+    //console.log(oFReader);
+    oFReader.onload = function(oFREvent) {
+        if (!rFilter.test(document.getElementById("file").files[0].type)) {
+            $('.drop-area input').val("");
+            $('body').removeClass('previewing');
+            $('form > button').attr('disabled', 'disabled');
+            alert("Sorry, only png, jpg and gif images are supported");
+            return;
+        }
+        $("#thumbnail img").attr("src", oFREvent.target.result);
+
+        var image = new Image();
+        image.onload = function() {
+            var size = Number((document.getElementById("file").files[0].size / 1024 / 1024).toFixed(2));
+
+            if (size > 4) {
+                alert("Sorry, we only accept images smaller than 4MB");
+            }
+
+            $("#thumbnail .width").text(this.width);
+            $("#thumbnail .height").text(this.height);
+            $("#thumbnail .name").text(document.getElementById("file").files[0].name);
+            $("#thumbnail .size").text(size);
+
+        };
+        image.src = oFREvent.target.result;
+
+    };
+};
+
+function qParam(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function copyToClipboard(text) {
+    window.prompt("Tallenna kuvan linkki leikepöydälle: Ctrl+C, Enter", text);
+}
+
+</script>
+</html>
+
