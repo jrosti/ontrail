@@ -86,7 +86,7 @@ header span {
   display: inline;
 }
 
-#author span {
+#author span[class^="icon-"] {
   font-size: 24px;
 }
 
