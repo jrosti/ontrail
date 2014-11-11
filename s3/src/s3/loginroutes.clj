@@ -15,19 +15,18 @@
                "authUser"  {:value "" :max-age 0 :path "/"}}
      :body    ""}))
 
-(defroutes
-  routes
+(defroutes login-routes
 
-  (POST "/rest/v2/login" {params :params headers :headers}
+  (POST "/trail/rest/login" {params :params headers :headers}
         (let [username (:username params)
               password (:password params)
               redirect-location (if-let [param-referer (:referer params)]
                                   param-referer
                                   (if-let [referer (headers "referer")] referer "/"))]
           (if (auth/authenticate username password)
-            (let [case-user (user/get-case-user username)
-                  authToken (auth/auth-token case-user)
-                  authUser (:username (user/get-case-user username))]
+            (let [user (user/get-case-user username)
+                  authToken (auth/auth-token user)
+                  authUser (:username user)]
               {:status  301
                :headers {"Content-Type" "text/html"
                          "Location"     redirect-location}
@@ -42,8 +41,8 @@
              :body    ""
              })))
 
-  (GET "/rest/v2/logout" {params :params headers :headers}
+  (GET "/trail/rest/logout" {params :params headers :headers}
        (logout params headers))
 
-  (POST "/rest/v2/logout" {params :params headers :headers}
+  (POST "/trail/rest/logout" {params :params headers :headers}
         (logout params headers)))
