@@ -2,7 +2,6 @@
   "name": "ontrail",
   "version": "1.0.0",
   "dependencies": {
-    "browserify-shim": "~3.2.0",
     "lodash": "2.4.1",
     "jquery": "2.1.1",
     "rx": "2.3.14",
@@ -18,16 +17,16 @@
   "engines": {
   },
   "scripts": {
-    "start": "watchify js/main.js -d -o js/main-bundle.js -v"
+    "start": "watchify resources/public/js/main.js -d -o resources/public/js/main-bundle.js -v"
   },
   "repository": {
     "type": "git",
     "url": "ssh://github.com/jrosti/ontrail"
   },
   "browser": {
-    "livestamp": "./js/lib/jquery/jquery.livestamp.js",
-    "medium-editor-insert-plugin": "./js/lib/medium-editor/medium-editor-insert-plugin.min.js",
-    "medium-editor-insert-images": "./js/lib/medium-editor/medium-editor-insert-images.min.js"
+    "livestamp": "./resources/public/js/lib/jquery/jquery.livestamp.js",
+    "medium-editor-insert-plugin": "./resources/public/js/lib/medium-editor/medium-editor-insert-plugin.min.js",
+    "medium-editor-insert-images": "./resources/public/js/lib/medium-editor/medium-editor-insert-images.min.js"
   },
   "browserify-shim": {
     "livestamp": {
