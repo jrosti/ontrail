@@ -13,3 +13,4 @@ node_modules
 .DS_Store
 tmp
 resources/public/trail/js/ontrail.js
+s3/properties.edn
