@@ -32,6 +32,7 @@
 (defn user-from-cookie [cookies]
   (try
       (:username (user-from-token (:value (cookies "authToken"))))
-      (catch Exception exception
+      (catch Exception e
+        (info "login failed")
         "nobody")))
     
