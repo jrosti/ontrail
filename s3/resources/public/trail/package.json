@@ -17,7 +17,7 @@
   "engines": {
   },
   "scripts": {
-    "start": "watchify js/main.js -d -o js/ontrail.js -v"
+    "start": "watchify js/main.js -d -o js/main-bundle.js -v"
   },
   "repository": {
     "type": "git",
