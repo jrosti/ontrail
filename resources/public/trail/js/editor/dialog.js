@@ -43,8 +43,9 @@ function toggle(field, distValidationResult) {
 
 function createValidatable(field, saves) {
 
-  var changes = $("#" + field).onAsObservable('keyup change')
+  var changes = $("#ex-" + field).onAsObservable('keyup change')
     .map( function (ev) { return $(ev.target).val() })
+    .filter( function(val) { return val.length > 0 })
     .throttle(300)
     .distinctUntilChanged()
     .repeat()
@@ -52,7 +53,7 @@ function createValidatable(field, saves) {
   var validations = changes.flatMapLatest(_.partial(validate, field))
   validations.subscribe(_.partial(toggle, field))
 
-  validations.sample(saves).subscribe(function (v) { $("#" + field).val(v[field]) })
+  validations.sample(saves).subscribe(function (v) { $("#ex-" + field).val(v[field]) })
 
   return validations.map(function(res) { return res.success })
 }
@@ -61,8 +62,6 @@ exports.create = function() {
   var saves = $("#details-save").onAsObservable("click")
   var distance = createValidatable("distance", saves)
   var time = createValidatable("time", saves)
-
-
 
   saves.subscribe(function() {
     $("#details-dialog").hide()
