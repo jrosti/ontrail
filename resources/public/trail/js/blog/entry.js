@@ -16,12 +16,11 @@ function mkObj(field, content) {
   return obj
 }
 
-var _text = function text(el) {
-  return $(el).text()
-}
+var _text = function text(el) { return $(el).text() }
+var _html = function html(el) { return $(el).html() }
 
-var _html = function html(el) {
-  return $(el).html()
+var _val = function val(el) {
+  return $(el).val()
 }
 
 function _zipObj(keys) {
@@ -43,7 +42,13 @@ Rx.Observable.prototype.asObjStream = function asObjStream(field) {
 
 var titles = $("#ex-title").onAsObservable('input').throttledEventTarget(300).map(_text).startWith("")
 var bodies = $("#ex-body").onAsObservable('input').throttledEventTarget(300).map(_html).startWith("")
+var distance = $("#ex-distance").onAsObservable('change').map(_attr("target")).map(_val).startWith("")
+var time = $("#ex-time").onAsObservable('change').map(_attr("target")).map(_val).startWith("")
+var sport = $("#ex-sport").onAsObservable('change').map(_attr("target")).map(_val).startWith("")
 
-var drafts = Rx.Observable.combineLatest([titles, bodies], _zipObj(["title", "body"]))
+var drafts = Rx.Observable.combineLatest(
+  [titles, bodies, distance, time, sport],
+  _zipObj(["title", "body", "distance", "time", "sport"])
+).distinctUntilChanged()
 
 exports.drafts = drafts;
