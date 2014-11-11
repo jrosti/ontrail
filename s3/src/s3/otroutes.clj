@@ -8,12 +8,12 @@
 (timbre/refer-timbre)
 
 (defroutes ontrail-routes
-  (GET "/blog/rest/validate/time/:time" [time]
+  (GET "/trail/rest/validate/time/:time" [time]
       (let [duration (to-human-time (parse-duration time))]
         (if (= "" duration)
           (json-response {:message "invalid-duration"} 400)
           (json-response {:success true :time duration}))))
 
-  (GET "/blog/rest/validate/distance/:distance" [distance]
+  (GET "/trail/rest/validate/distance/:distance" [distance]
       (json-response {:success true :distance (to-human-distance (parse-distance distance))})))
 
