@@ -3,9 +3,10 @@ var $ = require("jquery")
 var _ = require("lodash")
 var Rx = require('rx')
 var MediumEditor = require("medium-editor")
+var moment = require('moment')
 var dialog = require("./editor/dialog")
 var entry = require("./blog/entry")
-var moment = require('moment')
+var user = require("./app/user")
 
 // shims
 window.jQuery = $
@@ -41,6 +42,11 @@ var dates = new Rx.Subject()
 $(document).ready(function() {
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
   var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
+
+  user.requiredAuths().subscribe(function( profile ) {
+    console.log("user", profile)
+    $("#author-fullname").text(profile.user);
+  })
 
   $('.editable').mediumInsert({
     editor: contentEditor,
