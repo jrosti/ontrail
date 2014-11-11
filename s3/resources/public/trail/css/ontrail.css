@@ -28,13 +28,20 @@ header {
   background-position: 50% 50%;
 }
 
+header.login {
+  background: url("../img/login.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
 header.image {
     color: white;
 }
 
 header.image div.overlay {
   position: absolute;
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(10, 10, 10, 0.65);
   width: 100%;
   height: 100%;
 }
@@ -42,7 +49,6 @@ header.image div.overlay {
 .content {
   width: 800px;
   margin: 0 auto;
-  padding-bottom: 6em;
 }
 
 header div.title {
@@ -177,7 +183,7 @@ div.divider {
 }
 
 footer {
-  margin: 0 auto;
+  margin: 3em auto 0;
   color: #888;
   font-size: 70%;
   padding: 2em;
