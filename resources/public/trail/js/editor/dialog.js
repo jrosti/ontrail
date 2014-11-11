@@ -24,7 +24,7 @@ var parseValidationResult = function(n) {
 
 function validate(field, dist) {
   return Rx.Observable.onErrorResumeNext(
-    $.getJSONAsObservable('/rest/v1/validate/' + field + '/' + dist)
+    $.getJSONAsObservable('/rest/v1/validate/' + field + '/' + encodeURIComponent(dist))
       .materialize()
       .select(parseValidationResult)
       .dematerialize()
@@ -41,10 +41,10 @@ function toggle(field, distValidationResult) {
     $("#" + field + "-text").text(distValidationResult[field])
 }
 
-function createValidatable(field) {
+function createValidatable(field, saves) {
+
   var changes = $("#" + field).onAsObservable('keyup change')
     .map( function (ev) { return $(ev.target).val() })
-    .filter (function(input) { return input.length > 2 })
     .throttle(300)
     .distinctUntilChanged()
     .repeat()
@@ -52,14 +52,19 @@ function createValidatable(field) {
   var validations = changes.flatMapLatest(_.partial(validate, field))
   validations.subscribe(_.partial(toggle, field))
 
+  validations.sample(saves).subscribe(function (v) { $("#" + field).val(v[field]) })
+
   return validations.map(function(res) { return res.success })
 }
 
 exports.create = function() {
-  var distance = createValidatable("distance")
-  var time = createValidatable("time")
+  var saves = $("#details-save").onAsObservable("click")
+  var distance = createValidatable("distance", saves)
+  var time = createValidatable("time", saves)
 
-  $("#details-save").onAsObservable("click").subscribe(function() {
+
+
+  saves.subscribe(function() {
     $("#details-dialog").hide()
   })
 
