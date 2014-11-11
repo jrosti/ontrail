@@ -1,8 +1,9 @@
 (ns s3.auth
+  (:require [taoensso.timbre :as timbre])
   (:use [s3 user crypto]
         [clojure.string :only [split]]))
 
-(def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
+(timbre/refer-timbre)
 
 (defn authenticate [username password]
   (let [user (get-case-user username)
