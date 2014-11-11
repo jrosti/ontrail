@@ -3,7 +3,7 @@
             [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn]
             [taoensso.timbre :as timbre])
-  (:use [s3 webutil auth otroutes]
+  (:use [s3 webutil auth otroutes loginroutes]
         [ring.util.response :only [redirect]]
         [compojure.route :only [files not-found resources]]
         [compojure.handler :only [site]] 
@@ -40,7 +40,7 @@
   (not-found "not found"))
 
 (defroutes all-routes
-  (routes ontrail-routes main-routes))
+  (routes ontrail-routes login-routes main-routes))
 
 (defn -main [& args]
   (info "Hello Brave new world!")
