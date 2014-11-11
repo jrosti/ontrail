@@ -33,8 +33,10 @@
           (is-authenticated?
            cookies
            (let [user (user-from-cookie cookies)
-                 cdn-url (put-file user (:image params))]
-             (redirect (str upload-url "?o=" (url-encode cdn-url)))))))
+                 cdn-url (put-file user (:file params))]
+             {:status 200
+              :headers {"Content-Type" "text/plain"}
+              :body (url-encode cdn-url)}))))
   (resources "/")
   (not-found "not found"))
 
