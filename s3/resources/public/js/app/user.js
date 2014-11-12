@@ -1,5 +1,10 @@
+var $ = require("jquery")
 var cookie = require("cookie-cutter")
 var Rx = require("rx");
+
+var authUser = cookie.get("authUser")
+
+$("body").addClass(authUser || false ? "logged-in" : "logged-out")
 
 function ajaxProfileReq() {
   // todo -- real login
@@ -7,7 +12,6 @@ function ajaxProfileReq() {
 }
 
 exports.requiredAuths = function() {
-  var authUser = cookie.get("authUser")
   if (authUser == null) {
     document.location = "/login.html"
     return Rx.Observable.empty()
