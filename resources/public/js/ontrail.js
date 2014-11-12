@@ -678,6 +678,7 @@
     sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport", "group"])).distinctUntilChanged()
+
     userTagPages.selectArgs(pairsAsAssocMap).doAction(function () {
         $("#table-entries").html("")
       }).throttle(30).scrollWith(OnTrail.rest.exercises, $("#content-entries"), $("*[role=content]"))
@@ -718,6 +719,15 @@
       }
     }
 
+    userTagPages.selectArgs(function() {
+      console.log("detail")
+      var args = Array.prototype.slice.call(arguments)
+      var pairs = partition(args, 2)
+      return _.extend({action: args[0]}, _.zipObject(pairs))
+    }).throttle(101).selectAjax(OnTrail.rest.pageDetail)
+      .takeUntil(currentPages.whereArgs(_.compose(not, partialEqualsAny(["user", "tags", "sport", "group"]))))
+      .repeat().subscribeArgs(renderPageDetail)
+
     var $raceReports2013 = $('#raceReports2013')
     $($raceReports2013).hide()
     $("#toggleReports2013").toggle(function () {
@@ -725,13 +735,6 @@
     }, function () {
       $($raceReports2013).hide()
     })
-
-
-    userTagPages.selectArgs(function() {
-      var args = Array.prototype.slice.call(arguments)
-      var pairs = partition(args, 2)
-      return _.extend({action: args[0]}, _.zipObject(pairs))
-    }).throttle(101).selectAjax(OnTrail.rest.pageDetail).subscribeArgs(renderPageDetail)
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101)
     exPages.selectAjax(OnTrail.rest.details).combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
