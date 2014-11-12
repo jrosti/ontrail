@@ -13,10 +13,48 @@ body {
   font-family: "museo-slab",serif;
   font-size: 1.2em;
   background: #f8f8f8;
+  display: flex;
+}
+
+body.menu-collapsed #side-menu {
+  width: 0;
+  overflow: hidden;
+}
+
+#side-menu {
+  width: 20%;
+  height: 100%;
+  background: #282828;
+}
+
+#side-menu .pure-menu {
+  background: #282828;
+  color: white;
+}
+
+.favicon:hover {
+  background: no-repeat url('../img/favicon-32x32.png') 5px 50% #fff;
+  padding-left: 47px !important;
+}
+
+
+.favicon {
+  background: no-repeat url('../img/favicon-32x32.png') 5px 50%;
+  padding-left: 47px !important;
 }
 
 #top-menu {
   position: fixed;
+}
+
+#show-menu {
+  cursor: pointer;
+}
+
+#main-content {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 header {
@@ -232,6 +270,10 @@ footer img {
   margin: auto auto;
   padding: 2em;
   border: solid .3em #0075ea;
+}
+
+#ex-title {
+  outline: 0px solid transparent;
 }
 
 .medium-editor-placeholder:after {

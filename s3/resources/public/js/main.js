@@ -43,6 +43,11 @@ $(document).ready(function() {
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
   var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
+  $("#show-menu").onAsObservable("click").subscribe(function() {
+    $("body").toggleClass("menu-collapsed")
+    $("#side-menu .pure-menu").toggleClass("pure-menu-open")
+  })
+
   user.requiredAuths().subscribe(function( profile ) {
     console.log("user", profile)
     $("#author-fullname").text(profile.user);
