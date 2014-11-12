@@ -44,6 +44,8 @@
 (defroutes all-routes
   (routes ontrail-routes login-routes main-routes))
 
+(def app (-> (site all-routes)))
+
 (defn -main [& args]
   (info "Hello Brave new world!")
-  (run-server (site #'all-routes) {:port 8081}))
+  (run-server app {:port 8081}))
