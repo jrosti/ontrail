@@ -1,12 +1,12 @@
 (ns s3.user
-  (:use [s3 crypto mongodb])
-  (:require [taoensso.timbre :as timbre]
+  (:use [s3 crypto mongodb log])
+  (:require
             [monger.collection :as mc]
             [monger.query :as mq]
             [monger.result :as mr]
             [digest :as digest]))
 
-(timbre/refer-timbre)
+(use-logging)
 
 (defn as-gravatar [user]
   (let [gravatar? (:gravatar user)
