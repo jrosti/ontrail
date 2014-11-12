@@ -13,11 +13,21 @@
 <script type="text/javascript" src="http://use.typekit.net/hwl6yqd.js"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 </head>
-<body>
+<body class="menu-collapsed">
+
+<div id="side-menu" class="pure-u-1-5">
+  <div class="pure-menu pure-menu-vertical">
+    <ul>
+      <li><a class="favicon">ontrail.net</a></li>
+      <li id="login"><a href="/login.html" class="icon-login">kirjaudu sisään</a></li>
+      <li id="logout"><a class="icon-logout">kirjaudu ulos</a></li>
+    </ul>
+  </div>
+</div>
 
 <div id="main-content" class="pure-g">
   <div id="top-menu" class="pure-menu pure-menu-open pure-menu-horizontal pure-u-1">
-    <a class="pure-menu-heading"><img src="img/favicon-32x32.png"/></a>
+    <a id="show-menu" class="pure-menu-heading"><img src="img/favicon-32x32.png"/></a>
     <span class="draft pure-menu-heading">ontrail.net</span>
   </div>
 
