@@ -6,7 +6,6 @@ var MediumEditor = require("medium-editor")
 var moment = require('moment')
 var dialog = require("./editor/dialog")
 var entry = require("./blog/entry")
-var user = require("./app/user")
 var menu = require("./app/menu")
 
 // shims
@@ -46,6 +45,7 @@ $(document).ready(function() {
 
   menu.create()
 
+  var user = require("./app/user")
   user.requiredAuths().subscribe(function( profile ) {
     console.log("user", profile)
     $("#author-fullname").text(profile.user);
