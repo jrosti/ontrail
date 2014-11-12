@@ -14,6 +14,8 @@
                  [clj-aws-s3 "0.3.10"]
                  [clj-time "0.8.0"]
                 ]
+  :plugins [[lein-ring "0.8.13"]]
+  :ring {:handler s3.core/app}
   :aot  [s3.core]
   :main s3.core)
 
