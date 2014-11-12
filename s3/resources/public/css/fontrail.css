@@ -87,3 +87,6 @@
 .icon-lock-open-alt:before { content: '\e822'; } /* '' */
 .icon-login:before { content: '\e823'; } /* '' */
 .icon-logout:before { content: '\e824'; } /* '' */
+.icon-edit:before { content: '\e825'; } /* '' */
+.icon-list:before { content: '\e826'; } /* '' */
+.icon-list-add:before { content: '\e827'; } /* '' */
