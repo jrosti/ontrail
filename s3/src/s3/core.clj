@@ -1,9 +1,8 @@
 (ns s3.core
   (:require [aws.sdk.s3 :as s3]
             [ring.middleware.multipart-params :as mp]
-            [clojure.edn :as edn]
-            [taoensso.timbre :as timbre])
-  (:use [s3 webutil auth otroutes loginroutes]
+            [clojure.edn :as edn])
+  (:use [s3 webutil auth apiroutes loginroutes log]
         [ring.util.response :only [redirect resource-response]]
         [compojure.route :only [files not-found resources]]
         [compojure.handler :only [site]]
@@ -11,7 +10,7 @@
         org.httpkit.server)
   (:gen-class))
 
-(timbre/refer-timbre)
+(use-logging)
 
 (def conf (clojure.edn/read-string (slurp "properties.edn")))
 (def creds (:s3 conf))
@@ -42,9 +41,10 @@
   (not-found "not found"))
 
 (defroutes all-routes
-  (routes ontrail-routes login-routes main-routes))
+  (routes api-routes main-routes))
 
-(def app (-> (site all-routes)))
+(def app (-> (site all-routes)
+             (wrap-with-logger)))
 
 (defn -main [& args]
   (info "Hello Brave new world!")
