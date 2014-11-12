@@ -1,11 +1,11 @@
 (ns s3.formats
-  (:use s3.utils)
-  (:require [taoensso.timbre :as timbre]
+  (:use [s3 utils log])
+  (:require
             [clj-time.format :as time-format]
             [clj-time.core :as time]
             [clojure.string :as string]))
 
-(timbre/refer-timbre)
+(use-logging)
 
 (defn get-hres-percentage [exercise user-profile]
   (let [resthr (get user-profile :resthr)

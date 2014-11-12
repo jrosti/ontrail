@@ -1,9 +1,8 @@
 (ns s3.auth
-  (:require [taoensso.timbre :as timbre])
-  (:use [s3 user crypto]
+  (:use [s3 user crypto log]
         [clojure.string :only [split]]))
 
-(timbre/refer-timbre)
+(use-logging)
 
 (defn authenticate [username password]
   (let [user (get-case-user username)

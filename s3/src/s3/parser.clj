@@ -1,9 +1,11 @@
 (ns s3.parser
-  (:use [s3 formats])
-  (:require [taoensso.timbre :as timbre]
+  (:use [s3 formats log])
+  (:require
             [clj-time.format :as format]
             [clojure.string :as string]
             [clj-time.core :as time]))
+
+(use-logging)
 
 (def multi-parser (format/formatter (time/default-time-zone)
                                     "dd.MM.yyyy"
