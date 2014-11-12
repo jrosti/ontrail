@@ -6,7 +6,6 @@ var MediumEditor = require("medium-editor")
 var moment = require('moment')
 var dialog = require("./editor/dialog")
 var entry = require("./blog/entry")
-var menu = require("./app/menu")
 
 // shims
 window.jQuery = $
@@ -40,16 +39,17 @@ entry.drafts.subscribe(function(ev) {
 var dates = new Rx.Subject()
 
 $(document).ready(function() {
-  var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
-  var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
-
-  menu.create()
-
+  // require common parts
+  require("./app/menu")
   var user = require("./app/user")
+
   user.requiredAuths().subscribe(function( profile ) {
     console.log("user", profile)
     $("#author-fullname").text(profile.user);
   })
+
+  var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
+  var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
   $('.editable').mediumInsert({
     editor: contentEditor,
