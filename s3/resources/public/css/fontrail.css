@@ -84,3 +84,6 @@
 .icon-bold:before, .fa.fa-bold:before { content: '\e81f'; } /* '' */
 .icon-link:before, .fa.fa-link:before { content: '\e820'; } /* '' */
 .icon-quote-right:before, .fa.fa-quote-right:before { content: '\e821'; } /* '' */
+.icon-lock-open-alt:before { content: '\e822'; } /* '' */
+.icon-login:before { content: '\e823'; } /* '' */
+.icon-logout:before { content: '\e824'; } /* '' */
