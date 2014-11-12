@@ -4,9 +4,9 @@
             [clojure.edn :as edn]
             [taoensso.timbre :as timbre])
   (:use [s3 webutil auth otroutes loginroutes]
-        [ring.util.response :only [redirect]]
+        [ring.util.response :only [redirect resource-response]]
         [compojure.route :only [files not-found resources]]
-        [compojure.handler :only [site]] 
+        [compojure.handler :only [site]]
         [compojure.core :only [defroutes GET POST DELETE ANY context routes]]
         org.httpkit.server)
   (:gen-class))
@@ -36,6 +36,8 @@
              {:status 200
               :headers {"Content-Type" "text/plain"}
               :body (url-encode cdn-url)}))))
+  (GET "/" {}
+    (resource-response "index.html" {:root "public"}))
   (resources "/")
   (not-found "not found"))
 
