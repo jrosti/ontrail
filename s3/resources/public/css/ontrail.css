@@ -22,7 +22,6 @@ body.menu-collapsed #side-menu {
 }
 
 #side-menu {
-  width: 20%;
   height: 100%;
   background: #282828;
 }
@@ -85,14 +84,12 @@ header.image div.overlay {
 }
 
 .content {
-  width: 800px;
   margin: 0 auto;
 }
 
 header div.title {
   position: absolute;
   bottom: 10%;
-  width: 100%;
 }
 
 header div.title > * {
@@ -254,6 +251,7 @@ footer img {
 .dialog {
   position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0, 0.6);
