@@ -7,6 +7,7 @@ var moment = require('moment')
 var dialog = require("./editor/dialog")
 var entry = require("./blog/entry")
 var user = require("./app/user")
+var menu = require("./app/menu")
 
 // shims
 window.jQuery = $
@@ -43,10 +44,7 @@ $(document).ready(function() {
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
   var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
-  $("#show-menu").onAsObservable("click").subscribe(function() {
-    $("body").toggleClass("menu-collapsed")
-    $("#side-menu .pure-menu").toggleClass("pure-menu-open")
-  })
+  menu.create()
 
   user.requiredAuths().subscribe(function( profile ) {
     console.log("user", profile)
