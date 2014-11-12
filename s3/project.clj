@@ -11,8 +11,9 @@
                  [ring "1.3.1"]
                  [ring/ring-servlet "1.3.1"]
                  [compojure "1.2.1"]
-                 [clj-aws-s3 "0.3.10"]
+                 [clj-aws-s3 "0.3.10" :exclusions [joda-time]]
                  [clj-time "0.8.0"]
+                 [digest "1.4.4"]
                 ]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler s3.core/app}
