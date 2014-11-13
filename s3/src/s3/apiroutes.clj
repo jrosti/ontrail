@@ -8,7 +8,7 @@
 (use-logging)
 
 (defn- create-draft [user]
-  {:id "Random-id" :user (:username user)})
+  {:id "Random-id" :user user})
 
 (defroutes api-routes
 
@@ -61,6 +61,7 @@
         (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
 
     (POST "/blog/draft/new" {params :params cookies :cookies}
-       (as-authenticated? cookies create-draft))
+       (as-authenticated? cookies #(-> % create-draft json-response)))
+
   ))
 
