@@ -7,6 +7,9 @@
 
 (use-logging)
 
+(defn- create-draft [user]
+  {:id "Random-id" :user (:username user)})
+
 (defroutes api-routes
 
   (context "/trail/rest" []
@@ -55,5 +58,9 @@
             (json-response {:success true :time duration}))))
 
     (GET "/validate/distance/:distance" [distance]
-        (json-response {:success true :distance (to-human-distance (parse-distance distance))}))))
+        (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
+
+    (POST "/blog/draft/new" {params :params cookies :cookies}
+       (as-authenticated? cookies create-draft))
+  ))
 

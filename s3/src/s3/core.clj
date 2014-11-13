@@ -28,13 +28,12 @@
 (defroutes main-routes
   (mp/wrap-multipart-params
     (POST "/file-upload/put" {params :params cookies :cookies}
-          (is-authenticated?
-           cookies
-           (let [user (user-from-cookie cookies)
-                 cdn-url (put-file user (:file params))]
-             {:status 200
-              :headers {"Content-Type" "text/plain"}
-              :body (url-encode cdn-url)}))))
+          (as-authenticated? cookies
+            (fn [user]
+              (let [cdn-url (put-file user (:file params))]
+                {:status 200
+                 :headers {"Content-Type" "text/plain"}
+                 :body (url-encode cdn-url)})))))
   (GET "/" {}
     (resource-response "index.html" {:root "public"}))
   (resources "/")

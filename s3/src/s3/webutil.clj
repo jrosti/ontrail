@@ -6,7 +6,7 @@
 
 (use-logging)
 
-(defn url-encode [x] 
+(defn url-encode [x]
   (java.net.URLEncoder/encode x))
 
 (defn url-encode [x]
@@ -33,10 +33,11 @@
         :headers {"Content-Type" "application/json"}
         :body (str exception#)})))
 
-(defmacro is-authenticated? [cookies action]
+(defmacro as-authenticated? [cookies action]
   `(try
      (if (auth/valid-auth-token? (:value (~cookies "authToken")))
-       ~action
+       (let [user# (auth/user-from-cookie ~cookies)]
+         (~action user#))
        (json-response {"error" "Authentication required"} 401))
      (catch Exception exception#
        {:status 500
