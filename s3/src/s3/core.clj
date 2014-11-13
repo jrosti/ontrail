@@ -36,6 +36,10 @@
                  :body (url-encode cdn-url)})))))
   (GET "/" {}
     (resource-response "index.html" {:root "public"}))
+  (GET "/edit/" {}
+    (resource-response "edit.html" {:root "pages"}))
+  (GET "/edit/:blogId" [blog-id]
+    (resource-response "edit.html" {:root "pages"}))
   (resources "/")
   (not-found "not found"))
 
