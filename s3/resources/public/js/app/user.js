@@ -7,10 +7,8 @@ var authUser = cookie.get("authUser")
 $("body").addClass(authUser || false ? "logged-in" : "logged-out")
 
 function ajaxProfileReq() {
-  var profiles = $.getJSONAsObservable("/trail/rest/logged-ins")
+  return $.getJSONAsObservable("/trail/rest/logged-ins")
     .map(function(result) { return result.data; } )
-    .doAction(function(l) { console.log("got profile", l) });
-  return profiles;
 }
 
 exports.requiredAuths = function() {
