@@ -44,8 +44,8 @@ $(document).ready(function() {
   var user = require("./app/user")
 
   user.requiredAuths().subscribe(function( profile ) {
-    console.log("user", profile)
     $("#author-fullname").text(profile.user);
+    $("#author-image").css("background-image", "url(\'" + profile.avatarUrl + "\')");
   })
 
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor

@@ -131,10 +131,23 @@ header span {
 }
 
 #author {
-  font-size: 12px;
+  font-size: 17px;
   position: absolute;
   top: 64px;
   left: 48px;
+  vertical-align: middle;
+}
+
+#author-image {
+  display: inline-block;
+  vertical-align: middle;
+  border: solid 1px #0075ea;
+  border-radius: 17px;
+  width: 34px;
+  height: 34px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-size: cover;
 }
 
 #overview {
