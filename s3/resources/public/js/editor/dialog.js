@@ -24,7 +24,7 @@ var parseValidationResult = function(n) {
 
 function validate(field, dist) {
   return Rx.Observable.onErrorResumeNext(
-    $.getJSONAsObservable('/rest/v1/validate/' + field + '/' + encodeURIComponent(dist))
+    $.getJSONAsObservable('/trail/rest/validate/' + field + '/' + encodeURIComponent(dist))
       .materialize()
       .select(parseValidationResult)
       .dematerialize()
