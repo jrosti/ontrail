@@ -27,9 +27,13 @@ var distance = $("#ex-distance").onAsObservable('change').map(ƒ.attrF("target")
 var time = $("#ex-time").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
 var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
 
-var drafts = Rx.Observable.combineLatest(
-  [titles, bodies, distance, time, sport],
-  _zipObj(["title", "body", "distance", "time", "sport"])
-).distinctUntilChanged().skip(1)
+var createdDraft = $.postAsObservable("/trail/rest/blog/draft/new", {}).map(ƒ.attrF("data")).doAction(function(val) { console.log("draft, ", val)})
+
+var drafts =
+  createdDraft.flatMapLatest(function(blogPost) {
+    return Rx.Observable.combineLatest([titles, bodies, distance, time, sport], _zipObj(["title", "body", "distance", "time", "sport"]))
+      .map(function(values) { return _.merge({}, blogPost, values) })
+  }).distinctUntilChanged().skip(1)
+
 
 exports.drafts = drafts;
