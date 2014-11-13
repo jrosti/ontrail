@@ -32,9 +32,15 @@ var titleEditorOpts = {
   placeholder: "Naseva otsikko lenkillesi!"
 }
 
-entry.drafts.subscribe(function(ev) {
-  console.log("entry is ", ev)
-})
+var savedEntries = entry.drafts.throttle(6000)
+  .doAction(function(val) { console.log("Try save draft", val) })
+  .flatMap(function(entry) {
+    return $.postAsObservable("/trail/rest/blog/draft/" + entry.id, entry).catchException(function (error) {
+      return Rx.Observable.empty()
+    })
+  }).subscribe(function(response) {
+    console.log("autosave response ", response)
+  })
 
 var dates = new Rx.Subject()
 
@@ -59,6 +65,7 @@ $(document).ready(function() {
       }
     }
   });
+
 
   dates.subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp()
