@@ -35,5 +35,4 @@ var drafts =
       .map(function(values) { return _.merge({}, blogPost, values) })
   }).distinctUntilChanged().skip(1)
 
-
 exports.drafts = drafts;
