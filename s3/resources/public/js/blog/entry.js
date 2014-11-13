@@ -49,6 +49,6 @@ var sport = $("#ex-sport").onAsObservable('change').map(_attr("target")).map(_va
 var drafts = Rx.Observable.combineLatest(
   [titles, bodies, distance, time, sport],
   _zipObj(["title", "body", "distance", "time", "sport"])
-).distinctUntilChanged()
+).distinctUntilChanged().skip(1)
 
 exports.drafts = drafts;
