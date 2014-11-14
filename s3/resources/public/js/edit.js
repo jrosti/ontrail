@@ -57,8 +57,12 @@ $(document).ready(function() {
     $("#author-fullname").text(profile.user);
     $("#author-image").css("background-image", "url(\'" + profile.avatarUrl + "\')");
 
+
     $("#ex-sport").zelect({
-      placeholder: "Juoksu, suunnistus, pyöräily, ..."
+      placeholder: "Juoksu, suunnistus, pyöräily, ...",
+      loader: function(term, page, callback) {
+        callback(profile.sports)
+      }
     });
   })
 
