@@ -2,6 +2,10 @@
 var $ = require("jquery")
 var _ = require("lodash")
 var Rx = require('rx')
+
+window.jQuery = $
+require("zelect")
+
 var MediumEditor = require("medium-editor")
 var moment = require('moment')
 var dialog = require("./editor/dialog")
@@ -66,10 +70,11 @@ $(document).ready(function() {
     }
   });
 
-
   dates.subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp()
   })
+
+  $("#ex-sport").zelect();
 
   dates.onNext(moment())
 
