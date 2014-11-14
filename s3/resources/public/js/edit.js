@@ -56,6 +56,10 @@ $(document).ready(function() {
   user.requiredAuths().subscribe(function( profile ) {
     $("#author-fullname").text(profile.user);
     $("#author-image").css("background-image", "url(\'" + profile.avatarUrl + "\')");
+
+    $("#ex-sport").zelect({
+      placeholder: "Juoksu, suunnistus, pyöräily, ..."
+    });
   })
 
   var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
@@ -73,8 +77,6 @@ $(document).ready(function() {
   dates.subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp()
   })
-
-  $("#ex-sport").zelect();
 
   dates.onNext(moment())
 
