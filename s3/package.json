@@ -14,8 +14,7 @@
     "browserify": "^6.2.0",
     "browserify-shim": "^3.8.0"
   },
-  "engines": {
-  },
+  "engines": {},
   "scripts": {
     "start": "watchify resources/public/js/main.js -d -o resources/public/js/main-bundle.js -v"
   },
@@ -25,6 +24,7 @@
   },
   "browser": {
     "livestamp": "./resources/public/js/lib/jquery/jquery.livestamp.js",
+    "zelect": "./resources/public/js/lib/jquery/jquery.zelect.js",
     "medium-editor-insert-plugin": "./resources/public/js/lib/medium-editor/medium-editor-insert-plugin.min.js",
     "medium-editor-insert-images": "./resources/public/js/lib/medium-editor/medium-editor-insert-images.min.js"
   },
@@ -32,11 +32,21 @@
     "livestamp": {
       "depends": "jquery"
     },
+    "zelect": {
+      "depends": "jquery"
+    },
     "medium-editor-insert-plugin": {
-      "depends": ["jquery", "medium-editor"]
+      "depends": [
+        "jquery",
+        "medium-editor"
+      ]
     },
     "medium-editor-insert-images": {
-      "depends": ["jquery", "medium-editor", "medium-editor-insert-plugin"]
+      "depends": [
+        "jquery",
+        "medium-editor",
+        "medium-editor-insert-plugin"
+      ]
     }
   },
   "browserify": {
