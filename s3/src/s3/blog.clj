@@ -1,7 +1,7 @@
 (ns s3.blog
-  (:use [s3 log mongodb parser formats])
-  (:require
-            [monger.collection :as mc]
+  (:use [s3 log mongodb parser formats utils])
+  (:require [monger.collection :as mc]
+            [s3.mongoquery :as filter]
             [monger.result :as mr]
             [monger.query :as mq]
             [monger.conversion]
@@ -23,13 +23,14 @@
 (defn transform-using [blog transform-rules]
   (let [dropped (apply dissoc blog (:drop transform-rules))
         tf-fns (:transform transform-rules)
-        transformed (merge dropped (reduce (fn [m [key transform]]
-                                             (assoc m key (transform (key dropped))))
-                                             {}
-                                             (select-keys
-                                                tf-fns
-                                                (vec (clojure.set/intersection (set (keys dropped))
-                                                                               (set (keys tf-fns)))))))]
+        merged (reduce (fn [m [key transform]]
+                         (assoc m key (transform (key dropped))))
+                       {}
+                       (select-keys
+                         tf-fns
+                         (vec (clojure.set/intersection (set (keys dropped))
+                                                        (set (keys tf-fns))))))
+        transformed (merge dropped merged)]
     (if (every? identity ((apply juxt (:validation transform-rules)) transformed))
       transformed
       (error "cannot validate blog object" blog))))
@@ -52,16 +53,32 @@
 (def from-user-to-db-transform
   {:drop [:id]
    :transform {:distance #(-> % parse-distance int)
-               :time #(-> % parse-duration int)}
-   :validation [:user #(-> % :draft nil? not)]})
+               :time #(-> % parse-duration int)
+               :draft #(if (string? %) (parse-boolean %) (boolean %))}
+   :validation [:user #(-> % :draft string? not)]})
 
 (defn find-blog-object [id]
   (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
 
+
+(defn query [page rules sort-order]
+  (mq/with-collection
+    *db* BLOG
+    (mq/find rules)
+    (mq/paginate :page page :per-page 10)
+    (mq/sort sort-order)))
+
+(defn list-result [user page rules sort-order]
+  {:blogs (->> (query page rules sort-order)
+               (map from-db-to-user))
+   :page page
+   :viewer user
+   :sortedby sort-order})
+
 (defn create-new-draft [user]
   (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user})))
 
-(defn update [user blog]
+(defn update-with [user blog]
   (let [new-blog (assoc blog :user user)
         id (:id new-blog)
         db-object (find-blog-object id)]
@@ -69,11 +86,31 @@
       (-> new-blog
           (transform-using from-user-to-db-transform)
           (insert-and-return db-object))
-      (error "Db object deleted or not own. Refusing to update" user new-blog db-object))))
+      (error "Db object deleted or not own. Refusing to update:" user new-blog id))))
 
-(defn find-by [id]
-  (from-db-to-user (find-blog-object id)))
+(defn find-by [user id]
+  (let [obj (find-blog-object id)]
+    (if (or (not (:draft obj)) (= (:user obj) user))
+      (from-db-to-user obj)
+      (error "Cannot view draft from another user:" user id))))
 
-(defn delete-by [id])
+(defn delete-by [user id]
+  (let [db-object (find-blog-object id)
+        oid (:_id db-object)]
+    (if (and (not= nil db-object) (own? user db-object))
+      (do (mc/insert *db* BLOG_DEL db-object)
+          (mr/ok? (mc/remove-by-id *db* BLOG oid)))
+      (error "Db object deleted or not own. Refusing to delete:" user oid))))
 
-(defn list-by [rules])
+
+(defn list-by [user params]
+  (let [page (parse-int (params :page "1"))
+        rules (merge (filter/make-query-from params) {:draft false})
+        sort-order (filter/sort-results-by params)]
+    (list-result user page rules sort-order)))
+
+(defn list-drafts [user params]
+  (let [page (parse-int (params :page "1"))
+        rules {:user user :draft true}
+        sort-order (filter/sort-results-by params)]
+    (list-result user page rules sort-order)))

@@ -7,10 +7,7 @@
 
 (use-logging)
 
-(defroutes api-routes
-
-  (context "/trail/rest" []
-
+(defroutes api-routes (context "/trail/rest" []
 
     (POST "/login" {params :params headers :headers}
          (let [username (:username params)
@@ -48,7 +45,8 @@
                       "authUser"  {:value "" :max-age 0 :path "/"}}
             :body    ""}))
 
-    (GET "/logged-ins" {cookies :cookies} (auth-> cookies (logged-in)))
+    (GET "/logged-ins" {cookies :cookies}
+         (auth-> cookies (logged-in)))
 
     (GET "/validate/time/:time" [time]
          (let [duration (to-human-time (parse-duration time))]
@@ -57,16 +55,27 @@
               (json-response {:success true :time duration}))))
 
     (GET "/validate/distance/:distance" [distance]
-         (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
+         (json-response {:success true
+                         :distance (to-human-distance (parse-distance distance))}))
 
-    (POST "/blog/draft/new" {params :params cookies :cookies}
+    (POST "/blog/draft/new" {cookies :cookies}
           (auth-> cookies blog/create-new-draft))
 
-    (POST "/blog/:id" {params :params cookies :cookies}
-          (auth-> cookies (blog/update params)))
+    (POST "/blog/:id" {blog :params cookies :cookies}
+          (auth-> cookies (blog/update-with blog)))
 
-    (GET "/blog/:id" [id]
-          (json-response (blog/find-by id)))
+    (GET "/blog/:id" {params :params cookies :cookies}
+          (user-> cookies (blog/find-by (:id params))))
 
-  ))
+    (DELETE "/blog/:id" {params :params cookies :cookies}
+            (auth-> cookies (blog/delete-by (:id params))))
+
+    (GET "/blog/list/all" {params :params cookies :cookies}
+         (user-> cookies (blog/list-by params)))
+
+    (GET "/blog/list/drafts" {params :params cookies :cookies}
+         (auth-> cookies (blog/list-drafts params)))
+
+
+    ))
 
