@@ -6,7 +6,7 @@
 
 (use-logging)
 
-(defn params [user]
+(defn logged-in [user]
   (let [user-map (user/get-user user)]
     {
      :email (:email user-map)

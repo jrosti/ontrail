@@ -1,18 +1,18 @@
 (ns s3.apiroutes
   (:require [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn]
-            )
+            [s3.blog :as blog])
   (:use [s3 webutil formats parser loggedin auth user log]
         [compojure.core :only [defroutes GET POST DELETE ANY context]]))
 
 (use-logging)
 
-(defn- create-draft [user]
-  {:id "Random-id" :user user})
+
 
 (defroutes api-routes
 
   (context "/trail/rest" []
+
 
     (POST "/login" {params :params headers :headers}
          (let [username (:username params)
@@ -38,30 +38,37 @@
               :body    ""
               })))
 
-    (ANY "/logout" {params :params headers :headers}
-       (let [redirect-location (if-let [param-referer (:referer params)]
-                                 param-referer
-                                 (if-let [referer (headers "referer")] referer "/"))]
-         {:status  301
-          :headers {"Content-Type" "text/html"
-                    "Location"     redirect-location}
-          :cookies {"authToken" {:value "" :max-age 0 :path "/"}
-                    "authUser"  {:value "" :max-age 0 :path "/"}}
-          :body    ""}))
 
-    (GET "/logged-ins" {cookies :cookies} (json-response (params (user-from-cookie cookies))))
+    (ANY "/logout" {params :params headers :headers}
+         (let [redirect-location (if-let [param-referer (:referer params)]
+                                   param-referer
+                                   (if-let [referer (headers "referer")] referer "/"))]
+           {:status  301
+            :headers {"Content-Type" "text/html"
+                      "Location"     redirect-location}
+            :cookies {"authToken" {:value "" :max-age 0 :path "/"}
+                      "authUser"  {:value "" :max-age 0 :path "/"}}
+            :body    ""}))
+
+    (GET "/logged-ins" {cookies :cookies} (auth-> cookies (logged-in)))
 
     (GET "/validate/time/:time" [time]
-        (let [duration (to-human-time (parse-duration time))]
-          (if (= "" duration)
-            (json-response {:message "invalid-duration"} 400)
-            (json-response {:success true :time duration}))))
+         (let [duration (to-human-time (parse-duration time))]
+            (if (= "" duration)
+              (json-response {:message "invalid-duration"} 400)
+              (json-response {:success true :time duration}))))
 
     (GET "/validate/distance/:distance" [distance]
-        (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
+         (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
 
     (POST "/blog/draft/new" {params :params cookies :cookies}
-       (as-authenticated? cookies #(-> % create-draft json-response)))
+          (auth-> cookies blog/create-draft))
+
+    (POST "/blog/:id" {params :params cookies :cookies}
+          (auth-> cookies (blog/create params)))
+
+    (GET "/blog/:id" [id]
+          (json-response (blog/get id)))
 
   ))
 
