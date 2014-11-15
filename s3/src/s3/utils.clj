@@ -11,6 +11,9 @@
     (catch Exception e
       0)))
 
+(defn parse-boolean [^String bool-str]
+  (Boolean/parseBoolean bool-str))
+
 (defn truncate 
   ([str] 
      (truncate str 100))
