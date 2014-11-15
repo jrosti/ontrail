@@ -23,18 +23,19 @@
 (defn own? [user dbo]
   (= user (:user dbo)))
 
-(defn transform-using [params transform-rules]
-  (let [dropped (apply dissoc params (:drop transform-rules))
+(defn transform-using [blog transform-rules]
+  (let [dropped (apply dissoc blog (:drop transform-rules))
         tf-fns (:transform transform-rules)
         transformed (merge dropped (reduce (fn [m [key transform]]
                                              (assoc m key (transform (key dropped))))
                                              {}
                                              (select-keys
-                                              tf-fns
-                                              (vec (clojure.set/intersection (set (keys dropped)) (set (keys tf-fns)))))))]
+                                                tf-fns
+                                                (vec (clojure.set/intersection (set (keys dropped))
+                                                                               (set (keys tf-fns)))))))]
     (if (every? identity ((apply juxt (:validation transform-rules)) transformed))
       transformed
-      (error "cannot validate blog object" params))))
+      (error "cannot validate blog object" blog))))
 
 (def from-db-transform
   {:drop []
@@ -53,8 +54,8 @@
 
 (def to-db-transform
   {:drop [:id]
-   :transform {:distance parse-distance
-               :time parse-duration}
+   :transform {:distance #(-> % parse-distance int)
+               :time #(-> % parse-duration int)}
    :validation [:user #(-> % :draft nil? not)]})
 
 (defn find-dbo [id]
@@ -68,7 +69,7 @@
       (-> blog
           (transform-using to-db-transform)
           (insert-and-return dbo))
-      (error "Refusing to create" user blog dbo))))
+      (error "Db object deleted or not own. Refusing to create" user blog dbo))))
 
 (defn get [id]
   (from-db-to-user (find-dbo id)))
