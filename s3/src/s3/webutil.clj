@@ -1,6 +1,6 @@
 (ns s3.webutil
-  (:require [clojure.data.json :as json]
-            [s3.auth :as auth]
+  (:require [s3.auth :as auth]
+            [cheshire.core :refer :all]
             )
   (:use [s3 log]))
 
@@ -12,25 +12,37 @@
 (defn url-encode [x]
   (java.net.URLDecoder/decode x))
 
-(defn rq-filter [request response]
+(defn log-request? [request response]
   (or (.startsWith (:uri request) "/trail/rest")
       (> (:status response) 200)))
 
 (defn wrap-with-logger [handler]
   (fn [request]
     (let [response (handler request)]
-      (if (rq-filter request response)
-        (info "RQ" (select-keys request [:uri :query-string]) "RS" (select-keys response [:status :body])))
+      (if (log-request? request response)
+        (trace request response))
       response)))
 
 (defmacro json-response [data & [status]]
   `(try
      {:status (or ~status 200)
       :headers {"Content-Type" "application/json"}
-      :body (json/json-str ~data)}
+      :body (generate-string ~data)}
      (catch Exception exception#
        {:status 500
         :headers {"Content-Type" "application/json"}
+        :body (str exception#)})))
+
+
+(defmacro auth-> [cookies form]
+  `(try
+     (if (auth/valid-auth-token? (:value (~cookies "authToken")))
+       (let [user# (auth/user-from-cookie ~cookies)]
+         (json-response (spy :info (-> user# ~form))))
+       (json-response {"error" "Authentication required"} 401))
+     (catch Exception exception#
+       {:status 500
+        :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
 
 (defmacro as-authenticated? [cookies action]
