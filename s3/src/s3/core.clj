@@ -3,6 +3,7 @@
             [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn])
   (:use [s3 webutil auth apiroutes loginroutes log]
+        [ring.middleware.json :only [wrap-json-params]]
         [ring.util.response :only [redirect resource-response]]
         [compojure.route :only [files not-found resources]]
         [compojure.handler :only [site]]
@@ -47,7 +48,8 @@
   (routes api-routes main-routes))
 
 (def app (-> (site all-routes)
-             (wrap-with-logger)))
+             (wrap-json-params {:keywords? true :bigdecimals? true})
+             wrap-with-logger))
 
 (defn -main [& args]
   (info "Hello Brave new world!")
