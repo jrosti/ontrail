@@ -62,7 +62,15 @@ $(document).ready(function() {
     $("#ex-sport").zelect({
       placeholder: "Juoksu, suunnistus, pyöräily, ...",
       loader: function(term, page, callback) {
-        callback(allSports)
+        if (page > 0) {
+          callback([]);
+          return;
+        }
+
+        var sportsMatcher = new RegExp('(^|\\s)'+term, 'i')
+        callback(allSports.filter(function(sport) {
+          return sportsMatcher.test(sport.label)
+        }).value())
       },
       renderItem: function(item) {
         return $("<span>", {class: item.icon}).text(" " + item.label)
@@ -168,4 +176,4 @@ var allSports = _([
     icon: sport[key],
     value: key
   }
-}).value()
+})
