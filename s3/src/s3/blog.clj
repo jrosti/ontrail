@@ -17,9 +17,6 @@
   (let [id (str (:_id mongo-object))]
     (-> mongo-object (dissoc :_id) (assoc :id id))))
 
-(defn create-draft [user]
-  (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user})))
-
 (defn own? [user dbo]
   (= user (:user dbo)))
 
@@ -58,18 +55,21 @@
                :time #(-> % parse-duration int)}
    :validation [:user #(-> % :draft nil? not)]})
 
-(defn find-dbo [id]
+(defn find-blog-object [id]
   (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
 
+(defn create-draft [user]
+  (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user})))
+
 (defn create [user params]
-  (let [blog (assoc params :user user)
-        id (:id blog)
-        dbo (find-dbo id)]
-    (if (and (not= nil dbo) (own? user dbo))
-      (-> blog
+  (let [new-blog (assoc params :user user)
+        id (:id new-blog)
+        db-object (find-blog-object id)]
+    (if (and (not= nil db-object) (own? user db-object))
+      (-> new-blog
           (transform-using to-db-transform)
-          (insert-and-return dbo))
-      (error "Db object deleted or not own. Refusing to create" user blog dbo))))
+          (insert-and-return db-object))
+      (error "Db object deleted or not own. Refusing to create" user new-blog db-object))))
 
 (defn get [id]
-  (from-db-to-user (find-dbo id)))
+  (from-db-to-user (find-blog-object id)))
