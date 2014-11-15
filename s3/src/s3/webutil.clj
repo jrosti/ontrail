@@ -25,12 +25,15 @@
 
 (defmacro json-response [data & [status]]
   `(try
-     {:status (or ~status 200)
-      :headers {"Content-Type" "application/json"}
-      :body (generate-string ~data)}
+     (let [result# ~data]
+       (if result#
+         {:status (or ~status 200)
+          :headers {"Content-Type" "application/json"}
+          :body (generate-string ~data)}
+         {:status 400
+          :body "Invalid request"}))
      (catch Exception exception#
        {:status 500
-        :headers {"Content-Type" "application/json"}
         :body (str exception#)})))
 
 

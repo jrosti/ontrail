@@ -68,7 +68,7 @@
           (auth-> cookies (blog/create params)))
 
     (GET "/blog/:id" [id]
-          (json-response (blog/get id)))
+          (json-response (blog/find id)))
 
   ))
 

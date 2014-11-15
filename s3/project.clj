@@ -2,7 +2,6 @@
   :description "S3 service"
   :dependencies [
                  [org.clojure/clojure "1.6.0"]
-                 [org.clojure/data.json "0.2.5"]
                  [com.lambdaworks/scrypt "1.3.3"]
                  [org.clojure/clojure "1.6.0"]
                  [com.novemberain/monger "2.0.0"]
