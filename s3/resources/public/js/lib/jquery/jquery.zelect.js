@@ -19,7 +19,8 @@
     throttle: 300,
     renderItem: defaultRenderItem,
     noResults: defaultNoResults,
-    regexpMatcher: defaultRegexpMatcher
+    regexpMatcher: defaultRegexpMatcher,
+    renderPlaceholder: defaultRenderItem
   }
 
   $.fn.zelect = function(opts) {
@@ -89,7 +90,7 @@
         hide()
         if (item && item.value !== undefined) $select.val(item.value)
         $select.data('zelected', item)
-        $select.attr("placeholder", item.toString())
+        $select.attr("placeholder", opts.renderPlaceholder(item))
         if (triggerChange == null || triggerChange === true) $select.trigger('change', item)
       }
 
