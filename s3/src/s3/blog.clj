@@ -34,14 +34,14 @@
       transformed
       (error "cannot validate blog object" blog))))
 
-(def from-db-transform
+(def from-db-to-user-transform
   {:drop []
    :transform {:distance to-human-distance
                :time to-human-time}
    :validation [identity]})
 
 (defn from-db-to-user [obj]
-  (-> obj (transform-using from-db-transform) _id-to-id))
+  (-> obj (transform-using from-db-to-user-transform) _id-to-id))
 
 (defn insert-and-return [new-dbo dbo]
   (when new-dbo
@@ -49,7 +49,7 @@
       (mc/update-by-id *db* BLOG (:_id dbo) updated)
       (from-db-to-user updated))))
 
-(def to-db-transform
+(def from-user-to-db-transform
   {:drop [:id]
    :transform {:distance #(-> % parse-distance int)
                :time #(-> % parse-duration int)}
@@ -58,22 +58,22 @@
 (defn find-blog-object [id]
   (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
 
-(defn create-draft [user]
+(defn create-new-draft [user]
   (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user})))
 
-(defn create [user blog]
+(defn update [user blog]
   (let [new-blog (assoc blog :user user)
         id (:id new-blog)
         db-object (find-blog-object id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
-          (transform-using to-db-transform)
+          (transform-using from-user-to-db-transform)
           (insert-and-return db-object))
-      (error "Db object deleted or not own. Refusing to create" user new-blog db-object))))
+      (error "Db object deleted or not own. Refusing to update" user new-blog db-object))))
 
-(defn find [id]
+(defn find-by [id]
   (from-db-to-user (find-blog-object id)))
 
-(defn delete [id])
+(defn delete-by [id])
 
 (defn list-by [rules])

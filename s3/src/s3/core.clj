@@ -52,5 +52,4 @@
              wrap-with-logger))
 
 (defn -main [& args]
-  (info "Hello Brave new world!")
   (run-server app {:port 8081}))

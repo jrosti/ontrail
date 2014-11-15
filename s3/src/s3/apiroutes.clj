@@ -7,8 +7,6 @@
 
 (use-logging)
 
-
-
 (defroutes api-routes
 
   (context "/trail/rest" []
@@ -62,13 +60,13 @@
          (json-response {:success true :distance (to-human-distance (parse-distance distance))}))
 
     (POST "/blog/draft/new" {params :params cookies :cookies}
-          (auth-> cookies blog/create-draft))
+          (auth-> cookies blog/create-new-draft))
 
     (POST "/blog/:id" {params :params cookies :cookies}
-          (auth-> cookies (blog/create params)))
+          (auth-> cookies (blog/update params)))
 
     (GET "/blog/:id" [id]
-          (json-response (blog/find id)))
+          (json-response (blog/find-by id)))
 
   ))
 
