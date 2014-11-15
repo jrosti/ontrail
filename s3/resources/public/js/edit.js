@@ -1,6 +1,7 @@
 
 var $ = require("jquery")
 var _ = require("lodash")
+var ƒ = require("./util/functional")
 var Rx = require('rx')
 
 window.jQuery = $
@@ -68,6 +69,12 @@ $(document).ready(function() {
       },
       renderPlaceholder: function(item) { return }
     });
+
+    $("#ex-sport").onAsObservable('change').map(function(ev) {
+      return ev.additionalArguments[0]
+    }).subscribe(function(sport) {
+      $("#distance-logo").attr('class', sport.icon)
+    })
 
   })
 
