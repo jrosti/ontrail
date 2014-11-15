@@ -378,10 +378,13 @@ footer img {
   overflow-y: scroll;
 }
 .dropdown li {
-  padding-left: 10px;
 }
 .dropdown li.current {
   background-color: rgba(0, 117, 234, 0.25);
+}
+
+.zelect span:before {
+  margin-left: 0.1em;
 }
 
 
