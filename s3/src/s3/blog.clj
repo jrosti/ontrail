@@ -61,8 +61,8 @@
 (defn create-draft [user]
   (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user})))
 
-(defn create [user params]
-  (let [new-blog (assoc params :user user)
+(defn create [user blog]
+  (let [new-blog (assoc blog :user user)
         id (:id new-blog)
         db-object (find-blog-object id)]
     (if (and (not= nil db-object) (own? user db-object))
@@ -71,5 +71,9 @@
           (insert-and-return db-object))
       (error "Db object deleted or not own. Refusing to create" user new-blog db-object))))
 
-(defn get [id]
+(defn find [id]
   (from-db-to-user (find-blog-object id)))
+
+(defn delete [id])
+
+(defn list-by [rules])
