@@ -32,6 +32,5 @@
   (try
       (:username (user-from-token (:value (cookies "authToken"))))
       (catch Exception e
-        (info "login failed")
         "nobody")))
     

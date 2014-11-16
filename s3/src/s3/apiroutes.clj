@@ -61,13 +61,16 @@
     (POST "/blog/draft/new" {cookies :cookies}
           (auth-> cookies blog/create-new-draft))
 
-    (POST "/blog/:id" {blog :params cookies :cookies}
-          (auth-> cookies (blog/update-with blog)))
+    (POST "/blog/draft/:id" {blog :params cookies :cookies}
+          (auth-> cookies (blog/update-draft blog)))
 
-    (GET "/blog/:id" {params :params cookies :cookies}
+    (POST "/blog/:id" {blog :params cookies :cookies}
+          (auth-> cookies (blog/publish blog)))
+
+    (GET "/blog/:sid" {params :params cookies :cookies}
           (user-> cookies (blog/find-by (:id params))))
 
-    (DELETE "/blog/:id" {params :params cookies :cookies}
+    (DELETE "/blog/:sid" {params :params cookies :cookies}
             (auth-> cookies (blog/delete-by (:id params))))
 
     (GET "/blog/list/all" {params :params cookies :cookies}
