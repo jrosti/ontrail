@@ -29,7 +29,7 @@
 (defroutes main-routes
   (mp/wrap-multipart-params
     (POST "/file-upload/put" {params :params cookies :cookies}
-          (auth-> cookies (put-file (:file params)))))
+          (text-plain-auth-> cookies (put-file (:file params)))))
 
   (GET "/" {}
     (resource-response "index.html" {:root "public"}))
