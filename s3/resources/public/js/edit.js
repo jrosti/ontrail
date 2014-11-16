@@ -96,8 +96,8 @@ $(document).ready(function() {
 
   var dlg = dialog.create()
 
-  dlg.date.startWith(moment()).subscribe(function(date) {
-    $("#ex-date").attr("data-timestamp", date).livestamp()
+  dlg.date.subscribe(function(date) {
+    $("#ex-date").attr("data-livestamp", date).livestamp(date)
   })
 })
 
