@@ -37,12 +37,20 @@ var titleEditorOpts = {
   placeholder: "Naseva otsikko lenkillesi!"
 }
 
+function saveDraft(entry) {
+  return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).map(ƒ.attrF("data")).catchException(function (error) {
+    return Rx.Observable.empty()
+  })
+}
+
+function publishBlog(entry) {
+  return $.postAsObservable("/trail/rest/blog/" + entry.id, entry).map(ƒ.attrF("data")).catchException(function(error) {
+    return Rx.Observable.empty()
+  })
+}
+
 var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(60000))
-  .flatMap(function(entry) {
-    return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).catchException(function (error) {
-      return Rx.Observable.empty()
-    })
-  }).subscribe(function(response) {}) //autosaved?
+  .flatMap(saveDraft).subscribe(function(response) {}) //autosaved?
 
 var dates = new Rx.Subject()
 
@@ -99,6 +107,22 @@ $(document).ready(function() {
   dlg.date.subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp(date).trigger('change')
   })
+
+  function isEntryValid(entry) {
+    var body = $(entry.body).filter("p").text()
+    return !(!body) && body.trim() != ""
+  }
+
+  entry.drafts.map(isEntryValid).subscribe(function(publishEnabled) {
+    $("#publish").toggleClass('pure-button-disabled', !publishEnabled)
+  })
+
+  entry.drafts.combineLatest($('#publish').onAsObservable('click'), _.identity).filter(isEntryValid)
+    .flatMap(saveDraft)
+    .flatMap(publishBlog)
+    .subscribe(function(e ) {
+      document.location = "/entry/" + e.sid + "?published" // go to blog entry page and prompt for sharing.
+    })
 })
 
 var allSports = _([
