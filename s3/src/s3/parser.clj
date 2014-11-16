@@ -59,7 +59,8 @@
 
 (defn parse-duration [dur-str]
   (try
-    (some identity (map #(try-parse % dur-str) duration-regexps))
+    (let [duration (some identity (map #(try-parse % dur-str) duration-regexps))]
+      (if (nil? duration) 0 duration))
     (catch Exception ex
       0)))
 

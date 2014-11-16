@@ -60,7 +60,7 @@
 (def from-user-to-db-transform
   {:drop [:id]
    :transform {:distance #(-> % parse-distance int)
-               :time #(-> % parse-duration)
+               :time #(-> % parse-duration int)
                :draft #(if (string? %) (parse-boolean %) (boolean %))}
    :validation [:user #(-> % :draft string? not)]})
 
