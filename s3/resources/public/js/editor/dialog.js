@@ -81,7 +81,7 @@ exports.create = function() {
   var date = $("#zalendar").onAsObservable('click', '.day')
     .map(ƒ.attrF("target"))
     .map(function(el) {
-      return $(el).attr("data-timestamp") || $(el).parent(".day").attr("data-timestamp")
+      return +($(el).attr("data-timestamp") || $(el).parent(".day").attr("data-timestamp"))
     })
   date.subscribe(function(date) {
     $("#date-dialog").hide()
