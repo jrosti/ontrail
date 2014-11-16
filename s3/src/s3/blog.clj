@@ -1,5 +1,6 @@
 (ns s3.blog
-  (:use [s3 log mongodb parser formats utils])
+  (:use
+        [s3 log mongodb parser formats utils])
   (:require [monger.collection :as mc]
             [s3.mongoquery :as filter]
             [monger.result :as mr]
@@ -31,14 +32,14 @@
 (defn transform-fields-using [blog transform-rules]
   (let [dropped (apply dissoc blog (:drop transform-rules))
         tf-fns (:transform transform-rules)
-        merged (reduce (fn [m [key transform]]
-                         (assoc m key (transform (key dropped))))
-                       {}
-                       (select-keys
-                         tf-fns
-                         (vec (clojure.set/intersection (set (keys dropped))
-                                                        (set (keys tf-fns))))))
-        transformed (merge dropped merged)]
+        transforms (reduce (fn [m [key transform]]
+                             (assoc m key (transform (key dropped))))
+                           {}
+                           (select-keys
+                             tf-fns
+                             (vec (clojure.set/intersection (set (keys dropped))
+                                                            (set (keys tf-fns))))))
+        transformed (merge dropped transforms)]
     (if (every? identity ((apply juxt (:validation transform-rules)) transformed))
       transformed
       (error "cannot validate blog object" blog))))
@@ -47,7 +48,7 @@
   {:drop []
    :transform {:distance to-human-distance
                :time to-human-time}
-   :validation [identity :sid]})
+   :validation [identity]})
 
 (defn from-db-to-user [obj]
   (-> obj (transform-fields-using from-db-to-user-transform) _id-to-id))
@@ -91,14 +92,14 @@
         pad (->> padding reverse (take pad-count) (apply str))]
     (str text-part "_" pad)))
 
-(defn generate-seo-id [blog]
+(defn generate-seo-id [blog padding]
   (let [title (:title blog)]
     (assoc
       blog
       :sid (-> title
                to-lower
                (string/replace #"[^a-z]" "_")
-               (pad-with (:id blog))))))
+               (pad-with padding)))))
 
 (defn generate-title [blog]
   (if (and (-> blog :title string?) (> (-> blog :title count) 1))
@@ -108,19 +109,36 @@
       (assoc blog :title (truncate (first sentences) 150)))))
 
 (defn create-new-draft [user]
-  (id-to-sid (_id-to-id (mc/insert-and-return *db* BLOG {:draft true :user user}))))
+  (id-to-sid
+    (_id-to-id
+      (mc/insert-and-return *db* BLOG {:draft true :user user}))))
 
-(defn update-with [user blog]
-  (let [new-blog (assoc blog :user user)
-        id (:id new-blog)
+(defn update-draft [user params]
+  (let [new-draft (assoc params :user user :draft true)
+        id (:id new-draft)
         db-object (find-blog-object id)]
+    (if (and (not= nil db-object) (own? user db-object))
+      (-> (merge db-object new-draft)
+          (generate-title)
+          (transform-fields-using from-user-to-db-transform)
+          (insert-and-return db-object))
+      (error "Db object deleted or not own. Refusing to update: " user params id))))
+
+(defn generate-publication-date [blog]
+  (assoc blog :published (local/local-now)))
+
+(defn publish [user params]
+  (let [id (:id params)
+        db-object (find-blog-object id)
+        new-blog (assoc db-object :draft false :id id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
           (generate-title)
-          (generate-seo-id)
+          (generate-seo-id id)
           (transform-fields-using from-user-to-db-transform)
+          (generate-publication-date)
           (insert-and-return db-object))
-      (error "Db object deleted or not own. Refusing to update:" user new-blog id))))
+      (error "Db object deleted or not own. Refusing to update: " user new-blog id))))
 
 (defn find-by [user sid]
   (let [obj (find-blog-object-by-sid sid)
@@ -129,7 +147,7 @@
       (if user-obj
         user-obj
         (error "cant find object" sid))
-      (error "Cannot view draft from another user:" user sid))))
+      (error "Cannot view draft from another user: " user sid))))
 
 (defn delete-by [user id]
   (let [db-object (find-blog-object-by-sid id)
@@ -139,7 +157,7 @@
        :result (do (mc/insert *db* BLOG_DEL db-object)
                    (mr/ok? (mc/remove-by-id *db* BLOG oid)))
        :user user}
-      (error "Db object deleted or not own. Refusing to delete:" user oid))))
+      (error "Db object deleted or not own. Refusing to delete: " user oid))))
 
 
 (defn list-by [user params]
