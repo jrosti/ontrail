@@ -94,13 +94,11 @@ $(document).ready(function() {
     }
   });
 
-  dates.subscribe(function(date) {
+  var dlg = dialog.create()
+
+  dlg.date.startWith(moment()).subscribe(function(date) {
     $("#ex-date").attr("data-timestamp", date).livestamp()
   })
-
-  dates.onNext(moment())
-
-  var dlg = dialog.create()
 })
 
 var allSports = _([
