@@ -21,7 +21,7 @@ function textE(name, text, attrs) {
 function renderDate(timestamp, opts) {
   var dateClass = ((timestamp.isSame(today, 'day')) ? "day today " : "day ") + (opts.styles.day || "")
 
-  var $el = e("div", { "class": dateClass, "data-timestamp": timestamp, "data-month": opts.monthData(timestamp.month()) })
+  var $el = e("div", { "class": dateClass, "data-timestamp": timestamp.valueOf(), "data-month": opts.monthData(timestamp.month()) })
   $el.appendChild(textE("span", timestamp.date()))
   return $el
 }

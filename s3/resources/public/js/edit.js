@@ -37,7 +37,7 @@ var titleEditorOpts = {
   placeholder: "Naseva otsikko lenkillesi!"
 }
 
-var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(600))
+var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(60000))
   .flatMap(function(entry) {
     return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).catchException(function (error) {
       return Rx.Observable.empty()
@@ -97,7 +97,7 @@ $(document).ready(function() {
   var dlg = dialog.create()
 
   dlg.date.subscribe(function(date) {
-    $("#ex-date").attr("data-livestamp", date).livestamp(date)
+    $("#ex-date").attr("data-timestamp", date).livestamp(date).trigger('change')
   })
 })
 
