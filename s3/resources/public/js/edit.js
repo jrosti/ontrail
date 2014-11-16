@@ -37,7 +37,7 @@ var titleEditorOpts = {
   placeholder: "Naseva otsikko lenkillesi!"
 }
 
-var savedEntries = entry.drafts.sample(60000)
+var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(600))
   .flatMap(function(entry) {
     return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).catchException(function (error) {
       return Rx.Observable.empty()
@@ -54,7 +54,6 @@ $(document).ready(function() {
   user.requiredAuths().subscribe(function( profile ) {
     $("#author-fullname").text(profile.user);
     $("#author-image").css("background-image", "url(\'" + profile.avatarUrl + "\')");
-
 
     $("#ex-sport").zelect({
       placeholder: "Juoksu, suunnistus, pyöräily, ...",

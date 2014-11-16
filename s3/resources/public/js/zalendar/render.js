@@ -27,17 +27,18 @@ function renderDate(timestamp, opts) {
 }
 
 var weekdays = _(_.range(1, 8))
-
 function renderWeek(timestamp, opts) {
   var week = e("div", { "class":  "week " + (opts.styles.week || ""), "data-week-of-year": opts.weekName(timestamp.week()) })
-
   var items = [week]
 
   weekdays.each(function(wd) {
     var weekday = moment(timestamp).isoWeekday(wd)
     if (weekday.month() != timestamp.month() && weekday.date() == 1 || timestamp.date() ==1 && weekday.date() == 1) {
-      var month = e('div', {"class": "month " + "month-" + weekday.month(), "data-month": weekday.month()})
-      items = [month, week]
+      var monthNum = weekday.month()
+      var lastMonth = (12 + monthNum - 1) % 12
+      var monthEnd = e('div', {"class": "month-end " + "month-" + lastMonth, "data-month": lastMonth})
+      var month = e('div', {"class": "month " + "month-" + monthNum, "data-month": monthNum})
+      items = [monthEnd, month, week]
     }
 
     week.appendChild(renderDate(weekday, opts))
