@@ -38,7 +38,7 @@
   font-weight: bold;
   text-align: right;
   display: inline-block;
-  width: 20%;
+  width: 15%;
   content: attr(data-week-of-year);
   padding: 0.2em 0.2em;
 }
@@ -47,30 +47,42 @@
   padding: 0.2em 0.5em;
 }
 
-.day:hover {
+.day[data-month='0'] {
   background: rgba(0, 117, 234, 0.25);
 }
 
-/*
-
-
-.day[data-month='0'] {
-  background: #ccc;
-}
-
-.day[data-month='0']:hover {
-  background: #aaa;
+.day:hover, .day[data-month='0']:hover {
+  background: rgba(0, 117, 234, 0.60);
 }
 
 .month {
+  display: none;
+}
+
+.month-end {
   position: relative;
 }
-.month:before {
-  position: absolute;
-  float: left;
-  font-weight: bold;
-  padding: 0.2em 0 0 0.5em;
 
+.month-end:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: inline-block;
+  background: #f99400;
+
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin:    0 0;
+  -ms-transform-origin:     0 0;
+  -o-transform-origin:      0 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0.1em 1em;
 }
 
 .month-0:before { content: "Tammikuu"; }
@@ -84,4 +96,17 @@
 .month-8:before { content: "Syyskuu"; }
 .month-9:before { content: "Lokakuu"; }
 .month-10:before { content: "Marraskuu"; }
-.month-11:before { content: "Joulukuu"; }*/
+.month-11:before { content: "Joulukuu"; }
+
+/*
+
+.month:before {
+  position: absolute;
+  float: left;
+  font-weight: bold;
+  padding: 0.2em 0 0 0.5em;
+
+}
+
+*/
+
