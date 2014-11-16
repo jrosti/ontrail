@@ -57,8 +57,11 @@
   (let [match (try-match (:re re-conv) (string/trim str))]
     (if match (apply (:conv re-conv) (rest match)))))
 
-(defn parse-duration [dur-str] 
-  (some identity (map #(try-parse % dur-str) duration-regexps)))
+(defn parse-duration [dur-str]
+  (try
+    (some identity (map #(try-parse % dur-str) duration-regexps))
+    (catch Exception ex
+      0)))
 
 (defn parse-date [date-str]
   (if (= "" date-str)
