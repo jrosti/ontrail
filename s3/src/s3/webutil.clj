@@ -23,27 +23,29 @@
         (trace request response))
       response)))
 
-(defn error-status [ex]
-  {:status 500
+(defn error-status [ex & status]
+  {:status (or status 500)
    :headers {"Content-Type" "application/text"}
    :body (str ex)})
+
+(defn json-resp [data & status]
+  {:status (or status 200)
+   :headers {"Content-Type" "application/json"}
+   :body (generate-string data)})
 
 (defmacro no-auth [data & [status]]
   `(try
      (let [result# ~data]
        (if result#
-         {:status (or ~status 200)
-          :headers {"Content-Type" "application/json"}
-          :body (generate-string ~data)}
-         {:status 400
-          :body "Invalid request"}))
+         (json-resp ~data ~status)
+         (error-status "Invalid reqeust: None." 400)))
      (catch Exception ex#
        (error-status ex#))))
 
 (defmacro user-> [cookies form]
   `(try
      (let [user# (auth/user-from-cookie ~cookies)]
-       (no-auth (-> user# ~form)))
+       (json-resp (-> user# ~form)))
      (catch Exception ex#
        (error-status ex#))))
 
@@ -51,10 +53,8 @@
   `(try
      (if (auth/valid-auth-token? (:value (~cookies "authToken")))
        (let [user# (auth/user-from-cookie ~cookies)]
-         (generate-string (-> user# ~form)))
-       (generate-string {"error" "Authentication required"} 401))
-     (catch Exception exception#
-       {:status 500
-        :headers {"Content-Type" "application/text"}
-        :body (str exception#)})))
+         (json-resp (-> user# ~form)))
+       (json-resp {"error" "Authentication required"} 401))
+     (catch Exception ex#
+       (error-status ex#))))
 

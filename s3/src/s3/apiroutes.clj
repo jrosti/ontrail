@@ -46,7 +46,7 @@
             :body    ""}))
 
     (GET "/logged-ins" {cookies :cookies}
-         (auth-> cookies (logged-in)))
+         (auth-> cookies logged-in))
 
     (GET "/validate/time/:time" [time]
          (let [duration (to-human-time (parse-duration time))]
@@ -56,7 +56,7 @@
 
     (GET "/validate/distance/:distance" [distance]
          (no-auth {:success true
-                         :distance (to-human-distance (parse-distance distance))}))
+                   :distance (to-human-distance (parse-distance distance))}))
 
     (POST "/blog/draft/new" {cookies :cookies}
           (auth-> cookies blog/create-new-draft))
