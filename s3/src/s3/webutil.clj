@@ -41,6 +41,7 @@
   `(try
      (json-resp ~data)
      (catch Exception ex#
+       (error ex#)
        (error-status ex#))))
 
 (defmacro user-> [cookies form]
@@ -57,6 +58,7 @@
          (json-resp (-> user# ~form)))
        (json-resp {"error" "Authentication required"} 401))
      (catch Exception ex#
+       (error ex#)
        (error-status ex#))))
 
 (defmacro text-plain-auth-> [cookies form]
@@ -66,4 +68,5 @@
          (-> user# ~form))
        (json-resp {"error" "Authentication required"} 401))
      (catch Exception ex#
+       (error ex#)
        (error-status ex#))))
