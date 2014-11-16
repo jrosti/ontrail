@@ -1,5 +1,6 @@
 var $ = require("jquery")
 var _ = require("lodash")
+var ð = require("../util/dom")
 var ƒ = require("../util/functional")
 var Rx = require("rx")
 var zalendar = require('../zalendar/zalendar').create
@@ -77,8 +78,10 @@ exports.create = function() {
     })
   })
 
-  var date = $("#zalendar").onAsObservable('click', '.day').map(ƒ.attrF("target")).map(ƒ.attrF("data-timestamp"))
-  date.subscribe(function() {
+  var date = $("#zalendar").onAsObservable('click', '.day')
+    .map(ƒ.attrF("target"))
+    .map(ð.attrF("data-timestamp"))
+  date.subscribe(function(date) {
     $("#date-dialog").hide()
     $("#zalendar").html("")
   })
