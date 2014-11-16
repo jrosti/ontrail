@@ -102,11 +102,12 @@
                (pad-with padding)))))
 
 (defn generate-title [blog]
-  (if (and (-> blog :title string?) (> (-> blog :title count) 1))
-    blog
-    (let [b (:body blog)
-          sentences (clojure.string/split b #"\.")]
-      (assoc blog :title (truncate (first sentences) 150)))))
+  (when blog
+    (if (and (-> blog :title string?) (> (-> blog :title count) 1))
+      blog
+      (let [b (:body blog)
+            sentences (clojure.string/split b #"\.")]
+        (assoc blog :title (truncate (first sentences) 150))))))
 
 (defn create-new-draft [user]
   (id-to-sid
@@ -119,8 +120,8 @@
         db-object (find-blog-object id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> (merge db-object new-draft)
-          (generate-title)
           (transform-fields-using from-user-to-db-transform)
+          (generate-title)
           (insert-and-return db-object))
       (error "Db object deleted or not own. Refusing to update: " user params id))))
 
@@ -133,9 +134,9 @@
         new-blog (assoc db-object :draft false :id id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
+          (transform-fields-using from-user-to-db-transform)
           (generate-title)
           (generate-seo-id id)
-          (transform-fields-using from-user-to-db-transform)
           (generate-publication-date)
           (insert-and-return db-object))
       (error "Db object deleted or not own. Refusing to update: " user new-blog id))))
