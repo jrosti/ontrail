@@ -29,7 +29,7 @@ function renderDate(timestamp, opts) {
 var weekdays = _(_.range(1, 8))
 
 function renderWeek(timestamp, opts) {
-  var week = e("div", { "class":  "week " + (opts.styles.week || ""), "data-week-of-year": timestamp.week() })
+  var week = e("div", { "class":  "week " + (opts.styles.week || ""), "data-week-of-year": opts.weekName(timestamp.week()) })
 
   var items = [week]
 

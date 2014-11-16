@@ -55,7 +55,7 @@ body.menu-collapsed #side-menu {
   float: right;
 }
 
-#show-menu {
+#show-menu, #pick-date {
   cursor: pointer;
 }
 
