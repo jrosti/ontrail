@@ -68,10 +68,10 @@
           (auth-> cookies (blog/publish blog)))
 
     (GET "/blog/:sid" {params :params cookies :cookies}
-          (user-> cookies (blog/find-by (:id params))))
+          (user-> cookies (blog/find-by (:sid params))))
 
     (DELETE "/blog/:sid" {params :params cookies :cookies}
-            (auth-> cookies (blog/delete-by (:id params))))
+            (auth-> cookies (blog/delete-by (:sid params))))
 
     (GET "/blog/list/all" {params :params cookies :cookies}
          (user-> cookies (blog/list-by params)))

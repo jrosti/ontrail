@@ -70,7 +70,8 @@
   (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
 
 (defn find-blog-object-by-sid [seo-id]
-  (mc/find-one-as-map *db* BLOG {:sid seo-id}))
+  (when seo-id
+    (mc/find-one-as-map *db* BLOG {:sid seo-id})))
 
 (defn query [page rules sort-order]
   (mq/with-collection
@@ -110,9 +111,8 @@
         (assoc blog :title (truncate (first sentences) 150))))))
 
 (defn create-new-draft [user]
-  (id-to-sid
-    (_id-to-id
-      (mc/insert-and-return *db* BLOG {:draft true :user user}))))
+  (_id-to-id
+    (mc/insert-and-return *db* BLOG {:draft true :user user})))
 
 (defn update-draft [user params]
   (let [new-draft (assoc params :user user :draft true)
@@ -145,7 +145,7 @@
   (let [obj (find-blog-object-by-sid sid)
         user-obj (from-db-to-user obj)]
     (if (or (not (:draft obj)) (= (:user obj) user))
-      (if user-obj
+      (if obj
         user-obj
         (error "cant find object" sid))
       (error "Cannot view draft from another user: " user sid))))
