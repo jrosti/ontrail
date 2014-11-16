@@ -113,7 +113,7 @@
 (defn update-with [user blog]
   (let [new-blog (assoc blog :user user)
         id (:id new-blog)
-        db-object (find-blog-object-by-sid id)]
+        db-object (find-blog-object id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
           (generate-title)
