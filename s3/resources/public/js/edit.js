@@ -38,14 +38,11 @@ var titleEditorOpts = {
 }
 
 var savedEntries = entry.drafts.sample(60000)
-  .doAction(function(val) { console.log("Try save draft", val) })
   .flatMap(function(entry) {
-    return $.postAsObservable("/trail/rest/blog/draft/" + entry.id, entry).catchException(function (error) {
+    return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).catchException(function (error) {
       return Rx.Observable.empty()
     })
-  }).subscribe(function(response) {
-    console.log("autosave response ", response)
-  })
+  }).subscribe(function(response) {}) //autosaved?
 
 var dates = new Rx.Subject()
 
