@@ -35,6 +35,8 @@
     (resource-response "index.html" {:root "public"}))
   (GET "/edit/" {}
     (resource-response "edit.html" {:root "pages"}))
+  (GET "/entry/:blogId" {}
+    (resource-response "entry.html" {:root "pages"}))
   (GET "/edit/:blogId" [blog-id]
     (resource-response "edit.html" {:root "pages"}))
   (resources "/")

@@ -82,7 +82,8 @@ body.menu-collapsed #side-menu {
 header {
   font-family: "jaf-facitweb",sans-serif;
   position: relative;
-  height: 50%;
+  min-height: 200px;
+  margin-top: 40px;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 50%;
@@ -151,7 +152,7 @@ header span {
 #author {
   font-size: 17px;
   position: absolute;
-  top: 64px;
+  top: 24px;
   left: 48px;
   vertical-align: middle;
 }
@@ -170,7 +171,7 @@ header span {
 #overview {
   font-size: 24px;
   position: absolute;
-  top: 64px;
+  top: 24px;
   right: 48px;
   text-align: right;
 }
