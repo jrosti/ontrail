@@ -1,6 +1,8 @@
 var $ = require("jquery")
 var _ = require("lodash")
+var ƒ = require("../util/functional")
 var Rx = require("rx")
+var zalendar = require('../zalendar/zalendar').create
 require("rx-jquery")
 
 var parseValidationResult = function(n) {
@@ -31,7 +33,6 @@ function validate(field, dist) {
   )
 }
 
-
 function toggle(field, distValidationResult) {
   $("#" + field).toggleClass("hasError", !distValidationResult.success)
 
@@ -42,7 +43,6 @@ function toggle(field, distValidationResult) {
 }
 
 function createValidatable(field, saves) {
-
   var changes = $("#ex-" + field).onAsObservable('keyup change')
     .map( function (ev) { return $(ev.target).val() })
     .filter( function(val) { return val.length > 0 })
@@ -54,7 +54,6 @@ function createValidatable(field, saves) {
   validations.subscribe(_.partial(toggle, field))
 
   validations.sample(saves).subscribe(function (v) { $("#ex-" + field).val(v[field]).change() })
-
   return validations.map(function(res) { return res.success })
 }
 
@@ -71,8 +70,22 @@ exports.create = function() {
     $("#details-dialog").show()
   })
 
+  $('#pick-date').onAsObservable('click').subscribe(function() {
+    $('#date-dialog').show()
+    zalendar("zalendar", {
+      weekName: function(week) { return "vko " + week }
+    })
+  })
+
+  var date = $("#zalendar").onAsObservable('click', '.day').map(ƒ.attrF("target")).map(ƒ.attrF("data-timestamp"))
+  date.subscribe(function() {
+    $("#date-dialog").hide()
+    $("#zalendar").html("")
+  })
+
   return {
     distance: distance,
-    time: time
+    time: time,
+    date: date
   }
 }

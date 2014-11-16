@@ -1,21 +1,15 @@
-*, *:before {
+#zalendar * {
   box-sizing: border-box;
 }
 
-body, html {
-  height: 100%;
-}
-
-::-webkit-scrollbar {
+#zalendar::-webkit-scrollbar {
     width: 0;
 }
 
 #zalendar {
   display: block;
   margin: 0 auto;
-  border: solid #333;
-  border-width: 1px;
-  height: 50%;
+  height: 300px;
   overflow-y: scroll;
 }
 
@@ -24,32 +18,41 @@ body, html {
 }
 
 .week, .day, .week:before {
-  height: 6em;
+  height: 2.7em;
+  line-height: 2.2em;
 }
 
-.week:before {
-  font-weight: bold;
-  text-align: right;
-  display: inline-block;
-  width: 12.5%;
-  content: attr(data-week-of-year);
-  padding: 0.2em 0.5em 0 0 ;
-  border: solid #333;
-  border-width: 1px 1px 0 0;
+.week {
+  display: flex;
 }
 
 .day {
-  padding: 0.2em 0 0 0.5em;
-  border: solid #333;
-  border-width: 1px 0 0;
+  cursor: pointer;
+  width: 11%;
+  text-align: center;
+
 }
 
-.day span {
+.week:before {
+  box-sizing: border-box;
+  font-weight: bold;
+  text-align: right;
+  display: inline-block;
+  width: 20%;
+  content: attr(data-week-of-year);
+  padding: 0.2em 0.2em;
+}
+
+.day {
+  padding: 0.2em 0.5em;
 }
 
 .day:hover {
-  background: #aaa;
+  background: rgba(0, 117, 234, 0.25);
 }
+
+/*
+
 
 .day[data-month='0'] {
   background: #ccc;
@@ -81,4 +84,4 @@ body, html {
 .month-8:before { content: "Syyskuu"; }
 .month-9:before { content: "Lokakuu"; }
 .month-10:before { content: "Marraskuu"; }
-.month-11:before { content: "Joulukuu"; }
+.month-11:before { content: "Joulukuu"; }*/

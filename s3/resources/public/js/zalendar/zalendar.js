@@ -7,6 +7,7 @@ var defaultOpts = {
     week: "pure-g pure-u-1",
     day: "pure-u-1-8",
   },
+  weekName: _.identity,
   monthData: function(month) { return month % 2 }
 }
 
@@ -23,10 +24,10 @@ function zalendar(el, inOpts) {
 
   function appendWeek() {
     _.each(render(lastWeek, opts), function(child) {
-      console.log("laa2", child)
       $el.appendChild(child)
     })
     lastWeek.add(1, "week")
+    return lastWeek
   }
 
   function prependWeek() {
@@ -39,11 +40,11 @@ function zalendar(el, inOpts) {
     $el.scrollTop = top + ($el.scrollHeight - height)
   }
 
-  while($el.scrollHeight < $el.offsetHeight)
-    appendWeek()
+  while($el.scrollHeight < $el.offsetHeight ||
+    beginningOfMonth.month() <= appendWeek().month());
   prependWeek()
 
-  $today = document.querySelector("#" + el + " .today")
+  $today = document.querySelector("#" + el + " .day")
   var lineHeight = $today.offsetHeight
   $el.scrollTop = lineHeight
 
