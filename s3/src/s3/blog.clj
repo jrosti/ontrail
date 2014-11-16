@@ -2,7 +2,7 @@
   (:use
         [s3 log mongodb parser formats utils])
   (:require [monger.collection :as mc]
-            [s3.mongoquery :as filter]
+            [s3.mongoquery :as querystr]
             [monger.result :as mr]
             [monger.query :as mq]
             [monger.conversion]
@@ -16,14 +16,12 @@
 (use-logging)
 
 (defn _id-to-id [mongo-object]
-  (if (nil? mongo-object)
-    nil
+  (when mongo-object
     (let [id (str (:_id mongo-object))]
       (-> mongo-object (dissoc :_id) (assoc :id id)))))
 
 (defn id-to-sid [mongo-object]
-  (if (nil? mongo-object)
-    nil
+  (when mongo-object
     (-> mongo-object (assoc :sid (:id mongo-object)))))
 
 (defn own? [user dbo]
@@ -128,7 +126,8 @@
       (error "Db object deleted or not own. Refusing to update: " user params id))))
 
 (defn generate-publication-date [blog]
-  (assoc blog :published (local/local-now)))
+  (when blog
+    (assoc blog :published (local/local-now))))
 
 (defn publish [user params]
   (let [id (:id params)
@@ -164,12 +163,12 @@
 
 (defn list-by [user params]
   (let [page (parse-int (params :page "1"))
-        rules (merge (filter/make-query-from params) {:draft false})
-        sort-order (filter/sort-results-by params)]
+        rules (merge (querystr/make-query-from params) {:draft false})
+        sort-order (querystr/sort-results-by params)]
     (list-result user page rules sort-order)))
 
 (defn list-drafts [user params]
   (let [page (parse-int (params :page "1"))
         rules {:user user :draft true}
-        sort-order (filter/sort-results-by params)]
+        sort-order (querystr/sort-results-by params)]
     (list-result user page rules sort-order)))
