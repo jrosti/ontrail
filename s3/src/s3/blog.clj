@@ -64,7 +64,7 @@
    :transform {:distance #(-> % parse-distance int)
                :time #(-> % parse-duration int)
                :draft #(if (string? %) (parse-boolean %) (boolean %))}
-   :validation [:body #(-> % :body string?) :user #(-> % :draft string? not)]})
+   :validation [:user #(-> % :draft string? not)]})
 
 (defn find-blog-object [id]
   (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
@@ -117,10 +117,12 @@
 (defn update-draft [user params]
   (let [new-draft (assoc params :user user :draft true)
         id (:id new-draft)
-        db-object (find-blog-object id)]
+        db-object (find-blog-object id)
+        swap-merge (fn [a b] (merge b a))]
     (if (and (not= nil db-object) (own? user db-object))
-      (-> (merge db-object new-draft)
+      (-> new-draft
           (transform-fields-using from-user-to-db-transform)
+          (swap-merge db-object)
           (generate-title)
           (insert-and-return db-object))
       (error "Db object deleted or not own. Refusing to update: " user params id))))
@@ -131,10 +133,9 @@
 (defn publish [user params]
   (let [id (:id params)
         db-object (find-blog-object id)
-        new-blog (assoc db-object :draft false :id id)]
+        new-blog (assoc db-object :draft false)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
-          (transform-fields-using from-user-to-db-transform)
           (generate-title)
           (generate-seo-id id)
           (generate-publication-date)
