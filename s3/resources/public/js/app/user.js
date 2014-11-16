@@ -11,6 +11,7 @@ function ajaxProfileReq() {
     .map(function(result) { return result.data; } )
 }
 
+exports.auths = (authUser == null) ? Rx.Observable.empty() : ajaxProfileReq()
 exports.requiredAuths = function() {
   if (authUser == null) {
     document.location = "/login.html"
@@ -18,4 +19,10 @@ exports.requiredAuths = function() {
   }
 
   return Rx.Observable.of(authUser).flatMapLatest(ajaxProfileReq)
+}
+
+exports.logout = function() {
+  cookie.set("authUser", null, { expires: new Date(0) })
+  cookie.set("authToken", null, { expires: new Date(0) })
+  document.location = "/"
 }
