@@ -98,8 +98,10 @@
   (let [db-object (find-blog-object id)
         oid (:_id db-object)]
     (if (and (not= nil db-object) (own? user db-object))
-      (do (mc/insert *db* BLOG_DEL db-object)
-          (mr/ok? (mc/remove-by-id *db* BLOG oid)))
+      {:id id
+       :result (do (mc/insert *db* BLOG_DEL db-object)
+                  (mr/ok? (mc/remove-by-id *db* BLOG oid)))
+       :user user}
       (error "Db object deleted or not own. Refusing to delete:" user oid))))
 
 
