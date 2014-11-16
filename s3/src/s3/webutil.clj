@@ -28,7 +28,7 @@
    :headers {"Content-Type" "application/text"}
    :body (str ex)})
 
-(defmacro json-response [data & [status]]
+(defmacro no-auth [data & [status]]
   `(try
      (let [result# ~data]
        (if result#
@@ -43,7 +43,7 @@
 (defmacro user-> [cookies form]
   `(try
      (let [user# (auth/user-from-cookie ~cookies)]
-       (json-response (-> user# ~form)))
+       (no-auth (-> user# ~form)))
      (catch Exception ex#
        (error-status ex#))))
 
@@ -58,11 +58,3 @@
         :headers {"Content-Type" "application/text"}
         :body (str exception#)})))
 
-(defmacro as-authenticated? [cookies action]
-  `(try
-     (if (auth/valid-auth-token? (:value (~cookies "authToken")))
-       (let [user# (auth/user-from-cookie ~cookies)]
-         (~action user#))
-       (generate-string {"error" "Authentication required"} 401))
-     (catch Exception ex#
-       (error-status ex#))))

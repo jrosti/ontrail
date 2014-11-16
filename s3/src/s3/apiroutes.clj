@@ -51,11 +51,11 @@
     (GET "/validate/time/:time" [time]
          (let [duration (to-human-time (parse-duration time))]
             (if (= "" duration)
-              (json-response {:message "invalid-duration"} 400)
-              (json-response {:success true :time duration}))))
+              (no-auth {:message "invalid-duration"} 400)
+              (no-auth {:success true :time duration}))))
 
     (GET "/validate/distance/:distance" [distance]
-         (json-response {:success true
+         (no-auth {:success true
                          :distance (to-human-distance (parse-distance distance))}))
 
     (POST "/blog/draft/new" {cookies :cookies}
