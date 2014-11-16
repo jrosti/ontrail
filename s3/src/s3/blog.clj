@@ -83,7 +83,7 @@
                (map from-db-to-user))
    :page page
    :viewer user
-   :sortedby sort-order})
+   :sortedBy sort-order})
 
 (defn pad-with [text padding]
   (let [text-part (truncate text 40)
