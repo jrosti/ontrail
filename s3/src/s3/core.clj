@@ -29,7 +29,7 @@
 (defroutes main-routes
   (mp/wrap-multipart-params
     (POST "/file-upload/put" {params :params cookies :cookies}
-          (as-authenticated? cookies
+          (auth-> cookies
             (fn [user]
               (let [cdn-url (put-file user (:file params))]
                 {:status 200
