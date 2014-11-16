@@ -30,16 +30,16 @@
 
 (defn json-resp [data & status]
   (if data
-    {:status (or status 200)
+    {:status 200
      :headers {"Content-Type" "application/json"}
      :body (generate-string data)}
-    {:status (or status 400)
+    {:status 400
      :headers {"Content-Type" "application/json"}
      :body "Invalid request."}))
 
 (defmacro no-auth [data & [status]]
   `(try
-     (json-resp ~data ~status)
+     (json-resp ~data)
      (catch Exception ex#
        (error-status ex#))))
 
