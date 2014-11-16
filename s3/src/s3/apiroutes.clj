@@ -58,10 +58,10 @@
          (no-auth {:success true
                    :distance (to-human-distance (parse-distance distance))}))
 
-    (POST "/blog/draft/new" {cookies :cookies}
+    (POST "/blog/draft" {cookies :cookies}
           (auth-> cookies blog/create-new-draft))
 
-    (POST "/blog/draft/:id" {blog :params cookies :cookies}
+    (POST "/blog/:id/draft" {blog :params cookies :cookies}
           (auth-> cookies (blog/update-draft blog)))
 
     (POST "/blog/:id" {blog :params cookies :cookies}

@@ -80,4 +80,4 @@
 (defn sort-results-by [params]
   (if-let [sort-order (:sb params)]
     (order-by sort-order)
-    (array-map :_id -1)))
+    (array-map :publishDate -1 :_id -1)))
