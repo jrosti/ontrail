@@ -10,7 +10,7 @@ require("zelect")
 var MediumEditor = require("medium-editor")
 var moment = require('moment')
 var dialog = require("./editor/dialog")
-var entry = require("./blog/entry")
+var entry = require("./blog/entry").edit()
 
 // shims
 window.jQuery = $
