@@ -51,8 +51,8 @@
   `(try
      (if (auth/valid-auth-token? (:value (~cookies "authToken")))
        (let [user# (auth/user-from-cookie ~cookies)]
-         (json-response (-> user# ~form)))
-       (json-response {"error" "Authentication required"} 401))
+         (generate-string (-> user# ~form)))
+       (generate-string {"error" "Authentication required"} 401))
      (catch Exception exception#
        {:status 500
         :headers {"Content-Type" "application/text"}
@@ -63,6 +63,6 @@
      (if (auth/valid-auth-token? (:value (~cookies "authToken")))
        (let [user# (auth/user-from-cookie ~cookies)]
          (~action user#))
-       (json-response {"error" "Authentication required"} 401))
+       (generate-string {"error" "Authentication required"} 401))
      (catch Exception ex#
        (error-status ex#))))
