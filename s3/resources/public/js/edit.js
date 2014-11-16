@@ -72,7 +72,7 @@ $(document).ready(function() {
         }
 
         var sportsMatcher = new RegExp('(^|\\s)'+term, 'i')
-        callback(allSports.filter(function(sport) {
+        callback(entry.allSports.filter(function(sport) {
           return sportsMatcher.test(sport.label)
         }).value())
       },
@@ -123,75 +123,4 @@ $(document).ready(function() {
     .subscribe(function(e ) {
       document.location = "/entry/" + e.sid + "?published" // go to blog entry page and prompt for sharing.
     })
-})
-
-var allSports = _([
-  { "Beach volley": "flaticon-volleyball3" },
-  { "Crossfit": "flaticon-weightlift" },
-  { "Crosstrainer": "flaticon-person212" },
-  { "Cyclocross": "flaticon-time13" },
-  { "Golf": "flaticon-golf22" },
-  { "Hiihto": "flaticon-ski2" },
-  { "Jalkapallo": "flaticon-soccer43" },
-  { "Jooga": "flaticon-guru1" },
-  { "Jumppa": "flaticon-jump7" },
-  { "Juoksu": "flaticon-running30" },
-  { "Jääkiekko": "flaticon-ice57" },
-  { "Kahvakuula": "flaticon-biceps" },
-  { "Kamppailulaji": "flaticon-martial2" },
-  { "Kaukalopallo": "flaticon-ice46" },
-  { "Kickbike": "flaticon-regular2" },
-  { "Kiipeily": "flaticon-climbing6" },
-  { "Koripallo": "flaticon-basketball3" },
-  { "Kuntopiiri": "flaticon-flexions" },
-  { "Kuntopyörä": "flaticon-bicycle14" },
-  { "Kuntosali": "flaticon-barbell" },
-  { "Kävely": "flaticon-walking17" },
-  { "Laskettelu": "flaticon-skiing7" },
-  { "Lentopallo": "flaticon-person39" },
-  { "Leuanveto": "flaticon-pulling" },
-  { "Luistelu": "flaticon-ice49" },
-  { "Luisteluhiihto": "flaticon-ski2" },
-  { "Lumikenkäily": "flaticon-walking17" },
-  { "Lumilautailu": "flaticon-extreme1" },
-  { "Maantiepyöräily": "flaticon-time13" },
-  { "Maastojuoksu": "flaticon-mountain23" },
-  { "Maastopyöräily": "flaticon-mountain24" },
-  { "Melonta": "flaticon-padding" },
-  { "Nyrkkeily": "flaticon-female139" },
-  { "Perinteinen hiihto": "flaticon-ski2" },
-  { "Pilates": "flaticon-leg1" },
-  { "Potkukelkkailu": "flaticon-trekking" },
-  { "Pumppi": "flaticon-dumbbell21" },
-  { "Pyöräily": "flaticon-regular2" },
-  { "Ratsastus": "flaticon-silhouette2" },
-  { "Ringette": "flaticon-ice46" },
-  { "Rullahiihto": "flaticon-ski2" },
-  { "Rullaluistelu": "flaticon-skater1" },
-  { "Salibandy": "flaticon-hockey2" },
-  { "Sauvakävely": "flaticon-trekking" },
-  { "Seikkailu-urheilu": "flaticon-compass" },
-  { "Sisäsoutu": "flaticon-person209" },
-  { "Soutu": "flaticon-person209" },
-  { "Spinning": "flaticon-bicycle14" },
-  { "Squash": "flaticon-squash" },
-  { "Sulkapallo": "flaticon-man36" },
-  { "Suunnistus": "flaticon-map49" },
-  { "Sähly": "flaticon-hockey2" },
-  { "Tanssi": "flaticon-american36" },
-  { "Telinevoimistelu": "flaticon-individual3" },
-  { "Tennis": "flaticon-person17" },
-  { "Triathlon": "flaticon-mountain24" },
-  { "Uinti": "flaticon-swimming20" },
-  { "Vaellus": "flaticon-hiking" },
-  { "Venyttely": "flaticon-man252" },
-  { "Vesijuoksu": "flaticon-swimming20" },
-  { "Yleisurheilu": "flaticon-jumping2" }
-]).map(function(sport) {
-  var key = _.keys(sport)[0]
-  return {
-    label: key,
-    icon: sport[key],
-    value: key
-  }
 })
