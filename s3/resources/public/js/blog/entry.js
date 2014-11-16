@@ -27,7 +27,7 @@ var distance = $("#ex-distance").onAsObservable('change').map(ƒ.attrF("target")
 var time = $("#ex-time").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
 var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
 
-var createdDraft = $.postAsObservable("/trail/rest/blog/draft/new", {}).map(ƒ.attrF("data")).doAction(function(val) { console.log("draft, ", val)})
+var createdDraft = $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
 
 var drafts =
   createdDraft.flatMapLatest(function(blogPost) {
