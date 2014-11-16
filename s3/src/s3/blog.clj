@@ -15,11 +15,15 @@
 (use-logging)
 
 (defn _id-to-id [mongo-object]
-  (let [id (str (:_id mongo-object))]
-    (-> mongo-object (dissoc :_id) (assoc :id id))))
+  (if (nil? mongo-object)
+    nil
+    (let [id (str (:_id mongo-object))]
+      (-> mongo-object (dissoc :_id) (assoc :id id)))))
 
 (defn id-to-sid [mongo-object]
-  (-> mongo-object (assoc :sid (:id mongo-object))))
+  (if (nil? mongo-object)
+    nil
+    (-> mongo-object (assoc :sid (:id mongo-object)))))
 
 (defn own? [user dbo]
   (= user (:user dbo)))
@@ -43,7 +47,7 @@
   {:drop []
    :transform {:distance to-human-distance
                :time to-human-time}
-   :validation [identity]})
+   :validation [identity :sid]})
 
 (defn from-db-to-user [obj]
   (-> obj (transform-fields-using from-db-to-user-transform) _id-to-id))
@@ -109,7 +113,7 @@
 (defn update-with [user blog]
   (let [new-blog (assoc blog :user user)
         id (:id new-blog)
-        db-object (find-blog-object id)]
+        db-object (find-blog-object-by-sid id)]
     (if (and (not= nil db-object) (own? user db-object))
       (-> new-blog
           (generate-title)
@@ -119,14 +123,16 @@
       (error "Db object deleted or not own. Refusing to update:" user new-blog id))))
 
 (defn find-by [user sid]
-  (info sid)
-  (let [obj (find-blog-object-by-sid sid)]
+  (let [obj (find-blog-object-by-sid sid)
+        user-obj (from-db-to-user obj)]
     (if (or (not (:draft obj)) (= (:user obj) user))
-      (from-db-to-user obj)
+      (if user-obj
+        user-obj
+        (error "cant find object" sid))
       (error "Cannot view draft from another user:" user sid))))
 
 (defn delete-by [user id]
-  (let [db-object (find-blog-object id)
+  (let [db-object (find-blog-object-by-sid id)
         oid (:_id db-object)]
     (if (and (not= nil db-object) (own? user db-object))
       {:id id
