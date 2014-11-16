@@ -59,3 +59,11 @@
      (catch Exception ex#
        (error-status ex#))))
 
+(defmacro text-plain-auth-> [cookies form]
+  `(try
+     (if (auth/valid-auth-token? (:value (~cookies "authToken")))
+       (let [user# (auth/user-from-cookie ~cookies)]
+         (-> user# ~form))
+       (json-resp {"error" "Authentication required"} 401))
+     (catch Exception ex#
+       (error-status ex#))))
