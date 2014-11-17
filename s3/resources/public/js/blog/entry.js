@@ -15,6 +15,10 @@ require("livestamp")
 var entryIdRegex = /\/(edit|entry)\/(.*)/
 var entryId = (entryIdRegex.exec(document.location.pathname) || [undefined, undefined, undefined])[2]
 
+function iconFor(sport) {
+  return allSports.find(function(item) { return item.label == sport} ).icon
+}
+
 function populate(fromEditMode) {
   $.getJSONAsObservable("/trail/rest/blog/" + entryId).map(ƒ.attrF("data"))
     .take(1)
@@ -26,10 +30,9 @@ function populate(fromEditMode) {
       $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
       if (fromEditMode) {
         $("#ex-sport").val(entry.sport)
-      } else {
-        var sport = allSports.find(function(item) { return item.label == entry.sport} ).icon
-        $("#distance-logo").toggleClass(sport).show()
       }
+      if (entry.sport)
+        $("#distance-logo").toggleClass(iconFor(entry.sport)).show()
       if (entry.distance) {
         $("#distance-text").text(entry.distance).show()
       }
@@ -144,6 +147,31 @@ var allSports = _([
   }
 })
 
+function renderEntries(el, entries) {
+  $(el).append(_(entries.blogs).map(function(entry) {
+    var excerptText = $(entry.body).filter("p").text().substring(0,140)
+    var $title = $("<h3>").text( entry.title ? entry.title : excerptText)
+    var $excerpt = $("<p>").text(excerptText)
+    var $sport = (entry.sport ? $("<span>", {"class": iconFor(entry.sport)}).text(entry.distance? " " + entry.distance : "") : "")
+    var $time = (entry.time ? $("<span>", {"class": "flaticon-stopwatch7"}).text(entry.time ? " " + entry.time : "") : "")
+    var $user = $("<h5>").append($("<span>", {"class": "author"}).text(entry.user)).append($sport).append($time)
+    return $("<div>", {"class": "entry-preview pure-u-1", "data-sid": entry.sid}).append($title).append($excerpt).append($user)
+  }).value())
+}
+
+function entries(el, drafts) {
+  var user = require("../app/user")
+
+  var entries = drafts ?
+    user.auths.flatMap(function(profile) {
+      return $.getJSONAsObservable("/trail/rest/blog/list/drafts")
+    }) :
+    $.getJSONAsObservable("/trail/rest/blog/list/all")
+
+  entries.map(ƒ.attrF("data")).subscribe(_.partial(renderEntries, el))
+}
+
+exports.entries = entries
 exports.edit = edit
 exports.populate = populate
 

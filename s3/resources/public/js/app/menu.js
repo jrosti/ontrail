@@ -1,7 +1,6 @@
 var $ = require("jquery")
 var ƒ = require("../util/functional")
 var Rx = require("rx")
-var cookie = require("cookie-cutter")
 require("rx-jquery")
 
 $("#show-menu").onAsObservable("click").subscribe(function() {
@@ -13,9 +12,4 @@ var user = require("./user")
 
 $("#logout").onAsObservable("click").subscribe(user.logout)
 
-user.auths.flatMap(function(profile) {
-  return $.getJSONAsObservable("/trail/rest/blog/list/drafts").map(ƒ.attrF("data"))
-}).subscribe(function(drafts) {
-
-  console.log("drafts", drafts)
-})
+$("#to-home").onAsObservable("click").subscribe(function() { document.location = "/" })

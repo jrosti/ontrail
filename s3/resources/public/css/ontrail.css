@@ -55,7 +55,7 @@ body.menu-collapsed #side-menu {
   float: right;
 }
 
-#show-menu, #pick-date, #publish {
+#show-menu, #pick-date, #publish, #to-home {
   cursor: pointer;
 }
 
@@ -82,7 +82,7 @@ body.menu-collapsed #side-menu {
 header {
   font-family: "jaf-facitweb",sans-serif;
   position: relative;
-  min-height: 200px;
+  min-height: 300px;
   margin-top: 40px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -402,4 +402,40 @@ footer img {
   margin-left: 0.1em;
 }
 
+#blog-menu {
+  width: 100;
+  background: #f8f8f8;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+#blog-menu * {
+  padding: 14px 0 0;
+  vertical-align: bottom;
+  border-bottom: 1px solid #333;
+}
+
+.entry-preview {
+  font-weight: 100;
+  color: #333;
+  padding-bottom: 2em;
+}
+
+.entry-preview * {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.entry-preview h3 {
+  font-weight: 500;
+  line-height: 120%;
+}
+
+.entry-preview h5 {
+  font-size: 90%;
+  font-weight: 100;
+  color: #888;
+  padding-top: 0.3em;
+}
 
