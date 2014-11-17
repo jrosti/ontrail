@@ -20,31 +20,31 @@ function iconFor(sport) {
 }
 
 function populate(fromEditMode) {
-  $.getJSONAsObservable("/trail/rest/blog/" + entryId).map(ƒ.attrF("data"))
-    .take(1)
-    .subscribe(function(entry) {
-      var date = moment.unix(entry.date)
-      $("#page-title").text(entry.title)
-      $("#ex-title").text(entry.title)
-      $("#ex-body").html(entry.body)
-      $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
-      if (fromEditMode) {
-        $("#ex-sport").val(entry.sport)
-      }
-      if (entry.sport)
-        $("#distance-logo").toggleClass(iconFor(entry.sport)).show()
-      if (entry.distance) {
-        $("#distance-text").text(entry.distance).show()
-      }
-      if (entry.time) {
-        $("#time-text").text(entry.time).show()
-        $("#time-logo").show()
-      }
-      if (!fromEditMode) {
-        $("#author-fullname").text(entry.user)
-        $("#author-image").attr('src', entry.avatar)
-      }
-    })
+  var entry = $.getJSONAsObservable("/trail/rest/blog/" + entryId).map(ƒ.attrF("data")).take(1)
+  entry.subscribe(function(entry) {
+    var date = moment.unix(entry.date)
+    $("#page-title").text(entry.title)
+    $("#ex-title").text(entry.title)
+    $("#ex-body").html(entry.body)
+    $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
+    if (fromEditMode) {
+      $("#ex-sport").val(entry.sport)
+    }
+    if (entry.sport)
+      $("#distance-logo").toggleClass(iconFor(entry.sport)).show()
+    if (entry.distance) {
+      $("#distance-text").text(entry.distance).show()
+    }
+    if (entry.time) {
+      $("#time-text").text(entry.time).show()
+      $("#time-logo").show()
+    }
+    if (!fromEditMode) {
+      $("#author-fullname").text(entry.user)
+      $("#author-image").attr('src', entry.avatar)
+    }
+  })
+  return entry;
 }
 
 function edit() {
