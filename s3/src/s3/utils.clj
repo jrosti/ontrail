@@ -18,7 +18,9 @@
   ([str] 
      (truncate str 100))
   ([str n]
-     (subs str 0 (min (count str) n))))
+   (if (= 0 (count str))
+     ""
+     (subs str 0 (min (count str) n)))))
 
 (defn float= [x y]
   (<= (Math/abs (- x y)) 0.00001))

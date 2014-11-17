@@ -51,7 +51,7 @@
     (GET "/validate/time/:time" [time]
          (let [duration (to-human-time (parse-duration time))]
             (if (= "" duration)
-              (no-auth {:message "invalid-duration"} 400)
+              (no-auth {:message "invalid-duration"})
               (no-auth {:success true :time duration}))))
 
     (GET "/validate/distance/:distance" [distance]
@@ -60,6 +60,9 @@
 
     (POST "/blog/draft" {cookies :cookies}
           (auth-> cookies blog/create-new-draft))
+
+    (GET  "/blog/:id/draft" {params :params cookies :cookies}
+          (auth-> cookies (blog/get-draft (:id params))))
 
     (POST "/blog/:id/draft" {blog :params cookies :cookies}
           (auth-> cookies (blog/update-draft blog)))
