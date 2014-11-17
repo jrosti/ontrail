@@ -10,5 +10,9 @@ $("#show-menu").onAsObservable("click").subscribe(function() {
 
 var user = require("./user")
 
+user.auths.subscribe(function(profile) {
+  $('.username').text(profile.user)
+})
+
 $("#logout").onAsObservable("click").subscribe(user.logout)
 $("#to-home").onAsObservable("click").subscribe(function() { document.location = "/" })
