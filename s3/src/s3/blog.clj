@@ -1,6 +1,6 @@
 (ns s3.blog
   (:use
-        [s3 log mongodb parser formats utils])
+        [s3 log mongodb parser formats utils user])
   (:require [monger.collection :as mc]
             [s3.mongoquery :as querystr]
             [monger.result :as mr]
@@ -45,7 +45,7 @@
 (def from-db-to-user-transform
   {:drop []
    :transform {:distance to-human-distance
-               :time to-human-time}
+               :time #(if (not= 0 %) (to-human-time %) "")}
    :validation [identity]})
 
 (defn from-db-to-user [obj]
@@ -58,14 +58,20 @@
       (from-db-to-user updated))))
 
 (def from-user-to-db-transform
-  {:drop [:id]
+  {:drop [:id :avatar]
    :transform {:distance #(-> % parse-distance int)
                :time #(-> % parse-duration int)
                :draft #(if (string? %) (parse-boolean %) (boolean %))}
    :validation [:user #(-> % :draft string? not)]})
 
+(defn object-id [id]
+  (try
+    (ObjectId. id)
+    (catch Exception e
+      (error (.getMessage e)))))
+
 (defn find-blog-object [id]
-  (mc/find-one-as-map *db* BLOG {:_id (ObjectId. id)}))
+  (mc/find-one-as-map *db* BLOG {:_id (object-id id)}))
 
 (defn find-blog-object-by-sid [seo-id]
   (when seo-id
@@ -78,34 +84,43 @@
     (mq/paginate :page page :per-page 10)
     (mq/sort sort-order)))
 
+(defn generate-gravatar [blog]
+  (when blog
+    (assoc blog :avatar (get-avatar-url (:user blog)))))
+
 (defn list-result [user page rules sort-order]
   {:blogs (->> (query page rules sort-order)
-               (map from-db-to-user))
+               (map from-db-to-user)
+               (map generate-gravatar))
    :page page
    :viewer user
    :sortedBy sort-order})
 
 (defn pad-with [text padding]
   (let [text-part (truncate text 40)
-        pad-count (+ 2 (Math/max 0 (- (count padding) (count text))))
+        pad-count (+ 3 (max 0 (- (count padding) (count text))))
         pad (->> padding reverse (take pad-count) (apply str))]
     (str text-part "_" pad)))
 
 (defn generate-seo-id [blog padding]
-  (let [title (:title blog)]
-    (assoc
-      blog
-      :sid (-> title
-               to-lower
-               (string/replace #"[^a-z]" "_")
-               (pad-with padding)))))
+  (let [title (:title blog)
+        try-pad (-> title
+                    to-lower
+                    (string/replace #"ä" "a")
+                    (string/replace #"ö" "o")
+                    (string/replace #"[^a-z0-9]" "_")
+                    (pad-with padding))]
+    (if (not (find-blog-object-by-sid try-pad))
+      (assoc blog :sid try-pad)
+      (assoc blog :sid (str try-pad padding)))))
 
 (defn generate-title [blog]
   (when blog
     (if (and (-> blog :title string?) (> (-> blog :title count) 1))
       blog
       (let [b (:body blog)
-            sentences (clojure.string/split b #"\.")]
+            text (strip-html b)
+            sentences (clojure.string/split text #"\.")]
         (assoc blog :title (truncate (first sentences) 150))))))
 
 (defn create-new-draft [user]
@@ -122,8 +137,18 @@
           (transform-fields-using from-user-to-db-transform)
           (swap-merge db-object)
           (generate-title)
-          (insert-and-return db-object))
+          (insert-and-return db-object)
+          (generate-gravatar))
       (error "Db object deleted or not own. Refusing to update: " user params id))))
+
+(defn get-draft [user id]
+  (let [obj (find-blog-object id)
+        user-obj (from-db-to-user obj)]
+    (if (and (:draft obj) (= user (:user obj)))
+      (if obj
+        (-> user-obj
+            generate-gravatar))
+      (error "Cannot view draft. Not found or not owned by user" user id))))
 
 (defn generate-publication-date [blog]
   (when blog
@@ -138,17 +163,19 @@
           (generate-title)
           (generate-seo-id id)
           (generate-publication-date)
-          (insert-and-return db-object))
+          (insert-and-return db-object)
+          (generate-gravatar))
       (error "Db object deleted or not own. Refusing to update: " user new-blog id))))
 
 (defn find-by [user sid]
   (let [obj (find-blog-object-by-sid sid)
         user-obj (from-db-to-user obj)]
-    (if (or (not (:draft obj)) (= (:user obj) user))
+    (if (not (:draft obj))
       (if obj
-        user-obj
+        (-> user-obj
+            (generate-gravatar))
         (error "cant find object" sid))
-      (error "Cannot view draft from another user: " user sid))))
+      (error "Cannot view draft using seo id " user sid))))
 
 (defn delete-by [user id]
   (let [db-object (find-blog-object-by-sid id)

@@ -33,16 +33,16 @@
     {:status 200
      :headers {"Content-Type" "application/json"}
      :body (generate-string data)}
-    {:status 400
+    {:status status
      :headers {"Content-Type" "application/json"}
      :body "Invalid request."}))
 
-(defmacro no-auth [data & [status]]
+(defmacro no-auth [data & status]
   `(try
      (json-resp ~data)
      (catch Exception ex#
        (error ex#)
-       (error-status ex#))))
+       (error-status ex# ~status))))
 
 (defmacro user-> [cookies form]
   `(try
