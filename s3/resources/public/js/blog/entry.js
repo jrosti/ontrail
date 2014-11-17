@@ -163,16 +163,45 @@ function renderEntries(el, draft, entries) {
   }).value())
 }
 
+
+var elementBottomIsAlmostVisible = function($el, margin) {
+    if (!$el.is(':visible')) return false;
+
+    // Toim.huom. $(window).height() näyttäis olevan rikki jquery 1.8.1:ssä...
+    var viewportBottom = $(window).scrollTop() + window.innerHeight
+    var loadingPoint = $el.offset().top + $el.outerHeight()
+
+    return (viewportBottom  + margin) >= loadingPoint
+}
+
+var pager = function(fromUrl) {
+    return fromUrl.scan( {page: 0},
+      function(val, url) { var pg = val.page + 1; return {page: pg, url: url } })
+      .map(function(item) { return item.url + "page=" + item.page })
+}
+
 function entries(el, drafts) {
-  var user = require("../app/user")
+  require("../app/user").requiredAuths()
 
-  var entries = drafts ?
-    user.requiredAuths().flatMap(function(profile) {
-      return $.getJSONAsObservable("/trail/rest/blog/list/drafts")
-    }) :
-    $.getJSONAsObservable("/trail/rest/blog/list/all")
+  var url = drafts ? "/trail/rest/blog/list/drafts?" : "/trail/rest/blog/list/all?"
+  var $el = $("#blog-posts")
 
-  entries.map(ƒ.attrF("data")).subscribe(_.partial(renderEntries, el, drafts))
+  var ajaxReady = $el.onAsObservable("blog-update").throttle(100)
+  var shouldUpdate = ajaxReady.merge($(window).onAsObservable('scroll').throttle(100)).filter(_.partial(elementBottomIsAlmostVisible, $el, 100))
+  var pages = ajaxReady.startWith("").zip(shouldUpdate.startWith(""), _.identity)
+
+  var entries = pager(pages.map(function() { return url })).flatMap(function(url) {
+    console.log("get from url", url)
+    return $.getJSONAsObservable(url)
+  })
+
+  entries.map(ƒ.attrF("data")).subscribe(function(entries) {
+    renderEntries($el, drafts, entries)
+    if (entries.blogs.length > 0)
+      $el.trigger("blog-update")
+  }, function() { $el.trigger("blog-update") })
+
+  return entries
 }
 
 exports.entries = entries
