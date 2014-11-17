@@ -167,7 +167,7 @@ function entries(el, drafts) {
   var user = require("../app/user")
 
   var entries = drafts ?
-    user.auths.flatMap(function(profile) {
+    user.requiredAuths().flatMap(function(profile) {
       return $.getJSONAsObservable("/trail/rest/blog/list/drafts")
     }) :
     $.getJSONAsObservable("/trail/rest/blog/list/all")
