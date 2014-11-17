@@ -2,7 +2,7 @@
   (:require [aws.sdk.s3 :as s3]
             [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn])
-  (:use [s3 webutil auth apiroutes loginroutes log]
+  (:use [s3 webutil auth apiroutes log]
         [ring.middleware.json :only [wrap-json-params]]
         [ring.util.response :only [redirect resource-response]]
         [compojure.route :only [files not-found resources]]
