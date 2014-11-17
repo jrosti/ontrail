@@ -425,6 +425,11 @@ footer img {
   padding-bottom: 2em;
 }
 
+.entry-preview .generated {
+  font-style: italic;
+  color: #666;
+}
+
 .entry-preview * {
   padding: 0;
   margin: 0;
