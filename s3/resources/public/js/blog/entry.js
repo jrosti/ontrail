@@ -41,7 +41,7 @@ function populate(fromEditMode) {
     }
     if (!fromEditMode) {
       $("#author-fullname").text(entry.user)
-      $("#author-image").attr('src', entry.avatar)
+      $("#author-image").attr('style', "background-image: url(" + entry.avatar + ");")
     }
   })
   return entry;
