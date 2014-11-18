@@ -43,8 +43,9 @@ function iconFor(sport) {
 }
 
 function populate(fromEditMode) {
-  var entryStream = Rx.Observable.from(['', '/draft']).flatMap(function(extraPath) {
-    return $.getJSONAsObservable("/trail/rest/blog/" + entryId + extraPath).catchException()
+  var ajaxErrors = $(document).onAsObservable("entry-request-failed").startWith("")
+  var entryStream = Rx.Observable.from(['', '/draft']).zip(ajaxErrors, function(a) {return a}).flatMapLatest(function(extraPath) {
+    return $.getJSONAsObservable("/trail/rest/blog/" + entryId + extraPath).doAction(_.identity, function() { $(document).trigger("entry-request-failed")})
   }).retry(1).map(ƒ.attrF("data")).take(1).publish()
   entryStream.subscribe(function(entry) {
     var date = moment.unix(entry.date)
