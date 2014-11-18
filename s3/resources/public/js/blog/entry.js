@@ -64,15 +64,14 @@ function edit() {
   var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
   var date = $("#ex-date").onAsObservable('change').map(ƒ.attrF("target")).map(ð.attrF('data-timestamp')).startWith("")
 
-  var createdDraft = $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
+  var draft = entryId ? populate(true) : $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
 
   var drafts =
-    createdDraft.flatMapLatest(function(blogPost) {
+    draft.flatMapLatest(function(blogPost) {
       return Rx.Observable.combineLatest([titles, bodies, distance, time, sport, date], _zipObj(["title", "body", "distance", "time", "sport", "date"]))
         .map(function(values) { return _.merge({}, blogPost, values) })
     }).distinctUntilChanged().skip(1)
 
-  if (entryId) populate(true)
   return { drafts: drafts, allSports: allSports }
 }
 
