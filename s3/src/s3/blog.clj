@@ -120,7 +120,8 @@
       blog
       (let [b (:body blog)
             text (strip-html b)
-            sentences (clojure.string/split text #"\.")]
+            text-wo-nl (string/replace text #"\n" " ")
+            sentences (string/split text-wo-nl #"\.")]
         (assoc blog :title (truncate (first sentences) 150))))))
 
 (defn create-new-draft [user]

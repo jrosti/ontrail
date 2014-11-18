@@ -29,7 +29,9 @@
   (reduce #(and %1 %2) (map #(and (not= nil %) (> % 0)) vals)))
 
 (defn strip-html [^String val]
-   (string/replace val #"<[^>]*>" " "))
+  (-> val
+      (string/replace #"&[^;]*;" " ")
+      (string/replace #"<[^>]*>" " ")))
 
 (defn to-lower [^String value]
   (.toLowerCase value))
