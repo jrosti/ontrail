@@ -8,9 +8,31 @@ require("rx-jquery")
 require("../util/rx-extensions")
 
 window.jQuery = $
+window.MediumEditor = MediumEditor
+$.fn.MediumEditor = MediumEditor
 window.moment = moment
 require("livestamp")
+require("medium-editor-insert-plugin")
+require("medium-editor-insert-images")
 
+
+var MediumEditor = require("medium-editor")
+
+var editorOpts = {
+  cleanPastedHTML: true,
+  placeholder: "Kerro jotain lenkistäsi ...",
+  buttonLabels: 'fontawesome'
+}
+
+var titleEditorOpts = {
+  cleanPastedHTML: true,
+  disableReturn: true,
+  disableDoubleReturn: true,
+  firstHeader: 'h1',
+  secondHeader: 'h2',
+  disableToolbar: true,
+  placeholder: "Naseva otsikko lenkillesi!"
+}
 
 var entryIdRegex = /\/(edit|entry)\/(.*)/
 var entryId = (entryIdRegex.exec(document.location.pathname) || [undefined, undefined, undefined])[2]
@@ -18,7 +40,6 @@ var entryId = (entryIdRegex.exec(document.location.pathname) || [undefined, unde
 function iconFor(sport) {
   return allSports.find(function(item) { return item.label == sport} ).icon
 }
-
 
 function populate(fromEditMode) {
   var entryStream = Rx.Observable.from(['', '/draft']).flatMap(function(extraPath) {
@@ -76,6 +97,20 @@ function edit() {
       return Rx.Observable.combineLatest([titles, bodies, distance, time, sport, date], _zipObj(["title", "body", "distance", "time", "sport", "date"]))
         .map(function(values) { return _.merge({}, blogPost, values) })
     }).distinctUntilChanged().skip(1)
+
+    draft.take(1).subscribe(function (dr) {
+        var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
+        var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
+
+        $('.editable').mediumInsert({
+          editor: contentEditor,
+          addons: {
+            images: {
+              imagesUploadScript: '/file-upload/put'
+            }
+          }
+        });
+    })
 
   return { drafts: drafts, allSports: allSports }
 }
