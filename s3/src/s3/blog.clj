@@ -77,7 +77,7 @@
   (when seo-id
     (mc/find-one-as-map *db* BLOG {:sid seo-id})))
 
-(defn query [page rules sort-order]
+(defn query-many [page rules sort-order]
   (mq/with-collection
     *db* BLOG
     (mq/find rules)
@@ -89,7 +89,7 @@
     (assoc blog :avatar (get-avatar-url (:user blog)))))
 
 (defn list-result [user page rules sort-order]
-  {:blogs (->> (query page rules sort-order)
+  {:blogs (->> (query-many page rules sort-order)
                (map from-db-to-user)
                (map generate-gravatar))
    :page page
@@ -118,11 +118,12 @@
   (when blog
     (if (and (-> blog :title string?) (> (-> blog :title count) 1))
       blog
-      (let [b (:body blog)
-            text (strip-html b)
-            text-wo-nl (string/replace text #"\n" " ")
-            sentences (string/split text-wo-nl #"\.")]
-        (assoc blog :title (truncate (first sentences) 150))))))
+      (let [sentences (-> blog
+                          :body
+                          (strip-html)
+                          (string/replace #"\n" " ")
+                          (string/split #"\."))]
+        (assoc blog :title (truncate (first sentences) 80))))))
 
 (defn create-new-draft [user]
   (_id-to-id
@@ -143,13 +144,12 @@
       (error "Db object deleted or not own. Refusing to update: " user params id))))
 
 (defn get-draft [user id]
-  (let [obj (find-blog-object id)
-        user-obj (from-db-to-user obj)]
-    (if (and (:draft obj) (= user (:user obj)))
-      (if obj
-        (-> user-obj
-            generate-gravatar))
-      (error "Cannot view draft. Not found or not owned by user" user id))))
+  (let [obj (find-blog-object id)]
+    (if (and (:draft obj) (own? user obj))
+      (-> obj
+          from-db-to-user
+          generate-gravatar)
+    (error "Cannot view draft. Not found or not owned by user" user id))))
 
 (defn generate-publication-date [blog]
   (when blog
@@ -168,24 +168,24 @@
           (generate-gravatar))
       (error "Db object deleted or not own. Refusing to update: " user new-blog id))))
 
+(defn to-user [obj]
+  (if (not (:draft obj))
+    (-> obj
+        (from-db-to-user)
+        (generate-gravatar))
+  (error "Cannot view draft from this endpoint" obj)))
+
+
 (defn find-by-id [user id]
-  (let [obj (find-blog-object id)
-        user-obj (from-db-to-user obj)]
+  (let [obj (find-blog-object id)]
     (if obj
-      (if (not (:draft obj))
-        (-> user-obj
-            (generate-gravatar))
-        (error "Cannot view draft " user id))
+      (to-user obj)
       (error "Object not found" user id))))
 
-(defn find-by [user sid]
-  (let [obj (find-blog-object-by-sid sid)
-        user-obj (from-db-to-user obj)]
+(defn find-by-sid-or-id [user sid]
+  (let [obj (find-blog-object-by-sid sid)]
     (if obj
-      (if (not (:draft obj))
-        (-> user-obj
-            (generate-gravatar))
-        (error "Cannot view draft" user sid))
+      (to-user obj)
       (find-by-id user sid))))
 
 (defn delete-by [user id]
