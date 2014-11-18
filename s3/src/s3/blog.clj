@@ -168,15 +168,25 @@
           (generate-gravatar))
       (error "Db object deleted or not own. Refusing to update: " user new-blog id))))
 
+(defn find-by-id [user id]
+  (let [obj (find-blog-object id)
+        user-obj (from-db-to-user obj)]
+    (if obj
+      (if (not (:draft obj))
+        (-> user-obj
+            (generate-gravatar))
+        (error "Cannot view draft " user id))
+      (error "Object not found" user id))))
+
 (defn find-by [user sid]
   (let [obj (find-blog-object-by-sid sid)
         user-obj (from-db-to-user obj)]
-    (if (not (:draft obj))
-      (if obj
+    (if obj
+      (if (not (:draft obj))
         (-> user-obj
             (generate-gravatar))
-        (error "cant find object" sid))
-      (error "Cannot view draft using seo id " user sid))))
+        (error "Cannot view draft" user sid))
+      (find-by-id user sid))))
 
 (defn delete-by [user id]
   (let [db-object (find-blog-object-by-sid id)
