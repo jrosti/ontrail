@@ -19,9 +19,12 @@ function iconFor(sport) {
   return allSports.find(function(item) { return item.label == sport} ).icon
 }
 
+
 function populate(fromEditMode) {
-  var entry = $.getJSONAsObservable("/trail/rest/blog/" + entryId).map(ƒ.attrF("data")).take(1)
-  entry.subscribe(function(entry) {
+  var entryStream = Rx.Observable.from(['', '/draft']).flatMap(function(extraPath) {
+    return $.getJSONAsObservable("/trail/rest/blog/" + entryId + extraPath).catchException()
+  }).retry(1).map(ƒ.attrF("data")).take(1).publish()
+  entryStream.subscribe(function(entry) {
     var date = moment.unix(entry.date)
     $("#page-title").text(entry.title)
     $("#ex-title").text(entry.title)
@@ -44,7 +47,9 @@ function populate(fromEditMode) {
       $("#author-image").attr('style', "background-image: url(" + entry.avatar + ");")
     }
   })
-  return entry;
+  entryStream.connect()
+
+  return entryStream
 }
 
 function edit() {
@@ -190,7 +195,6 @@ function entries(el, drafts) {
   var pages = ajaxReady.startWith("").zip(shouldUpdate.startWith(""), _.identity)
 
   var entries = pager(pages.map(function() { return url })).flatMap(function(url) {
-    console.log("get from url", url)
     return $.getJSONAsObservable(url)
   })
 
