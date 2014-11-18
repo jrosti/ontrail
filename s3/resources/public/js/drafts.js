@@ -11,6 +11,6 @@ $(document).ready(function() {
     .map(ƒ.attrF("target"))
     .map(function(el) { console.log(el); return $(el).parent(".entry-preview").attr("data-sid")})
     .subscribe(function(sid) {
-      document.location = "/entry/" + sid
+      document.location = "/edit/" + sid
     })
 })
