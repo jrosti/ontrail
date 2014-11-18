@@ -31,7 +31,8 @@ var titleEditorOpts = {
   firstHeader: 'h1',
   secondHeader: 'h2',
   disableToolbar: true,
-  placeholder: "Naseva otsikko lenkillesi!"
+  placeholder: "Naseva otsikko lenkillesi!",
+  buttonLabels: 'fontawesome'
 }
 
 var entryIdRegex = /\/(edit|entry)\/(.*)/
@@ -47,8 +48,14 @@ function populate(fromEditMode) {
   }).retry(1).map(ƒ.attrF("data")).take(1).publish()
   entryStream.subscribe(function(entry) {
     var date = moment.unix(entry.date)
+    if (entry.background) {
+      $("header").addClass("image").css("background-image", "url(" + entry.background + ")")
+    }
     $("#page-title").text(entry.title)
-    $("#ex-title").text(entry.title)
+    if (fromEditMode)
+      $("#ex-title").html(entry.title)
+    else
+      $("#ex-title").text($(entry.title).filter("p").text())
     $("#ex-body").html(entry.body)
     $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
     if (fromEditMode) {
@@ -83,8 +90,9 @@ function edit() {
     }
   }
 
-  var titles = $("#ex-title").onAsObservable('input').throttledEventTarget(300).map(ð.text).startWith("")
+  var titles = $("#ex-title").onAsObservable('input').throttledEventTarget(300).map(ð.html).startWith("")
   var bodies = $("#ex-body").onAsObservable('input').throttledEventTarget(300).map(ð.html).startWith("")
+  var header = $('header').onAsObservable('change').map(function(evt) { return evt.additionalArguments[0] }).startWith("")
   var distance = $("#ex-distance").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
   var time = $("#ex-time").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).map(function(time) { time + "000"}).startWith("")
   var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
@@ -94,7 +102,8 @@ function edit() {
 
   var drafts =
     draft.flatMapLatest(function(blogPost) {
-      return Rx.Observable.combineLatest([titles, bodies, distance, time, sport, date], _zipObj(["title", "body", "distance", "time", "sport", "date"]))
+      return Rx.Observable.combineLatest([titles, bodies, header, distance, time, sport, date],
+        _zipObj(["title", "body", "background", "distance", "time", "sport", "date"]))
         .map(function(values) { return _.merge({}, blogPost, values) })
     }).distinctUntilChanged().skip(1)
 
@@ -102,14 +111,46 @@ function edit() {
         var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
         var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
+        $('#ex-title').mediumInsert({
+          editor: titleEditor,
+          addons: {
+            images: {
+              imagesUploadScript: '/file-upload/put',
+              imagesDeleteScript: '/file-upload/delete',
+              uploadFile: function ($placeholder, file, that) {
+                $.ajax({
+                  type: "post",
+                  url: that.options.imagesUploadScript,
+                  xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.upload.onprogress = that.updateProgressBar;
+                    return xhr;
+                  },
+                  cache: false,
+                  contentType: false,
+                  complete: function (jqxhr) {
+                    $("header").addClass("image").css("background-image", "url(" + jqxhr.responseText + ")").trigger('change', jqxhr.responseText)
+                    that.uploadCompleted(jqxhr, $placeholder);
+                  },
+                  processData: false,
+                  data: that.options.formatData(file)
+                });
+              }
+            }
+
+          }
+        });
+
         $('.editable').mediumInsert({
           editor: contentEditor,
           addons: {
             images: {
-              imagesUploadScript: '/file-upload/put'
+              imagesUploadScript: '/file-upload/put',
+              imagesDeleteScript: '/file-upload/delete'
             }
           }
         });
+
     })
 
   return { drafts: drafts, allSports: allSports }
@@ -191,7 +232,7 @@ function renderEntries(el, draft, entries) {
     var excerptText = $(entry.body).filter("p").text().substring(0,140)
     var hasExcerpt = excerptText != ""
     var hasTitle = entry.title && entry.title != ""
-    var titleText = hasTitle ? entry.title : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
+    var titleText = hasTitle ? $(entry.title).filter("p").text() : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
 
     var $title = $("<h3>", { "class": hasTitle ? "" : "generated" }).text(titleText)
     var $excerpt = $("<p>",  { "class": hasExcerpt ? "" : "generated" }).text( (excerptText != "" || !draft) ? excerptText : "Lenkkisi kaipaa kuvausta")
@@ -245,5 +286,3 @@ function entries(el, drafts) {
 exports.entries = entries
 exports.edit = edit
 exports.populate = populate
-
-
