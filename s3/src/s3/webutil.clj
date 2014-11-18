@@ -33,7 +33,7 @@
     {:status 200
      :headers {"Content-Type" "application/json"}
      :body (generate-string data)}
-    {:status status
+    {:status 400
      :headers {"Content-Type" "application/json"}
      :body "Invalid request."}))
 
@@ -42,14 +42,14 @@
      (json-resp ~data)
      (catch Exception ex#
        (error ex#)
-       (error-status ex# ~status))))
+       (error-status ex# 400))))
 
 (defmacro user-> [cookies form]
   `(try
      (let [user# (auth/user-from-cookie ~cookies)]
        (json-resp (-> user# ~form)))
      (catch Exception ex#
-       (error-status ex#))))
+       (error-status ex# 400))))
 
 (defmacro auth-> [cookies form]
   `(try
@@ -59,7 +59,7 @@
        (json-resp {"error" "Authentication required"} 401))
      (catch Exception ex#
        (error ex#)
-       (error-status ex#))))
+       (error-status ex# 400))))
 
 (defmacro text-plain-auth-> [cookies form]
   `(try
@@ -69,4 +69,4 @@
        (json-resp {"error" "Authentication required"} 401))
      (catch Exception ex#
        (error ex#)
-       (error-status ex#))))
+       (error-status ex# 400))))
