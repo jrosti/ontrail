@@ -7,7 +7,6 @@ var Rx = require('rx')
 window.jQuery = $
 require("zelect")
 
-var MediumEditor = require("medium-editor")
 var moment = require('moment')
 var dialog = require("./editor/dialog")
 var entry = require("./blog/entry").edit()
@@ -21,22 +20,6 @@ require('livestamp')
 require("medium-editor-insert-plugin")
 require("medium-editor-insert-images")
 
-var editorOpts = {
-  cleanPastedHTML: true,
-  placeholder: "Kerro jotain lenkistäsi ...",
-  buttonLabels: 'fontawesome'
-}
-
-var titleEditorOpts = {
-  cleanPastedHTML: true,
-  disableReturn: true,
-  disableDoubleReturn: true,
-  firstHeader: 'h1',
-  secondHeader: 'h2',
-  disableToolbar: true,
-  placeholder: "Naseva otsikko lenkillesi!"
-}
-
 function saveDraft(entry) {
   return $.postAsObservable("/trail/rest/blog/" + entry.id + "/draft", entry).map(ƒ.attrF("data")).catchException(function (error) {
     return Rx.Observable.empty()
@@ -49,7 +32,7 @@ function publishBlog(entry) {
   })
 }
 
-var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(60000))
+var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(3000))
   .flatMap(saveDraft).subscribe(function(response) {}) //autosaved?
 
 var dates = new Rx.Subject()
@@ -89,18 +72,6 @@ $(document).ready(function() {
     })
 
   })
-
-  var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
-  var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
-
-  $('.editable').mediumInsert({
-    editor: contentEditor,
-    addons: {
-      images: {
-        imagesUploadScript: '/file-upload/put'
-      }
-    }
-  });
 
   var dlg = dialog.create()
 
