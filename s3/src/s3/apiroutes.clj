@@ -71,7 +71,7 @@
           (auth-> cookies (blog/publish blog)))
 
     (GET "/blog/:sid" {params :params cookies :cookies}
-          (user-> cookies (blog/find-by (:sid params))))
+          (user-> cookies (blog/find-by-sid-or-id (:sid params))))
 
     (DELETE "/blog/:sid" {params :params cookies :cookies}
             (auth-> cookies (blog/delete-by (:sid params))))
