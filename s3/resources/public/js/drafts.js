@@ -9,7 +9,7 @@ $(document).ready(function() {
 
   $("#blog-posts").onAsObservable('click', ".entry-preview")
     .map(ƒ.attrF("target"))
-    .map(function(el) { console.log(el); return $(el).parent(".entry-preview").attr("data-sid")})
+    .map(function(el) { return $(el).closest(".entry-preview").attr("data-sid")} )
     .subscribe(function(sid) {
       document.location = "/edit/" + sid
     })
