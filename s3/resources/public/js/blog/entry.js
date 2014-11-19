@@ -225,7 +225,7 @@ function renderEntries(el, draft, entries) {
     var hasTitle = entry.title && entry.title != ""
     var titleText = hasTitle ? entry.title : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
 
-    var $bg = $("<div>", {"class": "bg-image", "style": (entry.background ? "background-image: url(" + entry.background + ")" : "") })
+    var $bg = $("<div>", {"class": "bg-image", "style":  "background-image: url(" + (entry.background ? entry.background : "/img/favicon-144x144.png")  + ")" })
     var $title = $("<h3>", { "class": hasTitle ? "" : "generated" }).text(titleText)
     var $excerpt = $("<p>",  { "class": hasExcerpt ? "" : "generated" }).text( (excerptText != "" || !draft) ? excerptText : "Lenkkisi kaipaa kuvausta")
     var $sport = (entry.sport ? $("<span>", {"class": iconFor(entry.sport)}).text(entry.distance? " " + entry.distance : "") : "")
