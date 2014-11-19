@@ -110,6 +110,11 @@ function edit(entry) {
   var draft = entry.id ? Rx.Observable.just(entry) : $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
 
   draft.take(1).subscribe(function (entry) {
+    if (!entryId && window.history)
+      window.history.replaceState(null, null, "/edit/" + entry.id)
+    else if (!entryId)
+      document.location = "/edit/" + entry.id
+
     var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
     var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
 
