@@ -225,12 +225,13 @@ function renderEntries(el, draft, entries) {
     var hasTitle = entry.title && entry.title != ""
     var titleText = hasTitle ? entry.title : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
 
+    var $bg = $("<div>", {"class": "bg-image", "style": (entry.background ? "background-image: url(" + entry.background + ")" : "") })
     var $title = $("<h3>", { "class": hasTitle ? "" : "generated" }).text(titleText)
     var $excerpt = $("<p>",  { "class": hasExcerpt ? "" : "generated" }).text( (excerptText != "" || !draft) ? excerptText : "Lenkkisi kaipaa kuvausta")
     var $sport = (entry.sport ? $("<span>", {"class": iconFor(entry.sport)}).text(entry.distance? " " + entry.distance : "") : "")
     var $time = (entry.time ? $("<span>", {"class": "flaticon-stopwatch7"}).text(entry.time ? " " + entry.time : "") : "")
     var $user = $("<h5>").append($("<span>", {"class": "author"}).text(entry.user)).append($sport).append($time)
-    return $("<div>", {"class": "entry-preview pure-u-1", "data-sid": draft ? entry.id : entry.sid}).append($title).append($excerpt).append($user)
+    return $("<div>", {"class": "entry-preview pure-u-1", "data-sid": draft ? entry.id : entry.sid}).append($bg).append($("<div>").append($title).append($excerpt).append($user))
   }).value())
 }
 

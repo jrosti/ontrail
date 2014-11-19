@@ -125,6 +125,7 @@ header.image div.overlay {
   background: rgba(0,0,0,.3);
   width: 100%;
   height: 100%;
+
 }
 
 .content {
@@ -450,9 +451,23 @@ body.editing header:hover:before {
 }
 
 .entry-preview {
+  display: flex;
   font-weight: 100;
   color: #333;
   padding-bottom: 2em;
+  clear: both;
+}
+
+.entry-preview .bg-image {
+  display: inline-block;
+  width: 100px;
+  min-width: 100px;
+  height: 100px;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-right: 20px;
+  float: left;
 }
 
 .entry-preview .generated {
