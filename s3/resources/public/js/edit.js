@@ -9,7 +9,7 @@ require("zelect")
 
 var moment = require('moment')
 var dialog = require("./editor/dialog")
-var entry = require("./blog/entry").edit()
+var entries = require("./blog/entry")
 
 // shims
 window.jQuery = $
@@ -32,19 +32,39 @@ function publishBlog(entry) {
   })
 }
 
-var savedEntries = entry.drafts.take(1).merge(entry.drafts.skip(1).sample(3000))
-  .flatMap(saveDraft).subscribe(function(response) {}) //autosaved?
-
 var dates = new Rx.Subject()
 
 $(document).ready(function() {
+
+  $("body").addClass("editing")
+
   // require common parts
   require("./app/menu")
   var user = require("./app/user")
 
-  user.requiredAuths().subscribe(function( profile ) {
+  var currentEntry = entries.currentEntry().catchException(entries.create)
+  user.requiredAuths().zip(currentEntry, function(a,b) {return [a,b]}).subscribe(function( profileAndEntry ) {
+    var profile = profileAndEntry[0]
+    var entry = profileAndEntry[1]
+
     $("#author-fullname").text(profile.user);
     $("#author-image").css("background-image", "url(\'" + profile.avatarUrl + "\')");
+
+    entries.populate(entry, true)
+    var drafts = entries.edit(entry)
+    var savedEntries = drafts.take(1).merge(drafts.skip(1).sample(3000))
+       .flatMap(saveDraft).subscribe(function(response) {}) //autosaved?
+
+    drafts.map(isEntryValid).subscribe(function(publishEnabled) {
+      $("#publish").toggleClass('pure-button-disabled', !publishEnabled)
+    })
+
+    drafts.combineLatest($('#publish').onAsObservable('click'), _.identity).filter(isEntryValid)
+      .flatMap(saveDraft)
+      .flatMap(publishBlog)
+      .subscribe(function(e ) {
+        document.location = "/entry/" + e.sid + "?published" // go to blog entry page and prompt for sharing.
+      })
 
     $("#ex-sport").zelect({
       placeholder: "Juoksu, suunnistus, pyöräily, ...",
@@ -55,7 +75,7 @@ $(document).ready(function() {
         }
 
         var sportsMatcher = new RegExp('(^|\\s)'+term, 'i')
-        callback(entry.allSports.filter(function(sport) {
+        callback(entries.allSports.filter(function(sport) {
           return sportsMatcher.test(sport.label)
         }).value())
       },
@@ -83,15 +103,4 @@ $(document).ready(function() {
     var body = $(entry.body).filter("p").text()
     return !(!body) && body.trim() != ""
   }
-
-  entry.drafts.map(isEntryValid).subscribe(function(publishEnabled) {
-    $("#publish").toggleClass('pure-button-disabled', !publishEnabled)
-  })
-
-  entry.drafts.combineLatest($('#publish').onAsObservable('click'), _.identity).filter(isEntryValid)
-    .flatMap(saveDraft)
-    .flatMap(publishBlog)
-    .subscribe(function(e ) {
-      document.location = "/entry/" + e.sid + "?published" // go to blog entry page and prompt for sharing.
-    })
 })

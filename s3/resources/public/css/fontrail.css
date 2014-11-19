@@ -19,7 +19,7 @@
 }
 */
 
- [class^="icon-"]:before, [class*=" icon-"]:before, .fa:before, #ex-title .mediumInsert:hover:before {
+ [class^="icon-"]:before, [class*=" icon-"]:before, .fa:before, body.editing header:hover:before {
   font-family: "ontrail";
   font-style: normal;
   font-weight: normal;
@@ -67,7 +67,7 @@
 .icon-terminal:before { content: '\e80e'; } /* '' */
 .icon-cog:before { content: '\e80f'; } /* '' */
 .icon-direction:before { content: '\e810'; } /* '' */
-.icon-picture:before, .fa.fa-picture-o:before,#ex-title .mediumInsert:hover:before { content: '\e811'; } /* '' */
+.icon-picture:before, .fa.fa-picture-o:before, body.editing header:hover:before  { content: '\e811'; } /* '' */
 .icon-location:before { content: '\e812'; } /* '' */
 .icon-cancel-circled:before { content: '\e813'; } /* '' */
 .icon-ellipsis:before { content: '\e814'; } /* '' */

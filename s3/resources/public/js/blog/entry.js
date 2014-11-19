@@ -15,6 +15,8 @@ require("livestamp")
 require("medium-editor-insert-plugin")
 require("medium-editor-insert-images")
 
+require("emitter-component")
+var Dropzone = require("dropzone")
 
 var MediumEditor = require("medium-editor")
 
@@ -42,46 +44,51 @@ function iconFor(sport) {
   return allSports.find(function(item) { return item.label == sport} ).icon
 }
 
-function populate(fromEditMode) {
+function entryStream() {
+  if(!entryId)
+    return Rx.Observable.throwError(new Error("no entry found"))
+
   var ajaxErrors = $(document).onAsObservable("entry-request-failed").startWith("")
   var entryStream = Rx.Observable.from(['', '/draft']).zip(ajaxErrors, function(a) {return a}).flatMapLatest(function(extraPath) {
     return $.getJSONAsObservable("/trail/rest/blog/" + entryId + extraPath).doAction(_.identity, function() { $(document).trigger("entry-request-failed")})
   }).retry(1).map(ƒ.attrF("data")).take(1).publish()
-  entryStream.subscribe(function(entry) {
-    var date = moment.unix(entry.date)
-    if (entry.background) {
-      $("header").addClass("image").css("background-image", "url(" + entry.background + ")")
-    }
-    $("#page-title").text(entry.title)
-    if (fromEditMode)
-      $("#ex-title").html(entry.title)
-    else
-      $("#ex-title").text($(entry.title).filter("p").text())
-    $("#ex-body").html(entry.body)
-    $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
-    if (fromEditMode) {
-      $("#ex-sport").val(entry.sport)
-    }
-    if (entry.sport)
-      $("#distance-logo").toggleClass(iconFor(entry.sport)).show()
-    if (entry.distance) {
-      $("#distance-text").text(entry.distance).show()
-    }
-    if (entry.time) {
-      $("#time-text").text(entry.time).show()
-      $("#time-logo").show()
-    }
-    if (!fromEditMode) {
-      $("#author-fullname").text(entry.user)
-      $("#author-image").attr('style', "background-image: url(" + entry.avatar + ");")
-    }
-  })
   entryStream.connect()
-
-  return entryStream
+  return entryStream;
 }
 
-function edit() {
+function create() {
+  return Rx.Observable.just({})
+}
+
+function populate(entry, fromEditMode) {
+  var date = moment.unix(entry.date)
+  if (entry.background) {
+    $("header").addClass("image").css("background-image", "url(" + entry.background + ")")
+  }
+  $("#page-title").text(entry.title)
+  $("#ex-title").text(entry.title)
+  $("#ex-body").html(entry.body)
+  $("#ex-date").attr("data-timestamp", entry.date).livestamp(date)
+  if (fromEditMode) {
+    $("#publish").removeClass("pure-button-disabled")
+    $("#ex-sport").val(entry.sport)
+  }
+  if (entry.sport)
+    $("#distance-logo").toggleClass(iconFor(entry.sport)).show()
+  if (entry.distance) {
+    $("#distance-text").text(entry.distance).show()
+  }
+  if (entry.time) {
+    $("#time-text").text(entry.time).show()
+    $("#time-logo").show()
+  }
+  if (!fromEditMode) {
+    $("#author-fullname").text(entry.user)
+    $("#author-image").attr('style', "background-image: url(" + entry.avatar + ");")
+  }
+}
+
+function edit(entry) {
   function _zipObj(keys) {
     return function() {
       var arr = []
@@ -91,70 +98,53 @@ function edit() {
     }
   }
 
-  var titles = $("#ex-title").onAsObservable('input').throttledEventTarget(300).map(ð.html).startWith("")
-  var bodies = $("#ex-body").onAsObservable('input').throttledEventTarget(300).map(ð.html).startWith("")
-  var header = $('header').onAsObservable('change').map(function(evt) { return evt.additionalArguments[0] }).startWith("")
-  var distance = $("#ex-distance").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
-  var time = $("#ex-time").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).map(function(time) { time + "000"}).startWith("")
-  var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith("")
-  var date = $("#ex-date").onAsObservable('change').map(ƒ.attrF("target")).map(ð.attrF('data-timestamp')).startWith("")
+  var titles = $("#ex-title").onAsObservable('input').throttledEventTarget(300).map(ð.text).startWith(entry.title || "")
+  var bodies = $("#ex-body").onAsObservable('input').throttledEventTarget(300).map(ð.html).doAction(function() { console.log("title0")}).startWith(entry.body || "")
+  var headerSubject = new Rx.Subject
+  var header = headerSubject.asObservable().startWith(entry.background || "")
+  var distance = $("#ex-distance").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith(entry.distance || "")
+  var time = $("#ex-time").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).map(function(time) { time + "000"}).startWith(entry.time || "")
+  var sport = $("#ex-sport").onAsObservable('change').map(ƒ.attrF("target")).map(ð.val).startWith(entry.sport || "")
+  var date = $("#ex-date").onAsObservable('change').map(ƒ.attrF("target")).map(ð.attrF('data-timestamp')).startWith(entry.date || "")
 
-  var draft = entryId ? populate(true) : $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
+  var draft = entry.id ? Rx.Observable.just(entry) : $.postAsObservable("/trail/rest/blog/draft", {}).map(ƒ.attrF("data"))
 
-  var drafts =
-    draft.flatMapLatest(function(blogPost) {
+  draft.take(1).subscribe(function (entry) {
+    var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
+    var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
+
+    $('.editable').mediumInsert({
+      editor: contentEditor,
+      addons: {
+        images: {
+          imagesUploadScript: '/file-upload/put',
+          imagesDeleteScript: '/file-upload/delete'
+        }
+      }
+    });
+
+    var myDropzone = new Dropzone("#background-container", {
+      url: "/file-upload/put",
+      createImageThumbnails: false,
+      init: function() {
+        this.on("success", function(img, resp) {
+          $("header").addClass("image").css("background-image", "url(" + encodeURI(resp) + ")")
+          headerSubject.onNext(encodeURI(resp))
+        } )
+      }
+    })
+  })
+
+  var drafts = draft.take(1).flatMap(function(entry) {
+    return draft.flatMapLatest(function(blogPost) {
       return Rx.Observable.combineLatest([titles, bodies, header, distance, time, sport, date],
         _zipObj(["title", "body", "background", "distance", "time", "sport", "date"]))
         .map(function(values) { return _.merge({}, blogPost, values) })
-    }).distinctUntilChanged().skip(1)
+    }).distinctUntilChanged()
+  }).publish()
+  drafts.connect()
 
-    draft.take(1).subscribe(function (dr) {
-        var titleEditor = new MediumEditor("#ex-title", titleEditorOpts) // instantiate content editor
-        var contentEditor = new MediumEditor(".editable", editorOpts) // instantiate content editor
-
-        $('#ex-title').mediumInsert({
-          editor: titleEditor,
-          addons: {
-            images: {
-              imagesUploadScript: '/file-upload/put',
-              imagesDeleteScript: '/file-upload/delete',
-              uploadFile: function ($placeholder, file, that) {
-                $.ajax({
-                  type: "post",
-                  url: that.options.imagesUploadScript,
-                  xhr: function () {
-                    var xhr = new XMLHttpRequest();
-                    xhr.upload.onprogress = that.updateProgressBar;
-                    return xhr;
-                  },
-                  cache: false,
-                  contentType: false,
-                  complete: function (jqxhr) {
-                    $("header").addClass("image").css("background-image", "url(" + jqxhr.responseText + ")").trigger('change', jqxhr.responseText)
-                    that.uploadCompleted(jqxhr, $placeholder);
-                  },
-                  processData: false,
-                  data: that.options.formatData(file)
-                });
-              }
-            }
-
-          }
-        });
-
-        $('.editable').mediumInsert({
-          editor: contentEditor,
-          addons: {
-            images: {
-              imagesUploadScript: '/file-upload/put',
-              imagesDeleteScript: '/file-upload/delete'
-            }
-          }
-        });
-
-    })
-
-  return { drafts: drafts, allSports: allSports }
+  return drafts
 }
 
 var allSports = _([
@@ -233,7 +223,7 @@ function renderEntries(el, draft, entries) {
     var excerptText = $(entry.body).filter("p").text().substring(0,140)
     var hasExcerpt = excerptText != ""
     var hasTitle = entry.title && entry.title != ""
-    var titleText = hasTitle ? $(entry.title).filter("p").text() : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
+    var titleText = hasTitle ? entry.title : (draft ? "Harjoituksen otsikko on vielä hakusessa" : excerptText)
 
     var $title = $("<h3>", { "class": hasTitle ? "" : "generated" }).text(titleText)
     var $excerpt = $("<p>",  { "class": hasExcerpt ? "" : "generated" }).text( (excerptText != "" || !draft) ? excerptText : "Lenkkisi kaipaa kuvausta")
@@ -285,5 +275,8 @@ function entries(el, drafts) {
 }
 
 exports.entries = entries
+exports.currentEntry = entryStream
 exports.edit = edit
+exports.create = create
 exports.populate = populate
+exports.allSports = allSports

@@ -14,6 +14,11 @@ body {
   font-size: 1.2em;
   background: #f8f8f8;
   display: flex;
+  margin-left: 20%;
+}
+
+body.menu-collapsed {
+  margin-left: 0;
 }
 
 body.menu-collapsed #side-menu {
@@ -22,8 +27,12 @@ body.menu-collapsed #side-menu {
 }
 
 #side-menu {
-  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   background: #282828;
+  z-index: 1;
 }
 
 #side-menu .pure-menu {
@@ -48,7 +57,12 @@ body.menu-collapsed #side-menu {
 }
 
 #top-menu {
+  width: 80%;
   position: fixed;
+}
+
+body.menu-collapsed #top-menu{
+  width: 100%;
 }
 
 #top-menu ul {
@@ -78,7 +92,8 @@ body.menu-collapsed #side-menu {
 }
 
 #main-content {
-  position: relative;
+  position: absolute;
+  top: 0;
   height: 100%;
   width: 100%;
 }
@@ -315,32 +330,23 @@ footer img {
   outline: 0px solid transparent;
 }
 
-#ex-title .mediumInsert {
-  position: fixed;
+body.editing header:hover:before {
   display: block;
-  top: -60px;
-  left: 100px;
-  right: 100px;
-  min-height: 160px;
-  margin: 180px 0 100px;
-}
-
-#ex-title .mediumInsert:hover {
+  position: absolute;
+  width: 80%;
+  margin: 60px 10%;
+  font-size: 50px;
+  line-height: 180px;
+  height: 180px;
   border: 3px dotted;
   border-radius: 10px;
   border-color: #ccc;
   vertical-align: middle;
-}
-
-#ex-title img,
-#ex-title .mediumInsert .mediumInsert-buttons {
-  display: none;
-}
-
-#ex-title .mediumInsert:hover:before {
   color: #ccc;
-  height: 100%;
-  vertical-align: middle;
+}
+
+.dz-preview {
+  display: none;
 }
 
 .medium-editor-placeholder:after {
@@ -350,10 +356,6 @@ footer img {
 .pure-menu {
   height: 40px;
   vertical-align: center;
-}
-
-.pure-menu ul {
-
 }
 
 .pure-menu .pure-menu-heading.draft {
