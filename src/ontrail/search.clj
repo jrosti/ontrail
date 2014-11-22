@@ -1,5 +1,5 @@
 (ns ontrail.search
-  (:use [ontrail mongodb utils exercise formats])
+  (:use [ontrail mongodb utils exercise formats nlp])
   (:require [monger.collection :as mc]
             [monger.query :as mq]
             [clj-time.core :as time]
@@ -38,8 +38,8 @@
 (def search-per-page 20)
 
 ;; Common words have been decided by observing the index manually, because some words have large postings, 
-;; like sport "Juoksu", and user still wants searc term to be used in the search.
-(def common-word #{"ja" "ei"})
+;; like sport "Juoksu", and user still wants search term to be used in the search.
+(def common-word stop-words)
 
 (defn valid-term? [term] 
   (and (>= (count term) min-term-length) 
@@ -49,7 +49,7 @@
 (defn tags-to-string [tags]
   (apply str (interpose " " tags)))
 
-(def re-term #"[a-zåäö#:0-9\-_]+")
+(def re-term #"[a-zåäæö#:0-9\-_]+")
 
 (defn to-term-seq [^String words]
   (if (string? words)
@@ -83,11 +83,11 @@
 
 (defn insert-exercise-to-index [assoc-fn index ex]
   (let [terms (exercise-to-terms ex)
-        ex-id (str (:_id ex))]
+        ex-id (:_id ex)]
     (reduce (partial insert-term assoc-fn ex-id) index terms)))
 
 (defn update-sort-index! [ex]
-  (swap! timestamps assoc (str (:_id ex)) (cljc/to-long (get-last-modified-date ex))))
+  (swap! timestamps assoc (:_id ex) (cljc/to-long (get-last-modified-date ex))))
 
 (defn insert-exercise-inmem-index! [ex]
   (update-sort-index! ex)
@@ -128,7 +128,7 @@
 
 (defn try-get-one [id]
   (try 
-    (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. ^String id)})
+    (mc/find-one-as-map *db* EXERCISE {:_id id})
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
