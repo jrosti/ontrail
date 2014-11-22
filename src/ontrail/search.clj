@@ -59,7 +59,7 @@
 (defn exercise-to-terms [exercise] 
   (concat 
    (to-term-seq (tags-to-string (:tags exercise)))
-   (to-term-seq (:user exercise))
+   (to-term-seq (str (:user exercise) " u:" (:user exercise)))
    (to-term-seq (:body exercise))
    (to-term-seq (:title exercise))
    (to-term-seq (:sport exercise))
