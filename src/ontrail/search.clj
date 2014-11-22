@@ -51,10 +51,20 @@
 
 (def re-term #"[a-zåäæö#:0-9\-_]+")
 
+(defn stem-word [term]
+  (when term
+    (if (.contains term ":")
+      term
+      (stem term))))
+
 (defn to-term-seq [^String words]
   (if (string? words)
-    (map stem (filter valid-term? (re-seq re-term (to-lower (strip-html words)))))
+    (map stem-word (filter valid-term? (re-seq re-term (to-lower (strip-html words)))))
     []))
+
+(defn month-str [date]
+  (when date
+    (.toString date "yyyy-M")))
 
 (defn exercise-to-terms [exercise] 
   (concat 
@@ -62,7 +72,7 @@
    (to-term-seq (str (:user exercise) " u:" (:user exercise)))
    (to-term-seq (:body exercise))
    (to-term-seq (:title exercise))
-   (to-term-seq (:sport exercise))
+   (to-term-seq (str (:sport exercise) " m:" (month-str (:creationDate exercise))))
    (to-term-seq 
     (reduce 
      (fn [result comment] 
@@ -163,7 +173,7 @@
 (defn search-wrapper [query]
   (let [query-string (:q query)
         page (page-or-default query)
-        terms (map stem (filter valid-term? (re-seq re-term (to-lower query-string))))]
+        terms (map stem-word (filter valid-term? (re-seq re-term (to-lower query-string))))]
     (if (> (count terms) 0)
       (let [res (search terms page)]
         {:results (:results res) :searchSummary (format-summary res terms query-string)})
