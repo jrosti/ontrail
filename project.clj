@@ -27,5 +27,6 @@
   :ring {:handler ontrail.core/app}
   :aliases {"import" ["run" "-m" "ontrail.heiaimport/import-json"]}
   :aot  [ontrail.core]
+  :java-source-paths ["src/main/java" "src/test/java"]
   :main ontrail.core)
 

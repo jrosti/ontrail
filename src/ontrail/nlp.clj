@@ -1,4 +1,13 @@
-(ns ontrail.nlp)
+(ns ontrail.nlp
+  (:import [org.tartarus.snowball.ext finnishStemmer]))
+
+(def stemmer (finnishStemmer.))
+
+(defn stem [word]
+  (when word
+    (.setCurrent stemmer word)
+    (.stem stemmer)
+    (.getCurrent stemmer)))
 
 (def verb-map {"Beach volley"       "pelasi biitsiä"
                "Crossfit"           "crossfittasi"
@@ -78,11 +87,7 @@
     "nil-sport-id"))
 
 (def stop-words
-  #{"ja" "ei"
-    "oli"
-    "mutta"
-    "on"
-    "kun"
+  #{"ja" "ei" "oli" "mutta" "on" "kun"
     "että"
     "niin"
     "se"
