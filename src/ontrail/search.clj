@@ -53,7 +53,7 @@
 
 (defn to-term-seq [^String words]
   (if (string? words)
-    (filter valid-term? (re-seq re-term (to-lower (strip-html words))))
+    (map stem (filter valid-term? (re-seq re-term (to-lower (strip-html words)))))
     []))
 
 (defn exercise-to-terms [exercise] 
@@ -163,7 +163,7 @@
 (defn search-wrapper [query]
   (let [query-string (:q query)
         page (page-or-default query)
-        terms (filter valid-term? (re-seq re-term (to-lower query-string)))]
+        terms (map stem (filter valid-term? (re-seq re-term (to-lower query-string))))]
     (if (> (count terms) 0)
       (let [res (search terms page)]
         {:results (:results res) :searchSummary (format-summary res terms query-string)})
