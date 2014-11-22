@@ -34,4 +34,5 @@
       (string/replace #"<[^>]*>" " ")))
 
 (defn to-lower [^String value]
-  (.toLowerCase value))
+  (when value
+    (.toLowerCase value)))
