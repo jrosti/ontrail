@@ -64,20 +64,24 @@
 
 (defn month-str [date]
   (when date
-    (.toString date "yyyy-M")))
+    (.toString date "'m:'yyyy-M")))
+
+(defn year-str [date]
+  (when date
+    (.toString date "'y:'yyyy")))
 
 (defn exercise-to-terms [exercise] 
-  (concat 
-   (to-term-seq (tags-to-string (:tags exercise)))
-   (to-term-seq (str (:user exercise) " u:" (:user exercise)))
-   (to-term-seq (:body exercise))
-   (to-term-seq (:title exercise))
-   (to-term-seq (str (:sport exercise) " m:" (month-str (:creationDate exercise))))
-   (to-term-seq 
-    (reduce 
-     (fn [result comment] 
-       (str result " " (:body comment) " c:"(:user comment))) 
-     "" (:comments exercise)))))
+  (concat
+    [(:sport exercise) (month-str (:creationDate exercise)) (year-str (:creationDate exercise))]
+     (to-term-seq (tags-to-string (:tags exercise)))
+     (to-term-seq (str (:user exercise) " u:" (:user exercise)))
+     (to-term-seq (:body exercise))
+     (to-term-seq (:title exercise))
+     (to-term-seq
+      (reduce
+       (fn [result comment]
+         (str result " " (:body comment) " c:"(:user comment)))
+       "" (:comments exercise)))))
 
 (defn insert-term [assoc-fn ex-id index term]
   (if-let [postings (index term)]
