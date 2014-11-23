@@ -33,7 +33,7 @@
 (def timestamps (atom {}))
 
 (def min-term-length 2)
-(def max-term-length 15)
+(def max-term-length 30)
 
 (def search-per-page 20)
 
@@ -49,7 +49,7 @@
 (defn tags-to-string [tags]
   (apply str (interpose " " tags)))
 
-(def re-term #"[a-zåäæö#:0-9\-_]+")
+(def re-term #"[a-zåäæö#:0-9_]+")
 
 (defn stem-word [term]
   (when term
@@ -72,7 +72,8 @@
 
 (defn exercise-to-terms [exercise] 
   (concat
-    [(:sport exercise) (month-str (:creationDate exercise)) (year-str (:creationDate exercise))]
+    [ (month-str (:creationDate exercise)) (year-str (:creationDate exercise))]
+    (to-term-seq (:sport exercise))
      (to-term-seq (tags-to-string (:tags exercise)))
      (to-term-seq (str (:user exercise) " u:" (:user exercise)))
      (to-term-seq (:body exercise))
@@ -142,7 +143,7 @@
 
 (defn try-get-one [id]
   (try 
-    (mc/find-one-as-map *db* EXERCISE {:_id id})
+    (dissoc (mc/find-one-as-map *db* EXERCISE {:_id id}) :comments)
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
