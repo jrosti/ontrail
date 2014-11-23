@@ -143,7 +143,7 @@
 
 (defn try-get-one [id]
   (try 
-    (dissoc (mc/find-one-as-map *db* EXERCISE {:_id id}) :comments)
+    (mc/find-one-as-map *db* EXERCISE {:_id id})
     (catch Exception exception
       (.error logger (str "Unable to get ex " id " " exception)))))
 
