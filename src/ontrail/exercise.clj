@@ -23,6 +23,12 @@
       (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 1)))
       false)))
 
+(defn visibility [viewing-user ex]
+  (let [owner (:user ex)]
+    (if (= "nobody" viewing-user)
+      (assoc ex :body "rekisteröidy nähdäksesi harjoitukset" :comments [])
+      ex)))
+
 (defn as-ex-result
   ([exercise] (as-ex-result (time/now) nc/zero-cache exercise))
   ([last-visit newcomment-cache exercise]
@@ -66,17 +72,17 @@
          with-details))))
   
 (defn as-ex-result-list
-  ([results]
+  ([results viewing-user]
      (as-ex-result-list (time/now) nc/zero-cache results))
-  ([last-visit new-comment-cache results]
-     (map (comp (fn [ex] (dissoc ex :comments)) 
+  ([last-visit new-comment-cache results viewing-user]
+     (map (comp (partial visibility viewing-user)
                 (partial as-ex-result last-visit new-comment-cache)) results)))
 
 (defn decorate-results [viewing-user results]
   (let [last-visit (if (not= viewing-user "nobody")
                       (nc/get-last-visit viewing-user)
                       (time/now))]
-    (as-ex-result-list last-visit (nc/get-cache viewing-user) results)))
+    (as-ex-result-list last-visit (nc/get-cache viewing-user) results viewing-user)))
 
 (defn get-latest-ex-list
   ([rule page sort-rule]
@@ -97,10 +103,6 @@
   ([viewing-user rule page]
      (get-latest-ex-list viewing-user rule page {:lastModifiedDate -1})))
 
-(defn comment-hiding? [viewing-user ex]
-  (let [user (:user ex)]
-    (= "nobody" viewing-user)))
-
 (defn get-ex
   ([viewing-user id]
      (.info logger (str "User " viewing-user " getting ex with id " id))
@@ -110,6 +112,4 @@
        (if (nil? exercise)
          {:error "No such id"}
          (let [ex (as-ex-result exercise)]
-           (if (comment-hiding? viewing-user ex)
-             (dissoc ex :comments)
-             ex))))))
+           (visibility viewing-user ex))))))
