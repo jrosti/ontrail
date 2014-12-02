@@ -157,11 +157,11 @@
           (str result " " term " (" occurrences ")")))
       "" terms)))
 
-(defn search [terms page]
+(defn search [viewing-user terms page]
   (let [result (search-ids terms page)
         ids (:results result)]
     (.debug logger (str "Terms " (stringify-terms terms) " page: " page " search result count: " (count ids)))
-    {:results (as-ex-result-list (filter identity (map try-get-one ids))) :total (:total result)}))
+    {:results (as-ex-result-list (filter identity (map try-get-one ids)) viewing-user) :total (:total result)}))
 
 (defn page-or-default [query]
   (try 
@@ -175,11 +175,11 @@
     (str "Löydettiin " (:total results) " tulosta hakusanoilla " (stringify-terms terms)
          (if (> (count invalid-terms) 0) (str " ei käytetty sanoja: " (stringify-terms invalid-terms)) ""))))
 
-(defn search-wrapper [query]
+(defn search-wrapper [viewing-user query]
   (let [query-string (:q query)
         page (page-or-default query)
         terms (map stem-word (filter valid-term? (re-seq re-term (to-lower query-string))))]
     (if (> (count terms) 0)
-      (let [res (search terms page)]
+      (let [res (search viewing-user terms page)]
         {:results (:results res) :searchSummary (format-summary res terms query-string)})
       {:results [] :searchSummary (str "Ei tuloksia hakuun: " query-string)})))

@@ -91,7 +91,7 @@
 
   (GET "/rest/v1/logged-ins" {cookies :cookies} (webutil/json-response (loggedin/params (user-from-cookie cookies))))
 
-  (GET "/rest/v1/search" {params :params} (webutil/json-response (search-wrapper params)))
+  (GET "/rest/v1/search" {params :params cookies :cookies} (webutil/json-response (search-wrapper (user-from-cookie cookies) params)))
   
   (GET "/rest/v1/ex/:id" {params :params cookies :cookies}
     (webutil/json-response (ex/get-ex (user-from-cookie cookies) (:id params))))
