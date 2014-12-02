@@ -73,7 +73,7 @@
   
 (defn as-ex-result-list
   ([results viewing-user]
-     (as-ex-result-list (time/now) nc/zero-cache results))
+     (as-ex-result-list (time/now) nc/zero-cache results viewing-user))
   ([last-visit new-comment-cache results viewing-user]
      (map (comp (partial visibility viewing-user)
                 (partial as-ex-result last-visit new-comment-cache)) results)))
