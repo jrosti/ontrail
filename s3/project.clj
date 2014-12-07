@@ -16,7 +16,8 @@
                  [ring/ring-json "0.3.1"]
                  [clj-time "0.8.0"]
                  [digest "1.4.4"]
-                ]
+                 [org.imgscalr/imgscalr-lib "4.2"]
+                 ]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler s3.core/app}
   :aot  [s3.core]
