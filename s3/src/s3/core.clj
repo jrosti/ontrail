@@ -2,7 +2,7 @@
   (:require [aws.sdk.s3 :as s3]
             [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn])
-  (:use [s3 webutil auth apiroutes log]
+  (:use [s3 webutil auth apiroutes upload log]
         [ring.middleware.json :only [wrap-json-params]]
         [ring.util.response :only [redirect resource-response]]
         [compojure.route :only [files not-found resources]]
@@ -13,23 +13,7 @@
 
 (use-logging)
 
-(def conf (clojure.edn/read-string (slurp "properties.edn")))
-(def creds (:s3 conf))
-(def bucket "ontrail")
-(def cdn "http://c.ontrail.net")
-(def upload-url "/file-upload/upload.html")
-
-(defn put-file [user image]
-  (let [key-name #(str "u/" (% user) "/" (% (:filename image)))
-        s3-name (key-name identity)
-        access-name (key-name url-encode)]
-    (s3/put-object creds bucket s3-name (:tempfile image))
-    (str cdn "/" access-name)))
-
 (defroutes main-routes
-  (mp/wrap-multipart-params
-    (POST "/file-upload/put" {params :params cookies :cookies}
-          (text-plain-auth-> cookies (put-file (:file params)))))
 
   (GET "/" {}
     (resource-response "index.html" {:root "public"}))
@@ -45,11 +29,13 @@
   (not-found "not found"))
 
 (defroutes all-routes
-  (routes api-routes main-routes))
+  (routes upload-routes api-routes main-routes))
 
 (def app (-> (site all-routes)
              (wrap-json-params {:keywords? true :bigdecimals? true})
              wrap-with-logger))
 
+(def port 8081)
 (defn -main [& args]
-  (run-server app {:port 8081}))
+  (info "Starting server on port " port)
+  (run-server app {:port port}))

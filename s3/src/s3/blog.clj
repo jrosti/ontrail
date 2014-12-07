@@ -106,6 +106,7 @@
   (let [title (:title blog)
         try-pad (-> title
                     to-lower
+                    (string/trim)
                     (string/replace #"ä" "a")
                     (string/replace #"ö" "o")
                     (string/replace #"[^a-z0-9]" "_")
