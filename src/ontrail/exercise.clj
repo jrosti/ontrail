@@ -1,5 +1,5 @@
 (ns ontrail.exercise
-  (:use [ontrail mongodb formats user utils nlp]
+  (:use [ontrail mongodb formats user utils nlp conf]
         monger.operators)
   (:require [ontrail.newcomment :as nc]
             [monger.collection :as mc]
@@ -23,11 +23,16 @@
       (time/after? (:lastModifiedDate ex) (time/minus last-visit (time/minutes 1)))
       false)))
 
+(defn apply-rules [viewing-user owner ex]
+  (if ((:hiding properties) [viewing-user owner])
+    (assoc ex :comments [] :commentCount 0 :newComments 0)
+    ex))
+
 (defn visibility [viewing-user ex]
   (let [owner (:user ex)]
     (if (= "nobody" viewing-user)
       (assoc ex :body "rekisteröidy nähdäksesi harjoitukset" :comments [])
-      ex)))
+      (apply-rules viewing-user owner ex))))
 
 (defn as-ex-result
   ([exercise] (as-ex-result (time/now) nc/zero-cache exercise))
