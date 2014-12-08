@@ -31,7 +31,7 @@
 (defn visibility [viewing-user ex]
   (let [owner (:user ex)]
     (if (= "nobody" viewing-user)
-      (assoc ex :body "rekisteröidy nähdäksesi harjoitukset" :comments [])
+      (assoc ex :body "rekisteröidy nähdäksesi harjoitukset" :comments [] :commentCount 0 :newComments 0)
       (apply-rules viewing-user owner ex))))
 
 (defn as-ex-result
