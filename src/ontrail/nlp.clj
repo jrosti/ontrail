@@ -4,10 +4,12 @@
 (def stemmer (finnishStemmer.))
 
 (defn stem [word]
-  (when word
-    (.setCurrent stemmer word)
-    (.stem stemmer)
-    (.getCurrent stemmer)))
+  (if (and word (> (count word) 0))
+    (do
+      (.setCurrent stemmer word)
+      (.stem stemmer)
+      (.getCurrent stemmer))
+    ""))
 
 (def verb-map {"Beach volley"       "pelasi biitsiä"
                "Crossfit"           "crossfittasi"
