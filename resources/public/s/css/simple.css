@@ -72,11 +72,6 @@ p.page {
     margin-bottom: 15px;
 }
 
-
-.currentPage {
-    font-size: 24px;
-}
-
 .postComment {
     margin-top: 30px;
 }
@@ -87,60 +82,11 @@ p.page {
     max-width: 90%;
 }
 
-.addexField {
-    width: 80px;
-    display: inline-block;
-}
-
-.topmenu {
-    border-bottom: 1px solid green;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    padding-bottom: 25px;
-}
-
-.currentUser {
-    float: right;
-    font-size: 20px;
-    color: blue;
-    margin-right: 15px;
-}
-
 .commentCount {
     margin-top: 5px;
     color: #ff560d !important;
-}
 
-.listHead {
-    margin-bottom: -10px;
-}
 
-.listContent {
-    margin-left: 10px;
-}
-
-.shortEx {
-    margin-bottom: 5px;
-}
-
-.body {
-    margin-left: 25px;
-}
-
-.articleHeading {
-    margin-left: 25px;
-}
-
-.listEntry {
-    margin-left: 15px;
-    border-bottom: 1px solid #000000;
-    min-height: 100px;
-}
-
-a {
-    color: #391617;
-    text-decoration: none;
-}
 
 
 

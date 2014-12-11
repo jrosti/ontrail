@@ -72,13 +72,18 @@
 
 (defn head [title]
   [:head
-   [:link {:rel "stylesheet" :href "/s/simple.css"}]
    [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"}]
    [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"}]
+   [:link {:rel "stylesheet" :href "/s/css/font-awesome.min.css"}]
+   [:link {:rel "stylesheet" :href "/s/css/froala_editor.min.css"}]
+   [:link {:rel "stylesheet" :href "/s/css/froala_style.min.css"}]
+   [:link {:rel "stylesheet" :href "/s/css/simple.css"}]
+
    [:meta {:http-equiv "X-UA-Compatible" :content "width=device-width, initial-scale=1"}]
    [:meta {:charset "utf-8"}]
    [:script {:src "http://code.jquery.com/jquery-1.11.1.min.js"}]
    [:script {:src "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]
+   [:script {:src "/s/froala_editor.min.js"}]
    [:script {:src "/s/sp.js"}]
    [:script {:type "text/javascript"}
     "var _gaq = _gaq || [];
@@ -255,7 +260,7 @@
       (form-group "detailElevation" "Nousumetrit" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
       [:div.form-group
        [:label {:for "mdbody"} "Kuvaus"]
-       [:textarea.form-control {:name "mdbody" :rows "8"}]]
+       [:textarea#addex.form-control {:name "mdbody" :rows "8"}]]
       [:button.btn.btn-default {:type "submit"} "Lisää lenkki"]]]]])
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
@@ -332,7 +337,7 @@
            (POST "/sp/addex" {params :params cookies :cookies}
                  (.info logger (str params))
                  (if (auth/valid-auth-token? (:value (cookies "authToken")))
-                   (let [params-with-dur (assoc params :duration (to-dur-str params) :body (md/md-to-html-string (params :mdbody)))
+                   (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
                      (redirect (url "/ex/" (:id posted))))
                    (redirect "/s/login.html")))
