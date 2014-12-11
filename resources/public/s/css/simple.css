@@ -1,0 +1,92 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.container {
+    box-shadow: 0 0 1px #67A6F4;
+    padding:0px 15px 14px 15px;
+}
+
+
+p {
+    font-size: 1.2em;
+}
+
+p.page {
+    margin: 10px 10px 0px 10px;
+}
+
+#navi li a.navilink {
+    padding-right: 7px;
+}
+
+.logoImg {
+    height: 40px;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.body img {
+    width: 90%;
+}
+
+#login-form {
+    margin: 1em;
+}
+
+#login-form input {
+    font-size: 1.5em;
+}
+
+.details {
+    font-size: 20px;
+    float: left;
+    margin-right: 20px;
+}
+
+
+.addex textarea {
+    width: 400px;
+    height: 200px;
+}
+
+.commentContainer, .postComment {
+    margin-left: 50px;
+}
+
+.list-avatar {
+    margin-right: 15px;
+}
+
+.username {
+    color: #E7911A;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.avatar {
+    float: left;
+    margin-right: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.postComment {
+    margin-top: 30px;
+}
+
+
+.comment {
+    border-bottom: 1px solid #000000;
+    max-width: 90%;
+}
+
+.commentCount {
+    margin-top: 5px;
+    color: #ff560d !important;
+
+
+
+
+
