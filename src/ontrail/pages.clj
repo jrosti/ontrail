@@ -244,7 +244,7 @@
      (navi user)
      [:h2 "Lisää uusi suoritus"]
      [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/addex")}
-      (form-group "title" "Otsikko")
+      (form-group "title" "Otsikko" {:required "required"})
       [:div.form-group
        [:label {:for "sport"} "Laji"]
        [:select.form-control {:name "sport" :required "required"} (form/select-options sports)]]
