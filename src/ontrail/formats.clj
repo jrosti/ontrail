@@ -80,6 +80,12 @@
         (str (int m) " m")
         "")))))
 
+(defn to-form-date [date-time]
+  (if (= nil date-time)
+    ""
+    (let [date-format (time-format/formatter "yyyy-MM-dd")]
+      (time-format/unparse date-format date-time))))
+
 (defn to-human-date [date-time]
   (if (= nil date-time)
     ""

@@ -1,17 +1,30 @@
-.main {
-    max-width: 550px;
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1.2em;
-    background-color: #ffffff;
-    max-width: 570px;
+.container {
+    box-shadow: 0 0 1px #67A6F4;
+    padding:0px 15px 14px 15px;
 }
+
 
 p {
-    font-family: Arial, Helvetica, sans-serif;
     font-size: 1.2em;
+}
+
+p.page {
+    margin: 10px 10px 0px 10px;
+}
+
+#navi li a.navilink {
+    padding-right: 7px;
+}
+
+.logoImg {
+    height: 40px;
+    padding-top: 10px;
+    padding-left: 10px;
 }
 
 .body img {
@@ -32,78 +45,22 @@ p {
     margin-right: 20px;
 }
 
-.postComment form textarea {
-    width: 400px;
-    height: 100px;
-}
 
 .addex textarea {
     width: 400px;
     height: 200px;
 }
 
-.addexLink, .ownLink, .owncLink, .allcLink {
-    font-size: 20px;
-    border: 1px solid;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    padding: 8px;
-    border-radius: 10px;
-    background-color: #ffb200;
-    margin-left: 20px;
-    margin-top: 5px;
-    position: absolute;
-    font-size: 15px;
-}
-
-.ownLink {
-    margin-left: 80px;
-}
-
-.owncLink {
-    margin-left: 140px;
-}
-
-.allcLink {
-    margin-left: 220px;
-}
-
 .commentContainer, .postComment {
     margin-left: 50px;
 }
-.pageNavi {
-    float: right;
-}
 
-.naviLink {
-    font-size: 20px;
-    border: 1px solid;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-    padding: 8px;
-    margin-left: 5px;
-    margin-top: 10px;
-    margin-right: 5px;
-    border-radius: 10px;
-    background-color: #ffb200;
-    font-size: 15px;
-}
-
-
-a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.allcLink {
-    text-decoration: underline;
-    background-color: #ffe900;
-}
-
-.listAvatar {
-    float: left;
+.list-avatar {
     margin-right: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
 }
 
 .username {
-    color: #e09d00;
+    color: #E7911A;
     font-weight: bold;
     margin: 5px;
 }
@@ -115,9 +72,6 @@ a:hover.addexLink, a:hover.ownLink, a:hover.naviLink, a:hover.owncLink, a:hover.
     margin-bottom: 15px;
 }
 
-.articleHeading {
-    min-height: 210px;
-}
 
 .currentPage {
     font-size: 24px;
@@ -188,27 +142,5 @@ a {
     text-decoration: none;
 }
 
-/*
-@media (min-width:320px) {  }
-@media (min-width:480px) {  }
-@media (min-width:600px) {  }
-@media (min-width:801px) {  }
-@media (min-width:1025px) {  }
-@media (min-width:801px) {
-    .main {
-        max-width: 800px;
-    }
-    body {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-        background-color: #ffffff;
-    }
-
-    p {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 14px;
-    }
-
-} */
 
 
