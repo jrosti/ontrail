@@ -94,6 +94,11 @@
      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();"]
+   "<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->\n"
+   "<!--[if lt IE 9]>\n"
+   [:script {:src "https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"}] "\n"
+   [:script {:src "https://oss.maxcdn.com/respond/1.4.2/respond.min.js"}]
+   "\n<![endif]-->"
    [:title title]])
 
 (defn action [ex]
@@ -150,13 +155,16 @@
     [:nav.navbar.navbar-inverse.navbar-fixed-top {:role "navigation"}
      [:div.container
       [:div.navbar-header
+       [:button.navbar-toggle.collapsed {:type "button" :data-toggle "collapse" :data-target "#navbar" :aria-expanded "false" :aria-controls "navbar"}
+        [:span.sr-only "Toggle navigation"] [:span.icon-bar] [:span.icon-bar] [:span.icon-bar]]
        [:a.logo {:href (url "/latest/1")}
-        [:img.logoImg {:src "/img/logo.png"}]]
-       [:ul#navi.nav.nav-pills.pull-right
-        [:li {:role "presentation"} [:a.navilink {:href (url "/addex")} "lisää"]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/list/" 1)} "omat"]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/own")} (format "seuratut (%d)" (:own counts))]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/all")} (format "uudet (%d)" (:all counts))]]
+        [:img.logoImg {:src "/img/logo.png"}]]]
+      [:div#navbar.navbar-collapse.collapse
+       [:ul#navi.nav.navbar-nav
+        [:li {:role "presentation"} [:a.navilink {:href (url "/addex")} "LISÄÄ"]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/list/" 1)} "OMAT"]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/own")} (format "SEURATUT (%d)" (:own counts))]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/all")} (format "UUDET (%d)" (:all counts))]]
         ]]]]))
 
 
