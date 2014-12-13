@@ -60,7 +60,7 @@
        (parse-int (params "duration.s")) "s"))
 
 (defn redirect [page]
-  {:status  302
+  {:status  301
    :headers {"Content-Type" "text/html"
              "Location"     page}
    :body    ""})
@@ -165,6 +165,7 @@
         [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/list/" 1)} "OMAT"]]
         [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/own")} (format "SEURATUT (%d)" (:own counts))]]
         [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/all")} (format "UUDET (%d)" (:all counts))]]
+        [:li {:role "presentation"} [:a.navilink {:href "/rest/v2/logout"} (format "Kirjaa ulos %s" user)]]
         ]]]]))
 
 
@@ -303,56 +304,86 @@
                                   page)
                 :user user}))
 
-(def host "")
+(defn login-page [data]
+  [:html
+   (head "Kirjaudu")
+   [:body
+     [:nav.navbar.navbar-inverse.navbar-fixed-top {:role "navigation"}
+      [:div.container
+       [:div.navbar-header
+         [:img.logoImg {:src "/img/logo.png"}]]]]
+    [:div.container
+     [:div.row
+      [:div.col-md-8
+        [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action "/rest/v2/login"}
+         (form-group "username" "Tunnus")
+         [:input.redirect {:type "hidden" :name "referer" :value "/sp/latest/1"}]
+         (form-group "password" "Salasana" {:type "password"})
+         [:button.btn.btn-default {:type "submit"} "Kirjaudu"]]]]]]])
+
+(def host "http://localhost:3000")
+
+(defmacro require-auth [cookies form]
+  `(if (and (auth/valid-auth-token? (:value (~cookies "authToken"))) (not= "nobody" (auth/user-from-cookie ~cookies)))
+     ~form
+     (redirect (str host "/sp/login.html"))))
 
 (defroutes templates
 
+           (GET "/sp/login.html" [] (render-with login-page {}))
+
            (GET "/sp/latest/:page" {params :params cookies :cookies}
-                (let [page (Integer/parseInt ^String (webutil/get-page params))
-                      user (auth/user-from-cookie cookies)]
-                  (render-listing-page (partial url "/latest/")
-                                       ex/get-latest-ex-list-default-order
-                                       user
-                                       {}
-                                       page)))
+                (require-auth cookies
+                  (let [page (Integer/parseInt ^String (webutil/get-page params))
+                        user (auth/user-from-cookie cookies)]
+                    (render-listing-page (partial url "/latest/")
+                                         ex/get-latest-ex-list-default-order
+                                         user
+                                         {}
+                                         page))))
 
            (GET "/sp/list/:page" {params :params cookies :cookies}
-                (let [page (Integer/parseInt ^String (webutil/get-page params))
-                      user (auth/user-from-cookie cookies)]
-                  (render-listing-page (partial url (dissoc params :page) "/list/")
-                                       (fn [user filter page]
-                                         (ex/get-latest-ex-list user
-                                                                filter
-                                                                page
-                                                                (mongerfilter/sortby params)))
-                                       user
-                                       (mongerfilter/make-query-from params)
-                                       page)))
+                (require-auth cookies
+                  (let [page (Integer/parseInt ^String (webutil/get-page params))
+                        user (auth/user-from-cookie cookies)]
+                    (render-listing-page (partial url (dissoc params :page) "/list/")
+                                         (fn [user filter page]
+                                           (ex/get-latest-ex-list user
+                                                                  filter
+                                                                  page
+                                                                  (mongerfilter/sortby params)))
+                                         user
+                                         (mongerfilter/make-query-from params)
+                                         page))))
 
            (GET "/sp/unread/:target" {params :params cookies :cookies}
-                (let [user (auth/user-from-cookie cookies)
-                      unread-fn (if (= (:target params) "own") unread/comments-own unread/comments-all)]
-                  (render-with (partial listing nil nil)
-                               {:exs  (unread-fn user)
-                                :user user})))
+                (require-auth cookies
+                  (let [user (auth/user-from-cookie cookies)
+                        unread-fn (if (= (:target params) "own") unread/comments-own unread/comments-all)]
+                    (render-with (partial listing nil nil)
+                                 {:exs  (unread-fn user)
+                                  :user user}))))
 
            (GET "/sp/ex/:id" {params :params cookies :cookies}
-                (let [user (auth/user-from-cookie cookies)]
-                  (render-with single-exercise
-                               {:ex (ex/get-ex user (:id params)) :user user})))
+                (require-auth cookies
+                  (let [user (auth/user-from-cookie cookies)]
+                    (render-with single-exercise
+                                 {:ex (ex/get-ex user (:id params)) :user user}))))
 
            (POST "/sp/comment/:id" {params :params cookies :cookies}
-                 (if (auth/valid-auth-token? (:value (cookies "authToken")))
-                   (let [user (auth/user-from-cookie cookies)
-                         with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
-                     (do
-                       (mutate/comment-ex user with-body)
-                       (redirect (str "http://ontrail.net/sp" (url "/ex/" (:id params))))))
-                   (redirect (str host "/s/login.html"))))
+                 (require-auth cookies
+                   (if (auth/valid-auth-token? (:value (cookies "authToken")))
+                     (let [user (auth/user-from-cookie cookies)
+                           with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
+                       (do
+                         (mutate/comment-ex user with-body)
+                         (redirect (str host (url "/ex/" (:id params))))))
+                     (redirect (str host "/sp/login.html")))))
 
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
-                (let [user (auth/user-from-cookie cookies)]
-                  (render-with addex {:params params :sports nlp/sports :user user})))
+                (require-auth cookies
+                  (let [user (auth/user-from-cookie cookies)]
+                    (render-with addex {:params params :sports nlp/sports :user user}))))
 
            (POST "/sp/addex" {params :params cookies :cookies}
                  (.info logger (str params))
@@ -360,10 +391,10 @@
                    (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
                      (redirect (str host (url "/ex/" (:id posted)))))
-                   (redirect (str host "http://ontrail.net/s/login.html"))))
+                   (redirect (str host "/sp/login.html"))))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
                   (redirect (str host "/sp/latest/1"))
-                  (redirect (str host "/s/login.html")))))
+                  (redirect (str host "/sp/login.html")))))
   

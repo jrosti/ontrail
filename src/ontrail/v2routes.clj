@@ -1,5 +1,5 @@
 (ns ontrail.v2routes
-  (:use [compojure.core :only (defroutes POST GET PUT DELETE)])
+  (:use [compojure.core :only (defroutes ANY POST GET PUT DELETE)])
 
   (:require [ontrail.auth :as auth]
             [ontrail.user :as user]))
@@ -42,9 +42,6 @@
              :body    ""
              })))
 
-  (GET "/rest/v2/logout" {params :params headers :headers}
-       (logout params headers))
-
-  (POST "/rest/v2/logout" {params :params headers :headers}
-        (logout params headers)))
+  (ANY "/rest/v2/logout" {params :params headers :headers}
+       (logout params headers)))
 
