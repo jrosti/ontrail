@@ -60,7 +60,7 @@
        (parse-int (params "duration.s")) "s"))
 
 (defn redirect [page]
-  {:status  301
+  {:status  302
    :headers {"Content-Type" "text/html"
              "Location"     page}
    :body    ""})
@@ -79,7 +79,7 @@
    [:link {:rel "stylesheet" :href "/s/css/froala_style.min.css"}]
    [:link {:rel "stylesheet" :href "/s/css/simple.css"}]
 
-   [:meta {:http-equiv "X-UA-Compatible" :content "width=device-width, initial-scale=1"}]
+   [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    [:meta {:charset "utf-8"}]
    [:script {:src "http://code.jquery.com/jquery-1.11.1.min.js"}]
    [:script {:src "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]
@@ -122,8 +122,8 @@
    [:div.row
     [:div.col-md-12
      [:p (-> ex :body utils/strip-html truncate)]
-     [:span.commentCount (str (:commentCount ex) " kommenttia"
-                              (if-let [new (:newComments ex)] (str ", " new " uutta") ""))]
+     [:a {:href (url "/ex/" (:id ex))} [:span.commentCount (str (:commentCount ex) " kommenttia"
+                              (if-let [new (:newComments ex)] (str ", " new " uutta") ""))]]
 
      ]]
    ]
@@ -302,8 +302,7 @@
                                   page)
                 :user user}))
 
-;; absolute uris in redirects, because of UC browser
-(def host "http://localhost:3000")
+(def host "")
 
 (defroutes templates
 
