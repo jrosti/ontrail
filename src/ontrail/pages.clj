@@ -321,7 +321,7 @@
          (form-group "password" "Salasana" {:type "password"})
          [:button.btn.btn-default {:type "submit"} "Kirjaudu"]]]]]]])
 
-(def host "http://localhost:3000")
+(def host "http://ontrail.net")
 
 (defmacro require-auth [cookies form]
   `(if (and (auth/valid-auth-token? (:value (~cookies "authToken"))) (not= "nobody" (auth/user-from-cookie ~cookies)))
