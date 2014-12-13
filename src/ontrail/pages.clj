@@ -110,7 +110,7 @@
            (:duration ex)))))
 
 (defn latest-list-entry [ex]
-  [:div.container
+  [:div.container.container-article
    [:div.row
     [:div.col-md-8
      [:img.profile-image.list-avatar.img-rounded.pull-left {:src (:avatar ex)}]
@@ -251,24 +251,32 @@
     [:div.container
      (navi user)
      [:h2 "Lisää uusi suoritus"]
+
      [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/addex")}
-      (form-group "title" "Otsikko" {:required "required"})
-      [:div.form-group
-       [:label {:for "sport"} "Laji"]
-       [:select.form-control {:name "sport" :required "required"} (form/select-options sports)]]
-      [:div.form-group
-       [:label "Aika"] [:br]
-        [:input {:name "duration.h" :type "number" :max "99" :min "0"}] "h"
-        [:input {:name "duration.m" :type "number" :max "59" :min "0"}] "m"
-        [:input {:name "duration.s" :type "number" :max "59" :min "0"}] "s" ]
-      (form-group "distance" "Matka" {:rel "txtTooltip" :title "Lisää matka esimerkiksi muodossa 10 km, 10,3 km tai 50m." :data-toggle "tooltip" :data-placement "bottom"})
-      (form-group "date" "Päivä" {:type "date" :value (today)})
-      (form-group "avghr" "Syke" {:type "number" :min "0" :max "200" :rel "txtTooltip" :title "Lisää harjoituksen keskisyke yksiköissä lyöntiä minuutissa." :data-toggle "tooltip" :data-placement "bottom"})
-      (form-group "detailRepeats" "Toistot" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää toistomäärä kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
-      (form-group "detailElevation" "Nousumetrit" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
-      [:div.form-group
-       [:label {:for "mdbody"} "Kuvaus"]
-       [:textarea#addex.form-control {:name "mdbody" :rows "8"}]]
+      [:div {:role "tabpanel"}
+       [:ul.nav.nav-tabs {:role "tablist"}
+        [:li.active {:role "active"} [:a {:href "#basic" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Perustiedot"]]
+        [:li {:role "active"} [:a {:href "#extended" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Lisätiedot"]]]
+       [:div.tab-content
+        [:div#basic.tab-pane.active {:role "tabpanel"}
+         (form-group "title" "Otsikko" {:required "required"})
+         [:div.form-group
+          [:label {:for "sport"} "Laji"]
+          [:select.form-control {:name "sport" :required "required"} (form/select-options sports)]]
+         [:div.form-group
+          [:label "Aika"] [:br]
+          [:input {:name "duration.h" :type "number" :max "99" :min "0"}] "h"
+          [:input {:name "duration.m" :type "number" :max "59" :min "0"}] "m"
+          [:input {:name "duration.s" :type "number" :max "59" :min "0"}] "s" ]
+         (form-group "distance" "Matka" {:rel "txtTooltip" :title "Lisää matka esimerkiksi muodossa 10 km, 10,3 km tai 50m." :data-toggle "tooltip" :data-placement "bottom"})
+         (form-group "date" "Päivä" {:type "date" :value (today)})
+         [:div.form-group
+          [:label {:for "mdbody"} "Kuvaus"]
+          [:textarea#addex.form-control {:name "mdbody" :rows "8"}]]]
+        [:div#extended.tab-pane {:role "tabpanel"}
+         (form-group "avghr" "Syke" {:type "number" :min "0" :max "200" :rel "txtTooltip" :title "Lisää harjoituksen keskisyke yksiköissä lyöntiä minuutissa." :data-toggle "tooltip" :data-placement "bottom"})
+         (form-group "detailRepeats" "Toistot" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää toistomäärä kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
+         (form-group "detailElevation" "Nousumetrit" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})]]]
       [:button.btn.btn-default {:type "submit"} "Lisää lenkki"]]]]])
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
@@ -293,6 +301,9 @@
                                   filter
                                   page)
                 :user user}))
+
+;; absolute uris in redirects, because of UC browser
+(def host "http://localhost:3000")
 
 (defroutes templates
 
@@ -333,10 +344,11 @@
            (POST "/sp/comment/:id" {params :params cookies :cookies}
                  (if (auth/valid-auth-token? (:value (cookies "authToken")))
                    (let [user (auth/user-from-cookie cookies)
-                         with-body (assoc params :body (md/md-to-html-string (params :mdbody)))
-                         comment (mutate/comment-ex user with-body)]
-                     (redirect (url "/ex/" (:id params))))
-                   (redirect "/s/login.html")))
+                         with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
+                     (do
+                       (mutate/comment-ex user with-body)
+                       (redirect (str "http://ontrail.net/sp" (url "/ex/" (:id params))))))
+                   (redirect (str host "/s/login.html"))))
 
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
                 (let [user (auth/user-from-cookie cookies)]
@@ -347,11 +359,11 @@
                  (if (auth/valid-auth-token? (:value (cookies "authToken")))
                    (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
-                     (redirect (url "/ex/" (:id posted))))
-                   (redirect "/s/login.html")))
+                     (redirect (str host (url "/ex/" (:id posted)))))
+                   (redirect (str host "http://ontrail.net/s/login.html"))))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
-                  (redirect "/sp/latest/1")
-                  (redirect "/s/login.html"))))
+                  (redirect (str host "/sp/latest/1"))
+                  (redirect (str host "/s/login.html")))))
   
