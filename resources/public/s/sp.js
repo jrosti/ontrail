@@ -3,4 +3,5 @@ $( document ).ready(function() {
   $('textarea#addex').editable({
     inlineMode: false
   })
+  $('#')
 });
