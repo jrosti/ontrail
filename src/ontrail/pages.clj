@@ -175,9 +175,9 @@
   [:div {:style "clear:both;"}])
 
 (defn comment-div [id]
-  [:div.postComment
+  [:div.container
    [:div.row
-    [:div.col-md-12
+    [:div.col-md-8
      [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/comment/" id)}
       [:input {:type "hidden" :name id}]
       [:div.form-group
@@ -222,9 +222,10 @@
        [:div.col-md-12 (:body ex)]]]
      (comment-div (:id ex))
      (if (> (:commentCount ex) 0)
-       [:div.commentContainer [:h3.commentHeading "Kommentit"]
+       [:div.commentContainer
+        [:h3.commentHeading "Kommentit"]
         (for [comment (reverse (:comments ex))]
-          [:div.container
+          [:div.container.container-article
            [:div.row
             [:div.col-md-12
              [:img.profile-image.img-rounded.pull-left {:src (str (:avatar comment) "&s=30")}]
