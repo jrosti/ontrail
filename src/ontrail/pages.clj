@@ -72,13 +72,13 @@
 
 (defn head [title]
   [:head
-   [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"}]
-   [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"}]
    [:link {:rel "stylesheet" :href "/s/css/font-awesome.min.css"}]
    [:link {:rel "stylesheet" :href "/s/css/froala_editor.min.css"}]
    [:link {:rel "stylesheet" :href "/s/css/froala_style.min.css"}]
    [:link {:rel "stylesheet" :href "/s/css/simple.css"}]
 
+   [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"}]
+   [:link {:rel "stylesheet" :href "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
    [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
    [:meta {:charset "utf-8"}]
@@ -210,8 +210,7 @@
   [:html
    (head (:title ex))
    [:body {:role "document"}
-    [:div
-     (navi user)
+    (navi user)
      [:div.container
       [:div.row
        [:div.col-md-12
@@ -234,7 +233,7 @@
              [:div.commentDiv
               [:p [:span.date (:date comment)] " " [:span.username (str (:user comment))]]
               [:p.commentBody (:body comment)]]]]])]
-       [:div.commentContainer "Ei kommentteja"])]]])
+       [:div.commentContainer "Ei kommentteja"])]])
 
 (defn today []
   (formats/to-form-date (time/now)))
@@ -253,8 +252,8 @@
   [:html
    (head "Lisää")
    [:body {:role "document"}
+    (navi user)
     [:div.container
-     (navi user)
      [:h2 "Lisää uusi suoritus"]
 
      [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/addex")}
