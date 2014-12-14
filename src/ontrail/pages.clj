@@ -80,6 +80,7 @@
    [:link {:rel "stylesheet" :href "/s/css/simple.css"}]
 
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+   [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
    [:meta {:charset "utf-8"}]
    [:script {:src "http://code.jquery.com/jquery-1.11.1.min.js"}]
    [:script {:src "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]
@@ -246,7 +247,9 @@
     [:label {:for id} name]
     [:input.form-control (merge {:id id :name id} params)]]))
 
-(defn addex [{params :params user :user sports :sports}]
+(def sports-options (form/select-options (map (fn [s] [s s]) nlp/sports)))
+
+(defn addex [{params :params user :user}]
   [:html
    (head "Lisää")
    [:body {:role "document"}
@@ -264,7 +267,7 @@
          (form-group "title" "Otsikko" {:required "required"})
          [:div.form-group
           [:label {:for "sport"} "Laji"]
-          [:select.form-control {:name "sport" :required "required"} (form/select-options sports)]]
+          [:select.form-control {:name "sport" :required "required"} sports-options]]
          [:div.form-group
           [:label "Aika"] [:br]
           [:input {:name "duration.h" :type "number" :max "99" :min "0"}] "h"
