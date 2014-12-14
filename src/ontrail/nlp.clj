@@ -1,11 +1,9 @@
 (ns ontrail.nlp
   (:import [org.tartarus.snowball.ext finnishStemmer]))
 
-(def stemmer (finnishStemmer.))
-
 (defn stem [word]
   (if (and word (> (count word) 0))
-    (do
+    (let [stemmer (finnishStemmer.)]
       (.setCurrent stemmer word)
       (.stem stemmer)
       (.getCurrent stemmer))
