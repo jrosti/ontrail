@@ -321,12 +321,10 @@
          (form-group "password" "Salasana" {:type "password"})
          [:button.btn.btn-default {:type "submit"} "Kirjaudu"]]]]]]])
 
-(def host "http://ontrail.net")
-
 (defmacro require-auth [cookies form]
   `(if (and (auth/valid-auth-token? (:value (~cookies "authToken"))) (not= "nobody" (auth/user-from-cookie ~cookies)))
      ~form
-     (redirect (str host "/sp/login.html"))))
+     (redirect "/sp/login.html")))
 
 (defroutes templates
 
@@ -377,8 +375,8 @@
                            with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
                        (do
                          (mutate/comment-ex user with-body)
-                         (redirect (str host (url "/ex/" (:id params))))))
-                     (redirect (str host "/sp/login.html")))))
+                         (redirect (url "/ex/" (:id params)))))
+                     (redirect "/sp/login.html"))))
 
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
                 (require-auth cookies
@@ -390,11 +388,11 @@
                  (if (auth/valid-auth-token? (:value (cookies "authToken")))
                    (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
-                     (redirect (str host (url "/ex/" (:id posted)))))
-                   (redirect (str host "/sp/login.html"))))
+                     (redirect (url "/ex/" (:id posted))))
+                   (redirect "/sp/login.html")))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
-                  (redirect (str host "/sp/latest/1"))
-                  (redirect (str host "/sp/login.html")))))
+                  (redirect "/sp/latest/1")
+                  (redirect "/sp/login.html"))))
   
