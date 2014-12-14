@@ -46,7 +46,7 @@
   `(try
      {:status  (or ~status 200)
       :headers {"Content-Type" "text/html"}
-      :body    (hiccup/html (~render-fn ~data))}
+      :body    (str "<!DOCTYPE html>\n" (hiccup/html (~render-fn ~data)))}
      (catch Exception exception#
        (stacktrace/print-stack-trace exception#)
        {:status  500
