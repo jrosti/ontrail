@@ -111,11 +111,11 @@
 
 (defn get-ex
   ([viewing-user id]
-     (.info logger (str "User " viewing-user " getting ex with id " id))
+   (.info logger (str "User " viewing-user " getting ex with id " id))
+   (let [exercise (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. id)})
+         new-count ((nc/get-cache viewing-user) id)]
      (nc/newcount-reset viewing-user id)
-     (let [exercise (mc/find-one-as-map *db* EXERCISE {:_id (ObjectId. id)})]
-       (.trace logger (format " get ex=%s" id))
        (if (nil? exercise)
          {:error "No such id"}
-         (let [ex (as-ex-result exercise)]
+         (let [ex (assoc (as-ex-result exercise) :new-count new-count)]
            (visibility viewing-user ex))))))

@@ -111,7 +111,9 @@
            (:duration ex)))))
 
 (defn latest-list-entry [ex]
-  [:div.container.container-article
+  [:div
+   (if (:isNew ex) {:class "container container-article container-new"}
+                   {:class "container container-article"})
    [:div.row
     [:div.col-md-8
      [:img.profile-image.list-avatar.img-rounded.pull-left {:src (:avatar ex)}]
@@ -205,6 +207,15 @@
      (row ""))
    (if-let [reps (:detailRepeats ex)] (row (str reps " toistoa")) (row ""))])
 
+(defn comments [ex]
+  (when ex
+    (let [n (ex :new-count 0)]
+      (map-indexed
+        (fn [i c]
+          (if (<= n i)
+            (assoc c :new true)
+            c)) (reverse (:comments ex))))))
+
 ;; renders /sp/ex/<id>
 (defn single-exercise [{ex :ex user :user}]
   [:html
@@ -225,8 +236,10 @@
      (if (> (:commentCount ex) 0)
        [:div.commentContainer
         [:h3.commentHeading "Kommentit"]
-        (for [comment (reverse (:comments ex))]
-          [:div.container.container-article
+        (for [comment (comments ex)]
+          [:div
+           (if (:new comment) {:class "container container-article"}
+                              {:class "container container-article container-new"})
            [:div.row
             [:div.col-md-12
              [:img.profile-image.img-rounded.pull-left {:src (str (:avatar comment) "&s=30")}]
