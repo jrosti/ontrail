@@ -116,7 +116,8 @@
                    {:class "container container-article"})
    [:div.row
     [:div.col-md-8
-     [:img.profile-image.list-avatar.img-rounded.pull-left {:src (:avatar ex)}]
+     [:a {:href (url {:user (:user ex)} "/list/" 1)}
+      [:img.profile-image.list-avatar.img-rounded.pull-left {:src (:avatar ex)}]]
      [:a {:href (url "/ex/" (:id ex))} [:h2 (:title ex)]]
      [:h4 (action ex)]]]
    [:div.row
@@ -227,8 +228,9 @@
        [:div.col-md-12
         [:h2 (:title ex)]
         [:p.date (:date ex)]
-        [:img.profile-image.img-rounded.pull-left.list-avatar {:src (str (:avatar ex) "&s=170")}]
-        [:p.username (:user ex)]
+        [:a {:href (url {:user (:user ex)} "/list/" 1)}
+          [:img.profile-image.img-rounded.pull-left.list-avatar {:src (str (:avatar ex) "&s=170")}]
+          [:p.username (:user ex)]]
         [:div#exDetail.exDetail (details-table ex) (more-details ex)]]]
       [:div.row
        [:div.col-md-12 (:body ex)]]]
