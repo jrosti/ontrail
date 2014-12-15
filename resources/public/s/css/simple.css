@@ -76,6 +76,10 @@ p.page {
     margin-top: 30px;
 }
 
+.container-new {
+    background-color: #fffff1;
+}
+
 
 .comment {
     border-bottom: 1px solid #000000;
