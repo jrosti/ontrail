@@ -441,7 +441,7 @@
                      (do
                        (if (= user (:user merged))
                          (render-with single-exercise {:ex (mutate/update-ex user merged) :user user})
-                         (throw IllegalAccessException. "failed"))))))
+                         (throw (IllegalAccessException. "failed")))))))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
