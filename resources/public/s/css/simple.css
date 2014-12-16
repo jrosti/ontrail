@@ -32,11 +32,16 @@ p.page {
     font-size: 2em;
 }
 
-.container-body {
+div.container-body {
     padding-top: 10px;
+    padding-left: 0;
 }
 
 .container-body img {
+    max-width: 90%;
+}
+
+.commentDiv img {
     max-width: 90%;
 }
 

@@ -409,10 +409,8 @@
                    (if (auth/valid-auth-token? (:value (cookies "authToken")))
                      (let [user (auth/user-from-cookie cookies)
                            with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
-                       (do
-                         (mutate/comment-ex user with-body)
-                         (redirect (url "/ex/" (:id params)))))
-                     (redirect "/sp/login.html"))))
+                       (render-with single-exercise
+                                    {:ex (mutate/comment-ex user with-body) :user user})))))
 
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
                 (require-auth cookies
@@ -435,6 +433,7 @@
                      (render-with single-exercise {:ex posted :user user}))))
 
            (POST "/sp/addex/:id" {params :params cookies :cookies}
+                 (.info logger (str params " " cookies))
                  (require-auth cookies
                    (let [user (auth/user-from-cookie cookies)
                          new-ex (assoc params :duration (to-dur-str params) :body (params :mdbody))
