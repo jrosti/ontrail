@@ -229,8 +229,9 @@
             [:img.profile-image.img-rounded.pull-left.list-avatar {:src (str (:avatar ex) "&s=170")}]
             [:p.username (:user ex)]]
           [:div#exDetail.exDetail (details-table ex) (more-details ex)]]]
-        [:div.row
-         [:div.col-md-12 (:body ex)]]]
+        [:div.container.container-body
+          [:div.row
+           [:div.col-md-12 (:body ex)]]]]
        (comment-div (:id ex))
        (if (> (:commentCount ex) 0)
          [:div.commentContainer
@@ -438,10 +439,9 @@
                    (let [user (auth/user-from-cookie cookies)
                          new-ex (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          merged (merge (ex/get-ex user (:id params)) new-ex)]
-                     (do
-                       (if (= user (:user merged))
-                         (render-with single-exercise {:ex (mutate/update-ex user merged) :user user})
-                         (throw (IllegalAccessException. "failed")))))))
+                     (if (= user (:user merged))
+                       (render-with single-exercise {:ex (mutate/update-ex user merged) :user user})
+                       (throw (IllegalAccessException. "failed"))))))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
