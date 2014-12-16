@@ -28,6 +28,9 @@ p.page {
     padding-left: 10px;
 }
 
+#addex-edit-glyphicon {
+    font-size: 2em;
+}
 
 #login-form {
     margin: 1em;

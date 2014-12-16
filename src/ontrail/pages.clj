@@ -160,11 +160,11 @@
         [:img.logoImg {:src "/img/logo.png"}]]]
       [:div#navbar.navbar-collapse.collapse
        [:ul#navi.nav.navbar-nav
-        [:li {:role "presentation"} [:a.navilink {:href (url "/addex")} "LISÄÄ"]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/list/" 1)} "OMAT"]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/own")} (format "SEURATUT (%d)" (:own counts))]]
-        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/all")} (format "UUDET (%d)" (:all counts))]]
-        [:li {:role "presentation"} [:a.navilink {:href "/rest/v2/logout"} (format "Kirjaa ulos %s" user)]]
+        [:li {:role "presentation"} [:a.navilink {:href (url "/addex")} [:span.glyphicon.glyphicon-edit] " Lisää"]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/list/" 1)} [:span.glyphicon.glyphicon-user] " Omat"]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/own")} [:span.glyphicon.glyphicon-list-alt] (format " Seuratut (%d)" (:own counts))]]
+        [:li {:role "presentation"} [:a.navilink {:href (url {:user user} "/unread/all")} [:span.glyphicon.glyphicon-list] (format " Uudet (%d)" (:all counts))]]
+        [:li {:role "presentation"} [:a.navilink {:href "/rest/v2/logout"} [:span.glyphicon.glyphicon-remove-circle] (str " " user)]]
         ]]]]))
 
 
@@ -214,36 +214,38 @@
 
 ;; renders /sp/ex/<id>
 (defn single-exercise [{ex :ex user :user}]
-  [:html
-   (head (:title ex))
-   [:body {:role "document"}
-    (navi user)
-     [:div.container
-      [:div.row
-       [:div.col-md-12
-        [:h2 (:title ex)]
-        [:p.date (:date ex)]
-        [:a {:href (url {:user (:user ex)} "/list/" 1)}
-          [:img.profile-image.img-rounded.pull-left.list-avatar {:src (str (:avatar ex) "&s=170")}]
-          [:p.username (:user ex)]]
-        [:div#exDetail.exDetail (details-table ex) (more-details ex)]]]
-      [:div.row
-       [:div.col-md-12 (:body ex)]]]
-     (comment-div (:id ex))
-     (if (> (:commentCount ex) 0)
-       [:div.commentContainer
-        [:h3.commentHeading "Kommentit"]
-        (for [comment (comments ex)]
-          [:div
-           (if (:new comment) {:class "container container-article"}
-                              {:class "container container-article container-new"})
-           [:div.row
-            [:div.col-md-12
-             [:img.profile-image.img-rounded.pull-left {:src (str (:avatar comment) "&s=30")}]
-             [:div.commentDiv
-              [:p [:span.date (:date comment)] " " [:span.username (str (:user comment))]]
-              [:p.commentBody (:body comment)]]]]])]
-       [:div.commentContainer "Ei kommentteja"])]])
+  (let [own? (= user (:user ex))]
+    [:html
+     (head (:title ex))
+     [:body {:role "document"}
+      (navi user)
+       [:div.container
+        [:div.row
+         [:div.col-md-8
+          [:h2 (:title ex)]
+          (if own? [:a.btn.btn-default.btn-lnk.pull-right {:href (url "/addex/" (:id ex))} [:span.glyphicon.glyphicon-edit]] "")
+          [:p.date (:date ex)]
+          [:a {:href (url {:user (:user ex)} "/list/" 1)}
+            [:img.profile-image.img-rounded.pull-left.list-avatar {:src (str (:avatar ex) "&s=170")}]
+            [:p.username (:user ex)]]
+          [:div#exDetail.exDetail (details-table ex) (more-details ex)]]]
+        [:div.row
+         [:div.col-md-12 (:body ex)]]]
+       (comment-div (:id ex))
+       (if (> (:commentCount ex) 0)
+         [:div.commentContainer
+          [:h3.commentHeading "Kommentit"]
+          (for [comment (comments ex)]
+            [:div
+             (if (:new comment) {:class "container container-article"}
+                                {:class "container container-article container-new"})
+             [:div.row
+              [:div.col-md-12
+               [:img.profile-image.img-rounded.pull-left {:src (str (:avatar comment) "&s=30")}]
+               [:div.commentDiv
+                [:p [:span.date (:date comment)] " " [:span.username (str (:user comment))]]
+                [:p.commentBody (:body comment)]]]]])]
+         [:div.commentContainer "Ei kommentteja"])]]))
 
 (defn today-as-form-date []
   (formats/to-form-date (time/now)))
@@ -311,7 +313,7 @@
            (form-group "detailRepeats" "Toistot" detailRepeats {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää toistomäärä kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
            (form-group "detailElevation" "Nousumetrit" detailElevation {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})]]]
         [:button.btn.btn-default {:type "submit"} (if ex "Muokkaa" "Lisää lenkki")]]]
-      [:script {:src "/s/sp.js"}]]]))
+      [:script {:src "/s/addex.js"}]]]))
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
 ;; if url-fn is nil paging is not required. 
@@ -425,21 +427,21 @@
                       (redirect "/sp/login.html")))))
 
            (POST "/sp/addex" {params :params cookies :cookies}
-                 (.info logger (str params))
-                 (if (auth/valid-auth-token? (:value (cookies "authToken")))
+                 (require-auth cookies
                    (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
-                         posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
-                     (redirect (url "/ex/" (:id posted))))
-                   (redirect "/sp/login.html")))
+                         user (auth/user-from-cookie cookies)
+                         posted (mutate/create-ex user params-with-dur)]
+                     (render-with single-exercise {:ex posted :user user}))))
 
            (POST "/sp/addex/:id" {params :params cookies :cookies}
-                 (.info logger (str "mutating with "params))
-                 (if (auth/valid-auth-token? (:value (cookies "authToken")))
-                   (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
-                         posted (mutate/update-ex (auth/user-from-cookie cookies) params-with-dur)]
-                     (redirect (url "/ex/" (:id posted))))
-                   (redirect "/sp/login.html")))
-
+                 (require-auth cookies
+                   (let [user (auth/user-from-cookie cookies)
+                         new-ex (assoc params :duration (to-dur-str params) :body (params :mdbody))
+                         merged (merge (ex/get-ex user (:id params)) new-ex)]
+                     (do
+                       (if (= user (:user merged))
+                         (render-with single-exercise {:ex (mutate/update-ex user merged) :user user})
+                         (throw IllegalAccessException. "failed"))))))
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
