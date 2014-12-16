@@ -116,6 +116,6 @@
          new-count ((nc/get-cache viewing-user) id)]
      (nc/newcount-reset viewing-user id)
        (if (nil? exercise)
-         {:error "No such id"}
+         nil
          (let [ex (assoc (as-ex-result exercise) :new-count new-count)]
            (visibility viewing-user ex))))))

@@ -18,7 +18,8 @@
     [hiccup.core :as hiccup]
     [stencil.core :as stencil]
     [clojure.stacktrace :as stacktrace]
-    [clojure.string :as string])
+    [clojure.string :as string]
+    [ontrail.parser :as parser])
   (:import [java.net URLEncoder]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -65,11 +66,6 @@
              "Location"     page}
    :body    ""})
 
-(defn current-user [user]
-  (if (= "nobody" user)
-    [:div.currentUser [:a {:href "/s/login.html"} "Kirjaudu"]]
-    [:div.currentUser [:a {:href "/rest/v2/logout?referer=/s/login.html"} [:p.currentUser user]]]))
-
 (defn head [title]
   [:head
    [:link {:rel "stylesheet" :href "/s/css/font-awesome.min.css"}]
@@ -85,7 +81,6 @@
    [:script {:src "http://code.jquery.com/jquery-1.11.1.min.js"}]
    [:script {:src "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"}]
    [:script {:src "/s/froala_editor.min.js"}]
-   [:script {:src "/s/sp.js"}]
    [:script {:type "text/javascript"}
     "var _gaq = _gaq || [];
      _gaq.push(['_setAccount', 'UA-34593654-1']);
@@ -250,53 +245,73 @@
               [:p.commentBody (:body comment)]]]]])]
        [:div.commentContainer "Ei kommentteja"])]])
 
-(defn today []
+(defn today-as-form-date []
   (formats/to-form-date (time/now)))
 
 (defn form-group
-  ([id name]
-   (form-group id name {}))
-  ([id name params]
-   [:div.form-group
-    [:label {:for id} name]
-    [:input.form-control (merge {:id id :name id} params)]]))
+  ([id name value]
+   (form-group id name value {}))
+  ([id name value params]
+   (let [value (if value {:value value} {})]
+     [:div.form-group
+      [:label {:for id} name]
+      [:input.form-control (merge {:id id :name id} params value)]])))
 
-(def sports-options (form/select-options (map (fn [s] [s s]) nlp/sports)))
+(def selectables (map (fn [s] [s s]) nlp/sports))
 
-(defn addex [{params :params user :user}]
-  [:html
-   (head "Lisää")
-   [:body {:role "document"}
-    (navi user)
-    [:div.container
-     [:h2 "Lisää uusi suoritus"]
+(defn sports-options [selected]
+  (if selected
+    (form/select-options selectables selected)
+    (form/select-options selectables)))
 
-     [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/addex")}
-      [:div {:role "tabpanel"}
-       [:ul.nav.nav-tabs {:role "tablist"}
-        [:li.active {:role "active"} [:a {:href "#basic" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Perustiedot"]]
-        [:li {:role "active"} [:a {:href "#extended" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Lisätiedot"]]]
-       [:div.tab-content
-        [:div#basic.tab-pane.active {:role "tabpanel"}
-         (form-group "title" "Otsikko" {:required "required"})
-         [:div.form-group
-          [:label {:for "sport"} "Laji"]
-          [:select.form-control {:name "sport" :required "required"} sports-options]]
-         [:div.form-group
-          [:label "Aika"] [:br]
-          [:input {:name "duration.h" :type "number" :max "99" :min "0"}] "h"
-          [:input {:name "duration.m" :type "number" :max "59" :min "0"}] "m"
-          [:input {:name "duration.s" :type "number" :max "59" :min "0"}] "s" ]
-         (form-group "distance" "Matka" {:rel "txtTooltip" :title "Lisää matka esimerkiksi muodossa 10 km, 10,3 km tai 50m." :data-toggle "tooltip" :data-placement "bottom"})
-         (form-group "date" "Päivä" {:type "date" :value (today)})
-         [:div.form-group
-          [:label {:for "mdbody"} "Kuvaus"]
-          [:textarea#addex.form-control {:name "mdbody" :rows "8"}]]]
-        [:div#extended.tab-pane {:role "tabpanel"}
-         (form-group "avghr" "Syke" {:type "number" :min "0" :max "200" :rel "txtTooltip" :title "Lisää harjoituksen keskisyke yksiköissä lyöntiä minuutissa." :data-toggle "tooltip" :data-placement "bottom"})
-         (form-group "detailRepeats" "Toistot" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää toistomäärä kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
-         (form-group "detailElevation" "Nousumetrit" {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})]]]
-      [:button.btn.btn-default {:type "submit"} "Lisää lenkki"]]]]])
+(defn to-duration [tdur]
+  (if tdur
+    (let [secs (quot (+ 50 tdur) 100)
+          hours (quot secs 3600) mrem (rem secs 3600)
+          mins (quot mrem 60) srem (rem mrem 60)
+          secs srem
+          to-val #(if (> % 0) {:value (str %)} {})]
+      (mapv to-val [hours mins secs]))
+    [{} {} {}]))
+
+(defn addex [{ex :ex user :user}]
+  (let [{detailElevation :detailElevation detailRepeats :detailRepeats id :id distance :distance tduration :tduration date :creationDate} ex
+        [hval mval sval] (to-duration tduration)
+        form-date (if (and ex date) (-> date parser/parse-date formats/to-form-date) (today-as-form-date))
+        action (if ex (url "/addex/" id) (url "/addex"))]
+    [:html
+     (head (if ex "Muokkaa ""Lisää"))
+     [:body {:role "document"}
+      (navi user)
+      [:div.container
+       [:h2 (if ex "Muokkaa lenkkiä " "Lisää lenkki")]
+       [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action action}
+        [:div {:role "tabpanel"}
+         [:ul.nav.nav-tabs {:role "tablist"}
+          [:li.active {:role "active"} [:a {:href "#basic" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Perustiedot"]]
+          [:li {:role "active"} [:a {:href "#extended" :aria-controls "basic" :role "tab" :data-toggle "tab"} "Lisätiedot"]]]
+         [:div.tab-content
+          [:div#basic.tab-pane.active {:role "tabpanel"}
+           (form-group "title" "Otsikko" (:title ex) {:required "required"})
+           [:div.form-group
+            [:label {:for "sport"} "Laji"]
+            [:select.form-control {:name "sport" :required "required"} (sports-options (:sport ex))]]
+           [:div.form-group
+            [:label "Aika"] [:br]
+            [:input (merge {:align "right" :name "duration.h" :type "number" :max "99" :min "0"} hval)] "h"
+            [:input (merge {:align "right" :name "duration.m" :type "number" :max "59" :min "0"} mval)] "m"
+            [:input (merge {:align "right" :name "duration.s" :type "number" :max "59" :min "0"} sval)] "s" ]
+           (form-group "distance" "Matka" distance {:rel "txtTooltip" :title "Lisää matka esimerkiksi muodossa 10 km, 10,3 km tai 50m." :data-toggle "tooltip" :data-placement "bottom"})
+           (form-group "date" "Päivä" form-date {:type "date"})
+           [:div.form-group
+            [:label {:for "mdbody"} "Kuvaus"]
+            [:textarea#addex.form-control {:name "mdbody" :rows "8"} (:body ex)]]]
+          [:div#extended.tab-pane {:role "tabpanel"}
+           (form-group "avghr" "Syke" (:avghr ex) {:type "number" :min "0" :max "200" :rel "txtTooltip" :title "Lisää harjoituksen keskisyke yksiköissä lyöntiä minuutissa." :data-toggle "tooltip" :data-placement "bottom"})
+           (form-group "detailRepeats" "Toistot" detailRepeats {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää toistomäärä kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})
+           (form-group "detailElevation" "Nousumetrit" detailElevation {:type "number" :min "0" :max "99999" :rel "txtTooltip" :title "Lisää nousumetrit kokonaislukuna." :data-toggle "tooltip" :data-placement "bottom"})]]]
+        [:button.btn.btn-default {:type "submit"} (if ex "Muokkaa" "Lisää lenkki")]]]
+      [:script {:src "/s/sp.js"}]]]))
 
 ;; renders /sp/latest/1 and /sp/list/1?<filter-map>
 ;; if url-fn is nil paging is not required. 
@@ -321,7 +336,7 @@
                                   page)
                 :user user}))
 
-(defn login-page [data]
+(defn login-page [_]
   [:html
    (head "Kirjaudu")
    [:body
@@ -331,11 +346,12 @@
          [:img.logoImg {:src "/img/logo.png"}]]]]
     [:div.container
      [:div.row
+      [:h2 "Kirjaudu"]
       [:div.col-md-8
         [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action "/rest/v2/login"}
-         (form-group "username" "Tunnus")
+         (form-group "username" "Tunnus" nil)
          [:input.redirect {:type "hidden" :name "referer" :value "/sp/latest/1"}]
-         (form-group "password" "Salasana" {:type "password"})
+         (form-group "password" "Salasana" nil {:type "password"})
          [:button.btn.btn-default {:type "submit"} "Kirjaudu"]]]]]]])
 
 (defmacro require-auth [cookies form]
@@ -398,7 +414,15 @@
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
                 (require-auth cookies
                   (let [user (auth/user-from-cookie cookies)]
-                    (render-with addex {:params params :sports nlp/sports :user user}))))
+                    (render-with addex {:user user}))))
+
+           (GET "/sp/addex/:id" {params :params cookies :cookies} ;;addex
+                (require-auth cookies
+                  (let [user (auth/user-from-cookie cookies)
+                        ex (ex/get-ex user (:id params))]
+                    (if (and ex (= user (:user ex)))
+                      (render-with addex {:ex ex :user user})
+                      (redirect "/sp/login.html")))))
 
            (POST "/sp/addex" {params :params cookies :cookies}
                  (.info logger (str params))
@@ -407,6 +431,15 @@
                          posted (mutate/create-ex (auth/user-from-cookie cookies) params-with-dur)]
                      (redirect (url "/ex/" (:id posted))))
                    (redirect "/sp/login.html")))
+
+           (POST "/sp/addex/:id" {params :params cookies :cookies}
+                 (.info logger (str "mutating with "params))
+                 (if (auth/valid-auth-token? (:value (cookies "authToken")))
+                   (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
+                         posted (mutate/update-ex (auth/user-from-cookie cookies) params-with-dur)]
+                     (redirect (url "/ex/" (:id posted))))
+                   (redirect "/sp/login.html")))
+
 
            (GET "/sp" {cookies :cookies}
                 (if (not= "nobody" (auth/user-from-cookie cookies))
