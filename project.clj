@@ -21,9 +21,18 @@
                  [cheshire "5.3.1"]
                  [ring.middleware.logger "0.2.2"]
                  [hiccup "1.0.5"]
-                 [markdown-clj "0.9.41"]
+                 [org.clojure/clojurescript "0.0-2411"]
+                 [reagent "0.5.0-alpha"]
                 ]
-  :plugins [[lein-ring "0.8.10"]]
+  :plugins [[lein-ring "0.8.10"]
+            [lein-cljsbuild "1.0.3"]]
+  :cljsbuild {:builds {:dev {:source-paths ["src-cljs"]
+                             :compiler {:output-to "resources/public/s/c_dbg.js"
+                                        :optimizations :whitespace
+                                        :pretty-print true}}
+                       :prod {:compiler {:output-to "resources/public/s/c.js"
+                                         :optimizations :advanced
+                                         :pretty-print false}}}}
   :ring {:handler ontrail.core/app}
   :aliases {"import" ["run" "-m" "ontrail.heiaimport/import-json"]}
   :aot  [ontrail.core]
