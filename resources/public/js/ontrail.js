@@ -159,9 +159,7 @@
       keen.count(id, function(err, res) {
         if (!err && res && res.result > 0) {
           try {
-            console.log(id, res.result)
             var $count = $('#count')
-            console.log($count)
             $count.html("Luettu " + res.result + " kertaa")
           } catch(err) {
             console.log(err)

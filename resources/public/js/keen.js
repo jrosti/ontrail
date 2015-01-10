@@ -12,7 +12,7 @@ var keen = (function () {
         eid: id,
         version: "full",
         owner: owner,
-        viewer: viewer,
+        viewer: viewer ? viewer : "nobody",
         keen: {
           timestamp: new Date().toISOString()
         }
