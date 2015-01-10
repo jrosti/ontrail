@@ -155,8 +155,24 @@
         $(tableContent).appendTo(tableElem)
       }
     }
+    var renderReadCount = function(id) {
+      keen.count(id, function(err, res) {
+        if (!err && res && res.result > 0) {
+          try {
+            console.log(id, res.result)
+            var $count = $("[data-id='" + id + "']").first().children('p#count').first()
+            console.log($count)
+            $count.html("Luettu " + res.result + " kertaa")
+          } catch(err) {
+            console.log(err)
+          }
+        }
+      })
+    }
     var renderSingleExercise = function (exercise, me) {
+      keen.view(exercise.id, exercise.user, me)
       renderUserMenu(exercise.user)
+      renderReadCount(exercise.id)
       var helpers = {
         deleteComment: function () {
           return function (text, render) {
@@ -170,7 +186,6 @@
       $('#comment-body').redactor(editorSettings)
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
-
       })
 
     }
@@ -473,10 +488,7 @@
     }, pingInterval)
 
     logouts.subscribe(closeWebSocket)
-
     loggedIns.subscribe(openWebSocket)
-
-
 
     // open single entries
     var parentArticle = function (el) {
@@ -494,6 +506,16 @@
     }
     clickedArticles.where(isArticleLoaded).subscribe(function (el) {
       $(el).toggleClass('full').toggleClass('preview')
+    })
+    var isOpenEvent = function(el) {
+    }
+    clickedArticles.combineWithLatestOf(sessions).subscribeArgs(function (el, viewer) {
+      var $el = $(el)
+      if ($el.hasClass('full')) {
+        var id = $el.attr('data-id')
+        var owner = $el.attr('data-user')
+        keen.view(id, owner, viewer)
+      }
     })
 
     // delete
