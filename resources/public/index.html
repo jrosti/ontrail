@@ -711,14 +711,13 @@
 <script id="exerciseTemplate" type="text/html">
     <div>
         <section>
-            <article data-id="{{id}}" class="preview exercise {{sport}}">
+            <article data-id="{{id}}" data-user="{{user}}" class="preview exercise {{sport}}">
                 <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 <a href="{{avatar}}&s=700" target="_blank"><img class="avatar" src="{{avatar}}" width="62" height="62"></a><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
                 <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
                 <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
                     <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
                 {{> exerciseDetailsTemplate}}
-
                 <div class="preview">
                     {{#trunc}}{{/trunc}}
                         <p><a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
@@ -765,6 +764,7 @@
 <script id="singleExerciseTemplate" type="text/html">
     <section>
         <article data-id="{{id}}" class="full exercise {{sport}}">
+
             <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
@@ -776,6 +776,7 @@
                 </p>
             </div>
             {{> tagsExpandedTemplate}}
+            <p id="count"></p>
         </article>
     </section>
     <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
@@ -1273,9 +1274,9 @@
 <script src="js/icanhaz-0.10.0.js?_=UID"></script>
 <script src="js/lodash.min.js?_=UID"></script>
 <script src="js/xdate-0.7.js?_=UID"></script>
-
+<script src="https://d26b395fwzu5fz.cloudfront.net/3.2.1/keen.min.js" type="text/javascript"></script>
+<script src="js/keen.js?_=UID"></script>
 <script src="js/rx.all.min.js?_=UID"></script>
-
 <script src="js/rx.jquery.min.js?_=UID"></script>
 <script src="js/rx.ontrail.js?_=UID"></script>
 <script src="js/rx.ontrail.jquery.js?_=UID"></script>
