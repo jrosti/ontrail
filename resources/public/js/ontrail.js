@@ -159,8 +159,7 @@
       keen.count(id, function(err, res) {
         if (!err && res && res.result > 0) {
           try {
-            var $count = $('#count')
-            $count.html("Luettu " + res.result + " kertaa")
+            $('[data-id=' + id + '] > p.count').html("Luettu " + res.result + " kertaa")
           } catch(err) {
             console.log(err)
           }
@@ -513,6 +512,7 @@
         var id = $el.attr('data-id')
         var owner = $el.attr('data-user')
         keen.view(id, owner, viewer)
+        renderReadCount(id)
       }
     })
 

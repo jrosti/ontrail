@@ -712,6 +712,7 @@
     <div>
         <section>
             <article data-id="{{id}}" data-user="{{user}}" class="preview exercise {{sport}}">
+               <p class="count" style="font-size:8px;margin-top: -30px !important;"></p>
                 <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 <a href="{{avatar}}&s=700" target="_blank"><img class="avatar" src="{{avatar}}" width="62" height="62"></a><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
                 <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
@@ -776,7 +777,7 @@
                 </p>
             </div>
             {{> tagsExpandedTemplate}}
-            <p id="count"></p>
+            <p class="count"></p>
         </article>
     </section>
     <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
