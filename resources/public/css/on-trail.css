@@ -35,11 +35,11 @@ a:hover {
 i {
   font-style: italic;
 }
-#count {
+p.count {
   color: #8c8c8c;
   font-size: 14px;
   float: left;
-  margin-top: -10px;
+  margin-top: -10px !important;
 }
 .avatar {
   -webkit-border-radius: 3px;
