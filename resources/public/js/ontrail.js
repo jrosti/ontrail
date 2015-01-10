@@ -241,7 +241,6 @@
       }
 
       if ($.isArray(summary)) {
-        var sum = null
         var hasSports = function (item) {
           return item.sports.length > 0
         }
@@ -720,7 +719,6 @@
     }
 
     userTagPages.selectArgs(function() {
-      console.log("detail")
       var args = Array.prototype.slice.call(arguments)
       var pairs = partition(args, 2)
       return _.extend({action: args[0]}, _.zipObject(pairs))
