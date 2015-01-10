@@ -22,7 +22,13 @@ var keen = (function () {
   function count(id, f) {
     var countQuery = new Keen.Query("count", {
       eventCollection: "pageviews",
-      eid: id
+      filters: [
+        {
+          "property_name" : "eid",
+          "operator" : "eq",
+          "property_value" : id
+        }
+      ]
     });
     client.run(countQuery, f)
   }

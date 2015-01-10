@@ -160,7 +160,7 @@
         if (!err && res && res.result > 0) {
           try {
             console.log(id, res.result)
-            var $count = $("[data-id='" + id + "']").first().children('p#count').first()
+            var $count = $('#count')
             console.log($count)
             $count.html("Luettu " + res.result + " kertaa")
           } catch(err) {
