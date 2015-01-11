@@ -7,16 +7,18 @@ var keen = (function () {
   })
 
   function view(id, owner, viewer) {
-    client.addEvent("pageviews",
-      {
-        eid: id,
-        version: "full",
-        owner: owner,
-        viewer: viewer ? viewer : "nobody",
-        keen: {
-          timestamp: new Date().toISOString()
-        }
-      })
+    if (viewer !== owner) {
+      client.addEvent("pageviews",
+        {
+          eid: id,
+          version: "full",
+          owner: owner,
+          viewer: viewer ? viewer : "nobody",
+          keen: {
+            timestamp: new Date().toISOString()
+          }
+        })
+    }
   }
 
   function count(id, f) {
