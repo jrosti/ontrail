@@ -9,7 +9,7 @@
 (defn url-encode [x]
   (java.net.URLEncoder/encode x))
 
-(defn url-encode [x]
+(defn url-decode [x]
   (java.net.URLDecoder/decode x))
 
 (defn log-request? [request response]

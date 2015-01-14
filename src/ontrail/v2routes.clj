@@ -1,7 +1,10 @@
 (ns ontrail.v2routes
-  (:use [compojure.core :only (defroutes ANY POST GET PUT DELETE)])
+  (:use [compojure.core :only (defroutes ANY POST GET PUT DELETE)]
+        [ontrail webutil])
 
-  (:require [ontrail.auth :as auth]
+  (:require [clojure.data.json :as json]
+            [ontrail.keen :as keen]
+            [ontrail.auth :as auth]
             [ontrail.user :as user]))
 
 (defn logout [params headers]

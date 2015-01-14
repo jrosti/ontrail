@@ -156,13 +156,9 @@
       }
     }
     var renderReadCount = function(id) {
-      keen.count(id, function(err, res) {
-        if (!err && res && res.result > 0) {
-          try {
-            $('[data-id=' + id + '] > p.count').html("Luettu " + res.result + " kertaa")
-          } catch(err) {
-            console.log(err)
-          }
+      keen.count(id, function(res) {
+        if (res && res.result > 0) {
+          $('[data-id=' + id + '] > p.count').html("Luettu " + res.result + " kertaa")
         }
       })
     }

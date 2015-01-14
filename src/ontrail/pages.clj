@@ -12,13 +12,11 @@
     [ontrail.auth :as auth]
     [ontrail.formats :as formats]
     [ontrail.mongerfilter :as mongerfilter]
-    [markdown.core :as md]
     [clj-time.core :as time]
     [hiccup.form :as form]
     [hiccup.core :as hiccup]
-    [stencil.core :as stencil]
+    [markdown.core :as md]
     [clojure.stacktrace :as stacktrace]
-    [clojure.string :as string]
     [ontrail.parser :as parser])
   (:import [java.net URLEncoder]))
 

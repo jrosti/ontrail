@@ -15,6 +15,7 @@
          sportsummary mongodb])
   (:gen-class)
   (:require [aleph.http :as aleph]
+            [ontrail.keen :as keen]
             [ontrail.races :as races]
             [ontrail.v2routes :as v2routes]
             [ontrail.webutil :as webutil]
@@ -209,7 +210,8 @@
 (def app-routes
   (routes              
    websocket/async
-   v2routes/v2routes 
+   v2routes/v2routes
+   keen/keen-routes
    pages/templates
    v1routes))
 
