@@ -21,7 +21,7 @@ var keen = (function () {
   }
 
   function count(id, f) {
-    $.get("/rest/v2/keen/count/" + id, f)
+    $.get("/rest/v1/keen/count/" + id, f)
   }
 
   return { view: view, count: count}

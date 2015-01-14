@@ -105,6 +105,7 @@
 </section>
 
 <section role="lists">
+   <div id="most-read"></div>
    <h3>Nopeimmat juoksut</h3>
         <a class="pageLink" rel="sport/Juoksu/distance/100/sb/pace">100 m</a>
         <a class="pageLink" rel="sport/Juoksu/distance/200/sb/pace">200 m</a>
@@ -670,6 +671,17 @@
 </div>
 
 <!-- templates -->
+<script id="listsTemplate" type="text/html">
+    <h3>Suosituimmat lenkit</h3>
+    <table class="details full">
+        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Lukukertoja</th></tr></thead>
+        {{#result}}
+        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
+        {{/result}}
+    </table>
+</script>
+
+
 <script id="exerciseDetailsTemplate" class="partial" type="text/html">
     <table class="details full">
         <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th>
