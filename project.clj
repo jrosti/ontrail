@@ -23,6 +23,8 @@
                  [hiccup "1.0.5"]
                  [org.clojure/clojurescript "0.0-2411"]
                  [reagent "0.5.0-alpha"]
+                 [clj-http "0.9.1"]
+                 [markdown-clj "0.9.41"]
                 ]
   :plugins [[lein-ring "0.8.10"]
             [lein-cljsbuild "1.0.3"]]
