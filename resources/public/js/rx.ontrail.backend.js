@@ -54,6 +54,7 @@
 
   Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
   Rest.prototype.newOwnComments = function() { return getAsObservableResultData("ex-unread-own-comments") }
+  Rest.prototype.mostRead = function() { return getAsObservableResultData("keen/most-read") }
 
   Rest.prototype.newCommentCountOwn = function() { return getAsObservableResultData("ex-unread-count", "own")}
   Rest.prototype.newCommentCountAll = function() { return getAsObservableResultData("ex-unread-count", "all")}

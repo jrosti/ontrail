@@ -604,6 +604,11 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
+    currentPages.whereArgs(partialEquals("lists")).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
+      console.log(data)
+      $("#most-read").html(ich.listsTemplate({result: data}))
+    })
+
     // Recursive animation needs exactly one target, otherwise animation complete will grow
     // stack exponentially on each animation step.
     var $scrollTopTarget = $('html, body')

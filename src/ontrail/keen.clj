@@ -83,8 +83,8 @@
 (defroutes
   keen-routes
 
-  (GET "/rest/v2/keen/most-read" []
+  (GET "/rest/v1/keen/most-read" []
        (json-response (memo-most-read nil)))
 
-  (GET "/rest/v2/keen/count/:id" [id]
+  (GET "/rest/v1/keen/count/:id" [id]
        (json-response (memo-count-by-id id))))
