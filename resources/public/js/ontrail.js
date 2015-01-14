@@ -351,7 +351,6 @@
         var rel = el.attr("rel")
         el.attr("rel", rel.split("/")[0] + "/" + userId)
       }
-
       $('.username').html(userId)
       $('*[data-user]').map(appendUser)
     })
@@ -507,12 +506,16 @@
     var isOpenEvent = function(el) {
     }
     clickedArticles.combineWithLatestOf(sessions).subscribeArgs(function (el, viewer) {
-      var $el = $(el)
-      if ($el.hasClass('full')) {
-        var id = $el.attr('data-id')
-        var owner = $el.attr('data-user')
-        keen.view(id, owner, viewer)
-        renderReadCount(id)
+      try {
+        var $el = $(el)
+        if ($el.hasClass('full')) {
+          var id = $el.attr('data-id')
+          var owner = $el.attr('data-article-owner')
+          keen.view(id, owner, viewer)
+          renderReadCount(id)
+        }
+      } catch(e) {
+        console.log(e)
       }
     })
 
