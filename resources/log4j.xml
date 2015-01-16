@@ -9,8 +9,12 @@
       </layout>
    </appender>
 
+    <category name="sun.nio.ch">
+        <priority value="off"/>
+    </category>
+
    <root>
-      <level value="DEBUG"/>
+      <level value="INFO"/>
       <appender-ref ref="consoleAppender"/>
    </root>
 
