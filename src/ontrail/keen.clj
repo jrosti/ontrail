@@ -14,11 +14,14 @@
         [compojure.core :only (defroutes ANY POST GET PUT DELETE)]))
 
 (def conman
-  (make-reusable-conn-manager {:timeout 10 :threads 50 :default-per-route 50}))
+  (make-reusable-conn-manager 
+   {:threads 10 :default-per-route 10}))
 
 (def connection
-  (merge {:accept :json}
-         {:throw-exceptions false}
+  (merge {:accept :json
+          :throw-exceptions false
+          :socket-timeout 5000  ;; in milliseconds
+          :conn-timeout 120000}
          {:connection-manager conman}))
 
 (def read-key (-> properties :keen :read-key))
@@ -38,11 +41,15 @@
       "&event_collection=pageviews&timezone=7200" filters-as-str group-by-str)))
 
 (defn count-by-id [id]
-  (let [filter-by [{:property_name :eid :operator :eq :property_value id}]]
-    (-> (http/get (keen-count-uri filter-by nil) connection)
-         :body
-         json/read-str
-         walk/keywordize-keys)))
+  (try
+    (let [filter-by [{:property_name :eid :operator :eq :property_value id}]]
+      (-> (http/get (keen-count-uri filter-by nil) connection)
+          :body
+          json/read-str
+          walk/keywordize-keys))
+    (catch Exception ex
+      (prn ex)
+      {:result 0})))
 
 (defn group-by-eid []
   (-> (http/get (keen-count-uri  nil "eid") connection)
@@ -50,8 +57,37 @@
       json/read-str
       walk/keywordize-keys))
 
-(def memo-count-by-id
-  (memo/ttl count-by-id :ttl/threshold (* 60 60 1000)))
+(def agents (ref {}))
+(def expires (ref {}))
+
+(import java.util.concurrent.Executors)
+(set-agent-send-off-executor! (Executors/newFixedThreadPool 8))
+
+(def expires-in (* 10 60 1000))
+
+(defn now [] 
+  (System/currentTimeMillis))
+
+(defn get-agent [id]
+  (dosync
+   (if-let [c (@agents id)]
+     c
+     (do 
+       (alter expires assoc id 0)
+       ((alter agents assoc id (agent (count-by-id id))) id)))))
+
+(defn update [state blocking-fn]
+  (blocking-fn))
+
+(defn memo-count-by-id [id]
+  @(let [agent (get-agent id)]
+     (if (< (@expires id) (now))
+       (do 
+         (dosync (alter expires assoc id (+ expires-in (now))))
+         (send-off 
+          agent
+          update (fn [] (count-by-id id))))
+       agent)))
 
 (defn try-get-one [id]
   (try
