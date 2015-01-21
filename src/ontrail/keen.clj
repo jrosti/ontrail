@@ -68,13 +68,12 @@
   (System/currentTimeMillis))
 
 (defn get-agent [id]
-  (let [initial-value (count-by-id id)]
-    (dosync
-     (if-let [c (@agents id)]
-       c
-       (do 
-         (alter expires assoc id 0)
-         ((alter agents assoc id (agent initial-value)) id))))))
+  (dosync
+   (if-let [c (@agents id)]
+     c
+     (do 
+       (alter expires assoc id 0)
+       ((alter agents assoc id (count-by-id id)) id)))))
 
 (defn update [state blocking-fn]
   (blocking-fn))
