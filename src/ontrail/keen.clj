@@ -14,7 +14,7 @@
         [compojure.core :only (defroutes ANY POST GET PUT DELETE)]))
 
 (def conman
-  (make-reusable-conn-manager {:timeout 10 :threads 10 :default-per-route 10}))
+  (make-reusable-conn-manager {:timeout 10 :threads 3 :default-per-route 3}))
 
 (def connection
   (merge {:accept :json}
@@ -51,7 +51,7 @@
       walk/keywordize-keys))
 
 (def memo-count-by-id
-  (memo/ttl count-by-id :ttl/threshold (* 10 60 1000)))
+  (memo/ttl count-by-id :ttl/threshold (* 60 60 1000)))
 
 (defn try-get-one [id]
   (try
@@ -78,7 +78,7 @@
          (filter #(not= "admin" (:user %)))
          (map-indexed (fn [i o] (assoc o :index (inc i)))))))
 
-(def memo-most-read (memo/ttl most-read :ttl/threshold (* 6 60 60 1000)))
+(def memo-most-read (memo/ttl most-read :ttl/threshold (* 12 60 60 1000)))
 
 (defroutes
   keen-routes
