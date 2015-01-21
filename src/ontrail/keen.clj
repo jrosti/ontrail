@@ -48,7 +48,6 @@
           json/read-str
           walk/keywordize-keys))
     (catch Exception ex
-      (prn ex)
       {:result 0})))
 
 (defn group-by-eid []
@@ -69,12 +68,13 @@
   (System/currentTimeMillis))
 
 (defn get-agent [id]
-  (dosync
-   (if-let [c (@agents id)]
-     c
-     (do 
-       (alter expires assoc id 0)
-       ((alter agents assoc id (agent (count-by-id id))) id)))))
+  (let [initial-value (count-by-id id)]
+    (dosync
+     (if-let [c (@agents id)]
+       c
+       (do 
+         (alter expires assoc id 0)
+         ((alter agents assoc id (agent initial-value)) id))))))
 
 (defn update [state blocking-fn]
   (blocking-fn))
