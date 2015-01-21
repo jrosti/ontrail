@@ -14,7 +14,7 @@
         [compojure.core :only (defroutes ANY POST GET PUT DELETE)]))
 
 (def conman
-  (make-reusable-conn-manager {:timeout 10 :threads 3 :default-per-route 3}))
+  (make-reusable-conn-manager {:timeout 10 :threads 50 :default-per-route 50}))
 
 (def connection
   (merge {:accept :json}
