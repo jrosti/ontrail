@@ -35,4 +35,3 @@
       (catch Exception exception
         (.trace logger (str "Could not get user from cookie " exception))
         "nobody")))
-    
