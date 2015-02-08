@@ -37,12 +37,6 @@ function addGraph(dataGenerator) {
   })
 }
 
-/*(defn pacetominkm [cpace]
- (let [kmh (/ cpace 1000.0)
- minkm (/ 60.0 kmh)
- min (int minkm)
- s (int (* 60.0 (- minkm min)))]
- (str min "." (format "%02d" s) " min/km")))*/
 function genValues(paces, vals) {
   return function() {
     var xy = [];

@@ -148,10 +148,11 @@
         var mappedData = _.map(data, function (item) {
           return _.extend(item, helpers)
         })
-        var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("")
+        var content = _.map(mappedData, _.partial(render, ich.exerciseTemplate)).join("").trim()
+
         $(content).appendTo(elem)
 
-        var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("")
+        var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("").trim()
         $(tableContent).appendTo(tableElem)
       }
     }
@@ -183,8 +184,8 @@
 
     }
     var renderSports = function (data) {
-      ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#ex-sport'))
-      ich.sportsCreateTemplate({sports: _.filter(data, identity)}).appendTo($('#filter-sport'))
+      $('#ex-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
+      $('#filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
       if (!Modernizr.touch) {
         $('#ex-sport').select2({formatSelection: selectionFormat})
         $('#filter-sport').select2({formatSelection: selectionFormat})
@@ -752,11 +753,6 @@
 
     var $raceReports2013 = $('#raceReports2013')
     $($raceReports2013).hide()
-    $("#toggleReports2013").toggle(function () {
-      $($raceReports2013).show()
-    }, function () {
-      $($raceReports2013).hide()
-    })
 
     var exPages = currentPages.whereArgs(partialEquals("ex")).spinnerAction('#exercise').throttle(101)
     exPages.selectAjax(OnTrail.rest.details).combineWithLatestOf(sessions).subscribeArgs(renderSingleExercise)
@@ -828,7 +824,7 @@
       return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
     }
 
-    $("#weeksummary").onAsObservable("hover", ".sport").subscribe(function (el) {
+    $("#weeksummary").onAsObservable("mouseenter", ".sport").subscribe(function (el) {
       var e = $(el.target)
       if (el.type === "mouseenter") {
         e.tooltip({content: function () {
@@ -1173,16 +1169,12 @@
       }
     }
 
-    // A static user list generated using bit heavy mongodb offline query to suggest currently active users.
-    // Must have a cached version of this in the server side. Chzn does not limit options, and
-    // thus this affects only to the autocomplete feature of selecting users.
     var activeUsers = ["-James-", "20660", "Anttu", "BirdiBlu", "Bråoddvar", "Duckbill", "Elwood", "Emo", "Epunäiti", "Esteri", "Ewanator", "Fransa", "Geoeläin", "Haapis", "Hazel", "Heidi", "Hejkki", "Hietsu", "HiiNokka", "Holle", "Hopo", "Hähi", "Imatran Voima", "Jagge", "JH", "JohannaLP", "Jokiv", "Jukkis", "Justiina_", "Juupe", "Jörö", "KapteeniSolisluu", "Kerttu", "Keura", "Koskaanenjuokse", "Lanttu", "Larry", "LauraIsabella", "Leena51", "Lynx", "MariP", "Massa-Matti", "Nandi", "Niina", "Osku", "Pantse", "Pasi_P", "Peksu", "Peppi", "Pohjan Tähti", "Pumppi60", "Päivi", "SannaK", "Sehnsucht", "Silu", "Sirpakka", "Sissi von Vuorenpeikko", "Soironen", "Sope", "Suski", "TaijaO", "Tapsajussi", "Tasku67", "Tatteus", "Tero", "Tiiti54", "Triina", "Tuomas", "Turri", "Ursa Minor", "Vilivilperi", "admin", "anatooli", "arddy", "berniboy", "ejex", "erz", "ese", "hannikainen", "herba63", "isi", "jamaatta", "jamo57", "jarmila", "jatossu", "jennirinne", "jogo3000", "jyri", "kalervo1", "kalman", "kata", "kettis", "kirva", "kriish", "maja", "mala", "mana", "meusi", "miguel horsehead", "miklai", "muhola", "mummi", "niilos mc", "oikakati", "oskuman", "ousi", "pellervo", "peta", "pietro", "plouh", "poko", "rampako", "rauman", "ritaatti", "rote", "saarja", "saavape", "sakke 2", "sammatti", "sanina", "sava", "ski", "tatteus", "tiinu", "tuomasnu", "wicca"]
     // anonymous users get a restricted view of the sports choices
     var defaultSports = ["Juoksu", "Pyöräily", "Uinti", "Perinteinen hiihto", "Luisteluhiihto"]
     var renderFilterValues = function () {
       $('#filter-continuous-start-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-start-date'), locale: DateLocale.FI })
       $('#filter-continuous-stop-date').continuousCalendar({isPopup: true, selectToday: false, weeksBefore: 520, weeksAfter: 1, startField: $('#filter-stop-date'), locale: DateLocale.FI })
-      ich.sportsCreateTemplate({sports: _.filter(defaultSports, identity)}).appendTo($('#filter-sport'))
       $('#filter-users').select2({
         tags: activeUsers,
         tokenSeparators: [","],

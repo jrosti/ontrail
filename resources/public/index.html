@@ -13,8 +13,9 @@
     <link rel="stylesheet" href="halcyonic/css/5grid/core-noscript.css" />
     <link rel="stylesheet" href="halcyonic/css/style.css" />
     <link rel="stylesheet" href="halcyonic/css/style-desktop.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js?_=UID"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js?_=UID"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?_=UID"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js?_=UID"></script>
     <script src="halcyonic/css/5grid/init.js?use=desktop,1000px&amp;mobileUI=0"></script>
 
     <!--[if lte IE 9]><link rel="stylesheet" href="halcyonic/css/style-ie9.css" /><![endif]-->
@@ -137,10 +138,10 @@
     <h3>Pisimmät suoritukset lajeittain</h3>
         <a class="pageLink" rel="sport/Juoksu/sb/distance">Juoksu</a>
         <a class="pageLink" rel="sport/Perinteinen hiihto/sb/distance">Perinteinen hiihto</a>
-        <a class="pageLink" rel="sport/Luisteluhiihto/sb/distance">Luisteluhiihto</a>  
-        <a class="pageLink" rel="sport/Suunnistus/sb/distance">Suunnistus</a>  
-        <a class="pageLink" rel="sport/Pyöräily/sb/distance">Pyöräily</a> 
-        <a class="pageLink" rel="sport/Uinti/sb/distance">Uinti</a> 
+        <a class="pageLink" rel="sport/Luisteluhiihto/sb/distance">Luisteluhiihto</a>
+        <a class="pageLink" rel="sport/Suunnistus/sb/distance">Suunnistus</a>
+        <a class="pageLink" rel="sport/Pyöräily/sb/distance">Pyöräily</a>
+        <a class="pageLink" rel="sport/Uinti/sb/distance">Uinti</a>
         <a class="pageLink" rel="sport/Vaellus/sb/distance">Vaellus</a>
         <a class="pageLink" rel="sport/Triathlon/sb/distance">Triathlon</a>
         <a class="pageLink" rel="sport/Rullaluistelu/sb/distance">Rullaluistelu</a>
@@ -271,11 +272,11 @@
             <header>
                 <div id="search-form">
                     <a id="show-filter" href="javascript:void(0)">Suodata</a> /
-                    <label for="search"><strong>Etsi: </strong></label> 
+                    <label for="search"><strong>Etsi: </strong></label>
                     <form accept-charset="utf-8"><input class="search" type="text" id="search"/></form>
                 </div>
                 <div id="filter-form" style="display: none" class="logged-in">
-                    <a id="show-search" href="javascript:void(0)">Etsi</a> / 
+                    <a id="show-search" href="javascript:void(0)">Etsi</a> /
                     <strong>Suodata</strong>:
                     <br/>
                     <h6>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jos et halua käyttää jotain kenttää suodatuksessa, jätä se täyttämättä.</h6>
@@ -720,6 +721,7 @@
         </ul>
     </div>
 </script>
+
 <script id="exerciseTemplate" type="text/html">
     <div>
         <section>
@@ -758,7 +760,7 @@
 
 <script id="exerciseSummaryTemplate" type="text/html">
     <tbody>
-    <tr class="{{#newComments}}new-comments{{/newComments}} {{#isNew}}new{{/isNew}}">
+    <tr class="exericise-detail {{#newComments}}new-comments{{/newComments}} {{#isNew}}new{{/isNew}}">
         <td>{{date}}</td>
         <td class="user"><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
         <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
@@ -831,6 +833,7 @@
     <option value="{{.}}">{{.}}</option>
     {{/sports}}
 </script>
+
 <script id="tagsCreateTemplate" type="text/html">
     {{#tags}}
     <option value="{{.}}">{{.}}</option>
@@ -1065,8 +1068,8 @@
             <div>
                 <div class="rhleft"><img src="img/runhigh-80x70.png" /></div>
                 <div class="rhleft">
-                Runner's High on viiden nuoren urheilijan yritys, 
-                joka tarjoaa laadukkaat juoksuvalmennuspalvelut kaikentasoisille kilpa- ja 
+                Runner's High on viiden nuoren urheilijan yritys,
+                joka tarjoaa laadukkaat juoksuvalmennuspalvelut kaikentasoisille kilpa- ja
                 kuntojuoksijoille. Lue lisää Runner's High:n <a href="http://runhigh.fi">nettisivuilta</a>.
                 </div>
                 <div class="clearfix"></div>
@@ -1281,16 +1284,16 @@
 </div>
 
 <script src="js/select2.min.js?_=UID"></script>
-<script src="js/jquery.cookie.js?_=UID"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="js/jquery.md5.js?_=UID"></script>
-<script src="js/jquery.address-1.5.min.js?strict=false?_UID"></script>
-<script src="js/icanhaz-0.10.0.js?_=UID"></script>
-<script src="js/lodash.min.js?_=UID"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js?strict=false"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.1.0/lodash.min.js"></script>
 <script src="js/xdate-0.7.js?_=UID"></script>
 <script src="//d26b395fwzu5fz.cloudfront.net/3.2.1/keen.min.js" type="text/javascript"></script>
 <script src="js/keen.js?_=UID"></script>
-<script src="js/rx.all.min.js?_=UID"></script>
-<script src="js/rx.jquery.min.js?_=UID"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.24/rx.all.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/rxjs-jquery/1.1.6/rx.jquery.min.js"></script>
 <script src="js/rx.ontrail.js?_=UID"></script>
 <script src="js/rx.ontrail.jquery.js?_=UID"></script>
 <script src="js/rx.ontrail.backend.js?_=UID"></script>
