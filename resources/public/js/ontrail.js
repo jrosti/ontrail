@@ -1047,17 +1047,11 @@
 
     var fixMenuPosition = function (isLoggedIn) {
       var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
-      if ($(window).scrollTop() > menuOffsetTop) {
-        var menuOffsetWidth = $('#header-wrapper').width()
-        var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
-        $('#header-wrapper').css({ position: 'fixed', top: '-4px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
-        $('#content-wrapper').addClass("scroll-overflow")
-        $('#content').css({"margin-top": (isLoggedIn ? 110 : 82)})
-      } else {
-        $('#header-wrapper,#content,#features-wrapper').removeAttr("style")
-        $('#content-wrapper').removeClass("scroll-overflow")
-      }
-
+      var menuOffsetWidth = $('#header-wrapper').width()
+      var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
+      $('#header-wrapper').css({ position: 'fixed', top: '-4px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
+      $('#content-wrapper').addClass("scroll-overflow")
+      $('#content').css({"margin-top": (isLoggedIn ? 110 : 82)})
     }
 
     loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function (loggedIn) {
@@ -1140,8 +1134,8 @@
     // run our function on load
     if (!mobile) {
       // and run it again every time you scroll
-      $(window).scrollAsObservable().startWith(0).selectMany(sessions).select(function (val) {
-        return exists(val) ? true : false
+      sessions.select(function (val) {
+        return exists(val)
       }).subscribe(fixMenuPosition)
     }
 
