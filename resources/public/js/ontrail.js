@@ -334,13 +334,17 @@
     var changePasswords = ajaxActionButtonAsStream('#change-password', postChangePassword)
     changePasswords.subscribeArgs(renderChangePassword)
 
+
+    var isLoggedUser = function(v) {
+      return v !== null && v !== "null"
+    }
     // create session
     var sessions = OnTrail.session.create(logins.merge(registerUsers).merge(changePasswords), logouts.merge(loginFails))
-    var loggedIns = sessions.where(identity)
+    var loggedIns = sessions.where(isLoggedUser)
 
     // toggle logged-in and logged-out
     sessions.subscribe(function (userId) {
-      $('body').toggleClass('logged-in', !!userId).toggleClass('logged-out', !userId)
+      $('body').toggleClass('logged-in', isLoggedUser(userId)).toggleClass('logged-out', !isLoggedUser(userId))
     })
     loggedIns.subscribe(function (userId) {
       function appendUser(_, _el) {
@@ -404,7 +408,6 @@
           webSocketPollerActive = false
           webSocket === undefined
         } catch(err) {
-          console.log("onclose")
         }
       }
     }
@@ -512,7 +515,6 @@
           renderReadCount(id)
         }
       } catch(e) {
-        console.log(e)
       }
     })
 
@@ -606,7 +608,6 @@
     })
 
     currentPages.whereArgs(partialEquals("lists")).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
-      console.log(data)
       $("#most-read").html(ich.listsTemplate({result: data}))
     })
 
@@ -626,7 +627,7 @@
           // X
         }
       } catch (err) {
-        console.log("rec scroll failed", err)
+
       }
     }
 
@@ -647,7 +648,6 @@
           $scrollTopTarget.scrollTop(0)
         }
       } catch(err) {
-        console.log('Scrolling to zero pos due to error: ', err)
       }
     }
 
