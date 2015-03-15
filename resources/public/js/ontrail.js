@@ -589,7 +589,7 @@
     var initialPage = function (user) {
       var address = $.address.value()
       if (address && address != "") return splitM(address)
-      return (user && ["user", user]) || "latest"
+      return "latest"
     }
 
     // back button handling
