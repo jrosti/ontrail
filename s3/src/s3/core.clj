@@ -16,6 +16,9 @@
 (defroutes main-routes
 
   (GET "/" {}
+    (redirect "/file-upload/upload.html"))
+
+  (GET "/index" {}
     (resource-response "index.html" {:root "public"}))
   (GET "/edit/" {}
     (resource-response "edit.html" {:root "pages"}))

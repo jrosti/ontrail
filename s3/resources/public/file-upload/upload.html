@@ -38,6 +38,10 @@
       z-index: 20;
   }
 
+  .upload-success {
+    font-weight: bold;
+    color: yellow !important;
+  }
   body.uploaded div.url {
       display: block;
       line-height: 60px;
@@ -303,10 +307,17 @@
             </p>
             <input type="file" name="image" id="file"/>
         </div>
-        <div id="thumbnail"><img class="preview" alt="Preview"/><div class="image-info"><p>Image name:<br><span class="name">Unknown</span></p><p>Width: <span class="width">unknown </span>px<br>Height: <span class="height">unkown </span>px<br>Size: <span class="size">unknown</span> MB</p></div></div>
+        <div id="thumbnail"><img class="preview" alt="Preview"/><div class="image-info"><p>Image name:<br><span class="name">Unknown</span></p><p>Leveys: <span class="width">unknown </span>px<br>Korkeus: <span class="height">unkown </span>px<br>Koko: <span class="size">unknown</span> MB</p></div></div>
         <div class="details">
-            <h1>Tallenna kuva</h1>
-            <p>Kuvasi tallennetaan Ontrailin k&auml;ytt&auml;j&auml;kohtaiseen kotihakemistoon.</p>
+            <div id="upload-success">
+              <p class="upload-success">Pysyvä linkki kuvaasi on: <br/><br/><span style="color: white" id="image-url"></span><br/><br/>
+              Liitä kuva lenkkiisi tallentamalla se ensin leikepöydälle ja sitten lenkkiisi valitsemaasi kohtaan kuvalinkin kautta.</p>
+            </div>
+            <div id="before-upload">
+              <h1>Tallenna kuva</h1>
+              <p>Kuvasi tallennetaan Ontrailin k&auml;ytt&auml;j&auml;kohtaiseen kotihakemistoon. Kuvasi koko muutetaan maksimissaan 1500 pikseliä leveydeltään tai korkeudeltaan. 
+              Tuetut kuvaformaatit ovat gif, png ja jpg.</p>
+            </div>
         </div>
         <button type="submit">Tallenna!</button>
         <a href="/" class="cancel" title="Peruuta">Peruuta</a>
@@ -319,7 +330,15 @@ $(document).ready(function() {
     var uploading = false;
 
     var orig = qParam("o");
-    if (orig) copyToClipboard(orig);
+    if (orig) {
+      $('#upload-success').show();
+      $('#before-upload').hide();
+      $('#image-url').text(orig)
+      copyToClipboard(orig);
+    } else {
+      $('#upload-success').hide();
+      $('#before-upload').show();
+    }
 
     $('form > a.cancel').click(function(e) {
         if (!uploading) {
@@ -394,8 +413,8 @@ function PreviewImage() {
         image.onload = function() {
             var size = Number((document.getElementById("file").files[0].size / 1024 / 1024).toFixed(2));
 
-            if (size > 4) {
-                alert("Sorry, we only accept images smaller than 4MB");
+            if (size > 10) {
+                alert("Kuvien koon pit&auml;&auml; olla alle 10 gigaa.");
             }
 
             $("#thumbnail .width").text(this.width);
@@ -417,7 +436,7 @@ function qParam(name) {
 }
 
 function copyToClipboard(text) {
-    window.prompt("Tallenna kuvan linkki leikepöydälle: Ctrl+C, Enter", text);
+    window.prompt("Tallenna kuvan linkki leikepöydälle: Ctrl+C, Enter.", text);
 }
 
 </script>

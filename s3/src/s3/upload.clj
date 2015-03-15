@@ -4,6 +4,7 @@
             [clojure.edn :as edn]
             [clojure.string :as string])
   (:use [s3 webutil auth log]
+        [ring.util.response :only [redirect]]
         [compojure.core :only [defroutes GET POST DELETE ANY context]])
   (:import java.awt.image.BufferedImage
            java.io.File
@@ -16,6 +17,7 @@
 (def creds (:s3 conf))
 (def bucket "ontrail")
 (def cdn "http://c.ontrail.net")
+(def upload-url "/file-upload/upload.html")
 
 (def formats {:png ".png" :gif ".gif" :jpg ".jpg"})
 
@@ -88,7 +90,9 @@
         format (image-format-of (:filename image))
         access-name (key-name url-encode)]
     (if-let [resized-file (resize-if-required format tempfile)]
-      (do ;(put-original tempfile s3-name format)
+      (do 
+          ;; we do not want to put original files.
+          ;(put-original tempfile s3-name format)
           (s3/put-object creds bucket s3-name resized-file)
           (.delete resized-file)
           (str cdn "/" access-name))
@@ -97,10 +101,14 @@
         (throw (IllegalArgumentException. "Invalid object for upload."))))))
 
 
+(defn put-and-redirect [user image]
+  (let [cdn-name (put-file user image)]
+    (redirect (str upload-url "?o=" cdn-name))))
+
 (defroutes upload-routes
 
   (mp/wrap-multipart-params
     (POST "/file-upload/put" {params :params cookies :cookies}
-        (text-plain-auth-> cookies (put-file (:file params)))))
+        (text-plain-auth-> cookies (put-and-redirect (:image params)))))
 
   )
