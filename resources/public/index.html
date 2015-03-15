@@ -459,6 +459,10 @@
                             <label>Nousumetrit:</label>
                             <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" placeholder="m"/>
                         </div>
+
+                    </div>
+                    <div>
+                    <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
                     </div>
                 </div>
             </div>
@@ -1053,31 +1057,6 @@
                 {{/res}}
             </table>
             <a class="pageLink" rel="ex/544d3a900cf234883f75b464">Lue lisää Marrasputkesta.</a>
-        </header>
-    </article>
-</script>
-
-<script id="runnersHighTemplate" type="text/html">
-    <article class="{{^in}}not-{{/in}}joined">
-        <header>
-            <p class="right">
-                <a class="leave button red" rel="{{target}}/part"><span class="label">Poistu</span></a>
-                <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
-            </p>
-
-            <div>
-                <div class="rhleft"><img src="img/runhigh-80x70.png" /></div>
-                <div class="rhleft">
-                Runner's High on viiden nuoren urheilijan yritys,
-                joka tarjoaa laadukkaat juoksuvalmennuspalvelut kaikentasoisille kilpa- ja
-                kuntojuoksijoille. Lue lisää Runner's High:n <a href="http://runhigh.fi">nettisivuilta</a>.
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <h4>Jäsenet</h4>
-            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</p>
-            </div>
-
         </header>
     </article>
 </script>
