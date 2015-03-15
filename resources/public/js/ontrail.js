@@ -336,7 +336,8 @@
 
 
     var isLoggedUser = function(v) {
-      return v !== null && v !== "null"
+      console.log(v)
+      return !!v && v !== "null"
     }
     // create session
     var sessions = OnTrail.session.create(logins.merge(registerUsers).merge(changePasswords), logouts.merge(loginFails))
