@@ -556,6 +556,7 @@
           resizable: false,
           draggable: false,
           width: 'auto',
+          maxWidth: 1000,
           title: url
         });
       });
