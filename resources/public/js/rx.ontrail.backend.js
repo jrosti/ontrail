@@ -15,6 +15,10 @@
     return $.ajaxAsObservable($.extend(options, errorHandler)).merge(ajaxErrors)
   }
 
+  var getAsObservableFromBlogDomain = function() {
+    var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
+    return ajaxWithErrorHandler({ url: "http://localhost:3000/" + path })
+  }
   var getAsObservable = function() {
     var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
     return ajaxWithErrorHandler({ url: "/rest/v1/" + path })
@@ -73,7 +77,9 @@
   Rest.prototype.passwordV = function(password, username) { return postAsObservable("validate/login", { username: username, password: password }) }
 
   Rest.prototype.pageDetail = function(filter) { return getAsObservable("page-detail?" + $.param(filter))}
-  
+
+  Rest.prototype.s3list = function(filter) { return getAsObservableFromBlogDomain("s3list?" + $.param(filter)) }
+
   // user search
   Rest.prototype.users = function(page) { return getAsObservableResultData("list-users", page ) }
   Rest.prototype.searchUsers = function(query, page) { return getAsObservableResultData("find-users", query, page ) }

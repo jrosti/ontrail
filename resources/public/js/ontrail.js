@@ -336,7 +336,6 @@
 
 
     var isLoggedUser = function(v) {
-      console.log(v)
       return !!v && v !== "null"
     }
     // create session
@@ -532,17 +531,6 @@
         $("*[data-id='" + data.id + "']").remove()
       })
 
-    // share
-    var shareClicks = clickedLinks.where(function (elem) {
-      return $(elem).hasClass('share')
-    }).select(function (el) {
-      return attr("rel", el)
-    })
-
-    shareClicks.subscribeArgs(function (url) {
-      window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent("http://ontrail.net/#" + url), 'facebook-share-dialog', 'width=626,height=436')
-    })
-
     var windowLinks = clickedLinks.where(function (elem) {
       return $(elem).hasClass('windowLink')
     }).select(function (el) {
@@ -551,6 +539,28 @@
     windowLinks.subscribeArgs(function(url) {
       window.open('#' + url, 'ontrail', 'width=830,height=800')
     })
+
+    var windowLinks = clickedLinks.where(function (elem) {
+      return $(elem).hasClass('imagePopup')
+    }).select(function (el) {
+      return attr("rel", el)
+    })
+    windowLinks.subscribeArgs(function(url) {
+      var $dialog = $("#dialog")
+      var $image = $('#image')
+      $image.attr('src', url);
+      $image.load(function(){
+
+        $dialog.dialog({
+          modal: true,
+          resizable: false,
+          draggable: false,
+          width: 'auto',
+          title: url
+        });
+      });
+    })
+
 
     // show own delete buttons
     sessions.subscribe(function (user) {
@@ -612,8 +622,11 @@
       $("#most-read").html(ich.listsTemplate({result: data}))
     })
 
-    // Recursive animation needs exactly one target, otherwise animation complete will grow
-    // stack exponentially on each animation step.
+    var userprofilePages = currentPages.whereArgs(partialEquals("userprofile")).selectArgs(pairsAsAssocMap)
+    userprofilePages.selectAjax(OnTrail.rest.s3list).subscribe(function(data) {
+      $("#file-list").html(ich.fileListTemplate(data.data))
+    })
+
     var $scrollTopTarget = $('html, body')
     var $body = $('body')
 
@@ -624,12 +637,8 @@
           $scrollTopTarget.animate({scrollTop: requiredPosition}, 200).promise().done(function() {
             scrollToPosition(idx + 1, requiredPosition)
           })
-        } else {
-          // X
         }
-      } catch (err) {
-
-      }
+      } catch (err) {}
     }
 
     function scrollPositionMemo(args) {
@@ -1066,6 +1075,7 @@
       renderSports(loggedIn.sports)
       $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({user: loggedIn.user, 'groups': loggedIn.ownGroups}))
     })
+
 
 
     var oldPasswordMatchV = createAjaxValidator(OnTrail.rest.passwordV)

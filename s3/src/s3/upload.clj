@@ -5,6 +5,7 @@
             [clojure.string :as string])
   (:use [s3 webutil auth log]
         [ring.util.response :only [redirect]]
+        [cheshire.core :only [generate-string]]
         [compojure.core :only [defroutes GET POST DELETE ANY context]])
   (:import java.awt.image.BufferedImage
            java.io.File
@@ -90,7 +91,7 @@
         format (image-format-of (:filename image))
         access-name (key-name url-encode)]
     (if-let [resized-file (resize-if-required format tempfile)]
-      (do 
+      (do
           ;; we do not want to put original files.
           ;(put-original tempfile s3-name format)
           (s3/put-object creds bucket s3-name resized-file)
@@ -105,10 +106,38 @@
   (let [cdn-name (put-file user image)]
     (redirect (str upload-url "?o=" cdn-name))))
 
+(def content-length (comp :content-length :metadata))
+
+(defn encode-parts [key]
+  (apply str
+    (interpose "/"
+      (->> (clojure.string/split key #"/")
+           (map url-encode)))))
+
+(defn list-s3-for [user]
+  (filter #(> (content-length %) 0)
+    (:objects (s3/list-objects creds bucket {:prefix (str "u/" user "/")}))))
+
+(defn s3dir [user]
+  (info user)
+  (->> (list-s3-for user)
+       (map
+        (fn [obj]
+          {:length (content-length obj)
+           :url (str cdn "/" (encode-parts (:key obj)))}))))
+
+
 (defroutes upload-routes
 
   (mp/wrap-multipart-params
     (POST "/file-upload/put" {params :params cookies :cookies}
         (text-plain-auth-> cookies (put-and-redirect (:image params)))))
+
+  (GET "/s3list" {params :params}
+    (let [u (:userprofile params)]
+      {:status 200
+       :headers {"Content-Type" "application/json"
+                 "Access-Control-Allow-Origin" "*"}
+       :body (generate-string {:results  (s3dir u) :user u})}))
 
   )
