@@ -17,7 +17,7 @@
 
   var getAsObservableFromBlogDomain = function() {
     var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })
-    return ajaxWithErrorHandler({ url: "http://localhost:3000/" + path })
+    return ajaxWithErrorHandler({ url: "http://blog.ontrail.net/" + path })
   }
   var getAsObservable = function() {
     var path = _.reduce(arguments, function(a, b) { return a + "/" + encodeURIComponent(b) })

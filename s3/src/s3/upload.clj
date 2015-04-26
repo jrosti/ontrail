@@ -119,7 +119,6 @@
     (:objects (s3/list-objects creds bucket {:prefix (str "u/" user "/")}))))
 
 (defn s3dir [user]
-  (info user)
   (->> (list-s3-for user)
        (map
         (fn [obj]
