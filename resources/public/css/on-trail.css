@@ -10,6 +10,9 @@ body.logged-in *.logged-out,
 body.login #login-link {
   display: none;
 }
+#image {
+  max-width: 100% ! important;
+}
 a {
   text-decoration: none;
   color: #ff4030;
