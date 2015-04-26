@@ -555,7 +555,7 @@
           modal: true,
           resizable: false,
           draggable: false,
-          width: 1200,
+          width: "auto",
           title: url
         });
       });
