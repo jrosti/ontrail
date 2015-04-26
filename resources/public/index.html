@@ -152,6 +152,8 @@
         <a class="pageLink" rel="sport/Juoksu/sb/avghr">Juoksu</a>
         <a class="pageLink" rel="sport/Perinteinen hiihto,Luisteluhiihto/sb/avghr">Hiihto</a>
     <h3>Pisimmät juoksulenkit vuosittain</h3>
+        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2015/lte_creationDate/2015/sb/distance">2015</a>
+        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2014/lte_creationDate/2014/sb/distance">2014</a>
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2013/lte_creationDate/2014/sb/distance">2013</a>
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2012/lte_creationDate/2013/sb/distance">2012</a>
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2011/lte_creationDate/2012/sb/distance">2011</a>
@@ -160,6 +162,8 @@
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2008/lte_creationDate/2009/sb/distance">2008</a>
         <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2007/lte_creationDate/2008/sb/distance">2007</a>
     <h3>Nopeimmat maratonit vuosittain</h3>
+        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2015/lte_creationDate/2015/sb/pace">2015</a>
+        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2014/lte_creationDate/2014/sb/pace">2014</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2014</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2013</a>
         <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2012/lte_creationDate/2013/sb/pace">2012</a>
@@ -187,6 +191,16 @@
         </p>
         <p>Käyttäjät online</p>
         <p id="active-users" class="activeUserList"></p>
+    </article>
+</section>
+
+<section role="userprofile">
+    <article>
+        <h3>Talletetut kuvat</h3>
+        <div id="file-list" style="width: 70%"></div>
+        <div id="dialog" title="Kuvat" style="display: none;">
+            <img id="image" src=""/>
+        </div>
     </article>
 </section>
 
@@ -607,62 +621,6 @@
             <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
         </ul>
     </section>
-    <section>
-        <h3>Kisaraportteja</h3>
-
-        <a id="toggleReports2013" href="javascript:void(0);">2013</a>
-        <div id="raceReports2013">
-            <table class="details">
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/16.11.2013/lt_creationDate/17.11.2013/distance/10000/sb/pace">Aktia-cup 16.11.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/distance/21090,21097,21100,21110,42200,42195,42234/sb/pace">Rautaveden maraton 2.11.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/2.11.2013/lt_creationDate/3.11.2013/sb/pace">Raatojuoksu 2.11.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/distance/42195,42200/sb/distance">Kaarinan syysmara 26.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.10.2013/lt_creationDate/27.10.2013/gt_distance/42200/sb/distance">Mammuttimarssi 26.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/19.10.2013/lt_creationDate/20.10.2013/gte_distance/42195/sb/distance">Wihan kilometrit 19.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/13.10.2013/lt_creationDate/14.10.2013/distance/21090,21097,21100,42195,42200,42196/sb/distance">Gardajärvi ja Vantaa maraton 13.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/gt_distance/20000/sb/distance">Jämi Mini-Mega 12.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/12.10.2013/lt_creationDate/13.10.2013/lt_distance/20000/sb/distance">Manna-suunnistus 12.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu,Kävely/gte_creationDate/6.10.2013/lt_creationDate/7.10.2013/gt_distance/32000/lt_distance/33400/sb/pace">Pirkan hölkkä 6.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu,Vaellus,Kävely/gte_creationDate/5.10.2013/lt_creationDate/7.10.2013/gte_distance/42500/sb/pace">Vaarojen maraton 5.10.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/29.9.2013/lt_creationDate/30.9.2013/distance/10550,21090,21097,21100,21110/sb/pace">Pääkaupunkijuoksu 29.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Seikkailu-urheilu/gte_creationDate/28.9.2013/lt_creationDate/29.9.2013/sb/pace">X-kaato 28.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/27.9.2013/lt_creationDate/28.9.2013/gt_distance/70000/sb/pace">Spartathlon 27.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/21.9.2013/lt_creationDate/22.9.2013/distance/10000,21090,21097,21100,21110,42200,42195,42234/user/Päivi,Massa-Matti,20660/sb/pace">Ruisrääkki 22.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu,Kickbike/gte_creationDate/21.9.2013/lt_creationDate/23.9.2013/distance/10000,21090,21097,21100,21110,42200,42195,42234/user/Holle,Emo,oskuman,Larry,Peksu,plouh,Elwood,saarja,kriish/sb/distance">Espoo Rantamaraton 22.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.9.2013/lt_creationDate/16.9.2013/distance/21090,21097,21100,21110/user/tuomasnu,oikakati/sb/pace">Kaisaniemi juoksu 15.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.9.2013/lt_creationDate/16.9.2013/distance/21090,21097,21100,21110/user/Jukkis/sb/pace">Tampere puolikas 15.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/14.9.2013/lt_creationDate/15.9.2013/distance/21090,21097,21100/sb/pace">Maisermatiemaraton 14.9.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/14.9.2013/lt_creationDate/15.9.2013/distance/20000/sb/pace">Eeron Extriimi 14.9.</a></td>><tr>
-               <tr><td><a class="pageLink" rel="sport/Pyöräily/gte_creationDate/1.9.2013/lt_creationDate/2.9.2013/gt_distance/100000/sb/pace">Tour de Helsinki 1.9.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/31.8.2013/lt_creationDate/1.9.2013/distance/42195,42200,42196/sb/pace">Nuuksio Classic Marathon 31.8.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Vaellus/gte_creationDate/26.8.2013/lt_creationDate/27.8.2013/gt_distance/100000/sb/pace"><b>UTMB / PTL 23.8</b></a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Triathlon/gte_creationDate/24.8.2013/lt_creationDate/25.8.2013/gt_distance/50000/sb/pace">Nastolan SM-triathlon 23.8</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/24.8.2013/lt_creationDate/25.8.2013/gte_distance/42190/sb/pace">Masokistin Unelma (100km/mini) 23.8.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Seikkailu-urheilu/gte_creationDate/18.8.2013/lt_creationDate/19.8.2013/gte_distance/10000/sb/pace">Snowflakes Adventure 18.8.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/17.8.2013/lt_creationDate/19.8.2013/distance/42195,42200,42196/sb/pace">Helsinki City Marathon 17.8.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/16.8.2013/lt_creationDate/18.8.2013/gte_distance/60000/sb/pace">Oxroad ultra 16.8.</a></td></tr>
-               <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/10.8.2013/lt_creationDate/12.8.2013/gte_distance/20000/sb/pace">Retki Rogaining 10.8.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/10.8.2013/lt_creationDate/11.8.2013/distance/21090,21097,21100,21110,10000/user/Peppi,Pasi_P/sb/pace">Runner's Twilight 10.8.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/27.7.2013/lt_creationDate/28.7.2013/gte_distance/20000/sb/pace">Somero yö-rogaining 27.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Triathlon/gte_creationDate/20.7.2013/lt_creationDate/21.7.2013/sb/pace">Joroinen Triathlon 20.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Seikkailu-urheilu/gte_creationDate/13.7.2013/lt_creationDate/14.7.2013/sb/pace">Tuulonen Adventure 13.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Soutu/gte_creationDate/13.7.2013/lt_creationDate/14.7.2013/sb/pace">Sulkavan soudut 13.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/7.7.2013/lt_creationDate/8.7.2013/distance/21090,21097,42195,42200,21100,21110/sb/pace">Mikkeli maraton 7.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu,Kickbike/gte_creationDate/6.7.2013/lt_creationDate/8.7.2013/distance/104000/sb/pace">Bodominjärven ultraintervalli 7.7.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/28.6.2013/lt_creationDate/30.6.2013/distance/80000,81000/sb/pace">Mont Blanc 80 km 28.6.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/28.6.2013/lt_creationDate/30.6.2013/distance/21090,21097,42195,42200,21100,21110/sb/pace">Paavo Nurmi maraton 28.6.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/26.6.2013/lt_creationDate/27.6.2013/distance/800/sb/pace">Koirataksi 26.6.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Suunnistus/gte_creationDate/15.6.2013/lt_creationDate/17.6.2013/sb/pace">Jukolan ja Venlojen viesti 16.6.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/15.6.2013/lt_creationDate/16.6.2013/sb/pace/distance/42200,42195,21090,21100,21095,10000">Forssa 15.6.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Pyöräily/gte_creationDate/26.5.2013/lt_creationDate/27.5.2013/sb/pace/distance/111000">Giro d'Espoo 26.5.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/25.5.2013/lt_creationDate/27.5.2013/sb/pace/distance/21100,21090,42195,42200">Terwa, Ponnenjärvi 25-26.5.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/19.5.2013/lt_creationDate/20.5.2013/sb/pace/distance/21100,21090,42195,42200">Puistopuolikas, Köpis 19.5.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_creationDate/18.5.2013/lt_creationDate/19.5.2013/sb/pace/distance/21100,42195,42200,21098">Haka-maraton, Västilä ja Yyteri 18.5.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_distance/20700/lte_distance/21100/gte_creationDate/4.5.2013/lt_creationDate/5.5.2013/sb/pace">Helsinki City Run 4.5.</a></td></tr>
-                <tr><td><a class="pageLink" rel="sport/Juoksu/gte_distance/17300/lte_distance/17400/gte_creationDate/21.4.2013/lt_creationDate/22.4.2013/sb/pace">Länsiväyläjuoksu 17.4</a></td></tr>
-            </table>
-        </div>
-    </section>
 
 </div>
 </div>
@@ -676,6 +634,30 @@
 </div>
 
 <!-- templates -->
+<script id="fileListTemplate" type="text/html">
+    <table class="details">
+        <thead>
+        <tr>
+            <th>Kuvan osoite</th>
+            <th>Koko</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#results}}
+        <tr>
+            <td>
+                <a rel="{{url}}" class="imagePopup">{{url}}</a>
+            </td>
+            <td>
+                {{length}}
+            </td>
+        </tr>
+        {{/results}}
+        </tbody>
+    </table>
+
+</script>
+
 <script id="listsTemplate" type="text/html">
     <h3>Suosituimmat lenkit</h3>
     <table class="details full">
@@ -685,7 +667,6 @@
         {{/result}}
     </table>
 </script>
-
 
 <script id="exerciseDetailsTemplate" class="partial" type="text/html">
     <table class="details full">

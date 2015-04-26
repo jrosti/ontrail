@@ -31,7 +31,7 @@
 (defn json-resp [data & status]
   (if data
     {:status 200
-     :headers {"Content-Type" "application/json"}
+     :headers {"Content-Type" "application/json" "Access-Control-Allow-Origin" "*"}
      :body (generate-string data)}
     {:status 400
      :headers {"Content-Type" "application/json"}
