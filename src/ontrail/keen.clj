@@ -20,7 +20,7 @@
 (def connection
   (merge {:accept :json
           :throw-exceptions false
-          :socket-timeout 5000  ;; in milliseconds
+          :socket-timeout 20000  ;; in milliseconds
           :conn-timeout 120000}
          {:connection-manager conman}))
 
