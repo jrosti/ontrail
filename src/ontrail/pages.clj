@@ -59,7 +59,7 @@
        (parse-int (params "duration.s")) "s"))
 
 (defn redirect [page]
-  {:status  301
+  {:status  302
    :headers {"Content-Type" "text/html"
              "Location"     page}
    :body    ""})
@@ -172,14 +172,19 @@
 (defn clear []
   [:div {:style "clear:both;"}])
 
+
+(defn onsubmit [id] 
+  (str "var text = document.getElementById('" id 
+       "').value; if(text.length < 3) { alert('Kommentin minimipituus kolme merkkiä.'); return false; } return true;"))
+
 (defn comment-div [id]
   [:div.container
    [:div.row
     [:div.col-md-8
-     [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/comment/" id)}
+     [:form {:role "form" :accept-charset "UTF-8" :method "POST" :action (url "/comment/" id) :onsubmit (onsubmit "comment-text")}
       [:input {:type "hidden" :name id}]
       [:div.form-group
-        [:textarea.form-control {:name "mdbody" :rows "4" :required "required"}]]
+        [:textarea#comment-text.form-control {:name "mdbody" :rows "4" :required "required"}]]
       [:button.btn.btn-default {:type "submit"} "Kommentoi"]
       ]]]])
 
@@ -406,9 +411,9 @@
                  (require-auth cookies
                    (if (auth/valid-auth-token? (:value (cookies "authToken")))
                      (let [user (auth/user-from-cookie cookies)
-                           with-body (assoc params :body (md/md-to-html-string (params :mdbody)))]
-                       (render-with single-exercise
-                                    {:ex (mutate/comment-ex user with-body) :user user})))))
+                           with-body (assoc params :body (md/md-to-html-string (params :mdbody))) 
+                           new-ex (mutate/comment-ex user with-body)]
+                       (redirect (str "/sp/ex/" (:id params)))))))
 
            (GET "/sp/addex" {params :params cookies :cookies} ;;addex
                 (require-auth cookies
@@ -428,7 +433,7 @@
                    (let [params-with-dur (assoc params :duration (to-dur-str params) :body (params :mdbody))
                          user (auth/user-from-cookie cookies)
                          posted (mutate/create-ex user params-with-dur)]
-                     (render-with single-exercise {:ex posted :user user}))))
+                     (redirect (str "/sp/ex/" (:id posted))))))
 
            (POST "/sp/addex/:id" {params :params cookies :cookies}
                  (.info logger (str params " " cookies))
