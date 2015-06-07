@@ -20,7 +20,9 @@
 (def cdn "http://c.ontrail.net")
 (def upload-url "/file-upload/upload.html")
 
-(def formats {:png ".png" :gif ".gif" :jpg ".jpg"})
+(def formats {".png" :png ".PNG" :png ".gif" :gif ".GIF" :gif ".jpg" :jpg ".jpeg" :jpg ".JPG" :jpg})
+(def normal-suffixes {:png ".png" :gif ".gif" :jpg ".jpg"})
+
 
 (defn image-size [buffered-image]
   (when buffered-image
@@ -35,7 +37,7 @@
 
 (defn temp-file [format]
   (when format
-    (File/createTempFile "upload-resize" (formats format))))
+    (File/createTempFile "upload-resize" (normal-suffixes format))))
 
 (defn write-image [buffered-image format]
   (when buffered-image
@@ -71,9 +73,9 @@
 
 (defn image-format-of [filename]
   (when filename
-    (first
+    (last
       (first
-        (filter (fn [[_ suffix]]
+        (filter (fn [[suffix _]]
                   (.endsWith filename suffix)) formats)))))
 
 (defn put-original [tempfile s3-name format]
