@@ -13,6 +13,7 @@
                "Crossfit"           "crossfittasi"
                "Cyclocross"         "cyclocrossaili"
                "Crosstrainer"       "tyllerövispilöi"
+               "Frisbeegolf"        "frisbeegolffasi"
                "Golf"               "golffasi"
                "Hieronta"           "oli hierottavana"
                "Hiihto"             "hiihti"
