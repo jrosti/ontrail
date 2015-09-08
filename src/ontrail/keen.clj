@@ -21,7 +21,7 @@
   (merge {:accept :json
           :throw-exceptions false
           :socket-timeout 20000  ;; in milliseconds
-          :conn-timeout 120000}
+          :conn-timeout 240000}
          {:connection-manager conman}))
 
 (def read-key (-> properties :keen :read-key))
