@@ -28,7 +28,12 @@
 (defn to-human-pace-500m [duration distance]
   (let [pace  (/ (/ duration 6000) (/ distance 500))
         secs (int (* 60.0 (- pace (int pace))))]
-    (str (int pace) "." (format "%02d" secs) " min/500m")))
+    (str (int pace) " min " (format "%2d" secs) " s / 500m")))
+
+(defn to-human-pace-100m [duration distance]
+  (let [pace  (/ (/ duration 6000) (/ distance 100))
+        secs (int (* 60.0 (- pace (int pace))))]
+    (str (int pace) " min " (format "%2d" secs) " s / 100 m")))
 
 (defn to-human-pace-kmh [duration distance]
   (let [speed (+ 0.05 (/ (/ distance 1000.0) (/ duration 360000.0)))]
@@ -38,6 +43,7 @@
   (case sport
     "Pyöräily" to-human-pace-kmh
     "tmp" to-human-pace-kmh
+    "Uinti" to-human-pace-100m
     "Sisäsoutu" to-human-pace-500m
     "Soutu" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh

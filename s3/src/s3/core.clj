@@ -1,6 +1,5 @@
 (ns s3.core
-  (:require [aws.sdk.s3 :as s3]
-            [ring.middleware.multipart-params :as mp]
+  (:require [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn])
   (:use [s3 webutil auth apiroutes upload log]
         [ring.middleware.json :only [wrap-json-params]]

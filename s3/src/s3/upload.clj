@@ -1,5 +1,5 @@
 (ns s3.upload
-  (:require [aws.sdk.s3 :as s3]
+  (:require [s3.s3 :as s3]
             [ring.middleware.multipart-params :as mp]
             [clojure.edn :as edn]
             [clojure.string :as string])
