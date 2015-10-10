@@ -72,10 +72,10 @@
         {:keys [resthr]} profile]
     (if (positive-numbers? (list resthr duration distance avghr))
       (/ distance (* (- avghr resthr) duration (double (/ 1 6000))))
-      0)))
+      (double 0))))
 
 (defn get-bpmdist [exercise profile]
-  (string/replace (format "%.2f m/b" (get-bpmdist-r exercise profile) #"\." ",")))
+  (string/replace (format "%.2f m/b" (get-bpmdist-r exercise profile)) #"\." ","))
 
 (defn to-human-distance [distance]
   (if (= nil distance)
