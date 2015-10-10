@@ -53,6 +53,7 @@
                "Pyöräily"           "pyöräili"
                "Ratsastus"          "ratsasti"
                "Ringette"           "pelasi ringetteä"
+               "Rogaining"          "rogainasi"
                "Rullahiihto"        "rullahiihti"
                "Rullaluistelu"      "rullaluisteli"
                "Sairaus"            "sairasti"
