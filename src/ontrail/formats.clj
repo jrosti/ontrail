@@ -75,7 +75,11 @@
       (double 0))))
 
 (defn get-bpmdist [exercise profile]
-  (string/replace (format "%.2f m/b" (get-bpmdist-r exercise profile)) #"\." ","))
+  (let [bpmdistv (get-bpmdist-r exercise profile)]
+    (if (> bpmdistv 0)
+      (string/replace (format "%.2f m/b" bpmdistv) #"\." ",")
+      "")))
+    
 
 (defn to-human-distance [distance]
   (if (= nil distance)
