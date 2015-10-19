@@ -531,15 +531,39 @@ table.weekly {
   width: 98%;
   text-align: left;
 }
+table.weekly td.other-month span.weeklyDay {
+  color: grey !important;
+}
+table.weekly td span.weeklyDay {
+  float: left;
+  vertical-align: top;
+  color: green;
+  margin: -8px 0 10px 5px;
+}
 table.weekly th {
   font-size: 14px;
-  font-weight: normal;
   color: #000;
   padding: 4px 10px 0 0;
   border-bottom: 2px solid #da7c0c;
 }
 table.weekly th.day {
   width: 65px;
+  font-weight: 400;
+}
+table.weekly th.week {
+  width: 45px;
+  text-align: center;
+  font-weight: 400;
+}
+table.weekly th.totals {
+  font-weight: 400;
+  text-align: left;
+}
+table.weekly td.week {
+  width: 45px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 13px;
 }
 table.weekly td {
   padding: 3px 2px;
