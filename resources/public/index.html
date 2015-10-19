@@ -1171,9 +1171,9 @@
         <tbody>
         {{#summary}}
         <tr>
-            <td><strong>{{week}}</strong></td>
+            <td class="week"><span><a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
             {{#exs}}
-            <td class="{{class}}">
+            <td class="{{class}}" style="vertical-align: top">
                 {{> hpkWeeklyExTemplate}}
             </td>
             {{/exs}}
@@ -1189,20 +1189,24 @@
 </script>
 
 <script id="hpkWeeklyExTemplate" type="text/html">
-    {{#exs}}
-    <a rel="ex/{{id}}" class="windowLink"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}" data-repeats="{{repeats}}"></span></a>
-        {{#distance}}{{distance}}{{/distance}}
-        {{^distance}}{{statsduration}}{{/distance}}<br/>
-    {{/exs}}
+    <span class="weeklyDay">{{day}}</span>
+    <div class="clearfix" style="margin: 0"></div>
+    <span>
+      {{#exs}}
+      <a rel="ex/{{id}}" class="windowLink"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}" data-repeats="{{repeats}}"></span></a>
+      <span>{{#distance}}{{distance}}{{/distance}}
+      {{^distance}}{{statsduration}}{{/distance}}</span><br/>
+      {{/exs}}
+    </span>
 </script>
 
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
         {{#summaries}}
             <span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>
-             <strong>{{^total}}{{^statspace}}{{duration}}{{/statspace}}
+             {{^total}}{{^statspace}}{{duration}}{{/statspace}}
              {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}}
-             {{#total}}{{duration}}{{/total}}</strong><br/>
+             {{#total}}{{duration}}{{/total}}<br/>
         {{/summaries}}
     </td>
 </script>

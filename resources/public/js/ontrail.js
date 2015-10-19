@@ -290,11 +290,12 @@
         for (var i in _.range(0, 7))
           if (exs[i] === undefined) resex[i] = []; else resex[i] = exs[i];
         exs = _.map(resex, function (item, index) {
-          return {dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
+            var day = monday.clone().addDays(index).getDate();
+            return {day: day, dayIndex: index, exs: item, "class": monday.clone().addDays(index).getMonth() == month ? "current" : "other-month"}
         })
         var monday = new XDate(summary.fromIsoDate)
         var sum = (summaryItem.exs.length > 0 ? summaryItem.summary : [])
-        var result = {week: summaryItem.week, exs: exs, summaries: sum }
+        var result = {week: summaryItem.week, exs: exs, summaries: sum, from: summaryItem.from, to: summaryItem.to, user: summaryItem.user }
         return result
       }
 
