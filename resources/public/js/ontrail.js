@@ -390,7 +390,6 @@
 
     var webSocket
     var $messages = $('#messages')
-    var $chatInput = $('#chatInput')
     var webSocketPollerActive = false
     var lastPongEpoch = new Date().getTime()
     var webSocketRetriesCount = 0
@@ -404,7 +403,6 @@
         try {
           webSocket.onclose = function () {}
           webSocket.close()
-          $chatInput.unbind('keyup')
           webSocketPollerActive = false
           webSocket === undefined
         } catch(err) {
@@ -416,24 +414,10 @@
       webSocketPollerActive = true
       if (enableWebSocket && "WebSocket" in window && webSocket === undefined ||
           (webSocket && (webSocket.readyState === undefined || webSocket.readyState > 1))) {
-        webSocket = new WebSocket('ws://' + location.hostname + '/rest/v1/async')
+        webSocket = new WebSocket('ws://' + location.hostname + ':' + location.port + '/rest/v1/async')
 
         $messages.empty()
         $messages.prepend('<p class="chatMsg">yhdistetään...</p>')
-        $chatInput.unbind('keyup')
-
-        $chatInput.keyup(function(event) {
-          if (event.keyCode === 13) {
-            var chatInputMessage = $chatInput.val();
-            if (chatInputMessage.indexOf("/") === 0) {
-              webSocket.send(JSON.stringify({action: "server", message: chatInputMessage}))
-            } else {
-              webSocket.send(JSON.stringify({action: "sanoi", message: chatInputMessage}))
-            }
-            $chatInput.val("")
-          }
-        })
-
 
         var onMessage = Rx.Observable.create(function (observer) {
           var next = function () {
