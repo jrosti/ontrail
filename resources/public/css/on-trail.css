@@ -68,7 +68,7 @@ strong {
   width: 90%;
 }
 #messages {
-  width: 190px;
+  width: auto;
   height: 250px;
   overflow: -moz-scrollbars-vertical;
   overflow-y: auto;
