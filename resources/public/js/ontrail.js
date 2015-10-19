@@ -618,8 +618,8 @@
     function scrollToPosition(idx, requiredPosition) {
       try {
         var currentScrollTop = $(document).scrollTop()
-        if (requiredPosition - currentScrollTop > 50 && idx < 300) {
-          $scrollTopTarget.animate({scrollTop: requiredPosition}, 200).promise().done(function() {
+        if (requiredPosition - currentScrollTop > 50 && idx < 30) {
+          $scrollTopTarget.animate({scrollTop: requiredPosition}, 700).promise().done(function() {
             scrollToPosition(idx + 1, requiredPosition)
           })
         }
@@ -629,15 +629,14 @@
     function scrollPositionMemo(args) {
       try {
         var pos = $(document).scrollTop()
-        var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport', 'group']
+        var memoizePositionOnPages = ['latest', 'user', 'tags', 'sport', 'group', 'weeksummary']
         var prevPage = $body.attr('data-last-page')
         var scrollTo = parseInt($body.attr('data-page-pos-' + args[0]))
-
         $body.attr('data-page-pos-' + prevPage, pos)
         $body.attr('data-last-page', args[0])
         if (scrollTo &&
             _.contains(memoizePositionOnPages, args[0]) &&
-            prevPage === "ex") {
+            (prevPage === "ex" || (prevPage === "user" && args[0] === "weeksummary"))) {
           scrollToPosition(0, scrollTo)
         } else {
           $scrollTopTarget.scrollTop(0)
@@ -889,7 +888,6 @@
       try {
         localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
       } catch(err) {
-        console.log("reset autosave content failed", err)
       }
       $("#ex-body").setCode("<p>\n<br>\n</p>")
     }
@@ -1242,7 +1240,6 @@
         try {
           localStorage.setItem('ex-body', bodyText)
         } catch(err) {
-          console.log("autosave item failed", err)
         }
       }
     })
