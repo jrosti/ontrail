@@ -415,7 +415,7 @@
       webSocketPollerActive = true
       if (enableWebSocket && "WebSocket" in window && webSocket === undefined ||
           (webSocket && (webSocket.readyState === undefined || webSocket.readyState > 1))) {
-        webSocket = new WebSocket('ws://' + location.hostname + ':' + location.port + '/rest/v1/async')
+        webSocket = new WebSocket('ws://' + location.hostname + '/rest/v1/async')
 
         $messages.empty()
         $messages.prepend('<p class="chatMsg">yhdistetään...</p>')
