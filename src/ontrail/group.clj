@@ -68,8 +68,8 @@
 
 (defn november-stats-query [users days]
   {:sport {"$in" ["Juoksu" "Maastojuoksu"]} "$or" (mapv (partial assoc {} :user) users) :duration {"$gte" min-jog-time}
-   "$and" [{:creationDate {"$gte" (time/date-time 2014 11 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2014 11 1 0 0) (time/days days))}}]
+   "$and" [{:creationDate {"$gte" (time/date-time 2015 11 1 0 0)}}
+           {:creationDate {"$lte" (time/plus (time/date-time 2015 11 1 0 0) (time/days days))}}]
    })
 
 (defn jogs-from-beginning-of-november [users last-day]
@@ -107,13 +107,13 @@
         (sort-by (juxt :resultCount :count) 
                  (fn [a b] (compare b a)) (november-race-stats-with-day day-now users)))))
 
-;; Leuanvetohaaste 2014
-(def start-date-time (time/date-time 2014 1 1 0 0))
+;; Leuanvetohaaste 2016
+(def start-date-time (time/date-time 2016 1 1 0 0))
 
 (defn chinup-stats-query [users days] 
   {:sport "Leuanveto" "$or" (mapv (partial assoc {} :user) users)
-   "$and" [{:creationDate {"$gte" (time/date-time 2014 1 1 0 0)}}
-           {:creationDate {"$lte" (time/plus (time/date-time 2014 1 1 0 0) (time/days days))}}] 
+   "$and" [{:creationDate {"$gte" (time/date-time 2016 1 1 0 0)}}
+           {:creationDate {"$lte" (time/plus (time/date-time 2016 1 1 0 0) (time/days days))}}] 
    })
 
 (defn year-day-number [date-time]
@@ -165,7 +165,7 @@
                   (fn [a b] (compare b a)) (challenge-results users)))))
 
 ;; elevation gain challenge
-(def elevation-year 2014)
+(def elevation-year 2016)
 (def elevation-month 4)
 (defn elevation-user [user]
   (let [result {:user user 
@@ -188,7 +188,7 @@
     (case (:name group-map)
       "Huippuhuhtikuu" (elevation-results users)
       "Marrasputki" (november-race-stats users)
-      "lvhaaste2014" (chinup-race-stats users)
+      "lvhaaste2015" (chinup-race-stats users)
       [])))
 
 (defn group-detail [params group-name user]
