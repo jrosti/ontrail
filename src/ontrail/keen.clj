@@ -73,7 +73,7 @@
      c
      (do 
        (alter expires assoc id 0)
-       ((alter agents assoc id (agent (count-by-id id))) id)))))
+       ((alter agents assoc id (agent {:result 0})) id)))))
 
 (defn update [state blocking-fn]
   (blocking-fn))
