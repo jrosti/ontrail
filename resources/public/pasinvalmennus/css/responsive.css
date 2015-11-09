@@ -1,0 +1,175 @@
+
+@media only screen 
+and (min-width : 320px) 
+and (max-width : 480px) {
+    
+    .top-info {
+        text-align: center;
+    }
+    
+    .logo {
+        text-align: center;
+    }
+    
+    .main-slider .img-caption {
+        display: none;
+    }
+    
+    .running-project {
+        margin-top: 30px;
+    }
+    
+    .call-to-action h1 {
+        font-size: 25px;
+        line-height: 35px;
+        padding: 10px 0;
+    }
+    
+    .call-to-action p {
+        font-size: 16px;
+        line-height: 20px;
+        padding-top: 0;
+    }
+    
+    .call-to-action a.custom-btn {
+        margin-top: 20px;
+        font-size: 13px;
+        padding: 10px 25px;
+    }
+    
+    .team-section .nav-tabs.nav-justified > li > a {
+        font-size: 14px;
+        padding: 12px;
+    }
+    
+    .page-title .breadcrumb {
+        top: 40%;
+    }
+    
+    .not-found h1 {
+        font-size: 50px;
+        line-height: 60px;
+    }
+    
+    .not-found h2 {
+        font-size: 20px;
+        line-height: 25px;
+    }
+    
+    .post-content h1 a {
+        font-size: 20px;
+        line-height: 10px;
+    }
+    
+    ul.post-meta li a {
+        font-size: 12px;
+    }
+    
+    .design, .copy {
+        text-align: center;
+    }
+    
+    
+}
+
+
+
+@media only screen 
+and (min-width : 481px) 
+and (max-width : 767px) {
+    
+    .top-info {
+        text-align: center;
+    }
+    
+    .logo {
+        text-align: center;
+    }
+    
+    .main-slider .img-caption {
+        display: none;
+    }
+    
+    .running-project {
+        margin-top: 30px;
+    }
+    
+    .page-title .breadcrumb { 
+        top: 40%;
+    }
+    
+    .design, .copy {
+        text-align: center;
+    }
+    
+    
+    
+}
+
+
+
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-width : 768px) 
+and (max-width : 991px) {
+    
+    
+    
+    .navbar-default .navbar-nav > li > a {
+        font-size: 14px;
+        padding: 15px 20px;
+    }
+    
+    .dropdown li a, .sup-dropdown li a {
+        font-size: 13px;
+        padding: 12px 20px;
+    }
+    
+    .main-slider .img-caption {
+        top: 20%;
+    }
+    
+    .main-slider .img-caption h1 {
+        font-size: 18px;
+        padding: 15px;
+    }
+    
+    .main-slider .img-caption p {
+        font-size: 13px;
+        padding: 15px;
+    }
+    
+    .running-project {
+        margin-top: 30px;
+    }
+    
+}
+
+@media only screen 
+and (min-width : 992px) 
+and (max-width : 1199px) {
+    
+    
+    .main-slider .img-caption h1 {
+        font-size: 22px;
+        padding: 15px;
+    }
+    
+    .main-slider .img-caption p {
+        font-size: 15px;
+        padding: 15px;
+    }
+    
+    .project .project-details {
+        font-size: 13px;
+    }
+    
+    .home-about-us p {
+        font-size: 14px;
+    }
+    
+    
+}
+
+

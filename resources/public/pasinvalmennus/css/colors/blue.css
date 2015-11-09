@@ -1,0 +1,110 @@
+.btn-primary {
+    background: #28ABE3;
+    border: 1px solid #28ABE3;
+}
+
+.navbar-default .navbar-nav > li > a.active, .navbar-default .navbar-nav > li:hover > a {
+	background: #28ABE3;
+    color: #fff;
+}
+
+.navbar-default .navbar-nav .dropdown {
+    border-top: 2px solid #28ABE3;
+}
+
+.dropdown li a.active, .sup-dropdown li a.active {
+    background: #28ABE3;
+    color: #fff;
+}
+
+.dropdown > li:hover > a, .sup-dropdown li:hover > a {
+    background: #28ABE3;
+    color: #fff;
+}
+
+.feature i, .feature-2 i {
+    color: #28ABE3;
+}
+
+.main-slider .carousel-caption h1 {
+    background: rgba(0,171,227, 0.7);
+}
+
+.main-slider .carousel-caption p {
+    background: rgba(0,171,227, 0.7);
+}
+
+.home-about-us a {
+    color: #28ABE3;
+}
+
+.project .project-details {
+    background-color: #28ABE3;
+}
+
+.effect-duke {
+	background: rgba(40,171,227, 0.8);
+}
+
+.overlay {
+    background-color: rgba(40,171,227, 0.8); 
+}
+
+.footer-link li:hover a {
+    color: #28ABE3;
+}
+
+.footer-social li a {
+    background: #28ABE3;
+	border: 1px solid #28ABE3;
+}
+
+.footer-social .btn-default {
+    background: #28ABE3;
+    border-color: #28ABE3;
+}
+
+.copyright-section a {
+    color: #28ABE3;
+}
+
+.team-section .nav-tabs.nav-justified {
+    background: #28ABE3;
+}
+
+.team-member .team-details {
+    background-color: rgba(40,171,227, 0.8);
+}
+
+.page-title-overlay {
+    background: rgba(40,171,227, 0.9);
+}
+
+.progress-bar {
+    background: #28ABE3;
+}
+
+.panel-default > .panel-heading {
+	background-color: #28ABE3;
+}
+
+.sidebar .tagcloud a:hover {
+    background: #28ABE3
+}
+
+.widget-search .search-btn {
+	background-color: #28ABE3;
+}
+
+
+.plan-name {
+	background: #28ABE3;
+}
+
+.plan-signup {
+	background: #28ABE3;
+}
+
+.dot1, .dot2 {
+    background-color: #28ABE3;
+}

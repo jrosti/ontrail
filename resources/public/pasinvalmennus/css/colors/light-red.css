@@ -1,0 +1,110 @@
+.btn-primary {
+    background: #FF432E;
+    border: 1px solid #FF432E;
+}
+
+.navbar-default .navbar-nav > li > a.active, .navbar-default .navbar-nav > li:hover > a {
+	background: #FF432E;
+    color: #fff;
+}
+
+.navbar-default .navbar-nav .dropdown {
+    border-top: 1px solid #FF432E;
+}
+
+.dropdown li a.active, .sup-dropdown li a.active {
+    background: #FF432E;
+    color: #fff;
+}
+
+.dropdown > li:hover > a, .sup-dropdown li:hover > a {
+    background: #FF432E;
+    color: #fff;
+}
+
+.feature i, .feature-2 i {
+    color: #FF432E;
+}
+
+.main-slider .carousel-caption h1 {
+    background: rgba(255, 67, 46, 0.7);
+}
+
+.main-slider .carousel-caption p {
+    background: rgba(255, 67, 46, 0.7);
+}
+
+.home-about-us a {
+    color: #FF432E;
+}
+
+.project .project-details {
+    background-color: #FF432E;
+}
+
+.effect-duke {
+	background: rgba(255, 67, 46, 0.8);
+}
+
+.overlay {
+    background-color: rgba(255, 67, 46, 0.8); 
+}
+
+.footer-link li:hover a {
+    color: #FF432E;
+}
+
+.footer-social li a {
+    background: #FF432E;
+	border: 1px solid #FF432E;
+}
+
+.footer-social .btn-default {
+    background: #FF432E;
+    border-color: #FF432E;
+}
+
+.copyright-section a {
+    color: #FF432E;
+}
+
+.team-section .nav-tabs.nav-justified {
+    background: #FF432E;
+}
+
+.team-member .team-details {
+    background-color: rgba(255, 67, 46, 0.8);
+}
+
+.page-title-overlay {
+    background: rgba(255, 67, 46, 0.9);
+}
+
+.progress-bar {
+    background: #FF432E;
+}
+
+.panel-default > .panel-heading {
+	background-color: #FF432E;
+}
+
+.sidebar .tagcloud a:hover {
+    background: #FF432E
+}
+
+.widget-search .search-btn {
+	background-color: #FF432E;
+}
+
+
+.plan-name {
+	background: #FF432E;
+}
+
+.plan-signup {
+	background: #FF432E;
+}
+
+.dot1, .dot2 {
+    background-color: #FF432E;
+}
