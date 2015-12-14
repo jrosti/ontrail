@@ -67,6 +67,12 @@
         :headers {"Content-Type" "application/csv"}
         :body (csv/export params)})
 
+
+  (GET "/rest/v1/export.json" {cookies :cookies}
+       {:status 200
+        :headers {"Content-Type" "application/download"}
+        :body (json-str (csv/export-all (user-from-cookie cookies)))})
+  
   (GET "/rest/v1/summary/:user" [user] (webutil/json-response (get-overall-summary user)))  
   (GET "/rest/v1/summary/:user/:year" [user year] (webutil/json-response (get-year-summary-sport user (Integer/valueOf year))))
   (GET "/rest/v1/summary/:user/:year/bymonth" [user year]
