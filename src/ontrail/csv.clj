@@ -9,13 +9,13 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(defn exs [query]
+(defn exs [query & extra-fields]
   (mq/with-collection *db* EXERCISE
                       (mq/find query)
-                      (mq/fields [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags :detailElevation])
+                      (mq/fields (concat [:creationDate :title :sport :distance :duration :avghr :pace :_id :tags :detailElevation] extra-fields))
                       (mq/sort {:creationDate 1})
-                      (mq/batch-size 1000)))
-
+                      (mq/batch-size 10000)))
+  
 (defn csv-escape [field]
   (let [s (str field)]
     (str "\"" (string/replace s "\"" "\"\"") "\"")))
@@ -45,6 +45,7 @@
    "elevation"    :detailElevation
    "pace"         :pace
    "avghr"        :avghr
+   "body"         :body
    "url"          (comp as-link :_id)
    "distancetext" (comp to-human-distance :distance)
    "durationtext" (comp to-human-time :duration)
@@ -73,3 +74,19 @@
           year (if (:year params) (Integer/valueOf (:year params)) (time/year (time/now)))]
       (to-csv keys (exs (ex-filter year user))))
     ""))
+
+(defn exp-obj [ex]
+  (reduce
+   (fn [memo [key fun]]
+     (if-let [val (fun ex)]
+       (assoc memo key (fun ex))
+       memo))
+   {}
+   extract-funs))
+             
+(defn export-all [user]
+  (.info logger (str "Full export for " user))
+  (mapv
+   exp-obj
+   (exs {:user user} :body)))
+   
