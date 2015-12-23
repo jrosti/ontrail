@@ -18,7 +18,7 @@
         all-distinct-sports (mc/distinct *db* EXERCISE "sport" cond-with-user)
         summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) :sport %) all-distinct-sports))]
     (if (> (count summary-sports) 1) 
-      {:user user :sports (concat summary-sports [(get-summary cond-with-user :sport "YHTEENSÄ")])}
+      {:user user :sports (concat summary-sports [(get-summary (assoc cond-with-user :sport {"$nin" ["Sairaus" "Hieronta" "Tapahtuma"]}) :sport "YHTEENSÄ")])}
       {:user user :sports summary-sports})))
 
 (defn get-overall-tags-cond [user condition]
