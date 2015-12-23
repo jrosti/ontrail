@@ -107,8 +107,15 @@
     </table>
 </section>
 
+<section role="tops">
+  <a rel="tops/hours" class="pageLink">Tuntiahmatit</a>
+  <a rel="tops/runs" class="pageLink">Juoksukunkut</a>
+  <a rel="tops/swims" class="pageLink">Vesipedot</a>
+  <a rel="tops/most-read"  class="pageLink">Suositut</a>
+  <div id="top-list"></div>
+</section>
+
 <section role="lists">
-   <div id="most-read"></div>
    <h3>Nopeimmat juoksut</h3>
         <a class="pageLink" rel="sport/Juoksu/distance/100/sb/pace">100 m</a>
         <a class="pageLink" rel="sport/Juoksu/distance/200/sb/pace">200 m</a>
@@ -288,6 +295,10 @@
     <div role="content">
         <section id="search-container">
           <header>
+	    <div style="float: right">
+	      <a rel="tops/hours" class="pageLink">Vuoden 2015 top-listat</a>	      
+	    </div>
+	    <div class="clearfix" style="margin: 0 0 0 0"></div>
 	    <div style="float: right">
 	      <iframe src="http://snapwidget.com/p/widget/?id=PoXnuXBi3m&t=36" title="Instagram Widget" class="snapwidget-widget" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:400px; height:80px"></iframe>
 	    </div>
@@ -663,6 +674,23 @@
         </tbody>
     </table>
 
+</script>
+
+<script id="topHoursTemplate" type="text/html">
+  <h3>Vuoden {{year}} {{title}}</h3>
+  <table class="details full">
+    <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Tunnit</th><th>Matka</th><th>Vauhti</th><th>Kerrat</th></thead>
+    {{#totals}}
+    <tr>
+      <td>{{position}}</td>
+      <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+      <td>{{duration}}</td>
+      <td>{{distance}}</td>
+      <td>{{pace}}</td>
+      <td>{{count}}</td>
+    </tr>
+    {{/totals}}
+  </table>
 </script>
 
 <script id="listsTemplate" type="text/html">

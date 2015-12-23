@@ -30,7 +30,7 @@
     }
 
     $.ajaxSetup({ cache: false })
-
+      
     var $spinnerElement = "#content-spinner"
 
     function actionButtonAsStream(btn, _selector, _action) {
@@ -603,9 +603,22 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-    currentPages.whereArgs(partialEquals("lists")).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
-      $("#most-read").html(ich.listsTemplate({result: data}))
-    })
+      var tops = currentPages.whereArgs(partialEquals("tops")).selectArgs(pairsAsAssocMap)
+      tops.where(function(args) { return args.tops == "hours" }).selectAjax(OnTrail.rest.topHours).subscribe(function(data) {
+	  data.title = "tuntiahmatit"
+	  $("#top-list").html(ich.topHoursTemplate(data))
+      })
+      tops.where(function(args) { return args.tops == "runs" }).selectAjax(OnTrail.rest.topRunning).subscribe(function(data) {
+	  data.title = "juoksukunkut"
+	  $("#top-list").html(ich.topHoursTemplate(data))
+      })
+      tops.where(function(args) { return args.tops == "swims" }).selectAjax(OnTrail.rest.topSwimming).subscribe(function(data) {
+	  data.title = "vesipedot"
+	  $("#top-list").html(ich.topHoursTemplate(data))
+      })
+      tops.where(function(args) { return args.tops == "most-read" }).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
+	  $("#top-list").html(ich.listsTemplate({result: data}))
+      })
 
     var userprofilePages = currentPages.whereArgs(partialEquals("userprofile")).selectArgs(pairsAsAssocMap)
     userprofilePages.selectAjax(OnTrail.rest.s3list).subscribe(function(data) {

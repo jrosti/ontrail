@@ -12,7 +12,7 @@
         [ontrail.profile :only (post-profile)]
         )
   (:use [ontrail log scheduler summary auth crypto exercise formats nlp 
-         sportsummary mongodb])
+         sportsummary mongodb utils])
   (:gen-class)
   (:require [aleph.http :as aleph]
             [ontrail.keen :as keen]
@@ -62,6 +62,18 @@
 
 (defroutes v1routes
 
+  (GET "/rest/v1/tops/totals/:year" [year]
+       (let [y (parse-int year)]
+         (webutil/json-response {:year y :totals (races/totals-all y)})))
+
+  (GET "/rest/v1/tops/totals/running/:year" [year]
+       (let [y (parse-int year)]
+         (webutil/json-response {:year y :totals (races/totals-running y)})))
+  (GET "/rest/v1/tops/totals/swimming/:year" [year]
+       (let [y (parse-int year)]
+         (webutil/json-response {:year y :totals (races/totals-swimming y)})))
+
+  
   (GET "/rest/v1/export.csv" {params :params}
        {:status 200
         :headers {"Content-Type" "application/csv"}
@@ -201,14 +213,6 @@
   (POST "/rest/v1/groups/:name/part" {params :params cookies :cookies}
     (webutil/is-authenticated? cookies
       (do-group-oper group/part-from (:name params) (user-from-cookie cookies))))  
-
-  (POST "/rest/v1/races" {params :params cookies :cookies}
-        (webutil/is-authenticated? 
-         cookies
-         (webutil/json-response (races/insert params))))
-
-  (GET "/rest/v1/races" {} 
-       (webutil/json-response (races/find-all)))
 
   (route/resources "/")
   (route/not-found {:status 404}))
