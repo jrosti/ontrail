@@ -79,6 +79,8 @@
         :headers {"Content-Type" "application/csv"}
         :body (csv/export params)})
 
+  (GET "/rest/v1/raw/:user" [user]
+       (webutil/json-response (csv/export-raw user)))
 
   (GET "/rest/v1/export.json" {cookies :cookies}
        {:status 200
