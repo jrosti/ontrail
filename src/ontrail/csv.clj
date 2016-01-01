@@ -52,6 +52,17 @@
    "pacetext"     get-pace
    "tags"         tags})
 
+(def extract-funs-raw
+  {"date"         (comp to-csv-date :creationDate)
+   "sport"        :sport
+   "distance"     :distance
+   "duration"     :duration
+   "elevation"    :detailElevation
+   "pace"         :pace
+   "avghr"        :avghr
+   "url"          (comp as-link :_id)
+   "tags"         tags})
+  
 (def default-keys
   ["date" "title" "sport" "distance" "duration" "pace" "avghr" "url" "elevation" "distancetext" "durationtext" "pacetext" "tags"])
 
@@ -75,18 +86,24 @@
       (to-csv keys (exs (ex-filter year user))))
     ""))
 
-(defn exp-obj [ex]
+(defn exp-obj [funs ex]
   (reduce
    (fn [memo [key fun]]
      (if-let [val (fun ex)]
        (assoc memo key (fun ex))
        memo))
    {}
-   extract-funs))
+   funs))
              
 (defn export-all [user]
   (.info logger (str "Full export for " user))
   (mapv
-   exp-obj
+   (partial exp-obj extract-funs)
    (exs {:user user} :body)))
    
+(defn export-raw [user]
+  (.info logger (str "Raw export for " user))
+  (mapv
+   (partial exp-obj extract-funs-raw)
+   (exs {:user user})))
+  
