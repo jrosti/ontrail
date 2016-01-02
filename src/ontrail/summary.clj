@@ -23,8 +23,9 @@
      :distance (to-human-distance (get db-retmap :dist)) :numDistance (if (get db-retmap :dist) (get db-retmap :dist) 0)
      :pace (get-pace {:sport sport :duration true-duration :distance true-distance})
      :avghr (avghr db-retmap)
-     :repeats (if (> (:repeats db-retmap) 0) (:repeats db-retmap) nil)
-     :elevation (if (> (:elevation db-retmap) 0) (:elevation db-retmap) nil)
+     :repeats (if-let [reps (:repeats db-retmap)] (when (> reps 0) reps))
+     :elevation (if-let [elevation (:repeats db-retmap)] (when (> elevation 0)
+     elevation))
      :count count
      key sport}))
 

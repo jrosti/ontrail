@@ -17,6 +17,7 @@
 
 (defn total [sport-key]
   (fn [year user]
+    (println user year)
     (->> (get-year-summary-sport user year)
          :sports
          (filter (fn [e] (= sport-key (:sport e))))
