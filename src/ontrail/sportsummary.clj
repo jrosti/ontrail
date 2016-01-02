@@ -13,12 +13,51 @@
 (defn get-distinct-tags [condition]
   (filter (partial not= nil) (mc/distinct *db* EXERCISE "tags" condition)))
 
+(def by-foot-sports #{"Juoksu" "Kävely" "Suunnistus" "Rogaining" "Maastojuoksu" "Vaellus" "Sauvakävely"})
+(def by-wheel-sports #{"Pyöräily" "Maastopyöräily" "Maantiepyöräily" "Kickbike" "Cyclocross"}) 
+
+(defn plus [key sports]
+  (apply + (map #(if-let [v (% key)] v 0.0) sports)))
+
+(defn sport-sum [sports]
+  (let [total (apply + (map :count sports))]
+    {
+     :nduration (plus :nduration sports)
+     :tduration (plus :tduration sports)
+     :tdistance (plus :tdistance sports)
+     :ndistance (plus :ndistance sports)
+     :elevation (plus :elevation sports)
+     :count total }))
+
+(defn humanize [sport]
+  (merge 
+   {:duration (to-human-time (:nduration sport))
+    :distance (to-human-distance (:ndistance sport))
+    :pace (get-pace {:sport (:sport sport) :duration (:tduration sport) :distance (:tdistance sport)})
+    :elevation (when (> (:elevation sport) 0))
+    :avghr nil}
+   sport))
+
+
+(defn combined [summary-sports sport-set combined-name]
+  (let [sports (filter #(sport-set (:sport %)) summary-sports)
+        summary-item (assoc (sport-sum sports) :sport combined-name :combined true)]
+    (humanize summary-item)))
+
+(defn get-combined-sports [summary-sports]
+  (->> 
+   [(combined summary-sports by-foot-sports "Byfoot")
+    (combined summary-sports by-wheel-sports "Bywheel")]
+   (filter #(> (:count %) 0))))
+  
 (defn get-overall-summary-cond [user condition]
   (let [cond-with-user (assoc condition :user user)
         all-distinct-sports (mc/distinct *db* EXERCISE "sport" cond-with-user)
-        summary-sports (sort-by :numericalDuration > (map #(get-summary (assoc cond-with-user :sport %) :sport %) all-distinct-sports))]
+        summary-sports (sort-by :nduration > (map #(get-summary (assoc cond-with-user :sport %) :sport %) all-distinct-sports))]
     (if (> (count summary-sports) 0) 
-      {:user user :sports (concat summary-sports [(get-summary (assoc cond-with-user :sport {"$nin" ["Sairaus" "Hieronta" "Tapahtuma"]}) :sport "YHTEENSÄ")])}
+      {:user user :sports (concat
+                           summary-sports
+                           [(get-summary (assoc cond-with-user :sport {"$nin" ["Sairaus" "Hieronta" "Tapahtuma"]}) :sport "YHTEENSÄ")])}
       {:user user :sports summary-sports})))
 
 (defn get-overall-tags-cond [user condition]
@@ -91,6 +130,7 @@
     (doall (get-overall-summary user))
     (doall (get-overall-tags-summary user))
     (doall (get-year-summary-sport user year))
+    (doall (get-year-summary-sport user (- year 1)))
     (doall (map (partial do-month user year) (range 1 up-to-month))))
   nil)
 

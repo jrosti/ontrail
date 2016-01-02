@@ -53,13 +53,13 @@
                "Pyöräily"           "pyöräili"
                "Ratsastus"          "ratsasti"
                "Ringette"           "pelasi ringetteä"
-               "Rogaining"          "rogainasi"
+               "Rogaining"          "rogasi"
                "Rullahiihto"        "rullahiihti"
                "Rullaluistelu"      "rullaluisteli"
                "Sairaus"            "sairasti"
                "Sauvakävely"        "sauvakäveli"
                "Seikkailu-urheilu"  "seikkaili"
-               "Sisäsoutu"          "souti ergometrillä"
+               "Sisäsoutu"          "sisäsouti"
                "Soutu"              "souti"
                "Spinning"           "spinnasi"
                "Squash"             "pelasi squashia"
@@ -75,6 +75,7 @@
                "Uinti"              "ui"
                "Vaellus"            "vaelsi"
                "Venyttely"          "venytteli"
+               "Voimaharjoittelu"   "voimaili"
                "Vesijuoksu"         "vesijuoksi"
                "Yleisurheilu"       "yleisurheili"})
 

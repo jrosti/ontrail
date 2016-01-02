@@ -608,14 +608,14 @@
 	  data.title = "tuntiahmatit"
 	  $("#top-list").html(ich.topHoursTemplate(data))
       })
-      tops.where(function(args) { return args.tops == "runs" }).selectAjax(OnTrail.rest.topRunning).subscribe(function(data) {
-	  data.title = "juoksukunkut"
-	  $("#top-list").html(ich.topHoursTemplate(data))
-      })
-      tops.where(function(args) { return args.tops == "swims" }).selectAjax(OnTrail.rest.topSwimming).subscribe(function(data) {
-	  data.title = "vesipedot"
-	  $("#top-list").html(ich.topHoursTemplate(data))
-      })
+      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel"}
+      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät"};
+      tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" })
+          .select(function(args) { return sportSelector[args.tops]})
+	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
+	    data.title = titles[data.sport]
+	    $("#top-list").html(ich.topHoursTemplate(data))
+          })
       tops.where(function(args) { return args.tops == "most-read" }).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
 	  $("#top-list").html(ich.listsTemplate({result: data}))
       })
