@@ -64,7 +64,7 @@
   (.trace logger (str "Getting summary: " user " condition " condition))  
   (let [cond-with-user (assoc condition :user user)
         all-distinct-tags (filter (partial not= "") (get-distinct-tags cond-with-user))
-        summary-tags (sort-by :numericalDuration > 
+        summary-tags (sort-by :nduration > 
           (map #(get-summary (assoc cond-with-user :tags %) :tag %) all-distinct-tags))]
     {:user user :sports summary-tags}))
 
