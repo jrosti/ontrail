@@ -42,6 +42,7 @@
 (defn pace-conversion-fun [^String sport]
   (case sport
     "Pyöräily" to-human-pace-kmh
+    "Bywheel" to-human-pace-kmh
     "tmp" to-human-pace-kmh
     "Uinti" to-human-pace-100m
     "Sisäsoutu" to-human-pace-500m

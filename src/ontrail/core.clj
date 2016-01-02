@@ -66,13 +66,9 @@
        (let [y (parse-int year)]
          (webutil/json-response {:year y :totals (races/totals-all y)})))
 
-  (GET "/rest/v1/tops/totals/running/:year" [year]
+  (GET "/rest/v1/tops/totals/:sport/:year" [year sport]
        (let [y (parse-int year)]
-         (webutil/json-response {:year y :totals (races/totals-running y)})))
-  (GET "/rest/v1/tops/totals/swimming/:year" [year]
-       (let [y (parse-int year)]
-         (webutil/json-response {:year y :totals (races/totals-swimming y)})))
-
+         (webutil/json-response {:year y :sport sport :totals (races/totals-by-sport sport y)})))
   
   (GET "/rest/v1/export.csv" {params :params}
        {:status 200
