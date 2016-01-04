@@ -28,7 +28,7 @@
      :tdistance true-distance
      :avghr (avghr db-retmap)
      :repeats (if-let [reps (:repeats db-retmap)] (when (> reps 0) reps))
-     :elevation (if-let [elevation (:repeats db-retmap)] (when (> elevation 0)
+     :elevation (if-let [elevation (:elevation db-retmap)] (when (> elevation 0)
      elevation))
      :count count
      key sport}))
