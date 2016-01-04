@@ -608,8 +608,8 @@
 	  data.title = "tuntiahmatit"
 	  $("#top-list").html(ich.topHoursTemplate(data))
       })
-      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel"}
-      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät"};
+      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit"}
+      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät"};
       tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" })
           .select(function(args) { return sportSelector[args.tops]})
 	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
