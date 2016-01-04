@@ -14,7 +14,8 @@
   (filter (partial not= nil) (mc/distinct *db* EXERCISE "tags" condition)))
 
 (def by-foot-sports #{"Juoksu" "Kävely" "Suunnistus" "Rogaining" "Maastojuoksu" "Vaellus" "Sauvakävely"})
-(def by-wheel-sports #{"Pyöräily" "Maastopyöräily" "Maantiepyöräily" "Kickbike" "Cyclocross"}) 
+(def by-wheel-sports #{"Pyöräily" "Maastopyöräily" "Maantiepyöräily" "Kickbike" "Cyclocross"})
+(def by-ski-sports #{"Hiihto" "Luisteluhiihto" "Perinteinen hiihto" "Rullahiihto"})
 
 (defn plus [key sports]
   (apply + (map #(if-let [v (% key)] v 0.0) sports)))
@@ -47,7 +48,8 @@
 (defn get-combined-sports [summary-sports]
   (->> 
    [(combined summary-sports by-foot-sports "Byfoot")
-    (combined summary-sports by-wheel-sports "Bywheel")]
+    (combined summary-sports by-wheel-sports "Bywheel")
+    (combined summary-sports by-ski-sports "Hiihtolajit")]
    (filter #(> (:count %) 0))))
   
 (defn get-overall-summary-cond [user condition]
