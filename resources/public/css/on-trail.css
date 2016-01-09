@@ -295,10 +295,18 @@ article h3,
 article h4 {
   margin: 0;
 }
-article.exercise {
+article.comment p span,
+article.exercise p span {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 100% !important;
+  line-height: 1.65em !important;
+}
+article.exercise,
+article.comment {
   margin-bottom: 1.5em;
 }
-article.exercise p {
+article.exercise p,
+article.comment p {
   margin: 20px 0 0;
 }
 article .newEx {
