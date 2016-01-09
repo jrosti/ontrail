@@ -3,7 +3,6 @@
   (:require 
    [monger.collection :as mc]
    [monger.query :as mq]
-   [ontrail.parser :as parser]
    [clojure.core.memoize :as memo]
    [monger.joda-time]))
 
@@ -27,7 +26,7 @@
   (->> (users-memo)
        (map (fn [u]
               (when-let [t (total-fn year u)]
-                (assoc (select-keys t [:pace :nduration :ndistance :duration :distance :count]) :user u))))
+                (assoc (select-keys t [:pace :nduration :repeats :ndistance :duration :distance :count]) :user u))))
        (sort-by sort-key)
        (filter :nduration)
        (filter #(> (:nduration %) 0))
@@ -38,8 +37,7 @@
   (totals-by (total "YHTEENSÄ") :nduration year))
 
 (def sort-keys
-  {"Uinti" :nduration})
-
+  {"Leuanveto" :repeats})
 
 (defn totals-by-sport [sport year]
   (totals-by (total sport) (sort-keys sport :ndistance) year))

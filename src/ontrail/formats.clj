@@ -47,6 +47,7 @@
     "Uinti" to-human-pace-100m
     "Sisäsoutu" to-human-pace-500m
     "Soutu" to-human-pace-500m
+    "Soudut" to-human-pace-500m
     "Rullaluistelu" to-human-pace-kmh
     "Rullahiihto" to-human-pace-kmh
     "Kickbike" to-human-pace-kmh
