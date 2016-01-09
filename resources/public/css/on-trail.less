@@ -317,7 +317,15 @@ article {
     margin: 0;
   }
 
-  &.exercise {
+  &.comment, &.exercise {
+    p span {
+        font-family: 'Open Sans', sans-serif !important;
+        font-size: 100% !important;
+	line-height: 1.65em !important;
+    }
+  }
+  
+  &.exercise, &.comment {
     p {
       margin: 20px 0 0;
     }
