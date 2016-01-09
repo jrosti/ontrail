@@ -603,20 +603,25 @@
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
     })
 
-      var tops = currentPages.whereArgs(partialEquals("tops")).selectArgs(pairsAsAssocMap)
-      tops.where(function(args) { return args.tops == "hours" }).selectAjax(OnTrail.rest.topHours).subscribe(function(data) {
+      var tops = currentPages.whereArgs(partialEquals("tops")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
+      tops.where(function(args) { return args.tops === "hours" }).selectAjax(OnTrail.rest.topHours).subscribe(function(data) {
 	  data.title = "tuntiahmatit"
 	  $("#top-list").html(ich.topHoursTemplate(data))
       })
-      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit"}
-      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät"};
-      tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" })
+      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit", rowing: "Soudut", pullups: "Leuanveto"}
+      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät", "Soudut": "soutajat"};
+      tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" && args.tops != "pullups"})
           .select(function(args) { return sportSelector[args.tops]})
 	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
-	    data.title = titles[data.sport]
-	    $("#top-list").html(ich.topHoursTemplate(data))
+	      data.title = titles[data.sport]
+	      $("#top-list").html(ich.topHoursTemplate(data))
           })
-      tops.where(function(args) { return args.tops == "most-read" }).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
+      tops.where(function(args) { return args.tops == "pullups" })
+	  .select(function(args) { return sportSelector[args.tops] })
+          .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
+	      $("#top-list").html(ich.topPullupsTemplate(data))
+	  })
+      tops.where(function(args) { return args.tops === "most-read" }).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
 	  $("#top-list").html(ich.listsTemplate({result: data}))
       })
 

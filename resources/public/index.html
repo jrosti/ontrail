@@ -114,6 +114,8 @@
   <a rel="tops/skis" class="pageLink">Hiihtelijät</a>
   <a rel="tops/swims" class="pageLink">Vesipedot</a>
   <a rel="tops/bywheel" class="pageLink">Pyöräilijät</a>
+  <a rel="tops/rowing" class="pageLink">Soutelijat</a>
+  <a rel="tops/pullups" class="pageLink">Vetelijät</a>
   <div id="top-list"></div>
 </section>
 
@@ -694,6 +696,23 @@
     {{/totals}}
   </table>
 </script>
+
+<script id="topPullupsTemplate" type="text/html">
+  <h3>Vuoden {{year}} leuanvetäjät</h3>
+  <table class="details full">
+    <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kokonaistoistot</th><th>Aika</th><th>Kerrat</th></thead>
+    {{#totals}}
+    <tr>
+      <td>{{position}}</td>
+      <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+      <td>{{repeats}}</td>
+      <td>{{duration}}</td>
+      <td>{{count}}</td>
+    </tr>
+    {{/totals}}
+  </table>
+</script>
+
 
 <script id="listsTemplate" type="text/html">
     <h3>Suosituimmat lenkit</h3>
