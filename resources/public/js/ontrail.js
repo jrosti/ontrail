@@ -608,11 +608,12 @@
 	  data.title = "tuntiahmatit"
 	  $("#top-list").html(ich.topHoursTemplate(data))
       })
-      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit", rowing: "Soudut", pullups: "Leuanveto"}
-      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät", "Soudut": "soutajat"};
+      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit", rowing: "Soudut", pullups: "Leuanveto", stretches: "Venyttely"}
+      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät", "Soudut": "soutajat", "Venyttely" : "venyttelijät"};
       tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" && args.tops != "pullups"})
           .select(function(args) { return sportSelector[args.tops]})
 	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
+	      console.log(data)
 	      data.title = titles[data.sport]
 	      $("#top-list").html(ich.topHoursTemplate(data))
           })
