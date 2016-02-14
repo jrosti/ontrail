@@ -37,7 +37,7 @@
   (totals-by (total "YHTEENSÄ") :nduration year))
 
 (def sort-keys
-  {"Leuanveto" :repeats})
+  {"Leuanveto" :repeats "Venyttely" :nduration})
 
 (defn totals-by-sport [sport year]
   (totals-by (total sport) (sort-keys sport :ndistance) year))
