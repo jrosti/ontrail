@@ -57,8 +57,6 @@
                               }
                           }
                       }
-                      exercise.paceHist = prev.paceHist
-                      exercise.paceHistBins = prev.paceHistBins
                       prev.dist += exercise.distance;
                       prev.dur += exercise.duration;
                       if (exercise.detailVolume > 0) prev.volume += exercise.detailVolume;
