@@ -1,4 +1,4 @@
-(defproject ontrail "0.0.1"
+(defproject ontrail "0.0.2"
   :description "A training blog."
   :dependencies [
                  [org.clojure/clojure "1.6.0"]
@@ -38,7 +38,7 @@
   :ring {:handler ontrail.core/app}
   :aliases {"import" ["run" "-m" "ontrail.heiaimport/import-json"]}
   :aot  [ontrail.core]
-  :javac-options     ["-target" "1.7" "-source" "1.7"]
+  :javac-options     ["-target" "1.8" "-source" "1.8"]
   :java-source-paths ["src/main/java" "src/test/java"]
   :main ontrail.core)
 
