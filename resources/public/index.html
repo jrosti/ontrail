@@ -4,31 +4,15 @@
     <title>ontrail.net</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="image_src" href="img/share.jpg" >
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
-    <link rel="stylesheet" href="halcyonic/css/5grid/core.css" />
-    <link rel="stylesheet" href="halcyonic/css/5grid/core-desktop.css" />
-    <link rel="stylesheet" href="halcyonic/css/5grid/core-1200px.css" />
-    <link rel="stylesheet" href="halcyonic/css/5grid/core-noscript.css" />
-    <link rel="stylesheet" href="halcyonic/css/style.css" />
-    <link rel="stylesheet" href="halcyonic/css/style-desktop.css" />
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js?_=UID"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js?_=UID"></script>
-    <script src="halcyonic/css/5grid/init.js?use=desktop,1000px&amp;mobileUI=0"></script>
-
-    <!--[if lte IE 9]><link rel="stylesheet" href="halcyonic/css/style-ie9.css" /><![endif]-->
-
-    <link href="n/src/nv.d3.css" rel="stylesheet" type="text/css">
-
-    <link rel="stylesheet" href="css/css3-buttons.css">
-    <link rel="stylesheet" href="css/select2.css">
-    <link rel="stylesheet" href="css/jquery.continuous-calendar.css">
-    <link rel="stylesheet" href="redactor/redactor.css">
-
-    <link rel="stylesheet" href="css/on-trail.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="css/material-trail.css">
 
     <!-- All JavaScript at the bottom, except this Modernizr build.
      Modernizr enables HTML5 elements & feature detects for optimal performance.
@@ -37,6 +21,8 @@
 
     <style id="logged-in-styles" type="text/css"></style>
 
+    <script src="//code.jquery.com/jquery-2.2.1.min.js?_=UID"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
     <script type="text/javascript">
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-34593654-1']);
@@ -48,76 +34,70 @@
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();
     </script>
-    <script src="//d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js" data-apikey="685bfdf1edcb2e315bd0f466820e60ca">
-</script>
+    <script src="//d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js" data-apikey="685bfdf1edcb2e315bd0f466820e60ca"></script>
 </head>
 <body class="visible" style="position: relative" data-list-type="list">
 <div id="header-login-wrapper">
     <!-- Header -->
-    <div id="header-wrapper">
-        <header id="header" class="5grid-layout">
-            <div class="row">
-                <div class="12u">
+    <div class="navbar-fixed">
+        <ul id="my-account" class="dropdown-content">
+            <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
+            <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
+            <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
+            <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+            <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+        </ul>
+        <nav class="blue-grey darken-2" role="navigation">
+            <div class="nav-wrapper container">
+                <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
+                <ul class="right hide-on-med-and-down logged-in">
+                    <li style="width: 55px;"><a href="#!"></a></li>
+                    <li><a class="pageLink" rel="latest">Viimeisimmät</a></li>
+                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge" id="new-comments-count">4</span></a></li>
+                    <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge" id="new-own-comments-count">4</span></a></li>
 
-                    <!-- Logo -->
-                    <h1><a rel="latest" class="pageLink mobileUI-site-name"><img src="/img/logo.png" alt="On Trail"/></a></h1>
+                    <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
+                    <li><a class="pageLink" id="logout"><i class="material-icons">exit_to_app</i></a></li>
+                </ul>
 
-                    <!-- Nav -->
-                    <nav class="mobileUI-site-nav">
-                        <a class="pageLink" rel="latest">Viimeisimmät</a>
-                        <a class="pageLink logged-in" rel="user" data-user="">Omat</a>
-                        <a class="pageLink logged-in" rel="new-comments">Kommentit <span style="display: none" class="button-small" id="new-comments-count"></span></a>
-                        <a class="pageLink logged-in" rel="new-own-comments">Seuratut <span style="display: none" class="button-small" id="new-own-comments-count"></span></a>
-                        <a class="pageLink logged-in" id="logout" rel="latest">Ulos</a>
-                        <a class="pageLink logged-out" rel="register">Luo tunnus</a>
-                    </nav>
-
-                </div>
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a href="#">Navbar Link</a></li>
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
             </div>
-        </header>
-
-        <div id="user-menu-wrapper" class="logged-in features-wrapper">
-            <div id="user-menu" class="features">
-                <div class="5grid-layout">
-                    <div class="row">
-                        <div class="12u">
-                            <section id="user-header"></section>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        </nav>
     </div>
+    <div class="fixed-action-btn" style="top: 20px; right: 15%;">
+        <a class="btn-floating btn-large red lighten-2 pageLink" rel="addex">
+            <i class="large material-icons">mode_edit</i>
+        </a>
+    </div>
+
 </div>
 
 <!-- Content -->
-<div id="content-wrapper">
+<div id="content-wrapper" class="container">
 <div id="content-top"></div>
 <div id="content">
-<div class="5grid-layout">
 <div class="row">
-<div class="9u">
+<div class="col s9">
 
-<section role="groups" class="logged-in">
-    <table class="details">
-        <thead><tr><th>Ryhmä</th><th class="user">Kuvaus</th><th class="title">Jäsenet</th><th>Toiminnot</th></tr></thead>
-        <tbody id="groups-content">
-        </tbody>
-    </table>
+<section id="groups-content" role="groups" class="logged-in">
 </section>
 
-<section role="tops">
-  <a rel="tops/hours" class="pageLink">Tuntiahmatit</a>
-  <a rel="tops/runs" class="pageLink">Juoksukunkut</a>
-  <a rel="tops/byfoot" class="pageLink">Jalankulkijat</a>
-  <a rel="tops/skis" class="pageLink">Hiihtoniilot</a>
-  <a rel="tops/swims" class="pageLink">Vesipedot</a>
-  <a rel="tops/bywheel" class="pageLink">Pyöräilijät</a>
-  <a rel="tops/rowing" class="pageLink">Soutelijat</a>
-  <a rel="tops/pullups" class="pageLink">Vetelijät</a>
-  <a rel="tops/stretches" class="pageLink">Venyttelijät</a>
-  <div id="top-list"></div>
+<section role="tops" class="card blue-grey lighten-5">
+    <div class="card-content">
+        <a rel="tops/hours" class="pageLink chip">Tuntiahmatit</a>
+        <a rel="tops/runs" class="pageLink chip">Juoksukunkut</a>
+        <a rel="tops/byfoot" class="pageLink chip">Jalankulkijat</a>
+        <a rel="tops/skis" class="pageLink chip">Hiihtoniilot</a>
+        <a rel="tops/swims" class="pageLink chip">Vesipedot</a>
+        <a rel="tops/bywheel" class="pageLink chip">Pyöräilijät</a>
+        <a rel="tops/rowing" class="pageLink chip">Soutelijat</a>
+        <a rel="tops/pullups" class="pageLink chip">Vetelijät</a>
+        <a rel="tops/stretches" class="pageLink chip">Venyttelijät</a>
+        <div id="top-list"></div>
+    </div>
 </section>
 
 <section role="lists">
@@ -553,97 +533,82 @@
 </section>
 
 </div>
-<div id="sidemenu" class="3u">
+<div id="sidemenu" class="col s3">
 
-    <section class="logged-out">
-        <div>
-        <form id="login-form" method="post">
-            <input id="username" name="username" type="text" placeholder="Tunnus" />
-            <input id="password" name="password" type="password" placeholder="Salasana"/>
-            <div class="buttons">
-                <a id="login" class="button login red">Kirjaudu sisään!</a>
+        <section class="logged-out">
+            <div>
+                <form id="login-form" method="post">
+                    <input id="username" name="username" type="text" placeholder="Tunnus" />
+                    <input id="password" name="password" type="password" placeholder="Salasana"/>
+                    <div class="buttons">
+                        <a id="login" class="button login red">Kirjaudu sisään!</a>
+                    </div>
+                    <div> <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                        Unohtuiko salasana?</a> </div>
+                </form>
             </div>
-            <div> <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
-                Unohtuiko salasana?</a> </div>
-        </form>
-        </div>
-    </section>
+        </section>
 
-    <!-- Sidebar -->
-    <section class="logged-in">
-        <header>
-            <h2 class="username"></h2>
-        </header>
-        <ul class="link-list">
-            <li><a class="pageLink" rel="addex">Lisää suoritus</a></li>
-            <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-            <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
-            <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
-            <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
-            <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
-        </ul>
-    </section>
-
-
-    <section id="chatSection" class="logged-in">
-      <article>
-	<h3>Viimeisimmät</h3>
-            <div id="messageBox">
-                <div id="messages">
+        <!-- Sidebar -->
+        <section id="chatSection" class="logged-in">
+            <article>
+                <h4>Viimeisimmät</h4>
+                <div id="messageBox">
+                    <div id="messages">
+                    </div>
                 </div>
+            </article>
+        </section>
+
+        <section>
+            <div id="ownGroupsDropDown"></div>
+            <div id="fastSelections" class="logged-in">
+                <h4>Kommentit</h4>
+                <ul class="link-list">
+                    <li><a class="pageLink" rel="most-comments">Kommentoiduimmat</a></li>
+                    <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li>
+                </ul>
             </div>
-        </article>
-    </section>
+            <div>
+                <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
+            </div>
+            <h4>Pikalinkit</h4>
+            <div id="sportFilter" class="buttons logged-in">
+                <div class="dropdown">
+                    <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
+                    <div class="dropdown-slider">
+                        <a class="pageLink ddm" rel="sport/Juoksu,Maastojuoksu"><span class="label">Juoksu</span></a>
+                        <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
+                        <a class="pageLink ddm" rel="sport/Pyöräily,Maantiepyöräily,Cyclocross"><span class="label">Pyöräily</span></a>
+                        <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
+                        <a class="pageLink ddm" rel="sport/Triathlon"><span class="label">Triathlon</span></a>
+                        <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto,Rullahiihto"><span class="label">Hiihto</span></a>
+                        <a class="pageLink ddm" rel="sport/Soutu,Sisäsoutu"><span class="label">Soutu</span></a>
+                        <a class="pageLink ddm" rel="sport/Kuntosali,Kahvakuula,Kuntopiiri,Leuanveto,Voimaharjoittelu"><span class="label">Voimailu</span></a>
+                    </div> <!-- /.dropdown-slider -->
+                </div> <!-- /.dropdown -->
+            </div>
+            <div>
+                <h4>Muut</h4>
+                <a href="/site/index.html">Ultralaskuri</a><br />
+                <a href="/sp/latest/1">Kevyet sivut!</a>
+            </div>
+        </section>
 
-    <section>
-        <div id="ownGroupsDropDown"></div>
-        <div id="fastSelections" class="logged-in">
-            <h3>Kommentit</h3>
+        <section>
+            <h4>Toiminnot</h4>
             <ul class="link-list">
-                <li><a class="pageLink" rel="most-comments">Kommentoiduimmat</a></li>
-                <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li>
+                <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
+                <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+                <li><a class="pageLink" rel="lists">Listat</a></li>
+                <!--<div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>-->
+                <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
             </ul>
-        </div>
-        <div>
-            <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
-        </div>
-        <h3>Pikalinkit</h3>
-        <div id="sportFilter" class="buttons logged-in">
-            <div class="dropdown">
-                <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
-                <div class="dropdown-slider">
-                    <a class="pageLink ddm" rel="sport/Juoksu,Maastojuoksu"><span class="label">Juoksu</span></a>
-                    <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
-                    <a class="pageLink ddm" rel="sport/Pyöräily,Maantiepyöräily,Cyclocross"><span class="label">Pyöräily</span></a>
-                    <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
-                    <a class="pageLink ddm" rel="sport/Triathlon"><span class="label">Triathlon</span></a>
-                    <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto,Rullahiihto"><span class="label">Hiihto</span></a>
-                    <a class="pageLink ddm" rel="sport/Soutu,Sisäsoutu"><span class="label">Soutu</span></a>
-                    <a class="pageLink ddm" rel="sport/Kuntosali,Kahvakuula,Kuntopiiri,Leuanveto,Voimaharjoittelu"><span class="label">Voimailu</span></a>
-                </div> <!-- /.dropdown-slider -->
-            </div> <!-- /.dropdown -->
-        </div>
-        <div>
-            <h3>Muut</h3>
-            <a href="/site/index.html">Ultralaskuri</a><br />
-            <a href="/sp/latest/1">Kevyet sivut!</a>
-        </div>
-    </section>
+        </section>
 
-    <section>
-        <h3>Toiminnot</h3>
-        <ul class="link-list">
-            <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
-            <li><a class="pageLink" rel="groups">Ryhmät</a></li>
-            <li><a class="pageLink" rel="lists">Listat</a></li>
-            <!--<div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>-->
-            <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
-        </ul>
-    </section>
+    </div>
+</div>
 
-</div>
-</div>
-</div>
 </div>
 </div>
 
@@ -739,7 +704,7 @@
 </script>
 
 <script id="ownGroupsTemplate" type="text/html">
-    <h3>Omat ryhmät</h3>
+    <h4>Omat ryhmät</h4>
         <ul class="link-list">
         {{#groups}}
             <li><a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
@@ -754,44 +719,57 @@
 <script id="tagsExpandedTemplate" class="partial" type="text/html">
     <div class="full">
         <ul>
-            {{#tags}}<li><a class="pageLink" rel="tags/{{.}}">{{.}}</a></li> {{/tags}}
+            {{#tags}}<li class="chip"><a class="pageLink" rel="tags/{{.}}">{{.}}</a></li> {{/tags}}
         </ul>
     </div>
 </script>
 
 <script id="exerciseTemplate" type="text/html">
     <div>
-        <section>
-            <article data-id="{{id}}" data-article-owner="{{user}}" class="preview exercise {{sport}}">
-               <p class="count" style="font-size:8px;margin-top: -30px !important;"></p>
-                <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-                <a href="{{avatar}}&s=700" target="_blank"><img class="avatar" src="{{avatar}}" width="62" height="62"></a><h2><a class="more" rel="ex/{{id}}">{{title}}</a></h2>
-                <h4 class="full"><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
-                <h4 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
-                    <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}</h4>
+        <article data-id="{{id}}" data-article-owner="{{user}}" class="card blue-grey lighten-5 preview exercise {{sport}}">
+            <div class="card-content">
+                <p class="count" style="display: none"></p>
+                <div class="card-title">
+                    <div class="left">
+                        <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                    </div>
+                    <a class="pageLink modify right" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    <div>
+                        <h4><a class="more" rel="ex/{{id}}">{{title}}</a></h4>
+                        <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
+                        <h6 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
+                            <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}
+                        </h6>
+                    </div>
+                </div>
                 {{> exerciseDetailsTemplate}}
                 <div class="preview">
-                    {{#trunc}}{{/trunc}}
-                        <p><a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>{{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
+                    <div class="flow-text">{{#trunc}}{{/trunc}}</div>
                 </div>
-
                 <div class="full">
-                    {{{body}}}
-                    <p class="signature">
+                    <div class="flow-text">{{{body}}}</div>
+                    <p class="signature right">
                         {{synopsis}}
                     </p>
-                {{> tagsExpandedTemplate}}
+                    {{> tagsExpandedTemplate}}
                 </div>
-
-                <p class="full">
-                    <a class="windowLink" rel="ex/{{id}}">□</a>
-                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+            </div>
+            <div class="card-action">
+            <div class="preview">
+                <p><a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <i class="material-icons" style="vertical-align: bottom;">comment</i>
+                    {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
+            </div>
+            <div class="full">
+                <a class="windowLink" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
+                <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <i class="material-icons" style="vertical-align: bottom;">comment</i>
                     {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
-                    </a>
-                </p>
-            </article>
-        </section>
+                </a>
+            </div>
+            </div>
+        </article>
     </div>
 </script>
 
@@ -814,37 +792,45 @@
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
-    <section>
-        <article data-id="{{id}}" class="full exercise {{sport}}">
-
+     <article data-id="{{id}}" class="card blue-grey lighten-5 full exercise {{sport}}">
+         <div class="card-content">
             <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-            <img class="avatar" src="{{avatar}}"  width="62" height="62"><h2>{{title}}</h2>
-            <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
+            <div class="card-title">
+                <div class="left">
+                    <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                </div>
+                <a class="pageLink modify right" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                <div>
+                    <h4>{{title}}</h4>
+                    <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
+                </div>
+            </div>
             {{> exerciseDetailsTemplate}}
-            <div>{{{body}}}
-                <p class="signature">
+            <div>
+                <div class="flow-text">{{{body}}}</div>
+                <p class="signature right">
                     {{synopsis}}
                 </p>
             </div>
             {{> tagsExpandedTemplate}}
             <p class="count"></p>
-        </article>
-    </section>
-    <h3>Kommentit <a id="scrollBottom" href="javascript:void(0);">&gt;&gt;</a></h3>
+         </div>
+    </article>
+    <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
     {{#comments}}
-      <section>
-        <article class="comment" data-id="{{id}}">
-          {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
-          <img class="avatar" src="{{avatar}}"  width="24" height="24">
-          <h4><span class="date">{{date}}</span><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
-          <div>{{{body}}}</div>
-        </article>
-      </section>
+    <article class="comment card" data-id="{{id}}">
+        <div class="card-content blue-grey darken-2 white-text">
+            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
+            <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
+            <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
+            <div class="flow-text clearfix">{{{body}}}</div>
+        </div>
+    </article>
     {{/comments}}
-    <section>
+    <div>
         <article class="logged-in">
-            <h4>Jätä oma kommenttisi</h4>
+            <h5>Jätä oma kommenttisi</h5>
             {{^comments}}
             <p>Kirjoita ensimmäinen kommentti</p>
             {{/comments}}
@@ -862,7 +848,7 @@
         <article class="logged-out">
             Kirjaudu sisään nähdäksesi kommentit ja kommentoidaksesi.
         </article>
-    </section>
+    </div>
 </script>
 
 <script id="sportsCreateTemplate" type="text/html">
@@ -885,27 +871,30 @@
 
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
-    <tr><td><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></td><td>{{{description}}}</td>
-        <td>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</td>
-        <td class="buttons">
-            {{#in}}<a class="leave button red" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
-            {{^in}}<a class="join button green" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
-        </td></tr>
+    <div class="card blue-grey lighten-5">
+        <div class="card-content">
+            <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
+            <div class="flow-text">{{description}}</div>
+            <div>{{#users}}<a class="pageLink chip" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
+        </div>
+        <div class="card-action">
+            {{#in}}<a class="leave mark red-text darken-2" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
+            {{^in}}<a class="join mark green-text darken-2" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+        </div>
+    </div>
     {{/groups}}
 </script>
 
 <script id="userHeaderTemplate" type="text/html">
     <span id="view-toggles" class="right">
-        <a id="summary-view" href="javascript:nothing()">Tiivistelmä</a>
-        <a id="list-view">Lista</a>
+        <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
+        <li><a id="list-view">Lista</a></li>
     </span>
-    <p class="logged-in">
-        <strong>{{data}}</strong>
-        <a class="pageLink" rel="user/{{data}}">Lenkit</a>
-        <a class="pageLink" rel="summary/{{data}}">Lajit</a>
-        <a class="pageLink" rel="tagsummary/{{data}}">Avainsanat</a>
-        <a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a>
-    </p>
+        <li>{{data}}</li>
+        <li><a class="pageLink" rel="user/{{data}}">Lenkit</a></li>
+        <li><a class="pageLink" rel="summary/{{data}}">Lajit</a></li>
+        <li><a class="pageLink" rel="tagsummary/{{data}}">Avainsanat</a></li>
+        <li><a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a></li>
 </script>
 
 <script id="hpkHeaderTemplate" type="text/html">
@@ -1300,12 +1289,13 @@
 </div>
 
 <script src="js/select2.min.js?_=UID"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="js/jquery.md5.js?_=UID"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js?strict=false"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.1.0/lodash.min.js"></script>
+
+
 
 <script src="js/xdate-0.7.js?_=UID"></script>
 
@@ -1322,7 +1312,6 @@
 <script src="js/rx.ontrail.pager.js?_=UID"></script>
 <script src="js/rx.ontrail.session.js?_=UID"></script>
 <script src="js/jquery.continuous-calendar.js?_=UID"></script>
-<script src="redactor/redactor.min.js?_=UID"></script>
 
 <script src="n/lib/d3.v3.js"></script>
 <script src="n/nv.d3.min.js"></script>

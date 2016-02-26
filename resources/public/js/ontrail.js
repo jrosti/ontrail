@@ -177,18 +177,16 @@
         }
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
-      $('#comment-body').redactor(editorSettings)
+//      $('#comment-body').redactor(editorSettings)
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
       })
 
     }
     var renderSports = function (data) {
-      $('#ex-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
-      $('#filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
+      $('#ex-sport #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
       if (!Modernizr.touch) {
-        $('#ex-sport').select2({formatSelection: selectionFormat})
-        $('#filter-sport').select2({formatSelection: selectionFormat})
+        $('#ex-sport #filter-sport').select2({formatSelection: selectionFormat})
       }
     }
     var renderTags = function (data) {
@@ -1053,18 +1051,7 @@
         this.$el.val(code).trigger('change')
       }
     }
-    $('#ex-body').redactor(editorSettings)
-
-    var menuOffsetTop = $('#header-wrapper').offset().top
-
-    var fixMenuPosition = function (isLoggedIn) {
-      var headerHeight = $('#header-login-wrapper').height() + 46 // plus content margin
-      var menuOffsetWidth = $('#header-wrapper').width()
-      var menuOffsetMargin = parseInt($('#header-wrapper').css("margin-left"))
-      $('#header-wrapper').css({ position: 'fixed', top: '-4px', width: menuOffsetWidth, 'margin-left': menuOffsetMargin, "z-index": 1000 })
-      $('#content-wrapper').addClass("scroll-overflow")
-      $('#content').css({"margin-top": (isLoggedIn ? 110 : 82)})
-    }
+//    $('#ex-body').redactor(editorSettings)
 
     loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function (loggedIn) {
       var profile = loggedIn.profile
@@ -1143,14 +1130,6 @@
 
     var mostCommentsPages = currentPages.whereArgs(partialEquals("most-comments")).throttle(101).selectAjax(OnTrail.rest.mostComments)
     mostCommentsPages.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("most-comments")))).repeat().subscribe(renderNewComments)
-
-    // run our function on load
-    if (!mobile) {
-      // and run it again every time you scroll
-      sessions.select(function (val) {
-        return exists(val)
-      }).subscribe(fixMenuPosition)
-    }
 
     $(document).onClickTouchAsObservable(clickEvent, ".dropdown .button, .dropdown button").subscribe(function (e) {
       var menu = $(e.target).closest(".dropdown")

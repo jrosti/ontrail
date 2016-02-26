@@ -1,0 +1,155 @@
+body.logged-out *.logged-in,
+body.logged-in *.logged-out,
+body.login #login-link {
+    display: none;
+}
+
+p { margin: 0; }
+
+#logo-container {
+    padding-top: 10px;
+}
+
+body.login #login-form * {
+    display: inline-block;
+}
+section[role],
+div[role] {
+    display: none;
+    opacity: 0;
+}
+div[role="dialog"] {
+    display: block;
+    opacity: 1;
+}
+
+article .full {
+    display: none;
+}
+article.full .full {
+    display: inherit;
+}
+article.full .preview {
+    display: none;
+}
+article.preview .body {
+    height: 1.0em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a {
+    color: #039be5;
+}
+
+a.pageLink,
+a.more,
+a.mark,
+a.windowLink {
+    cursor: pointer;
+}
+
+.avatar {
+    margin-right: 20px;
+}
+
+.signature {
+    margin-left: 3em;
+    font-style: italic;
+}
+
+
+body div[role="menu"],
+body[data-page="login"] div[role="login"],
+body[data-page="latest"] div[role="content"],
+body[data-page="tags"] div[role="content"],
+body[data-page="sport"] div[role="content"],
+body[data-page="user"] div[role="content"],
+body[data-page="group"] div[role="content"],
+body[data-page="new-comments"] div[role="content"],
+body[data-page="new-own-comments"] div[role="content"],
+body[data-page="most-comments"] div[role="content"],
+body[data-page="latest"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="tags"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="sport"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="user"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="new-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="new-own-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="most-comments"][data-list-type="summary"] div[role="content"] section[role="tableview"],
+body[data-page="latest"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="tags"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="sport"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="user"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="group"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="new-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="new-own-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="most-comments"][data-list-type="list"] div[role="content"] *[role="listview"],
+body[data-page="user"] section[role="user"],
+body[data-page="addex"] section[role="addex"],
+body[data-page="users"] section[role="users"],
+body[data-page="profile"] section[role="profile"],
+body[data-page="systemstats"] section[role="systemstats"],
+body[data-page="userprofile"] section[role="userprofile"],
+body[data-page="groups"] section[role="groups"],
+body[data-page="lists"] section[role="lists"],
+body[data-page="tops"] section[role="tops"],
+body[data-page="import"] section[role="import"],
+body[data-page="summary"] section[role="summary"],
+body[data-page="summary"] section[role="user"],
+body[data-page="tagsummary"] section[role="tagsummary"],
+body[data-page="tagsummary"] section[role="user"],
+body[data-page="weeksummary"] section[role="weeksummary"],
+body[data-page="weeksummary"] section[role="user"],
+body[data-page="ex"] div[role="ex"],
+body[data-page="ex"] section[role="user"],
+body[data-page="register"] section[role="register"],
+body[data-page="main"] div[role="main"] {
+    display: block;
+    opacity: 1;
+}
+body[data-page="login"] a[rel="login"],
+body[data-page="latest"] a[rel="tableview"],
+body[data-page="summary"] a[rel="summary"],
+body[data-page="tagsummary"] a[rel="tagsummary"],
+body[data-page="weeksummary"] a[rel="weeksummary"],
+body[data-page="import"] a[rel="import"],
+body[data-page="user"] a[rel="user"],
+body[data-page="users"] a[rel="users"],
+body[data-page="profile"] a[rel="profile"],
+body[data-page="userprofile"] a[rel="userprofile"],
+body[data-page="systemstats"] a[rel="systemstats"],
+body[data-page="searches"] a[rel="searches"],
+body[data-page="groups"] a[rel="groups"],
+body[data-page="lists"] a[rel="lists"],
+body[data-page="tops"] a[rel="tops"],
+body[data-page="addex"] a[rel="addex"],
+body[data-page="register"] a[rel="register"],
+body[data-page="new-comments"] a[rel="new-comments"],
+body[data-page="new-own-comments"] a[rel="new-own-comments"],
+body[data-page="most-comments"] a[rel="most-comments"],
+body[data-page="main"] a[rel="main"] {
+    font-weight: bold;
+}
+body[data-list-type="summary"] #summary-view,
+body[data-page="new-comments"] #content-spinner,
+body[data-page="new-own-comments"] #content-spinner,
+body[data-list-type="list"] #list-view {
+    display: none;
+}
+#view-toggles {
+    display: none;
+}
+body[data-page="latest"] #view-toggles,
+body[data-page="tags"] #view-toggles,
+body[data-page="user"] #view-toggles,
+body[data-page="sport"] #view-toggles,
+body[data-page="group"] #view-toggles,
+body[data-page="new-comments"] #view-toggles,
+body[data-page="most-comments"] #view-toggles,
+body[data-page="new-own-comments"] #view-toggles {
+    display: inline;
+}
+article.joined a.join,
+article.not-joined a.leave {
+    display: none;
+}
