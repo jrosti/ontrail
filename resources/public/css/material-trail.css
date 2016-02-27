@@ -161,3 +161,13 @@ article.joined a.join,
 article.not-joined a.leave {
     display: none;
 }
+
+#header-container {
+    display: none;
+}
+body[data-page="user"] #header-container,
+body[data-page="group"] #header-container,
+body[data-page="sport"] #header-container,
+body[data-page="tags"] #header-container {
+    display: block;
+}
