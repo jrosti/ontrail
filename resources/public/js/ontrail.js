@@ -774,15 +774,6 @@
       $("#active-users").html(ich.activeUsersTemplate({"users": data}))
     }
 
-    var systemPages = currentPages.whereArgs(partialEquals("systemstats"))
-    systemPages.selectAjax(OnTrail.rest.system).subscribe(function (system) {
-      _.map(system.systemstats, function updateStats(value, field) {
-        $('#' + field).text(value)
-      })
-      renderActiveUsersList(system.activeUsers)
-    })
-
-
     // initiate loading and search
     var latestScroll = $("#search").changes().throttle(600).skip(1).merge(currentPages.whereArgs(partialEquals("latest")).select(always("")))
       .doAction(function () {

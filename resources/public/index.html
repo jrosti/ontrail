@@ -46,6 +46,8 @@
             <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+            <span id="ownGroupsDropDown"></span>
+        </ul>
         </ul>
         <nav class="blue-grey darken-2" role="navigation">
             <div class="nav-wrapper container">
@@ -68,7 +70,7 @@
         </nav>
     </div>
     <div class="fixed-action-btn" style="top: 20px; right: 15%;">
-        <a class="btn-floating btn-large red lighten-2 pageLink" rel="addex">
+        <a class="btn-floating btn-large orange accent-2 pageLink" rel="addex">
             <i class="large material-icons">mode_edit</i>
         </a>
     </div>
@@ -82,7 +84,7 @@
 <div class="row">
 <div class="col s9">
 
-<section id="groups-content" role="groups" class="logged-in">
+<section id="groups-content" role="groups" class="logged-in"/>
 </section>
 
 <section role="tops" class="card blue-grey lighten-5">
@@ -98,94 +100,6 @@
         <a rel="tops/stretches" class="pageLink chip">Venyttelijät</a>
         <div id="top-list"></div>
     </div>
-</section>
-
-<section role="lists">
-   <h3>Nopeimmat juoksut</h3>
-        <a class="pageLink" rel="sport/Juoksu/distance/100/sb/pace">100 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/200/sb/pace">200 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/400/sb/pace">400 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/800/sb/pace">800 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/1500/sb/pace">1500 m</a>
-        <a class="pageLink" rel="sport/Juoksu/duration/72000/sb/pace">Cooper</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/3200,3218/sb/pace">2 mailia</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/5000/sb/pace">5000 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/10000/sb/pace">10000 m</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/21090,21100/sb/pace">Puolimaraton</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/sb/pace">Maraton</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/100000/sb/pace">100 km</a>
-        <a class="pageLink" rel="sport/Juoksu/duration/2160000/sb/pace">6 h</a>
-        <a class="pageLink" rel="sport/Juoksu/duration/4320000/sb/pace">12 h</a>
-        <a class="pageLink" rel="sport/Juoksu/duration/8640000/sb/pace">24 h</a>
-   <h3>Nopeimmat uinnit</h3>
-        <a class="pageLink" rel="sport/Uinti/distance/50/sb/pace">50 m</a>
-        <a class="pageLink" rel="sport/Uinti/distance/100/sb/pace">100 m</a>
-        <a class="pageLink" rel="sport/Uinti/distance/200/sb/pace">200 m</a>
-        <a class="pageLink" rel="sport/Uinti/distance/400/sb/pace">400 m</a>
-        <a class="pageLink" rel="sport/Uinti/distance/800/sb/pace">800 m</a>
-        <a class="pageLink" rel="sport/Uinti/distance/1500/sb/pace">1500 m</a>
-   <h3>Nopeimmat pyöräilyt</h3>
-        <a class="pageLink" rel="sport/Pyöräily/lte_distance/20000/sb/pace">Alle 20 km</a>
-        <a class="pageLink" rel="sport/Pyöräily/gte_distance/20000/lt_distance/100000/sb/pace">20 - 100 km</a>
-        <a class="pageLink" rel="sport/Pyöräily/gte_distance/100000/lt_distance/200000/sb/pace">100 km - 200 km</a>
-        <a class="pageLink" rel="sport/Pyöräily/gte_distance/200000/sb/pace">Yli 200 km.</a>
-    <h3>Pisimmät suoritukset lajeittain</h3>
-        <a class="pageLink" rel="sport/Juoksu/sb/distance">Juoksu</a>
-        <a class="pageLink" rel="sport/Perinteinen hiihto/sb/distance">Perinteinen hiihto</a>
-        <a class="pageLink" rel="sport/Luisteluhiihto/sb/distance">Luisteluhiihto</a>
-        <a class="pageLink" rel="sport/Suunnistus/sb/distance">Suunnistus</a>
-        <a class="pageLink" rel="sport/Pyöräily/sb/distance">Pyöräily</a>
-        <a class="pageLink" rel="sport/Uinti/sb/distance">Uinti</a>
-        <a class="pageLink" rel="sport/Vaellus/sb/distance">Vaellus</a>
-        <a class="pageLink" rel="sport/Triathlon/sb/distance">Triathlon</a>
-        <a class="pageLink" rel="sport/Rullaluistelu/sb/distance">Rullaluistelu</a>
-        <a class="pageLink" rel="sport/Sauvakävely/sb/distance">Sauvakävely</a>
-        <a class="pageLink" rel="sport/Vesijuoksu/sb/distance">Vesijuoksu</a>
-        <a class="pageLink" rel="sport/Seikkailu-urheilu/sb/distance">Seikkailu-urheilu</a>
-    <h3>Korkeimmat sykkeet</h3>
-        <a class="pageLink" rel="sport/Juoksu/sb/avghr">Juoksu</a>
-        <a class="pageLink" rel="sport/Perinteinen hiihto,Luisteluhiihto/sb/avghr">Hiihto</a>
-    <h3>Pisimmät juoksulenkit vuosittain</h3>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2015/lte_creationDate/2015/sb/distance">2015</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2014/lte_creationDate/2014/sb/distance">2014</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2013/lte_creationDate/2014/sb/distance">2013</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2012/lte_creationDate/2013/sb/distance">2012</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2011/lte_creationDate/2012/sb/distance">2011</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2010/lte_creationDate/2011/sb/distance">2010</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2009/lte_creationDate/2010/sb/distance">2009</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2008/lte_creationDate/2009/sb/distance">2008</a>
-        <a class="pageLink" rel="sport/Juoksu/gte_creationDate/2007/lte_creationDate/2008/sb/distance">2007</a>
-    <h3>Nopeimmat maratonit vuosittain</h3>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2015/lte_creationDate/2015/sb/pace">2015</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2014/lte_creationDate/2014/sb/pace">2014</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2014</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2013/lte_creationDate/2014/sb/pace">2013</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2012/lte_creationDate/2013/sb/pace">2012</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2011/lte_creationDate/2012/sb/pace">2011</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2010/lte_creationDate/2011/sb/pace">2010</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2009/lte_creationDate/2010/sb/pace">2009</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2008/lte_creationDate/2009/sb/pace">2008</a>
-        <a class="pageLink" rel="sport/Juoksu/distance/42200,42195/gte_creationDate/2007/lte_creationDate/2008/sb/pace">2007</a>
-    <h3>Nopeimmat suunnistukset</h3>
-        <a class="pageLink" rel="sport/Suunnistus/lte_distance/5000/sb/pace">Alle 5 km.</a>
-        <a class="pageLink" rel="sport/Suunnistus/gt_distance/5000/sb/pace">Yli 5 km matka.</a>
-        <a class="pageLink" rel="sport/Suunnistus/sb/pace">Kaikki.</a>
-    <h3>Muut</h3>
-        <a class="pageLink" rel="sport/Juoksu/gt_pace/12000/sb/lastModifiedDate">Uusimmat juoksulenkit alle 5 min/km.</a><br>
-</section>
-
-<section role="systemstats">
-    <article>
-        <h3>Käyttäjät ja palvelin</h3>
-        <p>
-            Muistia käytössä: <span id="sysheap"></span><br/>
-            Palvelin käynnissä: <span id="sysuptime"></span><br/>
-            Harjoituksia: <span id="sysexs"></span><br/>
-            Käyttäjiä: <span id="sysusers"></span><br/>
-        </p>
-        <p>Käyttäjät online</p>
-        <p id="active-users" class="activeUserList"></p>
-    </article>
 </section>
 
 <section role="userprofile">
@@ -278,11 +192,14 @@
 <!-- Main Content -->
 <div>
     <div role="content">
+        <nav class="logged-in orange accent-2" id="user-header">
+
+        </nav>
         <section id="search-container">
-          <header>
-        	    <div style="float: right">
-        	      <a rel="tops/hours" class="pageLink">Vuoden 2016 top-listat</a>	      
-        	    </div>
+            <header>
+                <div style="float: right">
+                    <a rel="tops/hours" class="pageLink">Vuoden 2016 top-listat</a>
+                </div>
                 <div id="search-form">
                     <a id="show-filter" href="javascript:void(0)">Suodata</a> /
                     <label for="search"><strong>Etsi: </strong></label>
@@ -561,37 +478,8 @@
         </section>
 
         <section>
-            <div id="ownGroupsDropDown"></div>
-            <div id="fastSelections" class="logged-in">
-                <h4>Kommentit</h4>
-                <ul class="link-list">
-                    <li><a class="pageLink" rel="most-comments">Kommentoiduimmat</a></li>
-                    <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi!</a></li>
-                </ul>
-            </div>
             <div>
                 <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
-            </div>
-            <h4>Pikalinkit</h4>
-            <div id="sportFilter" class="buttons logged-in">
-                <div class="dropdown">
-                    <a href="#" class="button"><span class="label">Suodata laji</span><span class="toggle"></span></a>
-                    <div class="dropdown-slider">
-                        <a class="pageLink ddm" rel="sport/Juoksu,Maastojuoksu"><span class="label">Juoksu</span></a>
-                        <a class="pageLink ddm" rel="sport/Suunnistus"><span class="label">Suunnistus</span></a>
-                        <a class="pageLink ddm" rel="sport/Pyöräily,Maantiepyöräily,Cyclocross"><span class="label">Pyöräily</span></a>
-                        <a class="pageLink ddm" rel="sport/Uinti"><span class="label">Uinti</span></a>
-                        <a class="pageLink ddm" rel="sport/Triathlon"><span class="label">Triathlon</span></a>
-                        <a class="pageLink ddm" rel="sport/Perinteinen hiihto,Luisteluhiihto,Rullahiihto"><span class="label">Hiihto</span></a>
-                        <a class="pageLink ddm" rel="sport/Soutu,Sisäsoutu"><span class="label">Soutu</span></a>
-                        <a class="pageLink ddm" rel="sport/Kuntosali,Kahvakuula,Kuntopiiri,Leuanveto,Voimaharjoittelu"><span class="label">Voimailu</span></a>
-                    </div> <!-- /.dropdown-slider -->
-                </div> <!-- /.dropdown -->
-            </div>
-            <div>
-                <h4>Muut</h4>
-                <a href="/site/index.html">Ultralaskuri</a><br />
-                <a href="/sp/latest/1">Kevyet sivut!</a>
             </div>
         </section>
 
@@ -600,9 +488,6 @@
             <ul class="link-list">
                 <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
                 <li><a class="pageLink" rel="groups">Ryhmät</a></li>
-                <li><a class="pageLink" rel="lists">Listat</a></li>
-                <!--<div class="logged-in"><li class="loggedIn"><a class="pageLink" rel="systemstats">Palvelin</a></li></div>-->
-                <li><a class="pageLink" rel="user/admin">Ylläpitäjän nurkka</a></li>
             </ul>
         </section>
 
@@ -614,7 +499,7 @@
 
 <!-- Copyright -->
 <div id="copyright">
-    &copy; ontrail.net. | <a href="http://html5up.net">HTML5 Up!</a>
+    &copy; ontrail.net, 2013-2016
 </div>
 
 <!-- templates -->
@@ -704,12 +589,11 @@
 </script>
 
 <script id="ownGroupsTemplate" type="text/html">
-    <h4>Omat ryhmät</h4>
-        <ul class="link-list">
-        {{#groups}}
-            <li><a class="pageLink ddm" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
-        {{/groups}}
-        </ul>
+    <li class="divider"></li>
+    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Omat ryhmät</span></div>
+    {{#groups}}
+        <li><a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
+    {{/groups}}
 </script>
 
 <script id="activeUsersTemplate" type="text/html">
@@ -733,7 +617,6 @@
                     <div class="left">
                         <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
                     </div>
-                    <a class="pageLink modify right" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                     <div>
                         <h4><a class="more" rel="ex/{{id}}">{{title}}</a></h4>
                         <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
@@ -756,10 +639,11 @@
             </div>
             <div class="card-action">
             <div class="preview">
-                <p><a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                     <i class="material-icons" style="vertical-align: bottom;">comment</i>
                     {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}</p>
+                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
+                <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             </div>
             <div class="full">
                 <a class="windowLink" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
@@ -767,6 +651,7 @@
                     <i class="material-icons" style="vertical-align: bottom;">comment</i>
                     {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
                 </a>
+                <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             </div>
             </div>
         </article>
@@ -794,38 +679,39 @@
 <script id="singleExerciseTemplate" type="text/html">
      <article data-id="{{id}}" class="card blue-grey lighten-5 full exercise {{sport}}">
          <div class="card-content">
-            <a class="delete button red" rel="ex/{{id}}" data-user="{{user}}"><span class="icon icon186"/> <span class="label">Poista</span></a>
-            <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-            <div class="card-title">
-                <div class="left">
-                    <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
-                </div>
-                <a class="pageLink modify right" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-                <div>
-                    <h4>{{title}}</h4>
-                    <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
-                </div>
-            </div>
-            {{> exerciseDetailsTemplate}}
-            <div>
-                <div class="flow-text">{{{body}}}</div>
-                <p class="signature right">
-                    {{synopsis}}
-                </p>
-            </div>
-            {{> tagsExpandedTemplate}}
-            <p class="count"></p>
+             <div class="card-title">
+                 <div class="left">
+                     <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                 </div>
+                 <div>
+                     <h4>{{title}}</h4>
+                     <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
+                 </div>
+             </div>
+             {{> exerciseDetailsTemplate}}
+             <div>
+                 <div class="flow-text">{{{body}}}</div>
+                 <p class="signature right">
+                     {{synopsis}}
+                 </p>
+             </div>
+             {{> tagsExpandedTemplate}}
+             <p class="count"></p>
          </div>
-    </article>
+         <div class="card-action">
+             <a class="delete button red-text" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
+             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+         </div>
+     </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
     {{#comments}}
     <article class="comment card" data-id="{{id}}">
         <div class="card-content blue-grey darken-2 white-text">
-            {{#deleteComment}}<a class="delete-comment button red" rel="{{deleteRel}}" data-user="{{user}}"><span class="icon red icon186"/> <span class="label">Poista</span></a>{{/deleteComment}}
             <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
             <div class="flow-text clearfix">{{{body}}}</div>
         </div>
+        {{#deleteComment}}<div class="card-action"><a class="delete-comment button red-text" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
     </article>
     {{/comments}}
     <div>
@@ -834,14 +720,13 @@
             {{^comments}}
             <p>Kirjoita ensimmäinen kommentti</p>
             {{/comments}}
-            <form class=" edit-form" id="add-comment-form" method="post">
-                <div>
-                    <label>Kommenttisi</label>
+            <form class="card edit-form" id="add-comment-form" method="post">
+                <div class="card-content blue-grey darken-2 white-text">
+                    <label class="card-title white-text">Kommenttisi</label>
                     <div id="comment-body"></div>
                 </div>
-                <div class="buttons">
-                    <label> </label>
-                    <a class="button addComment green" data-id="{{id}}">Kommentoi</a>
+                <div class="card-action">
+                    <a class="button addComment green-text" data-id="{{id}}">Kommentoi</a>
                 </div>
             </form>
         </article>
@@ -864,8 +749,10 @@
 </script>
 <script id="usersCreateTemplate" type="text/html">
     {{#users}}
-    <img class="avatar" src="{{avatar}}"  width="24" height="24">
-    <h4><a class="pageLink" rel="user/{{user}}">{{user}}</a></h4>
+    <div class="card-panel blue-grey lighten-5">
+        <img class="avatar left" src="{{avatar}}"  width="50" height="50">
+        <h5><a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
+    </div>
     {{/users}}
 </script>
 
@@ -886,15 +773,15 @@
 </script>
 
 <script id="userHeaderTemplate" type="text/html">
-    <span id="view-toggles" class="right">
-        <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
-        <li><a id="list-view">Lista</a></li>
-    </span>
-        <li>{{data}}</li>
+    <ul>
+        <li class="blue-grey-text darken-3">{{data}}</li>
         <li><a class="pageLink" rel="user/{{data}}">Lenkit</a></li>
         <li><a class="pageLink" rel="summary/{{data}}">Lajit</a></li>
         <li><a class="pageLink" rel="tagsummary/{{data}}">Avainsanat</a></li>
         <li><a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a></li>
+        <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
+        <li><a id="list-view">Lista</a></li>
+    </ul>
 </script>
 
 <script id="hpkHeaderTemplate" type="text/html">
@@ -1087,8 +974,8 @@
     <article class="{{^in}}not-{{/in}}joined">
         <header>
             <p class="right">
-                <a class="leave button red" rel="{{target}}/part"><span class="label">Poistu</span></a>
-                <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                <a class="leave button red-text" rel="{{target}}/part"><span class="label">Poistu</span></a>
+                <a class="join button green-text" rel="{{target}}/join"><span class="label">Liity</span></a>
             </p>
 
             <h3>{{target}}</h3>

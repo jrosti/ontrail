@@ -38,13 +38,10 @@ article.preview .body {
     text-overflow: ellipsis;
 }
 
-a {
-    color: #039be5;
-}
-
 a.pageLink,
 a.more,
 a.mark,
+a.button,
 a.windowLink {
     cursor: pointer;
 }
@@ -58,6 +55,17 @@ a.windowLink {
     font-style: italic;
 }
 
+#user-header {
+    padding-left: 20px;
+}
+
+#my-account li a, a {
+    color: #039be5;
+}
+
+span.badge.new {
+    background-color: #039be5;
+}
 
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
