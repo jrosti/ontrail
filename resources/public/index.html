@@ -275,12 +275,6 @@
             <p id="searchSummary"></p>
 
         </section>
-        <section id="header-container">
-            <div id="content-header"></div>
-            <div id="graph-container">
-                <svg id="paceHistogram" width="0px" height="0px"></svg>
-            </div>
-        </section>
 
         <div id="content-entries" role="listview"></div>
         <section role="tableview">
@@ -452,7 +446,14 @@
 </div>
 <div id="sidemenu" class="col s3">
 
-        <section class="logged-out">
+    <section id="header-container logged-in card">
+        <div id="content-header"></div>
+        <div id="graph-container">
+            <svg id="paceHistogram" width="0px" height="0px"></svg>
+        </div>
+    </section>
+
+    <section class="logged-out">
             <div>
                 <form id="login-form" method="post">
                     <input id="username" name="username" type="text" placeholder="Tunnus" />
@@ -793,7 +794,7 @@
         <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a>
         {{/hasWeekly}}
     </div>
-    <h2>Yhteenveto harjoituksista</h2>
+    <h4>Yhteenveto harjoituksista</h4>
 </script>
 
 <script id="hpkWeeklySummaryContentTemplate" type="text/html">
@@ -996,41 +997,41 @@
 
 
 <script id="userDetailTemplate" type="text/html">
-    <article>
-    <header>
-        <div>
-            <div id="left-detail-container">
-                <h3>{{target}} {{#profile.goals}}({{profile.goals}}){{/profile.goals}}</h3>
-                {{#profile.resthr}}<h6>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</h6>{{/profile.resthr}}
-                    <table><tr></tr><td>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a>&nbsp;{{/groups}}</td></tr></table>
-                    {{#hasRecords}}
-                        <a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
-                        <div id="recordsDiv" style="width:350px">
-                            <table id="records" class="details">
-                                <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
-                                {{#records}}
-                                <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
-                                    <td>{{result}}</td>
-                                    <td>{{pace}}</td>
-                                </tr>
-                                {{/records}}
-                            </table>
-                        </div>
-                    {{/hasRecords}}
-            </div>
-            <div id="right-detail-container">
-                <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a><br/>
-                <a class="pageLink" rel="summary/{{user}}/2016/by/week">Viikkoyhteenveto</a>
-
-            </div>
-            <div class="clear"></div>
-
+    <div class="card">
+        <div class="card-image">
+            <img src="{{profile.avatar}}&s=400"/>
+            <span class="card-title">{{target}}</span>
         </div>
-    </header>
-    </article>
+        <div class="card-content">
+            <div>{{#profile.goals}}{{profile.goals}}{{/profile.goals}}</div>
+
+            {{#profile.resthr}}<p>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
+            <div>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}</div>
+
+
+                {{#hasRecords}}
+                    <a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
+                    <div id="recordsDiv" style="width:350px">
+                        <table id="records" class="details">
+                            <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
+                            {{#records}}
+                            <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
+                                <td>{{result}}</td>
+                                <td>{{pace}}</td>
+                            </tr>
+                            {{/records}}
+                        </table>
+                    </div>
+                {{/hasRecords}}
+        </div>
+        <div class="card-action">
+            <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
+            <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
+            <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
+            <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a><br/>
+            <a class="pageLink" rel="summary/{{user}}/2016/by/week">Viikkoyhteenveto</a>
+        </div>
+    </div>
 </script>
 
 <script id="otherDetailTemplate" type="text/html">
