@@ -9,6 +9,7 @@
 
     <link rel="image_src" href="img/share.jpg" >
     <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="css/select2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -97,18 +98,23 @@
 <section id="groups-content" role="groups" class="logged-in"/>
 </section>
 
-<section role="tops" class="card blue-grey lighten-5">
-    <div class="card-content">
-        <a rel="tops/hours" class="pageLink chip">Tuntiahmatit</a>
-        <a rel="tops/runs" class="pageLink chip">Juoksukunkut</a>
-        <a rel="tops/byfoot" class="pageLink chip">Jalankulkijat</a>
-        <a rel="tops/skis" class="pageLink chip">Hiihtoniilot</a>
-        <a rel="tops/swims" class="pageLink chip">Vesipedot</a>
-        <a rel="tops/bywheel" class="pageLink chip">Pyöräilijät</a>
-        <a rel="tops/rowing" class="pageLink chip">Soutelijat</a>
-        <a rel="tops/pullups" class="pageLink chip">Vetelijät</a>
-        <a rel="tops/stretches" class="pageLink chip">Venyttelijät</a>
-        <div id="top-list"></div>
+<section role="tops" class="">
+
+    <nav class="orange accent-2">
+        <ul>
+            <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
+            <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
+            <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
+            <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
+            <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
+            <li><a rel="tops/bywheel" class="pageLink">Pyöräilijät</a></li>
+            <li><a rel="tops/rowing" class="pageLink">Soutelijat</a></li>
+            <li><a rel="tops/pullups" class="pageLink">Vetelijät</a></li>
+            <li><a rel="tops/stretches" class="pageLink">Venyttelijät</a></li>
+        </ul>
+    </nav>
+    <div class="card">
+        <div class="card-content" id="top-list"></div>
     </div>
 </section>
 
@@ -533,7 +539,7 @@
 </script>
 
 <script id="topHoursTemplate" type="text/html">
-  <h3>Vuoden {{year}} {{title}}</h3>
+  <span class="card-title">Vuoden {{year}} {{title}}</span>
   <table class="details full">
     <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Tunnit</th><th>Matka</th><th>Vauhti</th><th>Kerrat</th></thead>
     {{#totals}}
@@ -936,15 +942,11 @@
     </tr>
 </script>
 
-<script id="lvhaaste2016Template" type="text/html">
+<script id="lvhaaste2014Template" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
-        <header>
-            <h3>Leuanvetohaaste 2016</h3>
-            <div class="logged-in">
-                <p class="right">
-                    <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
-                </p>
-            </div>
+        <div class="card-content">
+            <h5 class="card-title">Leuanvetohaaste 2014</h5>
+
             <table id="lvhaaste" class="ranking">
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Vetoja</th></tr></thead>
                 {{#res}}
@@ -955,7 +957,7 @@
                 </tr>
                 {{/res}}
             </table>
-        </header>
+        </div>
     </article>
 </script>
 
@@ -963,6 +965,7 @@
     <article class="{{^in}}not-{{/in}}joined">
         <div class="card-content">
             <h5 class="card-title">Huippu-huhtikuu 2016!</h5>
+            <p>{{description}}</p>
 
             <a class="pageLink" rel="ex/533aec680cf28924708ed3be">keskustelu</a>,
             <a class="pageLink" rel="ex/534259d00cf2e7533f7df806">nousutilastot</a>,
@@ -989,13 +992,9 @@
 
 <script id="marrasputkiTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
-        <header>
-            <h3>Marrasputken  Kunniataulukko</h3>
-            <div class="logged-in">
-                <p class="right">
-                    <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
-                </p>
-            </div>
+        <div class="card-content">
+            <h5 class="card-title">Marrasputken kunniataulukko</h5>
+            <p>{{description}}</p>
             <table id="marrasputki" class="ranking">
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
                 {{#res}}
@@ -1004,7 +1003,12 @@
                 {{/res}}
             </table>
             <a class="pageLink" rel="ex/56328d280cf2efcb581aac6b">Lue lisää Marrasputkesta.</a>
-        </header>
+        </div>
+        {{^in}}
+        <div class="card-action">
+            <a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>
+        </div>
+        {{/in}}
     </article>
 </script>
 
@@ -1012,7 +1016,7 @@
     <article class="{{^in}}not-{{/in}}joined">
         <div class="card-content">
             <h4 class="card-title">{{target}}</h4>
-            <h5>{{description}}</h5>
+            <p>{{description}}</p>
             <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</p>
         </div>
         <div class="card-action">
@@ -1030,7 +1034,6 @@
         </header>
     </article>
 </script>
-
 
 <script id="userDetailTemplate" type="text/html">
     <div class="card">
