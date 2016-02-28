@@ -93,8 +93,16 @@
     }
 
     var postComment = function (exercise) {
-      var values = "body=" + encodeURIComponent($('#comment-body').getCode())
-      return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
+      var text = activeEditor.serialize()["comment-body"].value;
+      var el = $(text)
+
+      if (el[0].innerText.trim() != "") {
+        var values = "body=" + encodeURIComponent(text)
+        return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
+      } else {
+        return Rx.Observable.returnValue({ jqXHR: { status: 500 }})
+      }
+
     }
 
     var postRegisterUser = function () {
@@ -163,6 +171,9 @@
         }
       })
     }
+
+    var activeEditor = null;
+
     var renderSingleExercise = function (exercise, me) {
       keen.view(exercise.id, exercise.user, me)
       renderUserMenuFromUsername(exercise.user)
@@ -177,7 +188,16 @@
         }
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
-//      $('#comment-body').redactor(editorSettings)
+      activeEditor = new MediumEditor("#comment-body", {
+        toolbar: {
+          buttons: ['bold', 'italic', 'underline', 'anchor', 'h4', 'h5', 'quote']
+        }
+      })
+
+      $("#comment-body").mediumInsert({
+        editor: activeEditor
+      })
+
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
       })
@@ -611,7 +631,6 @@
       tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" && args.tops != "pullups"})
           .select(function(args) { return sportSelector[args.tops]})
 	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
-	      console.log(data)
 	      data.title = titles[data.sport]
 	      $("#top-list").html(ich.topHoursTemplate(data))
           })
@@ -705,7 +724,6 @@
       })
 
     function renderUserMenu(user) {
-      console.log("usermenu", user)
       $("#current-user-container").html(ich.userDetailTemplate(user))
     }
 
@@ -718,7 +736,7 @@
         .where(function(page) { return (page[0] || "") != "ex"})
         .combineWithLatestOf(sessions).selectArgs(_findUser(1));
     sessions.merge(currentPageLinkUsers)
-        .where(function(page) { console.log("paeg", page, initialPage()); return (initialPage()[0] || "") != "ex"})
+        .where(function(page) { return (initialPage()[0] || "") != "ex"})
         .switchMap(OnTrail.rest.profile)
         .select(_attr("data"))
         .subscribeArgs(renderUserMenu)
@@ -1057,6 +1075,7 @@
       var profile = loggedIn.profile
       _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function (field) {
         $('#' + field).val(profile[field])
+        $("#" + field).focus().blur()
       })
       $('#profile-email').text(loggedIn.email)
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)

@@ -27,6 +27,8 @@ div[role] {
     display: none;
     opacity: 0;
 }
+
+#comment-body,
 div[role="dialog"] {
     display: block;
     opacity: 1;
@@ -119,6 +121,21 @@ span.badge.new {
 
 body.pace #graph-container {
     display: block;
+}
+
+#comment-body {
+    min-height: 6rem;
+}
+
+#comment-body p {
+    padding-bottom: 1.5rem;
+}
+
+blockquote {
+    margin-left: -20px;
+    padding-left: 16px;
+    border-width: 4px;
+    border-color: #ffab40;
 }
 
 body div[role="menu"],
@@ -244,4 +261,63 @@ body[data-filter="byyear"] .by.year .prev {
 body[data-filter="bymonth"] .by.month .next,
 body[data-filter="bymonth"] .by.month .prev {
     cursor: pointer;
+}
+
+.medium-editor-toolbar-form,
+.medium-editor-anchor-preview {
+    background-color: #ffab40;
+    color: white;
+}
+
+.medium-insert-buttons {
+    left: -14px !important;
+}
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show {
+    border-color: #ffab40;
+    background: #ffab40;
+    color: #fff;
+}
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li {
+    background-color: rgba(0,0,0,0.0);
+}
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li a {
+    font-size: 0.8rem;
+    border-color: #ffab40;
+    background: #ffab40;
+    color: #fff;
+}
+
+.medium-editor-toolbar li button {
+    border: solid #eceff1;
+    border-width: 1px 1px 1px 0;
+    background-color: #ffab40;
+    color: #fff;
+}
+
+.medium-editor-toolbar li:first-child button {
+    border-width: 1px;
+}
+
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li:first-child,
+.medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li:first-child a {
+    display: none;
+}
+
+.medium-toolbar-arrow-under:after {
+    border-color: #ffab40 transparent transparent;
+}
+
+.medium-insert-buttons-addons i.material-icons {
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.error {
+    color: #ce1a00;
+    font-weight: 700;
+}
+.has-error {
+    background: rgba(226, 33, 33, 0.05);
 }
