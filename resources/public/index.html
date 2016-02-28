@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
 
+    <link rel="stylesheet" href="n/nv.d3.min.css">
     <link rel="stylesheet" href="css/material-trail.css">
 
     <!-- All JavaScript at the bottom, except this Modernizr build.
@@ -303,14 +304,6 @@
 
     <section role="summary" class="logged-in">
         <div id="summary-header"></div>
-        <div id="weekly-graph-container">
-            <div id="weekly-sum-id">
-                <svg id="weekly-sums" width="0px" height="0px"></svg>
-            </div>
-            <div id="weekly-sum-time-id">
-                <svg id="weekly-sums-time" width="0px" height="0px"></svg>
-            </div>
-        </div>
         <div id="summary-entries"></div>
     </section>
 
@@ -320,10 +313,11 @@
     </section>
 
     <section role="weeksummary" class="logged-in">
-        <div id="weeksummary-header">
-            <h2>Viikoittainen harjoitusyhteenveto</h2>
-        </div>
-        <div id="weeklyNavigate"></div>
+        <nav class="orange accent-2">
+            <div class="nav-wrapper">
+                <a class="brand-logo">Viikoittainen harjoitusyhteenveto</a>
+            </div>
+        </nav>
         <div>
             <article id="weeksummary">
             </article>
@@ -332,10 +326,21 @@
 </div>
 
 <section role="users" class="logged-in">
-    <article>
-        <label for="search-users">Hae käyttäjää: </label> <input class="search" type="text" id="search-users"/>
-        <div id="user-results"></div>
-    </article>
+
+    <h5 class="orange-text accent-2">Hae käyttäjää</h5>
+
+    <nav id="search-container" class="orange accent-2">
+        <div class="nav-wrapper">
+            <form accept-charset="utf-8">
+                <div class="input-field">
+                    <input id="search-users" type="search" required>
+                    <label for="search-users"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
+        </div>
+    </nav>
+    <div id="user-results"></div>
 </section>
 
 <div role="ex" class="full with-comments logged-in">
@@ -559,7 +564,6 @@
   </table>
 </script>
 
-
 <script id="listsTemplate" type="text/html">
     <h3>Suosituimmat lenkit</h3>
     <table class="details full">
@@ -637,21 +641,21 @@
                 </div>
             </div>
             <div class="card-action">
-            <div class="preview">
-                <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
-                    <i class="material-icons" style="vertical-align: bottom;">comment</i>
-                    {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
-                <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-            </div>
-            <div class="full">
-                <a class="windowLink" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
-                <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
-                    <i class="material-icons" style="vertical-align: bottom;">comment</i>
-                    {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
-                </a>
-                <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-            </div>
+                <div class="preview">
+                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                        <i class="material-icons" style="vertical-align: bottom;">comment</i>
+                        {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
+                        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
+                    <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                </div>
+                <div class="full">
+                    <a class="windowLink" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
+                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                        <i class="material-icons" style="vertical-align: bottom;">comment</i>
+                        {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
+                    </a>
+                    <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                </div>
             </div>
         </article>
     </div>
@@ -757,11 +761,11 @@
 
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
-    <div class="card blue-grey lighten-5">
+    <div class="card blue-grey lighten-5 col s5 group">
         <div class="card-content">
             <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
-            <div class="flow-text">{{description}}</div>
-            <div>{{#users}}<a class="pageLink chip" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
+            <div class="description">{{description}}</div>
+            <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
         </div>
         <div class="card-action">
             {{#in}}<a class="leave mark red-text" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
@@ -779,33 +783,50 @@
 </script>
 
 <script id="hpkHeaderTemplate" type="text/html">
-    <div class="subnavi">
-        <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a>
-        <a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a>
-        <a class="pageLink bymonth" data-filter="bymonth" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a>
-        {{#hasWeekly}}
-        <a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a>
-        {{/hasWeekly}}
-    </div>
-    <h4>Yhteenveto harjoituksista</h4>
+    <nav class="orange accent-2">
+        <ul>
+            <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a></li>
+            <li><a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a></li>
+            <li><a class="pageLink bymonth" data-filter="bymonth" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a></li>
+            {{#hasWeekly}}
+            <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a></li>
+            {{/hasWeekly}}
+        </ul>
+    </nav>
 </script>
 
 <script id="hpkWeeklySummaryContentTemplate" type="text/html">
     <article>
         <div class="by year">
-            <h2>{{year}}</h2>
-            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><span class="arr"></span> {{prevYear}}</a>
-            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
-            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            <nav class="blue-grey lighten-4">
+                <div class="nav-wrapper">
+                    <a class="brand-logo center">{{year}}</a>
+                    <ul class="left">
+                        <li>
+                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><i class="material-icons left">chevron_left</i></a>
+                        </li>
+                    </ul>
+                    <ul class="right" >
+                        <li>
+                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
-        <div>
-            {{#results}}
-            <hr/>
+        <div id="weekly-graph-container">
+            <div id="weekly-sum-id">
+                <svg id="weekly-sums" width="0px" height="0px"></svg>
+            </div>
+            <div id="weekly-sum-time-id">
+                <svg id="weekly-sums-time" width="0px" height="0px"></svg>
+            </div>
+        </div>
 
-
-            <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Viikko {{week}}, {{from}} - {{to}}</a>
-            <div id="week-content">
-                <h3>Harjoitukset</h3>
+        {{#results}}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title capitalize">{{year}}, Viikko {{week}}, {{from}} - {{to}}</span>
                 <table class="simpleExs">
                     <tr>
                         <th>Päivä</th>
@@ -828,8 +849,7 @@
                     </tr>
                     {{/exs}}
                 </table>
-                <br />
-                <h3>Viikkoyhteenveto</h3>
+                <span class="card-title">Viikkoyhteenveto</span>
                 <table class="simpleExs">
                     <th>Laji</th>
                     <th>Kesto</th>
@@ -845,7 +865,13 @@
                     {{/summary}}
                 </table>
             </div>
-            {{/results}}
+            <div class="card-action">
+                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Harjoitukset</a>
+            </div>
+        </div>
+        {{/results}}
+
+
         </div>
     </article>
 </script>
@@ -853,20 +879,36 @@
 <script id="hpkContentTemplate" type="text/html">
     <article>
         <div class="by year">
-            <div style="text-align: left; font-size: 70%;">
-                <a href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
-            </div>
-            <h2>{{year}}</h2>
-            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><span class="arr"></span> {{prevYear}}</a>
-            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
-            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            <nav class="blue-grey lighten-4">
+                <div class="nav-wrapper">
+                    <a class="brand-logo center">{{year}}</a>
+                    <ul class="left">
+                        <li>
+                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><i class="material-icons left">chevron_left</i></a>
+                        </li>
+                    </ul>
+                    <ul class="right" >
+                        <li>
+                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
-        {{> summaryTemplate}}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Vuoden {{year}} harjoitusyhteenveto</span>
+                {{> summaryTemplate}}
+            </div>
+            <div class="card-action">
+                 <a href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
+            </div>
+        </div>
     </article>
 </script>
 
 <script id="summaryTemplate" type="text/html">
-    <table id="homies" class="details">
+    <table class="details">
         <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th>
             <th>Toistot</th>
             <th>Nousu</th>
@@ -1002,7 +1044,7 @@
             {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
         </div>
         <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4">Profiili<i class="material-icons right">close</i></span>
+            <h5 class="card-title">{{target}}<i class="material-icons right">close</i></h5>
             <div>
                 <h5>Ryhmät</h5>
                 {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
@@ -1060,16 +1102,33 @@
 <script id="hpkMonthContentTemplate" type="text/html">
     <article>
         <div class="by month">
-            <h2>{{year}}</h2>
-            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth"><span class="arr"></span> {{prevYear}}</a>
-            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
-            {{^hasNextYear}}<a class="disabled next">{{nextYear}} <span class="arr"></span></a> {{/hasNextYear}}
+            <nav class="blue-grey lighten-4">
+                <div class="nav-wrapper">
+                    <a class="brand-logo center">{{year}}</a>
+                    <ul class="left">
+                        <li>
+                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth"><i class="material-icons left">chevron_left</i></a>
+                        </li>
+                    </ul>
+                    <ul class="right" >
+                        <li>
+                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
         {{#months}}
-        <h2 class="monthName">{{monthName}}</h2>
-        {{> summaryTemplate}}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title capitalize">{{monthName}}n {{year}} harjoitusyhteenveto</span>
+                <h2 class="monthName"></h2>
+                {{> summaryTemplate}}
+            </div>
+        </div>
         {{/months}}
     </article>
+
 </script>
 
 <script id="weeklyNavigateTemplate" type="text/html">

@@ -733,7 +733,7 @@
 
     var renderPageDetail = function (args) {
       $('#header-content').html("")
-      $('#graph-container').hide()
+      $('body').removeClass("pace")
       if (args.data.action == "group") {
         if (args.data.target == "Marrasputki") {
           ich.marrasputkiTemplate(args.data).appendTo($('#header-content'))
@@ -751,7 +751,7 @@
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#header-content'))
         if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
-          $('#graph-container').show();
+          $('body').addClass("pace")
           addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
         }
       }

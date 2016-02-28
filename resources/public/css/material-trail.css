@@ -8,7 +8,11 @@ p { margin: 0; }
 
 #logo-container {
     padding-top: 10px;
-    margin-left: 10px;
+    margin: 0 10px;
+}
+
+.brand-logo {
+    margin: 0 10px;
 }
 
 body.login #login-form * {
@@ -53,7 +57,8 @@ a.windowLink {
 }
 
 .signature {
-    margin-left: 3em;
+    margin-top: 1rem;
+    margin-left: 3rem;
     font-style: italic;
 }
 
@@ -78,6 +83,38 @@ span.badge.new {
     background: -o-linear-gradient(top, rgba(38,50,56,0) 0%, rgba(38,50,56,0.35) 100%);
     background: -ms-linear-gradient(top, rgba(38,50,56,0) 0%, rgba(38,50,56,0.35) 100%);
     background: linear-gradient(to bottom, rgba(38,50,56,0) 0%, rgba(38,50,56,0.35) 100%);
+}
+
+.card.group {
+    box-sizing: content-box;
+    position: relative;
+    margin-right: 1em;
+}
+
+.card.group .card-content {
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.description {
+    padding: 1rem 0;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+#paceHistogram h3,
+#weekly-graph-container h3 {
+    font-size: 1.2rem;
+}
+
+#graph-container {
+    display: none;
+}
+
+body.pace #graph-container {
+    display: block;
 }
 
 body div[role="menu"],
@@ -181,9 +218,26 @@ body[data-page="group"] #current-user-container,
     display: none;
 }
 
-body[data-page="user"] #header-container,
 body[data-page="group"] #header-container,
 body[data-page="sport"] #header-container,
 body[data-page="tags"] #header-container {
     display: block;
+}
+
+body .by.year,
+body .by.month {
+    display: none;
+}
+body[data-filter="bymonth"] .by.month,
+body[data-filter="byyear"] .by.year {
+    display: block;
+}
+body[data-filter="byyear"] .by.year .next,
+body[data-filter="byyear"] .by.year .prev {
+    cursor: pointer;
+}
+
+body[data-filter="bymonth"] .by.month .next,
+body[data-filter="bymonth"] .by.month .prev {
+    cursor: pointer;
 }
