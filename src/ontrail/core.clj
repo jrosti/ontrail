@@ -37,7 +37,8 @@
             [compojure.route :as route]
             [monger.collection :as mc]
             [ring.util.response :as response]
-            [clj-stacktrace.repl :as strp]))
+            [clj-stacktrace.repl :as strp]
+            [ontrail.profile :as profile]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 (def #^{:private true} request-logger (org.slf4j.LoggerFactory/getLogger (str *ns* ".requests")))
@@ -99,8 +100,10 @@
 
   (GET "/rest/v1/weekly-list/:user/:year/:month" [user year month]
        (webutil/json-response {:results (weekly/generate-month user (Integer/valueOf year) (Integer/valueOf month)) :user user}))
-  
-  
+
+  (GET "/rest/v1/profile/:user" [user]
+    (webutil/json-response (group/user-detail user nil)))
+
   (POST "/rest/v1/profile" {params :params cookies :cookies}
     (webutil/is-authenticated? cookies (webutil/json-response (post-profile (user-from-cookie cookies) params))))
 
