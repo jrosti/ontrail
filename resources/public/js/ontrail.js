@@ -93,11 +93,10 @@
     }
 
     var postComment = function (exercise) {
-      var text = activeEditor.serialize()["comment-body"].value;
-      var el = $(text)
+      var content = $('#comment-body').editable('getHTML');
 
-      if (el[0].innerText.trim() != "") {
-        var values = "body=" + encodeURIComponent(text)
+      if (content.trim() != "") {
+        var values = "body=" + encodeURIComponent($('#comment-body').editable('getHTML'))
         return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
       } else {
         return Rx.Observable.returnValue({ jqXHR: { status: 500 }})
@@ -172,8 +171,6 @@
       })
     }
 
-    var activeEditor = null;
-
     var renderSingleExercise = function (exercise, me) {
       keen.view(exercise.id, exercise.user, me)
       renderUserMenuFromUsername(exercise.user)
@@ -188,15 +185,8 @@
         }
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
-      activeEditor = new MediumEditor("#comment-body", {
-        toolbar: {
-          buttons: ['bold', 'italic', 'underline', 'anchor', 'h4', 'h5', 'quote']
-        }
-      })
 
-      $("#comment-body").mediumInsert({
-        editor: activeEditor
-      })
+      $("#comment-body").editable()
 
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
