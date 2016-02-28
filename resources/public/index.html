@@ -184,7 +184,7 @@
                     </div>
                 </div>
                 <div class="card-action">
-                    <a id="update-profile" class="button login">Päivitä profiilitiedot</a>
+                    <a id="update-profile" class="button login waves-effect waves-light btn-flat">Päivitä profiilitiedot</a>
                 </div>
             </div>
         </div>
@@ -195,17 +195,17 @@
                     <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
                     <form id="change-password-form" class="edit-form" method="post">
                         <div class="input-field">
-                            <label>Vanha salasana</label>
+                            <label for="ch-old-password">Vanha salasana</label>
                             <input id="ch-old-password" class="reset" type="password"/>
                             <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
                         </div>
                         <div class="input-field">
-                            <label>Salasana</label>
+                            <label for="ch-password">Salasana</label>
                             <input id="ch-password" name="ch-password" class="reset" type="password"/>
                             <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
                         </div>
                         <div class="input-field">
-                            <label>Salasana uudelleen</label>
+                            <label for="ch-password2">Salasana uudelleen</label>
                             <input id="ch-password2" class="reset" type="password"/>
                             <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
                         </div>
@@ -213,7 +213,7 @@
                     <p class="error"><span id="password-change-result"></span></p>
                 </div>
                 <div class="card-action">
-                    <a id="change-password" class="button change-password">Vaihda salasana</a>
+                    <a id="change-password" class="button change-password waves-effect waves-light btn-flat">Vaihda salasana</a>
                 </div>
             </div>
         </div>
@@ -370,49 +370,50 @@
 </div>
 
 <section role="addex" data-mode="add" class="logged-in">
-    <article class="edit-form">
-        <h2>Lisää uusi suoritus</h2>
-        <form id="add-exercise-form" method="post">
-            <div id="details-container">
-                <div id="left-addex-container">
-                    <div>
-                        <label>Otsikko</label>
-                        <input id="ex-title" name="title" class="reset" placeholder="Otsikko"/>
-                        <em class="error title-required">Lisää otsikko</em>
-                    </div>
-                    <div>
-                        <label>Laji</label>
-                        <select id="ex-sport" class="chzn-select" style="width:290px;">
-                        </select>
-                    </div>
-                    <div>
-                        <label>Kesto</label>
-                        <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="time-hint"></span>
-                        <em class="error duration-required">Lenkin kesto vaaditaan</em>
-                        <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
-                    </div>
-                    <div>
-                        <label>Matka</label>
-                        <input id="ex-distance" name="distance" class="reset" placeholder="Matka (esim 2km, 3250m)"/> <span id="distance-hint"></span>
-                    </div>
-                    <div>
-                        <label>Keskisyke</label>
-                        <input id="ex-avghr" name="avghr" class="reset" placeholder="Keskisyke"/>
-                    </div>
-                    <div>
-                        <label>Päivä</label>
-                        <div id="ex-continuous-date">
-                            <input style="display: none ! important" id="ex-date" name="date" placeholder="Milloin?"/>
+    <div class="card">
+        <div class="card-content">
+            <div class="card-title">Lisää uusi suoritus</div>
+            <form id="add-exercise-form" class="edit-form" method="post">
+                <div class="row">
+                    <div class="col s6">
+                        <div>
+                            <label for="ex-title">Otsikko</label>
+                            <input id="ex-title" name="title" class="reset"/>
+                            <em class="error title-required">Lisää otsikko</em>
+                        </div>
+                        <div>
+                            <label>Laji</label>
+                            <select id="ex-sport" class="chzn-select" style="width:100%;">
+                                <option>laa</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Kesto</label>
+                            <input id="ex-duration" name="duration" class="reset" placeholder="Kesto (esim  3h31, 3.31.28)"/><span id="time-hint"></span>
+                            <em class="error duration-required">Lenkin kesto vaaditaan</em>
+                            <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
+                        </div>
+                        <div>
+                            <label>Matka</label>
+                            <input id="ex-distance" name="distance" class="reset" placeholder="Matka (esim 2km, 3250m)"/> <span id="distance-hint"></span>
+                        </div>
+                        <div>
+                            <label for="ex-avghr">Keskisyke</label>
+                            <input id="ex-avghr" name="avghr" class="reset">
+                        </div>
+                        <div>
+                            <label>Päivä</label>
+                            <div id="ex-continuous-date">
+                                <input style="display: none ! important" id="ex-date" name="date" placeholder="Milloin?"/>
+                            </div>
+                        </div>
+                        <div id="add-tags-select">
+                            <label for="ex-tags">Avainsanat</label>
+                            <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
                         </div>
                     </div>
-                    <div id="add-tags-select">
-                        <label>Avainsanat</label>
-                        <input id="ex-tags" data-placeholder="Lisää avainsanoja..." multiple class="chzn-select"/>
-                    </div>
-                </div>
-                <div id="right-addex-container">
-                    <a id="toggle-numeric-details" href="javascript:void(0);">Yksityiskohdat...</a>
-                    <div id="ex-numeric-details">
+                    <div class="col s6">
+                        <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
                         <div>
                             <label>Toistot:</label>
                             <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" placeholder="kpl"/>
@@ -425,24 +426,26 @@
                             <label>Nousumetrit:</label>
                             <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" placeholder="m"/>
                         </div>
-
+                        <div>
+                            <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
+                        </div>
                     </div>
-                    <div>
-                    <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
+                    <div class="col s12" style="margin-top: 2rem;">
+                        <label for="ex-body">Kuvaus</label>
+                        <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
                     </div>
                 </div>
+            </form>
+        </div>
+        <div class="card-action">
+            <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
+            <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
+        </div>
+        <article class="edit-form">
+            <div id="details-container">
             </div>
             <div class="clear"></div>
             <div>
-                <div>
-                    <label>Kuvaus</label>
-                    <div id="ex-body"></div>
-                </div>
-                <div class="buttons">
-                    <label></label>
-                    <a id="add-exercise" class="button addExercise add green">Lisää suoritus</a>
-                    <a id="edit-exercise" class="button editExercise edit green">Muokkaa lenkkiä</a>
-                </div>
             </div>
         </form>
     </article>
@@ -664,19 +667,19 @@
             </div>
             <div class="card-action">
                 <div class="preview">
-                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                         {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
-                    <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
                 <div class="full">
-                    <a class="windowLink" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
-                    <a class="pageLink" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <a class="windowLink waves-effect waves-light btn-flat" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
+                    <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
                     </a>
-                    <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
             </div>
         </article>
@@ -724,8 +727,8 @@
              <p class="count"></p>
          </div>
          <div class="card-action">
-             <a class="delete button red-text" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
-             <a class="pageLink modify" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+             <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
+             <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
          </div>
      </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
@@ -736,7 +739,7 @@
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
             <div class="flow-text clearfix">{{{body}}}</div>
         </div>
-        {{#deleteComment}}<div class="card-action"><a class="delete-comment button red-text waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
+        {{#deleteComment}}<div class="card-action"><a class="delete-comment button waves-red btn-flat waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
     </article>
     {{/comments}}
     <div>
@@ -746,10 +749,10 @@
             {{/comments}}
             <form class="card edit-form" id="add-comment-form" method="post">
                 <div class="card-content blue-grey darken-2 white-text">
-                    <div id="comment-body" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
+                    <div id="comment-body" class="flow-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
                 </div>
                 <div class="card-action">
-                    <a class="button addComment" data-id="{{id}}">Kommentoi</a>
+                    <a class="button addComment waves-effect waves-light btn-flat" data-id="{{id}}">Kommentoi</a>
                 </div>
             </form>
         </article>
@@ -759,11 +762,7 @@
     </div>
 </script>
 
-<script id="sportsCreateTemplate" type="text/html">
-    {{#sports}}
-    <option value="{{.}}">{{.}}</option>
-    {{/sports}}
-</script>
+<script id="sportsCreateTemplate" type="text/html">{{#sports}}<option value="{{.}}">{{.}}</option>{{/sports}}</script>
 
 <script id="tagsCreateTemplate" type="text/html">
     {{#tags}}
@@ -788,8 +787,8 @@
             <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
         </div>
         <div class="card-action">
-            {{#in}}<a class="leave mark red-text" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
-            {{^in}}<a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+            {{#in}}<a class="leave mark waves-effect waves-light waves-red btn-flat" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
+            {{^in}}<a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
         </div>
     </div>
     {{/groups}}
@@ -886,7 +885,7 @@
                 </table>
             </div>
             <div class="card-action">
-                <a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Harjoitukset</a>
+                <a class="pageLink waves-effect waves-light btn-flat" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Harjoitukset</a>
             </div>
         </div>
         {{/results}}
@@ -921,7 +920,7 @@
                 {{> summaryTemplate}}
             </div>
             <div class="card-action">
-                 <a href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
+                 <a class="waves-effect waves-light btn-flat" href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
             </div>
         </div>
     </article>
@@ -997,7 +996,7 @@
         </div>
         {{^in}}
         <div class="card-action">
-            <a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>
+            <a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>
         </div>
         {{/in}}
     </article>
@@ -1019,7 +1018,7 @@
         </div>
         {{^in}}
         <div class="card-action">
-            <a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>
+            <a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>
         </div>
         {{/in}}
     </article>
@@ -1033,8 +1032,8 @@
             <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</p>
         </div>
         <div class="card-action">
-            <a class="leave button red-text" rel="{{target}}/part"><span class="label">Poistu</span></a>
-            <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
+            <a class="leave button waves-effect waves-light btn-flat waves-red" rel="{{target}}/part"><span class="label">Poistu</span></a>
+            <a class="join button waves-effect waves-light btn-flat" rel="{{target}}/join"><span class="label">Liity</span></a>
         </div>
     </article>
 </script>
@@ -1083,10 +1082,10 @@
             </div>
         </div>
         <div class="card-action">
-            <a class="pageLink" rel="user/{{target}}">Lenkit</a>
-            <a class="pageLink" rel="summary/{{target}}">Lajit</a>
-            <a class="pageLink" rel="tagsummary/{{target}}">Avainsanat</a>
-            <a class="pageLink" rel="weeksummary/{{target}}">Harjoitusviikot</a>
+            <a class="pageLink waves-effect waves-light" rel="user/{{target}}">Lenkit</a>
+            <a class="pageLink waves-effect waves-light" rel="summary/{{target}}">Lajit</a>
+            <a class="pageLink waves-effect waves-light" rel="tagsummary/{{target}}">Avainsanat</a>
+            <a class="pageLink waves-effect waves-light" rel="weeksummary/{{target}}">Harjoitusviikot</a>
         </div>
     </div>
 </script>

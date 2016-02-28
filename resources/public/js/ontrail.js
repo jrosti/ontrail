@@ -188,9 +188,11 @@
 
     }
     var renderSports = function (data) {
-      $('#ex-sport #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
+      console.log("render sports data", ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
+
+      $('#ex-sport, #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
       if (!Modernizr.touch) {
-        $('#ex-sport #filter-sport').select2({formatSelection: selectionFormat})
+        $('#ex-sport, #filter-sport').select2({formatSelection: selectionFormat})
       }
     }
     var renderTags = function (data) {
@@ -894,7 +896,8 @@
       $("#time-hint, #distance-hint").html("")
       var autoSavedText = localStorage.getItem("ex-body")
       var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n<br>\n</p>"
-      $("#ex-body").setCode(text)
+      $("#ex-body").editable()
+
       $("#ex-title, #ex-duration").blur()
       $("#ex-title").focus()
     }

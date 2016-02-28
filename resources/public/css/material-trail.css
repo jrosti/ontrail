@@ -321,3 +321,16 @@ body[data-filter="bymonth"] .by.month .prev {
 .has-error {
     background: rgba(226, 33, 33, 0.05);
 }
+
+a.addExercise,
+a.editExercise,
+a.addComment,
+a.editComment {
+    margin-top: 10px;
+}
+[role=addex][data-mode="add"] .edit {
+    display: none;
+}
+[role=addex][data-mode="edit"] .add {
+    display: none;
+}
