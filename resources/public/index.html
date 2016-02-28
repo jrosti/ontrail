@@ -993,14 +993,18 @@
 
 <script id="userDetailTemplate" type="text/html">
     <div class="card">
-        <div class="card-image">
-            <img src="{{profile.avatar}}&s=400"/>
+        <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="{{profile.avatar}}&s=400"/>
             <span class="card-title">{{target}}</span>
         </div>
         <div class="card-content">
+            <h5 class="activator">Profiili<i class="material-icons right">more_vert</i></h5>
             {{#profile.goals}}<strong>{{profile.goals}}</strong>{{/profile.goals}}
 
             {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
+        </div>
+        <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">Profiili<i class="material-icons right">close</i></span>
             <div>
                 <h5>Ryhmät</h5>
                 {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
