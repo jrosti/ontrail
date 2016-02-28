@@ -736,7 +736,7 @@
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
             <div class="flow-text clearfix">{{{body}}}</div>
         </div>
-        {{#deleteComment}}<div class="card-action"><a class="delete-comment button red-text" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
+        {{#deleteComment}}<div class="card-action"><a class="delete-comment button red-text waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
     </article>
     {{/comments}}
     <div>
@@ -1248,13 +1248,28 @@
     </style>
 </script>
 
-
-<div id="dialog-delete-ex-confirm" title="Poista suoritus?" style="display: none">
-    <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.  Oletko varma?</p>
+<div id="dialog-delete-ex-confirm" class="modal">
+    <div class="modal-content">
+        <h4>Oletko varma?</h4>
+        <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
+    </div>
+    <div class="modal-footer">
+        <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
+        <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
+    </div>
 </div>
 
-<div id="dialog-delete-comment-confirm" title="Poista kommentti?" style="display: none">
-    <p>Kommentti poistetaan lopullisesti, eikä sitä voi palauttaa.  Oletko varma?</p>
+
+
+<div id="dialog-delete-comment-confirm" class="modal">
+    <div class="modal-content">
+        <h4>Oletko varma?</h4>
+        <p>Kommentti poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
+    </div>
+    <div class="modal-footer">
+        <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
+        <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
+    </div>
 </div>
 
 <script src="js/select2.min.js?_=UID"></script>

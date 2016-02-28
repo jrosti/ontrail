@@ -113,13 +113,7 @@
     }
 
     var confirmDelete = function (dialog, type, id) {
-      return $(dialog).dialogAsObservable({
-        resizable: false,
-        modal: true
-      }, [
-        {id: "cancel", name: "Peruuta"},
-        {id: "delete", name: "Poista!"}
-      ]).take(1).where(partialEquals("delete")).select(always([type, id]))
+      return $(dialog).modalAsObservable({}).take(1).where(partialEquals("delete")).select(always([type, id]))
 
     }
 
@@ -522,6 +516,7 @@
     deleteClicks.selectMany(confirmDeleteEx).selectArgs(first)
       .selectAjax(deleteExerciseOrComment).where(isSuccess).select(ajaxResponseData).subscribe(function (data) {
         $("*[data-id='" + data.id + "']").remove()
+
       })
 
     var windowLinks = clickedLinks.where(function (elem) {

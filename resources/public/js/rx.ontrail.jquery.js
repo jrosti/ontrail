@@ -4,19 +4,33 @@
     return this.keyupAsObservable().throttle(500).select(_.compose(value, target)).distinctUntilChanged().startWith("")
   }
 
-  $.fn.dialogAsObservable = function(options, buttons) {
+  $.fn.modalAsObservable = function(options) {
     var self = this
+
     return rx.create(function(observer) {
-      var opts = _.extend({ buttons: {}}, options)
-      var createButton = function(button) {
-        opts.buttons[button.name] = function() {
-          observer.onNext(button.id)
-        }
+      function okClicked () {
+        observer.onNext("delete")
       }
-      _.map(buttons, createButton)
-      self.dialog(opts)
+
+      function cancelClicked () {
+        observer.onNext("cancel")
+      }
+
+      $(self).on('click', "a.confirm", okClicked);
+      $(self).on('click', "a.cancel", cancelClicked);
+
+      $(self).openModal({
+        dismissible: false,
+        complete: function() {
+          $(self).off('click', "a.confirm", okClicked)
+          $(self).off('click', "a.cancel", cancelClicked)
+        }
+      })
+
       return function() {
-        $(self).dialog("close")
+        $(self).closeModal()
+        $(self).off('click', "a.confirm", okClicked)
+        $(self).off('click', "a.cancel", cancelClicked)
       }
     })
   }
