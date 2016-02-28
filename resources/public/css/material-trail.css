@@ -110,7 +110,7 @@ span.badge.new {
     text-transform: capitalize;
 }
 
-#paceHistogram h3,
+#graph-container h3,
 #weekly-graph-container h3 {
     font-size: 1.2rem;
 }
