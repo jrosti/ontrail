@@ -8,6 +8,7 @@ p { margin: 0; }
 
 #logo-container {
     padding-top: 10px;
+    margin-left: 10px;
 }
 
 body.login #login-form * {
@@ -38,6 +39,7 @@ article.preview .body {
     text-overflow: ellipsis;
 }
 
+h5.activator,
 a.pageLink,
 a.more,
 a.mark,
@@ -149,6 +151,7 @@ body[data-page="most-comments"] a[rel="most-comments"],
 body[data-page="main"] a[rel="main"] {
     font-weight: bold;
 }
+
 body[data-list-type="summary"] #summary-view,
 body[data-page="new-comments"] #content-spinner,
 body[data-page="new-own-comments"] #content-spinner,
@@ -168,14 +171,16 @@ body[data-page="most-comments"] #view-toggles,
 body[data-page="new-own-comments"] #view-toggles {
     display: inline;
 }
-article.joined a.join,
-article.not-joined a.leave {
+.joined a.join,
+.not-joined a.leave {
     display: none;
 }
 
+body[data-page="group"] #current-user-container,
 #header-container {
     display: none;
 }
+
 body[data-page="user"] #header-container,
 body[data-page="group"] #header-container,
 body[data-page="sport"] #header-container,

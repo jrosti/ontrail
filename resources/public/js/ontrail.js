@@ -732,31 +732,24 @@
       .subscribe(renderLatest("#content-entries", "#table-entries"))
 
     var renderPageDetail = function (args) {
-      $('#content-header').html("")
+      $('#header-content').html("")
       $('#graph-container').hide()
-      if (args.data.action == "group" && args.data.target == "Marrasputki") {
-        ich.marrasputkiTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group" && args.data.target == "lvhaaste2014") {
-        ich.lvhaaste2014Template(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group" && args.data.target == "RunnersHigh") {
-        ich.runnersHighTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group" && args.data.target == "Suosikit") {
-        ich.favGroupTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group" && args.data.target == "Huippuhuhtikuu") {
-        ich.elevationGroupTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "group") {
-        ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
-      } else if (args.data.action == "user") {
-/*        $("#recordsDiv").hide()
-        $("#toggleRecords").toggle(function () {
-          $("#toggleRecords").text("Piilota juoksuennätykset")
-          $("#recordsDiv").show()
-        }, function () {
-          $("#toggleRecords").text("Näytä juoksuennätykset")
-          $("#recordsDiv").hide()
-        }) */
+      if (args.data.action == "group") {
+        if (args.data.target == "Marrasputki") {
+          ich.marrasputkiTemplate(args.data).appendTo($('#header-content'))
+        } else if (args.data.target == "lvhaaste2014") {
+          ich.lvhaaste2014Template(args.data).appendTo($('#header-content'))
+        } else if (args.data.target == "RunnersHigh") {
+          ich.runnersHighTemplate(args.data).appendTo($('#header-content'))
+        } else if (args.data.target == "Suosikit") {
+          ich.favGroupTemplate(args.data).appendTo($('#header-content'))
+        } else if (args.data.target == "Huippuhuhtikuu") {
+          ich.elevationGroupTemplate(args.data).appendTo($('#header-content'))
+        } else {
+          ich.groupDetailTemplate(args.data).appendTo($('#header-content'))
+        }
       } else {
-        ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
+        ich.otherDetailTemplate(args.data).appendTo($('#header-content'))
         if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
           $('#graph-container').show();
           addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))

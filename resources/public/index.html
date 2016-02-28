@@ -40,27 +40,32 @@
 <div id="header-login-wrapper">
     <!-- Header -->
     <div class="navbar-fixed">
+        <ul id="actions-menu" class="dropdown-content">
+            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+            <li><a rel="tops/hours" class="pageLink">2016 top-listat</a></li>
+            <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+            <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+            <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+        </ul>
         <ul id="my-account" class="dropdown-content">
+            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
             <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
             <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
             <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
-            <li class="divider"></li>
-            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
-            <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a></li>
-            <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
-            <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <span id="ownGroupsDropDown"></span>
         </ul>
         <nav class="blue-grey darken-2" role="navigation">
-            <div class="nav-wrapper container">
+            <div class="nav-wrapper">
                 <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
                 <ul class="right hide-on-med-and-down logged-in">
                     <li style="width: 55px;"><a href="#!"></a></li>
                     <li><a class="pageLink" rel="latest">Viimeisimmät</a></li>
                     <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge" id="new-comments-count">4</span></a></li>
                     <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge" id="new-own-comments-count">4</span></a></li>
+
+                    <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
 
                     <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
                     <li><a class="pageLink" id="logout"><i class="material-icons">exit_to_app</i></a></li>
@@ -73,7 +78,7 @@
             </div>
         </nav>
     </div>
-    <div class="fixed-action-btn" style="top: 20px; right: 15%;">
+    <div class="fixed-action-btn" style="top: 20px; right: 10px; bottom: inherit;">
         <a class="btn-floating btn-large orange accent-2 pageLink" rel="addex">
             <i class="large material-icons">mode_edit</i>
         </a>
@@ -196,16 +201,20 @@
 <!-- Main Content -->
 <div>
     <div role="content">
-        <section id="search-container">
+        <nav id="search-container" class="orange accent-2">
+            <div class="nav-wrapper">
+                <form accept-charset="utf-8">
+                    <div class="input-field">
+                        <input id="search" type="search" required>
+                        <label for="search"><i class="material-icons">search</i></label>
+                        <i class="material-icons">close</i>
+                    </div>
+                </form>
+            </div>
+        </nav>
+
+        <section id="filter-container">
             <header>
-                <div style="float: right">
-                    <a rel="tops/hours" class="pageLink">Vuoden 2016 top-listat</a>
-                </div>
-                <div id="search-form">
-                    <a id="show-filter" href="javascript:void(0)">Suodata</a> /
-                    <label for="search"><strong>Etsi: </strong></label>
-                    <form accept-charset="utf-8"><input class="search" type="text" id="search"/></form>
-                </div>
                 <div id="filter-form" style="display: none" class="logged-in">
                     <a id="show-search" href="javascript:void(0)">Etsi</a> /
                     <strong>Suodata</strong>:
@@ -276,6 +285,10 @@
             <p id="searchSummary"></p>
 
         </section>
+
+        <div id="graph-container">
+            <svg id="paceHistogram" width="0px" height="0px"></svg>
+        </div>
 
         <div id="content-entries" role="listview"></div>
         <section role="tableview">
@@ -447,15 +460,11 @@
 </div>
 <div id="sidemenu" class="col s3">
 
-    <div id="current-user-container" class="card">
-    </div>
+    <div id="current-user-container" class="logged-in card"></div>
 
-    <section id="header-container logged-in card">
-        <div id="content-header"></div>
-        <div id="graph-container">
-            <svg id="paceHistogram" width="0px" height="0px"></svg>
-        </div>
-    </section>
+    <div id="header-container" class="logged-in card">
+        <div id="header-content"></div>
+    </div>
 
     <section class="logged-out">
             <div>
@@ -582,7 +591,7 @@
     <li class="divider"></li>
     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Omat ryhmät</span></div>
     {{#groups}}
-        <li><a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
+        <li><a class="pageLink truncate" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
     {{/groups}}
 </script>
 
@@ -755,8 +764,8 @@
             <div>{{#users}}<a class="pageLink chip" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
         </div>
         <div class="card-action">
-            {{#in}}<a class="leave mark red-text darken-2" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
-            {{^in}}<a class="join mark green-text darken-2" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+            {{#in}}<a class="leave mark red-text" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
+            {{^in}}<a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
         </div>
     </div>
     {{/groups}}
@@ -764,11 +773,6 @@
 
 <script id="userHeaderTemplate" type="text/html">
     <ul>
-        <li class="blue-grey-text darken-3">{{data}}</li>
-        <li><a class="pageLink" rel="user/{{data}}">Lenkit</a></li>
-        <li><a class="pageLink" rel="summary/{{data}}">Lajit</a></li>
-        <li><a class="pageLink" rel="tagsummary/{{data}}">Avainsanat</a></li>
-        <li><a class="pageLink" rel="weeksummary/{{data}}">Harjoitusviikot</a></li>
         <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
         <li><a id="list-view">Lista</a></li>
     </ul>
@@ -895,7 +899,7 @@
             <h3>Leuanvetohaaste 2016</h3>
             <div class="logged-in">
                 <p class="right">
-                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                    <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
                 </p>
             </div>
             <table id="lvhaaste" class="ranking">
@@ -914,28 +918,29 @@
 
 <script id="elevationGroupTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
-        <header>
-            <h3>Huippu-huhtikuu 2014!</h3>
+        <div class="card-content">
+            <h5 class="card-title">Huippu-huhtikuu 2016!</h5>
+
             <a class="pageLink" rel="ex/533aec680cf28924708ed3be">keskustelu</a>,
             <a class="pageLink" rel="ex/534259d00cf2e7533f7df806">nousutilastot</a>,
             <a class="pageLink" rel="group/Huippuhuhtikuu/gte_creationDate/1.4.2014/gte_detailElevation/1/sb/detailElevation">noususummajärjestys</a>
 
-            <div class="logged-in">
-                <p class="right">
-                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
-                </p>
-            </div>
             <table id="elevationChallengeTable" class="ranking">
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kokonaisnousu</th></tr></thead>
                 {{#res}}
                 <tr>
-                <td>{{rank}}</td>
-                <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
-                <td>{{elevation}}</td>
+                    <td>{{rank}}</td>
+                    <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                    <td>{{elevation}}</td>
                 </tr>
                 {{/res}}
             </table>
-        </header>
+        </div>
+        {{^in}}
+        <div class="card-action">
+            <a class="join mark" rel="{{name}}/join"><span class="label">Liity</span></a>
+        </div>
+        {{/in}}
     </article>
 </script>
 
@@ -945,7 +950,7 @@
             <h3>Marrasputken  Kunniataulukko</h3>
             <div class="logged-in">
                 <p class="right">
-                    <a class="join button green" rel="{{target}}/join"><span class="label">Liity</span></a>
+                    <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
                 </p>
             </div>
             <table id="marrasputki" class="ranking">
@@ -962,16 +967,15 @@
 
 <script id="groupDetailTemplate" type="text/html">
     <article class="{{^in}}not-{{/in}}joined">
-        <header>
-            <p class="right">
-                <a class="leave button red-text" rel="{{target}}/part"><span class="label">Poistu</span></a>
-                <a class="join button green-text" rel="{{target}}/join"><span class="label">Liity</span></a>
-            </p>
-
-            <h3>{{target}}</h3>
-            <h4>{{description}}</h4>
-            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a>&nbsp;{{/users}}</p>
-        </header>
+        <div class="card-content">
+            <h4 class="card-title">{{target}}</h4>
+            <h5>{{description}}</h5>
+            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</p>
+        </div>
+        <div class="card-action">
+            <a class="leave button red-text" rel="{{target}}/part"><span class="label">Poistu</span></a>
+            <a class="join button" rel="{{target}}/join"><span class="label">Liity</span></a>
+        </div>
     </article>
 </script>
 
