@@ -129,80 +129,90 @@
 </section>
 
 <section role="profile" class="logged-in">
-    <article>
-        <h2><a href="http://www.gravatar.com"><img id="profile-avatar" src="img/share.jpg" /></a>Muokkaa profiilia</h2>
-        <div class="details">
-            <p></p>
-            <h3>Henkilökohtaiset tiedot</h3>
-            <div class="edit-form">
-                Sähköposti: <span id="profile-email"></span>
-                <div><i><small>Vaihda avatarta <a href="http://www.gravatar.com">Gravatar
-                    -palvelun avulla</a> käyttäen
-                    sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain
-                    ylläpitäjän pyynnostä.</small></i></div>
+    <div class="row">
+        <h3 class="orange-text accent-2">Muokkaa profiiliasi</h3>
+        <div class="col s6">
+            <div class="card">
+                <div class="card-content">
+                    <img id="profile-avatar" class="circle left" src="/img/share.jpg"/>
+                    <span class="card-title">Henkilökohtaiset tiedot</span>
+                    <div class="details">
+                        <div class="edit-form">
+                            Sähköposti: <strong><span id="profile-email"></span></strong>
+                            <div class="clearfix">
+                                <i>
+                                    Vaihda avatarta <a href="http://www.gravatar.com">Gravatar-palvelun avulla</a> käyttäen
+                                    sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain pyytämällä ylläpidolta.
+                                </i>
+                            </div>
+                        </div>
+                        <div class="download" style="margin: 10px 0px 20px 0px">
+                            <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
+                        </div>
+                        <form id="profile-form" class="edit-form" method="post">
+                            <div>
+                                <label for="synopsis">Motto</label>
+                                <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" placeholder="Kuvaus" />
+                            </div>
+                            <div>
+                                <label for="goals">Tavoitteet</label>
+                                <input id="goals" name="goals" type="text" maxlength="60" size="60" placeholder="Tavoitteet" />
+                            </div>
+                            <div>
+                                <label for="resthr">Leposyke</label>
+                                <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
+                            </div>
+                            <div>
+                                <label for="maxhr">Maksimisyke</label>
+                                <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
+                            </div>
+                            <div>
+                                <label for="aerk">Aerobinen kynnys</label>
+                                <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
+                            </div>
+                            <div>
+                                <label for="anaerk">Anaerobinen kynnys</label>
+                                <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" placeholder="Anaerobinen kynnnys" />
+                            </div>
+                        </form>
+                        <span id="profile-result"></span>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <a id="update-profile" class="button login">Päivitä profiilitiedot</a>
+                </div>
             </div>
-            <div class="download" style="margin: 10px 0px 20px 0px">
-	      <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
-	    </div>
-            <h3>Profiilin tiedot</h3>
-            <form id="profile-form" class="edit-form" method="post">
-                <div>
-                    <label for="synopsis">Motto</label>
-                    <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" placeholder="Kuvaus" />
-                </div>
-                <div>
-                    <label for="goals">Tavoitteet</label>
-                    <input id="goals" name="goals" type="text" maxlength="60" size="60" placeholder="Tavoitteet" />
-                </div>
-                <div>
-                    <label for="resthr">Leposyke</label>
-                    <input id="resthr" name="resthr" type="text" maxlength="3" size="3" placeholder="Leposyke" />
-                </div>
-                <div>
-                    <label for="maxhr">Maksimisyke</label>
-                    <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" placeholder="Maksimisyke"/>
-                </div>
-                <div>
-                    <label for="aerk">Aerobinen kynnys</label>
-                    <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" placeholder="Aerobinen kynnnys" />
-                </div>
-                <div>
-                    <label for="anaerk">Anaerobinen kynnys</label>
-                    <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" placeholder="Anaerobinen kynnnys" />
-                </div>
-                <div class="buttons">
-                    <label></label>
-                    <a id="update-profile" class="button login green">Päivitä profiilitiedot</a>
-                </div>
-            </form>
-            <span id="profile-result"></span>
-            <p></p>
-            <h3>Vaihda salasana</h3>
-            <form id="change-password-form" class="edit-form" method="post">
-                <div>
-                    <label>Vanha salasana</label>
-                    <input id="ch-old-password" class="reset" type="password" placeholder="Vanha salasana"/>
-                    <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
-                </div>
-                <p>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</p>
-                <div>
-                    <label>Salasana</label>
-                    <input id="ch-password" name="ch-password" class="reset" type="password" placeholder="Salasana"/>
-                    <em class="error ch-password-too-short">Salasana on liian lyhyt</em>
-                </div>
-                <div>
-                    <label>Salasana uudelleen</label>
-                    <input id="ch-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
-                    <em class="error ch-passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
-                </div>
-                <div class="buttons">
-                    <label></label>
-                    <a id="change-password" class="button change-password green">Vaihda salasana</a>
-                </div>
-            </form>
-            <p class="error"><span id="password-change-result"></span></p>
         </div>
-    </article>
+        <div class="col s6">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Vaihda salasana</span>
+                    <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
+                    <form id="change-password-form" class="edit-form" method="post">
+                        <div>
+                            <label>Vanha salasana</label>
+                            <input id="ch-old-password" class="reset" type="password" placeholder="Vanha salasana"/>
+                            <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
+                        </div>
+                        <div>
+                            <label>Salasana</label>
+                            <input id="ch-password" name="ch-password" class="reset" type="password" placeholder="Salasana"/>
+                            <em class="error ch-password-too-short">Salasana on liian lyhyt</em>
+                        </div>
+                        <div>
+                            <label>Salasana uudelleen</label>
+                            <input id="ch-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+                            <em class="error ch-passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
+                        </div>
+                    </form>
+                    <p class="error"><span id="password-change-result"></span></p>
+                </div>
+                <div class="card-action">
+                    <a id="change-password" class="button change-password">Vaihda salasana</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Main Content -->
