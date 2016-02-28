@@ -16,7 +16,7 @@
 
 (defn get-profile [user]
   (let [avatar (get-avatar-url user)
-        profile (merge (:profile (get-onuser user)) {:avatar avatar})]
+        profile (merge (:profile (get-onuser user)) {:avatar avatar :user user})]
     profile))
 
 (defn post-profile [user params]
