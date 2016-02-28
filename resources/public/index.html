@@ -318,6 +318,7 @@
                 <a class="brand-logo">Viikoittainen harjoitusyhteenveto</a>
             </div>
         </nav>
+        <div id="weeklyNavigate"></div>
         <div>
             <article id="weeksummary">
             </article>
@@ -1132,13 +1133,25 @@
 </script>
 
 <script id="weeklyNavigateTemplate" type="text/html">
-    <div class="right">
-        <a class="pageLink prev" rel="weeksummary/{{user}}/{{prevYear}}/{{prevMonth}}"><span class="arr"></span> {{prevYear}}</a>
-        <a class="pageLink next" rel="weeksummary/{{user}}/{{nextYear}}/{{nextMonth}}">{{nextYear}} <span class="arr"></span></a>
-    </div>
+    <nav class="blue-grey lighten-4">
+        <div class="nav-wrapper">
+            <a class="brand-logo center">{{year}}</a>
+            <ul class="left">
+                <li>
+                    <a class="pageLink prev" rel="weeksummary/{{user}}/{{prevYear}}/{{prevMonth}}"><i class="material-icons left">chevron_left</i></a>
+                </li>
+            </ul>
+            <ul class="right" >
+                <li>
+                    {{#hasNextYear}}<a class="pageLink next" rel="weeksummary/{{user}}/{{nextYear}}/{{nextMonth}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                </li>
+            </ul>
+        </div>
+    </nav>
 </script>
 
 <script id="hpkWeeklyContentTemplate" type="text/html">
+
     <h2 class="monthName">{{monthName}} {{year}}</h2>
     <table class="weekly">
         <thead>

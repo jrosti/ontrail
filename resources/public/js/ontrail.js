@@ -806,6 +806,7 @@
         var now = XDate.today()
         var year = now.getFullYear()
         var month = now.getMonth()
+        var maxYear = now.getFullYear()
 
         if (pg.length >= 2) {
           targetUser = pg[1]
@@ -817,7 +818,12 @@
         var nextYear = year === now.getFullYear() ? year : year + 1
         var nextMonth = year === now.getFullYear() - 1 ? now.getMonth() : (year === now.getFullYear() ? now.getMonth() : 11)
 
-        $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: targetUser,
+
+          $('#weeklyNavigate').html(ich.weeklyNavigateTemplate({user: targetUser,
+                                                              year: year,
+                                                              hasNextYear: function () {
+                                                                return this.year != maxYear
+                                                              },
                                                               prevYear: year - 1, prevMonth: 11,
                                                               nextYear: nextYear, nextMonth: nextMonth}))
         return OnTrail.pager.create(_.partial(OnTrail.rest.weeksummary, targetUser, year, month), $("#weeksummary"))
