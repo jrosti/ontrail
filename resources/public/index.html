@@ -46,8 +46,11 @@
             <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+            <li class="divider"></li>
+            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+            <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+            <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <span id="ownGroupsDropDown"></span>
-        </ul>
         </ul>
         <nav class="blue-grey darken-2" role="navigation">
             <div class="nav-wrapper container">
@@ -78,7 +81,7 @@
 </div>
 
 <!-- Content -->
-<div id="content-wrapper" class="container">
+<div id="content-wrapper" class="">
 <div id="content-top"></div>
 <div id="content">
 <div class="row">
@@ -192,9 +195,6 @@
 <!-- Main Content -->
 <div>
     <div role="content">
-        <nav class="logged-in orange accent-2" id="user-header">
-
-        </nav>
         <section id="search-container">
             <header>
                 <div style="float: right">
@@ -446,6 +446,9 @@
 </div>
 <div id="sidemenu" class="col s3">
 
+    <div id="current-user-container" class="card">
+    </div>
+
     <section id="header-container logged-in card">
         <div id="content-header"></div>
         <div id="graph-container">
@@ -482,14 +485,6 @@
             <div>
                 <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
             </div>
-        </section>
-
-        <section>
-            <h4>Toiminnot</h4>
-            <ul class="link-list">
-                <div class="logged-in"><li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li></div>
-                <li><a class="pageLink" rel="groups">Ryhmät</a></li>
-            </ul>
         </section>
 
     </div>
@@ -1003,70 +998,66 @@
             <span class="card-title">{{target}}</span>
         </div>
         <div class="card-content">
-            <div>{{#profile.goals}}{{profile.goals}}{{/profile.goals}}</div>
+            {{#profile.goals}}<strong>{{profile.goals}}</strong>{{/profile.goals}}
 
-            {{#profile.resthr}}<p>Syke: {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
-            <div>{{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}</div>
-
-
+            {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
+            <div>
+                <h5>Ryhmät</h5>
+                {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
+            </div>
+            <div>
+                <h5>Harjoitukset</h5>
+                <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
+                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a>
+                <a class="pageLink button" rel="summary/{{target}}/2016/by/week">viikkoyhteenveto</a>
+            </div>
                 {{#hasRecords}}
-                    <a id="toggleRecords" href="javascript:void(0);">Näytä juoksuennätykset</a>
-                    <div id="recordsDiv" style="width:350px">
-                        <table id="records" class="details">
-                            <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
-                            {{#records}}
-                            <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
-                                <td>{{result}}</td>
-                                <td>{{pace}}</td>
-                            </tr>
-                            {{/records}}
-                        </table>
-                    </div>
+                    <h5>Ennätykset</h5>
+                    <table id="records" class="details">
+                        <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
+                        {{#records}}
+                        <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
+                            <td>{{result}}</td>
+                            <td>{{pace}}</td>
+                        </tr>
+                        {{/records}}
+                    </table>
                 {{/hasRecords}}
         </div>
         <div class="card-action">
-            <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
-            <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
-            <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
-            <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a><br/>
-            <a class="pageLink" rel="summary/{{user}}/2016/by/week">Viikkoyhteenveto</a>
+            <a class="pageLink" rel="user/{{target}}">Lenkit</a>
+            <a class="pageLink" rel="summary/{{target}}">Lajit</a>
+            <a class="pageLink" rel="tagsummary/{{target}}">Avainsanat</a>
+            <a class="pageLink" rel="weeksummary/{{target}}">Harjoitusviikot</a>
         </div>
     </div>
 </script>
 
 <script id="otherDetailTemplate" type="text/html">
-    <article>
-        <header>
-            <h3>Haku lajille {{target}}</h3>
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">Haku lajille <i>{{target}}</i></span>
             {{#stats}}
             <table class="details">
-                <thead><tr>
-                    <th>Matka</th>
-                    <th>Aika</th>
-                    <th>Keskivauhti</th>
-                    {{#stats.f80}}<th>80 % hitaampia</th><th>95 % hitaampia</th>{{/stats.f80}}
-                    <th>Syke</th>
-                    <th>Toistot (kpl)</th>
-                    <th>Nousu (m)</th>
-                    <th>Kertoja (kpl)</th>
-                </tr></thead>
-                <tr>
-                    <td>{{stats.distance}}</td>
-                    <td>{{stats.duration}}</td>
-                    <td>{{stats.pace}}</td>
-                    {{#stats.f80}}
-                    <td>{{stats.f80}}</td>
-                    <td>{{stats.f95}}</td>
-                    {{/stats.f80}}
-                    <td>{{stats.avghr}}</td>
-                    <td>{{stats.repeats}}</td>
-                    <td>{{stats.elevation}}</td>
-                    <td>{{stats.count}}</td>
-                </tr>
+                <tbody>
+                <tr><th>Matka</th><td>{{stats.distance}}</td></tr>
+                <tr><th>Aika</th><td>{{stats.duration}}</td></tr>
+                <tr><th>Keskivauhti<td>{{stats.pace}}</td></th></tr>
+                {{#stats.f80}}
+                <tr><th>80 % hitaampia</th><td>{{stats.f80}}</td></tr>
+                <tr><th>95 % hitaampia</th><td>{{stats.f95}}</td></tr>
+                {{/stats.f80}}
+                <tr><th>Syke</th><td>{{stats.avghr}}</td></tr>
+                <tr><th>Toistot (kpl)</th><td>{{stats.repeats}}</td></tr>
+                <tr><th>Nousu (m)</th><td>{{stats.elevation}}</td></tr>
+                <tr><th>Kertoja (kpl)</th><td>{{stats.count}}</td></tr>
+                </tbody>
             </table>
             {{/stats}}
-        </header>
-    </article>
+        </div>
+    </div>
 </script>
 
 <script id="hpkMonthContentTemplate" type="text/html">

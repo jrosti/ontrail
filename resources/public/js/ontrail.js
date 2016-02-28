@@ -165,7 +165,7 @@
     }
     var renderSingleExercise = function (exercise, me) {
       keen.view(exercise.id, exercise.user, me)
-      renderUserMenu(exercise.user)
+      renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
       var helpers = {
         deleteComment: function () {
@@ -583,7 +583,7 @@
     var initialPage = function (user) {
       var address = $.address.value()
       if (address && address != "") return splitM(address)
-      return "latest"
+      return ["latest"]
     }
 
     // back button handling
@@ -705,12 +705,23 @@
       })
 
     function renderUserMenu(user) {
-      $("#user-header").html(ich.userHeaderTemplate({"data": user}))
+      console.log("usermenu", user)
+      $("#current-user-container").html(ich.userDetailTemplate(user))
+    }
+
+    function renderUserMenuFromUsername(username) {
+      OnTrail.rest.profile(username).take(1).select(_attr("data")).subscribe(renderUserMenu)
     }
 
     // update current user in the menu bar
-    var currentPageLinkUsers = currentPages.distinctUntilChanged().combineWithLatestOf(sessions).selectArgs(_findUser(1));
-    sessions.merge(currentPageLinkUsers).subscribeArgs(renderUserMenu)
+    var currentPageLinkUsers = currentPages.distinctUntilChanged()
+        .where(function(page) { return (page[0] || "") != "ex"})
+        .combineWithLatestOf(sessions).selectArgs(_findUser(1));
+    sessions.merge(currentPageLinkUsers)
+        .where(function(page) { console.log("paeg", page, initialPage()); return (initialPage()[0] || "") != "ex"})
+        .switchMap(OnTrail.rest.profile)
+        .select(_attr("data"))
+        .subscribeArgs(renderUserMenu)
 
     var userTagPages = currentPages.whereArgs(partialEqualsAny(["user", "tags", "sport", "group"])).distinctUntilChanged()
 
@@ -736,15 +747,14 @@
       } else if (args.data.action == "group") {
         ich.groupDetailTemplate(args.data).appendTo($('#content-header'))
       } else if (args.data.action == "user") {
-        ich.userDetailTemplate(args.data).appendTo($('#content-header'))
-        $("#recordsDiv").hide()
+/*        $("#recordsDiv").hide()
         $("#toggleRecords").toggle(function () {
           $("#toggleRecords").text("Piilota juoksuennätykset")
           $("#recordsDiv").show()
         }, function () {
           $("#toggleRecords").text("Näytä juoksuennätykset")
           $("#recordsDiv").hide()
-        })
+        }) */
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#content-header'))
         if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {

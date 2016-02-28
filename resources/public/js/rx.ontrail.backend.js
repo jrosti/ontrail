@@ -80,6 +80,7 @@
   Rest.prototype.passwordV = function(password, username) { return postAsObservable("validate/login", { username: username, password: password }) }
 
   Rest.prototype.pageDetail = function(filter) { return getAsObservable("page-detail?" + $.param(filter))}
+  Rest.prototype.profile = function(username) { return getAsObservable("profile/" + username) }
 
   Rest.prototype.s3list = function(filter) { return getAsObservableFromBlogDomain("s3list?" + $.param(filter)) }
 
