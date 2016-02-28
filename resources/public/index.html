@@ -48,6 +48,7 @@
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
             <li class="divider"></li>
             <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+            <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a></li>
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <span id="ownGroupsDropDown"></span>
@@ -480,13 +481,6 @@
                 </div>
             </article>
         </section>
-
-        <section>
-            <div>
-                <a class="pageLink" rel="sport/Tapahtuma/sb/creationDate"><b>Katso tapahtumia</b></a>
-            </div>
-        </section>
-
     </div>
 </div>
 
@@ -1010,15 +1004,8 @@
                 {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
             </div>
             <div>
-                <h5>Harjoitukset</h5>
-                <a class="pageLink button" rel="user/{{target}}/sb/lastModifiedDate">uusin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/+creationDate">vanhin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/distance">pisin</a>
-                <a class="pageLink button" rel="user/{{target}}/sb/pace">nopein</a>
-                <a class="pageLink button" rel="summary/{{target}}/2016/by/week">viikkoyhteenveto</a>
-            </div>
+                <h5>Ennätykset</h5>
                 {{#hasRecords}}
-                    <h5>Ennätykset</h5>
                     <table id="records" class="details">
                         <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
                         {{#records}}
@@ -1029,6 +1016,8 @@
                         {{/records}}
                     </table>
                 {{/hasRecords}}
+                {{^hasRecords}}Ei ennätyksiä{{/hasRecords}}
+            </div>
         </div>
         <div class="card-action">
             <a class="pageLink" rel="user/{{target}}">Lenkit</a>
