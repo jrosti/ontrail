@@ -8,7 +8,8 @@
             [clj-time.local :as local]
             )
   (:use [compojure.core]
-        [ontrail.scheduler])
+        [ontrail.scheduler]
+        [ontrail.user])
   (:import [java.lang IllegalStateException]))
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
@@ -61,12 +62,15 @@
 
 (defn server-message [type user value]
   (condp = type
-    :comment-ex {:user user 
-                 :action (str "kommentoi käyttäjän " (:user value) " harjoitusta") 
+    :comment-ex {:user user
+                 :avatar (get-avatar-url user)
+                 :action (str "kommentoi käyttäjän " (:user value) " harjoitusta")
+                 :otherUser (:user value)
                  :message (:title value) 
                  :link (ex-link value)}
-    :create-ex {:user user 
-                :action "kirjasi harjoituksen" 
+    :create-ex {:user user
+                :avatar (get-avatar-url user)
+                :action "kirjasi harjoituksen"
                 :message (:title value) 
                 :link (ex-link value)}))
 
