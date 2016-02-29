@@ -99,15 +99,32 @@ function emailV() {
   }
 }
 
-// (String -> ValidationResult) -> (String -> ValidationResult)
-function okWhen(predicate, validatorF) {
-  return function() {
-    if (forall(arguments, function(a) { return predicate(a) }))
-      return []
-    else
-      return validatorF.apply(this, arguments)
+// extend XDate parsing
+var parseDate
+(function() {
+  var toValidDate = function(year, month, day) {
+    var date = new XDate(year, month-1, day)
+    if (((date.getYear()+1900) == year || date.getYear() == year) && date.getMonth() == (month-1) && date.getDate() == day)
+      return date;
+    return null;
   }
-}
+
+  var stringsToDate = function(parts) {
+    if (parts === null)
+      return null;
+    if (parts[1].length == 4) return toValidDate(parseInt(parts[1]), parseInt(parts[3]), parseInt(parts[5]))
+    else if (parts[5].length == 4) return toValidDate(parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
+    return toValidDate(2000 + parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
+  }
+
+  parseDate = function(str) {
+    var validDate = /^(\d{1,2}|\d{4})(\.|-|\/)(\d{1,2})(\.|-|\/)(\d{1,2}|\d{4})$/
+    return stringsToDate(validDate.exec(str));
+  }
+
+  XDate.parsers.push(parseDate);
+})()
+
 // Observable a -> (a -> ValidationResult) -> Validation
 function mkValidation(observable, validator) {
   return observable.selectArgs(validator)
