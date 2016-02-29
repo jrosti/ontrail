@@ -67,7 +67,6 @@
     }
 
     var doPostExercise = function (url) {
-      console.log("posting ex", url)
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
       var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
       var values = $('#add-exercise-form').serialize()
@@ -346,7 +345,7 @@
     var sessions = OnTrail.session.create(logins.merge(registerUsers).merge(changePasswords), logouts.merge(loginFails))
     var loggedIns = sessions.where(isLoggedUser)
 
-    // toggle logged-in and logged-out
+    // toggle logged-in and logged-out3
     sessions.subscribe(function (userId) {
       $('body').toggleClass('logged-in', isLoggedUser(userId)).toggleClass('logged-out', !isLoggedUser(userId))
     })
@@ -601,7 +600,13 @@
       return nothing()
     }).select(splitM)
 
-    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).merge(backPresses).publish()
+    var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).merge(backPresses)
+        .select(function (pages) {
+          if (pages === undefined || pages.length < 1 || pages[0] == "")
+              return ["latest"]
+          return pages
+        })
+        .publish()
 
     currentPages.whereArgs(partialEquals("register")).subscribe(function () {
       $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
@@ -719,7 +724,7 @@
 
     // update current user in the menu bar
     var currentPageLinkUsers = currentPages.distinctUntilChanged()
-        .where(function(page) { return (page[0] || "") != "ex"})
+        .where(function(page) { return (page && page.length > 0 && ((page[0] || "") != "ex")) })
         .combineWithLatestOf(sessions).selectArgs(_findUser(1));
     sessions.merge(currentPageLinkUsers)
         .where(function(page) { return (initialPage()[0] || "") != "ex"})
