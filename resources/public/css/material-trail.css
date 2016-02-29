@@ -123,10 +123,6 @@ body.pace #graph-container {
     display: block;
 }
 
-#comment-body {
-    min-height: 6rem;
-}
-
 #comment-body p {
     padding-bottom: 1.5rem;
 }
@@ -239,6 +235,10 @@ body[data-page="group"] #current-user-container,
     display: none;
 }
 
+#current-user-container .card {
+    margin-top: 0;
+}
+
 body[data-page="group"] #header-container,
 body[data-page="sport"] #header-container,
 body[data-page="tags"] #header-container {
@@ -333,4 +333,43 @@ a.editComment {
 }
 [role=addex][data-mode="edit"] .add {
     display: none;
+}
+
+.froala-wrapper p {
+    margin-bottom: 1.5rem !important;
+}
+
+#ex-body .froala-element.f-placeholder+span.fr-placeholder {
+    left: 4.6rem;
+    right: auto;
+}
+
+.pika-title {
+    background-color: #ffa726;
+    color: #fff;
+}
+
+.pika-label.dayname {
+    background-color: #fb8c00;
+    color: #fff;
+}
+
+.pika-label.year {
+    color: #fff;
+}
+.is-selected .pika-button {
+    background-color: #039be5;
+    color: #fff;
+}
+
+.is-today .pika-button {
+    color: #039be5;
+}
+
+.pika-button:hover {
+    background: #039be5 !important;
+}
+
+.pika-ok {
+    color: #039be5;
 }

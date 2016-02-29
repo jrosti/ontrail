@@ -73,6 +73,9 @@
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').editable('getHTML'))
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
+
+      console.log("sending ", values)
+
       return OnTrail.rest.postAsObservable(url, values)
     }
 
@@ -167,9 +170,16 @@
 
     var renderSingleExercise = function (exercise, me) {
       keen.view(exercise.id, exercise.user, me)
+
+      console.log("iame", me, $("#profile-avatar").attr("src"))
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
       var helpers = {
+        now: function() {
+          return moment().format("DD.MM.YYYY HH:mm");
+        },
+        me: me,
+        "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {
           return function (text, render) {
             if (this.user !== me && exercise.user !== me) return ""
@@ -609,7 +619,7 @@
         .publish()
 
     currentPages.whereArgs(partialEquals("register")).subscribe(function () {
-      $("html, body").animate({ scrollTop: $("#content-wrapper").offset().top - 110 }, 1000)
+      $("html, body").animate({ scrollTop: 0 }, 1000)
     })
 
       var tops = currentPages.whereArgs(partialEquals("tops")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
@@ -916,7 +926,7 @@
         localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
       } catch(err) {
       }
-      $("#ex-body").editahble("setHTML", "<p>\n<br>\n</p>")
+      $("#ex-body").editable("setHTML", "<p>\n<br>\n</p>")
     }
 
     var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise',function (instream) {
@@ -934,10 +944,10 @@
     var renderEditExercise = function (ex) {
       $("[role='addex']").attr('data-mode', 'edit')
       _.map(["title", "duration", "distance", "avghr", "detailRepeats", "detailVolume", "detailElevation"], function (field) {
-        $('#ex-' + field).val(ex[field]).keyup()
+        $('#ex-' + field).val(ex[field]).keyup().focus().blur()
       })
-      $("#ex-date").attr('value', ex.date)
-      $("#ex-date").trigger("cal:changed")
+      $("#ex-date").attr('value', ex.date).focus().blur()
+      $("#ex-body").editable()
       $("#ex-body").editable("setHTML", ex.body)
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])
@@ -1051,7 +1061,13 @@
     var validations = _.flatten([titleValidation, durationReqValidation, timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise, #edit-exercise'), "disabled"))
 
-    $('#ex-continuous-date').continuousCalendar({isPopup: true, selectToday: true, weeksBefore: 520, weeksAfter: 5, startField: $('#ex-date'), locale: DateLocale.FI })
+    var picker = new Pikaday({
+      field: document.getElementById('ex-date'),
+      format: "DD.MM.YYYY",
+      onSelect: function() {
+        console.log(this.format);
+      }
+    });
 
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
