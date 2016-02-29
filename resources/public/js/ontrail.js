@@ -453,7 +453,11 @@
             }
 
             message.timestamp = moment().format("DD.MM.YYYY HH:mm")
-            message.description = message.action.replace("{{otherUser}}", "<a rel=\"user/" + message.otherUser + "\" class=\"pageLink\">" + message.otherUser + "</a>")
+            if (message.otherUser) {
+              message.description = message.action.replace(message.otherUser, "<a rel=\"user/" + message.otherUser + "\" class=\"pageLink\">" + message.otherUser + "</a>")
+            } else {
+              message.description = message.action
+            }
 
             var templateMsg = ich.chatMessageTemplate(message)
             $messages.prepend(templateMsg)
