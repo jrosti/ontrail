@@ -371,9 +371,9 @@
 
 <section role="addex" data-mode="add" class="logged-in">
     <div class="card">
+        <form id="add-exercise-form" class="edit-form" method="post">
         <div class="card-content">
             <div class="card-title">Lisää uusi suoritus</div>
-            <form id="add-exercise-form" class="edit-form" method="post">
                 <div class="row">
                     <div class="col s6">
                         <div>
@@ -435,20 +435,13 @@
                         <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
                     </div>
                 </div>
-            </form>
-        </div>
-        <div class="card-action">
-            <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
-            <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
-        </div>
-        <article class="edit-form">
-            <div id="details-container">
             </div>
-            <div class="clear"></div>
-            <div>
+            <div class="card-action">
+                <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
+                <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
             </div>
         </form>
-    </article>
+    </div>
 </section>
 
 <section id="register-wrapper" role="register" data-mode="add" class="logged-in">
@@ -670,7 +663,7 @@
                     <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a> {{#isNew}}<span class="newEx">uusi</span>{{/isNew}}
+                        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
                     <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
                 <div class="full">
@@ -1239,10 +1232,6 @@
         }
         a.modify[data-user="{{user}}"] {
         visibility: visible;
-        vertical-align: baseline;
-        }
-        body[data-page="user"] a[rel="user/{{user}}"] {
-        font-weight: bold;
         }
     </style>
 </script>

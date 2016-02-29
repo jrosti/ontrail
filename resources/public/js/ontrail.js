@@ -67,11 +67,12 @@
     }
 
     var doPostExercise = function (url) {
+      console.log("posting ex", url)
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
       var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
       var values = $('#add-exercise-form').serialize()
         + "&sport=" + renderSelection(sport)
-        + "&body=" + encodeURIComponent($('#ex-body').getCode())
+        + "&body=" + encodeURIComponent($('#ex-body').editable('getHTML'))
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
       return OnTrail.rest.postAsObservable(url, values)
     }
@@ -188,8 +189,6 @@
 
     }
     var renderSports = function (data) {
-      console.log("render sports data", ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
-
       $('#ex-sport, #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
       if (!Modernizr.touch) {
         $('#ex-sport, #filter-sport').select2({formatSelection: selectionFormat})
@@ -912,7 +911,7 @@
         localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
       } catch(err) {
       }
-      $("#ex-body").setCode("<p>\n<br>\n</p>")
+      $("#ex-body").editahble("setHTML", "<p>\n<br>\n</p>")
     }
 
     var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise',function (instream) {
@@ -934,7 +933,7 @@
       })
       $("#ex-date").attr('value', ex.date)
       $("#ex-date").trigger("cal:changed")
-      $("#ex-body").setCode(ex.body)
+      $("#ex-body").editable("setHTML", ex.body)
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])
       else {
@@ -1240,7 +1239,7 @@
     // Autosave the exercise XXX: this shoud be bound to onchange, but redactor
     // autosave, nor onchange event did not work.
     rx.interval(10000).subscribe(function () {
-      var bodyText = $('#ex-body').getCode()
+      var bodyText = $('#ex-body').editable('getHTML')
       if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
         try {
           localStorage.setItem('ex-body', bodyText)
