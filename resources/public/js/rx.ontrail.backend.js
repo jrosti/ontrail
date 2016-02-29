@@ -42,7 +42,6 @@
   Rest.prototype.tagsummary = function() { return getAsObservableResultData.apply(this, ["summary-tags"].concat(_.argsToArray(arguments))) }
   Rest.prototype.weeksummary = function(user, year, month, n) {
     var nthMonth = function(n) {
-      var now = XDate.today()
       monthsTotal = year * 12 + month - n
       return [Math.floor(monthsTotal / 12), monthsTotal % 12 + 1]
     }

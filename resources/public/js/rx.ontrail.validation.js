@@ -69,58 +69,10 @@ function requiredV(name) {
   }
 }
 
-// Int -> (String -> ValidationResult)
-function maxV(maxVal) {
-  return function(x) {
-    return (parseFloat(x) <= maxVal).orFailure("too_big")
-  }
-}
-
-// Int -> (Num -> ValidationResult)
-function minV(minVal) {
-  return function(x) {
-    return (parseFloat(x) >= minVal).orFailure("too_small")
-  }
-}
-
 // Int -> (Num -> ValidationResult)
 function minLengthV(minLen, name) {
   return function(x) {
     return (x.length >= minLen).orFailure(name || "too_short")
-  }
-}
-
-//
-// Int -> (Num -> ValidationResult)
-function maxLengthV(maxLen) {
-  return function(x) {
-    return (x.length <= maxLen).orFailure("too_long")
-  }
-}
-
-// Int -> Int -> (String -> ValidationResult)
-function lengthV(minLen, maxLen) {
-  return function(x) {
-    return (x != undefined && x.length >= minLen && x.length <= maxLen).orFailure("not_between")
-  }
-}
-
-// () -> (String -> ValidationResult)
-function numberV() {
-  return function(x) {
-    return (($.trim(x).length > 0) && !isNaN(x)).orFailure("not_number")
-  }
-}
-
-// () -> ([Num] -> ValidationResult)
-function orderV() {
-  return function() {
-    var prev = parseFloat(arguments[0])
-    for (var i = 1; i < arguments.length; i = i + 1) {
-      if (parseFloat(arguments[i]) < prev) return ["invalid_order"]
-      prev = parseFloat(arguments[i])
-    }
-    return []
   }
 }
 
@@ -147,72 +99,6 @@ function emailV() {
   }
 }
 
-// extend XDate parsing
-var parseDate
-(function() {
-  var toValidDate = function(year, month, day) {
-    var date = new XDate(year, month-1, day)
-    if (((date.getYear()+1900) == year || date.getYear() == year) && date.getMonth() == (month-1) && date.getDate() == day)
-      return date;
-    return null;
-  }
-
-  var stringsToDate = function(parts) {
-    if (parts === null)
-      return null;
-    if (parts[1].length == 4) return toValidDate(parseInt(parts[1]), parseInt(parts[3]), parseInt(parts[5]))
-    else if (parts[5].length == 4) return toValidDate(parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
-    return toValidDate(2000 + parseInt(parts[5]), parseInt(parts[3]), parseInt(parts[1]))
-  }
-
-  parseDate = function(str) {
-    var validDate = /^(\d{1,2}|\d{4})(\.|-|\/)(\d{1,2})(\.|-|\/)(\d{1,2}|\d{4})$/
-    return stringsToDate(validDate.exec(str));
-  }
-
-  XDate.parsers.push(parseDate);
-})()
-
-// () -> (String -> ValidationResult)
-function dateV() {
-  return function(date) {
-    return (date != null && date.valid()).orFailure("invalid_date")
-  }
-}
-
-function dateInThePastV() {
-  return function(date) {
-    return (date == null || date.diffDays(new XDate()) > 0).orFailure("date_too_new")
-  }
-}
-
-// () -> (String -> ValidationResult)
-function moneyV() {
-  return function(e) {
-    var valid = /^((0)|([1-9][0-9]*))([,\.][0-9]{2})?$/
-    return (valid.test($.trim(e))).orFailure("invalid_money")
-  }
-}
-
-// String -> (String -> ValidationResult)
-function charV(allowed) {
-  return function(x) {
-    for(i = 0; i < x.length; i++) {
-      if (allowed.indexOf(x.charAt(i)) == -1)
-        return ["forbidden_char"]
-    }
-    return []
-  }
-}
-
-// (() -> ValidationResult) -> ValidationResult -> ValidationResult
-function ifOkThenV(validator) {
-  return function(vnResult) {
-    if (vnResult.length == 0) return validator()
-    else return vnResult
-  }
-}
-
 // (String -> ValidationResult) -> (String -> ValidationResult)
 function okWhen(predicate, validatorF) {
   return function() {
@@ -222,35 +108,6 @@ function okWhen(predicate, validatorF) {
       return validatorF.apply(this, arguments)
   }
 }
-
-// (String -> ValidationResult) -> (String -> ValidationResult)
-function emptyOk(validatorF) { return okWhen(isEmpty, validatorF) }
-
-// (String -> ValidationResult)... -> (String -> ValidationResult)
-function andV() {
-  var validators = []
-  for (var i = 0; i < arguments.length; i++)
-    validators.push(arguments[i])
-
-  return function() {
-    var result = []
-    for (var i = 0; i < validators.length; i++)
-      result.push(validators[i].apply(this, arguments))
-    return _.flatten(result)
-  }
-}
-
-// (String -> ValidationResult) -> (String -> ValidationResult)
-function notV(validatorF) {
-  return function() {
-    var errors = validatorF.apply(this, arguments)
-    if (errors.length == 0)
-      return ["not"]
-    else
-      return []
-  }
-}
-
 // Observable a -> (a -> ValidationResult) -> Validation
 function mkValidation(observable, validator) {
   return observable.selectArgs(validator)

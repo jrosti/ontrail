@@ -74,8 +74,6 @@
         + "&body=" + encodeURIComponent($('#ex-body').editable('getHTML'))
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
 
-      console.log("sending ", values)
-
       return OnTrail.rest.postAsObservable(url, values)
     }
 
@@ -437,7 +435,6 @@
 
           webSocket.onmessage = function(event) {
             var message = JSON.parse(event.data)
-            console.log("message", message)
 
             if (message.action && message.action === "server" && message.message === "pong") {
               lastPongEpoch = new Date().getTime();
@@ -475,7 +472,7 @@
     var pingInterval = 4000, openWhenPingMissedIn = 15000, maxReopenCount = 20
 
     setInterval(function() {
-      if (webSocketPollerActive && webSocketRetriCount < maxReopenCount) {
+      if (webSocketPollerActive && webSocketRetriesCount < maxReopenCount) {
         if (new Date().getTime() - lastPongEpoch > openWhenPingMissedIn) {
           closeWebSocket()
           openWebSocket()
@@ -1073,10 +1070,7 @@
 
     var picker = new Pikaday({
       field: document.getElementById('ex-date'),
-      format: "DD.MM.YYYY",
-      onSelect: function() {
-        console.log(this.format);
-      }
+      format: "DD.MM.YYYY"
     });
 
     var editorSettings = {
