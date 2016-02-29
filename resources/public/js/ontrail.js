@@ -196,8 +196,11 @@
     }
     var renderSports = function (data) {
       $('#ex-sport, #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
+
       if (!Modernizr.touch) {
         $('#ex-sport, #filter-sport').select2({formatSelection: selectionFormat})
+        $("#filter-sport").val("Juoksu").attr('selected', true)
+        $("#filter-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
       }
     }
     var renderTags = function (data) {
@@ -1198,6 +1201,8 @@
         field: document.getElementById('filter-stop-date'),
         format: "DD.MM.YYYY"
       });
+
+      $("#filter-sort").material_select()
       $('#filter-users').select2({
         tags: activeUsers,
         tokenSeparators: [","],
