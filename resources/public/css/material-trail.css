@@ -134,6 +134,43 @@ blockquote {
     border-color: #ffab40;
 }
 
+#main-content {
+    margin-right: 260px;
+}
+
+@media only screen and (max-width: 992px) {
+    #main-content {
+        margin-right: 0;
+    }
+}
+
+#chatSection {
+    position: fixed;
+    overflow-y: scroll;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 260px;
+    padding: 64px 0 0;
+    border-left: solid 1px #9e9e9e;
+}
+
+#chatSection h5 {
+    margin-left: 1rem;
+}
+
+#chatSection #messageBox * {
+    font-size: 0.9rem;
+}
+
+.collection .collection-item.avatar {
+    min-height: 64px;
+}
+
+.input-field label {
+    left: 0;
+}
+
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="content"],

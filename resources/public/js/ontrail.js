@@ -171,7 +171,6 @@
     var renderSingleExercise = function (exercise, me) {
       keen.view(exercise.id, exercise.user, me)
 
-      console.log("iame", me, $("#profile-avatar").attr("src"))
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
       var helpers = {
@@ -427,10 +426,9 @@
       webSocketPollerActive = true
       if (enableWebSocket && "WebSocket" in window && webSocket === undefined ||
           (webSocket && (webSocket.readyState === undefined || webSocket.readyState > 1))) {
-        webSocket = new WebSocket('ws://' + location.hostname + '/rest/v1/async')
+        webSocket = new WebSocket('ws://' + location.hostname + ":" + location.port + '/rest/v1/async')
 
         $messages.empty()
-        $messages.prepend('<p class="chatMsg">yhdistetään...</p>')
 
         var onMessage = Rx.Observable.create(function (observer) {
           var next = function () {
@@ -439,6 +437,7 @@
 
           webSocket.onmessage = function(event) {
             var message = JSON.parse(event.data)
+            console.log("message", message)
 
             if (message.action && message.action === "server" && message.message === "pong") {
               lastPongEpoch = new Date().getTime();
@@ -448,6 +447,13 @@
             if (message.action && message.action.indexOf("kommentoi") === 0) {
               next()
             }
+
+            if (message.user == "Ontrail") {
+              return;
+            }
+
+            message.timestamp = moment().format("DD.MM.YYYY HH:mm")
+            message.description = message.action.replace("{{otherUser}}", "<a rel=\"user/" + message.otherUser + "\" class=\"pageLink\">" + message.otherUser + "</a>")
 
             var templateMsg = ich.chatMessageTemplate(message)
             $messages.prepend(templateMsg)
@@ -465,7 +471,7 @@
     var pingInterval = 4000, openWhenPingMissedIn = 15000, maxReopenCount = 20
 
     setInterval(function() {
-      if (webSocketPollerActive && webSocketRetriesCount < maxReopenCount) {
+      if (webSocketPollerActive && webSocketRetriCount < maxReopenCount) {
         if (new Date().getTime() - lastPongEpoch > openWhenPingMissedIn) {
           closeWebSocket()
           openWebSocket()

@@ -99,445 +99,441 @@
 <!-- Content -->
 <div id="content-top"></div>
 <div id="content">
-<div class="row">
-<div class="col s9">
+    <div id="main-content" class="row">
+        <div class="col s12 m9">
+            <section id="groups-content" role="groups" class="logged-in"/>
+            </section>
 
-<section id="groups-content" role="groups" class="logged-in"/>
-</section>
+            <section role="tops" class="">
 
-<section role="tops" class="">
+                <nav class="orange accent-2">
+                    <ul>
+                        <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
+                        <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
+                        <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
+                        <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
+                        <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
+                        <li><a rel="tops/bywheel" class="pageLink">Pyöräilijät</a></li>
+                        <li><a rel="tops/rowing" class="pageLink">Soutelijat</a></li>
+                        <li><a rel="tops/pullups" class="pageLink">Vetelijät</a></li>
+                        <li><a rel="tops/stretches" class="pageLink">Venyttelijät</a></li>
+                    </ul>
+                </nav>
+                <div class="card">
+                    <div class="card-content" id="top-list"></div>
+                </div>
+            </section>
 
-    <nav class="orange accent-2">
-        <ul>
-            <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
-            <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
-            <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
-            <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
-            <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
-            <li><a rel="tops/bywheel" class="pageLink">Pyöräilijät</a></li>
-            <li><a rel="tops/rowing" class="pageLink">Soutelijat</a></li>
-            <li><a rel="tops/pullups" class="pageLink">Vetelijät</a></li>
-            <li><a rel="tops/stretches" class="pageLink">Venyttelijät</a></li>
-        </ul>
-    </nav>
-    <div class="card">
-        <div class="card-content" id="top-list"></div>
-    </div>
-</section>
+            <section role="userprofile">
+                <article>
+                    <h3>Talletetut kuvat</h3>
+                    <div id="file-list" style="width: 70%"></div>
+                    <div id="dialog" title="Kuvat" style="display: none;">
+                        <img id="image" src=""/>
+                    </div>
+                </article>
+            </section>
 
-<section role="userprofile">
-    <article>
-        <h3>Talletetut kuvat</h3>
-        <div id="file-list" style="width: 70%"></div>
-        <div id="dialog" title="Kuvat" style="display: none;">
-            <img id="image" src=""/>
-        </div>
-    </article>
-</section>
-
-<section role="profile" class="logged-in">
-    <div class="row">
-        <h3 class="orange-text accent-2">Muokkaa profiiliasi</h3>
-        <div class="col s6">
-            <div class="card">
-                <div class="card-content">
-                    <img id="profile-avatar" class="circle left" src="/img/share.jpg"/>
-                    <span class="card-title">Henkilökohtaiset tiedot</span>
-                    <div class="details">
-                        <div class="edit-form">
-                            Sähköposti: <strong><span id="profile-email"></span></strong>
-                            <div class="clearfix">
-                                <i>
-                                    Vaihda avatarta <a href="http://www.gravatar.com">Gravatar-palvelun avulla</a> käyttäen
-                                    sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain pyytämällä ylläpidolta.
-                                </i>
+            <section role="profile" class="logged-in">
+                <div class="row">
+                    <h3 class="orange-text accent-2">Muokkaa profiiliasi</h3>
+                    <div class="col s6">
+                        <div class="card">
+                            <div class="card-content">
+                                <img id="profile-avatar" class="circle left" src="/img/share.jpg"/>
+                                <span class="card-title">Henkilökohtaiset tiedot</span>
+                                <div class="details">
+                                    <div class="edit-form">
+                                        Sähköposti: <strong><span id="profile-email"></span></strong>
+                                        <div class="clearfix">
+                                            <i>
+                                                Vaihda avatarta <a href="http://www.gravatar.com">Gravatar-palvelun avulla</a> käyttäen
+                                                sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain pyytämällä ylläpidolta.
+                                            </i>
+                                        </div>
+                                    </div>
+                                    <div class="download" style="margin: 10px 0px 20px 0px">
+                                        <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
+                                    </div>
+                                    <form id="profile-form" class="edit-form" method="post">
+                                        <div class="input-field">
+                                            <label for="synopsis">Motto</label>
+                                            <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="goals">Tavoitteet</label>
+                                            <input id="goals" name="goals" type="text" maxlength="60" size="60" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="resthr">Leposyke</label>
+                                            <input id="resthr" name="resthr" type="text" maxlength="3" size="3" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="maxhr">Maksimisyke</label>
+                                            <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="aerk">Aerobinen kynnys</label>
+                                            <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" />
+                                        </div>
+                                        <div class="input-field">
+                                            <label for="anaerk">Anaerobinen kynnys</label>
+                                            <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" />
+                                        </div>
+                                    </form>
+                                    <span id="profile-result"></span>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <a id="update-profile" class="button login waves-effect waves-light btn-flat">Päivitä profiilitiedot</a>
                             </div>
                         </div>
-                        <div class="download" style="margin: 10px 0px 20px 0px">
-                            <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
+                    </div>
+                    <div class="col s6">
+                        <div class="card">
+                            <div class="card-content">
+                                <span class="card-title">Vaihda salasana</span>
+                                <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
+                                <form id="change-password-form" class="edit-form" method="post">
+                                    <div class="input-field">
+                                        <label for="ch-old-password">Vanha salasana</label>
+                                        <input id="ch-old-password" class="reset" type="password"/>
+                                        <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ch-password">Salasana</label>
+                                        <input id="ch-password" name="ch-password" class="reset" type="password"/>
+                                        <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ch-password2">Salasana uudelleen</label>
+                                        <input id="ch-password2" class="reset" type="password"/>
+                                        <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
+                                    </div>
+                                </form>
+                                <p class="error"><span id="password-change-result"></span></p>
+                            </div>
+                            <div class="card-action">
+                                <a id="change-password" class="button change-password waves-effect waves-light btn-flat">Vaihda salasana</a>
+                            </div>
                         </div>
-                        <form id="profile-form" class="edit-form" method="post">
-                            <div class="input-field">
-                                <label for="synopsis">Motto</label>
-                                <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <div>
+                <div role="content">
+                    <nav id="search-container" class="orange accent-2">
+                        <div class="nav-wrapper">
+                            <form accept-charset="utf-8">
+                                <div class="input-field">
+                                    <input id="search" type="search" required>
+                                    <label for="search"><i class="material-icons">search</i></label>
+                                    <i class="material-icons">close</i>
+                                </div>
+                            </form>
+                        </div>
+                    </nav>
+
+                    <section id="filter-container">
+                        <header>
+                            <div id="filter-form" style="display: none" class="logged-in">
+                                <a id="show-search" href="javascript:void(0)">Etsi</a> /
+                                <strong>Suodata</strong>:
+                                <br/>
+                                <h6>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jos et halua käyttää jotain kenttää suodatuksessa, jätä se täyttämättä.</h6>
+                                <br/>
+
+                                <p>
+                                    <label>Käyttäjät</label>
+                                    <input id="filter-users" data-placeholder="" multiple class="chzn-select" style="width:290px;height:22px"/>
+                                </p>
+
+                                <p>
+                                    <label>Laji</label>
+                                    <select id="filter-sport" class="chzn-select" style="width:290px;">
+                                    </select>
+                                </p>
+
+                                <p>
+                                    <label>Matka vähintään</label>
+                                    <input id="filter-mindistance" name="filter-mindistance" placeholder="metriä" maxlength="6" size="6"/>
+
+                                    <label>enintään</label>
+                                    <input id="filter-maxdistance" name="filter-maxdistance" placeholder="metriä" maxlength="6" size="6"/>
+                                </p>
+
+                                <p>
+                                    <label>Vauhti vähintään</label>
+                                    <input id="filter-minpace" name="filter-minpace" placeholder="km/h" maxlength="6" size="6"/>
+
+                                    <label>enintään</label>
+                                    <input id="filter-maxpace" name="filter-maxpace" placeholder="km/h" maxlength="6" size="6"/>
+                                </p>
+
+
+                                <p>
+                                    <label>Syke vähintään</label>
+                                    <input id="filter-minhr" name="filter-minhr" placeholder="min" maxlength="3" size="3"/>
+
+                                    <label>enintään</label>
+                                    <input id="filter-maxhr" name="filter-maxhr" placeholder="max" maxlength="3" size="3"/>
+                                </p>
+
+                                <label>Alkaen (<a href="javascript:void(0)" id="filter-reset-start">aikojen alusta</a>)</label>
+                                <div id="filter-continuous-start-date">
+                                    <input style="display: none ! important" id="filter-start-date" name="date" placeholder="Alkaen?" />
+                                </div>
+
+                                <label>Päättyen (<a href="javascript:void(0)" id="filter-reset-stop">loppuun</a>)</label>
+                                <div id="filter-continuous-stop-date">
+                                    <input style="display: none ! important" id="filter-stop-date" name="date" placeholder="Päättyen?" />
+                                </div>
+
+                                <p>
+                                    <label>Järjestä </label>
+                                    <select id="filter-sort">
+                                        <option value="pace" selected>nopein ensin</option>
+                                        <option value="distance">pisin ensin</option>
+                                        <option value="duration">pitkäkestoisin ensin</option>
+                                        <option value="creationDate">uusin ensin</option>
+                                        <option value="avghr">korkein syke ensin</option>
+                                    </select>
+                                </p>
+                                <br/>
+                                <a id="filter-render" class="button green" href="javascript:void(0);">Suodata</a>
                             </div>
+                        </header>
+                        <p id="searchSummary"></p>
+
+                    </section>
+
+                    <div id="graph-container">
+                        <svg id="paceHistogram" width="0px" height="0px"></svg>
+                    </div>
+
+                    <div id="content-entries" role="listview"></div>
+                    <section role="tableview">
+                        <table class="details">
+                            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
+                            <tbody id="table-entries">
+                            </tbody>
+                        </table>
+                    </section>
+                    <div id="content-spinner"></div>
+                </div>
+
+                <section role="summary" class="logged-in">
+                    <div id="summary-header"></div>
+                    <div id="summary-entries"></div>
+                </section>
+
+                <section role="tagsummary" class="logged-in">
+                    <div id="tagsummary-header"></div>
+                    <div id="tagsummary-entries"></div>
+                </section>
+
+                <section role="weeksummary" class="logged-in">
+                    <nav class="orange accent-2">
+                        <div class="nav-wrapper">
+                            <a class="brand-logo">Viikoittainen harjoitusyhteenveto</a>
+                        </div>
+                    </nav>
+                    <div id="weeklyNavigate"></div>
+                    <div>
+                        <article id="weeksummary">
+                        </article>
+                    </div>
+                </section>
+            </div>
+
+            <section role="users" class="logged-in">
+
+                <h5 class="orange-text accent-2">Hae käyttäjää</h5>
+
+                <nav id="search-container" class="orange accent-2">
+                    <div class="nav-wrapper">
+                        <form accept-charset="utf-8">
                             <div class="input-field">
-                                <label for="goals">Tavoitteet</label>
-                                <input id="goals" name="goals" type="text" maxlength="60" size="60" />
-                            </div>
-                            <div class="input-field">
-                                <label for="resthr">Leposyke</label>
-                                <input id="resthr" name="resthr" type="text" maxlength="3" size="3" />
-                            </div>
-                            <div class="input-field">
-                                <label for="maxhr">Maksimisyke</label>
-                                <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" />
-                            </div>
-                            <div class="input-field">
-                                <label for="aerk">Aerobinen kynnys</label>
-                                <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" />
-                            </div>
-                            <div class="input-field">
-                                <label for="anaerk">Anaerobinen kynnys</label>
-                                <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" />
+                                <input id="search-users" type="search" required>
+                                <label for="search-users"><i class="material-icons">search</i></label>
+                                <i class="material-icons">close</i>
                             </div>
                         </form>
-                        <span id="profile-result"></span>
                     </div>
-                </div>
-                <div class="card-action">
-                    <a id="update-profile" class="button login waves-effect waves-light btn-flat">Päivitä profiilitiedot</a>
-                </div>
+                </nav>
+                <div id="user-results"></div>
+            </section>
+
+            <div role="ex" class="full with-comments logged-in">
+                <div id="exercise"></div>
             </div>
-        </div>
-        <div class="col s6">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Vaihda salasana</span>
-                    <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
-                    <form id="change-password-form" class="edit-form" method="post">
-                        <div class="input-field">
-                            <label for="ch-old-password">Vanha salasana</label>
-                            <input id="ch-old-password" class="reset" type="password"/>
-                            <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
+
+            <section role="addex" data-mode="add" class="logged-in">
+                <div class="card">
+                    <form id="add-exercise-form" class="edit-form" method="post">
+                        <div class="card-content">
+                            <div class="card-title">Lisää uusi suoritus</div>
+                            <div class="row">
+                                <div class="col s6">
+                                    <div class="input-field">
+                                        <label for="ex-title">Otsikko</label>
+                                        <input id="ex-title" name="title" type="text" class="reset"/>
+                                        <em class="error title-required">Lisää otsikko</em>
+                                    </div>
+                                    <div>
+                                        <label for="ex-sport">Laji</label>
+                                        <select id="ex-sport" class="chzn-select" style="width:100%;">
+                                            <option>laa</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-duration">Kesto (esim  3h31, 3.31.28)</label>
+                                        <input id="ex-duration" name="duration" class="reset" type="text"/><span id="time-hint"></span>
+                                        <em class="error duration-required">Lenkin kesto vaaditaan</em>
+                                        <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-distance">Matka (esim 2km, 3250m)</label>
+                                        <input id="ex-distance" name="distance" class="reset" type="text"/> <span id="distance-hint"></span>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-avghr">Keskisyke</label>
+                                        <input id="ex-avghr" name="avghr" type="number" class="reset">
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-date" class="active">Päivä</label>
+                                        <input id="ex-date" name="date" type="text" />
+                                    </div>
+                                    <div id="add-tags-select">
+                                        <label for="ex-tags">Avainsanat</label>
+                                        <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
+                                    </div>
+                                </div>
+                                <div class="col s6">
+                                    <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
+                                    <div class="input-field">
+                                        <label for="ex-detailRepeats">Toistot (kpl)</label>
+                                        <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" type="number"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-detailVolume">Volyymi (kg)</label>
+                                        <input class="small-input reset" id="ex-detailVolume" size="5"  maxlength="5" name="detailVolume" type="number"/>
+                                    </div>
+                                    <div class="input-field">
+                                        <label for="ex-detailElevation">Nousumetrit (m)</label>
+                                        <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" type="number"/>
+                                    </div>
+                                    <div>
+                                        <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 2rem;">
+                                <div class="col s12">
+                                    <i class="material-icons left medium orange-text accent-2">edit</i>
+                                    <label for="ex-body">Kuvaus</label>
+                                    <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-field">
-                            <label for="ch-password">Salasana</label>
-                            <input id="ch-password" name="ch-password" class="reset" type="password"/>
-                            <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
-                        </div>
-                        <div class="input-field">
-                            <label for="ch-password2">Salasana uudelleen</label>
-                            <input id="ch-password2" class="reset" type="password"/>
-                            <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
+                        <div class="card-action">
+                            <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
+                            <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
                         </div>
                     </form>
-                    <p class="error"><span id="password-change-result"></span></p>
                 </div>
-                <div class="card-action">
-                    <a id="change-password" class="button change-password waves-effect waves-light btn-flat">Vaihda salasana</a>
+            </section>
+
+            <section id="register-wrapper" role="register" data-mode="add" class="logged-in">
+                <div class="card">
+                    <form id="register-form" method="post">
+                        <div class="card-content" class="edit-form">
+                            <h4  class="card-title">Rekisteröidy käyttäjäksi</h4>
+                            <div class="input-field">
+                                <label for="ex-username">Käyttäjätunnus</label>
+                                <input id="ex-username" name="username" type="text" class="reset" required>
+                            </div>
+                            <div>
+                                <em class="error username-required">Käyttäjätunnus vaaditaan</em>
+                                <em class="error user-exists">Tunnus on jo käytössä</em>
+                            </div>
+                            <div>
+                                <label>Salasana</label>
+                                <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana"/>
+                                <em class="error password-required">Salasana vaaditaan</em>
+                                <em class="error password-too-short">Salasanassa pitää olla vähintään kuusi merkkiä</em>
+                            </div>
+                            <div>
+                                <label>Salasana uudelleen</label>
+                                <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
+                                <em class="error passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
+                            </div>
+                            <div>
+                                <label>Sähköpostiosoite</label>
+                                <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
+                                <em class="error email-invalid">Sähköpostiosoite vaaditaan</em>
+                                <p>Asetathan toimivan sähköpostiosoitteen, sillä tunnuksesi käyttö edellyttää
+                                    sähköpostien vastaanottamista. Osoittettasi ei näytetä muille käyttäjille.</p>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                            <label></label>
+                            <a id="register-user" class="button register waves-effect waves-light btn-flat">Rekisteröidy</a>
+                        </div>
+                    </form>
                 </div>
+            </section>
+
+        </div>
+        <div id="sidemenu" class="col m3 hide-on-small-and-down">
+
+            <div id="current-user-container" class="logged-in"></div>
+
+            <div id="header-container" class="logged-in card">
+                <div id="header-content"></div>
             </div>
+
+            <section class="logged-out">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" src="img/login_bg.png"/>
+                        <span class="card-title">Kirjaudu sisään</span>
+                    </div>
+                    <form id="login-form" method="post">
+                        <div class="card-content">
+                            <div class="input-field">
+                                <label for="username">Tunnus</label>
+                                <input id="username" name="username" type="text" required />
+                            </div>
+                            <div class="input-field">
+                                <label for="password">Salasana</label>
+                                <input id="password" name="password" type="password" required/>
+                            </div>
+                            <h5>Eikö sinulla ole vielä tunnuksia?</h5>
+                            <div style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
+                            <a class="pageLink" rel="register">Luo tunnus</a>
+                        </div>
+                        <div class="card-action">
+                            <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
+
+                            <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                                Salasana unohtunut</a>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </div>
     </div>
-</section>
 
-<!-- Main Content -->
-<div>
-    <div role="content">
-        <nav id="search-container" class="orange accent-2">
-            <div class="nav-wrapper">
-                <form accept-charset="utf-8">
-                    <div class="input-field">
-                        <input id="search" type="search" required>
-                        <label for="search"><i class="material-icons">search</i></label>
-                        <i class="material-icons">close</i>
-                    </div>
-                </form>
-            </div>
-        </nav>
-
-        <section id="filter-container">
-            <header>
-                <div id="filter-form" style="display: none" class="logged-in">
-                    <a id="show-search" href="javascript:void(0)">Etsi</a> /
-                    <strong>Suodata</strong>:
-                    <br/>
-                    <h6>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jos et halua käyttää jotain kenttää suodatuksessa, jätä se täyttämättä.</h6>
-                    <br/>
-
-                    <p>
-                        <label>Käyttäjät</label>
-                        <input id="filter-users" data-placeholder="" multiple class="chzn-select" style="width:290px;height:22px"/>
-                    </p>
-
-                    <p>
-                        <label>Laji</label>
-                        <select id="filter-sport" class="chzn-select" style="width:290px;">
-                        </select>
-                    </p>
-
-                    <p>
-                        <label>Matka vähintään</label>
-                        <input id="filter-mindistance" name="filter-mindistance" placeholder="metriä" maxlength="6" size="6"/>
-
-                        <label>enintään</label>
-                        <input id="filter-maxdistance" name="filter-maxdistance" placeholder="metriä" maxlength="6" size="6"/>
-                    </p>
-
-                    <p>
-                        <label>Vauhti vähintään</label>
-                        <input id="filter-minpace" name="filter-minpace" placeholder="km/h" maxlength="6" size="6"/>
-
-                        <label>enintään</label>
-                        <input id="filter-maxpace" name="filter-maxpace" placeholder="km/h" maxlength="6" size="6"/>
-                    </p>
-
-
-                    <p>
-                        <label>Syke vähintään</label>
-                        <input id="filter-minhr" name="filter-minhr" placeholder="min" maxlength="3" size="3"/>
-
-                        <label>enintään</label>
-                        <input id="filter-maxhr" name="filter-maxhr" placeholder="max" maxlength="3" size="3"/>
-                    </p>
-
-                    <label>Alkaen (<a href="javascript:void(0)" id="filter-reset-start">aikojen alusta</a>)</label>
-                    <div id="filter-continuous-start-date">
-                        <input style="display: none ! important" id="filter-start-date" name="date" placeholder="Alkaen?" />
-                    </div>
-
-                    <label>Päättyen (<a href="javascript:void(0)" id="filter-reset-stop">loppuun</a>)</label>
-                    <div id="filter-continuous-stop-date">
-                        <input style="display: none ! important" id="filter-stop-date" name="date" placeholder="Päättyen?" />
-                    </div>
-
-                    <p>
-                        <label>Järjestä </label>
-                        <select id="filter-sort">
-                            <option value="pace" selected>nopein ensin</option>
-                            <option value="distance">pisin ensin</option>
-                            <option value="duration">pitkäkestoisin ensin</option>
-                            <option value="creationDate">uusin ensin</option>
-                            <option value="avghr">korkein syke ensin</option>
-                        </select>
-                    </p>
-                    <br/>
-                    <a id="filter-render" class="button green" href="javascript:void(0);">Suodata</a>
-                </div>
-            </header>
-            <p id="searchSummary"></p>
-
-        </section>
-
-        <div id="graph-container">
-            <svg id="paceHistogram" width="0px" height="0px"></svg>
+    <div id="chatSection" class="logged-in hide-on-med-and-down">
+        <h5 class="orange-text accent-2">Viimeisimmät</h5>
+        <div id="messageBox">
+            <ul class="collection" id="messages">
+            </ul>
         </div>
-
-        <div id="content-entries" role="listview"></div>
-        <section role="tableview">
-            <table class="details">
-                <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-                <tbody id="table-entries">
-                </tbody>
-            </table>
-        </section>
-        <div id="content-spinner"></div>
     </div>
-
-    <section role="summary" class="logged-in">
-        <div id="summary-header"></div>
-        <div id="summary-entries"></div>
-    </section>
-
-    <section role="tagsummary" class="logged-in">
-        <div id="tagsummary-header"></div>
-        <div id="tagsummary-entries"></div>
-    </section>
-
-    <section role="weeksummary" class="logged-in">
-        <nav class="orange accent-2">
-            <div class="nav-wrapper">
-                <a class="brand-logo">Viikoittainen harjoitusyhteenveto</a>
-            </div>
-        </nav>
-        <div id="weeklyNavigate"></div>
-        <div>
-            <article id="weeksummary">
-            </article>
-        </div>
-    </section>
-</div>
-
-<section role="users" class="logged-in">
-
-    <h5 class="orange-text accent-2">Hae käyttäjää</h5>
-
-    <nav id="search-container" class="orange accent-2">
-        <div class="nav-wrapper">
-            <form accept-charset="utf-8">
-                <div class="input-field">
-                    <input id="search-users" type="search" required>
-                    <label for="search-users"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
-                </div>
-            </form>
-        </div>
-    </nav>
-    <div id="user-results"></div>
-</section>
-
-<div role="ex" class="full with-comments logged-in">
-    <div id="exercise"></div>
-</div>
-
-<section role="addex" data-mode="add" class="logged-in">
-    <div class="card">
-        <form id="add-exercise-form" class="edit-form" method="post">
-        <div class="card-content">
-            <div class="card-title">Lisää uusi suoritus</div>
-                <div class="row">
-                    <div class="col s6">
-                        <div class="input-field">
-                            <label for="ex-title">Otsikko</label>
-                            <input id="ex-title" name="title" type="text" class="reset"/>
-                            <em class="error title-required">Lisää otsikko</em>
-                        </div>
-                        <div>
-                            <label>Laji</label>
-                            <select id="ex-sport" class="chzn-select" style="width:100%;">
-                                <option>laa</option>
-                            </select>
-                        </div>
-                        <div class="input-field">
-                            <label>Kesto (esim  3h31, 3.31.28)</label>
-                            <input id="ex-duration" name="duration" class="reset" type="text"/><span id="time-hint"></span>
-                            <em class="error duration-required">Lenkin kesto vaaditaan</em>
-                            <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
-                        </div>
-                        <div class="input-field">
-                            <label for="ex-distance">Matka (esim 2km, 3250m)</label>
-                            <input id="ex-distance" name="distance" class="reset" type="text"/> <span id="distance-hint"></span>
-                        </div>
-                        <div class="input-field">
-                            <label for="ex-avghr">Keskisyke</label>
-                            <input id="ex-avghr" name="avghr" type="number" class="reset">
-                        </div>
-                        <div class="input-field">
-                            <label for="ex-date" class="active">Päivä</label>
-                            <input id="ex-date" name="date" type="text" />
-                        </div>
-                        <div id="add-tags-select">
-                            <label for="ex-tags">Avainsanat</label>
-                            <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
-                        </div>
-                    </div>
-                    <div class="col s6">
-                        <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
-                        <div class="input-field">
-                            <label for="ex-detailRepeats">Toistot (kpl)</label>
-                            <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" type="number"/>
-                        </div>
-                        <div class="input-field">
-                            <label for="ex-detailVolume">Volyymi (kg)</label>
-                            <input class="small-input reset" id="ex-detailVolume" size="5"  maxlength="5" name="detailVolume" type="number"/>
-                        </div>
-                        <div class="input-field">
-                            <label for="ex-detailElevation">Nousumetrit (m)</label>
-                            <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" type="number"/>
-                        </div>
-                        <div>
-                            <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 2rem;">
-                    <div class="col s12">
-                        <i class="material-icons left medium orange-text accent-2">edit</i>
-                            <label for="ex-body">Kuvaus</label>
-                            <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-action">
-                <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
-                <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
-            </div>
-        </form>
-    </div>
-</section>
-
-<section id="register-wrapper" role="register" data-mode="add" class="logged-in">
-    <div class="card">
-        <form id="register-form" method="post">
-            <div class="card-content" class="edit-form">
-                <h4  class="card-title">Rekisteröidy käyttäjäksi</h4>
-                <div class="input-field">
-                    <label for="ex-username">Käyttäjätunnus</label>
-                    <input id="ex-username" name="username" type="text" class="reset" required>
-                </div>
-                <div>
-                    <em class="error username-required">Käyttäjätunnus vaaditaan</em>
-                    <em class="error user-exists">Tunnus on jo käytössä</em>
-                </div>
-                <div>
-                    <label>Salasana</label>
-                    <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana"/>
-                    <em class="error password-required">Salasana vaaditaan</em>
-                    <em class="error password-too-short">Salasanassa pitää olla vähintään kuusi merkkiä</em>
-                </div>
-                <div>
-                    <label>Salasana uudelleen</label>
-                    <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
-                    <em class="error passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
-                </div>
-                <div>
-                    <label>Sähköpostiosoite</label>
-                    <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
-                    <em class="error email-invalid">Sähköpostiosoite vaaditaan</em>
-                    <p>Asetathan toimivan sähköpostiosoitteen, sillä tunnuksesi käyttö edellyttää
-                        sähköpostien vastaanottamista. Osoittettasi ei näytetä muille käyttäjille.</p>
-                </div>
-        </div>
-            <div class="card-action">
-                <label></label>
-                <a id="register-user" class="button register waves-effect waves-light btn-flat">Rekisteröidy</a>
-            </div>
-        </form>
-    </div>
-</section>
-
-</div>
-<div id="sidemenu" class="col s3">
-
-    <div id="current-user-container" class="logged-in"></div>
-
-    <div id="header-container" class="logged-in card">
-        <div id="header-content"></div>
-    </div>
-
-    <section class="logged-out">
-        <div class="card">
-            <div class="card-image waves-effect waves-block waves-light">
-                <img class="activator" src="img/login_bg.png"/>
-                <span class="card-title">Kirjaudu sisään</span>
-            </div>
-            <form id="login-form" method="post">
-                <div class="card-content">
-                    <div class="input-field">
-                        <label for="username">Tunnus</label>
-                        <input id="username" name="username" type="text" required />
-                    </div>
-                    <div class="input-field">
-                        <label for="password">Salasana</label>
-                        <input id="password" name="password" type="password" required/>
-                    </div>
-                    <h5>Eikö sinulla ole vielä tunnuksia?</h5>
-                    <div style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
-                    <a class="pageLink" rel="register">Luo tunnus</a>
-                </div>
-                <div class="card-action">
-                    <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
-
-                    <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
-                        Salasana unohtunut</a>
-                </div>
-            </form>
-        </div>
-    </section>
-
-        <!-- Sidebar -->
-        <section id="chatSection" class="logged-in">
-            <article>
-                <h4>Viimeisimmät</h4>
-                <div id="messageBox">
-                    <div id="messages">
-                    </div>
-                </div>
-            </article>
-        </section>
-    </div>
-</div>
 
 </div>
 </div>
@@ -573,36 +569,36 @@
 </script>
 
 <script id="topHoursTemplate" type="text/html">
-  <span class="card-title">Vuoden {{year}} {{title}}</span>
-  <table class="details full">
-    <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Tunnit</th><th>Matka</th><th>Vauhti</th><th>Kerrat</th></thead>
-    {{#totals}}
-    <tr>
-      <td>{{position}}</td>
-      <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
-      <td>{{duration}}</td>
-      <td>{{distance}}</td>
-      <td>{{pace}}</td>
-      <td>{{count}}</td>
-    </tr>
-    {{/totals}}
-  </table>
+    <span class="card-title">Vuoden {{year}} {{title}}</span>
+    <table class="details full">
+        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Tunnit</th><th>Matka</th><th>Vauhti</th><th>Kerrat</th></thead>
+        {{#totals}}
+        <tr>
+            <td>{{position}}</td>
+            <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+            <td>{{duration}}</td>
+            <td>{{distance}}</td>
+            <td>{{pace}}</td>
+            <td>{{count}}</td>
+        </tr>
+        {{/totals}}
+    </table>
 </script>
 
 <script id="topPullupsTemplate" type="text/html">
-  <h3>Vuoden {{year}} leuanvetäjät</h3>
-  <table class="details full">
-    <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kokonaistoistot</th><th>Aika</th><th>Kerrat</th></thead>
-    {{#totals}}
-    <tr>
-      <td>{{position}}</td>
-      <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
-      <td>{{repeats}}</td>
-      <td>{{duration}}</td>
-      <td>{{count}}</td>
-    </tr>
-    {{/totals}}
-  </table>
+    <h3>Vuoden {{year}} leuanvetäjät</h3>
+    <table class="details full">
+        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kokonaistoistot</th><th>Aika</th><th>Kerrat</th></thead>
+        {{#totals}}
+        <tr>
+            <td>{{position}}</td>
+            <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+            <td>{{repeats}}</td>
+            <td>{{duration}}</td>
+            <td>{{count}}</td>
+        </tr>
+        {{/totals}}
+    </table>
 </script>
 
 <script id="listsTemplate" type="text/html">
@@ -618,9 +614,9 @@
 <script id="exerciseDetailsTemplate" class="partial" type="text/html">
     <table class="details full">
         <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th>
-        {{#detailRepeats}}<th>Toistot</th>{{/detailRepeats}}
-        {{#detailElevation}}<th>Nousu</th>{{/detailElevation}}
-        {{#detailVolume}}<th>Volyymi</th>{{/detailVolume}}
+            {{#detailRepeats}}<th>Toistot</th>{{/detailRepeats}}
+            {{#detailElevation}}<th>Nousu</th>{{/detailElevation}}
+            {{#detailVolume}}<th>Volyymi</th>{{/detailVolume}}
         </tr></thead>
         <tr>
             <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
@@ -636,7 +632,7 @@
     <li class="divider"></li>
     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Omat ryhmät</span></div>
     {{#groups}}
-        <li><a class="pageLink truncate" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
+    <li><a class="pageLink truncate" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
     {{/groups}}
 </script>
 
@@ -686,7 +682,7 @@
                     <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                        {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
+                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
                     <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
                 <div class="full">
@@ -721,32 +717,32 @@
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
-     <article data-id="{{id}}" class="card blue-grey lighten-5 full exercise {{sport}}">
-         <div class="card-content">
-             <div class="card-title">
-                 <div class="left">
-                     <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
-                 </div>
-                 <div>
-                     <h4>{{title}}</h4>
-                     <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
-                 </div>
-             </div>
-             {{> exerciseDetailsTemplate}}
-             <div>
-                 <div class="flow-text">{{{body}}}</div>
-                 <p class="signature right">
-                     {{synopsis}}
-                 </p>
-             </div>
-             {{> tagsExpandedTemplate}}
-             <p class="count"></p>
-         </div>
-         <div class="card-action">
-             <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
-             <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-         </div>
-     </article>
+    <article data-id="{{id}}" class="card blue-grey lighten-5 full exercise {{sport}}">
+        <div class="card-content">
+            <div class="card-title">
+                <div class="left">
+                    <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                </div>
+                <div>
+                    <h4>{{title}}</h4>
+                    <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
+                </div>
+            </div>
+            {{> exerciseDetailsTemplate}}
+            <div>
+                <div class="flow-text">{{{body}}}</div>
+                <p class="signature right">
+                    {{synopsis}}
+                </p>
+            </div>
+            {{> tagsExpandedTemplate}}
+            <p class="count"></p>
+        </div>
+        <div class="card-action">
+            <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
+            <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+        </div>
+    </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
     {{#comments}}
     <article class="comment card" data-id="{{id}}">
@@ -938,7 +934,7 @@
                 {{> summaryTemplate}}
             </div>
             <div class="card-action">
-                 <a class="waves-effect waves-light btn-flat" href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
+                <a class="waves-effect waves-light btn-flat" href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
             </div>
         </div>
     </article>
@@ -1029,7 +1025,7 @@
                 <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
                 {{#res}}
                 <tr class={{#isGood}}"in"{{/isGood}}{{^isGood}}{{#lastMissing}}class="inDanger"{{/lastMissing}}{{/isGood}}><td>{{#isGood}}{{rank}}{{/isGood}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
-                <td>{{#lastMissing}}{{count}}{{/lastMissing}}{{^lastMissing}}<p>katkolla</p>{{/lastMissing}}</td></tr>
+                    <td>{{#lastMissing}}{{count}}{{/lastMissing}}{{^lastMissing}}<p>katkolla</p>{{/lastMissing}}</td></tr>
                 {{/res}}
             </table>
             <a class="pageLink" rel="ex/56328d280cf2efcb581aac6b">Lue lisää Marrasputkesta.</a>
@@ -1086,15 +1082,15 @@
             <div>
                 <h5>Ennätykset</h5>
                 {{#hasRecords}}
-                    <table id="records" class="details">
-                        <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
-                        {{#records}}
-                        <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
-                            <td>{{result}}</td>
-                            <td>{{pace}}</td>
-                        </tr>
-                        {{/records}}
-                    </table>
+                <table id="records" class="details">
+                    <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
+                    {{#records}}
+                    <tr><td><a class="pageLink" rel="{{filter}}">{{name}}</a></td>
+                        <td>{{result}}</td>
+                        <td>{{pace}}</td>
+                    </tr>
+                    {{/records}}
+                </table>
                 {{/hasRecords}}
                 {{^hasRecords}}Ei ennätyksiä{{/hasRecords}}
             </div>
@@ -1207,7 +1203,7 @@
                 </div>
                 {{/exs}}
                 <div class="col s4">
-                {{> hpkWeeklySummaryTemplate}}
+                    {{> hpkWeeklySummaryTemplate}}
                 </div>
             </div>
             {{/summary}}
@@ -1230,33 +1226,34 @@
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
         {{#summaries}}
-            <span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>
-             {{^total}}{{^statspace}}{{duration}}{{/statspace}}
-             {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}}
-             {{#total}}{{duration}}{{/total}}<br/>
+        <span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>
+        {{^total}}{{^statspace}}{{duration}}{{/statspace}}
+        {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}}
+        {{#total}}{{duration}}{{/total}}<br/>
         {{/summaries}}
     </td>
 </script>
 
 <script id="chatMessageTemplate" type="text/html">
-    <p class="chatMsg">
-        <span class="chatUser"><a class="pageLink" rel="user/{{user}}">{{user}}</a></span>
-        <span class="chatAction">{{action}}</span>
+    <li class="collection-item avatar valign-container">
+        <img src="{{avatar}}" alt="" class="circle">
+        <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}}
         {{#link}}<a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}}
         {{^link}}{{message}}{{/link}}
-    </p>
+        </p>
+    </li>
 </script>
 
 <script id="loggedInStylesTemplate" type="text/html">
     <style id="logged-in-styles" type="text/css">
         a.delete, a.modify {
-        visibility: hidden;
+            visibility: hidden;
         }
         a[data-user="{{user}}"].delete {
-        visibility: visible;
+            visibility: visible;
         }
         a.modify[data-user="{{user}}"] {
-        visibility: visible;
+            visibility: visible;
         }
     </style>
 </script>
