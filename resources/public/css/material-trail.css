@@ -171,6 +171,10 @@ blockquote {
     left: 0;
 }
 
+.col label {
+    left: 0.75em;
+}
+
 .card .card-reveal {
  z-index: 100;
 }
@@ -182,6 +186,7 @@ body[data-page="tags"] div[role="content"],
 body[data-page="sport"] div[role="content"],
 body[data-page="user"] div[role="content"],
 body[data-page="group"] div[role="content"],
+body[data-page="filter"] div[role="content"],
 body[data-page="new-comments"] div[role="content"],
 body[data-page="new-own-comments"] div[role="content"],
 body[data-page="most-comments"] div[role="content"],
@@ -219,6 +224,7 @@ body[data-page="weeksummary"] section[role="user"],
 body[data-page="ex"] div[role="ex"],
 body[data-page="ex"] section[role="user"],
 body[data-page="register"] section[role="register"],
+body.filter section[role="filter"],
 body[data-page="main"] div[role="main"] {
     display: block;
     opacity: 1;
