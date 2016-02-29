@@ -414,3 +414,649 @@ a.editComment {
 .pika-ok {
     color: #039be5;
 }
+
+
+
+/***** HERE BE DRAGONS *****/
+table.weekly {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 10px;
+    margin: 5px 0 0 30px;
+    width: 98%;
+    text-align: left;
+}
+table.weekly td.other-month span.weeklyDay {
+    color: #9e9e9e !important;
+}
+table.weekly td span.weeklyDay {
+    float: left;
+    vertical-align: top;
+    color: #fb8c00;
+}
+table.weekly th {
+    font-size: 14px;
+    color: #000;
+    padding: 4px 10px 0 0;
+    border-bottom: 2px solid #fb8c00;
+}
+table.weekly th.day {
+    width: 11%;
+    font-weight: 400;
+}
+table.weekly th.week {
+    width: 45px;
+    text-align: center;
+    font-weight: 400;
+}
+table.weekly th.totals {
+    font-weight: 400;
+    text-align: left;
+}
+table.weekly td.week {
+    width: 45px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 13px;
+}
+table.weekly td {
+    color: #000;
+    border: solid 1px #cccccc;
+    padding: 4px 4px 8px;
+}
+table.weekly td.other-month {
+    background-color: rgba(200, 200, 200, 0.5);
+}
+table.weekly tbody th {
+    font-weight: bold;
+}
+
+table.weekly .sport {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -143px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Golf {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Crossfit {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Crosstrainer {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Hieronta {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Jalkapallo {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Jooga {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -123px -40px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Jumppa {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Juoksu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -143px -20px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Maastojuoksu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -143px -20px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.J__kiekko {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -184px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Kahvakuula {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -122px -60px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Kamppailulaji {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -102px -60px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Kaukalopallo {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -184px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Kickbike {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -80px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Kiipeily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Koripallo {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px -20px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Kuntopiiri {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -122px -60px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Kuntosali {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -122px -60px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.K_vely {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Laskettelu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -61px 0px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Lentopallo {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Beach_volley {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Leuanveto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -122px -60px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Luistelu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -82px -60px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Luisteluhiihto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Hiihto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Lumikenk_ily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -80px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Lumilautailu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -61px 0px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Melonta {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -143px -79px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Nyrkkeily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -184px -40px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Hiihto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Perinteinen_hiihto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Py_r_ily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Maantiepy_r_ily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Cyclocross {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Maastopy_r_ily {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Ratsastus {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -61px -20px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Rullahiihto {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Rullaluistelu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -82px -60px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Sauvak_vely {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Seikkailu_urheilu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -82px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Sis_soutu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Soutu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -60px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Spinning {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Squash {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -82px -40px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Sulkapallo {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -102px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Suunnistus {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -82px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.S_hly {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -80px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Salibandy {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -80px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Tanssi {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -143px -40px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Tennis {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -184px -20px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Telinevoimistelu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -41px 0px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Triathlon {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -20px -20px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Uinti {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -163px 0px;
+    width: 21px;
+    height: 20px;
+}
+table.weekly .sport.Vaellus {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Venyttely {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -184px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Vesijuoksu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat 0px -79px;
+    width: 20px;
+    height: 20px;
+}
+table.weekly .sport.Yleisurheilu {
+    display: inline-block;
+    /* Fix for IE: https://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+
+    zoom: 1;
+    *display: inline;
+    background: url(../img/icons_20.png) no-repeat -163px -60px;
+    width: 21px;
+    height: 20px;
+}

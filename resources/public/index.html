@@ -1183,30 +1183,28 @@
     <div class="card">
         <div class="card-content">
             <span class="card-title">{{monthName}} {{year}}</span>
-            <div class="row" style="width: 100%;">
-                <div class="col s1">Vk</div>
-                <div class="col s1">Ma</div>
-                <div class="col s1">Ti</div>
-                <div class="col s1">Ke</div>
-                <div class="col s1">To</div>
-                <div class="col s1">Pe</div>
-                <div class="col s1">La</div>
-                <div class="col s1">Su</div>
-                <div class="col s4">Yhteensä</div>
-            </div>
-            {{#summary}}
-            <div class="row">
-                <div class="col s1 week"><span><a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></div>
-                {{#exs}}
-                <div class="col s1 {{class}}" style="vertical-align: top">
-                    {{> hpkWeeklyExTemplate}}
-                </div>
-                {{/exs}}
-                <div class="col s4">
+            <table class="weekly">
+                <thead>
+                <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
+                </thead>
+                <tbody>
+                {{#summary}}
+                <tr>
+                    <td class="week"><span><a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
+                    {{#exs}}
+                    <td class="{{class}}" style="vertical-align: top">
+                        {{> hpkWeeklyExTemplate}}
+                    </td>
+                    {{/exs}}
                     {{> hpkWeeklySummaryTemplate}}
-                </div>
-            </div>
-            {{/summary}}
+                </tr>
+                {{#summaries}}
+                </tr>
+                {{/summaries}}
+                {{/summary}}
+
+                </tbody>
+            </table>
         </div>
     </div>
 </script>
@@ -1216,7 +1214,7 @@
     <div class="clearfix" style="margin: 0"></div>
     <span>
       {{#exs}}
-      <a rel="ex/{{id}}" class="pageLink"><span class="sport {{sportId}}" data-title={{title}} data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}" data-repeats="{{repeats}}"></span></a>
+      <a rel="ex/{{id}}" class="pageLink tooltipped" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
       <span>{{#distance}}{{distance}}{{/distance}}
       {{^distance}}{{statsduration}}{{/distance}}</span><br/>
       {{/exs}}
@@ -1226,13 +1224,16 @@
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
         {{#summaries}}
-        <span class="sport {{sportId}}" data-title="{{title}}" data-pace="{{pace}}" data-duration="{{duration}}" data-sport="{{sport}}" data-distance="{{distance}}"></span>
+        <a class="tooltipped" data-position="top" data-delay="50" data-tooltip="{{sport}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}}{{pace}} {{/pace}} aikaan {{duration}}">
+        <span class="sport {{sportId}}"></span>
+        </a>
         {{^total}}{{^statspace}}{{duration}}{{/statspace}}
         {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}}
         {{#total}}{{duration}}{{/total}}<br/>
         {{/summaries}}
     </td>
 </script>
+
 
 <script id="chatMessageTemplate" type="text/html">
     <li class="collection-item avatar valign-container">

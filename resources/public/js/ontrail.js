@@ -313,6 +313,11 @@
       var summaries = _.extend({summary: _.map(summary, _.partial(toWeeklySummary, month)), month: month,
         year: date.getFullYear(), weeks: (summary.length * 2) + 1}, monthNames)
       $(ich.hpkWeeklyContentTemplate(summaries)).appendTo($("#weeksummary"))
+
+      $(document).ready(function(){
+        $('.tooltipped').tooltip();
+      });
+
     }
 
     var renderHint = function (kind, item) {
@@ -856,27 +861,6 @@
       })
       .switchLatest()
     weeklyScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("weeksummary")))).repeat().subscribe(renderWeeklySummary)
-
-    var formatToolTip = function (distance, duration, pace) {
-      return (distance !== "" ? distance + ", " : "") + (pace !== "" ? pace + "<br/>" : "<br/>") + (duration !== "" ? duration : "")
-    }
-
-    $("#weeksummary").onAsObservable("mouseenter", ".sport").subscribe(function (el) {
-      var e = $(el.target)
-      if (el.type === "mouseenter") {
-        e.tooltip({content: function () {
-          var distance = e.attr("data-distance").replace(" ", "&nbsp;")
-          var duration = e.attr("data-duration").replace(" ", "&nbsp;")
-          var pace = e.attr("data-pace").replace(" ", "&nbsp;")
-          var repeats = e.attr("data-repeats") !== undefined && e.attr("data-repeats") !== "" ? "<br/>" + e.attr("data-repeats") + "&nbsp;toistoa" : ""
-          return e.attr("data-sport") + ", " + formatToolTip(distance, duration, pace) + repeats
-        }, "items": "[data-sport]", show: false, hide: false})
-        e.tooltip("open")
-      } else if (el.type === "mouseleave") {
-        e.tooltip("close")
-      }
-      return true;
-    })
 
     // initiate summary loading after login
     var summaries = currentPages.whereArgs(partialEquals("summary")).spinnerAction("#summary-entries").throttle(101).selectArgs(tail).selectAjax(OnTrail.rest.summary)
