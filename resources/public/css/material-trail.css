@@ -395,6 +395,14 @@ a.editComment {
     right: auto;
 }
 
+@media only screen and (max-width: 600px) {
+    #ex-body .froala-element.f-placeholder+span.fr-placeholder {
+        left: auto;
+        right: auto;
+    }
+}
+
+
 .pika-title {
     background-color: #ffa726;
     color: #fff;

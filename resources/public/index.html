@@ -97,7 +97,6 @@
 
                     <li class="divider"></li>
                     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
-                    <li><a class="pageLink" rel="tops/hours">2016 top-listat</a></li>
                     <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
                     <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
                     <li><a class="pageLink" rel="groups">Ryhmät</a></li>
@@ -121,8 +120,50 @@
 <!-- Content -->
 <div id="content-top"></div>
 <div id="content">
+
     <div id="main-content" class="row">
-        <div class="col s12 m8 l9">
+        <div id="sidemenu" class="col m4 l3 s12 push-m8 push-l9">
+
+            <div id="current-user-container" class="logged-in hide-on-small-and-down"></div>
+
+            <div id="header-container" class="logged-in card">
+                <div id="header-content"></div>
+            </div>
+
+            <section class="logged-out">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" src="img/login_bg.png"/>
+                        <span class="card-title">Kirjaudu sisään</span>
+                    </div>
+                    <form id="login-form" method="post">
+                        <div class="card-content">
+                            <div class="input-field">
+                                <label for="username">Tunnus</label>
+                                <input id="username" name="username" type="text" required />
+                            </div>
+                            <div class="input-field">
+                                <label for="password">Salasana</label>
+                                <input id="password" name="password" type="password" required/>
+                            </div>
+                            <h5>Eikö sinulla ole vielä tunnuksia?</h5>
+                            <div style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
+                            <div><a class="pageLink" rel="register">Luo tunnus</a></div>
+                            <div>
+                                <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                                    Salasana unohtunut?</a>
+                            </div>
+                        </div>
+                        <div class="card-action">
+                            <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
+
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <div class="col s12 m8 l9 pull-m4 pull-l3">
             <section id="groups-content" role="groups" class="logged-in"/>
             </section>
 
@@ -159,7 +200,7 @@
             <section role="profile" class="logged-in">
                 <div class="row">
                     <h3 class="orange-text accent-2">Muokkaa profiiliasi</h3>
-                    <div class="col s6">
+                    <div class="col s12 m6">
                         <div class="card">
                             <div class="card-content">
                                 <img id="profile-avatar" class="circle left" src="/img/share.jpg"/>
@@ -211,7 +252,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col s6">
+                    <div class="col s12 m6">
                         <div class="card">
                             <div class="card-content">
                                 <span class="card-title">Vaihda salasana</span>
@@ -414,7 +455,7 @@
                         <div class="card-content">
                             <div class="card-title">Lisää uusi suoritus</div>
                             <div class="row">
-                                <div class="col s6">
+                                <div class="col s12 m6">
                                     <div class="input-field">
                                         <label for="ex-title">Otsikko</label>
                                         <input id="ex-title" name="title" type="text" class="reset"/>
@@ -449,7 +490,7 @@
                                         <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
                                     </div>
                                 </div>
-                                <div class="col s6">
+                                <div class="col s12 m6">
                                     <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
                                     <div class="input-field">
                                         <label for="ex-detailRepeats">Toistot (kpl)</label>
@@ -470,7 +511,7 @@
                             </div>
                             <div class="row" style="margin-top: 2rem;">
                                 <div class="col s12">
-                                    <i class="material-icons left medium orange-text accent-2">edit</i>
+                                    <i class="material-icons left medium orange-text accent-2 hide-on-small-and-down">edit</i>
                                     <label for="ex-body">Kuvaus</label>
                                     <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
                                 </div>
@@ -524,46 +565,6 @@
                 </div>
             </section>
 
-        </div>
-        <div id="sidemenu" class="col m4 l3 hide-on-small-and-down">
-
-            <div id="current-user-container" class="logged-in"></div>
-
-            <div id="header-container" class="logged-in card">
-                <div id="header-content"></div>
-            </div>
-
-            <section class="logged-out">
-                <div class="card">
-                    <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src="img/login_bg.png"/>
-                        <span class="card-title">Kirjaudu sisään</span>
-                    </div>
-                    <form id="login-form" method="post">
-                        <div class="card-content">
-                            <div class="input-field">
-                                <label for="username">Tunnus</label>
-                                <input id="username" name="username" type="text" required />
-                            </div>
-                            <div class="input-field">
-                                <label for="password">Salasana</label>
-                                <input id="password" name="password" type="password" required/>
-                            </div>
-                            <h5>Eikö sinulla ole vielä tunnuksia?</h5>
-                            <div style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
-                            <div><a class="pageLink" rel="register">Luo tunnus</a></div>
-                            <div>
-                            <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
-                                Salasana unohtunut?</a>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
-
-                        </div>
-                    </form>
-                </div>
-            </section>
         </div>
     </div>
 
