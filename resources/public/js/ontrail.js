@@ -207,6 +207,8 @@
         $('#ex-sport, #filter-sport').select2({formatSelection: selectionFormat})
         $("#filter-sport").val("Juoksu").attr('selected', true)
         $("#filter-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
+      } else {
+        $('#ex-sport, #filter-sport').css("display", "initial")
       }
     }
     var renderTags = function (data) {
@@ -920,8 +922,10 @@
     // Lisää lenkki
     var resetEditor = function () {
       $("#add-exercise-form .reset").attr('value', '')
-      $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
-      $("#ex-tags").select2("data", [])
+      if (!Modernizr.touch) {
+        $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
+        $("#ex-tags").select2("data", [])
+      }
       $("#time-hint, #distance-hint").html("")
       var autoSavedText = localStorage.getItem("ex-body")
       var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n<br>\n</p>"
@@ -1076,10 +1080,14 @@
     var validations = _.flatten([titleValidation, durationReqValidation, timeValidation, distanceValidation])
     combine(validations).subscribe(toggleClassEffect($('#add-exercise, #edit-exercise'), "disabled"))
 
-    var picker = new Pikaday({
-      field: document.getElementById('ex-date'),
-      format: "DD.MM.YYYY"
-    });
+    if (!Modernizr.touch) {
+      var picker = new Pikaday({
+        field: document.getElementById('ex-date'),
+        format: "DD.MM.YYYY"
+      });
+    } else {
+      $("#ex-date").attr("type", "date")
+    }
 
     var editorSettings = {
       buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
@@ -1197,22 +1205,29 @@
     // anonymous users get a restricted view of the sports choices
     var defaultSports = ["Juoksu", "Pyöräily", "Uinti", "Perinteinen hiihto", "Luisteluhiihto"]
     var renderFilterValues = function () {
-      var startPicker = new Pikaday({
-        field: document.getElementById('filter-start-date'),
-        format: "DD.MM.YYYY"
-      });
+      if (!Modernizr.touch) {
+        var startPicker = new Pikaday({
+          field: document.getElementById('filter-start-date'),
+          format: "DD.MM.YYYY"
+        });
 
-      var endPicker = new Pikaday({
-        field: document.getElementById('filter-stop-date'),
-        format: "DD.MM.YYYY"
-      });
+        var endPicker = new Pikaday({
+          field: document.getElementById('filter-stop-date'),
+          format: "DD.MM.YYYY"
+        });
+
+        $('#filter-users').select2({
+          tags: activeUsers,
+          tokenSeparators: [","],
+          formatSelection: selectionFormat
+        })
+      } else {
+        $('#filter-users').css('display', 'initial')
+        $("#filter-start-date").attr("type", "date")
+        $("#filter-end-date").attr("type", "date")
+      }
 
       $("#filter-sort").material_select()
-      $('#filter-users').select2({
-        tags: activeUsers,
-        tokenSeparators: [","],
-        formatSelection: selectionFormat
-      })
     }
 
     var onPageLoad = rx.empty().startWith("")
