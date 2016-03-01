@@ -179,6 +179,10 @@ blockquote {
  z-index: 100;
 }
 
+.dropdown-content li>span {
+    color: #039be5;
+}
+
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="content"],
