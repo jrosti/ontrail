@@ -177,6 +177,12 @@ blockquote {
     color: #039be5;
 }
 
+.flow-text img,
+.flow-text video {
+    max-width: 100%;
+    height: auto;
+}
+
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="content"],
