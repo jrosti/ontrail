@@ -716,7 +716,7 @@
                 <p class="count" style="display: none"></p>
                 <div class="card-title">
                     <div class="left">
-                        <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                        <a target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
                     </div>
                     <div>
                         <h4><a class="more" rel="ex/{{id}}">{{title}}</a></h4>
@@ -782,7 +782,7 @@
         <div class="card-content">
             <div class="card-title">
                 <div class="left">
-                    <a href="{{avatar}}&s=700" target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                    <a target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
                 </div>
                 <div>
                     <h4>{{title}}</h4>
@@ -1312,12 +1312,18 @@
     <style id="logged-in-styles" type="text/css">
         a.delete, a.modify {
             visibility: hidden;
+            height: 0;
+            width: 0;
         }
         a[data-user="{{user}}"].delete {
             visibility: visible;
+            height: auto;
+            width: auto;
         }
         a.modify[data-user="{{user}}"] {
             visibility: visible;
+            height: auto;
+            width: auto;
         }
     </style>
 </script>
