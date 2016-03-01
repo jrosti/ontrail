@@ -399,11 +399,11 @@
 
     function renderOwnCommentCount(result) {
       renderUpdateTitleWithComments(result.count)
-      renderUpdateElemCount('#new-own-comments-count', result.count)
+      renderUpdateElemCount('.new-own-comments-count', result.count)
     }
 
     function renderCommentCount(result) {
-      renderUpdateElemCount('#new-comments-count', result.count)
+      renderUpdateElemCount('.new-comments-count', result.count)
     }
 
     var webSocket
@@ -1009,8 +1009,8 @@
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
     var renderMarkAllRead = function (args) {
-      $("#new-comments-count").hide()
-      $("#new-own-comments-count").hide()
+      $(".new-comments-count").hide()
+      $(".new-own-comments-count").hide()
       document.title = 'ontrail.net'
     }
 
@@ -1089,13 +1089,12 @@
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)
       renderTags(loggedIn.ownTags)
       renderSports(loggedIn.sports)
-      $('#ownGroupsDropDown').html(ich.ownGroupsTemplate({user: loggedIn.user, 'groups': loggedIn.ownGroups}))
+      $('.ownGroupsDropDown').html(ich.ownGroupsTemplate({user: loggedIn.user, 'groups': loggedIn.ownGroups}))
     })
 
 
-
     var oldPasswordMatchV = createAjaxValidator(OnTrail.rest.passwordV)
-    var oldPasswordMatch = mkServerValidation($('#ch-old-password').changes().throttle(300).combineWithLatestOf(loggedIns), '/rest/v1/login', oldPasswordMatchV).validation.repeat()
+    var oldPasswordMatch = mkServerValidation($('#ch-old-password').changes().throttle(300).combineWithLatestOf(loggedIns).skip(1), '/rest/v1/login', oldPasswordMatchV).validation.repeat()
     oldPasswordMatch.subscribe(toggleEffect($(".ch-old-password-doesnt-match")))
     oldPasswordMatch.subscribe(toggleClassEffect($('#ch-old-password'), "has-error"))
 
@@ -1158,21 +1157,10 @@
     var mostCommentsPages = currentPages.whereArgs(partialEquals("most-comments")).throttle(101).selectAjax(OnTrail.rest.mostComments)
     mostCommentsPages.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("most-comments")))).repeat().subscribe(renderNewComments)
 
-    $(document).onClickTouchAsObservable(clickEvent, ".dropdown .button, .dropdown button").subscribe(function (e) {
-      var menu = $(e.target).closest(".dropdown")
-      menu.find('.dropdown-slider').slideToggle('fast')
-      menu.find('span.toggle').toggleClass('active')
-      e.preventDefault()
-    })
-
-    // Close open dropdown slider/s by clicking elsewhwere on page
-    $(document).onClickTouchAsObservable(clickEvent).subscribe(function (e) {
-      var menu = $(e.target).closest(".dropdown")
-
-      if (menu[0] == undefined || $(e.target).hasClass('ddm')) {
-        $('.dropdown-slider').slideUp()
-        $('span.toggle').removeClass('active')
-      }
+    $("#mobile-menu").sideNav({
+      "menuWidth": 300,
+      "edge": "left",
+      closeOnClick: true
     })
 
     var togglePairAction = function (a, b) {
@@ -1182,7 +1170,7 @@
       }
     }
 
-    $("#filter-menu").onClickTouchAsObservable(clickEvent).subscribe(function() {
+    $(".filter-menu").onClickTouchAsObservable(clickEvent).subscribe(function() {
       $("body").addClass("filter")
       showPage("latest")
     })

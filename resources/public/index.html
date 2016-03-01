@@ -56,7 +56,7 @@
             <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
-            <li><a id="filter-menu">Suodata</a></li>
+            <li><a class="filter-menu">Suodata</a></li>
         </ul>
         <ul id="my-account" class="dropdown-content">
             <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
@@ -65,15 +65,15 @@
             <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
-            <span id="ownGroupsDropDown"></span>
+            <span class="ownGroupsDropDown"></span>
         </ul>
         <nav class="blue-grey darken-2" role="navigation">
             <div class="nav-wrapper">
                 <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
                 <ul class="right hide-on-med-and-down logged-in">
                     <li style="width: 55px;"><a href="#!"></a></li>
-                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge" id="new-comments-count">4</span></a></li>
-                    <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge" id="new-own-comments-count">4</span></a></li>
+                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                    <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
 
                     <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
 
@@ -81,10 +81,32 @@
                     <li><a class="pageLink" id="logout"><i class="material-icons">exit_to_app</i></a></li>
                 </ul>
 
-                <ul id="nav-mobile" class="side-nav">
-                    <li><a href="#">Navbar Link</a></li>
+                <ul id="slide-out" class="side-nav">
+                    <li><a class="pageLink" rel="latest">Viimeiset</a></li>
+                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                    <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
+
+                    <li class="divider"></li>
+                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
+                    <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
+                    <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
+                    <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
+                    <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                    <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+                    <span class="ownGroupsDropDown"></span>
+
+                    <li class="divider"></li>
+                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+                    <li><a class="pageLink" rel="tops/hours">2016 top-listat</a></li>
+                    <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                    <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+                    <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+                    <li><a class="filter-menu">Suodata</a></li>
+                    <li class="divider"></li>
+
+                    <li><a class="pageLink" id="logout"><i class="material-icons right" style="vertical-align: bottom">exit_to_app</i> Kirjaudu ulos</a></li>
                 </ul>
-                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+                <a id="mobile-menu" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
             </div>
         </nav>
     </div>
