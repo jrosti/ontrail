@@ -159,6 +159,9 @@
       }
     }
     var renderReadCount = function(id) {
+      if (!keen) {
+        return;
+      }
       keen.count(id, function(res) {
         if (res && res.result > 0) {
           $('[data-id=' + id + '] > p.count').html("Luettu " + res.result + " kertaa")
@@ -167,7 +170,9 @@
     }
 
     var renderSingleExercise = function (exercise, me) {
-      keen.view(exercise.id, exercise.user, me)
+      if (keen) {
+        keen.view(exercise.id, exercise.user, me)
+      }
 
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
@@ -523,7 +528,9 @@
         if ($el.hasClass('full')) {
           var id = $el.attr('data-id')
           var owner = $el.attr('data-article-owner')
-          keen.view(id, owner, viewer)
+          if (keen) {
+            keen.view(id, owner, viewer)
+          }
           renderReadCount(id)
         }
       } catch(e) {

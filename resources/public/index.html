@@ -5,7 +5,24 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="touch-icon-192x192-precomposed.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="OnTrail">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144-precomposed.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#455a64">
+
+    <link rel="shortcut icon" href="favicon.png">
+
 
     <link rel="image_src" href="img/share.jpg" >
     <!-- Compiled and minified CSS -->
@@ -164,7 +181,7 @@
         </div>
 
         <div class="col s12 m8 l9 pull-m4 pull-l3">
-            <section id="groups-content" role="groups" class="logged-in"/>
+            <section id="groups-content" role="groups" class="logged-in row"/>
             </section>
 
             <section role="tops" class="">
@@ -835,15 +852,17 @@
 
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
-    <div class="card blue-grey lighten-5 col s5 group">
-        <div class="card-content">
-            <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
-            <div class="description">{{description}}</div>
-            <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
-        </div>
-        <div class="card-action">
-            {{#in}}<a class="leave mark waves-effect waves-light waves-red btn-flat" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
-            {{^in}}<a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+    <div class="col s12 m6 l4">
+        <div class="card blue-grey lighten-5 group">
+            <div class="card-content">
+                <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
+                <div class="description">{{description}}</div>
+                <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
+            </div>
+            <div class="card-action">
+                {{#in}}<a class="leave mark waves-effect waves-light waves-red btn-flat" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
+                {{^in}}<a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
+            </div>
         </div>
     </div>
     {{/groups}}
