@@ -767,7 +767,6 @@
 
     var renderPageDetail = function (args) {
       $('#header-content').html("")
-      $('body').removeClass("pace")
 
       if (!isSuccess(args)) {
         return
@@ -795,6 +794,11 @@
         }
       }
     }
+
+    currentPages.subscribe(function() {
+      $('body').removeClass("pace")
+    })
+
 
     userTagPages.selectArgs(function() {
       var args = Array.prototype.slice.call(arguments)
