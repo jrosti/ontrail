@@ -921,6 +921,7 @@
 
     // Lisää lenkki
     var resetEditor = function () {
+      $("#add-exercise-form label").removeClass("active")
       $("#add-exercise-form .reset").attr('value', '')
       if (!Modernizr.touch) {
         $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
@@ -963,9 +964,15 @@
     var renderEditExercise = function (ex) {
       $("[role='addex']").attr('data-mode', 'edit')
       _.map(["title", "duration", "distance", "avghr", "detailRepeats", "detailVolume", "detailElevation"], function (field) {
-        $('#ex-' + field).val(ex[field]).keyup().focus().blur()
+        $('#ex-' + field).val(ex[field]).keyup()
+        if ((ex[field] || "") != "") {
+          $("label[for=\"ex-" + field + "\"]").addClass('active')
+        } else {
+          $("label[for=\"ex-" + field + "\"]").removeClass('active')
+        }
       })
-      $("#ex-date").attr('value', ex.date).focus().blur()
+      $("#ex-date").attr('value', ex.date)
+      $("label[for=\"ex-date\"]").addClass('active')
       $("#ex-body").editable()
       $("#ex-body").editable("setHTML", ex.body)
       if (!Modernizr.touch)
@@ -1103,7 +1110,9 @@
       var profile = loggedIn.profile
       _.map(["goals", "synopsis", "resthr", "maxhr", "aerk", "anaerk"], function (field) {
         $('#' + field).val(profile[field])
-        $("#" + field).focus().blur()
+        if ((profile[field] || "") != "") {
+          $("label[for=\"" + field + "\"]").addClass("active")
+        }
       })
       $('#profile-email').text(loggedIn.email)
       $('#profile-avatar').attr("src", loggedIn.avatarUrl)
@@ -1223,8 +1232,8 @@
         })
       } else {
         $('#filter-users').css('display', 'initial')
-        $("#filter-start-date").attr("type", "date")
-        $("#filter-end-date").attr("type", "date")
+        $("#filter-start-date").attr("type", "date").parent().removeClass("input-field")
+        $("#filter-stop-date").attr("type", "date").parent().removeClass("input-field")
       }
 
       $("#filter-sort").material_select()
