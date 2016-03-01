@@ -1,5 +1,6 @@
 (function () {
   $(document).ready(function () {
+    FastClick.attach(document.body);
 
     var ww = $(window).width(), sw = screen.width, orientation = window.orientation;
 
@@ -631,6 +632,10 @@
       $.address.init(next).change(next)
       return nothing()
     }).select(splitM)
+
+    $("#mobile-back").onAsObservable("click").subscribe(function() {
+      history.go(-1)
+    })
 
     var currentPages = sessions.selectArgs(initialPage).merge(pageLinks.selectArgs(pageAndArgs)).merge(registerUsers.select(always("profile"))).merge(backPresses)
         .select(function (pages) {
