@@ -183,6 +183,18 @@ blockquote {
     height: auto;
 }
 
+.flow-text p,
+.flow-text div {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+table.vertical td,
+table.vertical th {
+    padding: 3px 5px;
+
+}
+
 body div[role="menu"],
 body[data-page="login"] div[role="login"],
 body[data-page="latest"] div[role="content"],
@@ -403,6 +415,26 @@ a.editComment {
 
     .card {
         overflow-x: hidden;
+    }
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+    }
+
+    h3 {
+        font-size: 1.8rem;
+    }
+
+    h4 {
+        font-size: 1.5rem;
+    }
+
+    h5 {
+        font-size: 1.2rem;
     }
 }
 

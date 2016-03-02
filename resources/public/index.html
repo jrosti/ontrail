@@ -673,7 +673,7 @@
 </script>
 
 <script id="exerciseDetailsTemplate" class="partial" type="text/html">
-    <table class="details full">
+    <table class="details full hide-on-small-and-down">
         <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th>
             {{#detailRepeats}}<th>Toistot</th>{{/detailRepeats}}
             {{#detailElevation}}<th>Nousu</th>{{/detailElevation}}
@@ -686,6 +686,56 @@
             {{#detailElevation}}<td>{{detailElevation}}&nbsp;m</td>{{/detailElevation}}
             {{#detailVolume}}<td>{{detailVolume}}&nbsp;kg</td>{{/detailVolume}}
         </tr>
+    </table>
+    <table class="details full hide-on-med-and-up vertical">
+        <tbody>
+        <tr>
+            <th>Laji</th>
+            <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td>
+        </tr>
+        <tr>
+            <th>Matka</th>
+            <td>{{distance}}</td>
+        </tr>
+        <tr>
+            <th>Aika</th>
+            <td>{{duration}}</td>
+        </tr>
+        <tr>
+            <th>Vauhti</th>
+            <td>{{pace}}</td>
+        </tr>
+        <tr>
+            <th>Syke</th>
+            <td>{{avghr}}</td>
+        </tr>
+        <tr>
+            <th>Syke-%</th>
+            <td>{{hrReserve}}</td>
+        </tr>
+        <tr>
+            <th>Etenemä</th>
+            <td>{{bpmdist}}</td>
+        </tr>
+        {{#detailRepeats}}
+        <tr>
+            <th>Toistot</th>
+            <td>{{detailRepeats}} kpl</td>
+        </tr>
+        {{/detailRepeats}}
+        {{#detailElevation}}
+        <tr>
+            <th>Nousu</th>
+            <td>{{detailElevation}} m</td>
+        </tr>
+        {{/detailElevation}}
+        {{#detailVolume}}
+        <tr>
+            <th>Volyymi</th>
+            <td>{{detailVolume}} kg</td>
+        </tr>
+        {{/detailVolume}}
+        </tbody>
     </table>
 </script>
 
