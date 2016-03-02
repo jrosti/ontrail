@@ -334,7 +334,7 @@
       $('#login-form').submit(function(event){event.preventDefault();})
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }
-    var logouts = $("#logout").onAsObservable("click")
+    var logouts = $(".logout").onAsObservable("click")
 
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
     var loginRequests = $("#login").onAsObservable("click").merge(loginEnters).selectAjax(doLogin)
