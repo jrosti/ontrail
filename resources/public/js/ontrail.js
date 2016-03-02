@@ -965,7 +965,7 @@
           $("label[for=\"ex-" + field + "\"]").removeClass('active')
         }
       })
-      $("#ex-date").attr('value', ex.date)
+      $("#ex-date").attr('value', Modernizr.touch ? moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD") : ex.date)
       $("label[for=\"ex-date\"]").addClass('active')
       $("#ex-body").editable()
       $("#ex-body").editable("setHTML", ex.body)
