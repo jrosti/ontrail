@@ -14,16 +14,10 @@
 
     var mobile = (ww <= 480 || sw <= 480) || Modernizr.touch
 
-    var clickEvent = "click touchstart"
-
     if (mobile) {
       $('#sportFilter').hide()
     }
-
-    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/)) {
-      clickEvent = "touchstart"
-    }
-
+    
     var enableWebSocket = true
 
     var isEnter = function (event) {
@@ -42,7 +36,7 @@
       } else if (arguments.length == 2) {
         action = _selector
       }
-      var actionStream = $(btn).onClickTouchAsObservable(clickEvent, selector).select(targetLink).where(_.compose(not, _hasClass("disabled")))
+      var actionStream = $(btn).onAsObservable("click", selector).select(targetLink).where(_.compose(not, _hasClass("disabled")))
         .doAction(function (elem) {
           button = $(elem);
           button.addClass('disabled')
@@ -340,15 +334,15 @@
       $('#login-form').submit(function(event){event.preventDefault();})
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }
-    var logouts = $("#logout").onClickTouchAsObservable(clickEvent)
+    var logouts = $("#logout").onAsObservable("click")
 
     var loginEnters = $("#password").keyupAsObservable().where(isEnter)
-    var loginRequests = $("#login").onClickTouchAsObservable(clickEvent).merge(loginEnters).selectAjax(doLogin)
+    var loginRequests = $("#login").onAsObservable("click").merge(loginEnters).selectAjax(doLogin)
     var logins = loginRequests.where(isSuccess).select(ajaxResponseData)
 
     var loginFails = loginRequests.where(_.compose(not, isSuccess)).select(ajaxResponseData)
 
-    $("#gotoLogin").onClickTouchAsObservable(clickEvent).subscribe(function () {
+    $("#gotoLogin").onAsObservable("click").subscribe(function () {
       $("html, body").animate({ scrollTop: $("#login-wrapper").offset().top - 110 }, 1000)
     })
 
@@ -510,7 +504,7 @@
     var parentArticle = function (el) {
       return $(el).closest('article')
     }
-    var clickedLinks = $("body").onClickTouchAsObservable(clickEvent, "a").select(targetLink).publish()
+    var clickedLinks = $("body").onAsObservable("click", "a").select(targetLink).publish()
     clickedLinks.connect()
     var clickedArticles = clickedLinks.where(function (elem) {
       return $(elem).hasClass('more')
@@ -1009,7 +1003,7 @@
       resetEditor()
       $("[role='addex']").attr('data-mode', 'add')
     }
-    $('.pageLink[rel="addex"]').onClickTouchAsObservable(clickEvent).subscribe(renderAddExercise)
+    $('.pageLink[rel="addex"]').onAsObservable("click").subscribe(renderAddExercise)
 
     var asExercise = function (__, exercise) {
       return ["ex", exercise]
@@ -1027,7 +1021,7 @@
     updateExercises.subscribe(doClearAutoSave)
 
     // update user profile
-    var updateProfiles = $('#update-profile').onClickTouchAsObservable(clickEvent)
+    var updateProfiles = $('#update-profile').onAsObservable("click")
       .selectAjax(postProfile).where(isSuccess).select(ajaxResponseData)
     updateProfiles.subscribeArgs(renderProfileUpdate)
 
@@ -1037,7 +1031,7 @@
       document.title = 'ontrail.net'
     }
 
-    var markAllRead = $('#mark-all-read').onClickTouchAsObservable(clickEvent)
+    var markAllRead = $('#mark-all-read').onAsObservable("click")
       .selectAjax(OnTrail.rest.markAllRead).subscribe(renderMarkAllRead)
 
     // Lisää kommentti
@@ -1157,7 +1151,7 @@
     var registerValidations = _.flatten([usernameRequiredValidation, passwordRequiredValidation, pwdLengthValidation, samePassword, emailValidation, usernameExistsValidation])
     combine(registerValidations).subscribe(toggleClassEffect($('#register-user'), "disabled"))
 
-    var exPagesWithComments = $("body").onClickTouchAsObservable(clickEvent, "a[data-new-comments]").selectMany(loggedIns).where(identity)
+    var exPagesWithComments = $("body").onAsObservable("click", "a[data-new-comments]").selectMany(loggedIns).where(identity)
 
     var tabIsInFocus = rx.interval(3000).select(function () {
       return $("body").hasClass("visible") && document.hasFocus()
@@ -1199,12 +1193,12 @@
       }
     }
 
-    $(".filter-menu").onClickTouchAsObservable(clickEvent).subscribe(function() {
+    $(".filter-menu").onAsObservable("click").subscribe(function() {
       $("body").addClass("filter")
       showPage("latest")
     })
 
-    $("#filter-close").onClickTouchAsObservable(clickEvent).subscribe(function() {
+    $("#filter-close").onAsObservable("click").subscribe(function() {
       $("body").removeClass("filter")
       $("body").removeClass("pace")
     })
@@ -1281,15 +1275,15 @@
       $.address.value(toUrl)
     }
 
-    $('#show-filter').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#search-form'), $('#filter-form')))
-    $('#show-search').onClickTouchAsObservable(clickEvent).subscribe(togglePairAction($('#filter-form'), $('#search-form')))
-    $('#filter-render').onClickTouchAsObservable(clickEvent).subscribe(renderFilter)
-    $('#filter-reset-start').onClickTouchAsObservable(clickEvent).subscribe(function () {
+    $('#show-filter').onAsObservable("click").subscribe(togglePairAction($('#search-form'), $('#filter-form')))
+    $('#show-search').onAsObservable("click").subscribe(togglePairAction($('#filter-form'), $('#search-form')))
+    $('#filter-render').onAsObservable("click").subscribe(renderFilter)
+    $('#filter-reset-start').onAsObservable("click").subscribe(function () {
 
       $("#filter-start-date").attr('value', "1.1.1970")
       $("#filter-start-date").trigger("cal:changed")
     })
-    $('#filter-reset-stop').onClickTouchAsObservable(clickEvent).subscribe(function () {
+    $('#filter-reset-stop').onAsObservable("click").subscribe(function () {
       $("#filter-stop-date").attr('value', "")
       $("#filter-stop-date").trigger("cal:changed")
     })

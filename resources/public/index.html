@@ -99,24 +99,24 @@
                 </ul>
 
                 <ul id="slide-out" class="side-nav">
-                    <li><a class="pageLink" rel="latest">Viimeiset</a></li>
-                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
-                    <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
+                    <li><a class="pageLink needsclick" rel="latest">Viimeiset</a></li>
+                    <li><a class="pageLink needsclick" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                    <li><a class="pageLink needsclick" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
 
                     <li class="divider"></li>
                     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
-                    <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-                    <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
-                    <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
-                    <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
-                    <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+                    <li><a class="pageLink needsclick" rel="profile">Muokkaa profiilia</a></li>
+                    <li><a class="pageLink needsclick" rel="user" data-user="">Omat suoritukset</a></li>
+                    <li><a class="pageLink needsclick" rel="summary" data-user="">Lajit</a></li>
+                    <li><a class="pageLink needsclick" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                    <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
                     <span class="ownGroupsDropDown"></span>
 
                     <li class="divider"></li>
                     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
-                    <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
-                    <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
-                    <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+                    <li><a class="pageLink needsclick" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                    <li><a class="pageLink needsclick" rel="users">Etsi käyttäjiä</a></li>
+                    <li><a class="pageLink needsclick" rel="groups">Ryhmät</a></li>
                     <li class="divider"></li>
 
                     <li><a class="pageLink" id="logout"><i class="material-icons right" style="vertical-align: bottom">exit_to_app</i> Kirjaudu ulos</a></li>
@@ -790,19 +790,19 @@
             </div>
             <div class="card-action">
                 <div class="preview">
-                    <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                     {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
-                    <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
                 <div class="full">
-                    <a class="windowLink waves-effect waves-light btn-flat" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
-                    <a class="pageLink waves-effect waves-light btn-flat" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
+                    <a class="windowLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
+                    <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.{{/newComments}}{{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}
                     </a>
-                    <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
             </div>
         </article>
