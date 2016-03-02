@@ -916,10 +916,14 @@
     // Lisää lenkki
     var resetEditor = function () {
       $("#add-exercise-form label").removeClass("active")
-      $("#add-exercise-form .reset").attr('value', '')
+      $("#add-exercise-form .reset").val('')
       if (!Modernizr.touch) {
         $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
         $("#ex-tags").select2("data", [])
+        $("#ex-date").val(moment().format("DD.MM.YYYY"))
+      } else {
+        $("#ex-date").val(moment().format("YYYY-MM-DD"))
+        $("label[for=\"ex-date\"]").addClass("active")
       }
       $("#time-hint, #distance-hint").html("")
       var autoSavedText = localStorage.getItem("ex-body")

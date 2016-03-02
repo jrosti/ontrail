@@ -72,6 +72,7 @@ a.windowLink {
     padding-left: 20px;
 }
 
+.extra li a,
 #my-account li a, a {
     color: #039be5;
 }
