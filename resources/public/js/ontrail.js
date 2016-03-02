@@ -1199,7 +1199,12 @@
 
     $(".filter-menu").onAsObservable("click").subscribe(function() {
       $("body").addClass("filter")
-      showPage("latest")
+      showPage("sport", "Juoksu")
+    })
+
+    currentPages.where(function(page) { return page[0] != "sport"}).subscribe(function(pg) {
+      $("body").removeClass("filter")
+      $("body").removeClass("pace")
     })
 
     $("#filter-close").onAsObservable("click").subscribe(function() {
