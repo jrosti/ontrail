@@ -4,6 +4,33 @@ body.login #login-link {
     display: none;
 }
 
+
+.card .card-action,
+.card .card-content {
+    padding: 10px;
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+    margin-top: 0.7rem;
+}
+
+h5 {
+    font-size: 1.2rem;
+}
+
 p { margin: 0; }
 
 #logo-container {
@@ -170,20 +197,20 @@ blockquote {
     color: #039be5;
 }
 
-.flow-text img,
-.flow-text video {
+.body-text img,
+.body-text video {
     max-width: 100%;
     height: auto;
 }
 
-.flow-text p,
-.flow-text div {
+.body-text p,
+.body-text div {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
 }
 
-.flow-text p:last-child,
-.flow-text div:last-child {
+.body-text p:last-child,
+.body-text div:last-child {
     padding-bottom: 0;
 }
 
@@ -406,31 +433,6 @@ a.editComment {
 }
 
 @media only screen and (max-width: 992px) {
-    .card .card-action,
-    .card .card-content {
-        padding: 10px;
-    }
-
-    h1 {
-        font-size: 4rem;
-    }
-
-    h2 {
-        font-size: 2.5rem;
-    }
-
-    h3 {
-        font-size: 1.8rem;
-    }
-
-    h4 {
-        font-size: 1.5rem;
-        margin-top: 0.7rem;
-    }
-
-    h5 {
-        font-size: 1.2rem;
-    }
 }
 
 @media only screen and (max-width: 600px) {

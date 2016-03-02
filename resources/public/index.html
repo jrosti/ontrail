@@ -534,7 +534,7 @@
                                 <div class="col s12">
                                     <i class="material-icons left medium orange-text accent-2 hide-on-small-and-down">edit</i>
                                     <label for="ex-body">Kuvaus</label>
-                                    <div id="ex-body" class="flow-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
+                                    <div id="ex-body" class="body-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
                                 </div>
                             </div>
                         </div>
@@ -779,10 +779,10 @@
                 </div>
                 {{> exerciseDetailsTemplate}}
                 <div class="preview">
-                    <div class="flow-text">{{#trunc}}{{/trunc}}</div>
+                    <div class="body-text">{{#trunc}}{{/trunc}}</div>
                 </div>
                 <div class="full">
-                    <div class="flow-text">{{{body}}}</div>
+                    <div class="body-text">{{{body}}}</div>
                     <p class="signature right">
                         {{synopsis}}
                     </p>
@@ -842,7 +842,7 @@
             </div>
             {{> exerciseDetailsTemplate}}
             <div>
-                <div class="flow-text">{{{body}}}</div>
+                <div class="body-text">{{{body}}}</div>
                 <p class="signature right">
                     {{synopsis}}
                 </p>
@@ -861,7 +861,7 @@
         <div class="card-content blue-grey darken-2 white-text">
             <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
-            <div class="flow-text clearfix">{{{body}}}</div>
+            <div class="body-text clearfix">{{{body}}}</div>
         </div>
         {{#deleteComment}}<div class="card-action"><a class="delete-comment button waves-red btn-flat waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
     </article>
@@ -875,7 +875,7 @@
                 <div class="card-content blue-grey darken-2 white-text">
                     <img class="avatar circle left" src="{{my-avatar}}"  width="50" height="50">
                     <h5><span class="date">{{now}}</span> <a class="pageLink" rel="user/{{me}}">{{me}}</a></h5>
-                    <div id="comment-body" style="clear: both;" class="row flow-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
+                    <div id="comment-body" style="clear: both;" class="row body-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
                 </div>
                 <div class="card-action">
                     <a class="button addComment waves-effect waves-light btn-flat" data-id="{{id}}">Kommentoi</a>
