@@ -1304,17 +1304,6 @@
       $("#ex-numeric-details").hide()
     })
 
-    // Autosave the exercise XXX: this shoud be bound to onchange, but redactor
-    // autosave, nor onchange event did not work.
-    rx.interval(10000).subscribe(function () {
-      var bodyText = $('#ex-body').editable('getHTML')
-      if (bodyText.length > 15) { // "empty" body contains <p>\n ... characters
-        try {
-          localStorage.setItem('ex-body', bodyText)
-        } catch(err) {
-        }
-      }
-    })
     // initiate current page
     currentPages.connect()
   })
