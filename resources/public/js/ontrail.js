@@ -17,7 +17,7 @@
     if (mobile) {
       $('#sportFilter').hide()
     }
-    
+
     var enableWebSocket = true
 
     var isEnter = function (event) {

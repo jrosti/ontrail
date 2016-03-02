@@ -239,27 +239,27 @@
                                         <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
                                     </div>
                                     <form id="profile-form" class="edit-form" method="post">
-                                        <div class="input-field">
+                                        <div class="col input-field">
                                             <label for="synopsis">Motto</label>
                                             <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" />
                                         </div>
-                                        <div class="input-field">
+                                        <div class="col input-field">
                                             <label for="goals">Tavoitteet</label>
                                             <input id="goals" name="goals" type="text" maxlength="60" size="60" />
                                         </div>
-                                        <div class="input-field">
+                                        <div class="col s12 input-field">
                                             <label for="resthr">Leposyke</label>
                                             <input id="resthr" name="resthr" type="text" maxlength="3" size="3" />
                                         </div>
-                                        <div class="input-field">
+                                        <div class="col s12 input-field">
                                             <label for="maxhr">Maksimisyke</label>
                                             <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" />
                                         </div>
-                                        <div class="input-field">
+                                        <div class="col s12 input-field">
                                             <label for="aerk">Aerobinen kynnys</label>
                                             <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" />
                                         </div>
-                                        <div class="input-field">
+                                        <div class="col s12 input-field">
                                             <label for="anaerk">Anaerobinen kynnys</label>
                                             <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" />
                                         </div>
@@ -278,17 +278,17 @@
                                 <span class="card-title">Vaihda salasana</span>
                                 <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
                                 <form id="change-password-form" class="edit-form" method="post">
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ch-old-password">Vanha salasana</label>
                                         <input id="ch-old-password" class="reset" type="password"/>
                                         <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ch-password">Salasana</label>
                                         <input id="ch-password" name="ch-password" class="reset" type="password"/>
                                         <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ch-password2">Salasana uudelleen</label>
                                         <input id="ch-password2" class="reset" type="password"/>
                                         <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
@@ -436,7 +436,8 @@
                 <section role="weeksummary" class="logged-in">
                     <nav class="orange accent-2">
                         <div class="nav-wrapper">
-                            <a class="brand-logo">Viikoittainen harjoitusyhteenveto</a>
+                            <a class="brand-logo hide-on-small-and-down">Viikoittainen harjoitusyhteenveto</a>
+                            <a class="brand-logo hide-on-med-and-up">Viikkoyhteenveto</a>
                         </div>
                     </nav>
                     <div id="weeklyNavigate"></div>
@@ -476,51 +477,51 @@
                             <div class="card-title">Lisää uusi suoritus</div>
                             <div class="row">
                                 <div class="col s12 m6">
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-title">Otsikko</label>
                                         <input id="ex-title" name="title" type="text" class="reset"/>
                                         <em class="error title-required">Lisää otsikko</em>
                                     </div>
-                                    <div>
+                                    <div class="col s12">
                                         <label for="ex-sport">Laji</label>
                                         <select id="ex-sport" class="chzn-select" style="width:100%;">
                                             <option>laa</option>
                                         </select>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-duration">Kesto (esim  3h31, 3.31.28)</label>
                                         <input id="ex-duration" name="duration" class="reset" type="text"/><span id="time-hint"></span>
                                         <em class="error duration-required">Lenkin kesto vaaditaan</em>
                                         <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-distance">Matka (esim 2km, 3250m)</label>
                                         <input id="ex-distance" name="distance" class="reset" type="text"/> <span id="distance-hint"></span>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-avghr">Keskisyke</label>
                                         <input id="ex-avghr" name="avghr" type="number" class="reset">
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-date" class="active">Päivä</label>
                                         <input id="ex-date" name="date" type="text" />
                                     </div>
-                                    <div id="add-tags-select">
+                                    <div id="add-tags-select" class="col s12">
                                         <label for="ex-tags">Avainsanat</label>
                                         <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
                                     </div>
                                 </div>
                                 <div class="col s12 m6">
                                     <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-detailRepeats">Toistot (kpl)</label>
                                         <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" type="number"/>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-detailVolume">Volyymi (kg)</label>
                                         <input class="small-input reset" id="ex-detailVolume" size="5"  maxlength="5" name="detailVolume" type="number"/>
                                     </div>
-                                    <div class="input-field">
+                                    <div class="col s12 input-field">
                                         <label for="ex-detailElevation">Nousumetrit (m)</label>
                                         <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" type="number"/>
                                     </div>
@@ -589,7 +590,7 @@
     </div>
 
     <div id="chatSection" class="logged-in hide-on-med-and-down">
-        <h5 class="orange-text accent-2">Viimeisimmät</h5>
+        <h5><a class="pageLink" rel="latest">Viimeisimmät</a></h5>
         <div id="messageBox">
             <ul class="collection" id="messages">
             </ul>
@@ -1056,9 +1057,9 @@
 <script id="summaryTemplate" type="text/html">
     <table class="details">
         <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th>
-            <th>Toistot</th>
-            <th>Nousu</th>
-            <th>Kerrat</th>
+            <th class="hide-on-med-and-down">Toistot</th>
+            <th class="hide-on-med-and-down">Nousu</th>
+            <th class="hide-on-med-and-down">Kerrat</th>
         </tr></thead>
         <tbody>
         {{#sports}}
@@ -1075,9 +1076,9 @@
         <td>{{pace}}</td>
         <td>{{duration}}</td>
         <td>{{avghr}}</td>
-        <td>{{repeats}}</td>
-        <td>{{elevation}}</td>
-        <td>{{count}}</td>
+        <td class="hide-on-med-and-down">{{repeats}}</td>
+        <td class="hide-on-med-and-down">{{elevation}}</td>
+        <td class="hide-on-med-and-down">{{count}}</td>
     </tr>
 </script>
 

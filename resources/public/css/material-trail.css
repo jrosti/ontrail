@@ -161,14 +161,6 @@ blockquote {
     min-height: 64px;
 }
 
-.input-field label {
-    left: 0;
-}
-
-.col label {
-    left: 0.75em;
-}
-
 .card .card-reveal {
  z-index: 100;
 }
@@ -187,6 +179,11 @@ blockquote {
 .flow-text div {
     padding-top: 0.5em;
     padding-bottom: 0.5em;
+}
+
+.flow-text p:last-child,
+.flow-text div:last-child {
+    padding-bottom: 0;
 }
 
 table.vertical td,
@@ -407,14 +404,10 @@ a.editComment {
     right: auto;
 }
 
-@media only screen and (max-width: 600px) {
-    #ex-body .froala-element.f-placeholder+span.fr-placeholder {
-        left: auto;
-        right: auto;
-    }
-
-    .card {
-        overflow-x: hidden;
+@media only screen and (max-width: 992px) {
+    .card .card-action,
+    .card .card-content {
+        padding: 10px;
     }
 
     h1 {
@@ -431,10 +424,26 @@ a.editComment {
 
     h4 {
         font-size: 1.5rem;
+        margin-top: 0.7rem;
     }
 
     h5 {
         font-size: 1.2rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #ex-body .froala-element.f-placeholder+span.fr-placeholder {
+        left: auto;
+        right: auto;
+    }
+
+    .card {
+        overflow-x: hidden;
+    }
+
+    .row .col {
+        padding: 0;
     }
 }
 
@@ -474,8 +483,6 @@ a.editComment {
 table.weekly {
     font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
     font-size: 10px;
-    margin: 5px 0 0 30px;
-    width: 98%;
     text-align: left;
 }
 table.weekly td.other-month span.weeklyDay {
