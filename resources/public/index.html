@@ -141,7 +141,7 @@
 <div id="content-top"></div>
 <div id="content">
 
-    <div id="main-content" class="row">
+    <div id="main-content" class="row blue-grey lighten-5">
         <div id="sidemenu" class="col m4 l3 s12 push-m8 push-l9">
 
             <div id="current-user-container" class="logged-in hide-on-small-and-down"></div>
@@ -601,7 +601,7 @@
 </div>
 
 <!-- Copyright -->
-<div id="copyright">
+<div id="copyright" class="blue-grey lighten-5">
     &copy; ontrail.net, 2013-2016
 </div>
 
@@ -762,7 +762,7 @@
 
 <script id="exerciseTemplate" type="text/html">
     <div>
-        <article data-id="{{id}}" data-article-owner="{{user}}" class="card blue-grey lighten-5 preview exercise {{sport}}">
+        <article data-id="{{id}}" data-article-owner="{{user}}" class="card preview exercise {{sport}}">
             <div class="card-content">
                 <p class="count" style="display: none"></p>
                 <div class="card-title">
@@ -829,7 +829,7 @@
 </script>
 
 <script id="singleExerciseTemplate" type="text/html">
-    <article data-id="{{id}}" class="card blue-grey lighten-5 full exercise {{sport}}">
+    <article data-id="{{id}}" class="card full exercise {{sport}}">
         <div class="card-content">
             <div class="card-title">
                 <div class="left">
@@ -897,7 +897,7 @@
 </script>
 <script id="usersCreateTemplate" type="text/html">
     {{#users}}
-    <div class="card-panel blue-grey lighten-5">
+    <div class="card-panel">
         <img class="avatar left" src="{{avatar}}"  width="50" height="50">
         <h5><a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
     </div>
@@ -907,7 +907,7 @@
 <script id="groupsTemplate" type="text/html">
     {{#groups}}
     <div class="col s12 m6 l4">
-        <div class="card blue-grey lighten-5 group">
+        <div class="card group">
             <div class="card-content">
                 <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
                 <div class="description">{{description}}</div>
