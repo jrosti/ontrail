@@ -173,7 +173,10 @@
   
   (POST "/rest/v1/ex/:id/comment" {params :params cookies :cookies}
     (webutil/is-authenticated? cookies (webutil/json-response (mutate/comment-ex (user-from-cookie cookies) params))))
-  
+
+  (POST "/rest/v1/ex/:id/care" {params :params cookies :cookies}
+    (webutil/is-authenticated? cookies (webutil/json-response (mutate/care-ex (user-from-cookie cookies) params))))
+
   (POST "/rest/v1/update/:id" {params :params cookies :cookies}
     (webutil/is-authenticated? cookies (webutil/json-response (mutate/update-ex (user-from-cookie cookies) params))))
   
