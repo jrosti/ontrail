@@ -131,6 +131,17 @@
     (websocket/submit :comment-ex user ex)
     (as-ex-result ex)))
 
+(defn care-ex [user params]
+  (.trace logger (str user " creating comment " params))
+  (let [ex (mc/find-and-modify *db* EXERCISE
+                               {:_id (ObjectId. (:id params))}
+                               {"$addToSet" {:cares {:avatar (get-avatar-url user)
+                                                     :user user}}}
+                               {:return-new true})]
+    (.info logger (str user " cares " params))
+    (websocket/submit :cares-ex user ex)
+    (as-ex-result ex)))
+
 (defn delete-comment[ex-id rule]
   (newcount-uncomment-ex ex-id)
   (let [ex (mc/find-and-modify *db* EXERCISE
