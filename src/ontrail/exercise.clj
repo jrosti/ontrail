@@ -58,6 +58,7 @@
                     :tags (:tags exercise)
                     :did (get-verb (:sport exercise))
                     :sport (:sport exercise)
+                    :cares (:cares exercise)
                     :avatar avatar
                     :date date
                     :duration (to-human-time (:duration exercise))

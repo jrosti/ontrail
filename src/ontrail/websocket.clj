@@ -72,7 +72,14 @@
                 :avatar (get-avatar-url user)
                 :action "kirjasi harjoituksen"
                 :message (:title value) 
-                :link (ex-link value)}))
+                :link (ex-link value)}
+    :cares-ex  {:user user
+                :avatar (get-avatar-url user)
+                :action (str "välitti käyttäjän " (:user value) " harjoituksesta")
+                :otherUser (:user value)
+                :message (:title value)
+                :link (ex-link value)}
+                ))
 
 ;; submits server messages to all users
 (defn submit [type user value]
