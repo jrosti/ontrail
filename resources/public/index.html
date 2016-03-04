@@ -616,6 +616,9 @@
         <clipPath id="heartPath40">
             <path d="M33.0770667,0.933809524 C28.1849333,-1.40571429 22.7076,0.800634921 19.9414667,5.87428571 C17.1756,0.800634921 11.698,-1.40571429 6.80573333,0.933809524 C1.2472,3.59238095 -1.4484,11.1125397 0.784933333,17.7295238 C2.92626667,24.0755556 19.8934667,39.8893651 19.8934667,39.8893651 L19.9413333,39.9338095 L19.9893333,39.8893651 C19.9893333,39.8893651 36.9561333,24.0755556 39.0978667,17.7295238 C41.3314667,11.1125397 38.6357333,3.59238095 33.0770667,0.933809524 L33.0770667,0.933809524 Z" id="heart"></path>
         </clipPath>
+        <clipPath id="heartPath16">
+            <path transform="scale(0.35, 0.35)" d="M33.0770667,0.933809524 C28.1849333,-1.40571429 22.7076,0.800634921 19.9414667,5.87428571 C17.1756,0.800634921 11.698,-1.40571429 6.80573333,0.933809524 C1.2472,3.59238095 -1.4484,11.1125397 0.784933333,17.7295238 C2.92626667,24.0755556 19.8934667,39.8893651 19.8934667,39.8893651 L19.9413333,39.9338095 L19.9893333,39.8893651 C19.9893333,39.8893651 36.9561333,24.0755556 39.0978667,17.7295238 C41.3314667,11.1125397 38.6357333,3.59238095 33.0770667,0.933809524 L33.0770667,0.933809524 Z" id="heart"></path>
+        </clipPath>
     </defs>
 </svg>
 
@@ -812,7 +815,13 @@
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
                     {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
-                    <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">Välitä</a>
+                    <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
+                        <span class="care-avatar small" style="vertical-align: text-top">
+                            <svg width="16" height="16">
+                                <rect width="16" height="16" fill="#ffab40" />
+                            </svg>
+                        </span>
+                        Välitä</a>
                     <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
                 </div>
                 <div class="full">
@@ -906,7 +915,9 @@
             <p class="count clearfix"></p>
         </div>
         <div class="card-action">
-            <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">Välitä</a>
+            <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
+
+                Välitä</a>
             <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
             <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
         </div>
