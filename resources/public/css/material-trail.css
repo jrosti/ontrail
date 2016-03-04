@@ -49,9 +49,6 @@ p { margin: 0; }
     margin: 0 10px;
 }
 
-body.login #login-form * {
-    display: inline-block;
-}
 section[role],
 div[role] {
     display: none;
@@ -297,7 +294,7 @@ body[data-page="main"] div[role="main"] {
 }
 
 
-body[data-page="register"] #login-form,
+body[data-page="register"] #login-container,
 body[data-list-type="summary"] #summary-view,
 body[data-page="new-comments"] #content-spinner,
 body[data-page="new-own-comments"] #content-spinner,

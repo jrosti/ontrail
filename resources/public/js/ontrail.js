@@ -361,6 +361,8 @@
 
     // logged in state handling
     var doLogin = function () {
+      console.log($("#login-form").serialize())
+
       $('#login-form').submit(function(event){event.preventDefault();})
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }
