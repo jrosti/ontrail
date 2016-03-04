@@ -133,6 +133,9 @@
         cared: function() {
           return _(this.cares).find(function(care) { return care.user == me}) ? " cared" : ""
         },
+        hasCares: function() {
+          return this.cares && this.cares.length > 0 ? "has-cares" : "no-cares"
+        },
         trunc: function () {
           return function (text, render) {
             var body = $('<div></div>').html(this.body)
@@ -158,6 +161,8 @@
 
         var tableContent = _.map(mappedData, _.partial(render, ich.exerciseSummaryTemplate)).join("").trim()
         $(tableContent).appendTo(tableElem)
+
+        $('#content-entries .tooltipped').tooltip();
       }
     }
     var renderReadCount = function(id) {
@@ -185,6 +190,9 @@
         cared: function() {
           return _(exercise.cares).find(function(care) { return care.user == me}) ? " cared" : ""
         },
+        hasCares: function() {
+          return this.cares && this.cares.length > 0 ? "has-cares" : "no-cares"
+        },
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {
@@ -205,9 +213,15 @@
     }
 
     var renderCaresToExercise = function(exercise, me) {
-      // laa kuikka
-      $("[data-id=" + exercise.id + "]").addClass("cared")
-      console.log("render caress", exercise, me)
+      console.log("render caress", exercise)
+
+      var $ex = $("article[data-id=" + exercise.id + "]")
+      $ex.addClass("cared")
+
+      $ex.find(".cares-container")
+          .removeClass("no-cares")
+          .html(ich.caresTemplate(exercise))
+
     }
 
     var renderSports = function (data) {

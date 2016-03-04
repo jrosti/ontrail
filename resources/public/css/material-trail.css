@@ -93,7 +93,7 @@ a.windowLink {
 }
 
 .signature {
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     margin-left: 3rem;
     font-style: italic;
 }
@@ -279,30 +279,9 @@ body[data-page="main"] div[role="main"] {
     display: block;
     opacity: 1;
 }
-body[data-page="login"] a[rel="login"],
-body[data-page="latest"] a[rel="tableview"],
-body[data-page="summary"] a[rel="summary"],
-body[data-page="tagsummary"] a[rel="tagsummary"],
-body[data-page="weeksummary"] a[rel="weeksummary"],
-body[data-page="import"] a[rel="import"],
-body[data-page="user"] a[rel="user"],
-body[data-page="users"] a[rel="users"],
-body[data-page="profile"] a[rel="profile"],
-body[data-page="userprofile"] a[rel="userprofile"],
-body[data-page="systemstats"] a[rel="systemstats"],
-body[data-page="searches"] a[rel="searches"],
-body[data-page="groups"] a[rel="groups"],
-body[data-page="lists"] a[rel="lists"],
-body[data-page="tops"] a[rel="tops"],
-body[data-page="addex"] a[rel="addex"],
-body[data-page="register"] a[rel="register"],
-body[data-page="new-comments"] a[rel="new-comments"],
-body[data-page="new-own-comments"] a[rel="new-own-comments"],
-body[data-page="most-comments"] a[rel="most-comments"],
-body[data-page="main"] a[rel="main"] {
-    font-weight: bold;
-}
 
+
+body[data-page="register"] #login-form,
 body[data-list-type="summary"] #summary-view,
 body[data-page="new-comments"] #content-spinner,
 body[data-page="new-own-comments"] #content-spinner,
@@ -428,9 +407,32 @@ body[data-filter="bymonth"] .by.month .prev {
     display: none;
 }
 
+.no-cares,
 .exercise.cared .addCare {
     display: none;
 }
+
+.cares-container {
+    margin-top: 1.2em;
+}
+
+.care-avatar {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-right: -30px;
+}
+
+.care-avatar:nth-child(2) {
+    margin-right: 10px;
+}
+
+.care-avatar image,
+.care-avatar rect {
+    -webkit-clip-path: url(#heartPath40);
+    clip-path: url(#heartPath40);
+}
+
 
 span.badge.new:after {
     content: " uutta";
