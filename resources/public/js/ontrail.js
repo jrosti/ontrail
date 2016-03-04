@@ -240,10 +240,11 @@
       var $ex = $("article[data-id=" + exercise.id + "]")
       $ex.addClass("cared")
 
-      $ex.find(".cares-container")
+      var cares = $ex.find(".cares-container")
           .removeClass("no-cares")
           .html(ich.caresTemplate(exercise))
 
+      $('#content-entries .tooltipped').tooltip();
     }
 
     var renderSports = function (data) {
@@ -1102,7 +1103,9 @@
     addCaresSingle.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
 
     var addCaresFeed = actionButtonAsStream("#content-entries", "a.addCare", function(clickStream) {
-      return clickStream.select(_attr("data-id")).selectAjax(postCare)
+      return clickStream.select(_attr("data-id"))
+          .doAction(function() { $('#content-entries .tooltipped').tooltip('remove') })
+          .selectAjax(postCare)
     }).where(isSuccess).select(ajaxResponseData)
     addCaresFeed.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderCaresToExercise)
 
