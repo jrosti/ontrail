@@ -220,7 +220,7 @@
       function updateCareBlockVisibility(idx, el) {
         var allCares = $(el).find(".all-cares")
         console.log("heights", allCares[0].scrollHeight, allCares.height())
-        if (allCares[0].scrollHeight > allCares.height() + 6) {
+        if (allCares[0].scrollHeight > allCares.height()*1.5) {
           $(el).find(".cares-container").addClass("has-more-cares")
         } else {
           $(el).find(".cares-container").removeClass("has-more-cares")
