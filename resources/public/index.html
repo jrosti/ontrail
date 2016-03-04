@@ -131,7 +131,7 @@
         </nav>
     </div>
     <div class="fixed-action-btn" style="top: 20px; right: 10px; bottom: inherit;">
-        <a class="btn-floating btn-large orange accent-2 pageLink logged-in" rel="addex">
+        <a class="btn-floating btn-large pink accent-2 pageLink logged-in" rel="addex">
             <i class="large material-icons">mode_edit</i>
         </a>
     </div>
@@ -190,7 +190,7 @@
 
             <section role="tops" class="">
 
-                <nav class="orange accent-2">
+                <nav class="pink accent-2">
                     <ul>
                         <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
                         <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
@@ -220,7 +220,7 @@
 
             <section role="profile" class="logged-in">
                 <div class="row">
-                    <h3 class="orange-text accent-2">Muokkaa profiiliasi</h3>
+                    <h3 class="pink-text accent-2">Muokkaa profiiliasi</h3>
                     <div class="col s12 m6">
                         <div class="card">
                             <div class="card-content">
@@ -308,7 +308,7 @@
             <!-- Main Content -->
             <div>
                 <div role="content">
-                    <nav id="search-container" class="orange accent-2">
+                    <nav id="search-container" class="pink accent-2">
                         <div class="nav-wrapper">
                             <form accept-charset="utf-8">
                                 <div class="input-field">
@@ -435,7 +435,7 @@
                 </section>
 
                 <section role="weeksummary" class="logged-in">
-                    <nav class="orange accent-2">
+                    <nav class="pink accent-2">
                         <div class="nav-wrapper">
                             <a class="brand-logo hide-on-small-and-down">Viikoittainen harjoitusyhteenveto</a>
                             <a class="brand-logo hide-on-med-and-up">Viikkoyhteenveto</a>
@@ -451,9 +451,9 @@
 
             <section role="users" class="logged-in">
 
-                <h5 class="orange-text accent-2">Hae käyttäjää</h5>
+                <h5 class="pink-text accent-2">Hae käyttäjää</h5>
 
-                <nav id="search-container" class="orange accent-2">
+                <nav id="search-container" class="pink accent-2">
                     <div class="nav-wrapper">
                         <form accept-charset="utf-8">
                             <div class="input-field">
@@ -533,7 +533,7 @@
                             </div>
                             <div class="row" style="margin-top: 2rem;">
                                 <div class="col s12">
-                                    <i class="material-icons left medium orange-text accent-2 hide-on-small-and-down">edit</i>
+                                    <i class="material-icons left medium pink-text accent-2 hide-on-small-and-down">edit</i>
                                     <label for="ex-body">Kuvaus</label>
                                     <div id="ex-body" class="body-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
                                 </div>
@@ -818,7 +818,7 @@
                     <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
                         <span class="care-avatar small" style="vertical-align: text-top">
                             <svg width="16" height="16">
-                                <rect width="16" height="16" fill="#ffab40" />
+                                <rect width="16" height="16" fill="#ff4081" />
                             </svg>
                         </span>
                         Välitä</a>
@@ -832,7 +832,7 @@
                     <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
                         <span class="care-avatar small" style="vertical-align: text-top">
                             <svg width="16" height="16">
-                                <rect width="16" height="16" fill="#ffab40" />
+                                <rect width="16" height="16" fill="#ff4081" />
                             </svg>
                         </span>
                         Välitä</a>
@@ -861,15 +861,15 @@
     {{> singleCareTemplate}}{{/cares}}
     </div>
     <div class="care-expand-buttons right">
-        <a class="button showAllCares waves-effect waves-light btn-flat logged-in orange-text accent-2" data-id="{{id}}">Näytä kaikki</a>
-        <a class="button hideAllCares waves-effect waves-light btn-flat logged-in orange-text accent-2" data-id="{{id}}">Piilota</a>
+        <a class="button showAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Näytä kaikki</a>
+        <a class="button hideAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Piilota</a>
     </div>
     <div class="clearfix"/>
 </script>
 
 <script id="singleCareTemplate" type="text/html">
     <div class="care-avatar">
-        <a class="tooltipped" data-position="top" data-delay="50" data-tooltip="{{user}} välittää">
+        <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{user}} välittää">
             <svg width="40" height="40">
                 <image xlink:href="{{avatar}}" width="40" height="40" />
             </svg>
@@ -924,7 +924,7 @@
             <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
                         <span class="care-avatar small" style="vertical-align: text-top">
                             <svg width="16" height="16">
-                                <rect width="16" height="16" fill="#ffab40" />
+                                <rect width="16" height="16" fill="#ff4081" />
                             </svg>
                         </span>
                 Välitä</a>
@@ -1007,7 +1007,7 @@
 </script>
 
 <script id="hpkHeaderTemplate" type="text/html">
-    <nav class="orange accent-2">
+    <nav class="pink accent-2">
         <ul>
             <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a></li>
             <li><a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a></li>
@@ -1405,7 +1405,7 @@
     <div class="clearfix" style="margin: 0"></div>
     <span>
       {{#exs}}
-      <a rel="ex/{{id}}" class="pageLink tooltipped" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
+      <a rel="ex/{{id}}" class="pageLink tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
       <span>{{#distance}}{{distance}}{{/distance}}
       {{^distance}}{{statsduration}}{{/distance}}</span><br/>
       {{/exs}}
@@ -1415,7 +1415,7 @@
 <script id="hpkWeeklySummaryTemplate" type="text/html">
     <td>
         {{#summaries}}
-        <a class="tooltipped" data-position="top" data-delay="50" data-tooltip="{{sport}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}}{{pace}} {{/pace}} aikaan {{duration}}">
+        <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}}{{pace}} {{/pace}} aikaan {{duration}}">
         <span class="sport {{sportId}}"></span>
         </a>
         {{^total}}{{^statspace}}{{duration}}{{/statspace}}
@@ -1438,7 +1438,7 @@
 
 <script id="chatCareMessageTemplate" type="text/html">
     <li class="collection-item avatar valign-container">
-        <a class="tooltipped care-avatar" data-position="top" data-delay="50" data-tooltip="{{user}}">
+        <a class="tooltipped care-avatar needsclick" data-position="top" data-delay="50" data-tooltip="{{user}}">
             <svg width="40" height="40">
                 <image xlink:href="{{avatar}}" width="40" height="40" />
             </svg>

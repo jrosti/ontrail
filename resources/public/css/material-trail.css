@@ -13,6 +13,10 @@ html, body, #content, #main-content {
     padding: 10px;
 }
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+    color: #ff4081;
+}
+
 h1 {
     font-size: 4rem;
 }
@@ -153,7 +157,7 @@ blockquote {
     margin-left: -20px;
     padding-left: 16px;
     border-width: 4px;
-    border-color: #ffab40;
+    border-color: #ff4081;
 }
 
 #main-content {
@@ -356,7 +360,7 @@ body[data-filter="bymonth"] .by.month .prev {
 
 .medium-editor-toolbar-form,
 .medium-editor-anchor-preview {
-    background-color: #ffab40;
+    background-color: #ff4081;
     color: white;
 }
 
@@ -365,8 +369,8 @@ body[data-filter="bymonth"] .by.month .prev {
 }
 
 .medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-show {
-    border-color: #ffab40;
-    background: #ffab40;
+    border-color: #ff4081;
+    background: #ff4081;
     color: #fff;
 }
 
@@ -375,15 +379,15 @@ body[data-filter="bymonth"] .by.month .prev {
 }
 .medium-editor-insert-plugin .medium-insert-buttons .medium-insert-buttons-addons li a {
     font-size: 0.8rem;
-    border-color: #ffab40;
-    background: #ffab40;
+    border-color: #ff4081;
+    background: #ff4081;
     color: #fff;
 }
 
 .medium-editor-toolbar li button {
     border: solid #eceff1;
     border-width: 1px 1px 1px 0;
-    background-color: #ffab40;
+    background-color: #ff4081;
     color: #fff;
 }
 
@@ -397,7 +401,7 @@ body[data-filter="bymonth"] .by.month .prev {
 }
 
 .medium-toolbar-arrow-under:after {
-    border-color: #ffab40 transparent transparent;
+    border-color: #ff4081 transparent transparent;
 }
 
 .medium-insert-buttons-addons i.material-icons {
