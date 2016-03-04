@@ -191,8 +191,24 @@ blockquote {
 }
 
 .collection .collection-item.avatar {
-    min-height: 64px;
+    min-height: 60px;
 }
+
+#chatSection .collection .collection-item.avatar .circle {
+    width: 40px;
+    height: 40px;
+}
+
+.collection .collection-item.avatar .care-avatar {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 
 .card .card-reveal {
  z-index: 100;
@@ -421,6 +437,12 @@ body[data-filter="bymonth"] .by.month .prev {
     width: 40px;
     height: 40px;
     margin-right: -30px;
+
+}
+
+.care-avatar.big {
+    width: 60px;
+    height: 60px;
 }
 
 .care-avatar:nth-child(2) {
@@ -431,6 +453,12 @@ body[data-filter="bymonth"] .by.month .prev {
 .care-avatar rect {
     -webkit-clip-path: url(#heartPath40);
     clip-path: url(#heartPath40);
+}
+
+.care-avatar.big image,
+.care-avatar.big rect {
+    -webkit-clip-path: url(#heartPath60);
+    clip-path: url(#heartPath60);
 }
 
 

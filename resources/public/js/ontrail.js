@@ -496,7 +496,7 @@
               message.description = message.action
             }
 
-            var templateMsg = ich.chatMessageTemplate(message)
+            var templateMsg = message.action.indexOf("välitti") == 0 ? ich.chatCareMessageTemplate(message) : ich.chatMessageTemplate(message)
             $messages.prepend(templateMsg)
           }
           return nothing()

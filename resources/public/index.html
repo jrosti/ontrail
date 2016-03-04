@@ -608,11 +608,13 @@
 
 <svg width="0" height="0">
     <defs>
+        <filter id="shadow-filter" x="0" y="0">
+            <feOffset result="offOut" in="SourceAlpha" dx="-5" dy="-5" />
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>
         <clipPath id="heartPath40">
             <path d="M33.0770667,0.933809524 C28.1849333,-1.40571429 22.7076,0.800634921 19.9414667,5.87428571 C17.1756,0.800634921 11.698,-1.40571429 6.80573333,0.933809524 C1.2472,3.59238095 -1.4484,11.1125397 0.784933333,17.7295238 C2.92626667,24.0755556 19.8934667,39.8893651 19.8934667,39.8893651 L19.9413333,39.9338095 L19.9893333,39.8893651 C19.9893333,39.8893651 36.9561333,24.0755556 39.0978667,17.7295238 C41.3314667,11.1125397 38.6357333,3.59238095 33.0770667,0.933809524 L33.0770667,0.933809524 Z" id="heart"></path>
-        </clipPath>
-        <clipPath id="heartPath60">
-            <path d="M49.6156,1.40071429 C42.2774,-2.10857143 34.0614,1.20095238 29.9122,8.81142857 C25.7634,1.20095238 17.547,-2.10857143 10.2086,1.40071429 C1.8708,5.38857143 -2.1726,16.6688095 1.1774,26.5942857 C4.3894,36.1133333 29.8402,59.8340476 29.8402,59.8340476 L29.912,59.9007143 L29.984,59.8340476 C29.984,59.8340476 55.4342,36.1133333 58.6468,26.5942857 C61.9972,16.6688095 57.9536,5.38857143 49.6156,1.40071429 L49.6156,1.40071429 Z" id="heart"></path>
         </clipPath>
     </defs>
 </svg>
@@ -1403,6 +1405,21 @@
         </p>
     </li>
 </script>
+
+<script id="chatCareMessageTemplate" type="text/html">
+    <li class="collection-item avatar valign-container">
+        <a class="tooltipped care-avatar" data-position="top" data-delay="50" data-tooltip="{{user}}">
+            <svg width="40" height="40">
+                <image xlink:href="{{avatar}}" width="40" height="40" />
+            </svg>
+        </a>
+        <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}}
+            {{#link}}<a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}}
+            {{^link}}{{message}}{{/link}}
+        </p>
+    </li>
+</script>
+
 
 <script id="loggedInStylesTemplate" type="text/html">
     <style id="logged-in-styles" type="text/css">
