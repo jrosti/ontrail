@@ -210,11 +210,11 @@
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
       })
+
+      $('#exercise .tooltipped').tooltip();
     }
 
     var renderCaresToExercise = function(exercise, me) {
-      console.log("render caress", exercise)
-
       var $ex = $("article[data-id=" + exercise.id + "]")
       $ex.addClass("cared")
 
@@ -361,8 +361,6 @@
 
     // logged in state handling
     var doLogin = function () {
-      console.log($("#login-form").serialize())
-
       $('#login-form').submit(function(event){event.preventDefault();})
       return OnTrail.rest.postAsObservable("login", $('#login-form').serialize())
     }

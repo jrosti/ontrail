@@ -434,7 +434,6 @@ body[data-filter="bymonth"] .by.month .prev {
     width: 40px;
     height: 40px;
     margin-right: -30px;
-
 }
 
 .care-avatar.big {
@@ -442,8 +441,13 @@ body[data-filter="bymonth"] .by.month .prev {
     height: 60px;
 }
 
+#exercise .care-avatar,
 .care-avatar:nth-child(2) {
     margin-right: 10px;
+}
+
+#exercise .care-avatar:first-child {
+    margin-right: -30px;
 }
 
 .care-avatar image,
