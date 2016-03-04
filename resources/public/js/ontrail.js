@@ -163,6 +163,7 @@
         $(tableContent).appendTo(tableElem)
 
         $('#content-entries .tooltipped').tooltip();
+        updateCaresVisibility();
       }
     }
     var renderReadCount = function(id) {
@@ -212,7 +213,29 @@
       })
 
       $('#exercise .tooltipped').tooltip();
+      updateCaresVisibility();
     }
+
+    var updateCaresVisibility = function() {
+      function updateCareBlockVisibility(idx, el) {
+        var allCares = $(el).find(".all-cares")
+        console.log("heights", allCares[0].scrollHeight, allCares.height())
+        if (allCares[0].scrollHeight > allCares.height() + 6) {
+          $(el).find(".cares-container").addClass("has-more-cares")
+        } else {
+          $(el).find(".cares-container").removeClass("has-more-cares")
+        }
+      }
+
+      $("article.exercise").each(updateCareBlockVisibility)
+    }
+
+    $("body").onAsObservable('click', ".cares-container a.button")
+        .subscribe(function(e) {
+          $(e.target).closest(".cares-container").toggleClass("expanded")
+        })
+
+    $(window).onAsObservable("resize").throttle(101).subscribe(updateCaresVisibility)
 
     var renderCaresToExercise = function(exercise, me) {
       var $ex = $("article[data-id=" + exercise.id + "]")
