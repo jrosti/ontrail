@@ -219,6 +219,10 @@ blockquote {
     padding-bottom: 0;
 }
 
+.body-text .fr-placeholder {
+    padding-top: 1.45em;
+}
+
 table.vertical td,
 table.vertical th {
     padding: 3px 5px;
@@ -417,17 +421,19 @@ body[data-filter="bymonth"] .by.month .prev {
     background: rgba(226, 33, 33, 0.05);
 }
 
-a.addExercise,
-a.editExercise,
-a.addComment,
-a.editComment {
-    margin-top: 10px;
-}
 [role=addex][data-mode="add"] .edit {
     display: none;
 }
 [role=addex][data-mode="edit"] .add {
     display: none;
+}
+
+.exercise.cared .addCare {
+    display: none;
+}
+
+span.badge.new:after {
+    content: " uutta";
 }
 
 .froala-wrapper p {

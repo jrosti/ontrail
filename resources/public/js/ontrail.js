@@ -97,7 +97,10 @@
       } else {
         return Rx.Observable.returnValue({ jqXHR: { status: 500 }})
       }
+    }
 
+    var postCare = function postCare(exercise) {
+      return OnTrail.rest.postAsObservable("ex/" + exercise + "/care", {})
     }
 
     var postRegisterUser = function () {
@@ -125,7 +128,11 @@
     }
 
     var renderLatest = function (el, tableEl) {
+      var me = $("#me").text()
       var helpers = {
+        cared: function() {
+          return _(this.cares).find(function(care) { return care.user == me}) ? " cared" : ""
+        },
         trunc: function () {
           return function (text, render) {
             var body = $('<div></div>').html(this.body)
@@ -175,6 +182,9 @@
         now: function() {
           return moment().format("DD.MM.YYYY HH:mm");
         },
+        cared: function() {
+          return _(exercise.cares).find(function(care) { return care.user == me}) ? " cared" : ""
+        },
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {
@@ -192,8 +202,14 @@
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
       })
-
     }
+
+    var renderCaresToExercise = function(exercise, me) {
+      // laa kuikka
+      $("[data-id=" + exercise.id + "]").addClass("cared")
+      console.log("render caress", exercise, me)
+    }
+
     var renderSports = function (data) {
       $('#ex-sport, #filter-sport').html(ich.sportsCreateTemplate({sports: _.filter(data, identity)}))
 
@@ -1043,6 +1059,17 @@
       return clickStream.select(_attr("data-id")).selectAjax(postComment)
     }).where(isSuccess).select(ajaxResponseData)
     addComments.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
+
+    var addCaresSingle = actionButtonAsStream("#exercise", "a.addCare", function(clickStream) {
+      return clickStream.select(_attr("data-id")).selectAjax(postCare)
+    }).where(isSuccess).select(ajaxResponseData)
+    addCaresSingle.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderSingleExercise)
+
+    var addCaresFeed = actionButtonAsStream("#content-entries", "a.addCare", function(clickStream) {
+      return clickStream.select(_attr("data-id")).selectAjax(postCare)
+    }).where(isSuccess).select(ajaxResponseData)
+    addCaresFeed.combineWithLatestOf(sessions).throttle(101).subscribeArgs(renderCaresToExercise)
+
 
     _.forEach($(".pageLink"), function (elem) {
       $(elem).attr('href', "javascript:nothing()")
