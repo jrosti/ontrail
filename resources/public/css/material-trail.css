@@ -455,11 +455,20 @@ body[data-filter="bymonth"] .by.month .prev {
     display: block;
 }
 
+
 .care-avatar {
     display: inline-block;
     width: 40px;
     height: 40px;
-    margin-right: -30px;
+    margin-left: -30px;
+}
+
+.care-avatar:first-child {
+    margin-left: 0;
+}
+
+.care-avatar:nth-child(3) {
+    margin-left: 10px;
 }
 
 .care-avatar.big {
@@ -472,7 +481,7 @@ body[data-filter="bymonth"] .by.month .prev {
     margin-left: 10px;
 }
 
-#exercise .care-avatar:nth-child(1) {
+#exercise .care-avatar:first-child {
     margin-left: 0px;
 }
 
