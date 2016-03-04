@@ -17,6 +17,10 @@ html, body, #content, #main-content {
     color: #ff4081;
 }
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+    color: #ff80ab;
+}
+
 h1 {
     font-size: 4rem;
 }
