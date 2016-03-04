@@ -497,19 +497,16 @@ body[data-filter="bymonth"] .by.month .prev {
 
 .care-avatar image,
 .care-avatar rect {
-    -webkit-clip-path: url(#heartPath40);
     clip-path: url(#heartPath40);
 }
 
 .care-avatar.small image,
 .care-avatar.small rect {
-    -webkit-clip-path: url(#heartPath16);
     clip-path: url(#heartPath16);
 }
 
 .care-avatar.big image,
 .care-avatar.big rect {
-    -webkit-clip-path: url(#heartPath60);
     clip-path: url(#heartPath60);
 }
 
