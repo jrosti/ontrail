@@ -968,7 +968,7 @@
 
     // Lisää lenkki
     var resetEditor = function () {
-      $("#add-exercise-form label").removeClass("active")
+      $("#add-exercise-form label:not(.date)").removeClass("active")
       $("#add-exercise-form .reset").val('')
       if (!Modernizr.touch) {
         $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
@@ -979,11 +979,10 @@
         $("label[for=\"ex-date\"]").addClass("active")
       }
       $("#time-hint, #distance-hint").html("")
-      var autoSavedText = localStorage.getItem("ex-body")
-      var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n<br>\n</p>"
       $("#ex-body").editable()
 
       $("#ex-title, #ex-duration").blur()
+
       $("#ex-title").focus()
     }
 
