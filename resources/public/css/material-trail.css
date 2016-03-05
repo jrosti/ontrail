@@ -84,6 +84,19 @@ article.preview .body {
     text-overflow: ellipsis;
 }
 
+#add-comment-form .avatar,
+.comment .avatar {
+    float: none ! important;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#add-comment-form h5,
+.comment.card h5 {
+    display: inline-block;
+    margin-left: 7px;
+}
+
 h5.activator,
 a.pageLink,
 a.more,
