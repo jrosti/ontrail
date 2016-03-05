@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>ontrail.net</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" sizes="192x192" href="touch-icon-192x192-precomposed.png">
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="OnTrail">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144-precomposed.png">
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#455a64">
+
+    <link rel="shortcut icon" href="favicon.png">
+
+    <!-- Compiled and minified CSS -->
+
+    <!-- froala -->
+    <link rel="stylesheet" href="css/pikaday.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+
+    <link rel="stylesheet" href="css/modern-trail.css">
+
+    <!-- All JavaScript at the bottom, except this Modernizr build.
+     Modernizr enables HTML5 elements & feature detects for optimal performance.
+     Create your own custom Modernizr build: www.modernizr.com/download/ -->
+    <script src="js/libs/modernizr-2.5.3.min.js"></script>
+
+    <style id="logged-in-styles" type="text/css"></style>
+
+    <script src="//code.jquery.com/jquery-2.2.1.min.js?_=UID"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
+</head>
+
+<body class="visible" style="position: relative" data-list-type="list">
+    <div id="header-login-wrapper">
+        <!-- Header -->
+        <div class="navbar-fixed">
+            <ul id="actions-menu" class="dropdown-content extra">
+                <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+                <li><a class="pageLink" rel="tops/hours">2016 top-listat</a></li>
+                <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+                <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+                <li><a class="filter-menu">Suodata</a></li>
+                <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
+            </ul>
+            <ul id="my-account" class="dropdown-content">
+                <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
+                <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
+                <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
+                <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
+                <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+                <span class="ownGroupsDropDown"></span>
+            </ul>
+            <nav class="blue-grey darken-2" role="navigation">
+                <div class="nav-wrapper">
+                    <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
+                    <ul class="right hide-on-med-and-down logged-in">
+                        <li style="width: 55px;"><a href="#!"></a></li>
+                        <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                        <li><a class="pageLink" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
+
+                        <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
+
+                        <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span id="me" class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
+                        <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
+                    </ul>
+
+                    <ul id="slide-out" class="side-nav">
+                        <li><a class="pageLink needsclick" rel="latest">Viimeiset</a></li>
+                        <li><a class="pageLink needsclick" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                        <li><a class="pageLink needsclick" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
+
+                        <li class="divider"></li>
+                        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
+                        <li><a class="pageLink needsclick" rel="profile">Muokkaa profiilia</a></li>
+                        <li><a class="pageLink needsclick" rel="user" data-user="">Omat suoritukset</a></li>
+                        <li><a class="pageLink needsclick" rel="summary" data-user="">Lajit</a></li>
+                        <li><a class="pageLink needsclick" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                        <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
+                        <span class="ownGroupsDropDown"></span>
+
+                        <li class="divider"></li>
+                        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+                        <li><a class="pageLink needsclick" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                        <li><a class="pageLink needsclick" rel="users">Etsi käyttäjiä</a></li>
+                        <li><a class="pageLink needsclick" rel="groups">Ryhmät</a></li>
+                        <li class="divider"></li>
+
+                        <li><a class="pageLink logout"><i class="material-icons right" style="vertical-align: bottom">exit_to_app</i> Kirjaudu ulos</a></li>
+                    </ul>
+                    <a id="mobile-menu" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+                    <ul class="hide-on-large-and-up">
+                        <li><a id="mobile-back" class="mark button-collapse"><i class="material-icons">arrow_back</i></a></li>
+                    </ul>
+
+                </div>
+            </nav>
+        </div>
+        <div class="fixed-action-btn" style="top: 20px; right: 10px; bottom: inherit;">
+            <a class="btn-floating btn-large pink accent-2 pageLink logged-in" rel="addex">
+                <i class="large material-icons">mode_edit</i>
+            </a>
+        </div>
+    </div>
+
+<!-- Content -->
+    <div id="content-top"></div>
+    <div id="content">
+        <div id="main-content" class="row blue-grey lighten-5">
+            <div id="sidemenu" class="col m4 l3 s12 push-m8 push-l9">
+
+                <div id="current-user-container" class="logged-in hide-on-small-and-down"></div>
+
+                <div id="header-container" class="logged-in card">
+                    <div id="header-content"></div>
+                </div>
+
+                <section id="login-container" class="logged-out">
+                    <div class="card">
+                        <div class="card-image waves-effect waves-block waves-light">
+                            <img class="activator" src="img/login_bg.png"/>
+                            <span class="card-title">Kirjaudu sisään</span>
+                        </div>
+                        <form id="login-form" method="post">
+                            <div class="card-content">
+                                <div class="col s12 input-field">
+                                    <label for="username">Tunnus</label>
+                                    <input id="username" name="username" type="text" required />
+                                </div>
+                                <div class="col s12 input-field">
+                                    <label for="password">Salasana</label>
+                                    <input id="password" name="password" type="password" required/>
+                                </div>
+                                <h5 class="col s12">Eikö sinulla ole vielä tunnuksia?</h5>
+                                <div class="col s12" style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
+                                <div class="col s12"><a class="pageLink" rel="register">Luo tunnus</a></div>
+                                <div>
+                                    <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                                        Salasana unohtunut?</a>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
+
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col s12 m8 l9 pull-m4 pull-l3">
+                <!-- Main Content -->
+                <div>
+                    <div role="content">
+                        <nav id="search-container" class="pink accent-2">
+                            <div class="nav-wrapper">
+                                <form accept-charset="utf-8">
+                                    <div class="input-field">
+                                        <input id="search" type="search" required>
+                                        <label for="search"><i class="material-icons">search</i></label>
+                                        <i class="material-icons">close</i>
+                                    </div>
+                                </form>
+                            </div>
+                        </nav>
+
+                        <div id="content-entries" role="listview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div id="copyright" class="blue-grey lighten-5">
+        &copy; ontrail.net, 2013-2016
+    </div>
+
+    <svg width="0" height="0">
+        <defs>
+            <filter id="shadow-filter" x="0" y="0">
+                <feOffset result="offOut" in="SourceAlpha" dx="-5" dy="-5" />
+                <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+                <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+            </filter>
+            <clipPath id="heartPath40">
+                <path d="M33.0770667,0.933809524 C28.1849333,-1.40571429 22.7076,0.800634921 19.9414667,5.87428571 C17.1756,0.800634921 11.698,-1.40571429 6.80573333,0.933809524 C1.2472,3.59238095 -1.4484,11.1125397 0.784933333,17.7295238 C2.92626667,24.0755556 19.8934667,39.8893651 19.8934667,39.8893651 L19.9413333,39.9338095 L19.9893333,39.8893651 C19.9893333,39.8893651 36.9561333,24.0755556 39.0978667,17.7295238 C41.3314667,11.1125397 38.6357333,3.59238095 33.0770667,0.933809524 L33.0770667,0.933809524 Z" id="heart"></path>
+            </clipPath>
+            <clipPath id="heartPath16">
+                <path transform="scale(0.35, 0.35)" d="M33.0770667,0.933809524 C28.1849333,-1.40571429 22.7076,0.800634921 19.9414667,5.87428571 C17.1756,0.800634921 11.698,-1.40571429 6.80573333,0.933809524 C1.2472,3.59238095 -1.4484,11.1125397 0.784933333,17.7295238 C2.92626667,24.0755556 19.8934667,39.8893651 19.8934667,39.8893651 L19.9413333,39.9338095 L19.9893333,39.8893651 C19.9893333,39.8893651 36.9561333,24.0755556 39.0978667,17.7295238 C41.3314667,11.1125397 38.6357333,3.59238095 33.0770667,0.933809524 L33.0770667,0.933809524 Z" id="heart"></path>
+            </clipPath>
+        </defs>
+    </svg>
+
+<script src="js/ontrail-bundle.js?_=UID"></script>
+
+<!-- end scripts -->
+
+</body>
+</html>

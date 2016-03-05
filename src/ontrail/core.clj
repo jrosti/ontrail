@@ -46,7 +46,10 @@
 (defn wrap-dir-index [handler]
   (fn [req]
     (handler
-      (update-in req [:uri] #(if (= "/" %) "/index.html" %)))))
+      (update-in req [:uri] #(cond 
+        (= "/" %) "/index.html"
+        (= "/modern/" %) "/modern/index.html"
+        :else %)))))
 
 (defn do-user-action [user-action params]
   (let [user (user-action params)
