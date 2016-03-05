@@ -9,6 +9,7 @@
     "@cycle/core": "^6.0.3",
     "@cycle/dom": "^9.1.0",
     "@cycle/history": "^1.1.0",
+    "@cycle/http": "^8.2.0",
     "cycle": "^1.0.3",
     "cycle-router": "^3.1.1",
     "folktale": "^1.0.0-SNAPSHOT",
