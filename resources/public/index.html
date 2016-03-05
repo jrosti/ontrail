@@ -74,7 +74,6 @@
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
             <li><a class="filter-menu">Suodata</a></li>
-             <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
         </ul>
         <ul id="my-account" class="dropdown-content">
             <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
@@ -84,8 +83,10 @@
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
             <span class="ownGroupsDropDown"></span>
+            <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
+            <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
         </ul>
-        <nav class="blue-grey darken-2" role="navigation">
+        <nav class="indigo darken-2" role="navigation">
             <div class="nav-wrapper">
                 <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
                 <ul class="right hide-on-med-and-down logged-in">
@@ -96,7 +97,6 @@
                     <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
 
                     <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span id="me" class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
-                    <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
                 </ul>
 
                 <ul id="slide-out" class="side-nav">
@@ -308,8 +308,8 @@
             <!-- Main Content -->
             <div>
                 <div role="content">
-                    <nav id="search-container" class="pink accent-2">
-                        <div class="nav-wrapper">
+                    <nav id="search-container" class="pink lighten-4">
+                        <div class="nav-bar">
                             <form accept-charset="utf-8">
                                 <div class="input-field">
                                     <input id="search" type="search" required>
@@ -453,7 +453,7 @@
 
                 <h5 class="pink-text accent-2">Hae käyttäjää</h5>
 
-                <nav id="search-container" class="pink accent-2">
+                <nav id="search-container" class="pink lighten-4">
                     <div class="nav-wrapper">
                         <form accept-charset="utf-8">
                             <div class="input-field">
@@ -590,7 +590,7 @@
         </div>
     </div>
 
-    <div id="chatSection" class="logged-in hide-on-med-and-down">
+    <div id="chatSection" class="logged-in hide-on-med-and-down blue-grey lighten-5">
         <h5><a class="pageLink" rel="latest">Viimeisimmät</a></h5>
         <div id="messageBox">
             <ul class="collection" id="messages">
@@ -934,8 +934,8 @@
     </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
     {{#comments}}
-    <article class="comment card" data-id="{{id}}">
-        <div class="card-content blue-grey darken-2 white-text">
+    <article class="indigo lighten-5 comment card" data-id="{{id}}">
+        <div class="card-content">
             <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
             <div class="body-text clearfix">{{{body}}}</div>
@@ -949,7 +949,7 @@
             <p>Kirjoita ensimmäinen kommentti</p>
             {{/comments}}
             <form class="card edit-form" id="add-comment-form" method="post">
-                <div class="card-content blue-grey darken-2 white-text">
+                <div class="card-content pink lighten-5">
                     <img class="avatar circle left" src="{{my-avatar}}"  width="50" height="50">
                     <h5><span class="date">{{now}}</span> <a class="pageLink" rel="user/{{me}}">{{me}}</a></h5>
                     <div id="comment-body" style="clear: both;" class="row body-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
@@ -1427,7 +1427,7 @@
 
 
 <script id="chatMessageTemplate" type="text/html">
-    <li class="collection-item avatar valign-container">
+    <li class="collection-item avatar valign-container blue-grey lighten-5">
         <img src="{{avatar}}" alt="" class="circle">
         <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}}
         {{#link}}<a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}}

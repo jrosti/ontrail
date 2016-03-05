@@ -109,7 +109,7 @@ a.windowLink {
 
 .extra li a,
 #my-account li a, a {
-    color: #039be5;
+    color: #303F9F;
 }
 
 span.badge.new {
@@ -184,7 +184,7 @@ blockquote {
     right: 0;
     width: 260px;
     padding: 64px 0 0;
-    border-left: solid 1px #9e9e9e;
+    border-left: solid 1px #e0e0e0;
 }
 
 #chatSection h5 {
@@ -463,6 +463,10 @@ body[data-filter="bymonth"] .by.month .prev {
     display: block;
 }
 
+#search-container {
+    height: 48px;
+    line-height: 48px;
+}
 
 .care-avatar {
     display: inline-block;
