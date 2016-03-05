@@ -560,7 +560,7 @@ span.badge.new:after {
 }
 
 .pika-label.dayname {
-    background-color: #fb8c00;
+    background-color: #FD4080;
     color: #fff;
 }
 
@@ -598,13 +598,13 @@ table.weekly td.other-month span.weeklyDay {
 table.weekly td span.weeklyDay {
     float: left;
     vertical-align: top;
-    color: #fb8c00;
+    color: #FD4080;
 }
 table.weekly th {
     font-size: 14px;
     color: #000;
     padding: 4px 10px 0 0;
-    border-bottom: 2px solid #fb8c00;
+    border-bottom: 2px solid #FD4080;
 }
 table.weekly th.day {
     width: 11%;

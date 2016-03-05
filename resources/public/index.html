@@ -1258,17 +1258,18 @@
             <span class="card-title">{{target}}</span>
         </div>
         <div class="card-content">
-            <h5 class="activator">Profiili<i class="material-icons right">more_vert</i></h5>
-            {{#profile.goals}}<strong>{{profile.goals}}</strong>{{/profile.goals}}
-
-            {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
-        </div>
-        <div class="card-reveal">
-            <h5 class="card-title">{{target}}<i class="material-icons right">close</i></h5>
+            <h5 class="activator"><i class="material-icons right">more_vert</i></h5>
+            {{#profile.synopsis}}<strong>{{profile.synopsis}}</strong>{{/profile.synopsis}}
             <div>
                 <h5>Ryhmät</h5>
                 {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
             </div>
+        </div>
+        <div class="card-reveal">
+            <h5 class="card-title">{{target}}<i class="material-icons right">close</i></h5>
+            {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
+            {{#profile.goals}}<strong>{{profile.goals}}</strong>{{/profile.goals}}
+
             <div>
                 <h5>Ennätykset</h5>
                 {{#hasRecords}}
