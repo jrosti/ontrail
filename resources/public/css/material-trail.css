@@ -113,7 +113,9 @@ a.windowLink {
 }
 
 span.badge.new {
-    background-color: #039be5;
+    background-color: #E8EAF6;
+    color: #303F9F;
+    font-weight: 700;
 }
 
 .card-image .card-title {
