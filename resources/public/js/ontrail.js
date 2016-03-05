@@ -979,7 +979,8 @@
         $("#ex-date").val(moment().format("YYYY-MM-DD"))
       }
       $("label[for=\"ex-date\"]").addClass("active")
-      $("#time-hint, #distance-hint").html("")
+      $("#time-hint").html("esim  3h31, 3.31.28") 
+      $("#distance-hint").html("esim 2km, 3250m")
       $("#ex-body").editable()
 
       $("#ex-title, #ex-duration").blur()
