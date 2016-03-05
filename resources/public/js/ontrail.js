@@ -209,7 +209,7 @@
       $("#comment-body").editable()
 
       $('#scrollBottom').click(function () {
-        $("html, body").animate({ scrollTop: $('#content-wrapper')[0].clientHeight - 500}, 500)
+        $("html, body").animate({ scrollTop: $('body')[0].clientHeight - 500}, 500)
       })
 
       $('#exercise .tooltipped').tooltip();
