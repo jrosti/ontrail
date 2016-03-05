@@ -1227,3 +1227,12 @@ table.weekly .sport.Yleisurheilu {
     width: 21px;
     height: 20px;
 }
+
+table.details {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    margin: 5px;
+    width: 100%;
+    text-align: left;
+}
