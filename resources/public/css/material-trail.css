@@ -1261,7 +1261,7 @@ table.details th {
     font-weight: 700;
     font-size: 14px;
     color: #000;
-    padding: 4px 0px;
+    padding: 4px 4px;
 }
 
 table.summary-details tr:last-child td {
