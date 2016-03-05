@@ -537,6 +537,10 @@ body[data-filter="bymonth"] .by.month .prev {
     clip-path: url(#heartPath60);
 }
 
+.card .card-content p.count {
+    font-size: 80%;
+    color: rgba(158,158,158,0.8);
+}
 
 span.badge.new:after {
     content: " uutta";
