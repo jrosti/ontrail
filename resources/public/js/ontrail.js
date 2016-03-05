@@ -967,12 +967,13 @@
     groupsScroll.takeUntil(currentPages.whereArgs(_.compose(not, partialEquals("groups")))).repeat().subscribe(renderGroupList)
 
     // Lisää lenkki
-    var resetEditor = function () {
+    var resetEditor = function () {        
       $("#add-exercise-form label:not(.date)").removeClass("active")
       $("#add-exercise-form .reset").val('')
       if (!Modernizr.touch) {
         $("#ex-sport").select2("data", {id: "Juoksu", text: "Juoksu"})
         $("#ex-tags").select2("data", [])
+        $(".chzn-select a").removeAttr("tabindex")
         $("#ex-date").val(moment().format("DD.MM.YYYY"))
       } else {
         $("#ex-date").val(moment().format("YYYY-MM-DD"))

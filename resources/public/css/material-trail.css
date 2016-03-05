@@ -546,14 +546,6 @@ span.badge.new:after {
     margin-bottom: 1.5rem !important;
 }
 
-#ex-body .froala-element.f-placeholder+span.fr-placeholder {
-    left: 4.6rem;
-    right: auto;
-}
-
-@media only screen and (max-width: 992px) {
-}
-
 @media only screen and (max-width: 600px) {
     #ex-body .froala-element.f-placeholder+span.fr-placeholder {
         left: auto;
@@ -1264,14 +1256,13 @@ table.details th {
     padding: 4px 4px;
 }
 
+table.details thead {
+    border-bottom: 2px solid #FF4081;
+}    
+
+
 table.summary-details tr:last-child td {
     background-color: #E8EAF6;
-}
-
-@media screen and (min-width: 600px) {
-    table.details th {
-        border-bottom: 2px solid #FF4081;
-    }
 }
 
 @media screen and (min-width: 794px) {
