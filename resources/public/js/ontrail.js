@@ -977,8 +977,8 @@
         $("#ex-date").val(moment().format("DD.MM.YYYY"))
       } else {
         $("#ex-date").val(moment().format("YYYY-MM-DD"))
-        $("label[for=\"ex-date\"]").addClass("active")
       }
+      $("label[for=\"ex-date\"]").addClass("active")
       $("#time-hint, #distance-hint").html("")
       $("#ex-body").editable()
 
@@ -1154,8 +1154,9 @@
     if (!Modernizr.touch) {
       var picker = new Pikaday({
         field: document.getElementById('ex-date'),
-        format: "DD.MM.YYYY"
-      });
+        format: "DD.MM.YYYY",
+        firstDay: 1
+      })
     } else {
       $("#ex-date").attr("type", "date")
     }
@@ -1285,13 +1286,15 @@
     var renderFilterValues = function () {
       if (!Modernizr.touch) {
         var startPicker = new Pikaday({
-          field: document.getElementById('filter-start-date'),
-          format: "DD.MM.YYYY"
+            field: document.getElementById('filter-start-date'),
+            format: "DD.MM.YYYY",
+            firstDay: 1
         });
 
         var endPicker = new Pikaday({
-          field: document.getElementById('filter-stop-date'),
-          format: "DD.MM.YYYY"
+            field: document.getElementById('filter-stop-date'),
+            format: "DD.MM.YYYY",
+            firstDay: 1
         });
 
         $('#filter-users').select2({

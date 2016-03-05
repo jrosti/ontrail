@@ -235,7 +235,7 @@ blockquote {
 }
 
 .dropdown-content li>span {
-    color: #039be5;
+    color: #303F9F;
 }
 
 .body-text img,
@@ -566,12 +566,12 @@ span.badge.new:after {
 }
 
 .pika-title {
-    background-color: #ffa726;
+    background-color: #ff80ab;
     color: #fff;
 }
 
 .pika-label.dayname {
-    background-color: #FD4080;
+    background-color: #ff4081;
     color: #fff;
 }
 

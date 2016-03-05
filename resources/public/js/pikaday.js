@@ -233,11 +233,11 @@
 
         // internationalization
         i18n: {
-            previousMonth : 'Previous Month',
-            nextMonth     : 'Next Month',
-            months        : ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'],
-            weekdays      : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
-            weekdaysShort : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+            previousMonth : 'Edellinen kuukausi',
+            nextMonth     : 'Seuraava kuukausi',
+            months        : ['Tammi','Helmi','Maalis','Huhti','Touko','Kesä','Heinä','Elo','Syys','Loka','Marras','Joulu'],
+            weekdays      : ['Sunnuntai', 'Maanantai','Tiistai','Keskiviikko','Torstai','Perjantai','Lauantai'],
+            weekdaysShort : ['Su','Ma','Ti','Ke','To','Pe','La']
         },
 
         // callback function
