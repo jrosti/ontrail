@@ -1088,7 +1088,7 @@
       document.title = 'ontrail.net'
     }
 
-    var markAllRead = $('#mark-all-read').onAsObservable("click")
+    var markAllRead = $('#mark-all-read, #mark-all-read-mob').onAsObservable("click")
       .selectAjax(OnTrail.rest.markAllRead).subscribe(renderMarkAllRead)
 
     // Lisää kommentti

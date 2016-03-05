@@ -77,11 +77,11 @@
         </ul>
         <ul id="my-account" class="dropdown-content">
             <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
-            <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-            <li><a class="pageLink" rel="user" data-user="">Omat suoritukset</a></li>
+            <li><a class="pageLink" rel="user" data-user="">Omat lenkit</a></li>
             <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
             <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
             <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+            <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
             <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
             <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
             <span class="ownGroupsDropDown"></span>
@@ -111,7 +111,7 @@
                     <li><a class="pageLink needsclick" rel="summary" data-user="">Lajit</a></li>
                     <li><a class="pageLink needsclick" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
                     <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
-                    <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
+                    <li><a id="mark-all-read-mob" class="mark">Merkitse kaikki luetuksi</a></li>
                     <span class="ownGroupsDropDown"></span>
 
                     <li class="divider"></li>
@@ -1259,7 +1259,7 @@
         </div>
         <div class="card-content">
             <h5 class="activator"><i class="material-icons right">more_vert</i></h5>
-            {{#profile.synopsis}}<strong>{{profile.synopsis}}</strong>{{/profile.synopsis}}
+            {{#profile.synopsis}}<span style="font-style: italic">{{profile.synopsis}}</span>{{/profile.synopsis}}
             <div>
                 <h5>Ryhmät</h5>
                 {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
