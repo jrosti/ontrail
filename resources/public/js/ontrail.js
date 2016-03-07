@@ -206,7 +206,7 @@
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
 
-      $("#comment-body").editable()
+      $("#comment-body").editable({key: 'jljqtfaeG5eiy=='})
 
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('body')[0].clientHeight - 500}, 500)
@@ -981,7 +981,7 @@
       $("label[for=\"ex-date\"]").addClass("active")
       $("#time-hint").html("esim  3h31, 3.31.28") 
       $("#distance-hint").html("esim 2km, 3250m")
-      $("#ex-body").editable()
+      $("#ex-body").editable({key: 'jljqtfaeG5eiy=='})
 
       $("#ex-title, #ex-duration").blur()
 
@@ -1025,7 +1025,7 @@
       })
       $("#ex-date").attr('value', Modernizr.touch ? moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD") : ex.date)
       $("label[for=\"ex-date\"]").addClass('active')
-      $("#ex-body").editable()
+      $("#ex-body").editable({key: 'jljqtfaeG5eiy=='})
       $("#ex-body").editable("setHTML", ex.body)
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])
