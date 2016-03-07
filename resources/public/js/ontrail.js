@@ -984,6 +984,7 @@
       $("#time-hint").html("esim  3h31, 3.31.28") 
       $("#distance-hint").html("esim 2km, 3250m")
       $("#ex-body").editable({key: 'jljqtfaeG5eiy=='})
+      $("#ex-body").editable('setHTML', "")
 
       $("#ex-title, #ex-duration").blur()
 
