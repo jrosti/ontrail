@@ -328,9 +328,9 @@
         $("#" + elem + "-entries").html(ich.hpkMonthContentTemplate(sum))
       } else if ($.isArray(summary.results)) { //render weekly summary
         var sum = _.extend(summary, utils)
-        $('#weekly-graph-container').show()
+        /*$('#weekly-graph-container').show()
         weeklySummaryGraph("#weekly-sums", sum.results, {title: "Matka (km)"})
-        weeklySummaryGraph("#weekly-sums-time", sum.results, {title: "Aika (h)", duration: true})
+        weeklySummaryGraph("#weekly-sums-time", sum.results, {title: "Aika (h)", duration: true})*/
 
         var filteredResults = _.filter(sum.results, function(val) {
           return val.summary[0].tduration > 0
@@ -849,10 +849,10 @@
         }
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#header-content'))
-        if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
+        /*if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
           $('body').addClass("pace")
           addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
-        }
+        }*/
       }
     }
 
