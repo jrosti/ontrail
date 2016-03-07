@@ -18,6 +18,8 @@
       $('#sportFilter').hide()
     }
 
+    $('input').attr('autocomplete','off');
+
     var enableWebSocket = true
 
     var isEnter = function (event) {
