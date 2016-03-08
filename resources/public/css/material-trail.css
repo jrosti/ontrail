@@ -14,11 +14,11 @@ html, body, #content, #main-content {
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
-    color: #ff4081;
+    color: #303F9F;
 }
 
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
-    color: #ff80ab;
+    color: #5c6bc0;
 }
 
 h1 {
