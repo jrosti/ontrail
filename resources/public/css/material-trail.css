@@ -185,6 +185,10 @@ blockquote {
     margin-bottom: 0;
 }
 
+.logged-out #main-content {
+    margin-right: 0;   
+}
+
 @media only screen and (max-width: 992px) {
     #main-content {
         margin-right: 0;
@@ -317,7 +321,6 @@ body[data-page="main"] div[role="main"] {
 }
 
 
-body[data-page="register"] #login-container,
 body[data-list-type="summary"] #summary-view,
 body[data-page="new-comments"] #content-spinner,
 body[data-page="new-own-comments"] #content-spinner,
