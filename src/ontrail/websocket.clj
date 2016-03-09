@@ -5,6 +5,7 @@
             [ontrail.auth :as auth]
             [ontrail.formats :as formats]
             [ontrail.scheduler :as scheduler]
+            [ontrail.unread :as unread]
             [clj-time.local :as local]
             )
   (:use [compojure.core]

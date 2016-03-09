@@ -50,12 +50,25 @@
     :all {:count (count-all user)}
     :own {:count (reduce + 0 (map count-comments (comments-own user)))}))
 
+(defn counts-for [user]
+  {:all (count-all user)
+   :own (reduce + 0 (map count-comments (comments-own user)))})
+
+
 (defn most-comments-oids []
   (.info logger "Aggregating comment counts")
   (let [comments-from (time/minus (time/now) (time/days 14))]
     (mc/aggregate *db* EXERCISE 
                   [{"$match" {:creationDate {"$gte" comments-from}}} 
                    {"$unwind" "$comments"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}} 
+                   {"$sort" {"size" -1}} {"$limit" 100}])))
+
+(defn most-cared-oids []
+  (.info logger "Aggregating comment counts")
+  (let [comments-from (time/minus (time/now) (time/days 14))]
+    (mc/aggregate *db* EXERCISE
+                  [{"$match" {:creationDate {"$gte" comments-from}}}
+                   {"$unwind" "$cares"} {"$group" {"_id" "$_id" "size" {"$sum" 1}}}
                    {"$sort" {"size" -1}} {"$limit" 100}])))
 
 (defn most-comments [user]
