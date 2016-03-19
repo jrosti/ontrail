@@ -7,20 +7,9 @@ var charts = (function () {
         labels: labels,
         datasets : [
           {
-            type: 'bar',
-            backgroundColor: "rgba(48, 63, 159, 0.4)",
-            borderColor: "rgba(48, 63, 159, 0.4)",
-            borderWidth: 1,
-            hoverBackgroundColor: "rgba(48, 63, 159, 0.3)",
-            hoverBorderColor: "rgba(48, 63, 159, 0.3)",
-            label: 'Matka vauhdilla',
-            data : distances,
-            yAxisID: 'y-axis-1'
-          },
-          {
             label: "% hitaammin",
             type:'line',
-            pointHoverRadius: 4,
+            pointHoverRadius: 8,
             data: cumulative,
             fill: false,
             borderColor: '#FF4081',
@@ -30,7 +19,19 @@ var charts = (function () {
             pointHoverBackgroundColor: '#FF4081',
             pointHoverBorderColor: '#FF4081',
             yAxisID: 'y-axis-2'
+          },
+          {
+            type: 'bar',
+            backgroundColor: "rgba(48, 63, 159, 0.4)",
+            borderColor: "rgba(48, 63, 159, 0.4)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(48, 63, 159, 0.3)",
+            hoverBorderColor: "rgba(48, 63, 159, 0.3)",
+            label: 'Matka vauhdilla',
+            data : distances,
+            yAxisID: 'y-axis-1'
           }
+
         ]
       },
       options: {
