@@ -1,5 +1,110 @@
+var charts = (function () {
 
+  function chartData(labels, distances, cumulative)  {
+    return {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets : [
+          {
+            type: 'bar',
+            backgroundColor: "rgba(48, 63, 159, 0.4)",
+            borderColor: "rgba(48, 63, 159, 0.4)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(48, 63, 159, 0.3)",
+            hoverBorderColor: "rgba(48, 63, 159, 0.3)",
+            label: 'Matka vauhdilla',
+            data : distances,
+            yAxisID: 'y-axis-1'
+          },
+          {
+            label: "% hitaammin",
+            type:'line',
+            data: cumulative,
+            fill: false,
+            borderColor: '#FF4081',
+            backgroundColor: '#FF4081',
+            pointBorderColor: '#FF4081',
+            pointBackgroundColor: '#FF4081',
+            pointHoverBackgroundColor: '#FF4081',
+            pointHoverBorderColor: '#FF4081',
+            yAxisID: 'y-axis-2'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          xAxes: [{
+            display: true,
+            gridLines: {
+              drawOnChartArea: false
+          },
+            labels: {
+              show: true
+            }
+          }],
+          yAxes: [{
+            type: "linear",
+            display: true,
+            position: "left",
+            id: "y-axis-1",
+            gridLines: {
+              display: false
+            },
+            labels: {
+              show: true
+            }
+          }, {
+            type: "linear",
+            display: false,
+            position: "right",
+            id: "y-axis-2",
+            gridLines: {
+              display: false
+            },
+            labels: {
+              show: true
+            }
+          }]
+        }
+      }
+    }
+  }
+
+  function renderPaceHistogram(parentId, stats) {
+    $('#pace-histogram').remove();
+    $(parentId).append('<canvas id="pace-histogram" width="600" height="300"><canvas>');
+    var ctx =  document.getElementById('pace-histogram')
+    var bins = []
+    var distances = []
+    var cumulative = []
+    var toMinkm = function(pace) {
+      var kmh = pace / 1000.0
+      var minkm = 60 / kmh
+      var mins = Math.floor(minkm)
+      var secs = Math.round((minkm - mins) * 60.0) / 100
+      return (mins + secs).toFixed(2)
+    }
+    var total = _.max(stats.paceHist)
+    var width = 1
+    for (var i = width; i < stats.paceHist.length; i+=width) {
+      cumulativePoint = stats.paceHist[i]/total
+      if (cumulativePoint > 0.005 && cumulativePoint < 0.9999) {
+        bins.push(toMinkm(stats.paceHistBins[i]) + "/km")
+        distances.push(Math.round((stats.paceHist[i] - stats.paceHist[i - width]) / 100)/10)
+        cumulative.push(Math.round(cumulativePoint*100))
+      }
+    }
+    new Chart(ctx, chartData(bins, distances, cumulative));
+  }
+
+  return { renderPaceHistogram: renderPaceHistogram}
+})()
+
+/*
 function addGraph(dataGenerator) {
+
+
   nv.addGraph({
     generate: function () {
       var width = 700,
@@ -62,42 +167,6 @@ function genValues(paces, vals) {
 }
 
 function weeklyChartConfig(containerId, data, yTitle) {
-  nv.addGraph({
-    generate: function () {
-      var width = 700,
-        height = 300;
-      var chart;
-      chart = nv.models.multiBarChart()
-        .stacked(true)
-        .margin({left: 80, bottom: 50})
-        .showXAxis(true)
-        .showYAxis(true)
-        .transitionDuration(300)
-      ;
-
-      chart.options({delay: 800});
-      chart.multibar
-        .hideable(true);
-
-      chart.xAxis
-        .axisLabel("Viikkonumero")
-        .tickFormat(d3.format(',0f'))
-
-      chart.yAxis
-        .axisLabel(yTitle)
-        .tickFormat(d3.format(',.1f'));
-
-      d3.select(containerId)
-        .attr('width', width)
-        .attr('height', height)
-        .datum(data)
-        .call(chart);
-
-      nv.utils.windowResize(chart.update);
-
-      return chart;
-    }
-  })
 }
 
 function getSportSums(key, filter, dataExtract, sums) {
@@ -143,3 +212,4 @@ function weeklySummaryGraph(elemId, sums, config) {
   })
   weeklyChartConfig(elemId, dataSets, config.title)
 }
+*/

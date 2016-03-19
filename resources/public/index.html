@@ -27,8 +27,6 @@
     <link rel="image_src" href="img/share.jpg" >
     <!-- Compiled and minified CSS -->
 
-    <link rel="stylesheet" href="n/nv.d3.min.css">
-
     <!-- froala -->
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" type="text/css" />
     <link rel="stylesheet" href="froala/css/froala_editor.min.css">
@@ -410,9 +408,7 @@
                             </form>
                     </section>
 
-                    <div id="graph-container">
-                        <svg id="paceHistogram" width="0px" height="0px"></svg>
-                    </div>
+                    <div id="graph-container"></div>
 
                     <div id="content-entries" role="listview"></div>
                     <section role="tableview">
@@ -1120,7 +1116,6 @@
         </div>
         <div class="card">
             <div class="card-content">
-                <span class="card-title">Vuoden {{year}} harjoitusyhteenveto</span>
                 {{> summaryTemplate}}
             </div>
             <div class="card-action">
@@ -1521,9 +1516,10 @@
 <script src="js/rx.ontrail.session.js?_=UID"></script>
 
 <!--<script src="n/lib/d3.v3.js"></script>
-<script src="n/nv.d3.min.js"></script>
+<script src="n/nv.d3.min.js"></script>-->
+<script src="js/libs/Chart.min.js"></script>
 <script src="js/chart.js"></script>
-<script src="n/src/utils.js"></script>-->
+
 <script src="js/pikaday.js"></script>
 
 <script src="js/plugins.js?_=UID"></script>

@@ -838,12 +838,6 @@
       if (args.data.action == "group") {
         if (args.data.target == "Marrasputki") {
           ich.marrasputkiTemplate(args.data).appendTo($('#header-content'))
-        } else if (args.data.target == "lvhaaste2014") {
-          ich.lvhaaste2014Template(args.data).appendTo($('#header-content'))
-        } else if (args.data.target == "RunnersHigh") {
-          ich.runnersHighTemplate(args.data).appendTo($('#header-content'))
-        } else if (args.data.target == "Suosikit") {
-          ich.favGroupTemplate(args.data).appendTo($('#header-content'))
         } else if (args.data.target == "Huippuhuhtikuu") {
           ich.elevationGroupTemplate(args.data).appendTo($('#header-content'))
         } else {
@@ -851,10 +845,10 @@
         }
       } else {
         ich.otherDetailTemplate(args.data).appendTo($('#header-content'))
-        /*if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
+        if (args.data && args.data.stats && args.data.stats.paceHist && args.data.stats.paceHist.length > 1) {
           $('body').addClass("pace")
-          addGraph(genValues(args.data.stats.paceHistBins, args.data.stats.paceHist))
-        }*/
+          charts.renderPaceHistogram('#graph-container', args.data.stats)
+        }
       }
     }
 

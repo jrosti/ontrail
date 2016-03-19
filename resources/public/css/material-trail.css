@@ -1277,3 +1277,9 @@ table.summary-details tr:last-child td {
         margin-left: 82px;
     }
 }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
