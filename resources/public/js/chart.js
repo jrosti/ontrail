@@ -93,7 +93,7 @@ var charts = (function () {
     var width = 1
     for (var i = width; i < stats.paceHist.length; i+=width) {
       var cumulativePoint = stats.paceHist[i]/total
-      if (cumulativePoint > 0.005 && cumulativePoint < 0.9999) {
+      if (cumulativePoint > 0.01 && cumulativePoint < 0.9999) {
         bins.push(toMinkm(stats.paceHistBins[i]) + "/km")
         distances.push(Math.round((stats.paceHist[i] - stats.paceHist[i - width]) / 100)/10)
         cumulative.push(Math.round(cumulativePoint*100))
