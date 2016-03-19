@@ -50,7 +50,8 @@ var charts = (function () {
             position: "left",
             id: "y-axis-1",
             gridLines: {
-              display: false
+              display: false,
+              drawOnChartArea: false
             },
             labels: {
               show: true
@@ -62,7 +63,7 @@ var charts = (function () {
             id: "y-axis-2",
             gridLines: {
               display: false,
-              drawOnChartArea: false
+              drawOnChartArea: true
             },
             labels: {
               show: true
