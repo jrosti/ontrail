@@ -20,7 +20,7 @@ var charts = (function () {
           {
             label: "% hitaammin",
             type:'line',
-            pointHoverRadius: 10,
+            pointHoverRadius: 4,
             data: cumulative,
             fill: false,
             borderColor: '#FF4081',
