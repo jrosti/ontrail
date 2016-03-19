@@ -20,6 +20,7 @@ var charts = (function () {
           {
             label: "% hitaammin",
             type:'line',
+            pointHoverRadius: 10,
             data: cumulative,
             fill: false,
             borderColor: '#FF4081',
@@ -56,11 +57,12 @@ var charts = (function () {
             }
           }, {
             type: "linear",
-            display: false,
+            display: true,
             position: "right",
             id: "y-axis-2",
             gridLines: {
-              display: false
+              display: false,
+              drawOnChartArea: false
             },
             labels: {
               show: true
@@ -88,7 +90,7 @@ var charts = (function () {
     var total = _.max(stats.paceHist)
     var width = 1
     for (var i = width; i < stats.paceHist.length; i+=width) {
-      cumulativePoint = stats.paceHist[i]/total
+      var cumulativePoint = stats.paceHist[i]/total
       if (cumulativePoint > 0.005 && cumulativePoint < 0.9999) {
         bins.push(toMinkm(stats.paceHistBins[i]) + "/km")
         distances.push(Math.round((stats.paceHist[i] - stats.paceHist[i - width]) / 100)/10)
