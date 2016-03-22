@@ -1251,7 +1251,7 @@
 
     $("#mobile-menu").sideNav({
       "menuWidth": 300,
-      "edge": "left",
+      "edge": "right",
       closeOnClick: true
     })
 

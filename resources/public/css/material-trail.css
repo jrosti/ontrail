@@ -45,8 +45,7 @@ h5 {
 p { margin: 0; }
 
 #logo-container {
-    padding-top: 10px;
-    margin: 0 10px;
+    margin: 10px 0 0 90px;
 }
 
 #profile-avatar {
@@ -1283,4 +1282,11 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+@media only screen and (max-width: 992px) {
+    nav .brand-logo {
+        left: 5%;
+        -webkit-transform: translateX(-5%);
+        transform: translateX(-5%);
+    }
 }
