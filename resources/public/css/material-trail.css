@@ -161,6 +161,7 @@ span.badge.new {
 }
 
 #graph-container {
+    padding-top: 10px;
     display: none;
 }
 
