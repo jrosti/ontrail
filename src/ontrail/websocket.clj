@@ -15,7 +15,7 @@
 
 (def #^{:private true} logger (org.slf4j.LoggerFactory/getLogger (str *ns*)))
 
-(def message-buffer-size 50)
+(def message-buffer-size 300)
 
 ;; Ring for in-memory persistence of last messages. 
 ;; conjoining to end, popping from beginning.
