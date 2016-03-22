@@ -1250,6 +1250,12 @@
             <img class="activator" src="{{profile.avatar}}&s=400"/>
             <span class="card-title">{{target}}</span>
         </div>
+        <div class="card-action">
+            <a class="pageLink waves-effect waves-light" rel="user/{{target}}">Harjoitukset</a>
+            <a class="pageLink waves-effect waves-light" rel="summary/{{target}}">Lajiyhteenveto</a>
+            <a class="pageLink waves-effect waves-light" rel="tagsummary/{{target}}">Avainsanat</a>
+            <a class="pageLink waves-effect waves-light" rel="weeksummary/{{target}}">Harjoitusviikot</a>
+        </div>
         <div class="card-content">
             <h5 class="activator"><i class="material-icons right">more_vert</i></h5>
             {{#profile.synopsis}}<span style="font-style: italic">{{profile.synopsis}}</span>{{/profile.synopsis}}
@@ -1278,12 +1284,6 @@
                 {{/hasRecords}}
                 {{^hasRecords}}Ei ennätyksiä{{/hasRecords}}
             </div>
-        </div>
-        <div class="card-action">
-            <a class="pageLink waves-effect waves-light" rel="user/{{target}}">Harjoitukset</a>
-            <a class="pageLink waves-effect waves-light" rel="summary/{{target}}">Lajiyhteenveto</a>
-            <a class="pageLink waves-effect waves-light" rel="tagsummary/{{target}}">Avainsanat</a>
-            <a class="pageLink waves-effect waves-light" rel="weeksummary/{{target}}">Harjoitusviikot</a>
         </div>
     </div>
 </script>
