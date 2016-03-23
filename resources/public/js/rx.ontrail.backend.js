@@ -58,6 +58,9 @@
   Rest.prototype.newComments = function() { return getAsObservableResultData("ex-unread-comments") }
   Rest.prototype.newOwnComments = function() { return getAsObservableResultData("ex-unread-own-comments") }
   Rest.prototype.mostRead = function() { return getAsObservableResultData("keen/most-read") }
+  Rest.prototype.mostRead14 = function() { return getAsObservableResultData("keen/most-read-14") }
+  Rest.prototype.mostCared14 = function() { return getAsObservableResultData("cares/most-cared-14") }
+
   Rest.prototype.topHours = function() { return getAsObservableResultData("tops/totals/2016") }
   Rest.prototype.topSports = function(sport) { return getAsObservableResultData("tops/totals/" + sport + "/2016") }
 

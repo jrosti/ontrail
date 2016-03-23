@@ -66,7 +66,9 @@
     <div class="navbar-fixed">
         <ul id="actions-menu" class="dropdown-content extra">
             <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+            <li><a class="pageLink" rel="tops3/most-read">Välitetyimmät ja luetuimmat</a></li>
             <li><a class="pageLink" rel="tops/hours">2016 top-listat</a></li>
+            <li><a class="pageLink" rel="tops2/bywheel">2016 top-listat II</a></li>
             <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
             <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
             <li><a class="pageLink" rel="groups">Ryhmät</a></li>
@@ -196,16 +198,43 @@
                         <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
                         <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
                         <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
-                        <li><a rel="tops/bywheel" class="pageLink">Pyöräilijät</a></li>
-                        <li><a rel="tops/rowing" class="pageLink">Soutelijat</a></li>
-                        <li><a rel="tops/pullups" class="pageLink">Vetelijät</a></li>
-                        <li><a rel="tops/stretches" class="pageLink">Venyttelijät</a></li>
                     </ul>
                 </nav>
                 <div class="card">
                     <div class="card-content" id="top-list"></div>
                 </div>
             </section>
+
+            <section role="tops2" class="">
+
+                <nav class="pink accent-2">
+                    <ul>
+                        <li><a rel="tops2/bywheel" class="pageLink">Pyöräilijät</a></li>
+                        <li><a rel="tops2/rowing" class="pageLink">Soutelijat</a></li>
+                        <li><a rel="tops2/pullups" class="pageLink">Vetelijät</a></li>
+                        <li><a rel="tops2/stretches" class="pageLink">Venyttelijät</a></li>
+                    </ul>
+                </nav>
+                <div class="card">
+                    <div class="card-content" id="top-list-other"></div>
+                </div>
+            </section>
+
+            <section role="tops3" class="">
+
+                <nav class="pink accent-2">
+                    <ul>
+                        <li><a rel="tops3/most-cared-14" class="pageLink">Kahden viikon välitetyimmät</a></li>
+                        <li><a rel="tops3/most-read-14" class="pageLink">Kahden viikon luetuimmat</a></li>
+                        <li><a rel="tops3/most-read" class="pageLink">Luetuimmat</a></li>
+                    </ul>
+                </nav>
+                <div class="card">
+                    <div class="card-content" id="top-list-cared"></div>
+                </div>
+            </section>
+
+
 
             <section role="userprofile">
                 <article>
@@ -618,30 +647,6 @@
     </defs>
 </svg>
 
-<!-- templates -->
-<script id="fileListTemplate" type="text/html">
-    <table class="details">
-        <thead>
-        <tr>
-            <th>Kuvan osoite</th>
-            <th>Koko</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#results}}
-        <tr>
-            <td>
-                <a rel="{{url}}" class="imagePopup">{{url}}</a>
-            </td>
-            <td>
-                {{length}}
-            </td>
-        </tr>
-        {{/results}}
-        </tbody>
-    </table>
-
-</script>
 
 <script id="topHoursTemplate" type="text/html">
     <span class="card-title">Vuoden {{year}} {{title}}</span>
@@ -680,6 +685,26 @@
     <h3>Suosituimmat lenkit</h3>
     <table class="details full">
         <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Lukukertoja</th></tr></thead>
+        {{#result}}
+        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
+        {{/result}}
+    </table>
+</script>
+
+<script id="careTemplate" type="text/html">
+    <h3>Kahden viikon välitetyimmät</h3>
+    <table class="details full">
+        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Välitetty</th></tr></thead>
+        {{#result}}
+        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
+        {{/result}}
+    </table>
+</script>
+
+<script id="readTemplate" type="text/html">
+    <h3>Kahden viikon luetuimmat</h3>
+    <table class="details full">
+        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Luettu</th></tr></thead>
         {{#result}}
         <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
         {{/result}}

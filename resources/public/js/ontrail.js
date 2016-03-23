@@ -701,27 +701,79 @@
       $("html, body").animate({ scrollTop: 0 }, 1000)
     })
 
-      var tops = currentPages.whereArgs(partialEquals("tops")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
-      tops.where(function(args) { return args.tops === "hours" }).selectAjax(OnTrail.rest.topHours).subscribe(function(data) {
-	  data.title = "tuntiahmatit"
-	  $("#top-list").html(ich.topHoursTemplate(data))
-      })
-      var sportSelector = { runs: "Juoksu", swims: "Uinti", byfoot: "Byfoot", bywheel: "Bywheel", skis: "Hiihtolajit", rowing: "Soudut", pullups: "Leuanveto", stretches: "Venyttely"}
-      var titles = {"Juoksu": "juoksukunkut", "Uinti": "vesipedot", "Byfoot": "jaloittelijat", "Bywheel": "pyöräilijät", "Hiihtolajit" : "hiihtelijät", "Soudut": "soutajat", "Venyttely" : "venyttelijät"};
-      tops.where(function(args) { return args.tops != "hours" && args.tops != "most-read" && args.tops != "pullups"})
-          .select(function(args) { return sportSelector[args.tops]})
-	  .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
-	      data.title = titles[data.sport]
-	      $("#top-list").html(ich.topHoursTemplate(data))
-          })
-      tops.where(function(args) { return args.tops == "pullups" })
-	  .select(function(args) { return sportSelector[args.tops] })
-          .selectAjax(OnTrail.rest.topSports).subscribe(function(data) {
-	      $("#top-list").html(ich.topPullupsTemplate(data))
-	  })
-      tops.where(function(args) { return args.tops === "most-read" }).selectAjax(OnTrail.rest.mostRead).subscribe(function(data) {
-	  $("#top-list").html(ich.listsTemplate({result: data}))
-      })
+    var sportSelector = {
+      runs: "Juoksu",
+      swims: "Uinti",
+      byfoot: "Byfoot",
+      bywheel: "Bywheel",
+      skis: "Hiihtolajit",
+      rowing: "Soudut",
+      pullups: "Leuanveto",
+      stretches: "Venyttely"
+    }
+    var titles = {
+      "Juoksu": "juoksukunkut",
+      "Uinti": "vesipedot",
+      "Byfoot": "jaloittelijat",
+      "Bywheel": "pyöräilijät",
+      "Hiihtolajit": "hiihtelijät",
+      "Soudut": "soutajat",
+      "Venyttely": "venyttelijät"
+    };
+
+
+    var tops = currentPages.whereArgs(partialEquals("tops")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
+    var tops2 = currentPages.whereArgs(partialEquals("tops2")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
+    var tops3 = currentPages.whereArgs(partialEquals("tops3")).distinctUntilChanged().selectArgs(pairsAsAssocMap)
+
+    tops.where(function (args) {
+      return args.tops === 'hours'
+    }).selectAjax(OnTrail.rest.topHours).subscribe(function (data) {
+      data.title = "tuntiahmatit"
+      $("#top-list").html(ich.topHoursTemplate(data))
+    })
+
+    tops.where(function (args) {
+        return args.tops ==='runs' || args.tops === 'byfoot' || args.tops === 'skis' || args.tops == 'swims'
+    }).select(function (args) {
+        return sportSelector[args.tops]
+    }).selectAjax(OnTrail.rest.topSports).subscribe(function (data) {
+      data.title = titles[data.sport]
+      $("#top-list").html(ich.topHoursTemplate(data))
+    })
+
+    tops2.where(function (args) {
+      return args.tops2 ==='bywheel' || args.tops2 === 'rowing' || args.tops2 == 'stretches'
+    }).select(function (args) {
+      return sportSelector[args.tops2]
+    }).selectAjax(OnTrail.rest.topSports).subscribe(function (data) {
+      data.title = titles[data.sport]
+      $("#top-list-other").html(ich.topHoursTemplate(data))
+    })
+
+    tops2.where(function (args) {
+      return args.tops2 === 'pullups'
+    }).select(function (args) {
+      return sportSelector[args.tops2]
+    }).selectAjax(OnTrail.rest.topSports).subscribe(function (data) {
+      $("#top-list-other").html(ich.topPullupsTemplate(data))
+    })
+
+    tops3.where(function (args) {
+      return args.tops3 === "most-read-all"
+    }).selectAjax(OnTrail.rest.mostRead).subscribe(function (data) {
+      $("#top-list-cared").html(ich.listsTemplate({result: data}))
+    })
+    tops3.where(function (args) {
+      return args.tops3 === "most-cared-14"
+    }).selectAjax(OnTrail.rest.mostCared14).subscribe(function (data) {
+      $("#top-list-cared").html(ich.careTemplate({result: data}))
+    })
+    tops3.where(function (args) {
+      return args.tops3 === "most-read-14"
+    }).selectAjax(OnTrail.rest.mostRead14).subscribe(function (data) {
+      $("#top-list-cared").html(ich.readTemplate({result: data}))
+    })
 
     var userprofilePages = currentPages.whereArgs(partialEquals("userprofile")).selectArgs(pairsAsAssocMap)
     userprofilePages.selectAjax(OnTrail.rest.s3list).subscribe(function(data) {
