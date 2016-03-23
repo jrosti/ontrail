@@ -1399,7 +1399,7 @@
                 <tbody>
                 {{#summary}}
                 <tr>
-                    <td class="week"><span><a class="pageLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
+                    <td class="week"><span><a class="windowLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
                     {{#exs}}
                     <td class="{{class}}" style="vertical-align: top">
                         {{> hpkWeeklyExTemplate}}
@@ -1423,7 +1423,7 @@
     <div class="clearfix" style="margin: 0"></div>
     <span>
       {{#exs}}
-      <a rel="ex/{{id}}" class="pageLink tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
+      <a rel="ex/{{id}}" class="windowLink tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
       <span>{{#distance}}{{distance}}{{/distance}}
       {{^distance}}{{statsduration}}{{/distance}}</span><br/>
       {{/exs}}
