@@ -520,9 +520,10 @@
             } else {
               message.description = message.action
             }
-
-            var templateMsg = message.action.indexOf("välitti") == 0 ? ich.chatCareMessageTemplate(message) : ich.chatMessageTemplate(message)
-            $messages.prepend(templateMsg)
+            if (screen.width && screen.width < 900) {
+              var templateMsg = message.action.indexOf("välitti") == 0 ? ich.chatCareMessageTemplate(message) : ich.chatMessageTemplate(message)
+              $messages.prepend(templateMsg)
+            }
           }
           return nothing()
         })
