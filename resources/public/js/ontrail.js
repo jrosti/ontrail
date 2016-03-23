@@ -520,7 +520,7 @@
             } else {
               message.description = message.action
             }
-            if (screen.width && screen.width < 900) {
+            if (screen.width && screen.width > 900) {
               var templateMsg = message.action.indexOf("välitti") == 0 ? ich.chatCareMessageTemplate(message) : ich.chatMessageTemplate(message)
               $messages.prepend(templateMsg)
             }
