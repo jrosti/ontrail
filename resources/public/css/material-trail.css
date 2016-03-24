@@ -453,6 +453,10 @@ body[data-filter="bymonth"] .by.month .prev {
     display: none;
 }
 
+.care-avatar {
+    line-height: 16px;
+}
+
 .cares-container {
     margin: 1.2em 0 0.3em;
 }
