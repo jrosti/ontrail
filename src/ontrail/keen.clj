@@ -44,11 +44,12 @@
 (defn count-by-id [id]
   (try
     (let [filter-by [{:property_name :eid :operator :eq :property_value id}]]
-      (-> (http/get (keen-count-uri filter-by nil) connection)
+      (-> (http/get (keen-count-uri filter-by nil nil) connection)
           :body
           json/read-str
           walk/keywordize-keys))
     (catch Exception ex
+      (.info logger ex)
       {:result 0})))
 
 (defn group-by-eid [timeframe]
