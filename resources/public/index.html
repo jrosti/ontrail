@@ -1080,30 +1080,7 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title capitalize">{{year}}, Viikko {{week}}, {{from}} - {{to}}</span>
-                <table class="simpleExs">
-                    <tr>
-                        <th>Päivä</th>
-                        <th>Laji</th>
-                        <th>Otsikko</th>
-                        <th>Kesto</th>
-                        <th>Matka</th>
-                        <th>Vauhti</th>
-                        <th>Syke</th>
-                    </tr>
-                    {{#exs}}
-                    <tr>
-                        <td>{{day}}</td>
-                        <td>{{sport}}</td>
-                        <td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
-                        <td>{{duration}}</td>
-                        <td>{{distance}}</td>
-                        <td>{{pace}}</td>
-                        <td>{{avghr}}</td>
-                    </tr>
-                    {{/exs}}
-                </table>
-                <span class="card-title">Viikkoyhteenveto</span>
-                <table class="simpleExs">
+                <table class="details">
                     <th>Laji</th>
                     <th>Kesto</th>
                     <th>Matka</th>
