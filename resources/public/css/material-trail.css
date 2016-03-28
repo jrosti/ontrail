@@ -1300,3 +1300,21 @@ input[type=number]::-webkit-outer-spin-button {
 #slide-out li {
     text-align: right;
 }
+
+.ot-create-btn a {
+    width: 50px !important;
+    height: 50px !important;
+}
+.ot-create-btn i {
+    line-height: 50px !important;
+}
+
+@media (max-width: 599px) {
+    .ot-create-btn a {
+        width: 42px !important;
+        height: 42px !important;
+    }
+    .ot-create-btn i {
+        line-height: 42px !important;
+    }
+}
