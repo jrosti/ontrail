@@ -97,10 +97,9 @@
                 </ul>
 
                 <ul id="slide-out" class="right side-nav" style="">
-                    <li><a class="pageLink needsclick" rel="latest">Viimeiset</a></li>
-                    <li><a class="pageLink needsclick" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
-                    <li><a class="pageLink needsclick" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
-
+                    <li><a class="pageLink needsclick" rel="latest">Uusimmat</a></li>
+                    <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                    <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-own-comments">Omat kommentit <span class="new badge new-own-comments-count"></span></a></li>
                     <li class="divider"></li>
                     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
                     <li><a class="pageLink needsclick" rel="profile">Muokkaa profiilia</a></li>
@@ -110,7 +109,8 @@
                     <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
                     <li><a id="mark-all-read-mob" class="mark">Merkitse kaikki luetuksi</a></li>
                     <span class="ownGroupsDropDown"></span>
-
+                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Listat</span></div>
+                    <li><a class="pageLink needsclick" rel="tops3/most-read-14">Välitetyimmät</a></li>
                     <li class="divider"></li>
                     <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
                     <li><a class="pageLink needsclick" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
@@ -193,7 +193,7 @@
 
             <section role="tops" class="">
 
-                <nav class="pink accent-2">
+                <nav class="grey accent-2">
                     <ul>
                         <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
                         <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
@@ -209,7 +209,7 @@
 
             <section role="tops2" class="">
 
-                <nav class="pink accent-2">
+                <nav class="grey accent-2">
                     <ul>
                         <li><a rel="tops2/bywheel" class="pageLink">Pyöräilijät</a></li>
                         <li><a rel="tops2/rowing" class="pageLink">Soutelijat</a></li>
@@ -224,11 +224,11 @@
 
             <section role="tops3" class="">
 
-                <nav class="pink accent-2">
+                <nav class="grey accent-2">
                     <ul>
                         <li><a rel="tops3/most-cared-14" class="pageLink">Kahden viikon välitetyimmät</a></li>
                         <li><a rel="tops3/most-read-14" class="pageLink">Kahden viikon luetuimmat</a></li>
-                        <!--<li><a rel="tops3/most-read-all" class="pageLink">Luetuimmat</a></li>-->
+                        <li><a rel="tops3/most-read-all" class="pageLink">Luetuimmat</a></li>
                     </ul>
                 </nav>
                 <div class="card">
@@ -463,7 +463,7 @@
                 </section>
 
                 <section role="weeksummary" class="logged-in">
-                    <nav class="pink accent-2">
+                    <nav class="grey accent-2">
                         <div class="nav-wrapper">
                             <a class="brand-logo hide-on-small-and-down">Viikoittainen harjoitusyhteenveto</a>
                             <a class="brand-logo hide-on-med-and-up">Viikkoyhteenveto</a>
@@ -956,7 +956,7 @@
     </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
     {{#comments}}
-    <article class="indigo lighten-5 comment card" data-id="{{id}}">
+    <article class="comment-background comment card" data-id="{{id}}">
         <div class="card-content">
             <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
@@ -1029,7 +1029,7 @@
 </script>
 
 <script id="hpkHeaderTemplate" type="text/html">
-    <nav class="pink accent-2">
+    <nav class="grey accent-2">
         <ul>
             <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a></li>
             <li><a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a></li>
