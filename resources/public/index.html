@@ -822,15 +822,18 @@
                 </div>
                 <div class="full clearfix">
                     <div class="body-text">{{{body}}}</div>
-                    <p class="signature right">
-                        {{synopsis}}
-                    </p>
                     {{> tagsExpandedTemplate}}
-                    <span class="count"></span>
                 </div>
                 <div class="cares-container logged-in {{hasCares}} clearfix">
                     {{> caresTemplate}}
                 </div>
+                <div class="full">
+                    <span class="count"></span>
+                    <p class="signature right">
+                        {{synopsis}}
+                    </p>
+                </div>
+                <div class="clearfix"></div>
             </div>
             <div class="card-action">
                 <div class="preview">
@@ -938,10 +941,12 @@
             <div class="cares-container {{hasCares}} clearfix">
                 {{> caresTemplate}}
             </div>
-            <div class="signature right">
-                {{synopsis}}
+            <div>
+                <span class="count"></span>
+                <p class="signature right">
+                    {{synopsis}}
+                </p>
             </div>
-            <span class="count"></span>
             <div class="clearfix"></div>
         </div>
         <div class="card-action">
