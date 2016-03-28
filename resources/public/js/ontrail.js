@@ -174,7 +174,7 @@
       }
       keen.count(id, function(res) {
         if (res && res.result > 0) {
-          $('[data-id=' + id + '] p.count').html("Luettu " + res.result + " kertaa")
+          $('[data-id=' + id + '] span.count').html("Luettu " + res.result + " kertaa")
         }
       })
     }

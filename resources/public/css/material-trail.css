@@ -546,8 +546,8 @@ body[data-filter="bymonth"] .by.month .prev {
     clip-path: url(#heartPath60);
 }
 
-.card .card-content p.count {
-    font-size: 80%;
+span.count {
+    font-size: 70%;
     color: rgba(158,158,158,0.8);
 }
 
