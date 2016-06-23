@@ -68,6 +68,18 @@ div[role="dialog"] {
     opacity: 1;
 }
 
+.froala-editor {
+    border: 0 !important;
+}
+
+.froala-wrapper {
+    border: 0 !important;
+}
+
+.froala-popup {
+    border: solid 1px #252525 !important;
+}
+
 article .full {
     display: none;
 }
