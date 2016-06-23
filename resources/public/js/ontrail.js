@@ -208,7 +208,7 @@
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
 
-      $("#comment-body").editable({key: 'jljqtfaeG5eiy=='})
+      $("#comment-body").editable({key: 'jljqtfaeG5eiy==',imageUpload: false, pasteImage: false})
 
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('body')[0].clientHeight - 500}, 500)
@@ -1030,7 +1030,7 @@
       $("label[for=\"ex-date\"]").addClass("active")
       $("#time-hint").html("esim  3h31, 3.31.28") 
       $("#distance-hint").html("esim 2km, 3250m")
-      $("#ex-body").editable({key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
+      $("#ex-body").editable({key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false]})
       $("#ex-body").editable('setHTML', "")
 
       $("#ex-title, #ex-duration").blur()
@@ -1073,10 +1073,9 @@
           $("label[for=\"ex-" + field + "\"]").removeClass('active')
         }
       })
-      console.log(ex.date)
       $("#ex-date").attr('value', moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD"))
       $("label[for=\"ex-date\"]").addClass('active')
-      $("#ex-body").editable({key: 'jljqtfaeG5eiy=='})
+      $("#ex-body").editable({key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
       $("#ex-body").editable("setHTML", ex.body)
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])

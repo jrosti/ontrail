@@ -556,7 +556,9 @@ span.badge.new:after {
 }
 
 .froala-wrapper p {
-    margin-bottom: 1.5rem !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0.5em !important;
 }
 
 @media only screen and (max-width: 600px) {
