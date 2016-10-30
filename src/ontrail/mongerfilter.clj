@@ -22,7 +22,7 @@
                                     "MM.yyyy"
                                     "yyyy"))
 
-(defn parse-date [val] (format/parse multi-parser val))
+(defn parse-date [val] (time/plus (format/parse multi-parser val) (time/hours 12)))
 
 (defn parse-long [^String val]
   (try
