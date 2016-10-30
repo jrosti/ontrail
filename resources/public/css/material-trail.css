@@ -504,6 +504,11 @@ body[data-filter="bymonth"] .by.month .prev {
     line-height: 48px;
 }
 
+#search {
+    font-size: 1.6rem;
+    padding: 0.6rem 0 0 4rem;
+}
+
 .care-avatar {
     display: inline-block;
     width: 40px;
