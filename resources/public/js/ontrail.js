@@ -892,7 +892,7 @@
       $("#ex-tags").select2("data", [])
       $("#time-hint, #distance-hint").html("")
       var autoSavedText = localStorage.getItem("ex-body")
-      var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n<br>\n</p>"
+      var text = (autoSavedText && autoSavedText.length > 15) ? autoSavedText : "<p>\n\n</p>"
       $("#ex-body").setCode(text)
       $("#ex-title, #ex-duration").blur()
       $("#ex-title").focus()
