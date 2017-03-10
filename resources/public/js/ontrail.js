@@ -172,11 +172,11 @@
       if (!keen) {
         return;
       }
-      keen.count(id, function(res) {
+      /*keen.count(id, function(res) {
         if (res && res.result > 0) {
           $('[data-id=' + id + '] span.count').html("Luettu " + res.result + " kertaa")
         }
-      })
+      })*/
     }
 
     var renderSingleExercise = function (exercise, me) {
