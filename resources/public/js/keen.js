@@ -6,7 +6,7 @@ var keen = (function () {
   })
 
   function view(id, owner, viewer) {
-    if (viewer !== owner) {
+    /* if (viewer !== owner) {
       client.addEvent("pageviews",
         {
           eid: id,
@@ -17,11 +17,11 @@ var keen = (function () {
             timestamp: new Date().toISOString()
           }
         })
-    }
+    }*/
   }
 
   function count(id, f) {
-    $.get("/rest/v1/keen/count/" + id, f)
+    // $.get("/rest/v1/keen/count/" + id, f)
   }
 
   return { view: view, count: count}

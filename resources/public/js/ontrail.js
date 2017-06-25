@@ -180,9 +180,6 @@
     }
 
     var renderSingleExercise = function (exercise, me) {
-      if (keen) {
-        keen.view(exercise.id, exercise.user, me)
-      }
 
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
@@ -196,6 +193,9 @@
         hasCares: function() {
           return this.cares && this.cares.length > 0 ? "has-cares" : "no-cares"
         },
+        xbody: function() {
+          return this.body.replace(/&nbsp;/g, ' ')
+        }, 
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {
