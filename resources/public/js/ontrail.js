@@ -68,7 +68,7 @@
       var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
       var values = $('#add-exercise-form').serialize()
         + "&sport=" + renderSelection(sport)
-        + "&body=" + encodeURIComponent($('#ex-body').editable('getHTML'))
+        + "&body=" + encodeURIComponent($('#ex-body').froalaEditor('html.get'))
         + "&tags=" + _.filter(_.flatten(["", _.map($("#ex-tags").select2("data"), renderSelection)])).join(",")
 
       return OnTrail.rest.postAsObservable(url, values)
@@ -91,10 +91,10 @@
     }
 
     var postComment = function (exercise) {
-      var content = $('#comment-body').editable('getHTML');
+      var content = $('#comment-body').froalaEditor('html.get');
 
       if (content.trim() != "") {
-        var values = "body=" + encodeURIComponent($('#comment-body').editable('getHTML'))
+        var values = "body=" + encodeURIComponent($('#comment-body').froalaEditor('html.get'))
         return OnTrail.rest.postAsObservable("ex/" + exercise + "/comment", values)
       } else {
         return Rx.Observable.returnValue({ jqXHR: { status: 500 }})
@@ -208,7 +208,7 @@
       }
       $('#exercise').html(ich.singleExerciseTemplate(_.extend(exercise, helpers)))
 
-      $("#comment-body").editable({key: 'jljqtfaeG5eiy==',imageUpload: false, pasteImage: false})
+      $("#comment-body").froalaEditor({key: 'jljqtfaeG5eiy==',imageUpload: false, pasteImage: false})
 
       $('#scrollBottom').click(function () {
         $("html, body").animate({ scrollTop: $('body')[0].clientHeight - 500}, 500)
@@ -1030,8 +1030,8 @@
       $("label[for=\"ex-date\"]").addClass("active")
       $("#time-hint").html("esim  3h31, 3.31.28") 
       $("#distance-hint").html("esim 2km, 3250m")
-      $("#ex-body").editable({buttons: ['createLink', 'insertImage'],inlineMode: false,key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
-      $("#ex-body").editable('setHTML', "")
+      $("#ex-body").froalaEditor({inlineMode: false, key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
+      $("#ex-body").froalaEditor('html.set', "")
 
       $("#ex-title, #ex-duration").blur()
 
@@ -1048,7 +1048,7 @@
         localStorage.setItem("ex-body", "<p>\n<br>\n</p>")
       } catch(err) {
       }
-      $("#ex-body").editable("setHTML", "<p>\n<br>\n</p>")
+      $("#ex-body").froalaEditor("html.set", "<p>\n<br>\n</p>")
     }
 
     var addExercises = actionButtonAsStream('#add-exercise-form', 'a.addExercise',function (instream) {
@@ -1075,8 +1075,8 @@
       })
       $("#ex-date").attr('value', moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD"))
       $("label[for=\"ex-date\"]").addClass('active')
-      $("#ex-body").editable({buttons: ['createLink'], inlineMode: false,key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
-      $("#ex-body").editable("setHTML", ex.body)
+      $("#ex-body").froalaEditor({inlineMode: false,key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
+      $("#ex-body").froalaEditor("html.set", ex.body)
       if (!Modernizr.touch)
         $("#ex-sport").select2("data", [ex.sport])
       else {
@@ -1212,14 +1212,6 @@
       $("#ex-date").attr("type", "date")
     }
 
-    var editorSettings = {
-      buttons: ['html', '|', 'formatting', '|', 'bold', 'italic', 'deleted', '|', 'unorderedlist', 'orderedlist', 'outdent', 'indent', '|',
-        'image', 'table', 'link', '|', 'fontcolor', 'backcolor', '|', 'alignleft', 'aligncenter', 'alignright', 'justify', '|', 'horizontalrule'],
-      minHeight: 200,
-      setCodeTextarea: function (code) {
-        this.$el.val(code).trigger('change')
-      }
-    }
 //    $('#ex-body').redactor(editorSettings)
 
     loggedIns.selectAjax(OnTrail.rest.loggedIns).subscribe(function (loggedIn) {
