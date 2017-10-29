@@ -17,6 +17,7 @@
                  [digest "1.4.4"]
                  [com.amazonaws/aws-java-sdk "1.10.17"]
                  [org.imgscalr/imgscalr-lib "4.2"]
+                 [social/exif-processor "0.1.2-socialsuperstore-SNAPSHOT"]
                  ]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler s3.core/app}
