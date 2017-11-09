@@ -1,24 +1,26 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="fi">
+
 <head>
     <title>ontrail</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="harjoituspäiväkirja,juoksu,suunnistus,hiihto,triathlon,harjoitukset,harjoittelu,vaellus,maastopyöräily,cyclocross" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="manifest" href="/manifest.manifest">
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="touch-icon-192x192-precomposed.png">
+    <link rel="icon" sizes="192x192" href="/img/icons/touch-icon-192x192-precomposed.png">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="OnTrail">
-    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/icons/apple-touch-icon-144x144-precomposed.png">
 
     <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="apple-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileImage" content="/img/icons/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#455a64">
 
     <link rel="shortcut icon" href="favicon.png">
@@ -54,586 +56,603 @@
         _gaq.push(['_trackPageview']);
 
         (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
         })();
     </script>
 </head>
+
 <body class="visible" style="position: relative" data-list-type="list">
-<div id="header-login-wrapper">
-    <!-- Header -->
-    <div class="navbar-fixed">
-        <ul id="actions-menu" class="dropdown-content extra">
-            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
-            <li><a class="pageLink" rel="tops3/most-cared-14">Välitetyimmät ja luetuimmat</a></li>
-            <li><a class="pageLink" rel="tops/hours">2017 top-listat</a></li>
-            <li><a class="pageLink" rel="tops2/bywheel">2017 top-listat II</a></li>
-            <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
-            <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
-            <li><a class="pageLink" rel="groups">Ryhmät</a></li>
-            <li><a class="filter-menu">Suodata</a></li>
-        </ul>
-        <ul id="my-account" class="dropdown-content">
-            <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
-            <li><a class="pageLink" rel="user" data-user="">Omat lenkit</a></li>
-            <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
-            <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
-            <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
-            <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
-            <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
-            <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
-            <span class="ownGroupsDropDown"></span>
-        </ul>
-        <nav class="indigo darken-2" role="navigation">
-            <div class="nav-wrapper">
-                <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail"/></a>
-                <ul class="right hide-on-med-and-down logged-in">
-                    <li style="width: 55px;"><a href="#!"></a></li>
+    <div id="header-login-wrapper">
+        <!-- Header -->
+        <div class="navbar-fixed">
+            <ul id="actions-menu" class="dropdown-content extra">
+                <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+                <li><a class="pageLink" rel="tops3/most-cared-14">Välitetyimmät ja luetuimmat</a></li>
+                <li><a class="pageLink" rel="tops/hours">2017 top-listat</a></li>
+                <li><a class="pageLink" rel="tops2/bywheel">2017 top-listat II</a></li>
+                <li><a class="pageLink" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                <li><a class="pageLink" rel="users">Etsi käyttäjiä</a></li>
+                <li><a class="pageLink" rel="groups">Ryhmät</a></li>
+                <li><a class="filter-menu">Suodata</a></li>
+            </ul>
+            <ul id="my-account" class="dropdown-content">
+                <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
+                <li><a class="pageLink" rel="user" data-user="">Omat lenkit</a></li>
+                <li><a class="pageLink" rel="summary" data-user="">Lajit</a></li>
+                <li><a class="pageLink" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                <li><a class="pageLink" rel="tagsummary" data-user="">Avainsanat</a></li>
+                <li><a class="pageLink" rel="profile">Muokkaa profiilia</a></li>
+                <li><a id="mark-all-read" class="mark">Merkitse kaikki luetuksi</a></li>
+                <li><a class="pageLink logout"><i class="material-icons">exit_to_app</i></a></li>
+                <span class="ownGroupsDropDown"></span>
+            </ul>
+            <nav class="indigo darken-2" role="navigation">
+                <div class="nav-wrapper">
+                    <a id="logo-container" rel="latest" class="pageLink mobileUI-site-name brand-logo"><img src="/img/logo.png" alt="On Trail" /></a>
+                    <ul class="right hide-on-med-and-down logged-in">
+                        <li style="width: 55px;">
+                            <a href="#!"></a>
+                        </li>
 
-                    <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
+                        <li style="min-width: 160px;"><a class="dropdown-button" href="#!" data-activates="actions-menu">Toiminnot <i class="material-icons medium right">arrow_drop_down</i></a></li>
 
-                    <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span id="me" class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
-                </ul>
+                        <li style="min-width: 170px;"><a class="dropdown-button" href="#!" data-activates="my-account"><span id="me" class="username"></span> <i class="material-icons medium right">arrow_drop_down</i></a></li>
+                    </ul>
 
-                <ul id="slide-out" class="right side-nav" style="">
-                    <li><a class="pageLink needsclick" rel="latest">Uusimmat</a></li>
-                    <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
-                    <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-own-comments">Seuratut <span class="new badge new-own-comments-count"></span></a></li>
-                    <li class="divider"></li>
-                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
-                    <li><a class="pageLink needsclick" rel="profile">Muokkaa profiilia</a></li>
-                    <li><a class="pageLink needsclick" rel="user" data-user="">Omat suoritukset</a></li>
-                    <li><a class="pageLink needsclick" rel="summary" data-user="">Lajit</a></li>
-                    <li><a class="pageLink needsclick" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
-                    <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
-                    <li><a id="mark-all-read-mob" class="mark">Merkitse kaikki luetuksi</a></li>
-                    <span class="ownGroupsDropDown"></span>
-                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Listat</span></div>
-                    <li><a class="pageLink needsclick" rel="tops3/most-read-14">Välitetyimmät</a></li>
-                    <li class="divider"></li>
-                    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
-                    <li><a class="pageLink needsclick" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
-                    <li><a class="pageLink needsclick" rel="users">Etsi käyttäjiä</a></li>
-                    <li><a class="pageLink needsclick" rel="groups">Ryhmät</a></li>
-                    <li class="divider"></li>
+                    <ul id="slide-out" class="right side-nav" style="">
+                        <li><a class="pageLink needsclick" rel="latest">Uusimmat</a></li>
+                        <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                        <li><a class="pageLink needsclick hide-on-med-and-up" rel="new-own-comments">Seuratut <span class="new badge new-own-comments-count"></span></a></li>
+                        <li class="divider"></li>
+                        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3 username"></span></div>
+                        <li><a class="pageLink needsclick" rel="profile">Muokkaa profiilia</a></li>
+                        <li><a class="pageLink needsclick" rel="user" data-user="">Omat suoritukset</a></li>
+                        <li><a class="pageLink needsclick" rel="summary" data-user="">Lajit</a></li>
+                        <li><a class="pageLink needsclick" rel="weeksummary" data-user="">Harjoitusviikot</a></li>
+                        <li><a class="pageLink needsclick" rel="tagsummary" data-user="">Avainsanat</a></li>
+                        <li><a id="mark-all-read-mob" class="mark">Merkitse kaikki luetuksi</a></li>
+                        <span class="ownGroupsDropDown"></span>
+                        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Listat</span></div>
+                        <li><a class="pageLink needsclick" rel="tops3/most-read-14">Välitetyimmät</a></li>
+                        <li class="divider"></li>
+                        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Toiminnot</span></div>
+                        <li><a class="pageLink needsclick" rel="sport/Tapahtuma/sb/creationDate">Katso tapahtumia</a></li>
+                        <li><a class="pageLink needsclick" rel="users">Etsi käyttäjiä</a></li>
+                        <li><a class="pageLink needsclick" rel="groups">Ryhmät</a></li>
+                        <li class="divider"></li>
 
-                    <li><a class="pageLink logout"><i class="material-icons right" style="vertical-align: bottom">exit_to_app</i> Kirjaudu ulos</a></li>
-                    <li>&nbsp;</li>
-                </ul>
-                <!--<ul class="hide-on-large-and-up right">
+                        <li><a class="pageLink logout"><i class="material-icons right" style="vertical-align: bottom">exit_to_app</i> Kirjaudu ulos</a></li>
+                        <li>&nbsp;</li>
+                    </ul>
+                    <!--<ul class="hide-on-large-and-up right">
                     <li><a id="mobile-back" class="mark button-collapse"><i class="material-icons">arrow_back</i></a></li>
                 </ul>-->
-                <a id="mobile-menu" data-activates="slide-out" class="right button-collapse"><i class="mdi-navigation-menu"></i></a>
-                <ul class="right hide-on-small-only logged-in">
-                    <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
-                    <li><a class="pageLink" rel="new-own-comments">Seuratut <span class="new badge new-own-comments-count"></span></a></li>
-                </ul>
+                    <a id="mobile-menu" data-activates="slide-out" class="right button-collapse"><i class="mdi-navigation-menu"></i></a>
+                    <ul class="right hide-on-small-only logged-in">
+                        <li><a class="pageLink" rel="new-comments">Kommentit <span class="new badge new-comments-count"></span></a></li>
+                        <li><a class="pageLink" rel="new-own-comments">Seuratut <span class="new badge new-own-comments-count"></span></a></li>
+                    </ul>
 
-            </div>
-        </nav>
-    </div>
-    <div class="fixed-action-btn ot-create-btn" style="top: 0; left: 10px; bottom: inherit; width: 50px; padding-top: 7px">
-        <a class="btn-floating btn-large pink accent-2 pageLink logged-in" rel="addex">
-            <i class="large material-icons">mode_edit</i>
-        </a>
-    </div>
-
-</div>
-
-<!-- Content -->
-<div id="content-top"></div>
-<div id="content">
-
-    <div id="main-content" class="row blue-grey lighten-5">
-        <div id="sidemenu" class="col m3 l3 s12">
-
-            <div id="current-user-container" class="logged-in hide-on-small-and-down"></div>
-
-            <div id="header-container" class="logged-in card">
-                <div id="header-content"></div>
-            </div>
-
-            <section id="login-container" class="logged-out">
-                <div class="card">
-                    <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src="img/login_bg.png"/>
-                        <span class="card-title">Kirjaudu sisään</span>
-                    </div>
-                    <form id="login-form" method="post">
-                        <div class="card-content">
-                            <div class="col s12 input-field">
-                                <label for="username">Tunnus</label>
-                                <input id="username" name="username" type="text" required />
-                            </div>
-                            <div class="col s12 input-field">
-                                <label for="password">Salasana</label>
-                                <input id="password" name="password" type="password" required/>
-                            </div>
-                            <h5 class="col s12">Eikö sinulla ole vielä tunnuksia?</h5>
-                            <div class="col s12" style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
-                            <div class="col s12"><a class="pageLink" rel="register">Luo tunnus</a></div>
-                            <div class="col s12">
-                                <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
-                                    Salasana unohtunut?</a>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
-
-                        </div>
-                    </form>
                 </div>
-            </section>
+            </nav>
+        </div>
+        <div class="fixed-action-btn ot-create-btn" style="top: 0; left: 10px; bottom: inherit; width: 50px; padding-top: 7px">
+            <a class="btn-floating btn-large pink accent-2 pageLink logged-in" rel="addex">
+                <i class="large material-icons">mode_edit</i>
+            </a>
         </div>
 
-        <div class="col s12 m8 l9 push-r3 push-r4">
-            <section id="groups-content" role="groups" class="logged-in row">
-            </section>
+    </div>
 
-            <section role="tops" class="">
+    <!-- Content -->
+    <div id="content-top"></div>
+    <div id="content">
 
-                <nav class="grey accent-2">
-                    <ul>
-                        <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
-                        <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
-                        <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
-                        <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
-                        <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
-                    </ul>
-                </nav>
-                <div class="card">
-                    <div class="card-content" id="top-list"></div>
+        <div id="main-content" class="row blue-grey lighten-5">
+            <div id="sidemenu" class="col m3 l3 s12">
+
+                <div id="current-user-container" class="logged-in hide-on-small-and-down"></div>
+
+                <div id="header-container" class="logged-in card">
+                    <div id="header-content"></div>
                 </div>
-            </section>
 
-            <section role="tops2" class="">
-
-                <nav class="grey accent-2">
-                    <ul>
-                        <li><a rel="tops2/bywheel" class="pageLink">Pyöräilijät</a></li>
-                        <li><a rel="tops2/rowing" class="pageLink">Soutelijat</a></li>
-                        <li><a rel="tops2/pullups" class="pageLink">Vetelijät</a></li>
-                        <li><a rel="tops2/stretches" class="pageLink">Venyttelijät</a></li>
-                    </ul>
-                </nav>
-                <div class="card">
-                    <div class="card-content" id="top-list-other"></div>
-                </div>
-            </section>
-
-            <section role="tops3" class="">
-
-                <nav class="grey accent-2">
-                    <ul>
-                        <li><a rel="tops3/most-cared-14" class="pageLink">Kahden viikon välitetyimmät</a></li>
-                        <li><a rel="tops3/most-read-14" class="pageLink">Kahden viikon luetuimmat</a></li>
-                        <!--<li><a rel="tops3/most-read-all" class="pageLink">Luetuimmat</a></li>-->
-                    </ul>
-                </nav>
-                <div class="card">
-                    <div class="card-content" id="top-list-cared"></div>
-                </div>
-            </section>
-
-
-
-            <section role="userprofile">
-                <article>
-                    <h3>Talletetut kuvat</h3>
-                    <div id="file-list" style="width: 70%"></div>
-                    <div id="dialog" title="Kuvat" style="display: none;">
-                        <img id="image" src=""/>
-                    </div>
-                </article>
-            </section>
-
-            <section role="profile" class="logged-in">
-                <div class="row">
-                    <h3 class="pink-text accent-2">Muokkaa profiiliasi</h3>
-                    <div class="col s12 m6">
-                        <div class="card">
+                <section id="login-container" class="logged-out">
+                    <div class="card">
+                        <div class="card-image waves-effect waves-block waves-light">
+                            <img class="activator" src="img/login_bg.png" />
+                            <span class="card-title">Kirjaudu sisään</span>
+                        </div>
+                        <form id="login-form" method="post">
                             <div class="card-content">
-                                <img id="profile-avatar" class="circle left" src="/img/share.jpg"/>
-                                <span class="card-title">Henkilökohtaiset tiedot</span>
-                                <div class="details">
-                                    <div class="edit-form">
-                                        Sähköposti: <strong><span id="profile-email"></span></strong>
-                                        <div class="clearfix">
-                                            <i>
+                                <div class="col s12 input-field">
+                                    <label for="username">Tunnus</label>
+                                    <input id="username" name="username" type="text" required />
+                                </div>
+                                <div class="col s12 input-field">
+                                    <label for="password">Salasana</label>
+                                    <input id="password" name="password" type="password" required/>
+                                </div>
+                                <h5 class="col s12">Eikö sinulla ole vielä tunnuksia?</h5>
+                                <div class="col s12" style="margin-bottom: 1rem;">Luo itsellesi tunnus ja liity iloisten liikkujien kerhoon.</div>
+                                <div class="col s12"><a class="pageLink" rel="register">Luo tunnus</a></div>
+                                <div class="col s12">
+                                    <a href="mailto:ontrail@ontrail.net?Subject=Salasana%20unohtui&body=Kirjoita%20tunnuksesi%20ja%20sähköpostiosoitteesi%20ja%20lähetä%20viesti." target="_top">
+                                    Salasana unohtunut?</a>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <a id="login" class="button login waves-effect waves-light btn-flat">Kirjaudu sisään!</a>
+
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col s12 m8 l9 push-r3 push-r4">
+                <section id="groups-content" role="groups" class="logged-in row">
+                </section>
+
+                <section role="tops" class="">
+
+                    <nav class="grey accent-2">
+                        <ul>
+                            <li><a rel="tops/hours" class="pageLink">Tuntiahmatit</a></li>
+                            <li><a rel="tops/runs" class="pageLink">Juoksukunkut</a></li>
+                            <li><a rel="tops/byfoot" class="pageLink">Jalankulkijat</a></li>
+                            <li><a rel="tops/skis" class="pageLink">Hiihtoniilot</a></li>
+                            <li><a rel="tops/swims" class="pageLink">Vesipedot</a></li>
+                        </ul>
+                    </nav>
+                    <div class="card">
+                        <div class="card-content" id="top-list"></div>
+                    </div>
+                </section>
+
+                <section role="tops2" class="">
+
+                    <nav class="grey accent-2">
+                        <ul>
+                            <li><a rel="tops2/bywheel" class="pageLink">Pyöräilijät</a></li>
+                            <li><a rel="tops2/rowing" class="pageLink">Soutelijat</a></li>
+                            <li><a rel="tops2/pullups" class="pageLink">Vetelijät</a></li>
+                            <li><a rel="tops2/stretches" class="pageLink">Venyttelijät</a></li>
+                        </ul>
+                    </nav>
+                    <div class="card">
+                        <div class="card-content" id="top-list-other"></div>
+                    </div>
+                </section>
+
+                <section role="tops3" class="">
+
+                    <nav class="grey accent-2">
+                        <ul>
+                            <li><a rel="tops3/most-cared-14" class="pageLink">Kahden viikon välitetyimmät</a></li>
+                            <li><a rel="tops3/most-read-14" class="pageLink">Kahden viikon luetuimmat</a></li>
+                            <!--<li><a rel="tops3/most-read-all" class="pageLink">Luetuimmat</a></li>-->
+                        </ul>
+                    </nav>
+                    <div class="card">
+                        <div class="card-content" id="top-list-cared"></div>
+                    </div>
+                </section>
+
+
+
+                <section role="userprofile">
+                    <article>
+                        <h3>Talletetut kuvat</h3>
+                        <div id="file-list" style="width: 70%"></div>
+                        <div id="dialog" title="Kuvat" style="display: none;">
+                            <img id="image" src="" />
+                        </div>
+                    </article>
+                </section>
+
+                <section role="profile" class="logged-in">
+                    <div class="row">
+                        <h3 class="pink-text accent-2">Muokkaa profiiliasi</h3>
+                        <div class="col s12 m6">
+                            <div class="card">
+                                <div class="card-content">
+                                    <img id="profile-avatar" class="circle left" src="/img/share.jpg" />
+                                    <span class="card-title">Henkilökohtaiset tiedot</span>
+                                    <div class="details">
+                                        <div class="edit-form">
+                                            Sähköposti: <strong><span id="profile-email"></span></strong>
+                                            <div class="clearfix">
+                                                <i>
                                                 Vaihda avatarta <a href="http://www.gravatar.com">Gravatar-palvelun avulla</a> käyttäen
                                                 sähköpostiosoitettasi. Sähköpostiosoitetta voi muokata vain pyytämällä ylläpidolta.
                                             </i>
+                                            </div>
                                         </div>
+                                        <div class="download" style="margin: 10px 0px 20px 0px">
+                                            <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
+                                        </div>
+                                        <form id="profile-form" class="edit-form" method="post">
+                                            <div class="col input-field">
+                                                <label for="synopsis">Motto</label>
+                                                <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" />
+                                            </div>
+                                            <div class="col input-field">
+                                                <label for="goals">Tavoitteet</label>
+                                                <input id="goals" name="goals" type="text" maxlength="60" size="60" />
+                                            </div>
+                                            <div class="col s12 input-field">
+                                                <label for="resthr">Leposyke</label>
+                                                <input id="resthr" name="resthr" type="text" maxlength="3" size="3" />
+                                            </div>
+                                            <div class="col s12 input-field">
+                                                <label for="maxhr">Maksimisyke</label>
+                                                <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" />
+                                            </div>
+                                            <div class="col s12 input-field">
+                                                <label for="aerk">Aerobinen kynnys</label>
+                                                <input id="aerk" name="aerk" type="text" maxlength="3" size="3" />
+                                            </div>
+                                            <div class="col s12 input-field">
+                                                <label for="anaerk">Anaerobinen kynnys</label>
+                                                <input id="anaerk" name="anaerk" type="text" maxlength="3" size="3" />
+                                            </div>
+                                        </form>
+                                        <span id="profile-result"></span>
                                     </div>
-                                    <div class="download" style="margin: 10px 0px 20px 0px">
-                                        <a href="/rest/v1/export.json">Lataa kaikki harjoitukset JSON-muodossa.</a>
-                                    </div>
-                                    <form id="profile-form" class="edit-form" method="post">
-                                        <div class="col input-field">
-                                            <label for="synopsis">Motto</label>
-                                            <input id="synopsis" name="synopsis" type="text" maxlength="60" size="60" />
-                                        </div>
-                                        <div class="col input-field">
-                                            <label for="goals">Tavoitteet</label>
-                                            <input id="goals" name="goals" type="text" maxlength="60" size="60" />
+                                </div>
+                                <div class="card-action">
+                                    <a id="update-profile" class="button login waves-effect waves-light btn-flat">Päivitä profiilitiedot</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col s12 m6">
+                            <div class="card">
+                                <div class="card-content">
+                                    <span class="card-title">Vaihda salasana</span>
+                                    <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
+                                    <form id="change-password-form" class="edit-form" method="post">
+                                        <div class="col s12 input-field">
+                                            <label for="ch-old-password">Vanha salasana</label>
+                                            <input id="ch-old-password" class="reset" type="password" />
+                                            <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
                                         </div>
                                         <div class="col s12 input-field">
-                                            <label for="resthr">Leposyke</label>
-                                            <input id="resthr" name="resthr" type="text" maxlength="3" size="3" />
+                                            <label for="ch-password">Salasana</label>
+                                            <input id="ch-password" name="ch-password" class="reset" type="password" />
+                                            <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
                                         </div>
                                         <div class="col s12 input-field">
-                                            <label for="maxhr">Maksimisyke</label>
-                                            <input id="maxhr" name="maxhr" type="text" maxlength="3" size="3" />
-                                        </div>
-                                        <div class="col s12 input-field">
-                                            <label for="aerk">Aerobinen kynnys</label>
-                                            <input id="aerk" name="aerk" type="text"  maxlength="3" size="3" />
-                                        </div>
-                                        <div class="col s12 input-field">
-                                            <label for="anaerk">Anaerobinen kynnys</label>
-                                            <input id="anaerk" name="anaerk" type="text"  maxlength="3" size="3" />
+                                            <label for="ch-password2">Salasana uudelleen</label>
+                                            <input id="ch-password2" class="reset" type="password" />
+                                            <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
                                         </div>
                                     </form>
-                                    <span id="profile-result"></span>
+                                    <p class="error"><span id="password-change-result"></span></p>
                                 </div>
-                            </div>
-                            <div class="card-action">
-                                <a id="update-profile" class="button login waves-effect waves-light btn-flat">Päivitä profiilitiedot</a>
+                                <div class="card-action">
+                                    <a id="change-password" class="button change-password waves-effect waves-light btn-flat">Vaihda salasana</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col s12 m6">
-                        <div class="card">
-                            <div class="card-content">
-                                <span class="card-title">Vaihda salasana</span>
-                                <div style="margin-bottom: 20px;"><i>Käytä salasanassa vähintään kuutta merkkiä ja vältä yleisiä tai muuten helppoja salasanoja.</i></div>
-                                <form id="change-password-form" class="edit-form" method="post">
-                                    <div class="col s12 input-field">
-                                        <label for="ch-old-password">Vanha salasana</label>
-                                        <input id="ch-old-password" class="reset" type="password"/>
-                                        <em class="error ch-old-password-doesnt-match" style="display: none">Salasana väärin</em>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ch-password">Salasana</label>
-                                        <input id="ch-password" name="ch-password" class="reset" type="password"/>
-                                        <em class="error ch-password-too-short" style="display: none">Salasana on liian lyhyt</em>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ch-password2">Salasana uudelleen</label>
-                                        <input id="ch-password2" class="reset" type="password"/>
-                                        <em class="error ch-passwords-do-not-match" style="display: none">Salasanat eivät vastaa toisiaan</em>
+                </section>
+
+                <!-- Main Content -->
+                <div>
+                    <div role="content">
+                        <nav id="search-container" class="indigo lighten-5">
+                            <div class="nav-bar">
+                                <form accept-charset="utf-8">
+                                    <div class="input-field">
+                                        <input id="search" type="search" required>
+                                        <label for="search"><i class="material-icons pink-text accent-2">search</i></label>
+                                        <i class="material-icons">close</i>
                                     </div>
                                 </form>
-                                <p class="error"><span id="password-change-result"></span></p>
                             </div>
-                            <div class="card-action">
-                                <a id="change-password" class="button change-password waves-effect waves-light btn-flat">Vaihda salasana</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+                        </nav>
 
-            <!-- Main Content -->
-            <div>
-                <div role="content">
-                    <nav id="search-container" class="indigo lighten-5">
-                        <div class="nav-bar">
-                            <form accept-charset="utf-8">
-                                <div class="input-field">
-                                    <input id="search" type="search" required>
-                                    <label for="search"><i class="material-icons pink-text accent-2">search</i></label>
-                                    <i class="material-icons">close</i>
-                                </div>
-                            </form>
-                        </div>
-                    </nav>
+                        <section id="filter-container" role="filter" class="card">
+                            <form method="post" accept-charset="utf-8">
+                                <div class="card-content">
+                                    <span class="card-title">Suodata lenkkejä</span>
+                                    <div id="filter-form" class="logged-in">
 
-                    <section id="filter-container" role="filter" class="card">
-                        <form method="post" accept-charset="utf-8">
-                            <div class="card-content">
-                                <span class="card-title">Suodata lenkkejä</span>
-                                <div id="filter-form" class="logged-in">
+                                        <p>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jätä kenttä tyhjäksi, jos et halua käyttää sitä suodatuksessa.</p>
 
-                                    <p>Kirjoita isot ja pienet kirjaimet kuten käyttäjänimessä. Jätä kenttä tyhjäksi, jos et halua käyttää sitä suodatuksessa.</p>
+                                        <div class="row">
+                                            <div class="col s12 m6 inputfield">
+                                                <label for="filter-users">Käyttäjät</label>
+                                                <input id="filter-users" data-placeholder="" multiple class="chzn-select" style="width:100%;height:22px" />
+                                            </div>
 
-                                    <div class="row">
-                                        <div class="col s12 m6 inputfield">
-                                            <label for="filter-users">Käyttäjät</label>
-                                            <input id="filter-users" data-placeholder="" multiple class="chzn-select" style="width:100%;height:22px"/>
-                                        </div>
-
-                                        <div class="col s12 m6">
-                                            <label>Laji</label>
-                                            <select id="filter-sport" class="chzn-select" style="width:100%;">
+                                            <div class="col s12 m6">
+                                                <label>Laji</label>
+                                                <select id="filter-sport" class="chzn-select" style="width:100%;">
                                             </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-mindistance">Matka vähintään (metriä)</label>
-                                            <input id="filter-mindistance" name="filter-mindistance" type="number" maxlength="6" size="6"/>
-                                        </div>
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-maxdistance">Matka enintään (metriä)</label>
-                                            <input id="filter-maxdistance" name="filter-maxdistance" type="number" maxlength="6" size="6"/>
-                                        </div>
-                                     </div>
-                                    <div class="row">
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-minpace">Vauhti vähintään (km/h)</label>
-                                            <input id="filter-minpace" name="filter-minpace" type="number" maxlength="6" size="6"/>
+                                            </div>
                                         </div>
 
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-maxpace">Vauhti enintään</label>
-                                            <input id="filter-maxpace" name="filter-maxpace" type="number" maxlength="6" size="6"/>
+                                        <div class="row">
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-mindistance">Matka vähintään (metriä)</label>
+                                                <input id="filter-mindistance" name="filter-mindistance" type="number" maxlength="6" size="6" />
+                                            </div>
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-maxdistance">Matka enintään (metriä)</label>
+                                                <input id="filter-maxdistance" name="filter-maxdistance" type="number" maxlength="6" size="6" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-minhr">Syke vähintään</label>
-                                            <input id="filter-minhr" name="filter-minhr" type="number" maxlength="3" size="3"/>
+                                        <div class="row">
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-minpace">Vauhti vähintään (km/h)</label>
+                                                <input id="filter-minpace" name="filter-minpace" type="number" maxlength="6" size="6" />
+                                            </div>
+
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-maxpace">Vauhti enintään</label>
+                                                <input id="filter-maxpace" name="filter-maxpace" type="number" maxlength="6" size="6" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-minhr">Syke vähintään</label>
+                                                <input id="filter-minhr" name="filter-minhr" type="number" maxlength="3" size="3" />
+                                            </div>
+
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-maxhr">Syke enintään</label>
+                                                <input id="filter-maxhr" name="filter-maxhr" type="number" maxlength="3" size="3" />
+                                            </div>
                                         </div>
 
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-maxhr">Syke enintään</label>
-                                            <input id="filter-maxhr" name="filter-maxhr" type="number" maxlength="3" size="3"/>
-                                        </div>
-                                    </div>
+                                        <div class="row">
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-start-date">Alkaen (<a href="javascript:void(0)" id="filter-reset-start">aikojen alusta</a>)</label>
+                                                <input id="filter-start-date" name="date" type="text" />
+                                            </div>
 
-                                    <div class="row">
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-start-date">Alkaen (<a href="javascript:void(0)" id="filter-reset-start">aikojen alusta</a>)</label>
-                                            <input id="filter-start-date" name="date" type="text" />
+                                            <div class="col s12 m6 input-field">
+                                                <label for="filter-stop-date">Päättyen (<a href="javascript:void(0)" id="filter-reset-stop">loppuun</a>)</label>
+                                                <input id="filter-stop-date" name="date" type="text" />
+                                            </div>
                                         </div>
 
-                                        <div class="col s12 m6 input-field">
-                                            <label for="filter-stop-date">Päättyen (<a href="javascript:void(0)" id="filter-reset-stop">loppuun</a>)</label>
-                                            <input id="filter-stop-date" name="date" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col s12 input-field">
-                                            <select id="filter-sort">
+                                        <div class="row">
+                                            <div class="col s12 input-field">
+                                                <select id="filter-sort">
                                                 <option value="pace" selected>nopein ensin</option>
                                                 <option value="distance">pisin ensin</option>
                                                 <option value="duration">pitkäkestoisin ensin</option>
                                                 <option value="creationDate">uusin ensin</option>
                                                 <option value="avghr">korkein syke ensin</option>
                                             </select>
-                                            <label for="filter-sort">Järjestä </label>
+                                                <label for="filter-sort">Järjestä </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p id="searchSummary"></p>
+                                </div>
+                                <div class="card-action">
+                                    <a id="filter-render" class="button btn-flat waves-effect waves-light">Suodata</a>
+                                    <a id="filter-close" class="button btn-flat waves-effect waves-light waves-red accent-2">Sulje</a>
+
+                                </div>
+                            </form>
+                        </section>
+
+                        <div id="graph-container"></div>
+
+                        <div id="content-entries" role="listview"></div>
+                        <section role="tableview">
+                            <table class="details">
+                                <thead>
+                                    <tr>
+                                        <th>Päivä</th>
+                                        <th class="user">Käyttäjä</th>
+                                        <th class="title">Otsikko</th>
+                                        <th class="sport">Laji</th>
+                                        <th>Matka</th>
+                                        <th>Aika</th>
+                                        <th>Vauhti</th>
+                                        <th>Syke</th>
+                                        <th>Kommentteja</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-entries">
+                                </tbody>
+                            </table>
+                        </section>
+                        <div id="content-spinner"></div>
+                    </div>
+
+                    <section role="summary" class="logged-in">
+                        <div id="summary-header"></div>
+                        <div id="summary-entries"></div>
+                    </section>
+
+                    <section role="tagsummary" class="logged-in">
+                        <div id="tagsummary-header"></div>
+                        <div id="tagsummary-entries"></div>
+                    </section>
+
+                    <section role="weeksummary" class="logged-in">
+                        <nav class="grey accent-2">
+                            <div class="nav-wrapper">
+                                <a class="brand-logo hide-on-small-and-down">Viikoittainen harjoitusyhteenveto</a>
+                                <a class="brand-logo hide-on-med-and-up">Viikkoyhteenveto</a>
+                            </div>
+                        </nav>
+                        <div id="weeklyNavigate"></div>
+                        <div>
+                            <article id="weeksummary">
+                            </article>
+                        </div>
+                    </section>
+                </div>
+
+                <section role="users" class="logged-in">
+
+                    <h5 class="pink-text accent-2">Hae käyttäjää</h5>
+
+                    <nav id="user-search-container" class="indigo lighten-5">
+                        <div class="nav-wrapper">
+                            <form accept-charset="utf-8">
+                                <div class="input-field">
+                                    <input id="search-users" type="search" required>
+                                    <label for="search-users"><i class="material-icons">search</i></label>
+                                    <i class="material-icons">close</i>
+                                </div>
+                            </form>
+                        </div>
+                    </nav>
+                    <div id="user-results"></div>
+                </section>
+
+                <div role="ex" class="full with-comments logged-in">
+                    <div id="exercise"></div>
+                </div>
+
+                <section role="addex" data-mode="add" class="logged-in">
+                    <div class="card">
+                        <form id="add-exercise-form" class="edit-form" method="post">
+                            <div class="card-content">
+                                <div class="card-title">Lisää uusi suoritus</div>
+                                <div class="row">
+                                    <div class="col s12 m6">
+                                        <div class="col s12 input-field">
+                                            <label for="ex-title">Otsikko</label>
+                                            <input id="ex-title" name="title" type="text" class="reset" />
+                                            <em class="error title-required">Lisää otsikko</em>
+                                        </div>
+                                        <div class="col s12">
+                                            <label for="ex-sport">Laji</label>
+                                            <select id="ex-sport" class="chzn-select" style="width:100%;">
+                                            <option>laa</option>
+                                        </select>
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-duration">Kesto (<span id="time-hint">esim  3h31, 3.31.28</span>)</label>
+                                            <input id="ex-duration" name="duration" class="reset" type="text" />
+                                            <em class="error duration-required">Lenkin kesto vaaditaan</em>
+                                            <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-distance">Matka (<span id="distance-hint">esim 2km, 3250m</span>)</label>
+                                            <input id="ex-distance" name="distance" class="reset" type="text" />
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-avghr">Keskisyke</label>
+                                            <input id="ex-avghr" name="avghr" type="text" pattern="[0-9]*" class="reset">
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-date" class="date active">Päivä</label>
+                                            <input id="ex-date" name="date" type="text" />
+                                        </div>
+                                        <div id="add-tags-select" class="col s12">
+                                            <label for="ex-tags">Avainsanat</label>
+                                            <input id="ex-tags" multiple class="chzn-select" style="width: 100%" />
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m6">
+                                        <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-detailRepeats">Toistot (kpl)</label>
+                                            <input class="small-input reset" id="ex-detailRepeats" size="5" maxlength="5" name="detailRepeats" type="number" />
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-detailVolume">Volyymi (kg)</label>
+                                            <input class="small-input reset" id="ex-detailVolume" size="5" maxlength="5" name="detailVolume" type="number" />
+                                        </div>
+                                        <div class="col s12 input-field">
+                                            <label for="ex-detailElevation">Nousumetrit (m)</label>
+                                            <input class="small-input reset" id="ex-detailElevation" size="5" maxlength="5" name="detailElevation" type="number" />
+                                        </div>
+                                        <div class="hide-on-med-and-down">
+                                            <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
                                         </div>
                                     </div>
                                 </div>
-                                <p id="searchSummary"></p>
+                                <div class="row" style="margin-top: 2rem;">
+                                    <div class="col s12">
+                                        <i class="material-icons left medium pink-text accent-2 hide-on-small-and-down">edit</i>
+                                        <label for="ex-body">Kuvaus</label>
+                                        <div id="ex-body" class="body-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-action">
-                                <a id="filter-render" class="button btn-flat waves-effect waves-light">Suodata</a>
-                                <a id="filter-close" class="button btn-flat waves-effect waves-light waves-red accent-2">Sulje</a>
-
-                            </div>
-                            </form>
-                    </section>
-
-                    <div id="graph-container"></div>
-
-                    <div id="content-entries" role="listview"></div>
-                    <section role="tableview">
-                        <table class="details">
-                            <thead><tr><th>Päivä</th><th class="user">Käyttäjä</th><th class="title">Otsikko</th><th class="sport">Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Kommentteja</th></tr></thead>
-                            <tbody id="table-entries">
-                            </tbody>
-                        </table>
-                    </section>
-                    <div id="content-spinner"></div>
-                </div>
-
-                <section role="summary" class="logged-in">
-                    <div id="summary-header"></div>
-                    <div id="summary-entries"></div>
-                </section>
-
-                <section role="tagsummary" class="logged-in">
-                    <div id="tagsummary-header"></div>
-                    <div id="tagsummary-entries"></div>
-                </section>
-
-                <section role="weeksummary" class="logged-in">
-                    <nav class="grey accent-2">
-                        <div class="nav-wrapper">
-                            <a class="brand-logo hide-on-small-and-down">Viikoittainen harjoitusyhteenveto</a>
-                            <a class="brand-logo hide-on-med-and-up">Viikkoyhteenveto</a>
-                        </div>
-                    </nav>
-                    <div id="weeklyNavigate"></div>
-                    <div>
-                        <article id="weeksummary">
-                        </article>
-                    </div>
-                </section>
-            </div>
-
-            <section role="users" class="logged-in">
-
-                <h5 class="pink-text accent-2">Hae käyttäjää</h5>
-
-                <nav id="user-search-container" class="indigo lighten-5">
-                    <div class="nav-wrapper">
-                        <form accept-charset="utf-8">
-                            <div class="input-field">
-                                <input id="search-users" type="search" required>
-                                <label for="search-users"><i class="material-icons">search</i></label>
-                                <i class="material-icons">close</i>
+                                <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
+                                <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
                             </div>
                         </form>
                     </div>
-                </nav>
-                <div id="user-results"></div>
-            </section>
+                </section>
 
-            <div role="ex" class="full with-comments logged-in">
-                <div id="exercise"></div>
+                <section id="register-wrapper" role="register" data-mode="add" class="logged-in">
+                    <div class="card">
+                        <form id="register-form" method="post">
+                            <div class="card-content" class="edit-form">
+                                <h4 class="card-title">Rekisteröidy käyttäjäksi</h4>
+                                <div class="input-field">
+                                    <label for="ex-username">Käyttäjätunnus</label>
+                                    <input id="ex-username" name="username" type="text" class="reset" required>
+                                </div>
+                                <div>
+                                    <em class="error username-required">Käyttäjätunnus vaaditaan</em>
+                                    <em class="error user-exists">Tunnus on jo käytössä</em>
+                                </div>
+                                <div>
+                                    <label>Salasana</label>
+                                    <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana" />
+                                    <em class="error password-required">Salasana vaaditaan</em>
+                                    <em class="error password-too-short">Salasanassa pitää olla vähintään kuusi merkkiä</em>
+                                </div>
+                                <div>
+                                    <label>Salasana uudelleen</label>
+                                    <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen" />
+                                    <em class="error passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
+                                </div>
+                                <div>
+                                    <label>Sähköpostiosoite</label>
+                                    <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite" />
+                                    <em class="error email-invalid">Sähköpostiosoite vaaditaan</em>
+                                    <p>Asetathan toimivan sähköpostiosoitteen, sillä tunnuksesi käyttö edellyttää sähköpostien vastaanottamista. Osoittettasi ei näytetä muille käyttäjille.</p>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <label></label>
+                                <a id="register-user" class="button register waves-effect waves-light btn-flat">Rekisteröidy</a>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
             </div>
-
-            <section role="addex" data-mode="add" class="logged-in">
-                <div class="card">
-                    <form id="add-exercise-form" class="edit-form" method="post">
-                        <div class="card-content">
-                            <div class="card-title">Lisää uusi suoritus</div>
-                            <div class="row">
-                                <div class="col s12 m6">
-                                    <div class="col s12 input-field">
-                                        <label for="ex-title">Otsikko</label>
-                                        <input id="ex-title" name="title" type="text" class="reset"/>
-                                        <em class="error title-required">Lisää otsikko</em>
-                                    </div>
-                                    <div class="col s12">
-                                        <label for="ex-sport">Laji</label>
-                                        <select id="ex-sport" class="chzn-select" style="width:100%;">
-                                            <option>laa</option>
-                                        </select>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-duration">Kesto (<span id="time-hint">esim  3h31, 3.31.28</span>)</label>
-                                        <input id="ex-duration" name="duration" class="reset" type="text"/>
-                                        <em class="error duration-required">Lenkin kesto vaaditaan</em>
-                                        <em class="error invalid-duration">Lenkin kesto on virheellistä muotoa</em>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-distance">Matka (<span id="distance-hint">esim 2km, 3250m</span>)</label>
-                                        <input id="ex-distance" name="distance" class="reset" type="text"/> 
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-avghr">Keskisyke</label>
-                                        <input id="ex-avghr" name="avghr" type="text" pattern="[0-9]*" class="reset">
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-date" class="date active">Päivä</label>
-                                        <input id="ex-date" name="date" type="text" />
-                                    </div>
-                                    <div id="add-tags-select" class="col s12">
-                                        <label for="ex-tags">Avainsanat</label>
-                                        <input id="ex-tags" multiple class="chzn-select" style="width: 100%"/>
-                                    </div>
-                                </div>
-                                <div class="col s12 m6">
-                                    <a id="toggle-numeric-details" class="mark">Yksityiskohdat...</a>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-detailRepeats">Toistot (kpl)</label>
-                                        <input class="small-input reset" id="ex-detailRepeats" size="5"  maxlength="5" name="detailRepeats" type="number"/>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-detailVolume">Volyymi (kg)</label>
-                                        <input class="small-input reset" id="ex-detailVolume" size="5"  maxlength="5" name="detailVolume" type="number"/>
-                                    </div>
-                                    <div class="col s12 input-field">
-                                        <label for="ex-detailElevation">Nousumetrit (m)</label>
-                                        <input class="small-input reset" id="ex-detailElevation" size="5"  maxlength="5" name="detailElevation" type="number"/>
-                                    </div>
-                                    <div class="hide-on-med-and-down">
-                                        <a onClick="window.open('http://blog.ontrail.net/file-upload/upload.html', 'ontrail', 'width=400,height=500')">Lisää kuva</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top: 2rem;">
-                                <div class="col s12">
-                                    <i class="material-icons left medium pink-text accent-2 hide-on-small-and-down">edit</i>
-                                    <label for="ex-body">Kuvaus</label>
-                                    <div id="ex-body" class="body-text" data-placeholder="Klikkaa kertoaksesi jotain harjoituksestasi.  Muotoile maalaamalla tekstin yli."></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <a id="add-exercise" class="button addExercise add waves-effect waves-light btn-flat">Lisää suoritus</a>
-                            <a id="edit-exercise" class="button editExercise edit waves-effect waves-light btn-flat">Muokkaa lenkkiä</a>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <section id="register-wrapper" role="register" data-mode="add" class="logged-in">
-                <div class="card">
-                    <form id="register-form" method="post">
-                        <div class="card-content" class="edit-form">
-                            <h4  class="card-title">Rekisteröidy käyttäjäksi</h4>
-                            <div class="input-field">
-                                <label for="ex-username">Käyttäjätunnus</label>
-                                <input id="ex-username" name="username" type="text" class="reset" required>
-                            </div>
-                            <div>
-                                <em class="error username-required">Käyttäjätunnus vaaditaan</em>
-                                <em class="error user-exists">Tunnus on jo käytössä</em>
-                            </div>
-                            <div>
-                                <label>Salasana</label>
-                                <input id="ex-password" name="password" class="reset" type="password" placeholder="Salasana"/>
-                                <em class="error password-required">Salasana vaaditaan</em>
-                                <em class="error password-too-short">Salasanassa pitää olla vähintään kuusi merkkiä</em>
-                            </div>
-                            <div>
-                                <label>Salasana uudelleen</label>
-                                <input id="ex-password2" class="reset" type="password" placeholder="Salasana uudelleen"/>
-                                <em class="error passwords-do-not-match">Salasanat eivät vastaa toisiaan</em>
-                            </div>
-                            <div>
-                                <label>Sähköpostiosoite</label>
-                                <input id="ex-email" name="email" class="reset" placeholder="Sähköpostiosoite"/>
-                                <em class="error email-invalid">Sähköpostiosoite vaaditaan</em>
-                                <p>Asetathan toimivan sähköpostiosoitteen, sillä tunnuksesi käyttö edellyttää
-                                    sähköpostien vastaanottamista. Osoittettasi ei näytetä muille käyttäjille.</p>
-                            </div>
-                        </div>
-                        <div class="card-action">
-                            <label></label>
-                            <a id="register-user" class="button register waves-effect waves-light btn-flat">Rekisteröidy</a>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
         </div>
+
+        <div id="chatSection" class="logged-in hide-on-med-and-down blue-grey lighten-5">
+            <h5><a class="pageLink" rel="latest">Tapahtumavirta</a></h5>
+            <div id="messageBox">
+                <ul class="collection" id="messages">
+                </ul>
+            </div>
+        </div>
+
     </div>
 
-    <div id="chatSection" class="logged-in hide-on-med-and-down blue-grey lighten-5">
-        <h5><a class="pageLink" rel="latest">Tapahtumavirta</a></h5>
-        <div id="messageBox">
-            <ul class="collection" id="messages">
-            </ul>
-        </div>
+    <!-- Copyright -->
+    <div id="copyright" class="blue-grey lighten-5">
+        &copy; ontrail.net, 2013-2016
     </div>
 
-</div>
-
-<!-- Copyright -->
-<div id="copyright" class="blue-grey lighten-5">
-    &copy; ontrail.net, 2013-2016
-</div>
-
-<svg width="0" height="0">
+    <svg width="0" height="0">
     <defs>
         <filter id="shadow-filter" x="0" y="0">
             <feOffset result="offOut" in="SourceAlpha" dx="-5" dy="-5" ></feOffset>
@@ -650,184 +669,362 @@
 </svg>
 
 
-<script id="topHoursTemplate" type="text/html">
-    <span class="card-title">Vuoden {{year}} {{title}}</span>
-    <table class="details full">
-        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Tunnit</th><th>Matka</th><th>Vauhti</th><th>Kerrat</th></thead>
-        {{#totals}}
-        <tr>
-            <td>{{position}}</td>
-            <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
-            <td>{{duration}}</td>
-            <td>{{distance}}</td>
-            <td>{{pace}}</td>
-            <td>{{count}}</td>
-        </tr>
-        {{/totals}}
-    </table>
-</script>
+    <script id="topHoursTemplate" type="text/html">
+        <span class="card-title">Vuoden {{year}} {{title}}</span>
+        <table class="details full">
+            <thead>
+                <tr>
+                    <th>Sija</th>
+                    <th>Käyttäjä</th>
+                    <th>Tunnit</th>
+                    <th>Matka</th>
+                    <th>Vauhti</th>
+                    <th>Kerrat</th>
+            </thead>
+            {{#totals}}
+            <tr>
+                <td>{{position}}</td>
+                <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+                <td>{{duration}}</td>
+                <td>{{distance}}</td>
+                <td>{{pace}}</td>
+                <td>{{count}}</td>
+            </tr>
+            {{/totals}}
+        </table>
+    </script>
 
-<script id="topPullupsTemplate" type="text/html">
-    <h3>Vuoden {{year}} leuanvetäjät</h3>
-    <table class="details full">
-        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Kokonaistoistot</th><th>Aika</th><th>Kerrat</th></thead>
-        {{#totals}}
-        <tr>
-            <td>{{position}}</td>
-            <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
-            <td>{{repeats}}</td>
-            <td>{{duration}}</td>
-            <td>{{count}}</td>
-        </tr>
-        {{/totals}}
-    </table>
-</script>
+    <script id="topPullupsTemplate" type="text/html">
+        <h3>Vuoden {{year}} leuanvetäjät</h3>
+        <table class="details full">
+            <thead>
+                <tr>
+                    <th>Sija</th>
+                    <th>Käyttäjä</th>
+                    <th>Kokonaistoistot</th>
+                    <th>Aika</th>
+                    <th>Kerrat</th>
+            </thead>
+            {{#totals}}
+            <tr>
+                <td>{{position}}</td>
+                <td><a rel="summary/{{user}}/{{year}}" class="pageLink">{{user}}</a></td>
+                <td>{{repeats}}</td>
+                <td>{{duration}}</td>
+                <td>{{count}}</td>
+            </tr>
+            {{/totals}}
+        </table>
+    </script>
 
-<script id="listsTemplate" type="text/html">
-    <h3>Suosituimmat lenkit</h3>
-    <table class="details full">
-        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Lukukertoja</th></tr></thead>
-        {{#result}}
-        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
-        {{/result}}
-    </table>
-</script>
+    <script id="listsTemplate" type="text/html">
+        <h3>Suosituimmat lenkit</h3>
+        <table class="details full">
+            <thead>
+                <tr>
+                    <th>Sija</th>
+                    <th>Käyttäjä</th>
+                    <th>Otsikko</th>
+                    <th>Lukukertoja</th>
+                </tr>
+            </thead>
+            {{#result}}
+            <tr>
+                <td>{{index}}</td>
+                <td>{{user}}</td>
+                <td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+                <td>{{count}}</td>
+            </tr>
+            {{/result}}
+        </table>
+    </script>
 
-<script id="careTemplate" type="text/html">
-    <h3>Kahden viikon välitetyimmät</h3>
-    <table class="details full">
-        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Välitetty</th></tr></thead>
-        {{#result}}
-        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
-        {{/result}}
-    </table>
-</script>
+    <script id="careTemplate" type="text/html">
+        <h3>Kahden viikon välitetyimmät</h3>
+        <table class="details full">
+            <thead>
+                <tr>
+                    <th>Sija</th>
+                    <th>Käyttäjä</th>
+                    <th>Otsikko</th>
+                    <th>Välitetty</th>
+                </tr>
+            </thead>
+            {{#result}}
+            <tr>
+                <td>{{index}}</td>
+                <td>{{user}}</td>
+                <td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+                <td>{{count}}</td>
+            </tr>
+            {{/result}}
+        </table>
+    </script>
 
-<script id="readTemplate" type="text/html">
-    <h3>Kahden viikon luetuimmat</h3>
-    <table class="details full">
-        <thead><tr><th>Sija</th><th>Käyttäjä</th><th>Otsikko</th><th>Luettu</th></tr></thead>
-        {{#result}}
-        <tr><td>{{index}}</td><td>{{user}}</td><td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td><td>{{count}}</td></tr>
-        {{/result}}
-    </table>
-</script>
+    <script id="readTemplate" type="text/html">
+        <h3>Kahden viikon luetuimmat</h3>
+        <table class="details full">
+            <thead>
+                <tr>
+                    <th>Sija</th>
+                    <th>Käyttäjä</th>
+                    <th>Otsikko</th>
+                    <th>Luettu</th>
+                </tr>
+            </thead>
+            {{#result}}
+            <tr>
+                <td>{{index}}</td>
+                <td>{{user}}</td>
+                <td><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+                <td>{{count}}</td>
+            </tr>
+            {{/result}}
+        </table>
+    </script>
 
-<script id="exerciseDetailsTemplate" class="partial" type="text/html">
-    <table class="details full hide-on-small-and-down">
-        <thead><tr><th>Laji</th><th>Matka</th><th>Aika</th><th>Vauhti</th><th>Syke</th><th>Syke-%</th><th>Etenemä</th>
-            {{#detailRepeats}}<th>Toistot</th>{{/detailRepeats}}
-            {{#detailElevation}}<th>Nousu</th>{{/detailElevation}}
-            {{#detailVolume}}<th>Volyymi</th>{{/detailVolume}}
-        </tr></thead>
-        <tr>
-            <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td><td>{{distance}}</td><td>{{duration}}</td> <td>{{pace}}</td>
-            <td>{{avghr}}</td><td>{{hrReserve}}</td><td>{{bpmdist}}</td>
-            {{#detailRepeats}}<td>{{detailRepeats}}&nbsp;kpl</td>{{/detailRepeats}}
-            {{#detailElevation}}<td>{{detailElevation}}&nbsp;m</td>{{/detailElevation}}
-            {{#detailVolume}}<td>{{detailVolume}}&nbsp;kg</td>{{/detailVolume}}
-        </tr>
-    </table>
-    <table class="details full hide-on-med-and-up vertical">
+    <script id="exerciseDetailsTemplate" class="partial" type="text/html">
+        <table class="details full hide-on-small-and-down">
+            <thead>
+                <tr>
+                    <th>Laji</th>
+                    <th>Matka</th>
+                    <th>Aika</th>
+                    <th>Vauhti</th>
+                    <th>Syke</th>
+                    <th>Syke-%</th>
+                    <th>Etenemä</th>
+                    {{#detailRepeats}}
+                    <th>Toistot</th>{{/detailRepeats}} {{#detailElevation}}
+                    <th>Nousu</th>{{/detailElevation}} {{#detailVolume}}
+                    <th>Volyymi</th>{{/detailVolume}}
+                </tr>
+            </thead>
+            <tr>
+                <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td>
+                <td>{{distance}}</td>
+                <td>{{duration}}</td>
+                <td>{{pace}}</td>
+                <td>{{avghr}}</td>
+                <td>{{hrReserve}}</td>
+                <td>{{bpmdist}}</td>
+                {{#detailRepeats}}
+                <td>{{detailRepeats}}&nbsp;kpl</td>{{/detailRepeats}} {{#detailElevation}}
+                <td>{{detailElevation}}&nbsp;m</td>{{/detailElevation}} {{#detailVolume}}
+                <td>{{detailVolume}}&nbsp;kg</td>{{/detailVolume}}
+            </tr>
+        </table>
+        <table class="details full hide-on-med-and-up vertical">
+            <tbody>
+                <tr>
+                    <th>Laji</th>
+                    <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td>
+                </tr>
+                <tr>
+                    <th>Matka</th>
+                    <td>{{distance}}</td>
+                </tr>
+                <tr>
+                    <th>Aika</th>
+                    <td>{{duration}}</td>
+                </tr>
+                <tr>
+                    <th>Vauhti</th>
+                    <td>{{pace}}</td>
+                </tr>
+                <tr>
+                    <th>Syke</th>
+                    <td>{{avghr}}</td>
+                </tr>
+                <tr>
+                    <th>Syke-%</th>
+                    <td>{{hrReserve}}</td>
+                </tr>
+                <tr>
+                    <th>Etenemä</th>
+                    <td>{{bpmdist}}</td>
+                </tr>
+                {{#detailRepeats}}
+                <tr>
+                    <th>Toistot</th>
+                    <td>{{detailRepeats}} kpl</td>
+                </tr>
+                {{/detailRepeats}} {{#detailElevation}}
+                <tr>
+                    <th>Nousu</th>
+                    <td>{{detailElevation}} m</td>
+                </tr>
+                {{/detailElevation}} {{#detailVolume}}
+                <tr>
+                    <th>Volyymi</th>
+                    <td>{{detailVolume}} kg</td>
+                </tr>
+                {{/detailVolume}}
+            </tbody>
+        </table>
+    </script>
+
+    <script id="ownGroupsTemplate" type="text/html">
+        <li class="divider"></li>
+        <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Omat ryhmät</span></div>
+        {{#groups}}
+        <li><a class="pageLink truncate" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
+        {{/groups}}
+    </script>
+
+    <script id="activeUsersTemplate" type="text/html">
+        <td>{{#users}}<a class="pageLink ddm" rel="user/{{.}}">{{.}}</a>{{/users}}</td>
+    </script>
+
+    <script id="tagsExpandedTemplate" class="partial" type="text/html">
+        <div class="full">
+            <ul>
+                {{#tags}}
+                <li class="chip"><a class="pageLink" rel="tags/{{.}}/stats/true">{{.}}</a></li> {{/tags}}
+            </ul>
+        </div>
+    </script>
+
+    <script id="exerciseTemplate" type="text/html">
+        <div>
+            <article data-id="{{id}}" data-article-owner="{{user}}" class="card preview exercise {{sport}} {{cared}}">
+                <div class="card-content">
+                    <div class="card-title">
+                        <div class="left">
+                            <a target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
+                        </div>
+                        <div>
+                            <h4><a class="more" rel="ex/{{id}}">{{title}}</a></h4>
+                            <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
+                            <h6 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
+                                <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}
+                            </h6>
+                        </div>
+                    </div>
+                    {{> exerciseDetailsTemplate}}
+                    <div class="preview clearfix">
+                        <div class="body-text">{{#trunc}}{{/trunc}}</div>
+                    </div>
+                    <div class="full clearfix">
+                        <div class="body-text">{{{body}}}</div>
+                        {{> tagsExpandedTemplate}}
+                    </div>
+                    <div class="cares-container logged-in {{hasCares}} clearfix">
+                        {{> caresTemplate}}
+                    </div>
+                    <div class="full">
+                        <span class="count"></span>
+                        <p class="signature right">
+                            {{synopsis}}
+                        </p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="card-action">
+                    <div class="preview">
+                        <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}} "true"{{/newComments}}>
+                            <i class="material-icons" style="vertical-align: bottom;">comment</i> {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}} {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
+                        <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
+                            <span class="care-avatar small" style="vertical-align: text-top">
+                            <svg width="16" height="16">
+                                <rect width="16" height="16" fill="#ff4081" />
+                            </svg>
+                        </span> Välitä
+                        </a>
+                        <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                    </div>
+                    <div class="full">
+                        <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}} "true"{{/newComments}}>
+                            <i class="material-icons" style="vertical-align: bottom;">comment</i> {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}} {{#newComments}}{{commentCount}} kommenttia <span class="new badge">{{newComments}}</span>{{/newComments}}</a>
+                        <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
+                            <span class="care-avatar small" style="vertical-align: text-top">
+                            <svg width="16" height="16">
+                                <rect width="16" height="16" fill="#ff4081" />
+                            </svg>
+                        </span> Välitä
+                        </a>
+                        <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+                        <a class="windowLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </script>
+
+    <script id="caresTemplate" type="text/html">
+        <div class="all-cares">
+
+            <div class="care-avatar">
+                <svg width="40" height="40">
+            <rect width="40" height="40" fill="#f48fb1" />
+        </svg>
+            </div>
+            <div class="care-avatar">
+                <svg width="40" height="40">
+            <rect width="40" height="40" fill="#f06292" />
+        </svg>
+            </div>
+            {{#cares}} {{> singleCareTemplate}}{{/cares}}
+        </div>
+        <div class="care-expand-buttons right">
+            <a class="button showAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Näytä kaikki</a>
+            <a class="button hideAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Piilota</a>
+        </div>
+        <div class="clearfix" />
+    </script>
+
+    <script id="singleCareTemplate" type="text/html">
+        <div class="care-avatar">
+            <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{user}} välittää">
+                <svg width="40" height="40">
+                <image xlink:href="{{avatar}}" width="40" height="40" />
+            </svg>
+            </a>
+        </div>
+    </script>
+
+    <script id="exerciseSummaryTemplate" type="text/html">
         <tbody>
-        <tr>
-            <th>Laji</th>
-            <td><a rel="sport/{{sport}}/user/{{user}}/stats/true" class="pageLink">{{sport}}</a></td>
-        </tr>
-        <tr>
-            <th>Matka</th>
-            <td>{{distance}}</td>
-        </tr>
-        <tr>
-            <th>Aika</th>
-            <td>{{duration}}</td>
-        </tr>
-        <tr>
-            <th>Vauhti</th>
-            <td>{{pace}}</td>
-        </tr>
-        <tr>
-            <th>Syke</th>
-            <td>{{avghr}}</td>
-        </tr>
-        <tr>
-            <th>Syke-%</th>
-            <td>{{hrReserve}}</td>
-        </tr>
-        <tr>
-            <th>Etenemä</th>
-            <td>{{bpmdist}}</td>
-        </tr>
-        {{#detailRepeats}}
-        <tr>
-            <th>Toistot</th>
-            <td>{{detailRepeats}} kpl</td>
-        </tr>
-        {{/detailRepeats}}
-        {{#detailElevation}}
-        <tr>
-            <th>Nousu</th>
-            <td>{{detailElevation}} m</td>
-        </tr>
-        {{/detailElevation}}
-        {{#detailVolume}}
-        <tr>
-            <th>Volyymi</th>
-            <td>{{detailVolume}} kg</td>
-        </tr>
-        {{/detailVolume}}
+            <tr class="exericise-detail {{#newComments}}new-comments{{/newComments}} {{#isNew}}new{{/isNew}}">
+                <td>{{date}}</td>
+                <td class="user"><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
+                <td class="sport">
+                    {{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}} {{#sport}}
+                    <a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}
+                </td>
+                <td>{{distance}}</td>
+                <td>{{duration}}</td>
+                <td>{{pace}}</td>
+                <td class="hr">{{avghr}}</td>
+                <td class="comments">
+                    {{^newComments}}<span>{{commentCount}}</span>{{/newComments}}{{#newComments}}<span>{{commentCount}}</span> / <span class="new">{{newComments}} uutta</span>{{/newComments}}
+                </td>
+            </tr>
         </tbody>
-    </table>
-</script>
+    </script>
 
-<script id="ownGroupsTemplate" type="text/html">
-    <li class="divider"></li>
-    <div class="valign-container" style="margin-left: 1rem"><span class="valign blue-grey-text darken-3">Omat ryhmät</span></div>
-    {{#groups}}
-    <li><a class="pageLink truncate" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a></li>
-    {{/groups}}
-</script>
-
-<script id="activeUsersTemplate" type="text/html">
-    <td>{{#users}}<a class="pageLink ddm" rel="user/{{.}}">{{.}}</a>{{/users}}</td>
-</script>
-
-<script id="tagsExpandedTemplate" class="partial" type="text/html">
-    <div class="full">
-        <ul>
-            {{#tags}}<li class="chip"><a class="pageLink" rel="tags/{{.}}/stats/true">{{.}}</a></li> {{/tags}}
-        </ul>
-    </div>
-</script>
-
-<script id="exerciseTemplate" type="text/html">
-    <div>
-        <article data-id="{{id}}" data-article-owner="{{user}}" class="card preview exercise {{sport}} {{cared}}">
+    <script id="singleExerciseTemplate" type="text/html">
+        <article data-id="{{id}}" class="card full exercise {{sport}} {{cared}}">
             <div class="card-content">
                 <div class="card-title">
                     <div class="left">
                         <a target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
                     </div>
                     <div>
-                        <h4><a class="more" rel="ex/{{id}}">{{title}}</a></h4>
+                        <h4>{{title}}</h4>
                         <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
-                        <h6 class="preview"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a>
-                            <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true">{{did}}</a> {{#distance}} {{distance}} ajassa {{duration}} vauhdilla {{pace}}{{/distance}} {{^distance}} {{duration}}{{/distance}}
-                        </h6>
                     </div>
                 </div>
                 {{> exerciseDetailsTemplate}}
-                <div class="preview clearfix">
-                    <div class="body-text">{{#trunc}}{{/trunc}}</div>
+                <div>
+                    <div class="body-text">{{{xbody}}}</div>
                 </div>
-                <div class="full clearfix">
-                    <div class="body-text">{{{body}}}</div>
-                    {{> tagsExpandedTemplate}}
-                </div>
-                <div class="cares-container logged-in {{hasCares}} clearfix">
+                {{> tagsExpandedTemplate}}
+                <div class="cares-container {{hasCares}} clearfix">
                     {{> caresTemplate}}
                 </div>
-                <div class="full">
+                <div>
                     <span class="count"></span>
                     <p class="signature right">
                         {{synopsis}}
@@ -836,707 +1033,677 @@
                 <div class="clearfix"></div>
             </div>
             <div class="card-action">
-                <div class="preview">
-                    <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
-                        <i class="material-icons" style="vertical-align: bottom;">comment</i>
-                        {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                    {{#newComments}}{{commentCount}} kommenttia, {{newComments}} uutta.{{/newComments}}</a>
-                    <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
-                        <span class="care-avatar small" style="vertical-align: text-top">
+                <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
+                    <span class="care-avatar small" style="vertical-align: text-top">
                             <svg width="16" height="16">
                                 <rect width="16" height="16" fill="#ff4081" />
                             </svg>
-                        </span>
-                        Välitä</a>
-                    <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-                </div>
-                <div class="full">
-                    <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
-                        <i class="material-icons" style="vertical-align: bottom;">comment</i>
-                        {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                    {{#newComments}}{{commentCount}} kommenttia <span class="new badge">{{newComments}}</span>{{/newComments}}</a>
-                    <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
-                        <span class="care-avatar small" style="vertical-align: text-top">
-                            <svg width="16" height="16">
-                                <rect width="16" height="16" fill="#ff4081" />
-                            </svg>
-                        </span>
-                        Välitä</a>
-                    <a class="pageLink modify waves-effect waves-light btn-flat needsclick" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
-                    <a class="windowLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}"><i class="material-icons" style="vertical-align: bottom;">open_in_new</i></a>
-                </div>
+                        </span> Välitä
+                </a>
+                <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
+                <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
             </div>
         </article>
-    </div>
-</script>
-
-<script id="caresTemplate" type="text/html">
-    <div class="all-cares">
-
-    <div class="care-avatar">
-        <svg width="40" height="40">
-            <rect width="40" height="40" fill="#f48fb1" />
-        </svg>
-    </div>
-    <div class="care-avatar">
-        <svg width="40" height="40">
-            <rect width="40" height="40" fill="#f06292" />
-        </svg>
-    </div>
-    {{#cares}}
-    {{> singleCareTemplate}}{{/cares}}
-    </div>
-    <div class="care-expand-buttons right">
-        <a class="button showAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Näytä kaikki</a>
-        <a class="button hideAllCares waves-effect waves-light btn-flat logged-in pink-text accent-2" data-id="{{id}}">Piilota</a>
-    </div>
-    <div class="clearfix"/>
-</script>
-
-<script id="singleCareTemplate" type="text/html">
-    <div class="care-avatar">
-        <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{user}} välittää">
-            <svg width="40" height="40">
-                <image xlink:href="{{avatar}}" width="40" height="40" />
-            </svg>
-        </a>
-    </div>
-</script>
-
-<script id="exerciseSummaryTemplate" type="text/html">
-    <tbody>
-    <tr class="exericise-detail {{#newComments}}new-comments{{/newComments}} {{#isNew}}new{{/isNew}}">
-        <td>{{date}}</td>
-        <td class="user"><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
-        <td class="title"><a class="pageLink" rel="ex/{{id}}">{{title}}</a></td>
-        <td class="sport">
-            {{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}">{{tag}}</a>{{/tag}}
-            {{#sport}}<a class="pageLink" rel="user/{{user}}/sport/{{sport}}">{{sport}}</a>{{/sport}}
-        </td>
-        <td>{{distance}}</td><td>{{duration}}</td><td>{{pace}}</td><td class="hr">{{avghr}}</td>
-        <td class="comments">
-            {{^newComments}}<span>{{commentCount}}</span>{{/newComments}}{{#newComments}}<span>{{commentCount}}</span> / <span class="new">{{newComments}} uutta</span>{{/newComments}}
-        </td>
-    </tr>
-    </tbody>
-</script>
-
-<script id="singleExerciseTemplate" type="text/html">
-    <article data-id="{{id}}" class="card full exercise {{sport}} {{cared}}">
-        <div class="card-content">
-            <div class="card-title">
-                <div class="left">
-                    <a target="_blank"><img class="avatar circle" src="{{avatar}}" width="62" height="62"></a>
-                </div>
-                <div>
-                    <h4>{{title}}</h4>
-                    <h6 class="full"><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h6>
-                </div>
+        <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
+        {{#comments}}
+        <article class="comment-background comment card" data-id="{{id}}">
+            <div class="card-content">
+                <img class="avatar circle left" src="{{avatar}}" width="50" height="50">
+                <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
+                <div class="body-text clearfix">{{{xbody}}}</div>
             </div>
-            {{> exerciseDetailsTemplate}}
-            <div>
-                <div class="body-text">{{{xbody}}}</div>
-            </div>
-            {{> tagsExpandedTemplate}}
-            <div class="cares-container {{hasCares}} clearfix">
-                {{> caresTemplate}}
-            </div>
-            <div>
-                <span class="count"></span>
-                <p class="signature right">
-                    {{synopsis}}
-                </p>
-            </div>
-            <div class="clearfix"></div>
+            {{#deleteComment}}
+            <div class="card-action"><a class="delete-comment button waves-red btn-flat waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
+        </article>
+        {{/comments}}
+        <div>
+            <article class="logged-in">
+                {{^comments}}
+                <p>Kirjoita ensimmäinen kommentti</p>
+                {{/comments}}
+                <form class="card edit-form" id="add-comment-form" method="post">
+                    <div class="card-content">
+                        <img class="avatar circle left" src="{{my-avatar}}" width="50" height="50">
+                        <h5><span class="date">{{now}}</span> <a class="pageLink" rel="user/{{me}}">{{me}}</a></h5>
+                        <div id="comment-body" style="clear: both;" class="row body-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
+                    </div>
+                    <div class="card-action">
+                        <a class="button addComment waves-effect waves-light btn-flat" data-id="{{id}}">Kommentoi</a>
+                    </div>
+                </form>
+            </article>
+            <article class="logged-out">
+                Kirjaudu sisään nähdäksesi kommentit ja kommentoidaksesi.
+            </article>
         </div>
-        <div class="card-action">
-            <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
-                        <span class="care-avatar small" style="vertical-align: text-top">
-                            <svg width="16" height="16">
-                                <rect width="16" height="16" fill="#ff4081" />
-                            </svg>
-                        </span>
-                Välitä</a>
-            <a class="delete button waves-effect waves-light btn-flat waves-red" rel="ex/{{id}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a>
-            <a class="pageLink modify waves-effect waves-light btn-flat" rel="addex/{{id}}" data-user="{{user}}">muokkaa</a>
+    </script>
+
+    <script id="sportsCreateTemplate" type="text/html">{{#sports}}
+        <option value="{{.}}">{{.}}</option>{{/sports}}</script>
+
+    <script id="tagsCreateTemplate" type="text/html">
+        {{#tags}}
+        <option value="{{.}}">{{.}}</option>
+        {{/tags}}
+    </script>
+    <script id="usersCreateTemplate" type="text/html">
+        {{#users}}
+        <div class="card-panel">
+            <img class="avatar left" src="{{avatar}}" width="50" height="50">
+            <h5><a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
         </div>
-    </article>
-    <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
-    {{#comments}}
-    <article class="comment-background comment card" data-id="{{id}}">
-        <div class="card-content">
-            <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
-            <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
-            <div class="body-text clearfix">{{{xbody}}}</div>
-        </div>
-        {{#deleteComment}}<div class="card-action"><a class="delete-comment button waves-red btn-flat waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
-    </article>
-    {{/comments}}
-    <div>
-        <article class="logged-in">
-            {{^comments}}
-            <p>Kirjoita ensimmäinen kommentti</p>
-            {{/comments}}
-            <form class="card edit-form" id="add-comment-form" method="post">
+        {{/users}}
+    </script>
+
+    <script id="groupsTemplate" type="text/html">
+        {{#groups}}
+        <div class="col s12 m6 l4">
+            <div class="card group">
                 <div class="card-content">
-                    <img class="avatar circle left" src="{{my-avatar}}"  width="50" height="50">
-                    <h5><span class="date">{{now}}</span> <a class="pageLink" rel="user/{{me}}">{{me}}</a></h5>
-                    <div id="comment-body" style="clear: both;" class="row body-text" data-placeholder="Klikkaa kommentoidaksesi.  Muotoile maalaamalla tekstin yli."></div>
+                    <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
+                    <div class="description">{{description}}</div>
+                    <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
                 </div>
                 <div class="card-action">
-                    <a class="button addComment waves-effect waves-light btn-flat" data-id="{{id}}">Kommentoi</a>
+                    {{#in}}<a class="leave mark waves-effect waves-light waves-red btn-flat" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}} {{^in}}
+                    <a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
                 </div>
-            </form>
-        </article>
-        <article class="logged-out">
-            Kirjaudu sisään nähdäksesi kommentit ja kommentoidaksesi.
-        </article>
-    </div>
-</script>
-
-<script id="sportsCreateTemplate" type="text/html">{{#sports}}<option value="{{.}}">{{.}}</option>{{/sports}}</script>
-
-<script id="tagsCreateTemplate" type="text/html">
-    {{#tags}}
-    <option value="{{.}}">{{.}}</option>
-    {{/tags}}
-</script>
-<script id="usersCreateTemplate" type="text/html">
-    {{#users}}
-    <div class="card-panel">
-        <img class="avatar left" src="{{avatar}}"  width="50" height="50">
-        <h5><a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
-    </div>
-    {{/users}}
-</script>
-
-<script id="groupsTemplate" type="text/html">
-    {{#groups}}
-    <div class="col s12 m6 l4">
-        <div class="card group">
-            <div class="card-content">
-                <div class="card-title"><a class="pageLink" rel="group/{{name}}/sb/lastModifiedDate">{{name}}</a></div>
-                <div class="description">{{description}}</div>
-                <div>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</div>
-            </div>
-            <div class="card-action">
-                {{#in}}<a class="leave mark waves-effect waves-light waves-red btn-flat" rel="{{name}}/part"><span class="label">Poistu</span></a>{{/in}}
-                {{^in}}<a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>{{/in}}
             </div>
         </div>
-    </div>
-    {{/groups}}
-</script>
+        {{/groups}}
+    </script>
 
-<script id="userHeaderTemplate" type="text/html">
-    <ul>
-        <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
-        <li><a id="list-view">Lista</a></li>
-    </ul>
-</script>
-
-<script id="hpkHeaderTemplate" type="text/html">
-    <nav class="grey accent-2">
+    <script id="userHeaderTemplate" type="text/html">
         <ul>
-            <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a></li>
-            <li><a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a></li>
-            <li><a class="pageLink bymonth" data-filter="bymonth" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a></li>
-            {{#hasWeekly}}
-            <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a></li>
-            {{/hasWeekly}}
+            <li><a id="summary-view" href="javascript:nothing()">Tiivistelmä</a></li>
+            <li><a id="list-view">Lista</a></li>
         </ul>
-    </nav>
-</script>
+    </script>
 
-<script id="hpkWeeklySummaryContentTemplate" type="text/html">
-    <article>
-        <div class="by year">
-            <nav class="blue-grey lighten-4">
-                <div class="nav-wrapper">
-                    <a class="brand-logo center">{{year}}</a>
-                    <ul class="left">
-                        <li>
-                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><i class="material-icons left">chevron_left</i></a>
-                        </li>
-                    </ul>
-                    <ul class="right" >
-                        <li>
-                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-        <div id="weekly-graph-container">
-            <!--<div id="weekly-sum-id">
+    <script id="hpkHeaderTemplate" type="text/html">
+        <nav class="grey accent-2">
+            <ul>
+                <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}">Kaikki</a></li>
+                <li><a class="pageLink byyear" data-filter="byyear" rel="{{kind}}/{{user}}/{{year}}">Vuosi</a></li>
+                <li><a class="pageLink bymonth" data-filter="bymonth" rel="{{kind}}/{{user}}/{{year}}/bymonth">Kuukausi</a></li>
+                {{#hasWeekly}}
+                <li><a class="pageLink" data-filter="" rel="{{kind}}/{{user}}/{{year}}/by/week">Viikko</a></li>
+                {{/hasWeekly}}
+            </ul>
+        </nav>
+    </script>
+
+    <script id="hpkWeeklySummaryContentTemplate" type="text/html">
+        <article>
+            <div class="by year">
+                <nav class="blue-grey lighten-4">
+                    <div class="nav-wrapper">
+                        <a class="brand-logo center">{{year}}</a>
+                        <ul class="left">
+                            <li>
+                                <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/by/week"><i class="material-icons left">chevron_left</i></a>
+                            </li>
+                        </ul>
+                        <ul class="right">
+                            <li>
+                                {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/by/week"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div id="weekly-graph-container">
+                <!--<div id="weekly-sum-id">
                 <svg id="weekly-sums" width="0px" height="0px"></svg>
             </div>
             <div id="weekly-sum-time-id">
                 <svg id="weekly-sums-time" width="0px" height="0px"></svg>
             </div>-->
-        </div>
+            </div>
 
-        {{#results}}
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title capitalize">{{year}}, Viikko {{week}}, {{from}} - {{to}}</span>
-                <table class="details">
+            {{#results}}
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title capitalize">{{year}}, Viikko {{week}}, {{from}} - {{to}}</span>
+                    <table class="details">
+                        <th>Laji</th>
+                        <th>Kesto</th>
+                        <th>Matka</th>
+                        <th>Vauhti</th>
+                        {{#summary}}
+                        <tr>
+                            <td>{{sport}}</td>
+                            <td>{{duration}}</td>
+                            <td>{{distance}}</td>
+                            <td>{{pace}}</td>
+                        </tr>
+                        {{/summary}}
+                    </table>
+                </div>
+                <div class="card-action">
+                    <a class="pageLink waves-effect waves-light btn-flat" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Harjoitukset</a>
+                </div>
+            </div>
+            {{/results}}
+
+
+            </div>
+        </article>
+    </script>
+
+    <script id="hpkContentTemplate" type="text/html">
+        <article>
+            <div class="by year">
+                <nav class="blue-grey lighten-4">
+                    <div class="nav-wrapper">
+                        <a class="brand-logo center">{{year}}</a>
+                        <ul class="left">
+                            <li>
+                                <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><i class="material-icons left">chevron_left</i></a>
+                            </li>
+                        </ul>
+                        <ul class="right">
+                            <li>
+                                {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    {{> summaryTemplate}}
+                </div>
+                <div class="card-action">
+                    <a class="waves-effect waves-light btn-flat" href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
+                </div>
+            </div>
+        </article>
+    </script>
+
+    <script id="summaryTemplate" type="text/html">
+        <table class="details summary-details">
+            <thead>
+                <tr>
                     <th>Laji</th>
-                    <th>Kesto</th>
                     <th>Matka</th>
                     <th>Vauhti</th>
-                    {{#summary}}
+                    </th>
+                    <th>Aika</th>
+                    <th>Syke</th>
+                    <th class="hide-on-med-and-down">Nousu</th>
+                    <th class="hide-on-med-and-down">Kerrat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#sports}} {{> summaryItemTemplate}} {{/sports}}
+            </tbody>
+        </table>
+    </script>
+
+    <script id="summaryItemTemplate" type="text/html">
+        <tr>
+            <td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}} {{#sport}}
+                <a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td>
+            <td>{{distance}}</td>
+            <td>{{pace}}</td>
+            <td>{{duration}}</td>
+            <td>{{avghr}}</td>
+            <td class="hide-on-med-and-down">{{elevation}}</td>
+            <td class="hide-on-med-and-down">{{count}}</td>
+        </tr>
+    </script>
+
+    <script id="lvhaaste2014Template" type="text/html">
+        <article class="{{^in}}not-{{/in}}joined">
+            <div class="card-content">
+                <h5 class="card-title">Leuanvetohaaste 2014</h5>
+
+                <table id="lvhaaste" class="ranking">
+                    <thead>
+                        <tr>
+                            <th>Sija</th>
+                            <th>Kilpailija</th>
+                            <th>Vetoja</th>
+                        </tr>
+                    </thead>
+                    {{#res}}
+                    <tr class="{{#ok}}in{{/ok}}">
+                        <td>{{#ok}}{{rank}}{{/ok}}</td>
+                        <td><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                        <td>{{total}}</td>
+                    </tr>
+                    {{/res}}
+                </table>
+            </div>
+        </article>
+    </script>
+
+    <script id="elevationGroupTemplate" type="text/html">
+        <article class="{{^in}}not-{{/in}}joined">
+            <div class="card-content">
+                <h5 class="card-title">Huippu-huhtikuu 2016!</h5>
+                <p>{{description}}</p>
+
+                <a class="pageLink" rel="ex/533aec680cf28924708ed3be">keskustelu</a>,
+                <a class="pageLink" rel="ex/534259d00cf2e7533f7df806">nousutilastot</a>,
+                <a class="pageLink" rel="group/Huippuhuhtikuu/gte_creationDate/1.4.2014/gte_detailElevation/1/sb/detailElevation">noususummajärjestys</a>
+
+                <table id="elevationChallengeTable" class="ranking">
+                    <thead>
+                        <tr>
+                            <th>Sija</th>
+                            <th>Kilpailija</th>
+                            <th>Kokonaisnousu</th>
+                        </tr>
+                    </thead>
+                    {{#res}}
                     <tr>
-                        <td>{{sport}}</td>
-                        <td>{{duration}}</td>
-                        <td>{{distance}}</td>
-                        <td>{{pace}}</td>
+                        <td>{{rank}}</td>
+                        <td><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                        <td>{{elevation}}</td>
                     </tr>
-                    {{/summary}}
+                    {{/res}}
                 </table>
             </div>
+            {{^in}}
             <div class="card-action">
-                <a class="pageLink waves-effect waves-light btn-flat" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">Harjoitukset</a>
+                <a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>
             </div>
-        </div>
-        {{/results}}
+            {{/in}}
+        </article>
+    </script>
 
-
-        </div>
-    </article>
-</script>
-
-<script id="hpkContentTemplate" type="text/html">
-    <article>
-        <div class="by year">
-            <nav class="blue-grey lighten-4">
-                <div class="nav-wrapper">
-                    <a class="brand-logo center">{{year}}</a>
-                    <ul class="left">
-                        <li>
-                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}"><i class="material-icons left">chevron_left</i></a>
-                        </li>
-                    </ul>
-                    <ul class="right" >
-                        <li>
-                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-        <div class="card">
+    <script id="marrasputkiTemplate" type="text/html">
+        <article class="{{^in}}not-{{/in}}joined">
             <div class="card-content">
-                {{> summaryTemplate}}
-            </div>
-            <div class="card-action">
-                <a class="waves-effect waves-light btn-flat" href="/rest/v1/export.csv?user={{user}}&year={{year}}">Vuoden {{year}} harjoitukset CSV:nä.</a>
-            </div>
-        </div>
-    </article>
-</script>
-
-<script id="summaryTemplate" type="text/html">
-    <table class="details summary-details">
-        <thead><tr><th>Laji</th><th>Matka</th><th>Vauhti</th></th><th>Aika</th><th>Syke</th>
-            <th class="hide-on-med-and-down">Nousu</th>
-            <th class="hide-on-med-and-down">Kerrat</th>
-        </tr></thead>
-        <tbody>
-        {{#sports}}
-        {{> summaryItemTemplate}}
-        {{/sports}}
-        </tbody>
-    </table>
-</script>
-
-<script id="summaryItemTemplate" type="text/html">
-    <tr><td>{{#tag}}<a class="pageLink" rel="tags/{{tag}}/user/{{user}}/stats/true">{{tag}}</a>{{/tag}}
-        {{#sport}}<a class="pageLink" rel="sport/{{sport}}/user/{{user}}/stats/true/{{sportsFilter}}">{{sport}}</a>{{/sport}}</td>
-        <td>{{distance}}</td>
-        <td>{{pace}}</td>
-        <td>{{duration}}</td>
-        <td>{{avghr}}</td>
-        <td class="hide-on-med-and-down">{{elevation}}</td>
-        <td class="hide-on-med-and-down">{{count}}</td>
-    </tr>
-</script>
-
-<script id="lvhaaste2014Template" type="text/html">
-    <article class="{{^in}}not-{{/in}}joined">
-        <div class="card-content">
-            <h5 class="card-title">Leuanvetohaaste 2014</h5>
-
-            <table id="lvhaaste" class="ranking">
-                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Vetoja</th></tr></thead>
-                {{#res}}
-                <tr class="{{#ok}}in{{/ok}}">
-                    <td>{{#ok}}{{rank}}{{/ok}}</td>
-                    <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
-                    <td>{{total}}</td>
-                </tr>
-                {{/res}}
-            </table>
-        </div>
-    </article>
-</script>
-
-<script id="elevationGroupTemplate" type="text/html">
-    <article class="{{^in}}not-{{/in}}joined">
-        <div class="card-content">
-            <h5 class="card-title">Huippu-huhtikuu 2016!</h5>
-            <p>{{description}}</p>
-
-            <a class="pageLink" rel="ex/533aec680cf28924708ed3be">keskustelu</a>,
-            <a class="pageLink" rel="ex/534259d00cf2e7533f7df806">nousutilastot</a>,
-            <a class="pageLink" rel="group/Huippuhuhtikuu/gte_creationDate/1.4.2014/gte_detailElevation/1/sb/detailElevation">noususummajärjestys</a>
-
-            <table id="elevationChallengeTable" class="ranking">
-                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kokonaisnousu</th></tr></thead>
-                {{#res}}
-                <tr>
-                    <td>{{rank}}</td>
-                    <td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
-                    <td>{{elevation}}</td>
-                </tr>
-                {{/res}}
-            </table>
-        </div>
-        {{^in}}
-        <div class="card-action">
-            <a class="join mark waves-effect waves-light btn-flat" rel="{{name}}/join"><span class="label">Liity</span></a>
-        </div>
-        {{/in}}
-    </article>
-</script>
-
-<script id="marrasputkiTemplate" type="text/html">
-    <article class="{{^in}}not-{{/in}}joined">
-        <div class="card-content">
-            <h5 class="card-title">Marrasputken kunniataulukko</h5>
-            <p>{{description}}</p>
-            <table id="marrasputki" class="ranking">
-                <thead><tr><th>Sija</th><th>Kilpailija</th><th>Kertoja lenkillä</th></tr></thead>
-                {{#res}}
-                <tr class={{#isGood}}"in"{{/isGood}}{{^isGood}}{{#lastMissing}}class="inDanger"{{/lastMissing}}{{/isGood}}><td>{{#isGood}}{{rank}}{{/isGood}}</td><td><a class ="pageLink" rel="user/{{user}}">{{user}}</a></td>
-                    <td>{{#lastMissing}}{{count}}{{/lastMissing}}{{^lastMissing}}<p>katkolla</p>{{/lastMissing}}</td></tr>
-                {{/res}}
-            </table>
-            <a class="pageLink" rel="ex/59f649929932c5f5294b0719">Lue lisää Marrasputkesta.</a>
-        </div>
-        {{^in}}
-        <div class="card-action">
-            <a class="join mark waves-effect waves-light btn-flat" rel="Marrasputki/join"><span class="label">Liity</span></a>
-        </div>
-        {{/in}}
-    </article>
-</script>
-
-<script id="groupDetailTemplate" type="text/html">
-    <article class="{{^in}}not-{{/in}}joined">
-        <div class="card-content">
-            <h4 class="card-title">{{target}}</h4>
-            <p>{{description}}</p>
-            <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</p>
-        </div>
-        <div class="card-action">
-            <a class="leave button waves-effect waves-light btn-flat waves-red" rel="{{target}}/part"><span class="label">Poistu</span></a>
-            <a class="join button waves-effect waves-light btn-flat" rel="{{target}}/join"><span class="label">Liity</span></a>
-        </div>
-    </article>
-</script>
-
-<script id="favGroupTemplate" type="text/html">
-    <article>
-        <header>
-            <h3>Käyttäjän {{description}} suosikit</h3>
-            <p>{{#users}}<a class="pageLink" rel="group/Suosikit/fav/{{.}}/sb/lastModifiedDate"><span style="font-size: 0.8em">{{.}}&nbsp;</span></a>{{/users}}</p>
-        </header>
-    </article>
-</script>
-
-<script id="userDetailTemplate" type="text/html">
-    <div class="card">
-        <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="{{profile.avatar}}&s=400"/>
-            <span class="card-title">{{target}}</span>
-        </div>
-        <div class="card-action">
-            <a class="pageLink waves-effect waves-light" rel="user/{{target}}">Harjoitukset</a>
-            <a class="pageLink waves-effect waves-light" rel="summary/{{target}}">Lajiyhteenveto</a>
-            <a class="pageLink waves-effect waves-light" rel="tagsummary/{{target}}">Avainsanat</a>
-            <a class="pageLink waves-effect waves-light" rel="weeksummary/{{target}}">Harjoitusviikot</a>
-        </div>
-        <div class="card-content">
-            <h5 class="activator"><i class="material-icons right">more_vert</i></h5>
-            {{#profile.synopsis}}<span style="font-style: italic">{{profile.synopsis}}</span>{{/profile.synopsis}}
-            <div>
-                <h5>Ryhmät</h5>
-                {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
-            </div>
-        </div>
-        <div class="card-reveal">
-            <h5 class="card-title">{{target}}<i class="material-icons right">close</i></h5>
-            {{#profile.resthr}}<p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}}
-            {{#profile.goals}}<strong>{{profile.goals}}</strong>{{/profile.goals}}
-
-            <div>
-                <h5>Ennätykset</h5>
-                {{#hasRecords}}
-                <table id="records" class="details">
-                    <thead><tr><th>Matka</th><th>Tulos</th><th>Vauhti</th></tr></thead>
-                    {{#records}}
-                    <tr><td><a class="pageLink" rel="{{filter}}/stats/true">{{name}}</a></td>
-                        <td>{{result}}</td>
-                        <td>{{pace}}</td>
+                <h5 class="card-title">Marrasputken kunniataulukko</h5>
+                <p>{{description}}</p>
+                <table id="marrasputki" class="ranking">
+                    <thead>
+                        <tr>
+                            <th>Sija</th>
+                            <th>Kilpailija</th>
+                            <th>Kertoja lenkillä</th>
+                        </tr>
+                    </thead>
+                    {{#res}}
+                    <tr class={{#isGood}} "in"{{/isGood}}{{^isGood}}{{#lastMissing}}class="inDanger" {{/lastMissing}}{{/isGood}}>
+                        <td>{{#isGood}}{{rank}}{{/isGood}}</td>
+                        <td><a class="pageLink" rel="user/{{user}}">{{user}}</a></td>
+                        <td>{{#lastMissing}}{{count}}{{/lastMissing}}{{^lastMissing}}
+                            <p>katkolla</p>{{/lastMissing}}</td>
                     </tr>
-                    {{/records}}
+                    {{/res}}
                 </table>
-                {{/hasRecords}}
-                {{^hasRecords}}Ei ennätyksiä{{/hasRecords}}
+                <a class="pageLink" rel="ex/59f649929932c5f5294b0719">Lue lisää Marrasputkesta.</a>
+            </div>
+            {{^in}}
+            <div class="card-action">
+                <a class="join mark waves-effect waves-light btn-flat" rel="Marrasputki/join"><span class="label">Liity</span></a>
+            </div>
+            {{/in}}
+        </article>
+    </script>
+
+    <script id="groupDetailTemplate" type="text/html">
+        <article class="{{^in}}not-{{/in}}joined">
+            <div class="card-content">
+                <h4 class="card-title">{{target}}</h4>
+                <p>{{description}}</p>
+                <p>{{#users}}<a class="pageLink" rel="user/{{.}}">{{.}}</a> {{/users}}</p>
+            </div>
+            <div class="card-action">
+                <a class="leave button waves-effect waves-light btn-flat waves-red" rel="{{target}}/part"><span class="label">Poistu</span></a>
+                <a class="join button waves-effect waves-light btn-flat" rel="{{target}}/join"><span class="label">Liity</span></a>
+            </div>
+        </article>
+    </script>
+
+    <script id="favGroupTemplate" type="text/html">
+        <article>
+            <header>
+                <h3>Käyttäjän {{description}} suosikit</h3>
+                <p>{{#users}}<a class="pageLink" rel="group/Suosikit/fav/{{.}}/sb/lastModifiedDate"><span style="font-size: 0.8em">{{.}}&nbsp;</span></a>{{/users}}</p>
+            </header>
+        </article>
+    </script>
+
+    <script id="userDetailTemplate" type="text/html">
+        <div class="card">
+            <div class="card-image waves-effect waves-block waves-light">
+                <img class="activator" src="{{profile.avatar}}&s=400" />
+                <span class="card-title">{{target}}</span>
+            </div>
+            <div class="card-action">
+                <a class="pageLink waves-effect waves-light" rel="user/{{target}}">Harjoitukset</a>
+                <a class="pageLink waves-effect waves-light" rel="summary/{{target}}">Lajiyhteenveto</a>
+                <a class="pageLink waves-effect waves-light" rel="tagsummary/{{target}}">Avainsanat</a>
+                <a class="pageLink waves-effect waves-light" rel="weeksummary/{{target}}">Harjoitusviikot</a>
+            </div>
+            <div class="card-content">
+                <h5 class="activator"><i class="material-icons right">more_vert</i></h5>
+                {{#profile.synopsis}}<span style="font-style: italic">{{profile.synopsis}}</span>{{/profile.synopsis}}
+                <div>
+                    <h5>Ryhmät</h5>
+                    {{#groups}}<a class="pageLink" rel="group/{{.}}/sb/lastModifiedDate">{{.}}</a> {{/groups}}
+                </div>
+            </div>
+            <div class="card-reveal">
+                <h5 class="card-title">{{target}}<i class="material-icons right">close</i></h5>
+                {{#profile.resthr}}
+                <p><strong>Syke:</strong> {{profile.resthr}}&nbsp;{{profile.aerk}}&nbsp;{{profile.anaerk}}&nbsp;{{profile.maxhr}}</p>{{/profile.resthr}} {{#profile.goals}}
+                <strong>{{profile.goals}}</strong>{{/profile.goals}}
+
+                <div>
+                    <h5>Ennätykset</h5>
+                    {{#hasRecords}}
+                    <table id="records" class="details">
+                        <thead>
+                            <tr>
+                                <th>Matka</th>
+                                <th>Tulos</th>
+                                <th>Vauhti</th>
+                            </tr>
+                        </thead>
+                        {{#records}}
+                        <tr>
+                            <td><a class="pageLink" rel="{{filter}}/stats/true">{{name}}</a></td>
+                            <td>{{result}}</td>
+                            <td>{{pace}}</td>
+                        </tr>
+                        {{/records}}
+                    </table>
+                    {{/hasRecords}} {{^hasRecords}}Ei ennätyksiä{{/hasRecords}}
+                </div>
             </div>
         </div>
-    </div>
-</script>
+    </script>
 
-<script id="otherDetailTemplate" type="text/html">
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">Haku lajille <i>{{target}}</i></span>
-            {{#stats}}
-            <table class="details">
-                <tbody>
-                <tr><th>Matka</th><td>{{stats.distance}}</td></tr>
-                <tr><th>Aika</th><td>{{stats.duration}}</td></tr>
-                <tr><th>Keskivauhti<td>{{stats.pace}}</td></th></tr>
-                {{#stats.f80}}
-                <tr><th>80 % hitaampia</th><td>{{stats.f80}}</td></tr>
-                <tr><th>95 % hitaampia</th><td>{{stats.f95}}</td></tr>
-                {{/stats.f80}}
-                <tr><th>Syke</th><td>{{stats.avghr}}</td></tr>
-                <tr><th>Toistot (kpl)</th><td>{{stats.repeats}}</td></tr>
-                <tr><th>Nousu (m)</th><td>{{stats.elevation}}</td></tr>
-                <tr><th>Kertoja (kpl)</th><td>{{stats.count}}</td></tr>
-                </tbody>
-            </table>
-            {{/stats}}
-        </div>
-    </div>
-</script>
-
-<script id="hpkMonthContentTemplate" type="text/html">
-    <article>
-        <div class="by month">
-            <nav class="blue-grey lighten-4">
-                <div class="nav-wrapper">
-                    <a class="brand-logo center">{{year}}</a>
-                    <ul class="left">
-                        <li>
-                            <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth"><i class="material-icons left">chevron_left</i></a>
-                        </li>
-                    </ul>
-                    <ul class="right" >
-                        <li>
-                            {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-        {{#months}}
+    <script id="otherDetailTemplate" type="text/html">
         <div class="card">
             <div class="card-content">
-                <span class="card-title capitalize">{{monthName}}n {{year}} harjoitusyhteenveto</span>
-                <h2 class="monthName"></h2>
-                {{> summaryTemplate}}
+                <span class="card-title">Haku lajille <i>{{target}}</i></span> {{#stats}}
+                <table class="details">
+                    <tbody>
+                        <tr>
+                            <th>Matka</th>
+                            <td>{{stats.distance}}</td>
+                        </tr>
+                        <tr>
+                            <th>Aika</th>
+                            <td>{{stats.duration}}</td>
+                        </tr>
+                        <tr>
+                            <th>Keskivauhti
+                                <td>{{stats.pace}}</td>
+                            </th>
+                        </tr>
+                        {{#stats.f80}}
+                        <tr>
+                            <th>80 % hitaampia</th>
+                            <td>{{stats.f80}}</td>
+                        </tr>
+                        <tr>
+                            <th>95 % hitaampia</th>
+                            <td>{{stats.f95}}</td>
+                        </tr>
+                        {{/stats.f80}}
+                        <tr>
+                            <th>Syke</th>
+                            <td>{{stats.avghr}}</td>
+                        </tr>
+                        <tr>
+                            <th>Toistot (kpl)</th>
+                            <td>{{stats.repeats}}</td>
+                        </tr>
+                        <tr>
+                            <th>Nousu (m)</th>
+                            <td>{{stats.elevation}}</td>
+                        </tr>
+                        <tr>
+                            <th>Kertoja (kpl)</th>
+                            <td>{{stats.count}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {{/stats}}
             </div>
         </div>
-        {{/months}}
-    </article>
+    </script>
 
-</script>
+    <script id="hpkMonthContentTemplate" type="text/html">
+        <article>
+            <div class="by month">
+                <nav class="blue-grey lighten-4">
+                    <div class="nav-wrapper">
+                        <a class="brand-logo center">{{year}}</a>
+                        <ul class="left">
+                            <li>
+                                <a class="pageLink prev" rel="{{kind}}/{{user}}/{{prevYear}}/bymonth"><i class="material-icons left">chevron_left</i></a>
+                            </li>
+                        </ul>
+                        <ul class="right">
+                            <li>
+                                {{#hasNextYear}}<a class="pageLink next" rel="{{kind}}/{{user}}/{{nextYear}}/bymonth"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+            {{#months}}
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title capitalize">{{monthName}}n {{year}} harjoitusyhteenveto</span>
+                    <h2 class="monthName"></h2>
+                    {{> summaryTemplate}}
+                </div>
+            </div>
+            {{/months}}
+        </article>
 
-<script id="weeklyNavigateTemplate" type="text/html">
-    <nav class="blue-grey lighten-4">
-        <div class="nav-wrapper">
-            <a class="brand-logo center">{{year}}</a>
-            <ul class="left">
-                <li>
-                    <a class="pageLink prev" rel="weeksummary/{{user}}/{{prevYear}}/{{prevMonth}}"><i class="material-icons left">chevron_left</i></a>
-                </li>
-            </ul>
-            <ul class="right" >
-                <li>
-                    {{#hasNextYear}}<a class="pageLink next" rel="weeksummary/{{user}}/{{nextYear}}/{{nextMonth}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
-                </li>
-            </ul>
+    </script>
+
+    <script id="weeklyNavigateTemplate" type="text/html">
+        <nav class="blue-grey lighten-4">
+            <div class="nav-wrapper">
+                <a class="brand-logo center">{{year}}</a>
+                <ul class="left">
+                    <li>
+                        <a class="pageLink prev" rel="weeksummary/{{user}}/{{prevYear}}/{{prevMonth}}"><i class="material-icons left">chevron_left</i></a>
+                    </li>
+                </ul>
+                <ul class="right">
+                    <li>
+                        {{#hasNextYear}}<a class="pageLink next" rel="weeksummary/{{user}}/{{nextYear}}/{{nextMonth}}"><i class="material-icons">chevron_right</i></a> {{/hasNextYear}}
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </script>
+
+    <script id="hpkWeeklyContentTemplate" type="text/html">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{monthName}} {{year}}</span>
+                <table class="weekly">
+                    <thead>
+                        <tr>
+                            <th class="week">Vk</th>
+                            <th class="day">Ma</th>
+                            <th class="day">Ti</th>
+                            <th class="day">Ke</th>
+                            <th class="day">To</th>
+                            <th class="day">Pe</th>
+                            <th class="day">La</th>
+                            <th class="day">Su</th>
+                            <th class="totals">Yhteensä</th>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#summary}}
+                        <tr>
+                            <td class="week"><span><a class="windowLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
+                            {{#exs}}
+                            <td class="{{class}}" style="vertical-align: top">
+                                {{> hpkWeeklyExTemplate}}
+                            </td>
+                            {{/exs}} {{> hpkWeeklySummaryTemplate}}
+                        </tr>
+                        {{#summaries}}
+                        </tr>
+                        {{/summaries}} {{/summary}}
+
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </nav>
-</script>
+    </script>
 
-<script id="hpkWeeklyContentTemplate" type="text/html">
-    <div class="card">
-        <div class="card-content">
-            <span class="card-title">{{monthName}} {{year}}</span>
-            <table class="weekly">
-                <thead>
-                <tr><th class="week">Vk</th><th class="day">Ma</th><th class="day">Ti</th><th class="day">Ke</th><th class="day">To</th><th class="day">Pe</th><th class="day">La</th><th class="day">Su</th><th class="totals">Yhteensä</th></th></tr>
-                </thead>
-                <tbody>
-                {{#summary}}
-                <tr>
-                    <td class="week"><span><a class="windowLink" rel="user/{{user}}/gte_creationDate/{{from}}/lte_creationDate/{{to}}/sb/+creationDate">{{week}}</a></span></td>
-                    {{#exs}}
-                    <td class="{{class}}" style="vertical-align: top">
-                        {{> hpkWeeklyExTemplate}}
-                    </td>
-                    {{/exs}}
-                    {{> hpkWeeklySummaryTemplate}}
-                </tr>
-                {{#summaries}}
-                </tr>
-                {{/summaries}}
-                {{/summary}}
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-</script>
-
-<script id="hpkWeeklyExTemplate" type="text/html">
-    <span class="weeklyDay">{{day}}</span>
-    <div class="clearfix" style="margin: 0"></div>
-    <span>
+    <script id="hpkWeeklyExTemplate" type="text/html">
+        <span class="weeklyDay">{{day}}</span>
+        <div class="clearfix" style="margin: 0"></div>
+        <span>
       {{#exs}}
       <a rel="ex/{{id}}" class="windowLink tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{repeats}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}} {{pace}} {{/pace}} aikaan {{duration}}"><span class="sport {{sportId}}"></span></a>
-      <span>{{#distance}}{{distance}}{{/distance}}
-      {{^distance}}{{statsduration}}{{/distance}}</span><br/>
-      {{/exs}}
-    </span>
-</script>
+        <span>{{#distance}}{{distance}}{{/distance}}
+      {{^distance}}{{statsduration}}{{/distance}}</span><br/> {{/exs}}
+        </span>
+    </script>
 
-<script id="hpkWeeklySummaryTemplate" type="text/html">
-    <td>
-        {{#summaries}}
-        <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}}{{pace}} {{/pace}} aikaan {{duration}}">
-        <span class="sport {{sportId}}"></span>
-        </a>
-        {{^total}}{{^statspace}}{{duration}}{{/statspace}}
-        {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}}
-        {{#total}}{{duration}}{{/total}}<br/>
-        {{/summaries}}
-    </td>
-</script>
+    <script id="hpkWeeklySummaryTemplate" type="text/html">
+        <td>
+            {{#summaries}}
+            <a class="tooltipped needsclick" data-position="top" data-delay="50" data-tooltip="{{sport}} {{#repeats}}{{repeats}} kertaa {{/repeats}} {{#distance}}{{distance}}, {{/distance}}{{#pace}}{{pace}} {{/pace}} aikaan {{duration}}">
+                <span class="sport {{sportId}}"></span>
+            </a>
+            {{^total}}{{^statspace}}{{duration}}{{/statspace}} {{#statspace}}{{distance}}&nbsp;{{statspace}}{{/statspace}}{{/total}} {{#total}}{{duration}}{{/total}}
+            <br/> {{/summaries}}
+        </td>
+    </script>
 
 
-<script id="chatMessageTemplate" type="text/html">
-    <li class="collection-item avatar valign-container blue-grey lighten-5">
-        <img src="{{avatar}}" alt="" class="circle">
-        <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}}
-        {{#link}}<a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}}
-        {{^link}}{{message}}{{/link}}
-        </p>
-    </li>
-</script>
+    <script id="chatMessageTemplate" type="text/html">
+        <li class="collection-item avatar valign-container blue-grey lighten-5">
+            <img src="{{avatar}}" alt="" class="circle">
+            <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}} {{#link}}
+                <a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}} {{^link}}{{message}}{{/link}}
+            </p>
+        </li>
+    </script>
 
-<script id="chatCareMessageTemplate" type="text/html">
-    <li class="collection-item avatar valign-container pink lighten-5">
-        <a class="tooltipped care-avatar needsclick" data-position="top" data-delay="50" data-tooltip="{{user}}">
-            <svg width="40" height="40">
+    <script id="chatCareMessageTemplate" type="text/html">
+        <li class="collection-item avatar valign-container pink lighten-5">
+            <a class="tooltipped care-avatar needsclick" data-position="top" data-delay="50" data-tooltip="{{user}}">
+                <svg width="40" height="40">
                 <image xlink:href="{{avatar}}" width="40" height="40" />
             </svg>
-        </a>
-        <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}}
-            {{#link}}<a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}}
-            {{^link}}{{message}}{{/link}}
-        </p>
-    </li>
-</script>
+            </a>
+            <p><a class="pageLink" rel="user/{{user}}">{{user}}</a> {{{description}}} {{#link}}
+                <a class="pageLink" rel="{{link}}">{{message}}</a>{{/link}} {{^link}}{{message}}{{/link}}
+            </p>
+        </li>
+    </script>
 
 
-<script id="loggedInStylesTemplate" type="text/html">
-    <style id="logged-in-styles" type="text/css">
-        a.delete, a.modify {
-            visibility: hidden;
-            height: 0;
-            width: 0;
-        }
-        a[data-user="{{user}}"].delete {
-            visibility: visible;
-            height: auto;
-            width: auto;
-        }
-        a.modify[data-user="{{user}}"] {
-            visibility: visible;
-            height: auto;
-            width: auto;
-        }
-    </style>
-</script>
+    <script id="loggedInStylesTemplate" type="text/html">
+        <style id="logged-in-styles" type="text/css">
+            a.delete,
+            a.modify {
+                visibility: hidden;
+                height: 0;
+                width: 0;
+            }
+            
+            a[data-user="{{user}}"].delete {
+                visibility: visible;
+                height: auto;
+                width: auto;
+            }
+            
+            a.modify[data-user="{{user}}"] {
+                visibility: visible;
+                height: auto;
+                width: auto;
+            }
+        </style>
+    </script>
 
-<div id="dialog-delete-ex-confirm" class="modal">
-    <div class="modal-content">
-        <h4>Oletko varma?</h4>
-        <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
+    <div id="dialog-delete-ex-confirm" class="modal">
+        <div class="modal-content">
+            <h4>Oletko varma?</h4>
+            <p>Lenkki poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
+        </div>
+        <div class="modal-footer">
+            <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
+            <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
+        </div>
     </div>
-    <div class="modal-footer">
-        <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
-        <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
+
+
+
+    <div id="dialog-delete-comment-confirm" class="modal">
+        <div class="modal-content">
+            <h4>Oletko varma?</h4>
+            <p>Kommentti poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
+        </div>
+        <div class="modal-footer">
+            <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
+            <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
+        </div>
     </div>
-</div>
 
+    <script src="js/select2.min.js?_=UID"></script>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js?strict=false"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.1.0/lodash.min.js"></script>
+    <script type="text/javascript" src="froala/js/froala_editor.min.js"></script>
 
-<div id="dialog-delete-comment-confirm" class="modal">
-    <div class="modal-content">
-        <h4>Oletko varma?</h4>
-        <p>Kommentti poistetaan lopullisesti, eikä sitä voi palauttaa.</p>
-    </div>
-    <div class="modal-footer">
-        <a class="cancel modal-action modal-close waves-effect waves-green btn-flat">Takaisin</a>
-        <a class="confirm modal-action modal-close waves-effect waves-red btn-flat">Poista</a>
-    </div>
-</div>
-
-<script src="js/select2.min.js?_=UID"></script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.0/js.cookie.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js?strict=false"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/ICanHaz.js/0.10.3/ICanHaz.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.1.0/lodash.min.js"></script>
-<script type="text/javascript" src="froala/js/froala_editor.min.js"></script>
-
-<script src="js/moment-locale-fi.js"></script>
-<script src="js/jquery.continuousCalendar-5.0.1-min.js"></script>
-<script src="js/xdate-0.8.js?_=UID"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.1/moment.min.js"></script>
+    <script src="js/moment-locale-fi.js"></script>
+    <script src="js/jquery.continuousCalendar-5.0.1-min.js"></script>
+    <script src="js/xdate-0.8.js?_=UID"></script>
 
-<script src="//d26b395fwzu5fz.cloudfront.net/3.2.1/keen.min.js" type="text/javascript"></script>
-<script src="js/keen.js?_=UID"></script>
+    <script src="//d26b395fwzu5fz.cloudfront.net/4.3.0/keen.min.js" type="text/javascript"></script>
+    <script src="js/keen.js?_=UID"></script>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.24/rx.all.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/rxjs-jquery/1.1.6/rx.jquery.min.js"></script>
-<script src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.24/rx.all.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/rxjs-jquery/1.1.6/rx.jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
 
-<script src="js/rx.ontrail.js?_=UID"></script>
-<script src="js/rx.ontrail.jquery.js?_=UID"></script>
-<script src="js/rx.ontrail.backend.js?_=UID"></script>
-<script src="js/rx.ontrail.validation.js?_=UID"></script>
-<script src="js/rx.ontrail.pager.js?_=UID"></script>
-<script src="js/rx.ontrail.session.js?_=UID"></script>
+    <script src="js/rx.ontrail.js?_=UID"></script>
+    <script src="js/rx.ontrail.jquery.js?_=UID"></script>
+    <script src="js/rx.ontrail.backend.js?_=UID"></script>
+    <script src="js/rx.ontrail.validation.js?_=UID"></script>
+    <script src="js/rx.ontrail.pager.js?_=UID"></script>
+    <script src="js/rx.ontrail.session.js?_=UID"></script>
 
-<!--<script src="n/lib/d3.v3.js"></script>
+    <!--<script src="n/lib/d3.v3.js"></script>
 <script src="n/nv.d3.min.js"></script>-->
-<script src="js/libs/Chart.min.js"></script>
-<script src="js/chart.js"></script>
+    <script src="js/libs/Chart.min.js"></script>
+    <script src="js/chart.js"></script>
 
-<script src="js/pikaday.js"></script>
+    <script src="js/pikaday.js"></script>
 
-<script src="js/plugins.js?_=UID"></script>
-<script src="js/ontrail.js?_=UID"></script>
+    <script src="js/plugins.js?_=UID"></script>
+    <script src="js/ontrail.js?_=UID"></script>
 
-<!-- end scripts -->
+    <!-- finally register service worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/sw.js')
+                .then(function() {
+                    console.log("Service Worker Registered");
+                });
+        }
+    </script>
+
+    <!-- end scripts -->
 
 </body>
+
 </html>
