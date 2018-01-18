@@ -180,7 +180,11 @@
     }
 
     var renderSingleExercise = function (exercise, me) {
-
+      var cleanComments = _.map(exercise.comments, function(comment) {
+            comment.cbody = comment.body.replace(/&nbsp;/g, ' ')
+            return comment
+      })
+      exercise.comments = cleanComments
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
       var helpers = {
@@ -196,12 +200,6 @@
         xbody: function() {
           return this.body.replace(/&nbsp;/g, ' ')
         }, 
-        xcomments: function() {
-          _.map(this.comments, function(comment) {
-            comment.body = comment.body.replace(/&nbsp;/g, ' ')
-          })
-          return this.comments
-        },
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {

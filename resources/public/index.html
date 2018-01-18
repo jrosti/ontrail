@@ -962,16 +962,16 @@
         </div>
     </article>
     <h5>Kommentit <a id="scrollBottom" class="mark">&raquo;</a></h5>
-    {{#xcomments}}
+    {{#comments}}
     <article class="comment-background comment card" data-id="{{id}}">
         <div class="card-content">
             <img class="avatar circle left" src="{{avatar}}"  width="50" height="50">
             <h5><span class="date">{{date}}</span> <a class="pageLink" rel="user/{{user}}">{{user}}</a></h5>
-            <div class="body-text clearfix">{{{body}}}</div>
+            <div class="body-text clearfix">{{{cbody}}}</div>
         </div>
         {{#deleteComment}}<div class="card-action"><a class="delete-comment button waves-red btn-flat waves-effect waves-light" rel="{{deleteRel}}" data-user="{{user}}"><i class="material-icons" style="vertical-align: bottom;">delete</i> <span class="label">Poista</span></a></div>{{/deleteComment}}
     </article>
-    {{/xcomments}}
+    {{/comments}}
     <div>
         <article class="logged-in">
             {{^comments}}
