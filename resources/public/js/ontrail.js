@@ -183,11 +183,6 @@
 
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
-      for (comment in exercise.comments) {
-        if (comment.body) {
-          comment.body = comment.body.replace(/&nbsp;/g, ' ')
-        }
-      }
       var helpers = {
         now: function() {
           return moment().format("DD.MM.YYYY HH:mm");
@@ -201,6 +196,12 @@
         xbody: function() {
           return this.body.replace(/&nbsp;/g, ' ')
         }, 
+        xcomments: function() {
+          _.map(this.comments, function(comment) {
+            comment.body = comment.body.replace(/&nbsp;/g, ' ')
+          })
+          return this.comments
+        },
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
         deleteComment: function () {
