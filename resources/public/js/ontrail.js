@@ -183,6 +183,11 @@
 
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
+      for (comment in exercise.comments) {
+        if (comment.body) {
+          comment.body = comment.body.replace(/&nbsp;/g, ' ')
+        }
+      }
       var helpers = {
         now: function() {
           return moment().format("DD.MM.YYYY HH:mm");
