@@ -197,10 +197,10 @@
           return this.body.replace(/&nbsp;/g, ' ')
         }, 
         xcomments: function() {
-          _.map(exercise.comments, function(comment) {
-            comment.cbody = comment.body.replace(/&nbsp;/g, ' ')
+          _.map(this.comments, function(comment) {
+            comment.body = comment.body.replace(/&nbsp;/g, ' ')
           })
-          return exercise.comments
+          return this.comments
         },
         me: me,
         "my-avatar": $("#profile-avatar").attr("src"),
