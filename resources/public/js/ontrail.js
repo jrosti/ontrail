@@ -180,11 +180,6 @@
     }
 
     var renderSingleExercise = function (exercise, me) {
-      var cleanComments = _.map(exercise.comments, function(comment) {
-            comment.cbody = comment.body.replace(/&nbsp;/g, ' ')
-            return comment
-      })
-      exercise.comments = cleanComments
       renderUserMenuFromUsername(exercise.user)
       renderReadCount(exercise.id)
       var helpers = {
@@ -198,6 +193,9 @@
           return this.cares && this.cares.length > 0 ? "has-cares" : "no-cares"
         },
         xbody: function() {
+          return this.body.replace(/&nbsp;/g, ' ')
+        }, 
+        cbody: function() {
           return this.body.replace(/&nbsp;/g, ' ')
         }, 
         me: me,
