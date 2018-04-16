@@ -65,7 +65,7 @@
 
     var doPostExercise = function (url) {
       var renderSelection = _.compose(encodeURIComponent, selectionFormat)
-      var sport = (!Modernizr.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
+      var sport = (! r.touch) ? $("#ex-sport").select2("data") : $("#ex-sport").val();
       var values = $('#add-exercise-form').serialize()
         + "&sport=" + renderSelection(sport)
         + "&body=" + encodeURIComponent($('#ex-body').editable('getHTML'))
@@ -146,6 +146,9 @@
             var more = text.length > truncOn ? "..." : ""
             return "<p>" + body.text().substring(0, truncOn - 1) + more + "</p>"
           }
+        },
+        cbody: function() {
+          return this.body.replace(/&nbsp;/g, ' ')
         }
       }
       return function (data) {
@@ -711,7 +714,8 @@
       skis: "Hiihtolajit",
       rowing: "Soudut",
       pullups: "Leuanveto",
-      stretches: "Venyttely"
+      stretches: "Venyttely",
+      orienteers: "Suunnistus"
     }
     var titles = {
       "Juoksu": "juoksukunkut",
@@ -720,7 +724,8 @@
       "Bywheel": "pyöräilijät",
       "Hiihtolajit": "hiihtelijät",
       "Soudut": "soutajat",
-      "Venyttely": "venyttelijät"
+      "Venyttely": "venyttelijät",
+      "Suunnistus": "suunnistajat"
     };
 
 
@@ -745,7 +750,7 @@
     })
 
     tops2.where(function (args) {
-      return args.tops2 ==='bywheel' || args.tops2 === 'rowing' || args.tops2 == 'stretches'
+      return args.tops2 ==='bywheel' || args.tops2 === 'rowing' || args.tops2 == 'stretches' || args.tops2 == 'orienteers'
     }).select(function (args) {
       return sportSelector[args.tops2]
     }).selectAjax(OnTrail.rest.topSports).subscribe(function (data) {
@@ -1027,6 +1032,7 @@
         $(".chzn-select a").removeAttr("tabindex")
         $("#ex-date").val(moment().format("DD.MM.YYYY"))
       } else {
+        $("#ex-tags").select2("data", [])
         $("#ex-date").val(moment().format("YYYY-MM-DD"))
       }
       $("label[for=\"ex-date\"]").addClass("active")

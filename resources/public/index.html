@@ -215,6 +215,7 @@
                         <li><a rel="tops2/rowing" class="pageLink">Soutelijat</a></li>
                         <li><a rel="tops2/pullups" class="pageLink">Vetelijät</a></li>
                         <li><a rel="tops2/stretches" class="pageLink">Venyttelijät</a></li>
+                        <li><a rel="tops2/orienteers" class="pageLink">Suunnistajat</a></li>
                     </ul>
                 </nav>
                 <div class="card">
@@ -821,7 +822,7 @@
                     <div class="body-text">{{#trunc}}{{/trunc}}</div>
                 </div>
                 <div class="full clearfix">
-                    <div class="body-text">{{{body}}}</div>
+                    <div class="body-text">{{{cbody}}}</div>
                     {{> tagsExpandedTemplate}}
                 </div>
                 <div class="cares-container logged-in {{hasCares}} clearfix">
@@ -854,7 +855,7 @@
                     <a class="pageLink waves-effect waves-light btn-flat needsclick" rel="ex/{{id}}" data-new-comments={{#newComments}}"true"{{/newComments}}>
                         <i class="material-icons" style="vertical-align: bottom;">comment</i>
                         {{^newComments}}{{commentCount}} kommenttia.</a> {{/newComments}}
-                    {{#newComments}}{{commentCount}} kommenttia <span class="new badge">{{newComments}}</span>{{/newComments}}</a>
+                        {{#newComments}}{{commentCount}} kommenttia , {{newComments}} uutta.{{/newComments}}</a>
                     <a class="button addCare waves-effect waves-light btn-flat logged-in" data-id="{{id}}">
                         <span class="care-avatar small" style="vertical-align: text-top">
                             <svg width="16" height="16">
