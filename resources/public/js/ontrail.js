@@ -1075,7 +1075,11 @@
           $("label[for=\"ex-" + field + "\"]").removeClass('active')
         }
       })
-      $("#ex-date").attr('value', moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD"))
+      if (!Modernizr.touch) {
+          $("#ex-date").val(moment(ex.date, "DD.MM.YYYY").format("DD.MM.YYYY"))
+      } else {
+          $("#ex-date").val(moment(ex.date, "DD.MM.YYYY").format("YYYY-MM-DD"))
+      }
       $("label[for=\"ex-date\"]").addClass('active')
       $("#ex-body").editable({buttons: ['createLink'], inlineMode: false,key: 'jljqtfaeG5eiy==', imageUpload: false, pasteImage: false})
       $("#ex-body").editable("setHTML", ex.body)

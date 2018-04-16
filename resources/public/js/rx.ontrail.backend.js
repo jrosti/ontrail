@@ -61,8 +61,8 @@
   Rest.prototype.mostRead14 = function() { return getAsObservableResultData("keen/most-read-14") }
   Rest.prototype.mostCared14 = function() { return getAsObservableResultData("cares/most-cared-14") }
 
-  Rest.prototype.topHours = function() { return getAsObservableResultData("tops/totals/2017") }
-  Rest.prototype.topSports = function(sport) { return getAsObservableResultData("tops/totals/" + sport + "/2017") }
+  Rest.prototype.topHours = function() { return getAsObservableResultData("tops/totals/2018") }
+  Rest.prototype.topSports = function(sport) { return getAsObservableResultData("tops/totals/" + sport + "/2018") }
 
 
   Rest.prototype.newCommentCountOwn = function() { return getAsObservableResultData("ex-unread-count", "own")}
