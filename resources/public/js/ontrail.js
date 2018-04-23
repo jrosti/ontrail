@@ -148,7 +148,7 @@
           }
         },
         cbody: function() {
-          return this.body.replace(/&nbsp;/g, ' ')
+          return typeof this.body === 'string' ? this.body.replace(/&nbsp;/g, ' ') : ''
         }
       }
       return function (data) {
