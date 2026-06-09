@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "bun test --preload ./src/test/setup.ts",
+    "test": "bun test --coverage --preload ./src/test/setup.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

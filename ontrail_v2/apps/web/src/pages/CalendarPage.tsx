@@ -49,13 +49,25 @@ export function CalendarPage() {
 
   const exercisesByDate = useMemo(() => {
     const map = new Map<string, ExerciseListItem[]>();
+    // Only show exercises in the 3 months currently rendered
+    const anchor = year === now.getFullYear() ? now.getMonth() : 11;
+    const shownMonths = new Set(
+      Array.from({ length: 3 }, (_, idx) => {
+        const rawM = anchor - idx;
+        const m = ((rawM % 12) + 12) % 12 + 1;
+        const y = rawM < 0 ? year - 1 : year;
+        return `${y}-${String(m).padStart(2, '0')}`;
+      })
+    );
     for (const ex of (exercisesData?.items ?? [])) {
       const key = ex.date.slice(0, 10);
+      const monthKey = key.slice(0, 7);
+      if (!shownMonths.has(monthKey)) continue;
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(ex);
     }
     return map;
-  }, [exercisesData]);
+  }, [exercisesData, year]);
 
   const weekDurationMap = useMemo(() => {
     const map: Record<number, number> = {};
@@ -66,10 +78,11 @@ export function CalendarPage() {
   }, [weekSummaries]);
 
   const now = new Date();
-  const currentMonth = now.getMonth();
+  // For the current year show last 3 months up to today; for other years show Oct-Dec
+  const anchorMonth = year === now.getFullYear() ? now.getMonth() : 11;
 
   const months = Array.from({ length: 3 }, (_, idx) => {
-    const rawM = currentMonth - idx;
+    const rawM = anchorMonth - idx;
     const m = ((rawM % 12) + 12) % 12;
     const y = rawM < 0 ? year - 1 : year;
     const first = new Date(y, m, 1);

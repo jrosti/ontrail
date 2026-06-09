@@ -465,7 +465,7 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   }
 
   // ── Groups ────────────────────────────────────────────────────────────────
-    if (path === '/api/groups') {
+  if (path === '/api/groups') {
     if (req.method === 'GET') {
       const items = await listGroups();
       return json({ items });
@@ -639,7 +639,7 @@ if (import.meta.main) {
 
   const server = Bun.serve({
     port: config.port,
-    fetch: handleRequest,
+    fetch: (req) => handleRequest(req),
   });
 
   console.log(`OnTrail API listening on http://localhost:${server.port}`);

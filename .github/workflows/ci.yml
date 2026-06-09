@@ -32,8 +32,11 @@ jobs:
       - name: Lint
         run: bun run lint
 
-      - name: Unit tests
+      - name: Tests with coverage
         run: bun run test
+
+      - name: Build server
+        run: bun run build
 
   web:
     name: Web
@@ -53,8 +56,38 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Unit tests
+      - name: Tests with coverage
         run: bun run test
 
       - name: Build
         run: bun run build
+
+  hanko:
+    name: Hanko
+    runs-on: ubuntu-latest
+    env:
+      HANKO_REPOSITORY: teamhanko/hanko
+      HANKO_REF: main
+    steps:
+      - name: Checkout OnTrail
+        uses: actions/checkout@v4
+
+      - name: Checkout Hanko source
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.HANKO_REPOSITORY }}
+          ref: ${{ env.HANKO_REF }}
+          path: _hanko
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: _hanko/backend/go.mod
+          cache-dependency-path: _hanko/backend/go.sum
+
+      - name: Apply OnTrail Hanko patches
+        run: ./ontrail_v2/infra/hanko/patches/apply.sh "$GITHUB_WORKSPACE/_hanko/backend"
+
+      - name: Build Hanko backend
+        working-directory: _hanko/backend
+        run: go build -o "$RUNNER_TEMP/hanko" .

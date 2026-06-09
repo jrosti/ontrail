@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "bun --watch src/server.ts",
     "start": "bun src/server.ts",
+    "build": "bun build src/server.ts --target bun --outdir dist",
     "test": "bun test --coverage",
-    "lint": "biome check .",
+    "lint": "biome check src package.json biome.json",
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
     "db:migrate": "bun src/db/migrate.ts"

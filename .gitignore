@@ -12,6 +12,7 @@ logs
 node_modules
 .DS_Store
 tmp
+ontrail_v2/apps/api/dist
 ontrail_v2/infra/hanko/hanko
 resources/public/trail/js/ontrail.js
 s3/properties.edn

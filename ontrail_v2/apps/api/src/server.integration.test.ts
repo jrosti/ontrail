@@ -1,6 +1,6 @@
+import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import postgres from 'postgres';
 import { GenericContainer, type StartedTestContainer } from 'testcontainers';
 import type { AuthClaims } from './auth/hanko';
@@ -195,9 +195,11 @@ describe('API integration', () => {
     expect(commentResponse.status).toBe(201);
 
     const anonymousResponse = await request(`/api/exercises/${created.id}`);
-    const anonymous = await jsonResponse<{ body: string; comments: unknown[]; commentCount: number }>(
-      anonymousResponse,
-    );
+    const anonymous = await jsonResponse<{
+      body: string;
+      comments: unknown[];
+      commentCount: number;
+    }>(anonymousResponse);
 
     expect(anonymousResponse.status).toBe(200);
     expect(anonymous.body).toBe('Rekisteröidy nähdäksesi harjoitukset');
