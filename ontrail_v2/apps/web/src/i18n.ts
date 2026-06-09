@@ -23,7 +23,7 @@ export const I18N = {
     forwardedBy: 'välitti', loggedBy: 'kirjasi', minkm: 'min/km', kmh: 'km/h',
     bpm: 'bpm', spm: 'spm', m: 'm', w: 'W',
     you: 'Sinä', followers: 'seuraajaa', following: 'seurattua',
-    logTitle: 'Kirjaa harjoitus', logSub: 'Lisää suoritus käsin — ei sovellusta tai laitetta tarvita.',
+    logTitle: 'Kirjaa harjoitus', logSub: 'Lisää suoritus käsin',
     titleField: 'Otsikko', titlePh: 'Anna harjoitukselle nimi', sportField: 'Laji',
     moreSports: 'Lisää…', sportPicker: 'Valitse laji', sportSearch: 'Hae lajia…',
     durationField: 'Kesto', durationPh: 'esim. 1:06:42 tai 45min',

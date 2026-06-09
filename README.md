@@ -1,130 +1,106 @@
 # OnTrail
 
-OnTrail is a sports diary and training community app. The existing application lets users log exercises, write diary-style training notes, track distance and duration, comment on other users' workouts, follow unread comments, join groups, browse leaderboards, view yearly and monthly summaries, search entries, and export data.
+OnTrail is a sports diary and training community app. Users log exercises, write diary-style training notes, track distance and duration, comment on each other's workouts, follow unread comments, join groups, browse leaderboards, view yearly and monthly summaries, search entries, and export data.
 
-This repository currently contains the legacy implementation:
+## Current State
 
+The repository contains two implementations in parallel:
+
+**Legacy** (root, Clojure/MongoDB):
 - Backend: Clojure 1.6, Ring, Compojure, Aleph, Monger, MongoDB.
-- Frontend: server-served static HTML, jQuery, RxJS, Handlebars, older CSS/LESS assets, and some ClojureScript/Reagent.
-- Data: MongoDB collections for users, exercises, sports, groups, and unread comment cache.
+- Frontend: server-served static HTML, jQuery, RxJS, Handlebars, older CSS/LESS assets, some ClojureScript/Reagent.
+- Data: MongoDB collections `onuser`, `exercise`, `onsport`, `groups`, `nccache`.
 - Tests: Clojure unit tests under `test/ontrail/test`.
 
-The modernization target is a maintainable product with:
+**Modern** (`ontrail_v2/`, TypeScript/PostgreSQL):
+- API: Bun HTTP server, raw `postgres` client, raw SQL migrations, port 3002.
+- Auth: Hanko.io — JWT verification via JWKS, cookie and Bearer token support, auto-provisioned users.
+- DB: PostgreSQL with `sports`, `users`, `exercises`, `comments`, `cares` tables.
+- Web: Vite/React frontend with Hanko login, routing, diary/feed/exercise/log pages.
+- Infra: Docker Compose with PostgreSQL, Hanko (port 8000), MailSlurper (port 9080/9085).
 
-- PostgreSQL as the source of truth.
-- Hanko.io for authentication and identity.
-- TypeScript backend serving a JSON API and realtime/event endpoints.
-- Drizzle ORM for typed PostgreSQL access and migrations.
-- Bun/Vite/React frontend with a modern responsive interface.
-- A migration path that keeps existing diary data, public URLs, and core behavior intact.
+Implemented API routes:
+- `GET /api/health`, `GET /api/sports`, `GET /api/me`
+- `GET /api/exercises`, `POST /api/exercises`
+- `GET /api/exercises/:id`, `PATCH /api/exercises/:id`, `DELETE /api/exercises/:id`
+- `POST /api/exercises/:id/comments`, `DELETE /api/exercises/:id/comments/:commentId`
 
 ## Product Scope
 
-OnTrail should remain focused on training history and community feedback, not become a generic social network. The primary workflows are:
+OnTrail stays focused on training history and community feedback, not a generic social network. The primary workflows are:
 
 - Record an exercise with sport, date, duration, distance, heart rate, notes, tags, and sport-specific details.
 - Browse latest exercises and filtered exercise lists.
 - Read one exercise with comments, reactions, and author profile context.
 - Comment on exercises and track unread discussion.
 - View personal summaries by sport, tags, week, month, and year.
-- View public leaderboards and record lists for common running, swimming, cycling, skiing, and other sport distances.
+- View public leaderboards and record lists for running, swimming, cycling, skiing, and other sports.
 - Manage profile details, avatar preferences, groups, and favourites.
 - Import and export diary data.
 
-## Target Architecture
-
-Recommended repository layout for the new system:
+## Repository Layout
 
 ```text
-apps/
-  api/                 TypeScript HTTP API
-  web/                 Bun + Vite + React frontend
-packages/
-  auth/                Hanko JWT/session verification
-  db/                  Drizzle schema, migrations, PostgreSQL access
-  domain/              Exercise, summary, group, comment, user logic
-  api-contracts/       Shared request/response types
-migrations/            SQL migrations
-scripts/
-  migrate/             MongoDB to PostgreSQL migration tools
-docs/
-  api/                 API contracts and compatibility notes
+ontrail_v2/
+  apps/
+    api/               TypeScript HTTP API (Bun, port 3002)
+    web/               Bun + Vite + React frontend
+    mock/              Mock API server for local frontend dev
+  docs/
+    api/               API plans and compatibility notes
+  infra/
+    docker-compose.yml PostgreSQL + Hanko + MailSlurper
+    hanko/             Hanko config and binary
+(root)                 Legacy Clojure application
 ```
 
-Keep the legacy Clojure app available during migration until data parity and feature parity are proven.
+Planned but not yet created:
+```text
+packages/
+  domain/              Exercise, summary, group, comment, user logic
+  api-contracts/       Shared request/response types
+scripts/
+  migrate/             MongoDB → PostgreSQL migration tools
+```
 
-## PostgreSQL Model Direction
+## PostgreSQL Schema
 
-The Mongo collections map roughly to these PostgreSQL tables:
+Tables in `ontrail_v2/apps/api/migrations/0001_initial.sql`:
 
-- `users`: Hanko subject, username, normalized username, email snapshot, profile fields, avatar settings.
-- `exercises`: owner, sport, title, body, markdown body, tags, date, duration, distance, average heart rate, pace, timestamps.
-- `exercise_details`: sport-specific numeric details such as repeats and elevation.
-- `comments`: exercise comments with author, body, timestamps, and migrated legacy id.
-- `cares`: lightweight reactions on exercises.
-- `groups`: group name, normalized name, description.
-- `group_members`: many-to-many membership table.
-- `favourites`: user-to-user following/favourite relationship.
-- `unread_comments`: per-user unread discussion state.
-- `sports`: configured sports and display metadata.
+- `sports` — key, name_fi/en, glyph, color, metric, pace_unit
+- `users` — UUID pk, hanko_subject, username, normalized_username, email, display_name, avatar_initials/color, synopsis, legacy_id
+- `exercises` — UUID pk, owner_id, sport_key, title, body_html, body_markdown, tags[], exercise_date, duration_sec, distance_m, avg_hr, climb_m, feel_rating, details jsonb, gpx_points jsonb, legacy_id
+- `comments` — UUID pk, exercise_id FK, author_id FK, body, legacy_id
+- `cares` — composite PK (exercise_id, author_id)
 
-Use stable UUID primary keys for new rows and keep legacy Mongo object ids in explicit `legacy_id` columns until migration audits are complete.
+Still needed: `groups`, `group_members`, `favourites`, `unread_comments`.
 
-## Authentication Direction
+## Local Development
 
-Hanko should own login, registration, passkeys, passwordless flows, and session identity. The TypeScript API should verify Hanko tokens and map the Hanko subject to an OnTrail user row.
+```sh
+# Start infra (PostgreSQL + Hanko + MailSlurper)
+cd ontrail_v2/infra && docker compose up -d
 
-Migration rules:
+# Run API migrations and start API
+cd ontrail_v2/apps/api
+bun run db:migrate
+bun run dev          # PORT=3002
 
-- Preserve existing usernames.
-- Keep legacy password hashes only long enough to support an account transition flow if needed.
-- Prefer Hanko account creation or linking over reimplementing password authentication.
-- Treat `nobody` as an anonymous viewer concept in application logic, not a real authenticated user.
-
-## API Direction
-
-The current API is mostly under `/rest/v1` and `/rest/v2`. The new API should use versioned JSON endpoints, for example:
-
-- `GET /api/v1/exercises`
-- `POST /api/v1/exercises`
-- `GET /api/v1/exercises/{id}`
-- `PATCH /api/v1/exercises/{id}`
-- `DELETE /api/v1/exercises/{id}`
-- `POST /api/v1/exercises/{id}/comments`
-- `POST /api/v1/exercises/{id}/cares`
-- `GET /api/v1/users/{username}/summary`
-- `GET /api/v1/groups`
-- `POST /api/v1/groups/{name}/join`
-- `GET /api/v1/export`
-
-During the transition, either maintain compatibility handlers for important legacy URLs or provide redirects/adapters that keep bookmarks working.
-
-## Frontend Direction
-
-The React app should be the primary user experience from day one, not a marketing page. Prioritize dense, practical screens for repeated training diary use:
-
-- Latest feed with filters, unread indicators, comments, and quick navigation.
-- Exercise editor optimized for fast entry.
-- User diary and yearly/monthly summary views.
-- Detail page with comments and reactions.
-- Group and leaderboard pages.
-- Profile and account settings.
-
-Use Bun for package management and Vite for development/build tooling. Keep state management simple until complexity justifies a dedicated library.
+# Start frontend
+cd ontrail_v2/apps/web
+bun run dev
+```
 
 ## Migration Principles
 
 - Preserve data first, redesign second.
-- Introduce the new backend behind explicit APIs while the old app remains runnable.
-- Write repeatable migrations and validation reports before cutting over.
+- Keep the legacy Clojure app runnable until data parity and feature parity are proven.
+- Write repeatable, idempotent migrations.
+- Keep units explicit: duration (seconds), distance (metres), dates (ISO date string), pace derived on read.
+- Preserve legacy Mongo `_id` values in `legacy_id` columns until migration audits complete.
 - Move business rules into tested TypeScript domain packages rather than embedding them in handlers.
-- Keep Drizzle migrations as the authoritative schema history.
-- Keep units explicit: duration, distance, pace, and dates must have canonical storage and display conversion tests.
-- Do not rely on manual Mongo document shape assumptions without sampling and validation.
 
 ## Legacy Commands
-
-The current application is a Leiningen project. Typical legacy commands are:
 
 ```sh
 lein test
@@ -136,5 +112,6 @@ MongoDB is expected locally as database `ontrail`.
 
 ## Planning Documents
 
-- [TODO.md](TODO.md) contains the phased modernization checklist.
-- [AGENTS.md](AGENTS.md) contains project-specific guidance for coding agents working in this repository.
+- [TODO.md](TODO.md) — phased modernization checklist.
+- [AGENTS.md](AGENTS.md) — guidance for coding agents working in this repository.
+- [ontrail_v2/docs/api/backend-plan.md](ontrail_v2/docs/api/backend-plan.md) — API implementation slices and test plan.

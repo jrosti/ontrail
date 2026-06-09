@@ -1,5 +1,6 @@
 import type { Comment, Exercise, ExerciseListItem } from '../../../web/src/types';
 import { sql } from '../db/client';
+import { emitToUser } from '../sse';
 import type { DbUser } from './users';
 
 interface ExerciseRow {
@@ -204,8 +205,8 @@ export async function createExercise(owner: DbUser, body: Partial<Exercise>): Pr
       ${body.tags ?? []}, ${body.date ?? new Date().toISOString().slice(0, 10)},
       ${body.durationSec ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
       ${body.climbM ?? null}, ${body.feelRating ?? null},
-      ${JSON.stringify(body.details ?? {})}::jsonb,
-      ${JSON.stringify(normalizeGpxPoints(body.gpxPoints) ?? null)}::jsonb
+      ${sql.json(body.details ?? {})},
+      ${sql.json(normalizeGpxPoints(body.gpxPoints) ?? null)}
     )
     returning id::text
   `;
@@ -258,8 +259,8 @@ export async function updateExercise(
       avg_hr = ${'avgHr' in body ? (body.avgHr ?? null) : existing.avg_hr},
       climb_m = ${'climbM' in body ? (body.climbM ?? null) : existing.climb_m},
       feel_rating = ${'feelRating' in body ? (body.feelRating ?? null) : existing.feel_rating},
-      details = ${JSON.stringify(details)}::jsonb,
-      gpx_points = ${JSON.stringify(gpxPoints)}::jsonb,
+      details = ${sql.json(details)},
+      gpx_points = ${sql.json(gpxPoints)},
       updated_at = now()
     where id = ${id}
   `;
@@ -285,8 +286,11 @@ export async function addComment(
   author: DbUser,
   body: string,
 ): Promise<Comment | null> {
-  const exercise = await sql`select 1 from exercises where id = ${exerciseId}`;
-  if (exercise.length === 0) return null;
+  const exerciseRows = await sql<{ owner_id: string }[]>`
+    select owner_id::text from exercises where id = ${exerciseId}
+  `;
+  if (exerciseRows.length === 0) return null;
+  const ownerId = exerciseRows[0].owner_id;
   const rows = await sql<CommentRow[]>`
     insert into comments (exercise_id, author_id, body)
     values (${exerciseId}, ${author.id}, ${body})
@@ -294,7 +298,12 @@ export async function addComment(
       ${author.avatarInitials} as avatar_initials, ${author.avatarColor} as avatar_color,
       body, created_at::text
   `;
-  return toComment(rows[0]);
+  const comment = toComment(rows[0]);
+  // Notify exercise owner via SSE (skip if author is owner)
+  if (ownerId !== author.id) {
+    emitToUser(ownerId, 'new_comment', { exerciseId });
+  }
+  return comment;
 }
 
 export async function deleteComment(

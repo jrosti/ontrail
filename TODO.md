@@ -1,163 +1,142 @@
 # OnTrail Modernization TODO
 
-This checklist tracks the migration from the legacy Clojure/Mongo/static frontend application to PostgreSQL, Hanko authentication, TypeScript API, Drizzle ORM, and Bun/Vite/React frontend.
+This checklist tracks the migration from the legacy Clojure/Mongo/static frontend application to
+PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 
-## 1. Discovery and Baseline
+See `plans/` for detailed design decisions:
+- `plans/highlevel-plan.md` — stack, hosting, security, migration strategy
+- `plans/plan0-sanity.md` — legacy endpoint inventory, feature decisions (what's kept/dropped)
+- `plans/plan1-thin-backend.md` — data contract, formatting → FE, shared formatter module
+- `plans/plan2-migration.md` — Mongo→Postgres field-by-field conversion, all Q1–Q12 decided
+- `plans/plan3-tech-stack.md` — frontend stack decisions (React, Vite, TanStack Query, TipTap, SVG charts)
+- `plans/plan4-exercise-data-audit.md` — live data audit: 374,182 exercises, real field shapes
+- `plans/units.md` — canonical stored units reference
 
-- [ ] Run the existing Clojure test suite and document failures.
-- [ ] Document how to start the legacy app locally, including MongoDB setup and required properties.
-- [ ] Inventory every current route in `src/ontrail/core.clj`, `src/ontrail/v2routes.clj`, page templates, and static frontend calls.
-- [ ] Inventory Mongo collections and actual document shapes from a representative database dump.
-- [ ] Identify production-only integrations: email, analytics, Bugsnag, Keen, imports, file uploads, and websocket behavior.
-- [ ] Capture screenshots of the main legacy workflows for parity reference.
-- [ ] Define what data is public, private, authenticated-only, and owner-only.
-- [ ] Decide whether legacy public URLs must be preserved exactly or redirected.
+## Implementation status
 
-## 2. Product and Design Definition
+### Done
 
-- [ ] Define core navigation: latest, my diary, add exercise, comments, groups, leaderboards, profile.
-- [ ] Define responsive layouts for desktop and mobile.
-- [ ] Design the exercise feed with filtering, pagination or infinite loading, unread indicators, and empty states.
-- [ ] Design the exercise editor for fast training entry.
-- [ ] Design summaries for year, month, week, sport, and tag views.
-- [ ] Design group and leaderboard pages.
-- [ ] Design profile/account settings integrated with Hanko.
-- [ ] Define visual system: typography, spacing, color, buttons, forms, tables, charts, and icon usage.
-- [ ] Define accessibility requirements for keyboard use, contrast, form labels, and focus states.
+- [x] Docker Compose infra: PostgreSQL 18, Hanko (port 8000), MailSlurper (port 8080/8085/2525)
+- [x] Bun TypeScript HTTP API on port 3002 (no framework, biome lint)
+- [x] Raw SQL migration runner (`src/db/migrate.ts`)
+- [x] Initial schema: `sports`, `users`, `exercises`, `comments`, `cares` tables
+- [x] Hanko JWT verification via JWKS (Bearer + cookie), auto-provision users on first login
+- [x] `GET /api/health`, `GET /api/sports`, `GET /api/me`
+- [x] Exercise CRUD: `GET/POST /api/exercises`, `GET/PATCH/PUT/DELETE /api/exercises/:id`
+- [x] Comments: `POST /api/exercises/:id/comments`, `DELETE /api/exercises/:id/comments/:commentId`
+- [x] Feed list with sport/user/tag filters and pagination
+- [x] GPX point normalization and validation (`normalizeGpxPoints`)
+- [x] Sports seeded from FE constants on startup
+- [x] React frontend: Hanko login, routing, diary/feed/exercise/log pages, GPX upload, OSM map
+- [x] Finnish translations for Hanko UI (corrected ä/ö)
+- [x] Mongodump loaded and audited (374,182 exercises · 672 users · see plan4)
+- [x] All migration decisions made (plan2 Q1–Q12, plan0 feature decisions)
 
-## 3. Data Model and PostgreSQL
+### Schema gaps (need migrations)
 
-- [ ] Confirm Drizzle ORM as the PostgreSQL access and migration tool.
-- [ ] Create initial Drizzle schema and PostgreSQL migrations.
-- [ ] Add `users` table with Hanko subject, username, normalized username, email snapshot, profile fields, avatar settings, and legacy id.
-- [ ] Add `sports` table for sport metadata.
-- [ ] Add `exercises` table with canonical units for duration, distance, pace, heart rate, dates, title, body, markdown body, and tags.
-- [ ] Add `exercise_details` table or JSONB column for sport-specific numeric details.
-- [ ] Add `comments` table with legacy ids.
-- [ ] Add `cares` table for reactions.
-- [ ] Add `groups` and `group_members` tables.
-- [ ] Add `favourites` table.
-- [ ] Add `unread_comments` or equivalent event/read model.
-- [ ] Add indexes for feed queries, user diary queries, sport filters, date filters, summaries, comments, and username lookup.
-- [ ] Decide whether search uses PostgreSQL full-text search first or an external search service later.
-- [ ] Add seed data for local development.
+- [ ] Add `pace` as a generated column: `round(distance_m::numeric / duration_sec * 360)` (plan2)
+- [ ] Add `detail_kcal integer` column to exercises (252 legacy docs)
+- [ ] Add `source text` column to exercises (965 legacy docs, "treenit.net")
+- [ ] Add `user_visit` table for unread comment tracking (plan2 §2)
+- [ ] Add groups schema: `groups`, `group_members` tables
+- [ ] Add `favourites` table — **decided: drop** (plan0 §4)
+- [ ] Add `unread_comments` tracking — use `user_visit` + comment timestamps instead
+- [ ] Add FTS: `search_vec tsvector` generated column on exercises with `finnish` config + GIN index (plan2 §2)
+- [ ] Add `legacy_object_id char(24)` on users and exercises for permalink resolution (plan2 §2)
+- [ ] Add `resthr`, `maxhr`, `aerk`, `anaerk`, `goals` columns to users (HR profile fields)
 
-## 4. Data Migration
+### API endpoints still needed
 
-- [ ] Write a Mongo export script for `onuser`, `exercise`, `onsport`, `groups`, and `nccache`.
-- [ ] Write a shape validation report that flags missing, unexpected, or malformed fields.
-- [ ] Map Mongo `_id` values to PostgreSQL UUIDs and preserve `legacy_id`.
-- [ ] Migrate users and profiles.
-- [ ] Migrate exercises, preserving dates, duration, distance, tags, markdown/body content, sport names, average heart rate, pace, and details.
-- [ ] Migrate embedded comments into the `comments` table.
-- [ ] Migrate cares/reactions.
-- [ ] Migrate groups and memberships.
-- [ ] Migrate favourites if the legacy data source is confirmed.
-- [ ] Migrate unread comment state or define an acceptable reset strategy.
-- [ ] Validate row counts against Mongo counts.
-- [ ] Validate summary totals for sample users and years against the legacy app.
-- [ ] Validate selected exercise detail pages against the legacy app.
-- [ ] Make migration repeatable and idempotent for test runs.
+- [ ] `POST /api/exercises/:id/cares` — toggle care/reaction (table exists, no route)
+- [ ] `DELETE /api/exercises/:id/cares` — remove care
+- [ ] `GET /api/users/:username` — public user profile
+- [ ] `PATCH /api/users/me` — update own profile (display name, synopsis, HR fields)
+- [ ] `GET /api/users/:username/exercises` — user diary (currently via exercises?user= filter)
+- [ ] `GET /api/users/:username/summary` — yearly/sport/tag summaries (plan0 §1)
+- [ ] `GET /api/users/:username/summary/:year` — year summary
+- [ ] `GET /api/users/:username/summary/:year/by/month` — monthly breakdown
+- [ ] `GET /api/users/:username/summary/:year/by/week` — weekly breakdown
+- [ ] `GET /api/users/:username/summary/tags` — tag summary
+- [ ] `GET /api/users/:username/records` — personal bests (800m…24h, Cooper — plan0 §4)
+- [ ] `GET /api/leaderboards/:category` — tops/leaderboards (plan0 §4)
+- [ ] `GET /api/exercises/:id/stats` — pace histogram, f80/f95 percentiles (plan0 §1)
+- [ ] `GET /api/search?q=` — FTS search (plan0 §1)
+- [ ] `GET /api/users` — user list / search by username prefix
+- [ ] `GET /api/groups` — groups list
+- [ ] `POST /api/groups` — create group
+- [ ] `GET /api/groups/:name` — group detail
+- [ ] `POST /api/groups/:name/join` — join group
+- [ ] `POST /api/groups/:name/part` — leave group
+- [ ] `GET /api/unread` — unread comment counts
+- [ ] `POST /api/unread/mark-all-read` — mark all read
+- [ ] `GET /api/export.json` — full JSON export (raw rows, FE assembles CSV)
+- [ ] `GET /api/sse` — Server-Sent Events for live feed notifications (plan0 §3, final item)
 
-## 5. Hanko Authentication
+### Data migration (Mongo → Postgres)
 
-- [ ] Create Hanko project configuration for local, staging, and production.
-- [ ] Add frontend Hanko elements or SDK integration.
-- [ ] Add TypeScript API middleware that verifies Hanko JWT/session identity.
-- [ ] Implement user provisioning on first authenticated request.
-- [ ] Implement account linking for migrated users by email and/or controlled invite flow.
-- [ ] Preserve username uniqueness and normalized username lookup.
-- [ ] Define anonymous access behavior for public feed, public profiles, summaries, and hidden content.
-- [ ] Remove legacy password authentication from the new API.
-- [ ] Document operational steps for Hanko environment variables and callback URLs.
+- [ ] Write `scripts/migrate/` tooling: load mongodump collections into staging JSONB tables
+- [ ] Build username→id map with orphan aliases (`j.satta`→`jsatta`, `[deleted]` placeholder)
+- [ ] Normalize `app_user` from `onuser` staging (flatten profile, keep scrypt hash)
+- [ ] Normalize `exercise` from staging: duration ÷100→seconds, avghr 0→NULL, clamp dates, map sports, NULL distance for dur=0 docs
+- [ ] Normalize `comment` from embedded arrays: parse date strings, assign seq
+- [ ] Normalize `care` from embedded arrays
+- [ ] Normalize `group` + `group_member` from `groups` staging
+- [ ] Hanko account linking for migrated users (email-claim flow vs. scrypt bridge)
+- [ ] Validation report: counts, spot totals, orphan reconciliation, permalink samples
+- [ ] Acceptance test: primary user stats/searches match legacy output
 
-## 6. TypeScript Backend
+### Frontend pages still needed
 
-- [ ] Create TypeScript API app structure.
-- [ ] Choose the API runtime/framework, favoring a small Bun-compatible stack.
-- [ ] Add configuration loading for environment variables.
-- [ ] Add structured logging.
-- [ ] Add PostgreSQL connection management and health checks.
-- [ ] Add Drizzle migration commands for local, staging, and production.
-- [ ] Add Drizzle query modules for users, exercises, comments, groups, summaries, and search.
-- [ ] Add auth middleware and current-user context.
-- [ ] Implement exercise create, read, update, delete.
-- [ ] Implement exercise list with filters matching legacy behavior where needed.
-- [ ] Implement comments and comment deletion permissions.
-- [ ] Implement cares/reactions.
-- [ ] Implement user profile read/update.
-- [ ] Implement summaries by year, month, week, sport, and tags.
-- [ ] Implement leaderboards and record lists.
-- [ ] Implement groups list, detail, join, leave, and own groups.
-- [ ] Implement unread comments.
-- [ ] Implement search.
-- [ ] Implement CSV/JSON export.
-- [ ] Implement import endpoints or offline import tools.
-- [ ] Implement realtime updates with WebSockets or server-sent events.
-- [ ] Add OpenAPI documentation or checked API contract tests.
+- [ ] User diary page (own + other-user exercises, filtered)
+- [ ] User profile page (HR profile, synopsis, groups, records card)
+- [ ] Summary/analytics page wired to real API (sport, year, month, week breakdowns)
+- [ ] Weekly training view with calendar grid and sport icons (plan0 §4)
+- [ ] Leaderboards page
+- [ ] Groups pages (list, detail, join/part)
+- [ ] Search page wired to real API
+- [ ] Unread indicators on feed + "mark all read"
+- [ ] Cares/reactions UI wired to API
+- [ ] JSON export download
 
-## 7. React Frontend
+### Frontend shared formatter module (plan1 §3)
 
-- [ ] Create Bun/Vite/React app.
-- [ ] Add TypeScript.
-- [ ] Add routing.
-- [ ] Add API client with typed request/response models.
-- [ ] Add Hanko login and session handling.
-- [ ] Build app shell and navigation.
-- [ ] Build latest feed.
-- [ ] Build exercise detail page.
-- [ ] Build exercise editor and validation.
-- [ ] Build comment and reaction UI.
-- [ ] Build my diary view.
-- [ ] Build profile page.
-- [ ] Build summary dashboards and charts.
-- [ ] Build groups pages.
-- [ ] Build leaderboards and record lists.
-- [ ] Build search.
-- [ ] Build import/export UI where appropriate.
-- [ ] Add loading, error, empty, and permission states.
-- [ ] Add responsive layout checks for phone, tablet, and desktop.
-- [ ] Add accessibility pass for forms, navigation, and dialogs.
+- [ ] `formatDuration(sec)` — via `Intl.DurationFormat('fi')` with fallback
+- [ ] `formatDistance(m)` — via `Intl.NumberFormat('fi', {style:'unit', unit:'kilometer'})`
+- [ ] `formatPace(sec, m, sport)` — picks unit from `PACE_UNIT_BY_SPORT`
+- [ ] `formatDate(iso)` / `formatDateTime(iso)` — via `Intl.DateTimeFormat('fi')`
+- [ ] `formatHrReserve(avghr, profile)` — via `Intl.NumberFormat('fi', {style:'percent'})`
+- [ ] `formatBpmDist(ex, profile)`
+- [ ] `verbFor(sport)` — Finnish past-tense verb map (from `nlp.clj`)
+- [ ] `PACE_UNIT_BY_SPORT` constant
+- [ ] `SPORTS` constant (canonical list from `nlp.clj`)
+- [ ] CSV builder using the above
+- [ ] Unit tests against legacy output samples
 
-## 8. Testing
+### Testing
 
-- [ ] Add TypeScript unit tests for parsing, formatting, pace, summaries, permissions, and filters.
-- [ ] Add TypeScript integration tests with PostgreSQL.
-- [ ] Add migration tests using sample Mongo fixtures.
-- [ ] Add API contract tests.
-- [ ] Add React component tests for critical forms and data states.
-- [ ] Add Playwright end-to-end tests for login, create exercise, edit exercise, comment, group join, and summaries.
-- [ ] Add visual regression snapshots for main screens if practical.
-- [ ] Compare old and new summary outputs for a representative migrated dataset.
+- [ ] API unit tests: duration/distance parsing, GPX normalization, permission helpers, summary calculations
+- [ ] Repository integration tests: run migrations against disposable PostgreSQL, verify ownership + comment visibility
+- [ ] API integration tests: signed test JWTs, assert 401/403/200 paths for each authenticated route
+- [ ] Playwright e2e: login, create exercise, edit exercise, comment, group join, summaries
 
-## 9. Operations
+### Operations
 
-- [ ] Choose deployment target.
-- [ ] Add non-Docker deployment build scripts for the TypeScript API.
-- [ ] Add frontend production build pipeline.
-- [ ] Add PostgreSQL backup and restore documentation.
-- [ ] Add migration rollback strategy.
-- [ ] Add logging, metrics, and error reporting.
-- [ ] Add staging environment.
-- [ ] Add production cutover checklist.
-- [ ] Add post-cutover monitoring checklist.
+- [ ] Caddy config for production (HTTPS, static SPA, reverse-proxy API)
+- [ ] systemd service files for API
+- [ ] `pg_dump` → `age` encryption → S3 backup script
+- [ ] GitHub Actions: build SPA + API → rsync/restart over SSH
+- [ ] Security: scan git history (gitleaks/trufflehog), rotate any leaked keys, confirm prod not running default AES KEY/MACKEY
 
-## 10. Cutover
+## Dropped / out of scope (decided 2026-06-09)
 
-- [ ] Freeze legacy writes or implement a final delta migration.
-- [ ] Run final Mongo export.
-- [ ] Run PostgreSQL import.
-- [ ] Run validation reports.
-- [ ] Smoke test critical workflows in staging.
-- [ ] Switch traffic to the new frontend and API.
-- [ ] Keep legacy app read-only until confidence window ends.
-- [ ] Archive legacy credentials and document final state.
-
-## Open Decisions
-
-- [ ] Exact Hanko account linking strategy for existing users.
-- [ ] Whether comments and unread state must migrate perfectly or can be recalculated/reset.
-- [ ] Whether search starts with PostgreSQL full-text search.
-- [ ] Whether realtime updates are required for launch.
-- [ ] Whether legacy mobile/static pages are retired immediately or redirected gradually.
-- [ ] Whether old `/rest/v1` endpoints are supported by adapters during transition.
+- Websocket chat and in-memory message ring (→ SSE for notifications only)
+- Keen.io analytics / most-read widgets
+- Bespoke challenges (Marrasputki, lvhaaste2015, Huippuhuhtikuu)
+- Avatar upload / S3 image upload (keep Gravatar)
+- Per-user image gallery
+- "Suosikit" favourites (auto-derived group)
+- Feed table/list view (cards only)
+- `heiaimport` / `treenitimport` (exercises already in data)
+- `mdbody` Markdown field (keep rich-text HTML body)
+- Keen/most-read/most-cared-14 feed widgets
+- Events view (`Tapahtuma` sport remains as ordinary exercise)

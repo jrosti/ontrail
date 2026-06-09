@@ -25,16 +25,16 @@ services:
       start_period: 10s
 
   # ── MailSlurper — catches all outgoing email ──────────────────────────────
-  # Web UI  →  http://localhost:9080
-  # REST    →  http://localhost:9085
+  # Web UI  →  http://localhost:8080
+  # REST    →  http://localhost:8085
   # SMTP    →  localhost:2525  (2500 is taken by OrbStack on arm64)
   mailslurper:
     image: marcopas/docker-mailslurper:latest
     platform: linux/amd64
     restart: unless-stopped
     ports:
-      - "9080:8080"
-      - "9085:8085"
+      - "8080:8080"
+      - "8085:8085"
       - "2525:2500"
 
 volumes:

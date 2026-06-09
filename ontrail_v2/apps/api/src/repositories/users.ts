@@ -102,3 +102,151 @@ export function apiUser(user: DbUser) {
     createdAt: user.createdAt,
   };
 }
+
+export interface PublicProfile {
+  username: string;
+  displayName: string;
+  avatarInitials: string;
+  avatarColor: string;
+  synopsis: string | null;
+  resthr: number | null;
+  maxhr: number | null;
+  createdAt: string;
+  exerciseCount: number;
+  followerCount: number;
+}
+
+interface PublicProfileRow {
+  username: string;
+  display_name: string;
+  avatar_initials: string;
+  avatar_color: string;
+  synopsis: string | null;
+  resthr: number | null;
+  maxhr: number | null;
+  created_at: string;
+  exercise_count: number;
+}
+
+export async function getPublicProfile(username: string): Promise<PublicProfile | null> {
+  const rows = await sql<PublicProfileRow[]>`
+    select
+      u.username,
+      u.display_name,
+      u.avatar_initials,
+      u.avatar_color,
+      u.synopsis,
+      u.resthr,
+      u.maxhr,
+      u.created_at::text,
+      count(e.id)::int as exercise_count
+    from users u
+    left join exercises e on e.owner_id = u.id
+    where u.username = ${username}
+    group by u.id
+    limit 1
+  `;
+  const row = rows[0];
+  if (!row) return null;
+  return {
+    username: row.username,
+    displayName: row.display_name,
+    avatarInitials: row.avatar_initials,
+    avatarColor: row.avatar_color,
+    synopsis: row.synopsis,
+    resthr: row.resthr,
+    maxhr: row.maxhr,
+    createdAt: row.created_at,
+    exerciseCount: row.exercise_count,
+    followerCount: 0,
+  };
+}
+
+export interface ProfileUpdate {
+  displayName?: string;
+  synopsis?: string;
+  resthr?: number | null;
+  maxhr?: number | null;
+  aerk?: number | null;
+  anaerk?: number | null;
+  goals?: string | null;
+}
+
+export async function updateUserProfile(
+  userId: string,
+  update: ProfileUpdate,
+): Promise<DbUser | null> {
+  // Build partial update — only set fields that are present in the update object
+  const rows = await sql<UserRow[]>`
+    update users set
+      display_name = case when ${'displayName' in update}::bool then ${update.displayName ?? null} else display_name end,
+      synopsis = case when ${'synopsis' in update}::bool then ${update.synopsis ?? null} else synopsis end,
+      resthr = case when ${'resthr' in update}::bool then ${update.resthr ?? null} else resthr end,
+      maxhr = case when ${'maxhr' in update}::bool then ${update.maxhr ?? null} else maxhr end,
+      aerk = case when ${'aerk' in update}::bool then ${update.aerk ?? null} else aerk end,
+      anaerk = case when ${'anaerk' in update}::bool then ${update.anaerk ?? null} else anaerk end,
+      goals = case when ${'goals' in update}::bool then ${update.goals ?? null} else goals end,
+      updated_at = now()
+    where id = ${userId}
+    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text
+  `;
+  return rows[0] ? toUser(rows[0]) : null;
+}
+
+export async function getExercisesForExport(userId: string) {
+  // Return all exercises with comments for the given user
+  const rows = await sql<
+    {
+      id: string;
+      sport_key: string;
+      title: string;
+      body_html: string | null;
+      tags: string[];
+      exercise_date: string;
+      duration_sec: number;
+      distance_m: number | null;
+      avg_hr: number | null;
+      climb_m: number | null;
+      feel_rating: string | null;
+      details: Record<string, number>;
+      gpx_points: unknown;
+      created_at: string;
+      updated_at: string;
+    }[]
+  >`
+    select
+      id::text,
+      sport_key,
+      title,
+      body_html,
+      tags,
+      exercise_date::text,
+      duration_sec,
+      distance_m,
+      avg_hr,
+      climb_m,
+      feel_rating,
+      details,
+      gpx_points,
+      created_at::text,
+      updated_at::text
+    from exercises
+    where owner_id = ${userId}
+    order by exercise_date desc, created_at desc
+  `;
+
+  const result = [];
+  for (const row of rows) {
+    const comments = await sql<
+      { id: string; username: string; body: string; created_at: string }[]
+    >`
+      select c.id::text, u.username, c.body, c.created_at::text
+      from comments c
+      join users u on u.id = c.author_id
+      where c.exercise_id = ${row.id}
+      order by c.created_at asc
+    `;
+    result.push({ ...row, comments });
+  }
+  return result;
+}

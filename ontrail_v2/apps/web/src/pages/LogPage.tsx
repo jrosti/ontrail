@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
@@ -31,6 +31,7 @@ export function LogPage() {
   const { lang, favoriteSports, rememberSport } = useStore();
   const t = I18N[lang];
   const nav = useNavigate();
+  const qc = useQueryClient();
 
   // check for edit mode
   const searchParams = new URLSearchParams(window.location.search);
@@ -163,7 +164,11 @@ export function LogPage() {
       };
       return editId ? updateExercise(editId, payload) : createExercise(payload);
     },
-    onSuccess: (ex) => nav({ to: '/exercise/$id', params: { id: ex.id } }),
+    onSuccess: (ex) => {
+      qc.invalidateQueries({ queryKey: ['exercise', ex.id] });
+      qc.invalidateQueries({ queryKey: ['exercises'] });
+      nav({ to: '/exercise/$id', params: { id: ex.id } });
+    },
   });
 
   const paceDisplay = isSpeed
@@ -182,7 +187,7 @@ export function LogPage() {
       </div>
 
       <div className="ot-log-grid">
-        <form className="ot-log-form" onSubmit={e => { e.preventDefault(); if (canSave) saveMut.mutate(); }}>
+        <form id="ot-log-form" className="ot-log-form" onSubmit={e => { e.preventDefault(); if (canSave) saveMut.mutate(); }}>
           <Card style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <input
               className="ot-log-title"
@@ -366,12 +371,6 @@ export function LogPage() {
               )}
             </div>
 
-            <div className="ot-log-actions">
-              <button type="button" className="ot-btn-ghost" onClick={() => nav({ to: '/feed', search: {} })}>{t.cancel}</button>
-              <button type="submit" className="ot-btn-primary" disabled={!canSave || saveMut.isPending}>
-                <Icon name="check" size={18} stroke={2.4} />{t.save}
-              </button>
-            </div>
           </Card>
         </form>
 
@@ -395,6 +394,18 @@ export function LogPage() {
             <p className="ot-preview-hint">{t.previewHint}</p>
           </div>
         </aside>
+      </div>
+
+      <div className="ot-log-footer">
+        <button type="button" className="ot-btn-ghost" onClick={() => nav({ to: '/feed', search: {} })}>{t.cancel}</button>
+        <button
+          type="submit"
+          form="ot-log-form"
+          className="ot-btn-primary"
+          disabled={!canSave || saveMut.isPending}
+        >
+          <Icon name="check" size={18} stroke={2.4} />{t.save}
+        </button>
       </div>
 
       {pickerOpen && (
