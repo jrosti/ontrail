@@ -1,42 +1,106 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
 import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS, sportName } from '../sports';
+import { listExercises, getWeekSummaries } from '../api';
+import type { ExerciseListItem } from '../types';
+
+function fmtDuration(sec: number): string {
+  if (!sec) return '';
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  if (h > 0) return `${h}h ${m}min`;
+  return `${m}min`;
+}
+
+function isoWeek(date: Date): number {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+  const week1 = new Date(d.getFullYear(), 0, 4);
+  return 1 + Math.round(((d.getTime() - week1.getTime()) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+}
 
 export function CalendarPage() {
-  const { lang } = useStore();
+  const { lang, currentUser } = useStore();
   const t = I18N[lang];
   const [year, setYear] = useState(new Date().getFullYear());
   const monthNamesFi = ['Tammikuu', 'Helmikuu', 'Maaliskuu', 'Huhtikuu', 'Toukokuu', 'Kesäkuu', 'Heinäkuu', 'Elokuu', 'Syyskuu', 'Lokakuu', 'Marraskuu', 'Joulukuu'];
   const monthNamesEn = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const dows = lang === 'fi' ? ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'] : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
+  const username = currentUser?.username ?? '';
+
+  const { data: exercisesData } = useQuery({
+    queryKey: ['exercises', 'calendar', username, year],
+    queryFn: () => listExercises({ user: username, perPage: 500 }),
+    enabled: !!username,
+  });
+
+  const { data: weekSummaries } = useQuery({
+    queryKey: ['weekSummaries', username, year],
+    queryFn: () => getWeekSummaries(username, year),
+    enabled: !!username,
+  });
+
+  const exercisesByDate = useMemo(() => {
+    const map = new Map<string, ExerciseListItem[]>();
+    for (const ex of (exercisesData?.items ?? [])) {
+      const key = ex.date.slice(0, 10);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(ex);
+    }
+    return map;
+  }, [exercisesData]);
+
+  const weekDurationMap = useMemo(() => {
+    const map: Record<number, number> = {};
+    for (const w of (weekSummaries ?? [])) {
+      map[w.week] = (map[w.week] ?? 0) + w.totalDurationSec;
+    }
+    return map;
+  }, [weekSummaries]);
+
   const now = new Date();
   const currentMonth = now.getMonth();
 
-  // Show last 3 months
   const months = Array.from({ length: 3 }, (_, idx) => {
-    const m = (currentMonth - idx + 12) % 12;
-    const y = currentMonth - idx < 0 ? year - 1 : year;
+    const rawM = currentMonth - idx;
+    const m = ((rawM % 12) + 12) % 12;
+    const y = rawM < 0 ? year - 1 : year;
     const first = new Date(y, m, 1);
     const startDow = (first.getDay() + 6) % 7;
     const days = new Date(y, m + 1, 0).getDate();
-    const weeks: { days: (null | { d: number; acts: { sport: string; km: number }[] })[]; km: number; wk: number }[] = [];
-    let week: (null | { d: number; acts: { sport: string; km: number }[] })[] = new Array(startDow).fill(null);
-    let weekKm = 0;
+
+    type WeekRow = { days: (null | { d: number; date: string; acts: ExerciseListItem[] })[]; wk: number; totalSec: number };
+    const weeks: WeekRow[] = [];
+    let week: WeekRow['days'] = new Array(startDow).fill(null);
+    let weekTotalSec = 0;
+    let weekNum = 0;
+
     for (let d = 1; d <= days; d++) {
-      const acts = Math.random() < 0.45 ? [{ sport: ['run', 'bike', 'orient', 'gym'][Math.floor(Math.random() * 4)], km: +(3 + Math.random() * 12).toFixed(1) }] : [];
-      weekKm += acts.reduce((s, a) => s + a.km, 0);
-      week.push({ d, acts });
+      const dateObj = new Date(y, m, d);
+      const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const acts = exercisesByDate.get(dateStr) ?? [];
+      const dayDur = acts.reduce((s, a) => s + a.durationSec, 0);
+      weekTotalSec += dayDur;
+      weekNum = isoWeek(dateObj);
+      week.push({ d, date: dateStr, acts });
       if (week.length === 7) {
-        weeks.push({ days: week, km: weekKm, wk: Math.ceil(d / 7) + idx * 4 });
-        week = []; weekKm = 0;
+        const wkNum = weekNum;
+        weeks.push({ days: week, wk: wkNum, totalSec: weekDurationMap[wkNum] ?? weekTotalSec });
+        week = [];
+        weekTotalSec = 0;
       }
     }
-    if (week.length) { while (week.length < 7) week.push(null); weeks.push({ days: week, km: weekKm, wk: weeks.length + 1 }); }
+    if (week.length) {
+      while (week.length < 7) week.push(null);
+      weeks.push({ days: week, wk: weekNum, totalSec: weekDurationMap[weekNum] ?? weekTotalSec });
+    }
     return { name: (lang === 'fi' ? monthNamesFi : monthNamesEn)[m], weeks };
   }).reverse();
 
@@ -83,7 +147,7 @@ export function CalendarPage() {
                                   color: SPORTS[a.sport]?.color ?? 'var(--accent)',
                                 }}
                                 title={sportName(a.sport, lang)}>
-                                <SportGlyph sport={a.sport} size={11} />{a.km}
+                                <SportGlyph sport={a.sport} size={11} />
                               </span>
                             ))}
                           </div>
@@ -91,7 +155,7 @@ export function CalendarPage() {
                       )}
                     </div>
                   ))}
-                  <span className="ot-cal-total">{w.km > 0 ? `${w.km.toFixed(0)} km` : ''}</span>
+                  <span className="ot-cal-total">{w.totalSec > 0 ? fmtDuration(w.totalSec) : ''}</span>
                 </div>
               ))}
             </div>

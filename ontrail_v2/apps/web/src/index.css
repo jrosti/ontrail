@@ -330,3 +330,24 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
 }
 
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+
+/* Unread badge */
+.ot-nav-badge { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; border-radius: 50%; background: oklch(0.65 0.22 28); border: 2px solid var(--bg); pointer-events: none; }
+
+/* Groups page */
+.ot-group-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.ot-group-name { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+.ot-group-meta { font-size: 13px; color: var(--text-faint); margin-top: 3px; }
+
+/* Sport filter chips */
+.ot-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border: 1px solid var(--border); border-radius: 20px; background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500; transition: background .14s, color .14s, border-color .14s; }
+.ot-chip:hover { background: var(--surface-2); color: var(--text); }
+.ot-chip.active { background: color-mix(in oklab, var(--accent) 14%, transparent); color: var(--accent); border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); }
+
+/* Load more button */
+.ot-load-more { padding: 10px 28px; border: 1px solid var(--border); border-radius: 10px; background: transparent; color: var(--text-dim); font-size: 14px; font-weight: 600; transition: background .14s, color .14s; }
+.ot-load-more:hover { background: var(--surface-2); color: var(--text); }
+
+/* Profile input */
+.ot-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font-size: 14px; outline: none; transition: border-color .15s; }
+.ot-input:focus { border-color: var(--accent); }

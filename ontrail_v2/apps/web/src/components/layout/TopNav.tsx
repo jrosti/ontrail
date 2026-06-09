@@ -1,16 +1,39 @@
 import { Link, useNavigate } from '@tanstack/react-router';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Icon } from '../ui/Icon';
 import { Logo } from '../ui/Logo';
 import { Avatar } from '../ui/Avatar';
 import { useStore } from '../../store';
 import { I18N } from '../../i18n';
 import { useState } from 'react';
+import { getUnread, markAllRead } from '../../api';
 
 export function TopNav() {
   const { lang, setLang, currentUser, theme, setTheme } = useStore();
   const t = I18N[lang];
   const nav = useNavigate();
   const [q, setQ] = useState('');
+  const qc = useQueryClient();
+
+  const { data: unread } = useQuery({
+    queryKey: ['unread'],
+    queryFn: getUnread,
+    enabled: !!currentUser,
+    refetchInterval: 60000,
+  });
+
+  const markReadMutation = useMutation({
+    mutationFn: markAllRead,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['unread'] }),
+  });
+
+  const handleFeedClick = () => {
+    if (unread && unread.commentCount > 0) {
+      markReadMutation.mutate();
+    }
+  };
+
+  const hasUnread = !!unread && unread.commentCount > 0;
 
   return (
     <header className="ot-topnav">
@@ -22,8 +45,12 @@ export function TopNav() {
           <nav className="ot-nav-tabs">
             <Link to="/feed" search={{}} className="ot-nav-tab"
               activeProps={{ className: 'ot-nav-tab active' }}
-              inactiveProps={{ className: 'ot-nav-tab' }}>
-              <Icon name="feed" size={18} stroke={2.2} /><span>{t.feed}</span>
+              inactiveProps={{ className: 'ot-nav-tab' }}
+              onClick={handleFeedClick}
+              style={{ position: 'relative' }}>
+              <Icon name="feed" size={18} stroke={2.2} />
+              <span>{t.feed}</span>
+              {hasUnread && <span className="ot-nav-badge" />}
             </Link>
             <Link to="/analytics" className="ot-nav-tab"
               activeProps={{ className: 'ot-nav-tab active' }}
@@ -34,6 +61,11 @@ export function TopNav() {
               activeProps={{ className: 'ot-nav-tab active' }}
               inactiveProps={{ className: 'ot-nav-tab' }}>
               <Icon name="calendar" size={18} stroke={2.2} /><span>{t.calendar}</span>
+            </Link>
+            <Link to="/groups" className="ot-nav-tab"
+              activeProps={{ className: 'ot-nav-tab active' }}
+              inactiveProps={{ className: 'ot-nav-tab' }}>
+              <Icon name="feed" size={18} stroke={2.2} /><span>{t.groups}</span>
             </Link>
           </nav>
         </div>

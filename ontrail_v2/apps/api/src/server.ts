@@ -50,13 +50,18 @@ export { emitToUser };
 
 const config = loadConfig();
 
-async function optionalUser(req: Request): Promise<DbUser | null> {
-  const claims = await verifyHankoRequest(req).catch(() => null);
+interface RequestDeps {
+  verifyRequest?: typeof verifyHankoRequest;
+}
+
+async function optionalUser(req: Request, deps: RequestDeps = {}): Promise<DbUser | null> {
+  const verifyRequest = deps.verifyRequest ?? verifyHankoRequest;
+  const claims = await verifyRequest(req).catch(() => null);
   return claims ? findOrCreateUserFromClaims(claims) : null;
 }
 
-async function requireUser(req: Request): Promise<DbUser | Response> {
-  const user = await optionalUser(req);
+async function requireUser(req: Request, deps: RequestDeps = {}): Promise<DbUser | Response> {
+  const user = await optionalUser(req, deps);
   return user ?? unauthorized();
 }
 
@@ -203,7 +208,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
 
 // ── Router ───────────────────────────────────────────────────────────────────
 
-async function route(req: Request): Promise<Response> {
+async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   const url = new URL(req.url);
   const path = url.pathname;
 
@@ -226,7 +231,7 @@ async function route(req: Request): Promise<Response> {
   // ── Me ────────────────────────────────────────────────────────────────────
   if (path === '/api/me') {
     if (req.method !== 'GET') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     return json(apiUser(user));
   }
@@ -234,11 +239,11 @@ async function route(req: Request): Promise<Response> {
   // ── Exercises ─────────────────────────────────────────────────────────────
   if (path === '/api/exercises') {
     if (req.method === 'GET') {
-      const viewer = await optionalUser(req);
+      const viewer = await optionalUser(req, deps);
       return json(await listExercises(url.searchParams, Boolean(viewer)));
     }
     if (req.method === 'POST') {
-      const user = await requireUser(req);
+      const user = await requireUser(req, deps);
       if (user instanceof Response) return user;
       return json(await createExercise(user, await req.json()), { status: 201 });
     }
@@ -250,19 +255,19 @@ async function route(req: Request): Promise<Response> {
     const id = exerciseMatch[1];
     if (!isUuid(id)) return notFound();
     if (req.method === 'GET') {
-      const user = await optionalUser(req);
+      const user = await optionalUser(req, deps);
       const exercise = await getExercise(id, Boolean(user));
       return exercise ? json(exercise) : notFound();
     }
     if (req.method === 'PATCH' || req.method === 'PUT') {
-      const user = await requireUser(req);
+      const user = await requireUser(req, deps);
       if (user instanceof Response) return user;
       const result = await updateExercise(id, user, await req.json());
       if (result === 'forbidden') return forbidden();
       return result ? json(result) : notFound();
     }
     if (req.method === 'DELETE') {
-      const user = await requireUser(req);
+      const user = await requireUser(req, deps);
       if (user instanceof Response) return user;
       const result = await deleteExercise(id, user);
       if (result === 'forbidden') return forbidden();
@@ -276,7 +281,7 @@ async function route(req: Request): Promise<Response> {
   if (commentsMatch) {
     if (!isUuid(commentsMatch[1])) return notFound();
     if (req.method !== 'POST') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const body = (await req.json()) as { body?: string };
     if (!body.body?.trim()) return json({ error: 'body_required' }, { status: 400 });
@@ -288,7 +293,7 @@ async function route(req: Request): Promise<Response> {
   if (deleteCommentMatch) {
     if (!isUuid(deleteCommentMatch[1]) || !isUuid(deleteCommentMatch[2])) return notFound();
     if (req.method !== 'DELETE') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const result = await deleteComment(deleteCommentMatch[1], deleteCommentMatch[2], user);
     if (result === 'forbidden') return forbidden();
@@ -302,7 +307,7 @@ async function route(req: Request): Promise<Response> {
     const exerciseId = caresMatch[1];
     if (!isUuid(exerciseId)) return notFound();
     if (req.method !== 'POST') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
 
     // Check if exercise exists
@@ -330,7 +335,7 @@ async function route(req: Request): Promise<Response> {
   // ── User profile ──────────────────────────────────────────────────────────
   if (path === '/api/users/me') {
     if (req.method !== 'PATCH') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const body = (await req.json()) as {
       displayName?: string;
@@ -460,13 +465,13 @@ async function route(req: Request): Promise<Response> {
   }
 
   // ── Groups ────────────────────────────────────────────────────────────────
-  if (path === '/api/groups') {
+    if (path === '/api/groups') {
     if (req.method === 'GET') {
       const items = await listGroups();
       return json({ items });
     }
     if (req.method === 'POST') {
-      const user = await requireUser(req);
+      const user = await requireUser(req, deps);
       if (user instanceof Response) return user;
       const body = (await req.json()) as { name?: string; description?: string };
       if (!body.name?.trim()) return json({ error: 'name_required' }, { status: 400 });
@@ -480,7 +485,7 @@ async function route(req: Request): Promise<Response> {
   const groupJoinMatch = path.match(/^\/api\/groups\/([^/]+)\/join$/);
   if (groupJoinMatch) {
     if (req.method !== 'POST') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const result = await joinGroup(groupJoinMatch[1], user.id);
     return result === 'not_found' ? notFound() : json({ ok: true });
@@ -489,7 +494,7 @@ async function route(req: Request): Promise<Response> {
   const groupLeaveMatch = path.match(/^\/api\/groups\/([^/]+)\/leave$/);
   if (groupLeaveMatch) {
     if (req.method !== 'POST') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const result = await leaveGroup(groupLeaveMatch[1], user.id);
     return result === 'not_found' ? notFound() : json({ ok: true });
@@ -541,21 +546,21 @@ async function route(req: Request): Promise<Response> {
   // ── Exercise search ───────────────────────────────────────────────────────
   if (path === '/api/search') {
     if (req.method !== 'GET') return methodNotAllowed();
-    const viewer = await optionalUser(req);
+    const viewer = await optionalUser(req, deps);
     return json(await searchExercises(url.searchParams, Boolean(viewer)));
   }
 
   // ── Unread ────────────────────────────────────────────────────────────────
   if (path === '/api/unread') {
     if (req.method !== 'GET') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     return json(await getUnread(user.id));
   }
 
   if (path === '/api/unread/mark-all-read') {
     if (req.method !== 'POST') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     await markAllRead(user.id);
     return json({ ok: true });
@@ -564,7 +569,7 @@ async function route(req: Request): Promise<Response> {
   // ── Export ────────────────────────────────────────────────────────────────
   if (path === '/api/export') {
     if (req.method !== 'GET') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
     const exercises = await getExercisesForExport(user.id);
     return json(exercises);
@@ -573,7 +578,7 @@ async function route(req: Request): Promise<Response> {
   // ── SSE ───────────────────────────────────────────────────────────────────
   if (path === '/api/sse') {
     if (req.method !== 'GET') return methodNotAllowed();
-    const user = await requireUser(req);
+    const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
 
     let unregister: (() => void) | undefined;
@@ -621,25 +626,29 @@ async function route(req: Request): Promise<Response> {
   return notFound();
 }
 
-await ensureSportsSeeded();
-
-const server = Bun.serve({
-  port: config.port,
-  async fetch(req) {
-    try {
-      return await route(req);
-    } catch (error) {
-      return handleError(error);
-    }
-  },
-});
-
-console.log(`OnTrail API listening on http://localhost:${server.port}`);
-
-async function shutdown() {
-  await closeDb();
-  process.exit(0);
+export async function handleRequest(req: Request, deps: RequestDeps = {}): Promise<Response> {
+  try {
+    return await route(req, deps);
+  } catch (error) {
+    return handleError(error);
+  }
 }
 
-process.on('SIGINT', shutdown);
-process.on('SIGTERM', shutdown);
+if (import.meta.main) {
+  await ensureSportsSeeded();
+
+  const server = Bun.serve({
+    port: config.port,
+    fetch: handleRequest,
+  });
+
+  console.log(`OnTrail API listening on http://localhost:${server.port}`);
+
+  async function shutdown() {
+    await closeDb();
+    process.exit(0);
+  }
+
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+}

@@ -92,47 +92,124 @@ export interface ExerciseListItem {
 
 export interface SportSummary {
   sport: string;
-  sessions: number;
+  sessionCount: number;
   totalDistanceM: number;
   totalDurationSec: number;
+  totalClimbM: number;
+  totalKcal: number;
   avgHr?: number;
-  totalClimbM?: number;
+  bestDurationSec?: number;
+  bestDistanceM?: number;
+  firstDate?: string;
+  lastDate?: string;
 }
 
-export interface YearSummary {
+export interface YearSportSummary {
   year: number;
+  sport: string;
+  sessionCount: number;
   totalDistanceM: number;
   totalDurationSec: number;
-  sessions: number;
-  avgPace?: number;
   totalClimbM: number;
-  totalKudos: number;
-  sports: SportSummary[];
+  totalKcal: number;
+  avgHr?: number;
+  bestDurationSec?: number;
+  bestDistanceM?: number;
+  firstDate?: string;
+  lastDate?: string;
 }
 
 export interface MonthSummary {
   year: number;
   month: number;
+  sport: string;
+  sessionCount: number;
   totalDistanceM: number;
   totalDurationSec: number;
-  sessions: number;
-  sports: SportSummary[];
+  totalClimbM: number;
+  avgHr?: number;
 }
 
 export interface WeekSummary {
   year: number;
   week: number;
+  sport: string;
+  sessionCount: number;
   totalDistanceM: number;
   totalDurationSec: number;
-  sessions: number;
+  totalClimbM: number;
+  avgHr?: number;
 }
 
-export interface Record {
+export interface AthleteProfile {
+  userId: string;
+  username: string;
+  displayName: string;
+  restHr?: number;
+  maxHr?: number;
+  aerk?: number;
+  anaerk?: number;
+  zone2LowerBpm?: number;
+  zone4LowerBpm?: number;
+  totalSessions: number;
+  careerDurationSec: number;
+  careerDistanceM: number;
+  careerClimbM: number;
+  careerKcal: number;
+  firstExerciseDate?: string;
+  lastExerciseDate?: string;
+  firstYear?: number;
+  lastYear?: number;
+  activeWeeks: number;
+  primarySport?: string;
+  sessions30d: number;
+  sessions90d: number;
+  sessions365d: number;
+  durationSec30d: number;
+  durationSec90d: number;
+}
+
+export interface PersonalRecord {
   sport: string;
-  distance: string;
-  value: string;
-  exerciseId: string;
-  date: string;
+  bestDurationSec?: number;
+  bestDurationExerciseId?: string;
+  bestDistanceM?: number;
+  bestDistanceExerciseId?: string;
+  bestPace?: number;
+  bestPaceExerciseId?: string;
+  peakAvgHr?: number;
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  userId: string;
+  username: string;
+  displayName: string;
+  avatarInitials: string;
+  avatarColor: string;
+  sessionCount: number;
+  totalDurationSec: number;
+  totalDistanceM: number;
+}
+
+export interface TagSummary {
+  tag: string;
+  sessionCount: number;
+  totalDurationSec: number;
+  totalDistanceM: number;
+  totalClimbM: number;
+  avgHr?: number;
+  firstDate?: string;
+  lastDate?: string;
+}
+
+export interface UserListItem {
+  username: string;
+  displayName: string;
+  avatarInitials: string;
+  avatarColor: string;
+  synopsis?: string;
+  exerciseCount: number;
 }
 
 export interface Group {

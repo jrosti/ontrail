@@ -1,10 +1,11 @@
 import axios from 'axios';
 import type {
   Exercise, ExerciseListItem, Comment, User,
-  YearSummary, MonthSummary, WeekSummary, Group, PaginatedResponse, Sport,
+  YearSportSummary, MonthSummary, WeekSummary, SportSummary,
+  AthleteProfile, PersonalRecord, LeaderboardEntry, TagSummary,
+  UserListItem, Group, PaginatedResponse, Sport,
 } from './types';
 
-// In dev, Vite proxies /api → localhost:3001. In prod, set VITE_API_URL.
 const BASE = import.meta.env.VITE_API_URL || '/api';
 
 const client = axios.create({ baseURL: BASE, withCredentials: true });
@@ -65,18 +66,46 @@ export const getUser = (username: string) =>
 export const updateProfile = (body: Partial<User>) =>
   client.patch<User>('/me', body).then(r => r.data);
 
+export const listUsers = (q?: string, page?: number, perPage?: number) =>
+  client.get<{ items: UserListItem[]; total: number; page: number; perPage: number }>('/users', { params: { q, page, perPage } }).then(r => r.data);
+
 // Summaries
-export const getYearSummary = (_username: string, year: number) =>
-  client.get<YearSummary>(`/summaries/year/${year}`).then(r => r.data);
+export const getSportSummary = (username: string) =>
+  client.get<{ items: SportSummary[] }>(`/users/${username}/summary`).then(r => r.data.items);
 
-export const getMonthSummaries = (_username: string, _year: number) =>
-  client.get<MonthSummary[]>(`/summaries/months`).then(r => r.data);
+export const getYearSummary = (username: string, year: number) =>
+  client.get<{ items: YearSportSummary[] }>(`/users/${username}/summary/${year}`).then(r => r.data.items);
 
-export const getWeekSummaries = (_username: string, _year: number) =>
-  client.get<WeekSummary[]>(`/summaries/weeks`).then(r => r.data);
+export const getMonthSummaries = (username: string, year: number) =>
+  client.get<{ items: MonthSummary[] }>(`/users/${username}/summary/${year}/by/month`).then(r => r.data.items);
+
+export const getWeekSummaries = (username: string, year: number) =>
+  client.get<{ items: WeekSummary[] }>(`/users/${username}/summary/${year}/by/week`).then(r => r.data.items);
+
+export const getAthleteProfile = (username: string) =>
+  client.get<AthleteProfile>(`/users/${username}/athlete`).then(r => r.data);
+
+export const getPersonalRecords = (username: string) =>
+  client.get<{ items: PersonalRecord[] }>(`/users/${username}/records`).then(r => r.data.items);
+
+export const getTagSummary = (username: string) =>
+  client.get<{ items: TagSummary[] }>(`/users/${username}/summary/tags`).then(r => r.data.items);
+
+export const getLeaderboard = (period: 'month' | 'year') =>
+  client.get<{ items: LeaderboardEntry[] }>(`/leaderboards/${period}`).then(r => r.data.items);
+
+// Unread
+export const getUnread = () =>
+  client.get<{ commentCount: number; exerciseIds: string[] }>('/unread').then(r => r.data);
+
+export const markAllRead = () =>
+  client.post('/unread/mark-all-read').then(r => r.data);
 
 // Groups
 export const listGroups = () => client.get<{ items: Group[]; total: number }>('/groups').then(r => r.data.items);
+
+export const createGroup = (body: { name: string; description?: string }) =>
+  client.post<Group>('/groups', body).then(r => r.data);
 
 export const joinGroup = (id: string) =>
   client.post(`/groups/${encodeURIComponent(id)}/members`).then(r => r.data);
@@ -89,6 +118,9 @@ export const search = (q: string) =>
   client.get<PaginatedResponse<ExerciseListItem>>('/search', { params: { q } }).then(r => r.data);
 
 // Export
+export const exportData = () =>
+  client.get('/export', { responseType: 'blob' }).then(r => r.data);
+
 export const exportCSV = () =>
   client.get(`/export/csv`, { responseType: 'blob' }).then(r => r.data);
 

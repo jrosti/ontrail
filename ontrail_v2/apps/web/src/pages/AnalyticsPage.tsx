@@ -3,12 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { Metric } from '../components/ui/Metric';
-import { Donut, HRZonesBar, Heatmap, LineChart, ZONE_COLORS } from '../components/charts/Charts';
+import { Donut, Heatmap, LineChart } from '../components/charts/Charts';
 import { SportGlyph } from '../components/ui/SportGlyph';
 import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS, sportName } from '../sports';
-import { getYearSummary, getMonthSummaries } from '../api';
+import { getYearSummary, getMonthSummaries, getWeekSummaries } from '../api';
+import type { YearSportSummary } from '../types';
 
 export function AnalyticsPage() {
   const { lang, currentUser } = useStore();
@@ -17,7 +18,7 @@ export function AnalyticsPage() {
   const year = new Date().getFullYear();
   const username = currentUser?.username ?? '';
 
-  const { data: yearSummary } = useQuery({
+  const { data: yearItems } = useQuery({
     queryKey: ['yearSummary', username, year],
     queryFn: () => getYearSummary(username, year),
     enabled: !!username,
@@ -29,6 +30,12 @@ export function AnalyticsPage() {
     enabled: !!username,
   });
 
+  const { data: weekSummaries } = useQuery({
+    queryKey: ['weekSummaries', username, year],
+    queryFn: () => getWeekSummaries(username, year),
+    enabled: !!username,
+  });
+
   if (!currentUser) return (
     <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-faint)' }}>
       <Icon name="analytics" size={48} style={{ margin: '0 auto 16px', opacity: 0.2 }} />
@@ -36,28 +43,38 @@ export function AnalyticsPage() {
     </div>
   );
 
-  const s = yearSummary;
-  const kmTotal = s ? (s.totalDistanceM / 1000).toFixed(0) : '—';
-  const hrTotal = s ? `${Math.floor(s.totalDurationSec / 3600)} h` : '—';
-  const sportDonut = (s?.sports ?? []).map(sp => ({
+  const items: YearSportSummary[] = yearItems ?? [];
+  const totalDurationSec = items.reduce((s, r) => s + r.totalDurationSec, 0);
+  const totalDistanceM = items.reduce((s, r) => s + r.totalDistanceM, 0);
+  const totalSessions = items.reduce((s, r) => s + r.sessionCount, 0);
+  const totalClimbM = items.reduce((s, r) => s + r.totalClimbM, 0);
+
+  const kmTotal = totalDistanceM > 0 ? (totalDistanceM / 1000).toFixed(0) : '—';
+  const hrTotal = totalDurationSec > 0 ? `${Math.floor(totalDurationSec / 3600)} h` : '—';
+
+  const sportDonut = items.map(sp => ({
     label: sportName(sp.sport, lang),
     color: SPORTS[sp.sport]?.color ?? 'var(--accent)',
-    value: sp.sessions,
+    value: sp.sessionCount,
   })).sort((a, b) => b.value - a.value);
 
-  const monthKm = (monthSummaries ?? []).map((m) => m.totalDistanceM / 1000);
+  const monthMap: Record<number, number> = {};
+  for (const m of (monthSummaries ?? [])) {
+    monthMap[m.month] = (monthMap[m.month] ?? 0) + m.totalDistanceM;
+  }
+  const monthKm = Array.from({ length: 12 }, (_, i) => (monthMap[i + 1] ?? 0) / 1000);
   const monthLabels = ['Tam', 'Hel', 'Maa', 'Huh', 'Tou', 'Kes', 'Hei', 'Elo', 'Syy', 'Lok', 'Mar', 'Jou'];
 
-  const hrZones = [
-    { z: 1, label: 'Z1', pct: 14, name: { fi: 'Palauttava', en: 'Recovery' } },
-    { z: 2, label: 'Z2', pct: 38, name: { fi: 'Peruskestävyys', en: 'Endurance' } },
-    { z: 3, label: 'Z3', pct: 26, name: { fi: 'Vauhtikestävyys', en: 'Tempo' } },
-    { z: 4, label: 'Z4', pct: 16, name: { fi: 'Maksimikestävyys', en: 'Threshold' } },
-    { z: 5, label: 'Z5', pct: 6, name: { fi: 'Maksimi', en: 'Anaerobic' } },
-  ];
+  const weekMap: Record<number, number> = {};
+  for (const w of (weekSummaries ?? [])) {
+    weekMap[w.week] = (weekMap[w.week] ?? 0) + w.totalDurationSec;
+  }
+  const hm = Array.from({ length: 26 }, (_, i) => {
+    const val = weekMap[i + 1] ?? 0;
+    return Array.from({ length: 7 }, () => val > 0 ? Math.min(100, Math.round(val / 3600 * 10)) : 0);
+  });
 
-  // placeholder heatmap
-  const hm = Array.from({ length: 26 }, () => Array.from({ length: 7 }, () => Math.random() < 0.3 ? 0 : Math.floor(Math.random() * 100)));
+  const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
 
   return (
     <div className="ot-page">
@@ -78,15 +95,15 @@ export function AnalyticsPage() {
       <div className="ot-summary-row">
         <Metric value={kmTotal} unit="km" label={t.distance} big />
         <Metric value={hrTotal} label={t.duration} big />
-        <Metric value={s?.sessions ?? '—'} label={t.sessions} big />
-        <Metric value={s?.totalClimbM ? s.totalClimbM.toLocaleString() : '—'} unit="m" label={t.climb} big />
+        <Metric value={totalSessions > 0 ? totalSessions : '—'} label={t.sessions} big />
+        <Metric value={totalClimbM > 0 ? totalClimbM.toLocaleString() : '—'} unit="m" label={t.climb} big />
       </div>
 
       <div className="ot-analytics-grid">
         <Panel span={4} title={t.sportBreakdown}>
           {sportDonut.length > 0 ? (
             <div style={{ display: 'flex', gap: 22, alignItems: 'center', flexWrap: 'wrap' }}>
-              <Donut data={sportDonut} size={170} thickness={24} centerLabel={s?.sessions} centerSub={t.sessions} />
+              <Donut data={sportDonut} size={170} thickness={24} centerLabel={totalSessions} centerSub={t.sessions} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7, flex: 1, minWidth: 120 }}>
                 {sportDonut.map(d => (
                   <div key={d.label} className="ot-legend-row">
@@ -101,31 +118,32 @@ export function AnalyticsPage() {
         </Panel>
 
         <Panel span={8} title={t.distanceTrend}>
-          {monthKm.length > 0 ? (
+          {monthKm.some(v => v > 0) ? (
             <LineChart height={210}
               series={[{ data: monthKm, color: 'var(--accent)' }]}
               xTicks={monthLabels} yFmt={v => Math.round(v).toString()} />
           ) : <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>{t.noExercises}</div>}
         </Panel>
 
-        <Panel span={5} title={t.hrZones} sub={lang === 'fi' ? 'Ajan jakauma' : 'Time distribution'}>
-          <HRZonesBar zones={hrZones} height={18} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginTop: 4 }}>
-            {hrZones.map(z => (
-              <div key={z.z} className="ot-zone-row">
-                <span className="ot-zone-dot" style={{ background: ZONE_COLORS[z.z - 1] }} />
-                <span className="ot-zone-name">{z.label} · {z.name[lang]}</span>
-                <span className="ot-zone-pct">{z.pct}%</span>
-              </div>
-            ))}
-          </div>
+        <Panel span={5} title={t.hrZones}>
+          {hasHrProfile ? (
+            <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>
+              {lang === 'fi' ? 'Sykealuedata lasketaan harjoituksista.' : 'HR zone data calculated from workouts.'}
+            </div>
+          ) : (
+            <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>
+              {lang === 'fi'
+                ? 'Syketiedot saatavilla kun lisäät HR-profiilin'
+                : 'HR data available after setting up your HR profile'}
+            </div>
+          )}
         </Panel>
 
         <Panel span={7} title={t.consistency} sub={lang === 'fi' ? '26 viikkoa' : 'Last 26 weeks'}>
           <Heatmap weeks={hm} />
         </Panel>
 
-        {s?.sports && s.sports.length > 0 && (
+        {items.length > 0 && (
           <Panel span={12} title={t.sportSummary}>
             <div className="ot-table">
               <div className="ot-tr ot-th">
@@ -136,7 +154,7 @@ export function AnalyticsPage() {
                 <span>{t.climb}</span>
                 <span>{lang === 'fi' ? 'Kerrat' : 'Sessions'}</span>
               </div>
-              {s.sports.map((r, i) => (
+              {items.map((r, i) => (
                 <div key={i} className="ot-tr ot-td">
                   <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                     <span className="ot-table-dot" style={{ background: SPORTS[r.sport]?.color ?? 'var(--accent)' }} />
@@ -147,7 +165,7 @@ export function AnalyticsPage() {
                   <span>{r.totalDurationSec ? `${Math.floor(r.totalDurationSec / 3600)} h` : '—'}</span>
                   <span>{r.avgHr ?? '—'}</span>
                   <span>{r.totalClimbM ? `${r.totalClimbM} m` : '—'}</span>
-                  <span style={{ fontWeight: 600 }}>{r.sessions}</span>
+                  <span style={{ fontWeight: 600 }}>{r.sessionCount}</span>
                 </div>
               ))}
             </div>
