@@ -88,6 +88,12 @@ jobs:
       - name: Apply OnTrail Hanko patches
         run: ./ontrail_v2/infra/hanko/patches/apply.sh "$GITHUB_WORKSPACE/_hanko/backend"
 
+      - name: Seed Hanko build metadata
+        working-directory: _hanko/backend
+        run: |
+          mkdir -p build_info
+          git rev-parse --short HEAD > build_info/version.txt
+
       - name: Build Hanko backend
         working-directory: _hanko/backend
         run: go build -o "$RUNNER_TEMP/hanko" .

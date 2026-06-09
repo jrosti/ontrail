@@ -130,7 +130,7 @@ describe('API integration', () => {
 
     expect(response.status).toBe(200);
     expect(body.total).toBeGreaterThan(60);
-    expect(body.items).toContainEqual(expect.objectContaining({ key: 'Juoksu', nameFi: 'Juoksu' }));
+    expect(body.items).toContainEqual(expect.objectContaining({ key: 'run', nameFi: 'Juoksu' }));
   });
 
   test('creates the current user from Hanko claims', async () => {
@@ -151,7 +151,7 @@ describe('API integration', () => {
 
     const response = await request('/api/exercises', {
       method: 'POST',
-      body: JSON.stringify({ title: 'Anonymous run', sport: 'Juoksu', durationSec: 1800 }),
+      body: JSON.stringify({ title: 'Anonymous run', sport: 'run', durationSec: 1800 }),
     });
 
     expect(response.status).toBe(401);
@@ -165,7 +165,7 @@ describe('API integration', () => {
       method: 'POST',
       headers: { 'x-test-subject': 'alice-subject' },
       body: JSON.stringify({
-        sport: 'Juoksu',
+        sport: 'run',
         title: 'Morning trail',
         body: '<p>Easy base run</p>',
         tags: ['base', 'forest'],
@@ -229,7 +229,7 @@ describe('API integration', () => {
       method: 'POST',
       headers: { 'x-test-subject': 'owner-subject' },
       body: JSON.stringify({
-        sport: 'Juoksu',
+        sport: 'run',
         title: 'Owner run',
         date: '2026-06-10',
         durationSec: 2400,
