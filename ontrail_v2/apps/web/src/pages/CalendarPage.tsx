@@ -24,6 +24,14 @@ function fmtDuration(sec: number): string {
   return `${m}min`;
 }
 
+function fmtDist(m: number, locale: string): string {
+  if (!m) return '';
+  if (m >= 1000) {
+    return new Intl.NumberFormat(locale, { style: 'unit', unit: 'kilometer', maximumFractionDigits: 1 }).format(m / 1000);
+  }
+  return new Intl.NumberFormat(locale, { style: 'unit', unit: 'meter', maximumFractionDigits: 0 }).format(m);
+}
+
 function isoWeek(date: Date): number {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
@@ -132,7 +140,7 @@ function MonthCard({
                           title={sportName(a.sport, lang)}>
                           <SportGlyph sport={a.sport} size={11} />
                           {a.distanceM
-                            ? <span>{a.distanceM >= 1000 ? `${(a.distanceM / 1000).toFixed(1)}` : `${a.distanceM}m`}</span>
+                            ? <span>{fmtDist(a.distanceM, lang === 'fi' ? 'fi-FI' : 'en-GB')}</span>
                             : a.durationSec ? <span>{fmtDuration(a.durationSec)}</span> : null}
                         </span>
                       ))}
