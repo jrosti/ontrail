@@ -351,3 +351,16 @@ h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spac
 /* Profile input */
 .ot-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font-size: 14px; outline: none; transition: border-color .15s; }
 .ot-input:focus { border-color: var(--accent); }
+
+/* Period picker */
+.ot-period-btn { display: inline-flex; align-items: center; gap: 4px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font-family: var(--font-display); font-weight: 600; font-size: 15px; transition: background .14s; }
+.ot-period-btn:hover { background: var(--surface); }
+.ot-picker-panel { position: absolute; right: 0; top: calc(100% + 6px); z-index: 200; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,.18); padding: 14px; min-width: 240px; }
+.ot-picker-year-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ot-picker-year-label { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+.ot-picker-year-grid, .ot-picker-month-grid, .ot-picker-week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.ot-picker-week-grid { grid-template-columns: repeat(5, 1fr); }
+.ot-picker-cell { padding: 7px 4px; border: 0; border-radius: 8px; background: transparent; color: var(--text-dim); font-size: 13px; font-weight: 500; text-align: center; transition: background .12s, color .12s; }
+.ot-picker-cell:hover { background: var(--surface-2); color: var(--text); }
+.ot-picker-cell.selected { background: var(--accent); color: #fff; font-weight: 700; }
+.ot-picker-cell-sm { font-size: 11px; padding: 5px 2px; }

@@ -467,7 +467,8 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   // ── Groups ────────────────────────────────────────────────────────────────
   if (path === '/api/groups') {
     if (req.method === 'GET') {
-      const items = await listGroups();
+      const viewer = await optionalUser(req, deps);
+      const items = await listGroups(viewer?.id);
       return json({ items });
     }
     if (req.method === 'POST') {
@@ -475,7 +476,7 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
       if (user instanceof Response) return user;
       const body = (await req.json()) as { name?: string; description?: string };
       if (!body.name?.trim()) return json({ error: 'name_required' }, { status: 400 });
-      const result = await createGroup(body.name.trim(), body.description?.trim() ?? null);
+      const result = await createGroup(body.name.trim(), body.description?.trim() ?? null, user.id);
       if (result === 'conflict') return json({ error: 'name_taken' }, { status: 409 });
       return json(result, { status: 201 });
     }

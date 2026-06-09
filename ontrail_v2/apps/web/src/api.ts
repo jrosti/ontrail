@@ -107,11 +107,11 @@ export const listGroups = () => client.get<{ items: Group[]; total: number }>('/
 export const createGroup = (body: { name: string; description?: string }) =>
   client.post<Group>('/groups', body).then(r => r.data);
 
-export const joinGroup = (id: string) =>
-  client.post(`/groups/${encodeURIComponent(id)}/members`).then(r => r.data);
+export const joinGroup = (normalizedName: string) =>
+  client.post(`/groups/${encodeURIComponent(normalizedName)}/join`).then(r => r.data);
 
-export const leaveGroup = (id: string) =>
-  client.delete(`/groups/${encodeURIComponent(id)}/members`).then(r => r.data);
+export const leaveGroup = (normalizedName: string) =>
+  client.post(`/groups/${encodeURIComponent(normalizedName)}/leave`).then(r => r.data);
 
 // Search
 export const search = (q: string) =>

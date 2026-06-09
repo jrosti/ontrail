@@ -20,12 +20,12 @@ export function GroupsPage() {
   });
 
   const joinMutation = useMutation({
-    mutationFn: (id: string) => joinGroup(id),
+    mutationFn: (normalizedName: string) => joinGroup(normalizedName),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['groups'] }),
   });
 
   const leaveMutation = useMutation({
-    mutationFn: (id: string) => leaveGroup(id),
+    mutationFn: (normalizedName: string) => leaveGroup(normalizedName),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['groups'] }),
   });
 
@@ -107,7 +107,7 @@ export function GroupsPage() {
                   <button
                     className="ot-iconbtn"
                     style={{ width: 'auto', padding: '0 14px', fontSize: 13, fontWeight: 600, flexShrink: 0 }}
-                    onClick={() => leaveMutation.mutate(g.id)}
+                    onClick={() => leaveMutation.mutate(g.normalizedName)}
                     disabled={leaveMutation.isPending}
                   >
                     {t.leaveGroup}
@@ -116,7 +116,7 @@ export function GroupsPage() {
                   <button
                     className="ot-rec-btn"
                     style={{ flexShrink: 0 }}
-                    onClick={() => joinMutation.mutate(g.id)}
+                    onClick={() => joinMutation.mutate(g.normalizedName)}
                     disabled={joinMutation.isPending}
                   >
                     {t.joinGroup}

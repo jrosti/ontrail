@@ -6,6 +6,7 @@ export interface DbGroup {
   normalizedName: string;
   description: string | null;
   memberCount: number;
+  isMember: boolean;
   createdAt: string;
 }
 
@@ -30,6 +31,7 @@ interface GroupRow {
   description: string | null;
   member_count: number;
   created_at: string;
+  is_member: boolean;
 }
 
 interface MemberRow {
@@ -46,11 +48,12 @@ function toGroup(row: GroupRow): DbGroup {
     normalizedName: row.normalized_name,
     description: row.description,
     memberCount: row.member_count,
+    isMember: row.is_member ?? false,
     createdAt: row.created_at,
   };
 }
 
-export async function listGroups(): Promise<DbGroup[]> {
+export async function listGroups(userId?: string): Promise<DbGroup[]> {
   const rows = await sql<GroupRow[]>`
     select
       g.id::text,
@@ -58,7 +61,8 @@ export async function listGroups(): Promise<DbGroup[]> {
       g.normalized_name,
       g.description,
       count(gm.user_id)::int as member_count,
-      g.created_at::text
+      g.created_at::text,
+      ${userId ? sql`exists(select 1 from group_members m2 where m2.group_id = g.id and m2.user_id = ${userId})` : sql`false`} as is_member
     from groups g
     left join group_members gm on gm.group_id = g.id
     group by g.id
@@ -108,6 +112,7 @@ export async function getGroupByName(
 export async function createGroup(
   name: string,
   description: string | null,
+  creatorId?: string,
 ): Promise<DbGroup | 'conflict'> {
   const normalized = normalizeName(name);
   try {
@@ -120,9 +125,20 @@ export async function createGroup(
         normalized_name,
         description,
         0::int as member_count,
-        created_at::text
+        created_at::text,
+        false as is_member
     `;
-    return toGroup(rows[0]);
+    const group = rows[0];
+    if (creatorId) {
+      await sql`
+        insert into group_members (group_id, user_id)
+        values (${group.id}, ${creatorId})
+        on conflict do nothing
+      `;
+      group.member_count = 1;
+      group.is_member = true;
+    }
+    return toGroup(group);
   } catch (err: unknown) {
     const pg = err as { code?: string };
     if (pg.code === '23505') return 'conflict';

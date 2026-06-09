@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -28,16 +28,99 @@ function fmtDur(sec: number) {
 
 type Scope = 'all' | 'year' | 'month' | 'week';
 
-function PeriodNav({ label, onPrev, onNext }: { label: string; onPrev: () => void; onNext: () => void }) {
+const PICK_YEARS = Array.from({ length: 12 }, (_, i) => CURRENT_YEAR - i);
+
+function PeriodPicker({ scope, year, month, week, onYear, onMonth, onWeek, lang }: {
+  scope: Scope; year: number; month: number; week: number;
+  onYear: (y: number) => void; onMonth: (m: number) => void; onWeek: (w: number) => void;
+  lang: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [pickYear, setPickYear] = useState(year);
+  const ref = useRef<HTMLDivElement>(null);
+  const monthNames = lang === 'fi' ? MONTH_NAMES_FI : MONTH_NAMES_EN;
+  const monthShort = lang === 'fi' ? MONTH_SHORT_FI : MONTH_SHORT_EN;
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open]);
+
+  // Sync pickYear when year prop changes externally
+  useEffect(() => { setPickYear(year); }, [year]);
+
+  let label = '';
+  if (scope === 'all') label = lang === 'fi' ? 'Kaikki ajat' : 'All time';
+  else if (scope === 'year') label = String(year);
+  else if (scope === 'month') label = `${monthNames[month - 1]} ${year}`;
+  else label = `${lang === 'fi' ? 'Vk' : 'Wk'} ${week} / ${year}`;
+
+  const numWeeks = (y: number) => {
+    const dec28 = new Date(y, 11, 28);
+    const tmp = new Date(dec28);
+    tmp.setDate(tmp.getDate() + 3 - ((tmp.getDay() + 6) % 7));
+    const w1 = new Date(tmp.getFullYear(), 0, 4);
+    return 1 + Math.round(((tmp.getTime() - w1.getTime()) / 86400000 - 3 + ((w1.getDay() + 6) % 7)) / 7);
+  };
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      <button className="ot-iconbtn" onClick={onPrev}>
-        <Icon name="chevron" size={16} style={{ transform: 'rotate(180deg)' }} />
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button className="ot-period-btn" onClick={() => setOpen(o => !o)}>
+        <span>{label}</span>
+        <Icon name="chevron" size={14} style={{ marginLeft: 4, opacity: 0.5, transform: open ? 'rotate(-90deg)' : 'rotate(90deg)', transition: 'transform .15s' }} />
       </button>
-      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, minWidth: 90, textAlign: 'center' }}>{label}</span>
-      <button className="ot-iconbtn" onClick={onNext} disabled={false}>
-        <Icon name="chevron" size={16} />
-      </button>
+
+      {open && (
+        <div className="ot-picker-panel">
+          {/* Year row */}
+          <div className="ot-picker-year-nav">
+            <button className="ot-iconbtn" style={{ width: 28, height: 28 }} onClick={() => setPickYear(y => y - 1)}>
+              <Icon name="chevron" size={13} style={{ transform: 'rotate(180deg)' }} />
+            </button>
+            <span className="ot-picker-year-label">{pickYear}</span>
+            <button className="ot-iconbtn" style={{ width: 28, height: 28 }} onClick={() => setPickYear(y => y + 1)}>
+              <Icon name="chevron" size={13} />
+            </button>
+          </div>
+
+          {(scope === 'year' || scope === 'all') && (
+            <div className="ot-picker-year-grid">
+              {PICK_YEARS.map(y => (
+                <button key={y} className={'ot-picker-cell' + (y === year ? ' selected' : '')}
+                  onClick={() => { onYear(y); setOpen(false); }}>
+                  {y}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {scope === 'month' && (
+            <div className="ot-picker-month-grid">
+              {monthShort.map((name, i) => (
+                <button key={i} className={'ot-picker-cell' + (pickYear === year && i + 1 === month ? ' selected' : '')}
+                  onClick={() => { onYear(pickYear); onMonth(i + 1); setOpen(false); }}>
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {scope === 'week' && (
+            <div className="ot-picker-week-grid">
+              {Array.from({ length: numWeeks(pickYear) }, (_, i) => i + 1).map(w => (
+                <button key={w} className={'ot-picker-cell ot-picker-cell-sm' + (pickYear === year && w === week ? ' selected' : '')}
+                  onClick={() => { onYear(pickYear); onWeek(w); setOpen(false); }}>
+                  {lang === 'fi' ? `Vk${w}` : `W${w}`}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -56,7 +139,6 @@ export function AnalyticsPage() {
     return 1 + Math.round(((d.getTime() - w1.getTime()) / 86400000 - 3 + ((w1.getDay() + 6) % 7)) / 7);
   });
   const username = currentUser?.username ?? '';
-  const monthNames = lang === 'fi' ? MONTH_NAMES_FI : MONTH_NAMES_EN;
   const monthShort = lang === 'fi' ? MONTH_SHORT_FI : MONTH_SHORT_EN;
 
   const { data: allItems } = useQuery({
@@ -89,34 +171,6 @@ export function AnalyticsPage() {
       <div style={{ fontSize: 18, fontWeight: 600 }}>{t.login}</div>
     </div>
   );
-
-  function prevPeriod() {
-    if (scope === 'year' || scope === 'all') { setYear(y => y - 1); }
-    else if (scope === 'month') {
-      if (month === 1) { setMonth(12); setYear(y => y - 1); }
-      else setMonth(m => m - 1);
-    } else {
-      if (week === 1) { setWeek(52); setYear(y => y - 1); }
-      else setWeek(w => w - 1);
-    }
-  }
-  function nextPeriod() {
-    if (scope === 'year' || scope === 'all') { setYear(y => y + 1); }
-    else if (scope === 'month') {
-      if (month === 12) { setMonth(1); setYear(y => y + 1); }
-      else setMonth(m => m + 1);
-    } else {
-      if (week === 52) { setWeek(1); setYear(y => y + 1); }
-      else setWeek(w => w + 1);
-    }
-  }
-
-  function periodLabel() {
-    if (scope === 'all') return lang === 'fi' ? 'Kaikki ajat' : 'All time';
-    if (scope === 'year') return String(year);
-    if (scope === 'month') return `${monthNames[month - 1]} ${year}`;
-    return `${lang === 'fi' ? 'Vk' : 'Wk'} ${week} / ${year}`;
-  }
 
   // Derive items for current scope
   let items: (YearSportSummary | SportSummary)[];
@@ -202,7 +256,8 @@ export function AnalyticsPage() {
               </button>
             ))}
           </div>
-          <PeriodNav label={periodLabel()} onPrev={prevPeriod} onNext={nextPeriod} />
+          <PeriodPicker scope={scope} year={year} month={month} week={week}
+            onYear={setYear} onMonth={setMonth} onWeek={setWeek} lang={lang} />
         </div>
       </div>
 
