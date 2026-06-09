@@ -1,6 +1,7 @@
 // Deterministic in-memory seed data
+import { ALL_SPORTS } from '../../web/src/sports';
 
-export type Sport = 'run' | 'orient' | 'bike' | 'gym' | 'floor' | 'snow' | 'ski' | 'swim' | 'mtb' | 'walk' | 'soutu' | 'cyclo';
+export type Sport = string;
 
 export interface User {
   id: string;
@@ -54,7 +55,7 @@ export interface Exercise {
 }
 
 const COLORS = ['oklch(60% .18 260)', 'oklch(60% .18 30)', 'oklch(55% .16 150)', 'oklch(58% .2 300)', 'oklch(56% .15 200)'];
-const SPORTS: Sport[] = ['run', 'orient', 'bike', 'gym', 'floor', 'snow', 'ski', 'swim', 'mtb', 'walk', 'soutu', 'cyclo'];
+const SPORTS: Sport[] = ALL_SPORTS.map((sport) => sport.key);
 
 function rng(seed: number) {
   let s = seed;
@@ -92,7 +93,7 @@ const USERS: User[] = [
   { id: 'u4', username: 'matti', displayName: 'Matti P', avatarInitials: 'MP', avatarColor: COLORS[3], synopsis: 'Hiihto & juoksu', totalExercises: 198, totalKm: 3200, thisYearKm: 340 },
 ];
 
-const TITLES: Record<Sport, string[]> = {
+const TITLES: Record<string, string[]> = {
   run: ['Aamuintoilu', 'Intervallit radalla', 'Pitkä hidas juoksu', 'Tempojuoksu', 'Metsälenkki', 'Kisajuoksu'],
   orient: ['SM-kartat', 'Suunnistusharjoitus', 'Yösuunnistus', 'Sprinttisuunnistus', 'Kartanmuistiharjoitus'],
   bike: ['Maantieajo', 'Pyörätreeni', 'Ratojen kiertäminen', 'Ryhmäajo', 'Pyöräilyretki'],
@@ -123,7 +124,7 @@ function makeExercises(): Exercise[] {
   for (let i = 0; i < 60; i++) {
     const user = USERS[Math.floor(r() * USERS.length)];
     const sport = SPORTS[Math.floor(r() * SPORTS.length)];
-    const titles = TITLES[sport];
+    const titles = TITLES[sport] ?? ['Harjoitus', 'Kevyt treeni', 'Pitkä harjoitus', 'Tekniikkatreeni'];
     const title = titles[Math.floor(r() * titles.length)];
     const daysBack = Math.floor(r() * 180);
     const date = new Date(now.getTime() - daysBack * 86400000);

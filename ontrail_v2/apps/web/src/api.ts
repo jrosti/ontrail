@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type {
   Exercise, ExerciseListItem, Comment, User,
-  YearSummary, MonthSummary, WeekSummary, Group, PaginatedResponse,
+  YearSummary, MonthSummary, WeekSummary, Group, PaginatedResponse, Sport,
 } from './types';
 
 // In dev, Vite proxies /api → localhost:3001. In prod, set VITE_API_URL.
@@ -51,6 +51,10 @@ export const addCare = (exerciseId: string) =>
 
 export const removeCare = (exerciseId: string) =>
   client.delete(`/exercises/${exerciseId}/cares`);
+
+// Sports
+export const listSports = () =>
+  client.get<{ items: Sport[]; total: number }>('/sports').then(r => r.data.items);
 
 // Users
 export const getMe = () => client.get<User>('/me').then(r => r.data);

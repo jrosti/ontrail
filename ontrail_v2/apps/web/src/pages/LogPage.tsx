@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
@@ -8,10 +8,11 @@ import { RichEditor } from '../components/editor/RichEditor';
 import { GpxDropzone } from '../components/exercise/GpxDropzone';
 import { useStore } from '../store';
 import { I18N } from '../i18n';
-import { SPORTS } from '../sports';
+import { ALL_SPORTS, SPORTS } from '../sports';
 import { parseDuration, parseDistance, calcPace, calcSpeed, fmtPace } from '../utils/format';
-import { createExercise, updateExercise, getExercise } from '../api';
+import { createExercise, updateExercise, getExercise, listSports } from '../api';
 import type { GpxResult } from '../utils/gpx';
+import type { Sport } from '../types';
 
 function formatDurationInput(sec: number): string {
   const h = Math.floor(sec / 3600);
@@ -27,7 +28,7 @@ function formatDistanceInput(meters?: number): string {
 }
 
 export function LogPage() {
-  const { lang } = useStore();
+  const { lang, favoriteSports, rememberSport } = useStore();
   const t = I18N[lang];
   const nav = useNavigate();
 
@@ -39,6 +40,11 @@ export function LogPage() {
     queryKey: ['exercise', editId],
     queryFn: () => getExercise(editId!),
     enabled: !!editId,
+  });
+
+  const { data: apiSports } = useQuery({
+    queryKey: ['sports'],
+    queryFn: listSports,
   });
 
   const [sport, setSport] = useState(existing?.sport ?? 'run');
@@ -59,6 +65,28 @@ export function LogPage() {
   const [tagDraft, setTagDraft] = useState('');
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg');
   const [gpxResult, setGpxResult] = useState<GpxResult | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [sportQuery, setSportQuery] = useState('');
+
+  const sports = apiSports?.length ? apiSports : ALL_SPORTS;
+  const sportsByKey = useMemo(() => Object.fromEntries(sports.map((s) => [s.key, s])), [sports]);
+  const selectedSport = sportsByKey[sport] ?? SPORTS[sport];
+  const favoriteSportOptions = favoriteSports
+    .map((key) => sportsByKey[key] ?? SPORTS[key])
+    .filter((s): s is Sport => Boolean(s))
+    .slice(0, 10);
+  const filteredSports = sports.filter((s) => {
+    const q = sportQuery.trim().toLocaleLowerCase();
+    if (!q) return true;
+    return s.nameFi.toLocaleLowerCase().includes(q) || s.nameEn.toLocaleLowerCase().includes(q);
+  });
+
+  const chooseSport = (key: string) => {
+    setSport(key);
+    rememberSport(key);
+    setPickerOpen(false);
+    setSportQuery('');
+  };
 
   useEffect(() => {
     if (!existing) return;
@@ -102,7 +130,7 @@ export function LogPage() {
 
   const set = (k: string, v: unknown) => setForm(f => ({ ...f, [k]: v }));
 
-  const meta = SPORTS[sport];
+  const meta = selectedSport ?? SPORTS[sport];
   const sec = parseDuration(form.duration);
   const distM = parseDistance(form.distance);
   const effectiveSec = sec || existing?.durationSec || 0;
@@ -122,6 +150,7 @@ export function LogPage() {
 
   const saveMut = useMutation({
     mutationFn: () => {
+      rememberSport(sport);
       const payload = {
         sport, title: form.title, durationSec: effectiveSec, distanceM: effectiveDistM || undefined,
         avgHr: form.hr ? +form.hr : undefined, climbM: form.climb ? +form.climb : undefined,
@@ -166,17 +195,26 @@ export function LogPage() {
             <div>
               <span className="ot-field-label" style={{ marginBottom: 10, display: 'block' }}>{t.sportField}</span>
               <div className="ot-sport-pick">
-                {Object.values(SPORTS).map(s => (
+                {favoriteSportOptions.map(s => (
                   <button
                     type="button" key={s.key}
                     className={'ot-sport-chip' + (sport === s.key ? ' active' : '')}
-                    onClick={() => setSport(s.key)}
+                    onClick={() => chooseSport(s.key)}
                     style={sport === s.key ? { '--chip': s.color } as React.CSSProperties : undefined}
                   >
                     <SportGlyph sport={s.key} size={17} />
                     {lang === 'fi' ? s.nameFi : s.nameEn}
                   </button>
                 ))}
+                <button
+                  type="button"
+                  className="ot-sport-chip"
+                  onClick={() => setPickerOpen(true)}
+                  style={{ '--chip': selectedSport?.color ?? 'var(--accent)' } as React.CSSProperties}
+                >
+                  <Icon name="plus" size={17} />
+                  {t.moreSports}
+                </button>
               </div>
             </div>
 
@@ -358,6 +396,63 @@ export function LogPage() {
           </div>
         </aside>
       </div>
+
+      {pickerOpen && (
+        <div
+          role="presentation"
+          onMouseDown={() => setPickerOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.36)',
+            display: 'grid', placeItems: 'center', padding: 16,
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.sportPicker}
+            onMouseDown={e => e.stopPropagation()}
+            style={{
+              width: 'min(620px, 100%)', maxHeight: 'min(720px, 88vh)', overflow: 'hidden',
+              borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface)',
+              boxShadow: '0 24px 70px rgba(0,0,0,.25)', display: 'flex', flexDirection: 'column',
+            }}
+          >
+            <div style={{ padding: 16, borderBottom: '1px solid var(--border)', display: 'flex', gap: 10, alignItems: 'center' }}>
+              <div style={{ fontWeight: 700, flex: 1 }}>{t.sportPicker}</div>
+              <button type="button" className="ot-iconbtn" onClick={() => setPickerOpen(false)} aria-label={t.cancel}>
+                <Icon name="close" size={16} />
+              </button>
+            </div>
+            <div style={{ padding: 14, borderBottom: '1px solid var(--border)' }}>
+              <input
+                className="ot-input"
+                value={sportQuery}
+                onChange={e => setSportQuery(e.target.value)}
+                placeholder={t.sportSearch}
+                autoFocus
+              />
+            </div>
+            <div style={{ overflowY: 'auto', padding: 10, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
+              {filteredSports.map(s => (
+                <button
+                  type="button"
+                  key={s.key}
+                  onClick={() => chooseSport(s.key)}
+                  style={{
+                    border: '1px solid var(--border)', borderRadius: 8, padding: '10px 11px',
+                    background: sport === s.key ? 'color-mix(in oklab, var(--accent) 10%, var(--surface))' : 'var(--surface)',
+                    color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
+                    textAlign: 'left', minHeight: 42,
+                  }}
+                >
+                  <span style={{ color: s.color }}><SportGlyph sport={s.key} size={17} /></span>
+                  <span style={{ fontWeight: sport === s.key ? 700 : 600 }}>{lang === 'fi' ? s.nameFi : s.nameEn}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { EXERCISES, USERS, getUserByUsername, type Exercise } from './seed';
+import { ALL_SPORTS } from '../../web/src/sports';
 
 const PORT = 3001;
 
@@ -98,6 +99,11 @@ Bun.serve({
       if (user) filtered = filtered.filter(e => e.ownerUsername === user);
       if (tag) filtered = filtered.filter(e => e.tags.includes(tag));
       return json(paginate(filtered, page, perPage));
+    }
+
+    // GET /api/sports
+    if (path === '/api/sports' && method === 'GET') {
+      return json({ items: ALL_SPORTS, total: ALL_SPORTS.length });
     }
 
     // POST /api/exercises
