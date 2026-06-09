@@ -64,7 +64,7 @@ export function TopNav() {
           </button>
 
           {currentUser ? (
-            <Link to="/diary/$username" params={{ username: currentUser.username }} style={{ display: 'flex', padding: 2 }}>
+            <Link to="/profile" style={{ display: 'flex', padding: 2 }} aria-label={t.profile}>
               <Avatar initials={currentUser.avatarInitials} color={currentUser.avatarColor} size={32} />
             </Link>
           ) : (

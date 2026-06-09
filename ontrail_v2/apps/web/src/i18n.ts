@@ -2,7 +2,7 @@ export type Lang = 'fi' | 'en';
 
 export const I18N = {
   fi: {
-    feed: 'Virta', analytics: 'Analytiikka', calendar: 'Kalenteri', live: 'Tallenna', record: 'Tallenna',
+    feed: 'Syöte', analytics: 'Analytiikka', calendar: 'Kalenteri', live: 'Tallenna', record: 'Tallenna',
     search: 'Hae harjoituksia, lajeja, ihmisiä…', composer: 'Kirjaa harjoitus…',
     comments: 'kommenttia', forward: 'Välitä', forwarded: 'välitetty', kudos: 'peukkua',
     km: 'km', pace: 'tahti', time: 'aika', hr: 'syke', avgHr: 'ka. syke', climb: 'nousu',

@@ -6,6 +6,11 @@ HANKO_SRC="${HANKO_SRC:-$HOME/work/private/hanko/backend}"
 HANKO_BIN="$ROOT/infra/hanko/hanko"
 HANKO_CONFIG="$ROOT/infra/hanko/config.yaml"
 INFRA_DIR="$ROOT/infra"
+API_DIR="$ROOT/apps/api"
+WEB_DIR="$ROOT/apps/web"
+HANKO_PID=""
+API_PID=""
+WEB_PID=""
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 green() { printf '\033[32m  %s\033[0m\n' "$*"; }
@@ -21,6 +26,27 @@ wait_tcp() {
   echo " ready"
 }
 
+require_port_free() {
+  local port=$1 label=$2
+  if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
+    echo "  ERROR: $label port $port is already in use."
+    lsof -nP -iTCP:"$port" -sTCP:LISTEN
+    exit 1
+  fi
+}
+
+cleanup() {
+  echo ""
+  echo "  Stopping …"
+  [ -n "$HANKO_PID" ] && kill "$HANKO_PID" 2>/dev/null || true
+  [ -n "$API_PID" ] && kill "$API_PID" 2>/dev/null || true
+  [ -n "$WEB_PID" ] && kill "$WEB_PID" 2>/dev/null || true
+  docker-compose -f "$INFRA_DIR/docker-compose.yml" stop
+  echo "  Done."
+}
+
+trap cleanup INT TERM
+
 echo ""
 echo "  ╔══════════════════════════════════════╗"
 echo "  ║  OnTrail v2 — starting               ║"
@@ -32,6 +58,11 @@ green "Starting Docker infra …"
 docker-compose -f "$INFRA_DIR/docker-compose.yml" up -d
 wait_tcp localhost 5432  "Postgres"
 wait_tcp localhost 2525  "MailSlurper"
+
+green "Ensuring OnTrail database exists …"
+if [ -z "$(docker-compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd psql -U hanko -d postgres -tAc "select 1 from pg_database where datname = 'ontrail'")" ]; then
+  docker-compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd createdb -U hanko -O hanko ontrail
+fi
 
 # ── 2. Apply patches and build Hanko binary ───────────────────────────────────
 if [ ! -f "$HANKO_SRC/main.go" ]; then
@@ -64,29 +95,39 @@ fi
 green "Running Hanko DB migrations …"
 "$HANKO_BIN" --config "$HANKO_CONFIG" migrate up
 
-# ── 4. Start Hanko ────────────────────────────────────────────────────────────
+# ── 4. Run OnTrail API migrations ─────────────────────────────────────────────
+green "Running OnTrail API migrations …"
+(cd "$API_DIR" && bun run db:migrate)
+
+# ── 5. Start Hanko ────────────────────────────────────────────────────────────
+require_port_free 8000 "Hanko public"
+require_port_free 8001 "Hanko admin"
 green "Starting Hanko …"
 "$HANKO_BIN" --config "$HANKO_CONFIG" serve all &
 HANKO_PID=$!
 wait_tcp localhost 8000 "Hanko"
+wait_tcp localhost 8001 "Hanko admin"
 
-# ── 5. Start mock API ─────────────────────────────────────────────────────────
-green "Starting mock API …"
-cd "$ROOT/apps/mock"
-bun run src/server.ts &
-MOCK_PID=$!
+# ── 6. Start OnTrail API ──────────────────────────────────────────────────────
+require_port_free 3002 "OnTrail API"
+green "Starting OnTrail API …"
+cd "$API_DIR"
+bun run start &
+API_PID=$!
+wait_tcp localhost 3002 "OnTrail API"
 
-# ── 6. Start Vite frontend ────────────────────────────────────────────────────
+# ── 7. Start Vite frontend ────────────────────────────────────────────────────
+require_port_free 5173 "Frontend"
 green "Starting frontend …"
-cd "$ROOT/apps/web"
+cd "$WEB_DIR"
 bun run dev &
 WEB_PID=$!
 
-# ── 7. URLs ───────────────────────────────────────────────────────────────────
+# ── 8. URLs ───────────────────────────────────────────────────────────────────
 echo ""
 echo "  ┌────────────────────────────────────────────────┐"
 echo "  │  Frontend    →  http://localhost:5173           │"
-echo "  │  Mock API    →  http://localhost:3001/api       │"
+echo "  │  API         →  http://localhost:3002/api       │"
 echo "  │  Hanko pub   →  http://localhost:8000           │"
 echo "  │  Hanko admin →  http://localhost:8001           │"
 echo "  │  MailSlurper →  http://localhost:9080 (smtp:2525)│"
@@ -95,13 +136,5 @@ echo "  └───────────────────────
 echo ""
 dim "Press Ctrl-C to stop all services"
 echo ""
-
-trap '
-  echo ""
-  echo "  Stopping …"
-  kill $HANKO_PID $MOCK_PID $WEB_PID 2>/dev/null
-  docker-compose -f "$INFRA_DIR/docker-compose.yml" stop
-  echo "  Done."
-' INT TERM
 
 wait

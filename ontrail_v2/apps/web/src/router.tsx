@@ -9,6 +9,7 @@ import { CalendarPage } from './pages/CalendarPage';
 import { DiaryPage } from './pages/DiaryPage';
 import { SearchPage } from './pages/SearchPage';
 import { LoginPage } from './pages/LoginPage';
+import { ProfilePage } from './pages/ProfilePage';
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -86,6 +87,12 @@ const loginRoute = createRoute({
   component: LoginPage,
 });
 
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/profile',
+  component: ProfilePage,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -102,6 +109,7 @@ const routeTree = rootRoute.addChildren([
   diaryRoute,
   searchRoute,
   loginRoute,
+  profileRoute,
 ]);
 
 export const router = createRouter({ routeTree });

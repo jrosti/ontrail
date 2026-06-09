@@ -1,15 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { register } from '@teamhanko/hanko-elements';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { useStore } from '../store';
 import { getMe } from '../api';
-import { hankoFi } from '../hankoTranslations';
-import { en } from '@teamhanko/hanko-elements/i18n/en';
-
-// Hanko public API — set VITE_HANKO_URL to override (defaults to local docker)
-const HANKO_URL = import.meta.env.VITE_HANKO_URL || 'http://localhost:8000';
+import { HANKO_URL, registerHankoElements } from '../hankoClient';
 
 export function LoginPage() {
   const { lang, setCurrentUser } = useStore();
@@ -20,10 +15,7 @@ export function LoginPage() {
     if (registered.current) return;
     registered.current = true;
 
-    register(HANKO_URL, {
-      fallbackLanguage: 'en',
-      translations: { en, fi: hankoFi },
-    }).catch(console.error);
+    registerHankoElements().catch(console.error);
   }, []);
 
   useEffect(() => {

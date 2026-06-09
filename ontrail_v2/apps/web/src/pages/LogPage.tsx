@@ -319,7 +319,7 @@ export function LogPage() {
               </div>
             </label>
 
-            <label className="ot-field">
+            <div className="ot-field">
               <span className="ot-field-label">{t.gpxField} <em className="ot-field-badge">{t.opt}</em></span>
               <GpxDropzone
                 result={gpxResult}
@@ -333,7 +333,7 @@ export function LogPage() {
                 pointsLabel={t.gpxPoints}
                 filledLabel={t.gpxFilled}
               />
-            </label>
+            </div>
 
             <div className="ot-field">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
