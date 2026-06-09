@@ -10,7 +10,7 @@
 
 (defn as-gravatar [user]
   (let [gravatar? (:gravatar user)
-        email (.toLowerCase (get user :email))
+        email (.toLowerCase (or (get user :email) ""))
         gravatar-md5-hash (digest/md5 email)]
     (if gravatar?
       (str "http://www.gravatar.com/avatar/" gravatar-md5-hash "?d=monsterid&r=x")

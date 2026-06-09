@@ -4,6 +4,7 @@
                  [org.clojure/clojure "1.6.0"]
                  [digest "1.4.4"]
                  [com.draines/postal "1.11.1"]
+                 [javax.activation/activation "1.1.1"]
                  [aleph "0.3.3"]
                  [compojure "1.2.0"]
                  [stencil "0.3.4"]	   
