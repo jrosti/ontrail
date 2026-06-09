@@ -19,7 +19,7 @@ jobs:
         working-directory: ontrail_v2/apps/api
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -49,7 +49,7 @@ jobs:
         working-directory: ontrail_v2/apps/web
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -73,17 +73,17 @@ jobs:
       HANKO_REF: main
     steps:
       - name: Checkout OnTrail
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout Hanko source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ env.HANKO_REPOSITORY }}
           ref: ${{ env.HANKO_REF }}
           path: _hanko
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version-file: _hanko/backend/go.mod
           cache-dependency-path: _hanko/backend/go.sum
