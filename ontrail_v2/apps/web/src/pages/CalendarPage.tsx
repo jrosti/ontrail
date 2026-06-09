@@ -34,6 +34,7 @@ export function CalendarPage() {
   const dows = lang === 'fi' ? ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su'] : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
   const username = currentUser?.username ?? '';
+  const now = new Date();
 
   const { data: exercisesData } = useQuery({
     queryKey: ['exercises', 'calendar', username, year],
@@ -77,7 +78,6 @@ export function CalendarPage() {
     return map;
   }, [weekSummaries]);
 
-  const now = new Date();
   // For the current year show last 3 months up to today; for other years show Oct-Dec
   const anchorMonth = year === now.getFullYear() ? now.getMonth() : 11;
 
