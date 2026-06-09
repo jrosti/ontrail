@@ -20,10 +20,14 @@ import {
 } from './repositories/groups';
 import { ensureSportsSeeded, listSports } from './repositories/sports';
 import {
+  getAthleteProfile,
+  getLeaderboard,
+  getPersonalRecords,
   getSportSummary,
   getSportSummaryByYear,
   getSummaryByMonth,
   getSummaryByWeek,
+  getTagUsage,
 } from './repositories/summaries';
 import { getUnread, markAllRead } from './repositories/unread';
 import {
@@ -35,15 +39,12 @@ import {
   updateUserProfile,
 } from './repositories/users';
 import { emitToUser, registerSseClient } from './sse';
+import { isUuid } from './validation';
 
 // Re-export emitToUser so it can be used from exercises repo (kept here for clarity)
 export { emitToUser };
 
 const config = loadConfig();
-
-function isUuid(value: string): boolean {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
-}
 
 async function optionalUser(req: Request): Promise<DbUser | null> {
   const claims = await verifyHankoRequest(req).catch(() => null);
@@ -379,6 +380,45 @@ async function route(req: Request): Promise<Response> {
   if (summaryYearMatch) {
     if (req.method !== 'GET') return methodNotAllowed();
     const items = await getSportSummaryByYear(summaryYearMatch[1], Number(summaryYearMatch[2]));
+    return json({ items });
+  }
+
+  // ── Athlete profile (analytics) ───────────────────────────────────────────
+  const athleteProfileMatch = path.match(/^\/api\/users\/([^/]+)\/athlete$/);
+  if (athleteProfileMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const profile = await getAthleteProfile(athleteProfileMatch[1]);
+    return profile ? json(profile) : notFound();
+  }
+
+  // ── Personal records ──────────────────────────────────────────────────────
+  const recordsMatch = path.match(/^\/api\/users\/([^/]+)\/records$/);
+  if (recordsMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const items = await getPersonalRecords(recordsMatch[1]);
+    return json({ items });
+  }
+
+  // ── Tag usage ─────────────────────────────────────────────────────────────
+  const tagUsageMatch = path.match(/^\/api\/users\/([^/]+)\/tags$/);
+  if (tagUsageMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const items = await getTagUsage(tagUsageMatch[1]);
+    return json({ items });
+  }
+
+  // ── Leaderboards ──────────────────────────────────────────────────────────
+  if (path === '/api/leaderboards/month') {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const limit = Math.min(100, Number(url.searchParams.get('limit') ?? 50));
+    const items = await getLeaderboard('month', limit);
+    return json({ items });
+  }
+
+  if (path === '/api/leaderboards/year') {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const limit = Math.min(100, Number(url.searchParams.get('limit') ?? 50));
+    const items = await getLeaderboard('year', limit);
     return json({ items });
   }
 
