@@ -58,7 +58,7 @@ async function requireUser(req: Request): Promise<DbUser | Response> {
 
 // ── Search helper ────────────────────────────────────────────────────────────
 
-async function searchExercises(params: URLSearchParams) {
+async function searchExercises(params: URLSearchParams, authenticated: boolean) {
   const q = (params.get('q') ?? '').trim();
   const page = Math.max(1, Number(params.get('page') ?? 1));
   const perPage = Math.min(100, Math.max(1, Number(params.get('perPage') ?? 20)));
@@ -132,8 +132,8 @@ async function searchExercises(params: URLSearchParams) {
       distanceM: row.distance_m ?? undefined,
       avgHr: row.avg_hr ?? undefined,
       climbM: row.climb_m ?? undefined,
-      gpxPoints: row.gpx_points ?? undefined,
-      commentCount: row.comment_count,
+      gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
+      commentCount: authenticated ? row.comment_count : 0,
       careCount: row.care_count,
     };
   }
@@ -229,7 +229,10 @@ async function route(req: Request): Promise<Response> {
 
   // ── Exercises ─────────────────────────────────────────────────────────────
   if (path === '/api/exercises') {
-    if (req.method === 'GET') return json(await listExercises(url.searchParams));
+    if (req.method === 'GET') {
+      const viewer = await optionalUser(req);
+      return json(await listExercises(url.searchParams, Boolean(viewer)));
+    }
     if (req.method === 'POST') {
       const user = await requireUser(req);
       if (user instanceof Response) return user;
@@ -468,7 +471,8 @@ async function route(req: Request): Promise<Response> {
   // ── Search ────────────────────────────────────────────────────────────────
   if (path === '/api/search') {
     if (req.method !== 'GET') return methodNotAllowed();
-    return json(await searchExercises(url.searchParams));
+    const viewer = await optionalUser(req);
+    return json(await searchExercises(url.searchParams, Boolean(viewer)));
   }
 
   // ── Unread ────────────────────────────────────────────────────────────────

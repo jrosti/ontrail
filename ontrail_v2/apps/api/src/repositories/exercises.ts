@@ -53,7 +53,9 @@ interface CommentRow {
   created_at: string;
 }
 
-function toListItem(row: ExerciseRow): ExerciseListItem {
+const ANON_BODY = 'Rekisteröidy nähdäksesi harjoitukset';
+
+function toListItem(row: ExerciseRow, authenticated: boolean): ExerciseListItem {
   return {
     id: row.id,
     ownerUsername: row.owner_username,
@@ -68,8 +70,8 @@ function toListItem(row: ExerciseRow): ExerciseListItem {
     distanceM: row.distance_m ?? undefined,
     avgHr: row.avg_hr ?? undefined,
     climbM: row.climb_m ?? undefined,
-    gpxPoints: row.gpx_points ?? undefined,
-    commentCount: row.comment_count,
+    gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
+    commentCount: authenticated ? row.comment_count : 0,
     careCount: row.care_count,
   };
 }
@@ -86,14 +88,14 @@ function toComment(row: CommentRow): Comment {
   };
 }
 
-function toExercise(row: ExerciseRow, comments: Comment[]): Exercise {
+function toExercise(row: ExerciseRow, comments: Comment[], authenticated: boolean): Exercise {
   return {
-    ...toListItem(row),
-    body: row.body_html ?? undefined,
-    gpxPoints: row.gpx_points ?? undefined,
-    feelRating: row.feel_rating ?? undefined,
-    details: row.details,
-    comments,
+    ...toListItem(row, authenticated),
+    body: authenticated ? (row.body_html ?? undefined) : ANON_BODY,
+    gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
+    feelRating: authenticated ? (row.feel_rating ?? undefined) : undefined,
+    details: authenticated ? row.details : {},
+    comments: authenticated ? comments : [],
     cares: [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -143,7 +145,7 @@ function exerciseSelect() {
   `;
 }
 
-export async function listExercises(params: URLSearchParams) {
+export async function listExercises(params: URLSearchParams, authenticated: boolean) {
   const page = Math.max(1, Number(params.get('page') ?? 1));
   const perPage = Math.min(100, Math.max(1, Number(params.get('perPage') ?? 20)));
   const sport = params.get('sport');
@@ -169,10 +171,10 @@ export async function listExercises(params: URLSearchParams) {
       and (${tag}::text is null or ${tag} = any(e.tags))
   `;
   const total = totals[0]?.total ?? 0;
-  return { items: rows.map(toListItem), total, page, perPage };
+  return { items: rows.map((r) => toListItem(r, authenticated)), total, page, perPage };
 }
 
-export async function getExercise(id: string, includeComments: boolean): Promise<Exercise | null> {
+export async function getExercise(id: string, authenticated: boolean): Promise<Exercise | null> {
   const rows = await sql<ExerciseRow[]>`
     ${exerciseSelect()}
     where e.id = ${id}
@@ -181,7 +183,7 @@ export async function getExercise(id: string, includeComments: boolean): Promise
   const row = rows[0];
   if (!row) return null;
 
-  const commentRows = includeComments
+  const commentRows = authenticated
     ? await sql<CommentRow[]>`
         select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, c.body, c.created_at::text
         from comments c
@@ -191,7 +193,7 @@ export async function getExercise(id: string, includeComments: boolean): Promise
       `
     : [];
 
-  return toExercise(row, commentRows.map(toComment));
+  return toExercise(row, commentRows.map(toComment), authenticated);
 }
 
 export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {
