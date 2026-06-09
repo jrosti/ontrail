@@ -31,7 +31,7 @@ echo ""
 green "Starting Docker infra …"
 docker-compose -f "$INFRA_DIR/docker-compose.yml" up -d
 wait_tcp localhost 5432  "Postgres"
-wait_tcp localhost 2500  "MailSlurper"
+wait_tcp localhost 2525  "MailSlurper"
 
 # ── 2. Apply patches and build Hanko binary ───────────────────────────────────
 if [ ! -f "$HANKO_SRC/main.go" ]; then
@@ -89,7 +89,7 @@ echo "  │  Frontend    →  http://localhost:5173           │"
 echo "  │  Mock API    →  http://localhost:3001/api       │"
 echo "  │  Hanko pub   →  http://localhost:8000           │"
 echo "  │  Hanko admin →  http://localhost:8001           │"
-echo "  │  MailSlurper →  http://localhost:8080           │"
+echo "  │  MailSlurper →  http://localhost:8080 (smtp:2525)│"
 echo "  │  Postgres    →  localhost:5432                  │"
 echo "  └────────────────────────────────────────────────┘"
 echo ""

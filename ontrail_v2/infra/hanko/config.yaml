@@ -10,7 +10,7 @@ email_delivery:
   enabled: true
   smtp:
     host: localhost
-    port: "2500"
+    port: "2525"
   from_address: noreply@ontrail.local
   from_name: OnTrail
 
