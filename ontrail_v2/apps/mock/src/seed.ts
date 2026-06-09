@@ -61,6 +61,30 @@ function rng(seed: number) {
   return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return Math.abs(s) / 0x7fffffff; };
 }
 
+function makeGpxPoints(seed: number, distanceM: number): NonNullable<Exercise['gpxPoints']> {
+  const r = rng(seed);
+  const count = Math.max(24, Math.min(120, Math.round(distanceM / 250)));
+  const startLat = 60.1699 + (r() - 0.5) * 0.08;
+  const startLon = 24.9384 + (r() - 0.5) * 0.12;
+  const points: NonNullable<Exercise['gpxPoints']> = [];
+  let lat = startLat;
+  let lon = startLon;
+  let ele = 20 + r() * 30;
+  let angle = r() * Math.PI * 2;
+  const stepM = distanceM / count;
+
+  for (let i = 0; i < count; i++) {
+    angle += (r() - 0.5) * 0.65;
+    const meters = stepM * (0.75 + r() * 0.5);
+    lat += (Math.cos(angle) * meters) / 111_320;
+    lon += (Math.sin(angle) * meters) / (111_320 * Math.cos((lat * Math.PI) / 180));
+    ele += (r() - 0.45) * 4;
+    points.push({ lat, lon, ele: Math.round(ele) });
+  }
+
+  return points;
+}
+
 const USERS: User[] = [
   { id: 'u1', username: 'petri', displayName: 'Petri L', avatarInitials: 'PL', avatarColor: COLORS[0], synopsis: 'Juoksija ja suunnistaja', totalExercises: 412, totalKm: 5820, thisYearKm: 623 },
   { id: 'u2', username: 'antta', displayName: 'Antta M', avatarInitials: 'AM', avatarColor: COLORS[1], synopsis: 'Pyöräilijä', totalExercises: 287, totalKm: 12450, thisYearKm: 1840 },
@@ -105,6 +129,7 @@ function makeExercises(): Exercise[] {
     const date = new Date(now.getTime() - daysBack * 86400000);
     const durationSec = Math.floor(1800 + r() * 7200);
     const distanceM = sport === 'gym' || sport === 'floor' ? 0 : Math.floor(3000 + r() * 35000);
+    const gpxPoints = distanceM > 0 ? makeGpxPoints(i + 1000, distanceM) : undefined;
     const hr = sport === 'gym' ? undefined : Math.floor(130 + r() * 40);
     const feel = ([1, 2, 3] as const)[Math.floor(r() * 3)];
     const tagPool = ['aamu', 'ilta', 'intervalli', 'pitkä', 'kilpailu', 'helppo', 'raskasta', 'luonto'];
@@ -152,6 +177,7 @@ function makeExercises(): Exercise[] {
       careCount: cares.length,
       commentCount: comments.length,
       details: {},
+      gpxPoints,
       createdAt: ts,
       updatedAt: ts,
     });

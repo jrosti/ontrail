@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
@@ -12,6 +12,19 @@ import { SPORTS } from '../sports';
 import { parseDuration, parseDistance, calcPace, calcSpeed, fmtPace } from '../utils/format';
 import { createExercise, updateExercise, getExercise } from '../api';
 import type { GpxResult } from '../utils/gpx';
+
+function formatDurationInput(sec: number): string {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.round(sec % 60);
+  return h > 0
+    ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+    : `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function formatDistanceInput(meters?: number): string {
+  return meters ? (meters / 1000).toFixed(2) : '';
+}
 
 export function LogPage() {
   const { lang } = useStore();
@@ -47,6 +60,26 @@ export function LogPage() {
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg');
   const [gpxResult, setGpxResult] = useState<GpxResult | null>(null);
 
+  useEffect(() => {
+    if (!existing) return;
+
+    setSport(existing.sport);
+    setForm({
+      title: existing.title,
+      duration: formatDurationInput(existing.durationSec),
+      distance: formatDistanceInput(existing.distanceM),
+      hr: existing.avgHr?.toString() ?? '',
+      reps: existing.details?.reps?.toString() ?? '',
+      volume: existing.details?.volume ? String(existing.details.volume / 1000) : '',
+      climb: existing.climbM?.toString() ?? '',
+      feel: existing.feelRating ?? 'ok',
+      date: existing.date.slice(0, 10),
+      tags: existing.tags,
+      desc: existing.body ?? '',
+      descHtml: existing.body ?? '',
+    });
+  }, [existing]);
+
   const onGpxLoaded = (result: GpxResult) => {
     setGpxResult(result);
     // Prefill form fields from GPS data — only overwrite if still empty
@@ -72,12 +105,14 @@ export function LogPage() {
   const meta = SPORTS[sport];
   const sec = parseDuration(form.duration);
   const distM = parseDistance(form.distance);
-  const km = distM / 1000;
-  const pace = distM > 0 && sec > 0 ? calcPace(sec, distM) : 0;
-  const speed = distM > 0 && sec > 0 ? calcSpeed(sec, distM) : 0;
+  const effectiveSec = sec || existing?.durationSec || 0;
+  const effectiveDistM = distM || existing?.distanceM || 0;
+  const km = effectiveDistM / 1000;
+  const pace = effectiveDistM > 0 && effectiveSec > 0 ? calcPace(effectiveSec, effectiveDistM) : 0;
+  const speed = effectiveDistM > 0 && effectiveSec > 0 ? calcSpeed(effectiveSec, effectiveDistM) : 0;
   const isReps = meta?.metric === 'reps';
   const isSpeed = meta?.metric === 'speed';
-  const canSave = form.title.trim() && sec > 0;
+  const canSave = form.title.trim() && effectiveSec > 0;
 
   const addTag = () => {
     const v = tagDraft.trim().replace(/^#/, '');
@@ -88,12 +123,14 @@ export function LogPage() {
   const saveMut = useMutation({
     mutationFn: () => {
       const payload = {
-        sport, title: form.title, durationSec: sec, distanceM: distM || undefined,
+        sport, title: form.title, durationSec: effectiveSec, distanceM: effectiveDistM || undefined,
         avgHr: form.hr ? +form.hr : undefined, climbM: form.climb ? +form.climb : undefined,
         feelRating: form.feel as 'easy' | 'ok' | 'hard',
         tags: form.tags, body: form.descHtml, date: form.date,
         details: isReps ? { reps: +form.reps, volume: +form.volume * 1000 } : undefined,
-        gpxPoints: gpxResult ? gpxResult.points.map(p => ({ lat: p.lat, lon: p.lon, ele: p.ele })) : undefined,
+        gpxPoints: gpxResult
+          ? gpxResult.points.map(p => ({ lat: p.lat, lon: p.lon, ele: p.ele }))
+          : existing?.gpxPoints,
       };
       return editId ? updateExercise(editId, payload) : createExercise(payload);
     },

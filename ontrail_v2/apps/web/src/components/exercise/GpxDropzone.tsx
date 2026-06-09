@@ -95,7 +95,12 @@ export function GpxDropzone({
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
       onClick={() => inputRef.current?.click()}
-      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') inputRef.current?.click(); }}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
       style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         gap: 10, minHeight: 96, border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--border)'}`,
@@ -108,7 +113,13 @@ export function GpxDropzone({
         type="file"
         accept=".gpx,application/gpx+xml"
         style={{ display: 'none' }}
-        onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
+        onClick={e => e.stopPropagation()}
+        onChange={e => {
+          const input = e.currentTarget;
+          const file = input.files?.[0];
+          if (file) handleFile(file);
+          input.value = '';
+        }}
       />
       <Icon name="route" size={26} style={{ color: dragging ? 'var(--accent)' : 'var(--text-faint)', opacity: dragging ? 1 : 0.5 }} />
       <span style={{ fontSize: 13.5, color: 'var(--text-faint)', textAlign: 'center' }}>{hint}</span>

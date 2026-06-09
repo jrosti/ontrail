@@ -84,6 +84,7 @@ export interface ExerciseListItem {
   distanceM?: number;
   avgHr?: number;
   climbM?: number;
+  gpxPoints?: { lat: number; lon: number; ele?: number }[];
   commentCount: number;
   careCount: number;
   isNew?: boolean;

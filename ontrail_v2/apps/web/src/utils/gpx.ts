@@ -29,13 +29,15 @@ function haversineM(a: GpxPoint, b: GpxPoint): number {
 export function parseGpx(xmlText: string): GpxResult {
   const parser = new DOMParser();
   const doc = parser.parseFromString(xmlText, 'application/xml');
+  const parseError = doc.querySelector('parsererror');
+  if (parseError) throw new Error('Invalid GPX file');
 
   const name =
     doc.querySelector('name')?.textContent?.trim() ?? undefined;
 
-  // collect all trackpoints (trkpt) or waypoints (wpt)
+  // collect all trackpoints (trkpt), route points (rtept), or waypoints (wpt)
   const nodes = Array.from(
-    doc.querySelectorAll('trkpt, wpt')
+    doc.querySelectorAll('trkpt, rtept, wpt')
   );
 
   const points: GpxPoint[] = nodes.map((n) => ({

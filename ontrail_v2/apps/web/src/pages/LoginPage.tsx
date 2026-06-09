@@ -5,6 +5,8 @@ import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { useStore } from '../store';
 import { getMe } from '../api';
+import { hankoFi } from '../hankoTranslations';
+import { en } from '@teamhanko/hanko-elements/i18n/en';
 
 // Hanko public API — set VITE_HANKO_URL to override (defaults to local docker)
 const HANKO_URL = import.meta.env.VITE_HANKO_URL || 'http://localhost:8000';
@@ -18,7 +20,10 @@ export function LoginPage() {
     if (registered.current) return;
     registered.current = true;
 
-    register(HANKO_URL).catch(console.error);
+    register(HANKO_URL, {
+      fallbackLanguage: 'en',
+      translations: { en, fi: hankoFi },
+    }).catch(console.error);
   }, []);
 
   useEffect(() => {
@@ -59,7 +64,7 @@ export function LoginPage() {
         {/* Hanko auth web component — rendered after register() resolves */}
         <hanko-auth
           style={{ width: '100%' }}
-          lang={lang === 'fi' ? 'de' : 'en'}
+          lang={lang}
         />
 
         <p style={{ fontSize: 11, color: 'var(--text-faint)', textAlign: 'center', margin: 0 }}>

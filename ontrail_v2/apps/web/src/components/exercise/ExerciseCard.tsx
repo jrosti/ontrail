@@ -5,11 +5,12 @@ import { Card } from '../ui/Card';
 import { Icon } from '../ui/Icon';
 import { Metric } from '../ui/Metric';
 import { SportBadge } from '../ui/SportBadge';
-import { RouteMap } from '../charts/RouteMap';
+import { LeafletMap } from '../charts/LeafletMap';
 import { useStore } from '../../store';
 import { I18N } from '../../i18n';
 import { SPORTS } from '../../sports';
 import { durShort, fmtDistanceKm, calcPace, calcSpeed, fmtPace, relDay } from '../../utils/format';
+import { downsample } from '../../utils/gpx';
 import type { ExerciseListItem } from '../../types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addCare, removeCare } from '../../api';
@@ -114,9 +115,14 @@ export function ExerciseCard({ exercise: ex, layout = 'cards' }: ExerciseCardPro
 
       {metricRow}
 
-      {km > 0 && !['gym', 'floor'].includes(ex.sport) && (
+      {km > 0 && ex.gpxPoints && ex.gpxPoints.length >= 2 && !['gym', 'floor'].includes(ex.sport) && (
         <Link to="/exercise/$id" params={{ id: ex.id }} style={{ display: 'block' }}>
-          <RouteMap seed={parseInt(ex.id.replace(/\D/g, '').slice(-8), 10) || 1} height={200} accent={color} />
+          <LeafletMap
+            points={downsample(ex.gpxPoints, 200)}
+            height={200}
+            accent={color}
+            style={{ pointerEvents: 'none' }}
+          />
         </Link>
       )}
 

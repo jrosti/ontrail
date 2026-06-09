@@ -4,6 +4,43 @@ const PORT = 3001;
 
 let exercises: Exercise[] = EXERCISES.map(e => ({ ...e, comments: [...e.comments], cares: [...e.cares] }));
 
+type GpxPoint = NonNullable<Exercise['gpxPoints']>[number];
+
+function normalizeGpxPoints(points: unknown, maxPoints = 2000): GpxPoint[] | undefined {
+  if (!Array.isArray(points)) return undefined;
+
+  const clean = points.flatMap((point) => {
+    if (!point || typeof point !== 'object') return [];
+    const source = point as Record<string, unknown>;
+    const lat = Number(source.lat);
+    const lon = Number(source.lon);
+    const ele = source.ele == null ? undefined : Number(source.ele);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return [];
+    if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return [];
+
+    return [{
+      lat,
+      lon,
+      ...(Number.isFinite(ele) ? { ele } : {}),
+    }];
+  });
+
+  if (clean.length <= maxPoints) return clean;
+
+  const step = clean.length / maxPoints;
+  return Array.from({ length: maxPoints }, (_, i) => clean[Math.floor(i * step)]);
+}
+
+function normalizeExerciseBody(body: Partial<Exercise>): Partial<Exercise> {
+  if (!('gpxPoints' in body)) return body;
+
+  return {
+    ...body,
+    gpxPoints: normalizeGpxPoints(body.gpxPoints),
+  };
+}
+
 function cors(res: Response): Response {
   res.headers.set('Access-Control-Allow-Origin', '*');
   res.headers.set('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
@@ -65,7 +102,7 @@ Bun.serve({
 
     // POST /api/exercises
     if (path === '/api/exercises' && method === 'POST') {
-      const body = await req.json() as Partial<Exercise>;
+      const body = normalizeExerciseBody(await req.json() as Partial<Exercise>);
       const ts = new Date().toISOString();
       const newEx: Exercise = {
         id: `ex${Date.now()}`,
@@ -103,7 +140,7 @@ Bun.serve({
       if (!ex) return json({ error: 'not found' }, 404);
       if (method === 'GET') return json(ex);
       if (method === 'PUT' || method === 'PATCH') {
-        const body = await req.json() as Partial<Exercise>;
+        const body = normalizeExerciseBody(await req.json() as Partial<Exercise>);
         Object.assign(ex, body, { updatedAt: new Date().toISOString() });
         return json(ex);
       }
@@ -182,19 +219,28 @@ Bun.serve({
     if (yearMatch && method === 'GET') {
       const year = parseInt(yearMatch[1]);
       const exYear = exercises.filter(e => e.date.startsWith(String(year)));
-      const totalKm = exYear.reduce((s, e) => s + e.distanceM / 1000, 0);
-      const totalH = exYear.reduce((s, e) => s + e.durationSec / 3600, 0);
+      const totalDistanceM = exYear.reduce((s, e) => s + (e.distanceM ?? 0), 0);
+      const totalDurationSec = exYear.reduce((s, e) => s + e.durationSec, 0);
+      const sports = [...new Set(exYear.map(e => e.sport))].map(sport => {
+        const sub = exYear.filter(e => e.sport === sport);
+        const hrValues = sub.map(e => e.avgHr).filter((v): v is number => typeof v === 'number');
+        return {
+          sport,
+          sessions: sub.length,
+          totalDistanceM: sub.reduce((s, e) => s + (e.distanceM ?? 0), 0),
+          totalDurationSec: sub.reduce((s, e) => s + e.durationSec, 0),
+          avgHr: hrValues.length ? Math.round(hrValues.reduce((s, v) => s + v, 0) / hrValues.length) : undefined,
+          totalClimbM: sub.reduce((s, e) => s + (e.climbM ?? 0), 0),
+        };
+      });
       return json({
         year,
-        totalExercises: exYear.length,
-        totalDistanceKm: Math.round(totalKm),
-        totalHours: Math.round(totalH * 10) / 10,
-        bySport: Object.fromEntries(
-          [...new Set(exYear.map(e => e.sport))].map(sport => {
-            const sub = exYear.filter(e => e.sport === sport);
-            return [sport, { count: sub.length, distanceKm: Math.round(sub.reduce((s, e) => s + e.distanceM / 1000, 0)) }];
-          })
-        ),
+        sessions: exYear.length,
+        totalDistanceM,
+        totalDurationSec,
+        totalClimbM: exYear.reduce((s, e) => s + (e.climbM ?? 0), 0),
+        totalKudos: exYear.reduce((s, e) => s + e.careCount, 0),
+        sports,
       });
     }
 
@@ -205,7 +251,14 @@ Bun.serve({
           const d = new Date(e.date);
           return d.getFullYear() === 2026 && d.getMonth() === m;
         });
-        return { year: 2026, month: m + 1, distanceKm: Math.round(exMonth.reduce((s, e) => s + e.distanceM / 1000, 0)), count: exMonth.length };
+        return {
+          year: 2026,
+          month: m + 1,
+          totalDistanceM: exMonth.reduce((s, e) => s + (e.distanceM ?? 0), 0),
+          totalDurationSec: exMonth.reduce((s, e) => s + e.durationSec, 0),
+          sessions: exMonth.length,
+          sports: [],
+        };
       });
       return json(months);
     }

@@ -6,7 +6,7 @@ services:
 
   # ── Postgres ─────────────────────────────────────────────────────────────
   postgresd:
-    image: postgres:16-alpine
+    image: postgres:18
     restart: unless-stopped
     environment:
       POSTGRES_USER: hanko
