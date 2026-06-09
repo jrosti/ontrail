@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--bg); }
+a { color: inherit; text-decoration: none; cursor: pointer; }
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; }
+::selection { background: color-mix(in oklab, var(--accent) 30%, transparent); }
+
+.ot-app {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--base-font);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.003em;
+  transition: background .3s, color .3s;
+}
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+
+/* ProseMirror / TipTap */
+.ProseMirror { outline: none; }
+.ProseMirror p { margin: 0 0 .75em; }
+.ProseMirror p:last-child { margin-bottom: 0; }
+.ProseMirror h2 { font-size: 1.3em; margin-bottom: .5em; }
+.ProseMirror h3 { font-size: 1.1em; margin-bottom: .4em; }
+.ProseMirror ul, .ProseMirror ol { padding-left: 1.4em; margin: 0 0 .75em; }
+.ProseMirror blockquote { border-left: 3px solid var(--accent); padding-left: 1em; color: var(--text-dim); margin: 0 0 .75em; }
+.ProseMirror mark { background: color-mix(in oklab, var(--accent) 25%, transparent); border-radius: 3px; padding: 1px 3px; }
+.ProseMirror a { color: var(--accent); text-decoration: underline; }
+.ProseMirror p.is-editor-empty:first-child::before { content: attr(data-placeholder); float: left; color: var(--text-faint); pointer-events: none; height: 0; }
+
+/* scrollbars */
+.ot-app *::-webkit-scrollbar { width: 10px; height: 10px; }
+.ot-app *::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; border: 3px solid var(--bg); }
+
+/* cards */
+.ot-card { transition: border-color .18s, transform .18s, box-shadow .18s; }
+.ot-card-hover:hover { border-color: color-mix(in oklab, var(--accent) 45%, var(--border)); transform: translateY(-2px); }
+
+/* ── TOP NAV ─────────────────────────────────────────────────── */
+.ot-topnav {
+  position: sticky; top: 0; z-index: 50; height: var(--nav-h);
+  background: color-mix(in oklab, var(--bg) 82%, transparent);
+  backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border-bottom: 1px solid var(--border);
+}
+.ot-topnav-inner { max-width: 1340px; margin: 0 auto; height: 100%; padding: 0 24px;
+  display: flex; align-items: center; gap: 20px; }
+.ot-logo-btn { background: none; border: 0; padding: 0; }
+.ot-nav-tabs { display: flex; gap: 4px; }
+.ot-nav-tab { display: flex; align-items: center; gap: 7px; padding: 8px 14px; border: 0; border-radius: 10px;
+  background: transparent; color: var(--text-dim); font-weight: 600; font-size: 14px; transition: background .15s, color .15s; }
+.ot-nav-tab:hover { background: var(--surface-2); color: var(--text); }
+.ot-nav-tab.active { background: color-mix(in oklab, var(--accent) 14%, transparent); color: var(--accent); }
+.ot-search { flex: 1; max-width: 380px; display: flex; align-items: center; gap: 9px;
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 11px; padding: 0 13px; height: 40px; }
+.ot-search input { flex: 1; min-width: 0; background: none; border: 0; outline: none; color: var(--text); font-size: 14px; }
+.ot-search input::placeholder { color: var(--text-faint); }
+.ot-iconbtn { position: relative; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+  border: 0; border-radius: 11px; background: transparent; color: var(--text-dim); transition: background .15s, color .15s; }
+.ot-iconbtn:hover { background: var(--surface-2); color: var(--text); }
+.ot-rec-btn { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 11px;
+  background: var(--accent); color: var(--accent-on); font-weight: 600; font-size: 14px; transition: filter .15s; }
+.ot-rec-btn:hover { filter: brightness(1.06); }
+.ot-rec-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-on); animation: otpulse 1.6s infinite; }
+@keyframes otpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.ot-badge { position: absolute; top: 4px; right: 4px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
+  background: var(--accent); color: var(--accent-on); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+
+/* ── SHELL / GRIDS ───────────────────────────────────────────── */
+.ot-shell { max-width: 1340px; margin: 0 auto; padding: 22px 24px 80px; }
+.ot-grid-3 { display: grid; grid-template-columns: 272px minmax(0, 1fr) 324px; gap: 22px; align-items: start; }
+.ot-col-left, .ot-col-right { min-width: 0; }
+
+/* ── PROFILE SIDEBAR ─────────────────────────────────────────── */
+.ot-profile-cover { padding: 22px 18px; display: flex; flex-direction: column; gap: 12px;
+  background: linear-gradient(150deg, color-mix(in oklab, var(--accent) 40%, var(--logo-bg, var(--surface))), var(--surface)); }
+.ot-profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); padding: 14px 6px; border-bottom: 1px solid var(--border); }
+.ot-profile-stats > div { text-align: center; }
+.ot-pstat-v { font-family: var(--font-display); font-weight: 600; font-size: 18px; letter-spacing: -0.02em; }
+.ot-pstat-l { font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+.ot-profile-nav { padding: 10px; display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--border); }
+.ot-pnav { display: flex; align-items: center; gap: 11px; padding: 9px 12px; border: 0; border-radius: 10px;
+  background: transparent; color: var(--text-dim); font-weight: 500; font-size: 14px; text-align: left; width: 100%; transition: background .14s, color .14s; }
+.ot-pnav:hover { background: var(--surface-2); color: var(--text); }
+.ot-pnav.active { background: color-mix(in oklab, var(--accent) 12%, transparent); color: var(--accent); font-weight: 600; }
+.ot-profile-groups { padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
+.ot-pgroup-hd { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--text-faint); font-weight: 700; }
+.ot-pgroup { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-dim); }
+.ot-pgroup-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+/* ── COMPOSER ────────────────────────────────────────────────── */
+.ot-composer-input { flex: 1; text-align: left; height: 44px; padding: 0 16px; border-radius: 12px;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-faint); font-size: 14.5px; }
+.ot-composer-input:hover { border-color: color-mix(in oklab, var(--accent) 40%, var(--border)); }
+.ot-composer-go { width: 44px; height: 44px; border-radius: 12px; border: 0; background: var(--accent); color: var(--accent-on);
+  display: flex; align-items: center; justify-content: center; }
+
+/* ── LOG FORM ────────────────────────────────────────────────── */
+.ot-log { max-width: 1100px; margin: 0 auto; }
+.ot-log-head { margin-bottom: 22px; }
+.ot-log-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; }
+.ot-log-title { width: 100%; border: 0; border-bottom: 2px solid var(--border); background: transparent; color: var(--text);
+  font-family: var(--font-display); font-weight: 600; font-size: clamp(22px, 3.4vw, 30px); letter-spacing: -0.02em;
+  padding: 4px 0 12px; outline: none; }
+.ot-log-title::placeholder { color: var(--text-faint); }
+.ot-log-title:focus { border-color: var(--accent); }
+.ot-field { display: flex; flex-direction: column; gap: 7px; }
+.ot-field-label { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); font-weight: 700;
+  display: flex; align-items: center; gap: 8px; }
+.ot-field-badge { font-style: normal; text-transform: none; letter-spacing: 0; font-size: 11px; font-weight: 500; color: var(--text-faint); opacity: .8; }
+.ot-field-hint { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
+.ot-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.ot-input, .ot-input-unit, .ot-textarea, .ot-tag-input {
+  width: 100%; background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: 11px; color: var(--text); font-size: 15px; outline: none; transition: border-color .15s; }
+.ot-input { height: 46px; padding: 0 14px; }
+.ot-input:focus, .ot-textarea:focus, .ot-input-unit:focus-within, .ot-tag-input:focus-within { border-color: var(--accent); }
+.ot-input-unit { height: 46px; display: flex; align-items: center; padding: 0 14px; gap: 8px; }
+.ot-input-unit input { flex: 1; min-width: 0; height: 100%; border: 0; background: transparent; color: inherit; font: inherit; outline: none; font-variant-numeric: tabular-nums; }
+.ot-input-unit span { font-family: var(--font-mono); font-size: 13px; color: var(--text-faint); }
+.ot-computed { background: color-mix(in oklab, var(--accent) 9%, var(--surface-2)); border-color: color-mix(in oklab, var(--accent) 30%, var(--border)); }
+.ot-computed input { color: var(--accent); font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.ot-textarea { padding: 12px 14px; resize: vertical; line-height: 1.5; font-size: 14.5px; }
+.ot-sport-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.ot-sport-chip { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-dim); font-weight: 600; font-size: 13.5px; transition: all .14s; }
+.ot-sport-chip:hover { color: var(--text); border-color: var(--text-faint); }
+.ot-sport-chip.active { border-color: var(--chip, var(--accent)); color: var(--chip, var(--accent)); background: color-mix(in oklab, var(--chip, var(--accent)) 13%, transparent); }
+.ot-feel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.ot-feel-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 8px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-dim); font-weight: 600; font-size: 13px; transition: all .14s; }
+.ot-feel-btn.active { border-color: var(--accent); color: var(--accent); background: color-mix(in oklab, var(--accent) 10%, transparent); }
+.ot-feel-dots { display: flex; gap: 4px; }
+.ot-feel-dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+.ot-feel-btn.active .ot-feel-dots i.on { background: var(--accent); }
+.ot-feel-btn .ot-feel-dots i.on { background: var(--text-faint); }
+.ot-tag-input { min-height: 46px; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 7px 10px; }
+.ot-tag-input input { flex: 1; min-width: 120px; height: 30px; border: 0; background: transparent; color: inherit; font: inherit; outline: none; }
+.ot-tag-chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 6px 4px 10px; border-radius: 8px;
+  background: color-mix(in oklab, var(--accent) 12%, transparent); color: var(--accent); font-size: 13px; font-weight: 600; }
+.ot-tag-chip button { display: flex; border: 0; background: transparent; color: inherit; padding: 2px; border-radius: 5px; opacity: .7; }
+.ot-tag-chip button:hover { opacity: 1; background: color-mix(in oklab, var(--accent) 20%, transparent); }
+.ot-log-actions { display: flex; justify-content: flex-end; gap: 12px; padding-top: 4px; }
+.ot-btn-ghost { height: 46px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); font-weight: 600; font-size: 14px; }
+.ot-btn-ghost:hover { color: var(--text); }
+.ot-btn-primary { display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 22px; border-radius: 12px; border: 0;
+  background: var(--accent); color: var(--accent-on); font-weight: 700; font-size: 14.5px; }
+.ot-btn-primary:disabled { opacity: .45; }
+.ot-btn-primary:not(:disabled):hover { filter: brightness(1.06); }
+.ot-log-preview { min-width: 0; }
+.ot-preview-sticky { position: sticky; top: calc(var(--nav-h) + 18px); }
+.ot-preview-hint { font-size: 12.5px; color: var(--text-faint); text-align: center; margin: 14px 0 0; }
+
+/* editor toolbar */
+.ot-editor-toolbar { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+.ot-tbtn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 0;
+  border-radius: 7px; background: transparent; color: var(--text-dim); font-weight: 700; font-size: 13px; transition: background .12s, color .12s; }
+.ot-tbtn:hover { background: var(--surface-2); color: var(--text); }
+.ot-tbtn.is-active { background: color-mix(in oklab, var(--accent) 14%, transparent); color: var(--accent); }
+.ot-tbtn-sep { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
+.ot-editor-body { padding: 12px 14px; min-height: 140px; font-size: 15px; line-height: 1.6; }
+
+/* toast */
+.ot-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 80;
+  display: flex; align-items: center; gap: 9px; padding: 13px 20px; border-radius: 13px;
+  background: var(--accent); color: var(--accent-on); font-weight: 600; font-size: 14.5px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.3); animation: ottoast .3s cubic-bezier(.3,.7,.4,1.2); }
+@keyframes ottoast { from { opacity: 0; transform: translate(-50%, 16px); } }
+
+/* ── ACTIVITY CARD ───────────────────────────────────────────── */
+.ot-card-head { display: flex; align-items: center; gap: 12px; }
+.ot-card-title { font-size: clamp(17px, 2.4vw, 21px); cursor: pointer; transition: color .14s; color: var(--text); display: block; }
+.ot-card-title:hover { color: var(--accent); }
+.ot-metric-row { display: flex; flex-wrap: wrap; gap: clamp(16px, 4%, 34px); align-items: flex-end; }
+.ot-readout { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); }
+.ot-readout b { color: var(--text); font-weight: 600; }
+.ot-strength-row { display: flex; gap: 30px; background: var(--inset); border-radius: var(--radius-sm); padding: 16px 18px; }
+.ot-strength-v { font-family: var(--font-display); font-weight: 600; font-size: 22px; letter-spacing: -0.02em; }
+.ot-strength-l { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); margin-top: 2px; font-weight: 600; }
+.ot-desc { margin: 0; color: var(--text-dim); font-size: 14.5px; line-height: 1.6; text-wrap: pretty; }
+.ot-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+.ot-tag { font-size: 12.5px; color: var(--accent); background: color-mix(in oklab, var(--accent) 10%, transparent); padding: 3px 10px; border-radius: 8px; font-weight: 500; }
+.ot-card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 4px; border-top: 1px solid var(--border); margin-top: 2px; }
+.ot-actions { display: flex; align-items: center; }
+.ot-act { display: flex; align-items: center; gap: 7px; border: 0; background: transparent; color: var(--text-dim);
+  font-weight: 600; font-size: 13.5px; padding: 8px 2px; transition: color .14s; }
+.ot-act:hover { color: var(--text); }
+.ot-act.liked { color: var(--accent); }
+
+/* ── RIGHT RAIL ──────────────────────────────────────────────── */
+.ot-rail-hd { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-weight: 600; font-size: 14px; letter-spacing: -0.01em; }
+.ot-leader { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); }
+.ot-leader:last-child { border-bottom: 0; }
+.ot-leader-rank { width: 18px; font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); font-weight: 600; }
+.ot-leader-name { flex: 1; min-width: 0; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ot-leader-n { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--accent); }
+
+/* ── DETAIL ──────────────────────────────────────────────────── */
+.ot-detail-wrap { max-width: 980px; margin: 0 auto; }
+.ot-detail-hero { padding: 6px 0 22px; }
+.ot-back { display: inline-flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--text-dim);
+  font-weight: 600; font-size: 14px; padding: 6px 0; }
+.ot-back:hover { color: var(--text); }
+.ot-detail-title { font-size: clamp(28px, 5vw, 44px); line-height: 1.05; margin: 14px 0 16px; text-wrap: balance; }
+.ot-statpill { display: flex; flex-direction: column; gap: 5px; }
+.ot-statpill-top { display: flex; align-items: center; gap: 6px; }
+.ot-statpill-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint); font-weight: 700; }
+.ot-statpill-v { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 3.4vw, 34px); letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+.ot-statpill-u { font-size: 0.46em; font-weight: 500; color: var(--text-dim); margin-left: 4px; font-family: var(--font-mono); }
+.ot-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.ot-panel-title { font-size: 15px; }
+.ot-panel-sub { font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+.ot-legend { display: inline-flex; align-items: center; font-size: 11.5px; color: var(--text-faint); font-family: var(--font-mono); }
+.ot-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+.ot-legend-num { font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); font-weight: 600; }
+.ot-zone-row { display: flex; align-items: center; gap: 9px; font-size: 13px; }
+.ot-zone-dot { width: 9px; height: 9px; border-radius: 3px; }
+.ot-zone-name { color: var(--text-dim); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ot-zone-pct { margin-left: auto; font-family: var(--font-mono); font-weight: 600; }
+.ot-splits { display: flex; flex-direction: column; }
+.ot-split-head, .ot-split-row { display: grid; grid-template-columns: 28px 64px 1fr 44px; align-items: center; gap: 12px; padding: 7px 0; }
+.ot-split-head { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); font-weight: 700; border-bottom: 1px solid var(--border); }
+.ot-split-row { border-bottom: 1px solid var(--border); font-size: 14px; }
+.ot-split-row:last-child { border-bottom: 0; }
+.ot-split-bar { height: 7px; border-radius: 4px; background: var(--inset); overflow: hidden; }
+.ot-split-bar i { display: block; height: 100%; border-radius: 4px; }
+.ot-detail-desc { margin: 0; font-size: 16px; line-height: 1.7; color: var(--text-dim); text-wrap: pretty; white-space: pre-line; }
+.ot-comment-input { flex: 1; min-width: 0; height: 40px; padding: 0 14px; border-radius: 11px; background: var(--surface-2);
+  border: 1px solid var(--border); color: var(--text); outline: none; }
+.ot-comment-input:focus { border-color: var(--accent); }
+.ot-comment-send { width: 40px; height: 40px; border-radius: 11px; border: 0; background: var(--accent); color: var(--accent-on);
+  display: flex; align-items: center; justify-content: center; }
+.ot-comment-send:disabled { opacity: .4; }
+
+/* ── ANALYTICS ───────────────────────────────────────────────── */
+.ot-page { max-width: 1140px; margin: 0 auto; }
+.ot-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; flex-wrap: wrap; }
+.ot-page-title { font-size: clamp(26px, 4vw, 34px); }
+.ot-page-sub { color: var(--text-faint); font-size: 14px; margin-top: 4px; }
+.ot-scope, .ot-cal-nav { display: flex; gap: 4px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 11px; padding: 4px; }
+.ot-scope-btn { border: 0; background: transparent; color: var(--text-dim); font-weight: 600; font-size: 13px; padding: 7px 14px; border-radius: 8px; }
+.ot-scope-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.ot-summary-row { display: flex; flex-wrap: wrap; gap: clamp(20px, 5vw, 56px); padding: 22px 24px; margin-bottom: 22px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.ot-analytics-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+.ot-legend-row { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
+.ot-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.ot-legend-label { color: var(--text-dim); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ot-legend-val { font-family: var(--font-mono); font-weight: 600; }
+.ot-heat-legend { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); }
+.ot-heat-legend i { width: 11px; height: 11px; border-radius: 3px; }
+.ot-record { display: flex; align-items: center; gap: 11px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.ot-record:last-child { border-bottom: 0; }
+.ot-record-dist { font-weight: 600; font-size: 14px; flex: 1; }
+.ot-record-val { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; color: var(--accent); }
+.ot-record-when { font-size: 11.5px; color: var(--text-faint); font-family: var(--font-mono); width: 88px; text-align: right; }
+.ot-table { display: flex; flex-direction: column; overflow-x: auto; }
+.ot-tr { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr .7fr .8fr .8fr; gap: 12px; align-items: center; min-width: 640px; }
+.ot-th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); font-weight: 700;
+  padding: 0 0 10px; border-bottom: 2px solid var(--accent); }
+.ot-td { padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; font-variant-numeric: tabular-nums; }
+.ot-table-dot { width: 9px; height: 9px; border-radius: 3px; flex-shrink: 0; }
+
+/* ── CALENDAR ────────────────────────────────────────────────── */
+.ot-cal-month { font-size: 20px; }
+.ot-cal-grid { display: flex; flex-direction: column; }
+.ot-cal-row { display: grid; grid-template-columns: 34px repeat(7, 1fr) 90px; gap: 6px; border-bottom: 1px solid var(--border); }
+.ot-cal-row:last-child { border-bottom: 0; }
+.ot-cal-dow { padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
+.ot-cal-dow span { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-faint); font-weight: 700; }
+.ot-cal-dow span:last-child, .ot-cal-total { text-align: right; }
+.ot-cal-wk { font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); padding-top: 10px; }
+.ot-cal-cell { min-height: 62px; padding: 7px 4px; display: flex; flex-direction: column; gap: 4px; }
+.ot-cal-cell.empty { opacity: .35; }
+.ot-cal-d { font-size: 12px; color: var(--text-faint); font-family: var(--font-mono); }
+.ot-cal-acts { display: flex; flex-direction: column; gap: 3px; }
+.ot-cal-act { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; font-family: var(--font-mono); }
+.ot-cal-total { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--text-dim); padding-top: 10px; }
+
+/* ── BOTTOM NAV (mobile) ─────────────────────────────────────── */
+.ot-bottomnav { display: none; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 1180px) {
+  .ot-grid-3 { grid-template-columns: 252px minmax(0, 1fr); }
+  .ot-col-right { display: none; }
+}
+@media (max-width: 860px) {
+  .ot-topnav-inner { padding: 0 16px; gap: 12px; }
+  .ot-nav-tabs, .ot-search, .ot-rec-label { display: none; }
+  .ot-shell { padding: 16px 14px 90px; }
+  .ot-grid-3 { grid-template-columns: 1fr; }
+  .ot-col-left { display: none; }
+  .ot-chart-grid { grid-template-columns: 1fr; }
+  .ot-log-grid { grid-template-columns: 1fr; }
+  .ot-log-preview { display: none; }
+  .ot-analytics-grid { grid-template-columns: 1fr !important; }
+  .ot-analytics-grid > * { grid-column: span 1 !important; }
+  .ot-bottomnav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; height: 64px;
+    background: color-mix(in oklab, var(--bg) 88%, transparent); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom);
+    align-items: center; }
+  .ot-bottom-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    border: 0; background: transparent; color: var(--text-faint); font-size: 10.5px; font-weight: 600; }
+  .ot-bottom-tab.active { color: var(--accent); }
+  .ot-bottom-fab { width: 50px; height: 50px; margin-top: -16px; border-radius: 16px; border: 0;
+    background: var(--accent); color: var(--accent-on); display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 18px color-mix(in oklab, var(--accent) 45%, transparent); flex-shrink: 0; }
+  .ot-rec-btn { padding: 0 12px; }
+}
+@media (max-width: 520px) {
+  .ot-cal-row { grid-template-columns: 24px repeat(7, 1fr); }
+  .ot-cal-total, .ot-cal-dow span:last-child { display: none; }
+  .ot-cal-act { font-size: 9px; padding: 1px 3px; }
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
