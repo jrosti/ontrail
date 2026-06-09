@@ -27,6 +27,9 @@ import {
   getSportSummaryByYear,
   getSummaryByMonth,
   getSummaryByWeek,
+  getTagSummary,
+  getTagSummaryByMonth,
+  getTagSummaryByYear,
   getTagUsage,
 } from './repositories/summaries';
 import { getUnread, markAllRead } from './repositories/unread';
@@ -36,6 +39,7 @@ import {
   findOrCreateUserFromClaims,
   getExercisesForExport,
   getPublicProfile,
+  listUsers,
   updateUserProfile,
 } from './repositories/users';
 import { emitToUser, registerSseClient } from './sse';
@@ -402,7 +406,37 @@ async function route(req: Request): Promise<Response> {
     return json({ items });
   }
 
-  // ── Tag usage ─────────────────────────────────────────────────────────────
+  // ── Tag summaries ─────────────────────────────────────────────────────────
+  // All-time: GET /api/users/:username/summary/tags
+  const tagSummaryAllMatch = path.match(/^\/api\/users\/([^/]+)\/summary\/tags$/);
+  if (tagSummaryAllMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const items = await getTagSummary(tagSummaryAllMatch[1]);
+    return json({ items });
+  }
+
+  // By year: GET /api/users/:username/summary/tags/:year
+  const tagSummaryYearMatch = path.match(/^\/api\/users\/([^/]+)\/summary\/tags\/(\d{4})$/);
+  if (tagSummaryYearMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const items = await getTagSummaryByYear(tagSummaryYearMatch[1], Number(tagSummaryYearMatch[2]));
+    return json({ items });
+  }
+
+  // By month: GET /api/users/:username/summary/tags/:year/by/month
+  const tagSummaryMonthMatch = path.match(
+    /^\/api\/users\/([^/]+)\/summary\/tags\/(\d{4})\/by\/month$/,
+  );
+  if (tagSummaryMonthMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const items = await getTagSummaryByMonth(
+      tagSummaryMonthMatch[1],
+      Number(tagSummaryMonthMatch[2]),
+    );
+    return json({ items });
+  }
+
+  // Tag usage/cloud: GET /api/users/:username/tags
   const tagUsageMatch = path.match(/^\/api\/users\/([^/]+)\/tags$/);
   if (tagUsageMatch) {
     if (req.method !== 'GET') return methodNotAllowed();
@@ -468,7 +502,43 @@ async function route(req: Request): Promise<Response> {
     return result ? json(result) : notFound();
   }
 
-  // ── Search ────────────────────────────────────────────────────────────────
+  // ── User list / search ────────────────────────────────────────────────────
+  if (path === '/api/users') {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const q = url.searchParams.get('q')?.trim() ?? '';
+    const page = Math.max(1, Number(url.searchParams.get('page') ?? 1));
+    const perPage = Math.min(100, Number(url.searchParams.get('perPage') ?? 50));
+    const { items, total } = await listUsers(q, page, perPage);
+    return json({ items, total, page, perPage });
+  }
+
+  // ── Legacy permalink resolution ───────────────────────────────────────────
+  // /api/legacy/ex/:objectId  →  { id: <new uuid> }  (for client-side redirect)
+  const legacyExMatch = path.match(/^\/api\/legacy\/ex\/([0-9a-f]{24})$/i);
+  if (legacyExMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const row = await sql<{ id: string }[]>`
+      select id::text from exercises where legacy_object_id = ${legacyExMatch[1]} limit 1
+    `;
+    return row[0] ? json({ id: row[0].id }) : notFound();
+  }
+
+  // /api/legacy/user/:username  →  { username }  (legacy usernames may differ after normalization)
+  const legacyUserMatch = path.match(/^\/api\/legacy\/user\/([^/]+)$/);
+  if (legacyUserMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const term = legacyUserMatch[1];
+    const row = await sql<{ username: string }[]>`
+      select username from users
+      where username = ${term}
+         or normalized_username = ${term.toLowerCase()}
+         or legacy_id = ${term}
+      limit 1
+    `;
+    return row[0] ? json({ username: row[0].username }) : notFound();
+  }
+
+  // ── Exercise search ───────────────────────────────────────────────────────
   if (path === '/api/search') {
     if (req.method !== 'GET') return methodNotAllowed();
     const viewer = await optionalUser(req);

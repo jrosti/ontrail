@@ -364,6 +364,152 @@ export async function getLeaderboard(
   }));
 }
 
+export interface TagSummary {
+  tag: string;
+  sessionCount: number;
+  totalDurationSec: number;
+  totalDistanceM: number | null;
+  totalClimbM: number | null;
+  avgHr: number | null;
+  firstDate: string | null;
+  lastDate: string | null;
+}
+
+// Tag summaries — same shape as sport summaries but grouped by tag.
+// All three functions exclude the excluded_sports set.
+export async function getTagSummary(username: string): Promise<TagSummary[]> {
+  const rows = await sql<
+    {
+      tag: string;
+      session_count: number;
+      total_duration_sec: string;
+      total_distance_m: string | null;
+      total_climb_m: string | null;
+      avg_hr: number | null;
+      first_date: string | null;
+      last_date: string | null;
+    }[]
+  >`
+    select
+      tag,
+      count(*)::int                       as session_count,
+      sum(e.duration_sec)::bigint         as total_duration_sec,
+      sum(e.distance_m)::bigint           as total_distance_m,
+      sum(e.climb_m)::bigint              as total_climb_m,
+      round(avg(e.avg_hr))::int           as avg_hr,
+      min(e.exercise_date)::text          as first_date,
+      max(e.exercise_date)::text          as last_date
+    from exercises e
+    join users u on u.id = e.owner_id
+    cross join unnest(e.tags) as tag
+    where u.username = ${username}
+      and e.sport_key not in (select sport_key from excluded_sports)
+      and tag <> ''
+    group by tag
+    order by total_duration_sec desc
+  `;
+  return rows.map((r) => ({
+    tag: r.tag,
+    sessionCount: r.session_count,
+    totalDurationSec: Number(r.total_duration_sec),
+    totalDistanceM: r.total_distance_m ? Number(r.total_distance_m) : null,
+    totalClimbM: r.total_climb_m ? Number(r.total_climb_m) : null,
+    avgHr: r.avg_hr,
+    firstDate: r.first_date,
+    lastDate: r.last_date,
+  }));
+}
+
+export async function getTagSummaryByYear(username: string, year: number): Promise<TagSummary[]> {
+  const rows = await sql<
+    {
+      tag: string;
+      session_count: number;
+      total_duration_sec: string;
+      total_distance_m: string | null;
+      total_climb_m: string | null;
+      avg_hr: number | null;
+      first_date: string | null;
+      last_date: string | null;
+    }[]
+  >`
+    select
+      tag,
+      count(*)::int                       as session_count,
+      sum(e.duration_sec)::bigint         as total_duration_sec,
+      sum(e.distance_m)::bigint           as total_distance_m,
+      sum(e.climb_m)::bigint              as total_climb_m,
+      round(avg(e.avg_hr))::int           as avg_hr,
+      min(e.exercise_date)::text          as first_date,
+      max(e.exercise_date)::text          as last_date
+    from exercises e
+    join users u on u.id = e.owner_id
+    cross join unnest(e.tags) as tag
+    where u.username = ${username}
+      and extract(year from e.exercise_date) = ${year}
+      and e.sport_key not in (select sport_key from excluded_sports)
+      and tag <> ''
+    group by tag
+    order by total_duration_sec desc
+  `;
+  return rows.map((r) => ({
+    tag: r.tag,
+    sessionCount: r.session_count,
+    totalDurationSec: Number(r.total_duration_sec),
+    totalDistanceM: r.total_distance_m ? Number(r.total_distance_m) : null,
+    totalClimbM: r.total_climb_m ? Number(r.total_climb_m) : null,
+    avgHr: r.avg_hr,
+    firstDate: r.first_date,
+    lastDate: r.last_date,
+  }));
+}
+
+export interface TagMonthSummary {
+  month: number;
+  tag: string;
+  sessionCount: number;
+  totalDurationSec: number;
+  totalDistanceM: number | null;
+}
+
+export async function getTagSummaryByMonth(
+  username: string,
+  year: number,
+): Promise<TagMonthSummary[]> {
+  const rows = await sql<
+    {
+      month: number;
+      tag: string;
+      session_count: number;
+      total_duration_sec: string;
+      total_distance_m: string | null;
+    }[]
+  >`
+    select
+      extract(month from e.exercise_date)::int as month,
+      tag,
+      count(*)::int                            as session_count,
+      sum(e.duration_sec)::bigint              as total_duration_sec,
+      sum(e.distance_m)::bigint                as total_distance_m
+    from exercises e
+    join users u on u.id = e.owner_id
+    cross join unnest(e.tags) as tag
+    where u.username = ${username}
+      and extract(year from e.exercise_date) = ${year}
+      and e.sport_key not in (select sport_key from excluded_sports)
+      and tag <> ''
+    group by month, tag
+    order by month asc, total_duration_sec desc
+  `;
+  return rows.map((r) => ({
+    month: r.month,
+    tag: r.tag,
+    sessionCount: r.session_count,
+    totalDurationSec: Number(r.total_duration_sec),
+    totalDistanceM: r.total_distance_m ? Number(r.total_distance_m) : null,
+  }));
+}
+
 export async function getTagUsage(
   username: string,
 ): Promise<{ tag: string; useCount: number; lastUsed: string }[]> {

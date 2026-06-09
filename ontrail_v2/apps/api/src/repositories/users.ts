@@ -193,6 +193,66 @@ export async function updateUserProfile(
   return rows[0] ? toUser(rows[0]) : null;
 }
 
+export interface UserListItem {
+  username: string;
+  displayName: string;
+  avatarInitials: string;
+  avatarColor: string;
+  synopsis: string | null;
+  exerciseCount: number;
+}
+
+export async function listUsers(
+  query: string,
+  page: number,
+  perPage: number,
+): Promise<{ items: UserListItem[]; total: number }> {
+  const offset = (page - 1) * perPage;
+  const like = query ? `${query.toLowerCase()}%` : null;
+
+  const rows = await sql<
+    {
+      username: string;
+      display_name: string;
+      avatar_initials: string;
+      avatar_color: string;
+      synopsis: string | null;
+      exercise_count: number;
+    }[]
+  >`
+    select
+      u.username,
+      u.display_name,
+      u.avatar_initials,
+      u.avatar_color,
+      u.synopsis,
+      count(e.id)::int as exercise_count
+    from users u
+    left join exercises e on e.owner_id = u.id
+    where (${like}::text is null or u.normalized_username like ${like})
+    group by u.id
+    order by u.username asc
+    limit ${perPage} offset ${offset}
+  `;
+
+  const totals = await sql<{ total: number }[]>`
+    select count(*)::int as total from users
+    where (${like}::text is null or normalized_username like ${like})
+  `;
+
+  return {
+    items: rows.map((r) => ({
+      username: r.username,
+      displayName: r.display_name,
+      avatarInitials: r.avatar_initials,
+      avatarColor: r.avatar_color,
+      synopsis: r.synopsis,
+      exerciseCount: r.exercise_count,
+    })),
+    total: totals[0]?.total ?? 0,
+  };
+}
+
 export async function getExercisesForExport(userId: string) {
   // Return all exercises with comments for the given user
   const rows = await sql<
