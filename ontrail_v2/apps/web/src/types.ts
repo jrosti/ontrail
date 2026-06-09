@@ -51,6 +51,7 @@ export interface Exercise {
   sport: string;
   title: string;
   body?: string;
+  gpxPoints?: { lat: number; lon: number; ele?: number }[];
   tags: string[];
   date: string;
   durationSec: number;

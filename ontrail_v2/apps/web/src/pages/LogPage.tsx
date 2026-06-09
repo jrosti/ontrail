@@ -5,11 +5,13 @@ import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
 import { RichEditor } from '../components/editor/RichEditor';
+import { GpxDropzone } from '../components/exercise/GpxDropzone';
 import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
 import { parseDuration, parseDistance, calcPace, calcSpeed, fmtPace } from '../utils/format';
 import { createExercise, updateExercise, getExercise } from '../api';
+import type { GpxResult } from '../utils/gpx';
 
 export function LogPage() {
   const { lang } = useStore();
@@ -43,6 +45,27 @@ export function LogPage() {
   });
   const [tagDraft, setTagDraft] = useState('');
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg');
+  const [gpxResult, setGpxResult] = useState<GpxResult | null>(null);
+
+  const onGpxLoaded = (result: GpxResult) => {
+    setGpxResult(result);
+    // Prefill form fields from GPS data — only overwrite if still empty
+    const updates: Partial<typeof form> = {};
+    if (!form.title && result.name) updates.title = result.name;
+    if (!form.distance && result.distanceM > 0)
+      updates.distance = (result.distanceM / 1000).toFixed(2);
+    if (!form.duration && result.durationSec && result.durationSec > 0) {
+      const h = Math.floor(result.durationSec / 3600);
+      const m = Math.floor((result.durationSec % 3600) / 60);
+      const s = result.durationSec % 60;
+      updates.duration = h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+    }
+    if (!form.climb && result.elevationGainM > 0)
+      updates.climb = String(Math.round(result.elevationGainM));
+    if (result.startTime)
+      updates.date = result.startTime.slice(0, 10);
+    setForm(f => ({ ...f, ...updates }));
+  };
 
   const set = (k: string, v: unknown) => setForm(f => ({ ...f, [k]: v }));
 
@@ -70,6 +93,7 @@ export function LogPage() {
         feelRating: form.feel as 'easy' | 'ok' | 'hard',
         tags: form.tags, body: form.descHtml, date: form.date,
         details: isReps ? { reps: +form.reps, volume: +form.volume * 1000 } : undefined,
+        gpxPoints: gpxResult ? gpxResult.points.map(p => ({ lat: p.lat, lon: p.lon, ele: p.ele })) : undefined,
       };
       return editId ? updateExercise(editId, payload) : createExercise(payload);
     },
@@ -218,6 +242,22 @@ export function LogPage() {
                   placeholder={form.tags.length ? '' : t.keywordsPh}
                 />
               </div>
+            </label>
+
+            <label className="ot-field">
+              <span className="ot-field-label">{t.gpxField} <em className="ot-field-badge">{t.opt}</em></span>
+              <GpxDropzone
+                result={gpxResult}
+                onLoaded={onGpxLoaded}
+                onRemove={() => setGpxResult(null)}
+                accent={SPORTS[sport]?.color ?? 'var(--accent)'}
+                label={t.gpxField}
+                hint={t.gpxDrop}
+                removeLabel={t.gpxRemove}
+                loadedLabel={t.gpxLoaded}
+                pointsLabel={t.gpxPoints}
+                filledLabel={t.gpxFilled}
+              />
             </label>
 
             <div className="ot-field">

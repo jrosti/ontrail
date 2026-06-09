@@ -6,6 +6,7 @@ import { Avatar } from '../components/ui/Avatar';
 import { Icon } from '../components/ui/Icon';
 import { SportBadge } from '../components/ui/SportBadge';
 import { RouteMap } from '../components/charts/RouteMap';
+import { LeafletMap } from '../components/charts/LeafletMap';
 import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
@@ -104,8 +105,12 @@ export function ExercisePage() {
         </Card>
 
         {km > 0 && !['gym', 'floor'].includes(ex.sport) && (
-          <Card pad={false} style={{ overflow: 'hidden' }}>
-            <RouteMap seed={parseInt(ex.id.slice(-6), 16) || 1} height={340} accent={color} rounded={0} />
+          <Card pad={false} style={{ overflow: 'hidden', borderRadius: 'var(--radius)' }}>
+            {ex.gpxPoints && ex.gpxPoints.length >= 2 ? (
+              <LeafletMap points={ex.gpxPoints} height={340} accent={color} rounded={0} />
+            ) : (
+              <RouteMap seed={parseInt(ex.id.replace(/\D/g, '').slice(-8), 10) || 1} height={340} accent={color} rounded={0} />
+            )}
           </Card>
         )}
 

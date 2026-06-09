@@ -43,6 +43,9 @@ export const I18N = {
     yes: 'Kyllä', no: 'Ei',
     commentPlaceholder: 'Kirjoita kommentti…', sendComment: 'Lähetä',
     kudosGiven: 'Antoi peukun', noComments: 'Ei kommentteja',
+    gpxField: 'GPS-jälki (.gpx)', gpxDrop: 'Pudota .gpx-tiedosto tähän tai klikkaa',
+    gpxLoaded: 'GPS-jälki ladattu', gpxRemove: 'Poista', gpxPoints: 'pistettä',
+    gpxFilled: 'Matka, kesto ja nousu täytetty GPS-tiedoista',
   },
   en: {
     feed: 'Feed', analytics: 'Analytics', calendar: 'Calendar', live: 'Record', record: 'Record',
@@ -86,6 +89,9 @@ export const I18N = {
     yes: 'Yes', no: 'No',
     commentPlaceholder: 'Write a comment…', sendComment: 'Send',
     kudosGiven: 'gave kudos', noComments: 'No comments yet',
+    gpxField: 'GPS trace (.gpx)', gpxDrop: 'Drop a .gpx file here or click to browse',
+    gpxLoaded: 'GPS trace loaded', gpxRemove: 'Remove', gpxPoints: 'points',
+    gpxFilled: 'Distance, duration and ascent filled from GPS data',
   },
 } as const;
 

@@ -1,0 +1,49 @@
+From: OnTrail <noreply@ontrail.local>
+Subject: [PATCH] Make /me endpoint return full ProfileData
+
+The upstream /me handler returns only {"id": "..."}. This patch makes it
+return the full ProfileData struct (emails, passkeys, username, metadata)
+so the frontend can display user info immediately after login without a
+second round-trip to the profile endpoint.
+
+Also adds an `id` field to ProfileData for backward compatibility with
+clients that expect the user ID as `id` rather than `user_id`.
+
+--- a/backend/dto/profile.go
++++ b/backend/dto/profile.go
+@@ -17,6 +17,8 @@ type MFAConfig struct {
+
+ type ProfileData struct {
++	// ID mirrors UserID for backward compatibility with clients expecting `id`
++	ID           uuid.UUID                    `json:"id"`
+ 	UserID       uuid.UUID                    `json:"user_id"`
+ 	Passkeys     []WebauthnCredentialResponse `json:"passkeys,omitempty"`
+ 	SecurityKeys []WebauthnCredentialResponse `json:"security_keys,omitempty"`
+@@ -51,6 +53,7 @@ func ProfileDataFromUserModel(user *models.User, cfg *config.Config) *ProfileDat
+
+ 	return &ProfileData{
++		ID:           user.ID,
+ 		UserID:       user.ID,
+ 		Passkeys:     webauthnCredentials,
+
+--- a/backend/handler/user.go
++++ b/backend/handler/user.go
+@@ -255,7 +255,17 @@ func (h *UserHandler) Me(c echo.Context) error {
+ 	sessionToken, ok := c.Get("session").(jwt.Token)
+ 	if !ok {
+ 		return errors.New("failed to cast session object")
+ 	}
+
+-	return c.JSON(http.StatusOK, map[string]string{"id": sessionToken.Subject()})
++	user, err := h.persister.GetUserPersister().Get(uuid.FromStringOrNil(sessionToken.Subject()))
++	if err != nil {
++		return fmt.Errorf("failed to get user: %w", err)
++	}
++
++	if user == nil {
++		return echo.NewHTTPError(http.StatusNotFound).SetInternal(errors.New("user not found"))
++	}
++
++	data := dto.ProfileDataFromUserModel(user, h.cfg)
++	return c.JSON(http.StatusOK, *data)
+ }

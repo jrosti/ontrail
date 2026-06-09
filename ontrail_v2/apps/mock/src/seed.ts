@@ -48,6 +48,7 @@ export interface Exercise {
   careCount: number;
   commentCount: number;
   details: { [key: string]: number };
+  gpxPoints?: { lat: number; lon: number; ele?: number }[];
   createdAt: string;
   updatedAt: string;
 }
