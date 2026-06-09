@@ -61,6 +61,7 @@ Exercises currently embed comments and reactions. New PostgreSQL design should n
 - Keep units explicit. Legacy code stores durations, distances, pace, and dates in app-specific formats; verify before changing.
 - Treat `nobody` as the legacy anonymous viewer concept.
 - Keep Finnish sport names and existing public-facing terminology unless product direction changes.
+- Always add or update tests when fixing a bug or implementing a new feature. If a meaningful automated test is not feasible, document why and cover the behavior with the closest practical verification.
 
 ## Suggested New Layout
 
@@ -113,6 +114,8 @@ Use the most relevant checks for the files touched:
 - TypeScript backend: `bun test`, `bun run lint`, `bun run typecheck`, `bun run build`
 - React frontend: `bun test`, `bun run lint`, `bun run build`
 - End-to-end frontend checks: Playwright once the new app exists
+
+Bug fixes and new features should include focused tests that would fail before the change and pass after it.
 
 If a command cannot run because dependencies or services are missing, document the blocker in the final response.
 

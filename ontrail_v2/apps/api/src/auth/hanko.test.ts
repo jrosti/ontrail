@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { getBearerToken } from './hanko';
+import { claimEmail, getBearerToken } from './hanko';
 
 describe('getBearerToken', () => {
   test('reads bearer authorization headers', () => {
@@ -31,5 +31,25 @@ describe('getBearerToken', () => {
 
   test('returns null when no supported token exists', () => {
     expect(getBearerToken(new Request('http://test.local'))).toBeNull();
+  });
+});
+
+describe('claimEmail', () => {
+  test('reads string email claims', () => {
+    expect(claimEmail({ sub: 'user-id', email: 'user@example.test' })).toBe('user@example.test');
+  });
+
+  test('reads structured Hanko email claims', () => {
+    expect(
+      claimEmail({
+        sub: 'user-id',
+        email: { address: 'primary@example.test', is_primary: true, is_verified: true },
+      }),
+    ).toBe('primary@example.test');
+  });
+
+  test('returns null when claims do not contain an email address', () => {
+    expect(claimEmail({ sub: 'user-id' })).toBeNull();
+    expect(claimEmail({ sub: 'user-id', email: {} })).toBeNull();
   });
 });

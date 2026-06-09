@@ -36,6 +36,31 @@ Object.defineProperty(globalThis, 'navigator', {
   configurable: true,
 });
 
+const localStorageShim = {
+  store: new Map<string, string>(),
+  getItem(key: string) {
+    return this.store.get(key) ?? null;
+  },
+  setItem(key: string, value: string) {
+    this.store.set(key, value);
+  },
+  removeItem(key: string) {
+    this.store.delete(key);
+  },
+  clear() {
+    this.store.clear();
+  },
+};
+
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageShim,
+  configurable: true,
+});
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageShim,
+  configurable: true,
+});
+
 class TestFileReader extends EventTarget {
   result: string | ArrayBuffer | null = null;
   onload: ((event: ProgressEvent<FileReader>) => void) | null = null;

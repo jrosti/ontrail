@@ -1,7 +1,8 @@
-import { describe, expect, mock, test } from 'bun:test';
+import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import type { ExerciseListItem } from '../../types';
+import { useStore } from '../../store';
 
 mock.module('@tanstack/react-router', () => ({
   Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLSpanElement>) => (
@@ -40,6 +41,10 @@ function renderWithProviders(ui: React.ReactNode) {
 }
 
 describe('ExerciseCard', () => {
+  beforeEach(() => {
+    useStore.getState().setLang('fi');
+  });
+
   test('renders the core feed card content', () => {
     renderWithProviders(<ExerciseCard exercise={exercise} />);
 

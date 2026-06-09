@@ -11,6 +11,7 @@ target
 logs
 node_modules
 .DS_Store
+.claude/
 tmp
 ontrail_v2/apps/api/dist
 ontrail_v2/infra/hanko/hanko
