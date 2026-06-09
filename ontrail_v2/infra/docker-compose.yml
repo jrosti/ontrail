@@ -1,5 +1,3 @@
-version: '3.9'
-
 # OnTrail v2 — local infra (Postgres + MailSlurper only)
 # Hanko runs directly via start.sh, not in Docker.
 # Usage:  docker-compose up -d   (from this directory, or via start.sh)
