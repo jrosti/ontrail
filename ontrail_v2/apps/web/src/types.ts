@@ -203,6 +203,17 @@ export interface TagSummary {
   lastDate?: string;
 }
 
+export interface TagSummaryMonth {
+  year: number;
+  month: number;
+  tag: string;
+  sessionCount: number;
+  totalDurationSec: number;
+  totalDistanceM: number;
+  totalClimbM: number;
+  avgHr?: number;
+}
+
 export interface UserListItem {
   username: string;
   displayName: string;

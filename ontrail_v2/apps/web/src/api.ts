@@ -2,7 +2,7 @@ import axios from 'axios';
 import type {
   Exercise, ExerciseListItem, Comment, User,
   YearSportSummary, MonthSummary, WeekSummary, SportSummary,
-  AthleteProfile, PersonalRecord, LeaderboardEntry, TagSummary,
+  AthleteProfile, PersonalRecord, LeaderboardEntry, TagSummary, TagSummaryMonth,
   UserListItem, Group, PaginatedResponse, Sport,
 } from './types';
 
@@ -90,6 +90,12 @@ export const getPersonalRecords = (username: string) =>
 
 export const getTagSummary = (username: string) =>
   client.get<{ items: TagSummary[] }>(`/users/${username}/summary/tags`).then(r => r.data.items);
+
+export const getTagSummaryByYear = (username: string, year: number) =>
+  client.get<{ items: TagSummary[] }>(`/users/${username}/summary/tags/${year}`).then(r => r.data.items);
+
+export const getTagSummaryByMonth = (username: string, year: number) =>
+  client.get<{ items: TagSummaryMonth[] }>(`/users/${username}/summary/tags/${year}/by/month`).then(r => r.data.items);
 
 export const getLeaderboard = (period: 'month' | 'year') =>
   client.get<{ items: LeaderboardEntry[] }>(`/leaderboards/${period}`).then(r => r.data.items);

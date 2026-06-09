@@ -11,6 +11,7 @@ import { SearchPage } from './pages/SearchPage';
 import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { GroupsPage } from './pages/GroupsPage';
+import { AthletePage } from './pages/AthletePage';
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -100,6 +101,17 @@ const groupsRoute = createRoute({
   component: GroupsPage,
 });
 
+function AthletePageWrapper() {
+  const { username } = athleteRoute.useParams();
+  return <AthletePage username={username} />;
+}
+
+const athleteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/user/$username',
+  component: AthletePageWrapper,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -118,6 +130,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   profileRoute,
   groupsRoute,
+  athleteRoute,
 ]);
 
 export const router = createRouter({ routeTree });
