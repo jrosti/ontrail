@@ -69,15 +69,17 @@ export function TopNav() {
               <Icon name="analytics" size={18} stroke={2.2} />
               <span>{t.analytics}</span>
             </Link>
-            <Link
-              to="/calendar"
-              className="ot-nav-tab"
-              activeProps={{ className: 'ot-nav-tab active' }}
-              inactiveProps={{ className: 'ot-nav-tab' }}
-            >
-              <Icon name="calendar" size={18} stroke={2.2} />
-              <span>{t.calendar}</span>
-            </Link>
+            {currentUser && (
+              <Link
+                to="/calendar"
+                className="ot-nav-tab"
+                activeProps={{ className: 'ot-nav-tab active' }}
+                inactiveProps={{ className: 'ot-nav-tab' }}
+              >
+                <Icon name="calendar" size={18} stroke={2.2} />
+                <span>{t.calendar}</span>
+              </Link>
+            )}
             <Link
               to="/toplists"
               className="ot-nav-tab"
@@ -107,7 +109,7 @@ export function TopNav() {
         </form>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link to="/log" search={{}} className="ot-rec-btn">
+          <Link to="/log" search={{}} className="ot-rec-btn" aria-label={t.record}>
             <span className="ot-rec-dot" />
             <Icon name="route" size={17} stroke={2.2} />
             <span className="ot-rec-label">{t.record}</span>
@@ -125,7 +127,7 @@ export function TopNav() {
           <button
             type="button"
             className="ot-iconbtn"
-            aria-label="Language"
+            aria-label={`${lang.toUpperCase()} Language`}
             onClick={() => setLang(lang === 'fi' ? 'en' : 'fi')}
           >
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 600 }}>
@@ -142,7 +144,7 @@ export function TopNav() {
               />
             </Link>
           ) : (
-            <Link to="/login" className="ot-iconbtn">
+            <Link to="/login" className="ot-iconbtn" aria-label={t.login}>
               <Icon name="user" size={20} />
             </Link>
           )}
