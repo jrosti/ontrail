@@ -1,15 +1,19 @@
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { exportJWK, generateKeyPair, type JWK, SignJWT } from 'jose';
 import postgres from 'postgres';
 import { GenericContainer, type StartedTestContainer } from 'testcontainers';
-import type { AuthClaims } from './auth/hanko';
 
 const postgresUser = 'ontrail';
 const postgresPassword = 'ontrail';
 const postgresDb = 'ontrail_test';
+const jwtKeyId = 'ontrail-integration-key';
 
 let container: StartedTestContainer;
+let jwksServer: ReturnType<typeof Bun.serve>;
+let privateKey: CryptoKey;
+let hankoIssuer: string;
 let handleRequest: typeof import('./server').handleRequest;
 let closeDb: typeof import('./db/client').closeDb;
 let integrationReady = false;
@@ -39,20 +43,53 @@ async function applyMigrations(databaseUrl: string) {
   await sql.end({ timeout: 5 });
 }
 
-function claimsFor(subject: string): AuthClaims {
+async function startJwksServer(): Promise<string> {
+  const keyPair = await generateKeyPair('RS256', { extractable: true });
+  privateKey = keyPair.privateKey;
+  const publicJwk = (await exportJWK(keyPair.publicKey)) as JWK & { kid: string; alg: string };
+  publicJwk.kid = jwtKeyId;
+  publicJwk.alg = 'RS256';
+
+  const fetch = (req: Request) => {
+    const url = new URL(req.url);
+    if (url.pathname === '/.well-known/jwks.json') {
+      return Response.json({ keys: [publicJwk] });
+    }
+    return new Response('not found', { status: 404 });
+  };
+
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const port = 20_000 + Math.floor(Math.random() * 20_000);
+    try {
+      jwksServer = Bun.serve({ hostname: '127.0.0.1', port, fetch });
+      return jwksServer.url.href.replace(/\/$/, '');
+    } catch (error) {
+      if (attempt === 19) throw error;
+    }
+  }
+
+  throw new Error('failed to start JWKS server');
+}
+
+async function tokenFor(subject: string): Promise<string> {
+  return new SignJWT({ email: `${subject}@example.test` })
+    .setProtectedHeader({ alg: 'RS256', kid: jwtKeyId })
+    .setIssuer(hankoIssuer)
+    .setSubject(subject)
+    .setIssuedAt()
+    .setExpirationTime('10m')
+    .sign(privateKey);
+}
+
+async function authHeaders(subject: string, headers: HeadersInit = {}): Promise<HeadersInit> {
   return {
-    sub: subject,
-    email: `${subject}@example.test`,
+    ...headers,
+    authorization: `Bearer ${await tokenFor(subject)}`,
   };
 }
 
 async function request(path: string, init: RequestInit = {}) {
-  return handleRequest(new Request(`http://api.test${path}`, init), {
-    verifyRequest: async (req) => {
-      const subject = req.headers.get('x-test-subject');
-      return subject ? claimsFor(subject) : null;
-    },
-  });
+  return handleRequest(new Request(`http://api.test${path}`, init));
 }
 
 async function jsonResponse<T = Record<string, unknown>>(response: Response): Promise<T> {
@@ -61,6 +98,7 @@ async function jsonResponse<T = Record<string, unknown>>(response: Response): Pr
 
 beforeAll(async () => {
   try {
+    hankoIssuer = await startJwksServer();
     container = await new GenericContainer('postgres:18')
       .withEnvironment({
         POSTGRES_USER: postgresUser,
@@ -72,8 +110,8 @@ beforeAll(async () => {
 
     const databaseUrl = `postgres://${postgresUser}:${postgresPassword}@${container.getHost()}:${container.getMappedPort(5432)}/${postgresDb}`;
     process.env.DATABASE_URL = databaseUrl;
-    process.env.HANKO_URL = 'http://hanko.test';
-    process.env.JWT_ISSUER = 'http://hanko.test';
+    process.env.HANKO_URL = hankoIssuer;
+    process.env.HANKO_JWT_ISSUER = hankoIssuer;
 
     await applyMigrations(databaseUrl);
 
@@ -91,6 +129,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await closeDb?.();
   await container?.stop();
+  jwksServer?.stop(true);
 });
 
 describe('API integration', () => {
@@ -137,7 +176,7 @@ describe('API integration', () => {
     if (skipIfIntegrationUnavailable()) return;
 
     const response = await request('/api/me', {
-      headers: { 'x-test-subject': 'alice-subject' },
+      headers: await authHeaders('alice-subject'),
     });
     const body = await jsonResponse<{ username: string; email: string }>(response);
 
@@ -163,7 +202,7 @@ describe('API integration', () => {
 
     const createdResponse = await request('/api/exercises', {
       method: 'POST',
-      headers: { 'x-test-subject': 'alice-subject' },
+      headers: await authHeaders('alice-subject'),
       body: JSON.stringify({
         sport: 'run',
         title: 'Morning trail',
@@ -189,7 +228,7 @@ describe('API integration', () => {
 
     const commentResponse = await request(`/api/exercises/${created.id}/comments`, {
       method: 'POST',
-      headers: { 'x-test-subject': 'bob-subject' },
+      headers: await authHeaders('bob-subject'),
       body: JSON.stringify({ body: 'Nice one' }),
     });
     expect(commentResponse.status).toBe(201);
@@ -207,7 +246,7 @@ describe('API integration', () => {
     expect(anonymous.commentCount).toBe(0);
 
     const authenticatedResponse = await request(`/api/exercises/${created.id}`, {
-      headers: { 'x-test-subject': 'alice-subject' },
+      headers: await authHeaders('alice-subject'),
     });
     const authenticated = await jsonResponse<{
       body: string;
@@ -227,7 +266,7 @@ describe('API integration', () => {
 
     const createdResponse = await request('/api/exercises', {
       method: 'POST',
-      headers: { 'x-test-subject': 'owner-subject' },
+      headers: await authHeaders('owner-subject'),
       body: JSON.stringify({
         sport: 'run',
         title: 'Owner run',
@@ -239,14 +278,14 @@ describe('API integration', () => {
 
     const forbiddenResponse = await request(`/api/exercises/${created.id}`, {
       method: 'PATCH',
-      headers: { 'x-test-subject': 'other-subject' },
+      headers: await authHeaders('other-subject'),
       body: JSON.stringify({ title: 'Hijacked' }),
     });
     expect(forbiddenResponse.status).toBe(403);
 
     const ownerResponse = await request(`/api/exercises/${created.id}`, {
       method: 'PATCH',
-      headers: { 'x-test-subject': 'owner-subject' },
+      headers: await authHeaders('owner-subject'),
       body: JSON.stringify({ title: 'Owner edited', distanceM: null }),
     });
     const ownerEdit = await jsonResponse<{ title: string; distanceM?: number }>(ownerResponse);
