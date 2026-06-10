@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from '@tanstack/react-router';
+import { Link, useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { addCare, addComment, deleteExercise, getExercise, removeCare } from '../api';
 import { LeafletMap } from '../components/charts/LeafletMap';
@@ -222,9 +222,15 @@ export function ExercisePage() {
             {ex.tags.length > 0 && (
               <div className="ot-tags">
                 {ex.tags.map((tag) => (
-                  <span key={tag} className="ot-tag">
+                  <Link
+                    key={tag}
+                    to="/feed"
+                    search={{ tag }}
+                    className="ot-tag"
+                    style={{ textDecoration: 'none' }}
+                  >
                     #{tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}
