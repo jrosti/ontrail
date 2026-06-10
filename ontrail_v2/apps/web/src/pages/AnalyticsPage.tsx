@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import type React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import {
   getMonthSummaries,
@@ -257,6 +258,8 @@ export function AnalyticsPage() {
   });
   const username = currentUser?.username ?? '';
   const monthShort = lang === 'fi' ? MONTH_SHORT_FI : MONTH_SHORT_EN;
+  const [sportSortCol, setSportSortCol] = useState<SportSortCol>('sessions');
+  const [sportSortDir, setSportSortDir] = useState<SortDir3>('desc');
 
   const { data: allItems } = useQuery({
     queryKey: ['sportSummaryAll', username],
@@ -314,6 +317,34 @@ export function AnalyticsPage() {
   } else {
     items = yearItems ?? [];
   }
+
+  const sortedItems =
+    sportSortDir === 'none'
+      ? items
+      : [...items].sort((a, b) => {
+          let cmp = 0;
+          if (sportSortCol === 'name')
+            cmp = sportName(a.sport, lang).localeCompare(sportName(b.sport, lang));
+          else if (sportSortCol === 'distance')
+            cmp = (a.totalDistanceM ?? 0) - (b.totalDistanceM ?? 0);
+          else if (sportSortCol === 'time') cmp = a.totalDurationSec - b.totalDurationSec;
+          else if (sportSortCol === 'hr') cmp = (a.avgHr ?? 0) - (b.avgHr ?? 0);
+          else if (sportSortCol === 'climb') cmp = (a.totalClimbM ?? 0) - (b.totalClimbM ?? 0);
+          else cmp = a.sessionCount - b.sessionCount;
+          return sportSortDir === 'asc' ? cmp : -cmp;
+        });
+
+  const cycleSortDir = (col: SportSortCol) => {
+    if (sportSortCol !== col) {
+      setSportSortCol(col);
+      setSportSortDir(col === 'name' ? 'asc' : 'desc');
+    } else {
+      setSportSortDir((prev) => {
+        if (col === 'name') return prev === 'asc' ? 'desc' : prev === 'desc' ? 'none' : 'asc';
+        return prev === 'desc' ? 'asc' : prev === 'asc' ? 'none' : 'desc';
+      });
+    }
+  };
 
   const totalDurationSec = items.reduce((s, r) => s + r.totalDurationSec, 0);
   const totalDistanceM = items.reduce((s, r) => s + r.totalDistanceM, 0);
@@ -488,14 +519,56 @@ export function AnalyticsPage() {
           <Panel span={12} title={t.sportSummary}>
             <div className="ot-table">
               <div className="ot-tr ot-th">
-                <span>{lang === 'fi' ? 'Laji' : 'Sport'}</span>
-                <span>{t.distance}</span>
-                <span>{t.time}</span>
-                <span>{t.hr}</span>
-                <span>{t.climb}</span>
-                <span>{lang === 'fi' ? 'Kerrat' : 'Sessions'}</span>
+                <SportSortHeader
+                  col="name"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {lang === 'fi' ? 'Laji' : 'Sport'}
+                </SportSortHeader>
+                <SportSortHeader
+                  col="distance"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {t.distance}
+                </SportSortHeader>
+                <SportSortHeader
+                  col="time"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {t.time}
+                </SportSortHeader>
+                <SportSortHeader
+                  col="hr"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {t.hr}
+                </SportSortHeader>
+                <SportSortHeader
+                  col="climb"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {t.climb}
+                </SportSortHeader>
+                <SportSortHeader
+                  col="sessions"
+                  active={sportSortCol}
+                  dir={sportSortDir}
+                  onClick={cycleSortDir}
+                >
+                  {lang === 'fi' ? 'Kerrat' : 'Sessions'}
+                </SportSortHeader>
               </div>
-              {items.map((r) => (
+              {sortedItems.map((r) => (
                 <div key={r.sport} className="ot-tr ot-td">
                   <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                     <span
@@ -612,5 +685,52 @@ function Panel({
       </div>
       {children}
     </Card>
+  );
+}
+
+type SportSortCol = 'name' | 'distance' | 'time' | 'hr' | 'climb' | 'sessions';
+type SortDir3 = 'asc' | 'desc' | 'none';
+
+function SportSortHeader({
+  col,
+  active,
+  dir,
+  onClick,
+  children,
+}: {
+  col: SportSortCol;
+  active: SportSortCol;
+  dir: SortDir3;
+  onClick: (col: SportSortCol) => void;
+  children: React.ReactNode;
+}) {
+  const isActive = active === col && dir !== 'none';
+  const chevron = isActive ? (dir === 'asc' ? '↑' : '↓') : '';
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(col)}
+      style={{
+        background: 'none',
+        border: 'none',
+        padding: 0,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        font: 'inherit',
+        fontSize: 11,
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em',
+        fontWeight: 700,
+        color: isActive ? 'var(--accent)' : 'var(--text-faint)',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {children}
+      <span style={{ fontSize: 10, opacity: isActive ? 1 : 0.3, minWidth: 8 }}>
+        {chevron || '↕'}
+      </span>
+    </button>
   );
 }

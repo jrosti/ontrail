@@ -1,14 +1,16 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import type React from 'react';
 import { useRef, useState } from 'react';
-import { listExercises, listGroups } from '../api';
+import { listExercises, listGroups, listSports } from '../api';
 import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { I18N } from '../i18n';
 import type { FeedSearch } from '../router';
+import { sportName } from '../sports';
 import { useStore } from '../store';
 import { parseDistance, parseDuration } from '../utils/format';
 
@@ -305,7 +307,9 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const t = I18N[lang];
 
   const { data: groups } = useQuery({ queryKey: ['groups'], queryFn: listGroups });
+  const { data: allSports } = useQuery({ queryKey: ['sports'], queryFn: listSports });
 
+  const [selectedSports, setSelectedSports] = useState<string[]>(search.sports ?? []);
   const [distMin, setDistMin] = useState(search.minDistM ? String(search.minDistM / 1000) : '');
   const [distMax, setDistMax] = useState(search.maxDistM ? String(search.maxDistM / 1000) : '');
   const [durMin, setDurMin] = useState(
@@ -321,8 +325,14 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const [sortBy, setSortBy] = useState<FeedSearch['sortBy']>(search.sortBy ?? 'date');
   const [sortDir, setSortDir] = useState<FeedSearch['sortDir']>(search.sortDir ?? 'desc');
 
+  const toggleSport = (key: string) =>
+    setSelectedSports((prev) =>
+      prev.includes(key) ? prev.filter((s) => s !== key) : [...prev, key],
+    );
+
   const apply = () => {
     const updates: Partial<FeedSearch> = {
+      sports: selectedSports.length > 0 ? selectedSports : undefined,
       minDistM: distMin ? parseDistance(`${distMin}km`) || undefined : undefined,
       maxDistM: distMax ? parseDistance(`${distMax}km`) || undefined : undefined,
       minDurSec: durMin ? parseDuration(`${durMin}min`) || undefined : undefined,
