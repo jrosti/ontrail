@@ -37,7 +37,11 @@ const feedRoute = createRoute({
   path: '/feed',
   validateSearch: (s: Record<string, unknown>): FeedSearch => ({
     tag: s.tag as string | undefined,
-    sport: s.sport as string | undefined,
+    sports: Array.isArray(s.sports)
+      ? (s.sports as string[])
+      : s.sports
+        ? [s.sports as string]
+        : undefined,
     user: s.user as string | undefined,
     group: s.group as string | undefined,
     page: s.page ? Number(s.page) : undefined,
@@ -57,7 +61,7 @@ const feedRoute = createRoute({
 
 export type FeedSearch = {
   tag?: string;
-  sport?: string;
+  sports?: string[];
   user?: string;
   group?: string;
   page?: number;

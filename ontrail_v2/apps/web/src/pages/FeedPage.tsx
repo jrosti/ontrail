@@ -27,7 +27,7 @@ export function FeedPage() {
         page: pageParam as number,
         perPage: 20,
         tag: search.tag,
-        sport: search.sport,
+        sports: search.sports?.join(','),
         user: search.user,
         group: search.group,
         minDistM: search.minDistM,
@@ -56,7 +56,7 @@ export function FeedPage() {
 
   const hasFilters = !!(
     search.tag ||
-    search.sport ||
+    (search.sports?.length ?? 0) > 0 ||
     search.user ||
     search.group ||
     search.minDistM ||
@@ -97,12 +97,21 @@ export function FeedPage() {
                 onRemove={() => nav({ to: '/feed', search: { ...search, user: undefined } })}
               />
             )}
-            {search.sport && (
+            {(search.sports ?? []).map((s) => (
               <FilterChip
-                label={search.sport}
-                onRemove={() => nav({ to: '/feed', search: { ...search, sport: undefined } })}
+                key={s}
+                label={s}
+                onRemove={() =>
+                  nav({
+                    to: '/feed',
+                    search: {
+                      ...search,
+                      sports: search.sports?.filter((x) => x !== s) || undefined,
+                    },
+                  })
+                }
               />
-            )}
+            ))}
             {search.tag && (
               <FilterChip
                 label={`#${search.tag}`}
@@ -340,6 +349,41 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
   return (
     <Card style={{ display: 'flex', flexDirection: 'column', gap: 18, padding: 20 }}>
+      {/* Sport multi-select */}
+      {(allSports?.length ?? 0) > 0 && (
+        <div>
+          <span style={labelStyle}>{lang === 'fi' ? 'Laji' : 'Sport'}</span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {(allSports ?? []).map((s) => {
+              const active = selectedSports.includes(s.key);
+              return (
+                <button
+                  key={s.key}
+                  type="button"
+                  onClick={() => toggleSport(s.key)}
+                  style={{
+                    padding: '4px 10px',
+                    borderRadius: 20,
+                    border: '1px solid',
+                    borderColor: active ? 'var(--accent)' : 'var(--border)',
+                    background: active
+                      ? 'color-mix(in oklab, var(--accent) 15%, transparent)'
+                      : 'transparent',
+                    color: active ? 'var(--accent)' : 'var(--text)',
+                    fontSize: 12,
+                    cursor: 'pointer',
+                    fontWeight: active ? 600 : 400,
+                    transition: 'all .1s',
+                  }}
+                >
+                  {sportName(s.key, lang)}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <div
         style={{
           display: 'grid',

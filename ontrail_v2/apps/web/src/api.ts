@@ -43,6 +43,7 @@ export const listExercises = (params?: {
   perPage?: number;
   user?: string;
   sport?: string;
+  sports?: string;
   tag?: string;
   q?: string;
   group?: string;

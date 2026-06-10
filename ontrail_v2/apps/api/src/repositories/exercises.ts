@@ -148,7 +148,13 @@ function exerciseSelect() {
 export async function listExercises(params: URLSearchParams, authenticated: boolean) {
   const page = Math.max(1, Number(params.get('page') ?? 1));
   const perPage = Math.min(100, Math.max(1, Number(params.get('perPage') ?? 20)));
-  const sport = params.get('sport');
+  const singleSport = params.get('sport');
+  const multiSports = params.get('sports'); // comma-separated, e.g. "juoksu,hiihto"
+  const sportList = multiSports
+    ? multiSports.split(',').filter(Boolean)
+    : singleSport
+      ? [singleSport]
+      : null;
   const user = params.get('user');
   const tag = params.get('tag');
   const group = params.get('group'); // normalized group name
@@ -179,7 +185,7 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
       : sql`${sortCol} desc nulls last, e.created_at desc`;
 
   const whereClause = sql`
-    where (${sport}::text is null or e.sport_key = ${sport})
+    where (${sportList}::text[] is null or e.sport_key = any(${sportList}::text[]))
       and (${user}::text is null or u.username = ${user})
       and (${tag}::text is null or ${tag} = any(e.tags))
       and (${group}::text is null or u.id in (

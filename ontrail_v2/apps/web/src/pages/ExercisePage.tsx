@@ -3,6 +3,7 @@ import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { addCare, addComment, deleteExercise, getExercise, removeCare } from '../api';
 import { LeafletMap } from '../components/charts/LeafletMap';
+import { RichViewer } from '../components/editor/RichViewer';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -179,8 +180,7 @@ export function ExercisePage() {
 
         {ex.body && (
           <Card style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* biome-ignore lint/security/noDangerouslySetInnerHtml: exercise body is stored HTML from our own editor */}
-            <div className="ot-detail-desc" dangerouslySetInnerHTML={{ __html: ex.body }} />
+            <RichViewer html={ex.body} className="ot-detail-desc" />
             {ex.tags.length > 0 && (
               <div className="ot-tags">
                 {ex.tags.map((tag) => (
