@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
 import { getUser, listExercises } from '../api';
@@ -18,28 +18,38 @@ export function DiaryPage() {
   const { lang } = useStore();
   const t = I18N[lang];
   const [sportFilter, setSportFilter] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
 
   const { data: user } = useQuery({
     queryKey: ['user', username],
     queryFn: () => getUser(username),
   });
 
-  const { data: exercises, isLoading } = useQuery({
-    queryKey: ['exercises', 'user', username, sportFilter, page],
-    queryFn: () =>
-      listExercises({ user: username, perPage: 50, page, sport: sportFilter ?? undefined }),
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
+    queryKey: ['exercises', 'user', username, sportFilter],
+    queryFn: ({ pageParam = 1 }) =>
+      listExercises({
+        user: username,
+        perPage: 50,
+        page: pageParam as number,
+        sport: sportFilter ?? undefined,
+      }),
+    getNextPageParam: (last) => (last.page * last.perPage < last.total ? last.page + 1 : undefined),
+    initialPageParam: 1,
   });
 
-  const total = exercises?.total ?? 0;
-  const loaded = (exercises?.items.length ?? 0) + (page - 1) * 50;
-  const hasMore = loaded < total;
+  const allItems = data?.pages.flatMap((p) => p.items) ?? [];
+  const total = data?.pages[0]?.total ?? 0;
 
   return (
     <div className="ot-page">
       {user && (
         <Card style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 22 }}>
-          <Avatar initials={user.avatarInitials} color={user.avatarColor} size={64} />
+          <Avatar
+            initials={user.avatarInitials}
+            color={user.avatarColor}
+            size={64}
+            gravatarHash={user.gravatarHash}
+          />
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22 }}>
               {user.displayName}
@@ -60,10 +70,7 @@ export function DiaryPage() {
         <button
           type="button"
           className={`ot-chip${sportFilter === null ? ' active' : ''}`}
-          onClick={() => {
-            setSportFilter(null);
-            setPage(1);
-          }}
+          onClick={() => setSportFilter(null)}
         >
           {t.all}
         </button>
@@ -72,10 +79,7 @@ export function DiaryPage() {
             type="button"
             key={s}
             className={`ot-chip${sportFilter === s ? ' active' : ''}`}
-            onClick={() => {
-              setSportFilter(s);
-              setPage(1);
-            }}
+            onClick={() => setSportFilter(s)}
             style={{ display: 'flex', alignItems: 'center', gap: 5 }}
           >
             <SportGlyph sport={s} size={13} />
@@ -88,7 +92,7 @@ export function DiaryPage() {
         <div style={{ color: 'var(--text-faint)', textAlign: 'center', padding: '40px 0' }}>…</div>
       )}
 
-      {!isLoading && exercises?.items.length === 0 && (
+      {!isLoading && allItems.length === 0 && (
         <Card style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-faint)' }}>
           <Icon name="feed" size={32} style={{ margin: '0 auto 12px', opacity: 0.3 }} />
           <div>{t.noExercises}</div>
@@ -96,15 +100,20 @@ export function DiaryPage() {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-        {exercises?.items.map((ex) => (
+        {allItems.map((ex) => (
           <ExerciseCard key={ex.id} exercise={ex} />
         ))}
       </div>
 
-      {hasMore && (
+      {hasNextPage && (
         <div style={{ textAlign: 'center', marginTop: 24 }}>
-          <button type="button" className="ot-load-more" onClick={() => setPage((p) => p + 1)}>
-            {t.loadMore}
+          <button
+            type="button"
+            className="ot-load-more"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            {isFetchingNextPage ? '…' : t.loadMore}
           </button>
         </div>
       )}
