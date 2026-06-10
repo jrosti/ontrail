@@ -104,7 +104,7 @@ function buildMonthGrid(
   return weeks;
 }
 
-// One month card — fetches its own exercises
+// One month card — fetches exercises for its own month on demand
 function MonthCard({
   year,
   month0,
@@ -120,10 +120,13 @@ function MonthCard({
 }) {
   const username = useStore((s) => s.currentUser?.username ?? '');
   const monthKey = `${year}-${String(month0 + 1).padStart(2, '0')}`;
+  const dateFrom = `${monthKey}-01`;
+  const lastDay = new Date(year, month0 + 1, 0).getDate();
+  const dateTo = `${monthKey}-${String(lastDay).padStart(2, '0')}`;
 
   const { data } = useQuery({
-    queryKey: ['cal-exercises', username],
-    queryFn: () => listExercises({ user: username, perPage: 500 }),
+    queryKey: ['cal-exercises', username, monthKey],
+    queryFn: () => listExercises({ user: username, perPage: 200, dateFrom, dateTo }),
     enabled: !!username,
     staleTime: 5 * 60_000,
   });
@@ -132,12 +135,11 @@ function MonthCard({
     const map = new Map<string, ExerciseListItem[]>();
     for (const ex of data?.items ?? []) {
       const key = ex.date.slice(0, 10);
-      if (!key.startsWith(monthKey)) continue;
       if (!map.has(key)) map.set(key, []);
       map.get(key)?.push(ex);
     }
     return map;
-  }, [data, monthKey]);
+  }, [data]);
 
   const weeks = useMemo(
     () => buildMonthGrid(year, month0, exercisesByDate, weekDurationMap),
