@@ -176,7 +176,14 @@ describe('API client', () => {
     ]);
     await expect(api.getPersonalRecords('trail_runner')).resolves.toEqual([{ sport: 'Juoksu' }]);
     await expect(api.getTagSummary('trail_runner')).resolves.toEqual([{ sport: 'Juoksu' }]);
+    await expect(api.getTagSummaryByYear('trail_runner', 2026)).resolves.toEqual([
+      { sport: 'Juoksu' },
+    ]);
+    await expect(api.getTagSummaryByMonth('trail_runner', 2026)).resolves.toEqual([
+      { sport: 'Juoksu' },
+    ]);
     await expect(api.getLeaderboard('month')).resolves.toEqual([{ sport: 'Juoksu' }]);
+    await expect(api.getLeaderboard('year', 'run')).resolves.toEqual([{ sport: 'Juoksu' }]);
 
     nextData = { username: 'trail_runner' };
     await expect(api.getAthleteProfile('trail_runner')).resolves.toEqual(nextData);
@@ -188,9 +195,13 @@ describe('API client', () => {
       '/users/trail_runner/summary/2026/by/week',
       '/users/trail_runner/records',
       '/users/trail_runner/summary/tags',
+      '/users/trail_runner/summary/tags/2026',
+      '/users/trail_runner/summary/tags/2026/by/month',
       '/leaderboards/month',
+      '/leaderboards/year',
       '/users/trail_runner/athlete',
     ]);
+    expect(calls.at(-2)?.config).toEqual({ params: { sport: 'run' } });
   });
 
   test('wraps unread, groups, search, export, and auth endpoints', async () => {
