@@ -12,9 +12,9 @@ const jwtKeyId = 'ontrail-integration-key';
 
 let container: StartedTestContainer;
 let jwksServer: ReturnType<typeof Bun.serve>;
+let apiServer: ReturnType<typeof Bun.serve>;
 let privateKey: CryptoKey;
 let hankoIssuer: string;
-let handleRequest: typeof import('./server').handleRequest;
 let closeDb: typeof import('./db/client').closeDb;
 let integrationReady = false;
 let integrationSetupError: unknown;
@@ -43,6 +43,22 @@ async function applyMigrations(databaseUrl: string) {
   await sql.end({ timeout: 5 });
 }
 
+function startLocalServer(fetch: (req: Request) => Response | Promise<Response>): string {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const port = 20_000 + Math.floor(Math.random() * 20_000);
+    try {
+      const server = Bun.serve({ hostname: '127.0.0.1', port, fetch });
+      if (!jwksServer) jwksServer = server;
+      else apiServer = server;
+      return server.url.href.replace(/\/$/, '');
+    } catch (error) {
+      if (attempt === 19) throw error;
+    }
+  }
+
+  throw new Error('failed to start local test server');
+}
+
 async function startJwksServer(): Promise<string> {
   const keyPair = await generateKeyPair('RS256', { extractable: true });
   privateKey = keyPair.privateKey;
@@ -58,17 +74,7 @@ async function startJwksServer(): Promise<string> {
     return new Response('not found', { status: 404 });
   };
 
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    const port = 20_000 + Math.floor(Math.random() * 20_000);
-    try {
-      jwksServer = Bun.serve({ hostname: '127.0.0.1', port, fetch });
-      return jwksServer.url.href.replace(/\/$/, '');
-    } catch (error) {
-      if (attempt === 19) throw error;
-    }
-  }
-
-  throw new Error('failed to start JWKS server');
+  return startLocalServer(fetch);
 }
 
 async function tokenFor(subject: string): Promise<string> {
@@ -89,7 +95,7 @@ async function authHeaders(subject: string, headers: HeadersInit = {}): Promise<
 }
 
 async function request(path: string, init: RequestInit = {}) {
-  return handleRequest(new Request(`http://api.test${path}`, init));
+  return fetch(`${apiServer.url.href.replace(/\/$/, '')}${path}`, init);
 }
 
 async function jsonResponse<T = Record<string, unknown>>(response: Response): Promise<T> {
@@ -115,10 +121,11 @@ beforeAll(async () => {
 
     await applyMigrations(databaseUrl);
 
-    ({ handleRequest } = await import('./server'));
+    const { handleRequest } = await import('./server');
     ({ closeDb } = await import('./db/client'));
     const { ensureSportsSeeded } = await import('./repositories/sports');
     await ensureSportsSeeded();
+    startLocalServer(handleRequest);
     integrationReady = true;
   } catch (error) {
     integrationSetupError = error;
@@ -128,6 +135,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await closeDb?.();
+  apiServer?.stop(true);
   await container?.stop();
   jwksServer?.stop(true);
 });
