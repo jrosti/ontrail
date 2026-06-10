@@ -69,19 +69,13 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Install API dependencies for Lighthouse stack
+        working-directory: ontrail_v2/apps/api
+        run: bun install --frozen-lockfile
+
       - name: Lighthouse report
         continue-on-error: true
-        run: |
-          pnpm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/ontrail-vite-preview.log" 2>&1 &
-          preview_pid=$!
-          for attempt in {1..60}; do
-            if curl -fsS http://127.0.0.1:4173/feed >/dev/null; then
-              break
-            fi
-            sleep 1
-          done
-          LIGHTHOUSE_BASE_URL=http://127.0.0.1:4173 pnpm run lighthouse:report
-          kill "$preview_pid"
+        run: pnpm run lighthouse:stack
 
       - name: Upload Lighthouse reports
         if: always()
