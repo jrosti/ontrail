@@ -93,6 +93,7 @@ const commentRow = {
   display_name: 'Friend Runner',
   avatar_initials: 'FR',
   avatar_color: 'oklch(70% .15 180)',
+  author_email: null,
   body: 'Nice work',
   created_at: '2026-06-09T13:00:00.000Z',
 };
@@ -201,6 +202,7 @@ describe('exercise repository reads', () => {
             displayName: 'Friend Runner',
             avatarInitials: 'FR',
             avatarColor: 'oklch(70% .15 180)',
+            gravatarHash: '',
             body: 'Nice work',
             createdAt: '2026-06-09T13:00:00.000Z',
           },
@@ -298,6 +300,7 @@ describe('exercise comments', () => {
       displayName: 'Friend Runner',
       avatarInitials: 'FR',
       avatarColor: 'oklch(70% .15 180)',
+      gravatarHash: '',
       body: 'Nice work',
       createdAt: '2026-06-09T13:00:00.000Z',
     });

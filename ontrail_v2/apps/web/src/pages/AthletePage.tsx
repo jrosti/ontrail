@@ -335,7 +335,12 @@ export function AthletePage({ username }: { username: string }) {
     <div className="ot-page">
       {/* Header */}
       <Card style={{ display: 'flex', gap: 18, alignItems: 'center', marginBottom: 4 }}>
-        <Avatar initials={user.avatarInitials} color={user.avatarColor} size={56} />
+        <Avatar
+          initials={user.avatarInitials}
+          color={user.avatarColor}
+          size={56}
+          gravatarHash={user.gravatarHash}
+        />
         <div style={{ flex: 1, minWidth: 0 }}>
           <h2 style={{ margin: 0, fontSize: 22 }}>{user.displayName || user.username}</h2>
           <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>@{user.username}</div>

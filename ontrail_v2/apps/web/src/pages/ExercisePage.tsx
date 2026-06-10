@@ -136,7 +136,12 @@ export function ExercisePage() {
         </div>
         <h1 className="ot-detail-title">{ex.title}</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Avatar initials={ex.ownerInitials} color={ex.ownerColor} size={32} />
+          <Avatar
+            initials={ex.ownerInitials}
+            color={ex.ownerColor}
+            size={32}
+            gravatarHash={ex.ownerGravatarHash}
+          />
           <span style={{ fontWeight: 600 }}>{ex.ownerDisplayName}</span>
           <span style={{ color: 'var(--text-faint)' }}>@{ex.ownerUsername}</span>
           <span style={{ color: 'var(--text-faint)', fontSize: 13 }}>
@@ -235,7 +240,12 @@ export function ExercisePage() {
           )}
           {ex.comments.map((c: Comment) => (
             <div key={c.id} style={{ display: 'flex', gap: 12 }}>
-              <Avatar initials={c.avatarInitials} color={c.avatarColor} size={36} />
+              <Avatar
+                initials={c.avatarInitials}
+                color={c.avatarColor}
+                size={36}
+                gravatarHash={c.gravatarHash}
+              />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'baseline' }}>
                   <b style={{ fontSize: 14 }}>{c.displayName}</b>
@@ -268,6 +278,7 @@ export function ExercisePage() {
                 initials={currentUser.avatarInitials}
                 color={currentUser.avatarColor}
                 size={36}
+                gravatarHash={currentUser.gravatarHash}
               />
               <input
                 className="ot-comment-input"

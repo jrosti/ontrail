@@ -68,6 +68,7 @@ describe('apiUser', () => {
       synopsis: 'Runs trails',
       avatarInitials: 'TR',
       avatarColor: 'oklch(60% .18 260)',
+      gravatarHash: expect.stringMatching(/^[0-9a-f]{32}$/),
       createdAt: '2026-06-09T12:00:00.000Z',
     });
   });
@@ -130,6 +131,7 @@ describe('profile queries', () => {
         display_name: 'Trail Runner',
         avatar_initials: 'TR',
         avatar_color: 'oklch(60% .18 260)',
+        email: 'runner@example.test',
         synopsis: 'Runs trails',
         resthr: 45,
         maxhr: 190,
@@ -142,6 +144,7 @@ describe('profile queries', () => {
       displayName: 'Trail Runner',
       avatarInitials: 'TR',
       avatarColor: 'oklch(60% .18 260)',
+      gravatarHash: expect.stringMatching(/^[0-9a-f]{32}$/),
       synopsis: 'Runs trails',
       resthr: 45,
       maxhr: 190,

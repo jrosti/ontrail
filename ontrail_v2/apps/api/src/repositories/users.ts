@@ -1,6 +1,7 @@
 import type { AuthClaims } from '../auth/hanko';
 import { claimEmail } from '../auth/hanko';
 import { sql } from '../db/client';
+import { gravatarHash } from '../gravatar';
 
 export interface DbUser {
   id: string;
@@ -99,6 +100,7 @@ export function apiUser(user: DbUser) {
     synopsis: user.synopsis ?? undefined,
     avatarInitials: user.avatarInitials,
     avatarColor: user.avatarColor,
+    gravatarHash: gravatarHash(user.email),
     createdAt: user.createdAt,
   };
 }
@@ -108,6 +110,7 @@ export interface PublicProfile {
   displayName: string;
   avatarInitials: string;
   avatarColor: string;
+  gravatarHash: string;
   synopsis: string | null;
   resthr: number | null;
   maxhr: number | null;
@@ -121,6 +124,7 @@ interface PublicProfileRow {
   display_name: string;
   avatar_initials: string;
   avatar_color: string;
+  email: string | null;
   synopsis: string | null;
   resthr: number | null;
   maxhr: number | null;
@@ -135,6 +139,7 @@ export async function getPublicProfile(username: string): Promise<PublicProfile 
       u.display_name,
       u.avatar_initials,
       u.avatar_color,
+      u.email,
       u.synopsis,
       u.resthr,
       u.maxhr,
@@ -153,6 +158,7 @@ export async function getPublicProfile(username: string): Promise<PublicProfile 
     displayName: row.display_name,
     avatarInitials: row.avatar_initials,
     avatarColor: row.avatar_color,
+    gravatarHash: gravatarHash(row.email),
     synopsis: row.synopsis,
     resthr: row.resthr,
     maxhr: row.maxhr,

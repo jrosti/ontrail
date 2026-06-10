@@ -136,7 +136,12 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
           style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-            <Avatar initials={ex.ownerInitials} color={ex.ownerColor} size={38} />
+            <Avatar
+              initials={ex.ownerInitials}
+              color={ex.ownerColor}
+              size={38}
+              gravatarHash={ex.ownerGravatarHash}
+            />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontWeight: 600 }}>{ex.title}</div>
               <div style={{ color: 'var(--text-faint)', fontSize: 12.5, marginTop: 2 }}>
@@ -164,7 +169,12 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   return (
     <Card style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div className="ot-card-head">
-        <Avatar initials={ex.ownerInitials} color={ex.ownerColor} size={44} />
+        <Avatar
+          initials={ex.ownerInitials}
+          color={ex.ownerColor}
+          size={44}
+          gravatarHash={ex.ownerGravatarHash}
+        />
         <div style={{ minWidth: 0, flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Link

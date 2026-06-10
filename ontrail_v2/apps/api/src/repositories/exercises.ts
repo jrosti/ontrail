@@ -1,5 +1,6 @@
 import type { Comment, Exercise, ExerciseListItem } from '../../../web/src/types';
 import { sql } from '../db/client';
+import { gravatarHash } from '../gravatar';
 import { emitToUser } from '../sse';
 import type { DbUser } from './users';
 
@@ -9,6 +10,7 @@ interface ExerciseRow {
   owner_display_name: string;
   owner_initials: string;
   owner_color: string;
+  owner_email: string | null;
   sport_key: string;
   title: string;
   body_html: string | null;
@@ -49,6 +51,7 @@ interface CommentRow {
   display_name: string;
   avatar_initials: string;
   avatar_color: string;
+  author_email: string | null;
   body: string;
   created_at: string;
 }
@@ -58,6 +61,7 @@ interface CareRow {
   username: string;
   avatar_initials: string;
   avatar_color: string;
+  author_email: string | null;
   emoji: string;
 }
 
@@ -69,6 +73,7 @@ function toCare(row: CareRow): import('../../../web/src/types').Care {
     authorUsername: row.username,
     avatarInitials: row.avatar_initials,
     avatarColor: row.avatar_color,
+    gravatarHash: gravatarHash(row.author_email),
     emoji: row.emoji,
   };
 }
@@ -80,6 +85,7 @@ function toListItem(row: ExerciseRow, cares: CareRow[], authenticated: boolean):
     ownerDisplayName: row.owner_display_name,
     ownerInitials: row.owner_initials,
     ownerColor: row.owner_color,
+    ownerGravatarHash: gravatarHash(row.owner_email),
     sport: row.sport_key,
     title: row.title,
     tags: row.tags,
@@ -102,6 +108,7 @@ function toComment(row: CommentRow): Comment {
     displayName: row.display_name,
     avatarInitials: row.avatar_initials,
     avatarColor: row.avatar_color,
+    gravatarHash: gravatarHash(row.author_email),
     body: row.body,
     createdAt: row.created_at,
   };
@@ -147,6 +154,7 @@ function exerciseSelect() {
       u.display_name as owner_display_name,
       u.avatar_initials as owner_initials,
       u.avatar_color as owner_color,
+      u.email as owner_email,
       e.sport_key,
       e.title,
       e.body_html,
@@ -244,7 +252,7 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   const careRows =
     exerciseIds.length > 0
       ? await sql<(CareRow & { exercise_id: string })[]>`
-          select ca.exercise_id::text, ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
+          select ca.exercise_id::text, ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, u.email as author_email, ca.emoji
           from cares ca
           join users u on u.id = ca.author_id
           where ca.exercise_id = any(${exerciseIds}::uuid[])
@@ -277,7 +285,7 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
   const [commentRows, careRows] = await Promise.all([
     authenticated
       ? sql<CommentRow[]>`
-          select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, c.body, c.created_at::text
+          select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, u.email as author_email, c.body, c.created_at::text
           from comments c
           join users u on u.id = c.author_id
           where c.exercise_id = ${id}
@@ -285,7 +293,7 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
         `
       : [],
     sql<CareRow[]>`
-      select ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
+      select ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, u.email as author_email, ca.emoji
       from cares ca
       join users u on u.id = ca.author_id
       where ca.exercise_id = ${id}

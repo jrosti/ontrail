@@ -6,6 +6,7 @@ export interface User {
   synopsis?: string;
   avatarInitials: string;
   avatarColor: string;
+  gravatarHash?: string;
   restHr?: number;
   maxHr?: number;
   createdAt: string;
@@ -29,6 +30,7 @@ export interface Comment {
   displayName: string;
   avatarInitials: string;
   avatarColor: string;
+  gravatarHash?: string;
   body: string;
   createdAt: string;
   legacyId?: string;
@@ -39,6 +41,7 @@ export interface Care {
   authorUsername: string;
   avatarInitials: string;
   avatarColor: string;
+  gravatarHash?: string;
   emoji: string;
 }
 
@@ -48,6 +51,7 @@ export interface Exercise {
   ownerDisplayName: string;
   ownerInitials: string;
   ownerColor: string;
+  ownerGravatarHash?: string;
   ownerSynopsis?: string;
   sport: string;
   title: string;
@@ -77,6 +81,7 @@ export interface ExerciseListItem {
   ownerDisplayName: string;
   ownerInitials: string;
   ownerColor: string;
+  ownerGravatarHash?: string;
   sport: string;
   title: string;
   tags: string[];
