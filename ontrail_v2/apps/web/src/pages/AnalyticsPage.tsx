@@ -398,6 +398,53 @@ export function AnalyticsPage() {
 
   const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
 
+  // Karvonen 5-zone boundaries (% of HRR)
+  const ZONE_PCT = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0] as const;
+  const ZONE_COLORS = ['#60a5fa', '#34d399', '#fbbf24', '#f97316', '#ef4444'];
+  const ZONE_NAMES_FI = ['Z1 Palautus', 'Z2 Aerobinen', 'Z3 Tempo', 'Z4 Kynnys', 'Z5 Maksimi'];
+  const ZONE_NAMES_EN = ['Z1 Recovery', 'Z2 Aerobic', 'Z3 Tempo', 'Z4 Threshold', 'Z5 Max'];
+
+  const hrZoneData = (() => {
+    const restHr = currentUser.restHr ?? 60;
+    const maxHr = currentUser.maxHr ?? 190;
+    const hrr = maxHr - restHr;
+    const bounds = ZONE_PCT.map((p) => Math.round(restHr + hrr * p));
+
+    // Filter calExercises to scope date range
+    const now = new Date();
+    let fromDate = '';
+    let toDate = '';
+    if (scope === 'year') {
+      fromDate = `${year}-01-01`;
+      toDate = `${year}-12-31`;
+    } else if (scope === 'month') {
+      fromDate = `${year}-${String(month).padStart(2, '0')}-01`;
+      const lastDay = new Date(year, month, 0).getDate();
+      toDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+    } else if (scope === 'week') {
+      const d = new Date(now);
+      d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+      fromDate = d.toISOString().slice(0, 10);
+      toDate = now.toISOString().slice(0, 10);
+    }
+
+    const zoneSec = [0, 0, 0, 0, 0];
+    for (const ex of calExercises?.items ?? []) {
+      if (!ex.avgHr) continue;
+      const d = ex.date.slice(0, 10);
+      if (fromDate && d < fromDate) continue;
+      if (toDate && d > toDate) continue;
+      const hr = ex.avgHr;
+      let zone = 0;
+      for (let i = 0; i < bounds.length - 1; i++) {
+        if (hr >= bounds[i]) zone = i;
+      }
+      zoneSec[zone] += ex.durationSec;
+    }
+    const total = zoneSec.reduce((a, b) => a + b, 0);
+    return { zoneSec, total, bounds };
+  })();
+
   return (
     <div className="ot-page">
       <div className="ot-page-head">
@@ -485,17 +532,69 @@ export function AnalyticsPage() {
         </Panel>
 
         <Panel span={5} title={t.hrZones}>
-          {hasHrProfile ? (
+          {!hasHrProfile ? (
             <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>
               {lang === 'fi'
-                ? 'Sykealuedata lasketaan harjoituksista.'
-                : 'HR zone data calculated from workouts.'}
+                ? 'Syketiedot saatavilla kun lisäät HR-profiilin asetuksissa'
+                : 'HR zones available after setting up your HR profile in settings'}
             </div>
+          ) : hrZoneData.total === 0 ? (
+            <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>{t.noExercises}</div>
           ) : (
-            <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>
-              {lang === 'fi'
-                ? 'Syketiedot saatavilla kun lisäät HR-profiilin'
-                : 'HR data available after setting up your HR profile'}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ fontSize: 11, color: 'var(--text-faint)', display: 'flex', gap: 16 }}>
+                <span>
+                  {lang === 'fi' ? 'Lepo' : 'Rest'}: {currentUser.restHr ?? '—'} bpm
+                </span>
+                <span>
+                  {lang === 'fi' ? 'Maksimi' : 'Max'}: {currentUser.maxHr ?? '—'} bpm
+                </span>
+              </div>
+              {hrZoneData.zoneSec.map((sec, i) => {
+                const zoneNames = lang === 'fi' ? ZONE_NAMES_FI : ZONE_NAMES_EN;
+                const pct = hrZoneData.total > 0 ? (sec / hrZoneData.total) * 100 : 0;
+                return (
+                  <div key={zoneNames[i]}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        fontSize: 12,
+                        marginBottom: 3,
+                      }}
+                    >
+                      <span style={{ fontWeight: 600, color: ZONE_COLORS[i] }}>{zoneNames[i]}</span>
+                      <span style={{ color: 'var(--text-faint)' }}>
+                        {sec > 0 ? fmtDur(sec) : '—'}
+                        {pct > 0 ? ` · ${Math.round(pct)}%` : ''}
+                      </span>
+                    </div>
+                    <div
+                      style={{
+                        height: 8,
+                        borderRadius: 4,
+                        background: 'var(--surface-2)',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <div
+                        style={{
+                          height: '100%',
+                          width: `${pct}%`,
+                          background: ZONE_COLORS[i],
+                          borderRadius: 4,
+                          transition: 'width 0.3s ease',
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <div style={{ fontSize: 11, color: 'var(--text-faint)', marginTop: 4 }}>
+                {lang === 'fi'
+                  ? `Yhteensä HR-datalla: ${fmtDur(hrZoneData.total)}`
+                  : `Total with HR data: ${fmtDur(hrZoneData.total)}`}
+              </div>
             </div>
           )}
         </Panel>
