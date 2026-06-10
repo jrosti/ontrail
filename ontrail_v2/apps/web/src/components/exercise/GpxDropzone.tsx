@@ -41,7 +41,7 @@ export function GpxDropzone({
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const parsed = parseGpx(e.target!.result as string);
+        const parsed = parseGpx(e.target?.result as string);
         if (parsed.points.length < 2) throw new Error('No track points found');
         onLoaded(parsed);
       } catch (err) {
@@ -111,9 +111,8 @@ export function GpxDropzone({
   }
 
   return (
-    <div
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       aria-label={label}
       onDragOver={(e) => {
         e.preventDefault();
@@ -122,12 +121,6 @@ export function GpxDropzone({
       onDragLeave={() => setDragging(false)}
       onDrop={onDrop}
       onClick={() => inputRef.current?.click()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          inputRef.current?.click();
-        }
-      }}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -135,6 +128,7 @@ export function GpxDropzone({
         justifyContent: 'center',
         gap: 10,
         minHeight: 96,
+        width: '100%',
         border: `2px dashed ${dragging ? 'var(--accent)' : 'var(--border)'}`,
         borderRadius: 12,
         background: dragging
@@ -172,6 +166,6 @@ export function GpxDropzone({
       {error && (
         <span style={{ fontSize: 12, color: 'oklch(0.66 0.20 28)', fontWeight: 600 }}>{error}</span>
       )}
-    </div>
+    </button>
   );
 }

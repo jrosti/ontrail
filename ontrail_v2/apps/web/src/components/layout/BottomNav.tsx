@@ -9,7 +9,7 @@ export function BottomNav() {
   const { lang, currentUser } = useStore();
   const t = I18N[lang];
   const qc = useQueryClient();
-  const tab = (active: boolean) => ({ className: 'ot-bottom-tab' + (active ? ' active' : '') });
+  const tab = (active: boolean) => ({ className: `ot-bottom-tab${active ? ' active' : ''}` });
 
   const { data: unread } = useQuery({
     queryKey: ['unread'],

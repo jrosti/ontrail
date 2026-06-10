@@ -114,6 +114,7 @@ export function TopNav() {
           </Link>
 
           <button
+            type="button"
             className="ot-iconbtn"
             aria-label="Toggle theme"
             onClick={() => setTheme({ theme: theme.theme === 'dark' ? 'light' : 'dark' })}
@@ -122,6 +123,7 @@ export function TopNav() {
           </button>
 
           <button
+            type="button"
             className="ot-iconbtn"
             aria-label="Language"
             onClick={() => setLang(lang === 'fi' ? 'en' : 'fi')}

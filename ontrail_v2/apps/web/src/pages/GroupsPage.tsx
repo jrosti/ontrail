@@ -47,7 +47,7 @@ export function GroupsPage() {
           <h1 className="ot-page-title">{t.groups}</h1>
         </div>
         {currentUser && (
-          <button className="ot-rec-btn" onClick={() => setShowCreate((s) => !s)}>
+          <button type="button" className="ot-rec-btn" onClick={() => setShowCreate((s) => !s)}>
             <Icon name="plus" size={16} stroke={2.4} />
             <span>{t.createGroup}</span>
           </button>
@@ -83,6 +83,7 @@ export function GroupsPage() {
           />
           <div style={{ display: 'flex', gap: 8 }}>
             <button
+              type="button"
               className="ot-rec-btn"
               onClick={() => createMutation.mutate()}
               disabled={!newName.trim() || createMutation.isPending}
@@ -90,6 +91,7 @@ export function GroupsPage() {
               {t.createGroup}
             </button>
             <button
+              type="button"
               className="ot-iconbtn"
               style={{ width: 'auto', padding: '0 12px', fontSize: 14 }}
               onClick={() => setShowCreate(false)}
@@ -132,6 +134,7 @@ export function GroupsPage() {
               {currentUser &&
                 (g.isMember ? (
                   <button
+                    type="button"
                     className="ot-iconbtn"
                     style={{
                       width: 'auto',
@@ -147,6 +150,7 @@ export function GroupsPage() {
                   </button>
                 ) : (
                   <button
+                    type="button"
                     className="ot-rec-btn"
                     style={{ flexShrink: 0 }}
                     onClick={() => joinMutation.mutate(g.normalizedName)}

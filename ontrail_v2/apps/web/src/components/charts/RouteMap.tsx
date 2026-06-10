@@ -100,7 +100,7 @@ export function RouteMap({
   }, [pts, H]);
 
   const _gid = useId();
-  const gid = 'rm' + _gid.replace(/:/g, '');
+  const gid = `rm${_gid.replace(/:/g, '')}`;
 
   return (
     <svg
@@ -115,16 +115,17 @@ export function RouteMap({
       }}
     >
       <defs>
-        <pattern id={gid + 'g'} width="26" height="26" patternUnits="userSpaceOnUse">
+        <pattern id={`${gid}g`} width="26" height="26" patternUnits="userSpaceOnUse">
           <path d="M26 0H0V26" fill="none" stroke="var(--map-grid)" strokeWidth="1" />
         </pattern>
-        <linearGradient id={gid + 'l'} x1="0" x2="1" y1="0" y2="1">
+        <linearGradient id={`${gid}l`} x1="0" x2="1" y1="0" y2="1">
           <stop offset="0" stopColor={accent} />
           <stop offset="1" stopColor={`color-mix(in oklab, ${accent} 55%, white)`} />
         </linearGradient>
       </defs>
       <rect x="0" y="0" width={W} height={H} fill={`url(#${gid}g)`} />
       {blobs.map((b, i) => (
+        // biome-ignore lint/suspicious/noArrayIndexKey: decorative SVG blobs with no stable id
         <ellipse key={i} cx={b.cx} cy={b.cy} rx={b.rx} ry={b.ry} fill="var(--map-blob)" />
       ))}
       <path

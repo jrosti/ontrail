@@ -44,7 +44,7 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const showSpeed = sport?.metric === 'speed';
   const showDistance = sport?.metric !== 'reps';
   const paceVal = showSpeed
-    ? fmtSpeed(ex.distanceM!, ex.durationSec, lang)
+    ? fmtSpeed(ex.distanceM ?? 0, ex.durationSec, lang)
     : pace
       ? fmtPace(pace)
       : '—';
@@ -53,7 +53,7 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const metricRow = (
     <div className="ot-metric-row">
       {showDistance && km > 0 && (
-        <Metric value={fmtDistKm(ex.distanceM!, lang)} unit="km" label={t.distance} />
+        <Metric value={fmtDistKm(ex.distanceM ?? 0, lang)} unit="km" label={t.distance} />
       )}
       <Metric value={durShort(ex.durationSec)} label={t.time} />
       {sport?.metric !== 'time' && sport?.metric !== 'reps' && (
@@ -66,7 +66,8 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const actions = (
     <div className="ot-actions" style={{ gap: compact ? 14 : 22 }}>
       <button
-        className={'ot-act' + (liked ? ' liked' : '')}
+        type="button"
+        className={`ot-act${liked ? ' liked' : ''}`}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();

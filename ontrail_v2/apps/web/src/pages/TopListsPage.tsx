@@ -30,6 +30,7 @@ function SortHeader({
   const active = current === sortKey;
   return (
     <button
+      type="button"
       onClick={() => onSort(sortKey)}
       style={{
         background: 'none',
@@ -115,8 +116,9 @@ export function TopListsPage() {
           <div className="ot-scope">
             {(['month', 'year'] as const).map((p) => (
               <button
+                type="button"
                 key={p}
-                className={'ot-scope-btn' + (period === p ? ' active' : '')}
+                className={`ot-scope-btn${period === p ? ' active' : ''}`}
                 onClick={() => setPeriod(p)}
               >
                 {p === 'month' ? t.month : t.year}
@@ -235,27 +237,7 @@ function TopListRow({
       params={{ username: entry.username }}
       style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
     >
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '40px 1fr 100px 100px 70px',
-          gap: 0,
-          padding: '10px 16px',
-          alignItems: 'center',
-          background: even
-            ? 'color-mix(in oklab, var(--surface-2) 50%, transparent)'
-            : 'transparent',
-          transition: 'background .12s',
-        }}
-        onMouseEnter={(e) =>
-          ((e.currentTarget as HTMLDivElement).style.background = 'var(--surface-2)')
-        }
-        onMouseLeave={(e) =>
-          ((e.currentTarget as HTMLDivElement).style.background = even
-            ? 'color-mix(in oklab, var(--surface-2) 50%, transparent)'
-            : 'transparent')
-        }
-      >
+      <div className={`ot-toplists-row${even ? ' even' : ''}`}>
         <span
           style={{
             fontFamily: 'var(--font-display)',

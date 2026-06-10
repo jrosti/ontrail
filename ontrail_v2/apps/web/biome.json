@@ -16,12 +16,17 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
         "noUnusedImports": "error"
       },
       "suspicious": {
         "noConsole": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "noStaticElementInteractions": "warn"
       }
     }
   }

@@ -64,7 +64,7 @@ export function ExercisePage() {
   const pace = ex.distanceM ? calcPace(ex.durationSec, ex.distanceM) : 0;
   const showSpeed = sport?.metric === 'speed';
   const paceVal = showSpeed
-    ? fmtSpeed(ex.distanceM!, ex.durationSec, lang)
+    ? fmtSpeed(ex.distanceM ?? 0, ex.durationSec, lang)
     : pace
       ? fmtPace(pace)
       : '—';
@@ -75,7 +75,7 @@ export function ExercisePage() {
   return (
     <div className="ot-detail-wrap">
       <div className="ot-detail-hero">
-        <button className="ot-back" onClick={() => nav({ to: '/feed', search: {} })}>
+        <button type="button" className="ot-back" onClick={() => nav({ to: '/feed', search: {} })}>
           <Icon name="chevron" size={18} style={{ transform: 'rotate(180deg)' }} />
           {t.back}
         </button>
@@ -101,6 +101,7 @@ export function ExercisePage() {
           {isOwner && (
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
               <button
+                type="button"
                 className="ot-iconbtn"
                 onClick={() => nav({ to: '/log', search: { id: ex.id } })}
                 title={t.editExercise}
@@ -108,6 +109,7 @@ export function ExercisePage() {
                 <Icon name="edit" size={16} />
               </button>
               <button
+                type="button"
                 className="ot-iconbtn"
                 onClick={() => {
                   if (confirm(t.confirmDelete)) deleteMut.mutate();
@@ -144,7 +146,7 @@ export function ExercisePage() {
             <StatPill
               icon="route"
               label={t.distance}
-              value={fmtDistKm(ex.distanceM!, lang)}
+              value={fmtDistKm(ex.distanceM ?? 0, lang)}
               unit="km"
             />
           )}
@@ -155,7 +157,11 @@ export function ExercisePage() {
           {ex.avgHr && <StatPill icon="heart" label={t.avgHr} value={ex.avgHr} unit={t.bpm} />}
           {ex.climbM && <StatPill icon="arrowUp" label={t.climb} value={ex.climbM} unit="m" />}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
-            <button className={'ot-act' + (liked ? ' liked' : '')} onClick={() => careMut.mutate()}>
+            <button
+              type="button"
+              className={`ot-act${liked ? ' liked' : ''}`}
+              onClick={() => careMut.mutate()}
+            >
               <Icon name={liked ? 'heart-f' : 'heart'} size={18} />
               <span>{cares}</span>
             </button>
@@ -173,6 +179,7 @@ export function ExercisePage() {
 
         {ex.body && (
           <Card style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {/* biome-ignore lint/security/noDangerouslySetInnerHtml: exercise body is stored HTML from our own editor */}
             <div className="ot-detail-desc" dangerouslySetInnerHTML={{ __html: ex.body }} />
             {ex.tags.length > 0 && (
               <div className="ot-tags">
@@ -239,6 +246,7 @@ export function ExercisePage() {
                 placeholder={t.commentPlaceholder}
               />
               <button
+                type="button"
                 className="ot-comment-send"
                 disabled={!commentText.trim()}
                 onClick={() => commentMut.mutate()}

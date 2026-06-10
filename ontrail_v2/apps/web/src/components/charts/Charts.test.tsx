@@ -1,6 +1,14 @@
-import { describe, expect, test } from 'bun:test';
-import { render, screen } from '@testing-library/react';
-import { Donut, Elevation, Heatmap, HRZonesBar, LineChart, Sparkline, StackedBars } from './Charts';
+import { describe, expect, mock, test } from 'bun:test';
+import { fireEvent, render, screen } from '@testing-library/react';
+import {
+  ActivityCalendar,
+  Donut,
+  Elevation,
+  HRZonesBar,
+  LineChart,
+  Sparkline,
+  StackedBars,
+} from './Charts';
 
 describe('chart components', () => {
   test('renders sparkline and elevation SVG paths', () => {
@@ -66,7 +74,7 @@ describe('chart components', () => {
     expect(screen.getByText('TOTAL')).toBeTruthy();
   });
 
-  test('renders HR zones and heatmap cells', () => {
+  test('renders HR zones and activity calendar cells', () => {
     const { container: zones } = render(
       <HRZonesBar
         zones={[
@@ -78,7 +86,22 @@ describe('chart components', () => {
     );
     expect(zones.querySelectorAll('div[title]')).toHaveLength(2);
 
-    const { container: heatmap } = render(<Heatmap weeks={[[0, 1, 2, 3, 4, 5, 6]]} />);
-    expect(heatmap.querySelectorAll('rect')).toHaveLength(7);
+    const onDayClick = mock(() => {});
+    const { container: calendar } = render(
+      <ActivityCalendar
+        year={2026}
+        byDate={new Map([['2026-01-01', 3600]])}
+        cell={8}
+        gap={2}
+        onDayClick={onDayClick}
+        lang="en"
+      />,
+    );
+    expect(calendar.querySelectorAll('rect')).toHaveLength(365);
+    expect(screen.getByText('Jan')).toBeTruthy();
+    expect(screen.getByText('Tu')).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: '2026-01-01: 60min' }));
+    expect(onDayClick).toHaveBeenCalledWith('2026-01-01');
   });
 });

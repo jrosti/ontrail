@@ -184,6 +184,7 @@ export function ProfilePage() {
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 4 }}>
             <button
+              type="button"
               className="ot-rec-btn"
               onClick={() => saveMutation.mutate()}
               disabled={saveMutation.isPending}
@@ -197,6 +198,7 @@ export function ProfilePage() {
                   : t.saveProfile}
             </button>
             <button
+              type="button"
               className="ot-iconbtn"
               style={{
                 width: 'auto',
@@ -210,6 +212,7 @@ export function ProfilePage() {
               JSON
             </button>
             <button
+              type="button"
               className="ot-iconbtn"
               style={{
                 width: 'auto',
@@ -223,6 +226,7 @@ export function ProfilePage() {
               CSV
             </button>
             <button
+              type="button"
               className="ot-iconbtn"
               style={{
                 width: 'auto',

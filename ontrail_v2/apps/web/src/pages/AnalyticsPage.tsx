@@ -1,7 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { getMonthSummaries, getSportSummary, getWeekSummaries, getYearSummary } from '../api';
-import { Donut, Heatmap, LineChart } from '../components/charts/Charts';
+import {
+  getMonthSummaries,
+  getSportSummary,
+  getWeekSummaries,
+  getYearSummary,
+  listExercises,
+} from '../api';
+import { ActivityCalendar, Donut, LineChart } from '../components/charts/Charts';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { Metric } from '../components/ui/Metric';
@@ -132,7 +139,7 @@ function PeriodPicker({
 
   return (
     <div ref={ref} style={{ position: 'relative' }}>
-      <button className="ot-period-btn" onClick={() => setOpen((o) => !o)}>
+      <button type="button" className="ot-period-btn" onClick={() => setOpen((o) => !o)}>
         <span>{label}</span>
         <Icon
           name="chevron"
@@ -151,6 +158,7 @@ function PeriodPicker({
           {/* Year row */}
           <div className="ot-picker-year-nav">
             <button
+              type="button"
               className="ot-iconbtn"
               style={{ width: 28, height: 28 }}
               onClick={() => setPickYear((y) => y - 1)}
@@ -159,6 +167,7 @@ function PeriodPicker({
             </button>
             <span className="ot-picker-year-label">{pickYear}</span>
             <button
+              type="button"
               className="ot-iconbtn"
               style={{ width: 28, height: 28 }}
               onClick={() => setPickYear((y) => y + 1)}
@@ -171,8 +180,9 @@ function PeriodPicker({
             <div className="ot-picker-year-grid">
               {PICK_YEARS.map((y) => (
                 <button
+                  type="button"
                   key={y}
-                  className={'ot-picker-cell' + (y === year ? ' selected' : '')}
+                  className={`ot-picker-cell${y === year ? ' selected' : ''}`}
                   onClick={() => {
                     onYear(y);
                     setOpen(false);
@@ -188,10 +198,9 @@ function PeriodPicker({
             <div className="ot-picker-month-grid">
               {monthShort.map((name, i) => (
                 <button
-                  key={i}
-                  className={
-                    'ot-picker-cell' + (pickYear === year && i + 1 === month ? ' selected' : '')
-                  }
+                  type="button"
+                  key={name}
+                  className={`ot-picker-cell${pickYear === year && i + 1 === month ? ' selected' : ''}`}
                   onClick={() => {
                     onYear(pickYear);
                     onMonth(i + 1);
@@ -208,6 +217,7 @@ function PeriodPicker({
             <div className="ot-picker-week-grid">
               {Array.from({ length: numWeeks(pickYear) }, (_, i) => i + 1).map((w) => (
                 <button
+                  type="button"
                   key={w}
                   className={
                     'ot-picker-cell ot-picker-cell-sm' +
@@ -271,6 +281,16 @@ export function AnalyticsPage() {
     queryFn: () => getWeekSummaries(username, year),
     enabled: !!username && scope !== 'all',
   });
+
+  // Per-day exercise data for the activity calendar heatmap
+  const { data: calExercises } = useQuery({
+    queryKey: ['cal-exercises', username],
+    queryFn: () => listExercises({ user: username, perPage: 500 }),
+    enabled: !!username,
+    staleTime: 5 * 60_000,
+  });
+
+  const nav = useNavigate();
 
   if (!currentUser)
     return (
@@ -338,17 +358,12 @@ export function AnalyticsPage() {
     trendLabels = [];
   }
 
-  // Heatmap (always week-based for year)
-  const weekMap: Record<number, number> = {};
-  for (const w of weekSummaries ?? []) {
-    weekMap[w.week] = (weekMap[w.week] ?? 0) + w.totalDurationSec;
+  // Day-keyed duration map for activity calendar
+  const byDate = new Map<string, number>();
+  for (const ex of calExercises?.items ?? []) {
+    const d = ex.date.slice(0, 10);
+    byDate.set(d, (byDate.get(d) ?? 0) + ex.durationSec);
   }
-  const hm = Array.from({ length: 26 }, (_, i) => {
-    const val = weekMap[i + 1] ?? 0;
-    return Array.from({ length: 7 }, () =>
-      val > 0 ? Math.min(100, Math.round((val / 3600) * 10)) : 0,
-    );
-  });
 
   const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
 
@@ -363,8 +378,9 @@ export function AnalyticsPage() {
           <div className="ot-scope">
             {(['all', 'year', 'month', 'week'] as const).map((k) => (
               <button
+                type="button"
                 key={k}
-                className={'ot-scope-btn' + (scope === k ? ' active' : '')}
+                className={`ot-scope-btn${scope === k ? ' active' : ''}`}
                 onClick={() => setScope(k)}
               >
                 {t[k]}
@@ -456,10 +472,15 @@ export function AnalyticsPage() {
         {scope !== 'week' && (
           <Panel
             span={7}
-            title={t.consistency}
-            sub={lang === 'fi' ? '26 viikkoa' : 'Last 26 weeks'}
+            title={lang === 'fi' ? 'Treenikalenteri' : 'Training calendar'}
+            sub={String(year)}
           >
-            <Heatmap weeks={hm} />
+            <ActivityCalendar
+              year={year}
+              byDate={byDate}
+              lang={lang}
+              onDayClick={(date) => nav({ to: '/feed', search: { dateFrom: date, dateTo: date } })}
+            />
           </Panel>
         )}
 
@@ -474,8 +495,8 @@ export function AnalyticsPage() {
                 <span>{t.climb}</span>
                 <span>{lang === 'fi' ? 'Kerrat' : 'Sessions'}</span>
               </div>
-              {items.map((r, i) => (
-                <div key={i} className="ot-tr ot-td">
+              {items.map((r) => (
+                <div key={r.sport} className="ot-tr ot-td">
                   <span style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                     <span
                       className="ot-table-dot"

@@ -24,6 +24,7 @@ export function LeafletMap({
   const mapRef = useRef<LMap | null>(null);
   const polyRef = useRef<Polyline | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional mount-only effect
   useEffect(() => {
     if (!containerRef.current || points.length < 2) return;
 
@@ -59,7 +60,7 @@ export function LeafletMap({
         return;
       }
 
-      const map = L.map(containerRef.current!, {
+      const map = L.map(containerRef.current as HTMLElement, {
         zoomControl: true,
         attributionControl: true,
         scrollWheelZoom: false,

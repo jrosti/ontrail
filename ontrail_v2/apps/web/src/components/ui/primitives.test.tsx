@@ -33,6 +33,9 @@ describe('UI primitives', () => {
 
     fireEvent.click(card);
     expect(onClick).toHaveBeenCalledTimes(1);
+
+    expect(card.tagName).toBe('BUTTON');
+    expect(card.getAttribute('type')).toBe('button');
   });
 
   test('Icon renders filled hearts and falls back to info for unknown names', () => {

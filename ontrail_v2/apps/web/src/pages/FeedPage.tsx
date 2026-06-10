@@ -159,6 +159,7 @@ export function FeedPage() {
               />
             )}
             <button
+              type="button"
               onClick={clearFilters}
               style={{
                 fontSize: 12,
@@ -178,7 +179,8 @@ export function FeedPage() {
         {/* Filter toggle */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <button
-            className={'ot-iconbtn' + (filterOpen ? ' active' : '')}
+            type="button"
+            className={`ot-iconbtn${filterOpen ? ' active' : ''}`}
             style={{
               width: 'auto',
               padding: '0 12px',
@@ -282,7 +284,7 @@ function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }
   return (
     <span className="ot-filter-chip">
       {label}
-      <button onClick={onRemove} aria-label="remove filter">
+      <button type="button" onClick={onRemove} aria-label="remove filter">
         <Icon name="close" size={11} stroke={2.4} />
       </button>
     </span>
@@ -312,10 +314,10 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
   const apply = () => {
     const updates: Partial<FeedSearch> = {
-      minDistM: distMin ? parseDistance(distMin + 'km') || undefined : undefined,
-      maxDistM: distMax ? parseDistance(distMax + 'km') || undefined : undefined,
-      minDurSec: durMin ? parseDuration(durMin + 'min') || undefined : undefined,
-      maxDurSec: durMax ? parseDuration(durMax + 'min') || undefined : undefined,
+      minDistM: distMin ? parseDistance(`${distMin}km`) || undefined : undefined,
+      maxDistM: distMax ? parseDistance(`${distMax}km`) || undefined : undefined,
+      minDurSec: durMin ? parseDuration(`${durMin}min`) || undefined : undefined,
+      maxDurSec: durMax ? parseDuration(`${durMax}min`) || undefined : undefined,
       minHr: hrMin ? Number(hrMin) || undefined : undefined,
       maxHr: hrMax ? Number(hrMax) || undefined : undefined,
       dateFrom: dateFrom || undefined,
@@ -348,8 +350,11 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
         {/* Group filter */}
         {(groups?.length ?? 0) > 0 && (
           <div>
-            <label style={labelStyle}>{lang === 'fi' ? 'Ryhmä' : 'Group'}</label>
+            <label htmlFor="filter-group" style={labelStyle}>
+              {lang === 'fi' ? 'Ryhmä' : 'Group'}
+            </label>
             <select
+              id="filter-group"
               className="ot-input"
               value={search.group ?? ''}
               onChange={(e) =>
@@ -368,9 +373,12 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
         {/* Distance range */}
         <div>
-          <label style={labelStyle}>{lang === 'fi' ? 'Matka (km)' : 'Distance (km)'}</label>
+          <label htmlFor="filter-dist-min" style={labelStyle}>
+            {lang === 'fi' ? 'Matka (km)' : 'Distance (km)'}
+          </label>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <input
+              id="filter-dist-min"
               className="ot-input"
               placeholder="min"
               value={distMin}
@@ -392,9 +400,12 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
         {/* Duration range */}
         <div>
-          <label style={labelStyle}>{lang === 'fi' ? 'Kesto (min)' : 'Duration (min)'}</label>
+          <label htmlFor="filter-dur-min" style={labelStyle}>
+            {lang === 'fi' ? 'Kesto (min)' : 'Duration (min)'}
+          </label>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <input
+              id="filter-dur-min"
               className="ot-input"
               placeholder="min"
               value={durMin}
@@ -416,9 +427,12 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
         {/* HR range */}
         <div>
-          <label style={labelStyle}>{lang === 'fi' ? 'Syke (bpm)' : 'Heart rate (bpm)'}</label>
+          <label htmlFor="filter-hr-min" style={labelStyle}>
+            {lang === 'fi' ? 'Syke (bpm)' : 'Heart rate (bpm)'}
+          </label>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             <input
+              id="filter-hr-min"
               className="ot-input"
               placeholder="min"
               value={hrMin}
@@ -440,9 +454,12 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
         {/* Date range */}
         <div>
-          <label style={labelStyle}>{lang === 'fi' ? 'Päivämäärä' : 'Date range'}</label>
+          <label htmlFor="filter-date-from" style={labelStyle}>
+            {lang === 'fi' ? 'Päivämäärä' : 'Date range'}
+          </label>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
             <input
+              id="filter-date-from"
               className="ot-input"
               type="date"
               value={dateFrom}
@@ -462,9 +479,12 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
 
         {/* Sort */}
         <div>
-          <label style={labelStyle}>{lang === 'fi' ? 'Järjestys' : 'Sort by'}</label>
+          <label htmlFor="filter-sort-by" style={labelStyle}>
+            {lang === 'fi' ? 'Järjestys' : 'Sort by'}
+          </label>
           <div style={{ display: 'flex', gap: 6 }}>
             <select
+              id="filter-sort-by"
               className="ot-input"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as FeedSearch['sortBy'])}
@@ -489,10 +509,11 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
       </div>
 
       <div style={{ display: 'flex', gap: 10 }}>
-        <button className="ot-rec-btn" onClick={apply}>
+        <button type="button" className="ot-rec-btn" onClick={apply}>
           {t.search.split(' ')[0]}
         </button>
         <button
+          type="button"
           className="ot-iconbtn"
           style={{ width: 'auto', padding: '0 14px', fontSize: 13 }}
           onClick={() => nav({ to: '/feed', search: {} })}

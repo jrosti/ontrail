@@ -5,10 +5,10 @@ import { useStore } from '../../store';
 import type { ExerciseListItem } from '../../types';
 
 mock.module('@tanstack/react-router', () => ({
-  Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLSpanElement>) => (
-    <span role="link" className={className} style={style} onClick={onClick}>
+  Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLAnchorElement>) => (
+    <a href="/mock" className={className} style={style} onClick={onClick}>
       {children}
-    </span>
+    </a>
   ),
 }));
 

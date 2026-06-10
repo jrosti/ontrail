@@ -133,7 +133,7 @@ function MonthCard({
       const key = ex.date.slice(0, 10);
       if (!key.startsWith(monthKey)) continue;
       if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(ex);
+      map.get(key)?.push(ex);
     }
     return map;
   }, [data, monthKey]);
@@ -159,18 +159,21 @@ function MonthCard({
           ))}
           <span>{lang === 'fi' ? 'Yht.' : 'Tot.'}</span>
         </div>
-        {weeks.map((w, wi) => (
-          <div key={wi} className="ot-cal-row">
+        {weeks.map((w) => (
+          <div key={w.wk} className="ot-cal-row">
             <span className="ot-cal-wk">{w.wk}</span>
             {w.days.map((day, di) => (
-              <div key={di} className={'ot-cal-cell' + (day ? '' : ' empty')}>
+              <div
+                key={day ? day.date : `empty-${di}`}
+                className={`ot-cal-cell${day ? '' : ' empty'}`}
+              >
                 {day && (
                   <>
                     <span className="ot-cal-d">{day.d}</span>
                     <div className="ot-cal-acts">
-                      {day.acts.map((a, ai) => (
+                      {day.acts.map((a) => (
                         <span
-                          key={ai}
+                          key={a.id}
                           className="ot-cal-act"
                           style={{
                             background: `color-mix(in oklab, ${SPORTS[a.sport]?.color ?? 'var(--accent)'} 18%, transparent)`,
@@ -220,6 +223,7 @@ export function CalendarPage() {
   // How many months are currently visible (grows as user scrolls down)
   const [visibleCount, setVisibleCount] = useState(3);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset to 3 when year changes; setVisibleCount is stable
   useEffect(() => {
     setVisibleCount(3);
   }, [year]);
@@ -297,13 +301,14 @@ export function CalendarPage() {
           <h1 className="ot-page-title">{t.weeks}</h1>
         </div>
         <div className="ot-cal-nav">
-          <button className="ot-iconbtn" onClick={handlePrevYear}>
+          <button type="button" className="ot-iconbtn" onClick={handlePrevYear}>
             <Icon name="chevron" size={18} style={{ transform: 'rotate(180deg)' }} />
           </button>
           <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 18 }}>
             {year}
           </span>
           <button
+            type="button"
             className="ot-iconbtn"
             onClick={handleNextYear}
             disabled={year >= CURRENT_YEAR}

@@ -596,11 +596,11 @@ h4 {
   border-radius: 50%;
   background: var(--border);
 }
-.ot-feel-btn.active .ot-feel-dots i.on {
-  background: var(--accent);
-}
 .ot-feel-btn .ot-feel-dots i.on {
   background: var(--text-faint);
+}
+.ot-feel-btn.active .ot-feel-dots i.on {
+  background: var(--accent);
 }
 .ot-tag-input {
   min-height: 46px;
@@ -1396,10 +1396,10 @@ h4 {
     display: none;
   }
   .ot-analytics-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
   .ot-analytics-grid > * {
-    grid-column: span 1 !important;
+    grid-column: span 1;
   }
   .ot-bottomnav {
     display: flex;
@@ -1708,13 +1708,18 @@ h4 {
 
 /* Top lists page */
 .ot-toplists-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 100px 70px;
+  gap: 0;
+  padding: 10px 16px;
   align-items: center;
-  gap: 10;
+  background: transparent;
+  transition: background 0.12s;
 }
 .ot-toplists-row.even {
-  background: color-mix(in oklab, var(--surface-2) 40%, transparent);
+  background: color-mix(in oklab, var(--surface-2) 50%, transparent);
 }
-.ot-toplists-row:hover {
+.ot-toplists-row:hover,
+.ot-toplists-row.even:hover {
   background: var(--surface-2);
 }

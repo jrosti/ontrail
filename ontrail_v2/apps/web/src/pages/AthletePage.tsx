@@ -137,8 +137,8 @@ function SummaryTable({
         <span>{lang === 'fi' ? 'Nousu' : 'Climb'}</span>
         <span>{lang === 'fi' ? 'Kerrat' : 'Count'}</span>
       </div>
-      {all.map((r, i) => (
-        <div key={i} className={'ot-tr ot-td' + (r.isTotal ? ' ot-total-row' : '')}>
+      {all.map((r) => (
+        <div key={r.key} className={`ot-tr ot-td${r.isTotal ? ' ot-total-row' : ''}`}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {r.sport && !r.isTotal && (
               <>
@@ -207,7 +207,11 @@ function MonthAccordion({
         const cnt = rows.reduce((s, r) => s + r.sessionCount, 0);
         return (
           <div key={m}>
-            <button className="ot-month-header" onClick={() => setOpen(isOpen ? null : m)}>
+            <button
+              type="button"
+              className="ot-month-header"
+              onClick={() => setOpen(isOpen ? null : m)}
+            >
               <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600 }}>
                 {monthNames[m - 1]} {year}
               </span>
@@ -344,8 +348,9 @@ export function AthletePage({ username }: { username: string }) {
       <div className="ot-scope" style={{ marginBottom: 16 }}>
         {(['workouts', 'sports', 'tags'] as const).map((k) => (
           <button
+            type="button"
             key={k}
-            className={'ot-scope-btn' + (tab === k ? ' active' : '')}
+            className={`ot-scope-btn${tab === k ? ' active' : ''}`}
             onClick={() => setTab(k)}
           >
             {k === 'workouts'
@@ -420,8 +425,9 @@ export function AthletePage({ username }: { username: string }) {
             <div className="ot-scope">
               {(['all', 'year', 'month'] as const).map((k) => (
                 <button
+                  type="button"
                   key={k}
-                  className={'ot-scope-btn' + (scope === k ? ' active' : '')}
+                  className={`ot-scope-btn${scope === k ? ' active' : ''}`}
                   onClick={() => setScope(k)}
                 >
                   {k === 'all' ? t.all : k === 'year' ? t.year : t.month}
@@ -431,6 +437,7 @@ export function AthletePage({ username }: { username: string }) {
             {scope !== 'all' && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <button
+                  type="button"
                   className="ot-iconbtn"
                   style={{ width: 32, height: 32 }}
                   onClick={() => setYear((y) => y - 1)}
@@ -449,6 +456,7 @@ export function AthletePage({ username }: { username: string }) {
                   {year}
                 </span>
                 <button
+                  type="button"
                   className="ot-iconbtn"
                   style={{ width: 32, height: 32 }}
                   onClick={() => setYear((y) => y + 1)}

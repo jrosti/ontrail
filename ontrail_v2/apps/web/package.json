@@ -7,7 +7,7 @@
     "dev": "vite",
     "test": "bun test --coverage --preload ./src/test/setup.ts",
     "build": "tsc -b && vite build",
-    "lint": "biome lint src --only=lint/correctness/noUnusedVariables --only=lint/correctness/noUnusedImports",
+    "lint": "biome check src",
     "format": "biome format --write src",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview"

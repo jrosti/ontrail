@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createExercise, getExercise, listSports, updateExercise } from '../api';
 import { RichEditor } from '../components/editor/RichEditor';
 import { GpxDropzone } from '../components/exercise/GpxDropzone';
@@ -47,7 +47,7 @@ export function LogPage() {
 
   const { data: existing } = useQuery({
     queryKey: ['exercise', editId],
-    queryFn: () => getExercise(editId!),
+    queryFn: () => getExercise(editId ?? ''),
     enabled: !!editId,
   });
 
@@ -76,6 +76,21 @@ export function LogPage() {
   const [gpxResult, setGpxResult] = useState<GpxResult | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [sportQuery, setSportQuery] = useState('');
+
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const sportSearchRef = useRef<HTMLInputElement>(null);
+
+  // Focus title input on mount
+  useEffect(() => {
+    titleInputRef.current?.focus();
+  }, []);
+
+  // Focus sport search input when picker opens
+  useEffect(() => {
+    if (pickerOpen) {
+      sportSearchRef.current?.focus();
+    }
+  }, [pickerOpen]);
 
   const sports = apiSports?.length ? apiSports : ALL_SPORTS;
   const sportsByKey = useMemo(() => Object.fromEntries(sports.map((s) => [s.key, s])), [sports]);
@@ -193,7 +208,7 @@ export function LogPage() {
   return (
     <div className="ot-log">
       <div className="ot-log-head">
-        <button className="ot-back" onClick={() => nav({ to: '/feed', search: {} })}>
+        <button type="button" className="ot-back" onClick={() => nav({ to: '/feed', search: {} })}>
           <Icon name="chevron" size={18} style={{ transform: 'rotate(180deg)' }} />
           {t.back}
         </button>
@@ -214,11 +229,11 @@ export function LogPage() {
         >
           <Card style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <input
+              ref={titleInputRef}
               className="ot-log-title"
               value={form.title}
               onChange={(e) => set('title', e.target.value)}
               placeholder={t.titlePh}
-              autoFocus
             />
 
             <div>
@@ -230,7 +245,7 @@ export function LogPage() {
                   <button
                     type="button"
                     key={s.key}
-                    className={'ot-sport-chip' + (sport === s.key ? ' active' : '')}
+                    className={`ot-sport-chip${sport === s.key ? ' active' : ''}`}
                     onClick={() => chooseSport(s.key)}
                     style={
                       sport === s.key ? ({ '--chip': s.color } as React.CSSProperties) : undefined
@@ -384,11 +399,12 @@ export function LogPage() {
                   <button
                     type="button"
                     key={v}
-                    className={'ot-feel-btn' + (form.feel === v ? ' active' : '')}
+                    className={`ot-feel-btn${form.feel === v ? ' active' : ''}`}
                     onClick={() => set('feel', v)}
                   >
                     <span className="ot-feel-dots">
                       {Array.from({ length: 3 }).map((_, j) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: static 3-dot decoration
                         <i key={j} className={j <= i ? 'on' : ''} />
                       ))}
                     </span>
@@ -635,24 +651,36 @@ export function LogPage() {
 
       {pickerOpen && (
         <div
-          role="presentation"
-          onMouseDown={() => setPickerOpen(false)}
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 1000,
-            background: 'rgba(0,0,0,.36)',
             display: 'grid',
             placeItems: 'center',
             padding: 16,
           }}
         >
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setPickerOpen(false)}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'rgba(0,0,0,.36)',
+              border: 'none',
+              cursor: 'default',
+              padding: 0,
+            }}
+          />
           <div
             role="dialog"
             aria-modal="true"
             aria-label={t.sportPicker}
             onMouseDown={(e) => e.stopPropagation()}
             style={{
+              position: 'relative',
+              zIndex: 1,
               width: 'min(620px, 100%)',
               maxHeight: 'min(720px, 88vh)',
               overflow: 'hidden',
@@ -685,11 +713,11 @@ export function LogPage() {
             </div>
             <div style={{ padding: 14, borderBottom: '1px solid var(--border)' }}>
               <input
+                ref={sportSearchRef}
                 className="ot-input"
                 value={sportQuery}
                 onChange={(e) => setSportQuery(e.target.value)}
                 placeholder={t.sportSearch}
-                autoFocus
               />
             </div>
             <div

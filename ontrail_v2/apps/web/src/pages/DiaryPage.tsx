@@ -58,7 +58,8 @@ export function DiaryPage() {
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
         <button
-          className={'ot-chip' + (sportFilter === null ? ' active' : '')}
+          type="button"
+          className={`ot-chip${sportFilter === null ? ' active' : ''}`}
           onClick={() => {
             setSportFilter(null);
             setPage(1);
@@ -68,8 +69,9 @@ export function DiaryPage() {
         </button>
         {TOP_SPORTS.map((s) => (
           <button
+            type="button"
             key={s}
-            className={'ot-chip' + (sportFilter === s ? ' active' : '')}
+            className={`ot-chip${sportFilter === s ? ' active' : ''}`}
             onClick={() => {
               setSportFilter(s);
               setPage(1);
@@ -101,7 +103,7 @@ export function DiaryPage() {
 
       {hasMore && (
         <div style={{ textAlign: 'center', marginTop: 24 }}>
-          <button className="ot-load-more" onClick={() => setPage((p) => p + 1)}>
+          <button type="button" className="ot-load-more" onClick={() => setPage((p) => p + 1)}>
             {t.loadMore}
           </button>
         </div>
