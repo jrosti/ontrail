@@ -7,6 +7,7 @@
     "dev": "vite",
     "test": "bun test src --coverage --preload ./src/test/setup.ts",
     "test:e2e": "playwright test",
+    "lighthouse:report": "node scripts/lighthouse-report.mjs",
     "build": "tsc -b && vite build",
     "lint": "biome check src",
     "format": "biome format --write src",
@@ -46,6 +47,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "lighthouse": "^13.4.0",
     "linkedom": "^0.18.12",
     "typescript": "~6.0.2",
     "vite": "^8.0.12"

@@ -69,6 +69,28 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Lighthouse report
+        continue-on-error: true
+        run: |
+          pnpm run preview -- --host 127.0.0.1 --port 4173 > "$RUNNER_TEMP/ontrail-vite-preview.log" 2>&1 &
+          preview_pid=$!
+          for attempt in {1..60}; do
+            if curl -fsS http://127.0.0.1:4173/feed >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          LIGHTHOUSE_BASE_URL=http://127.0.0.1:4173 pnpm run lighthouse:report
+          kill "$preview_pid"
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-reports
+          path: ontrail_v2/apps/web/reports/lighthouse
+          if-no-files-found: ignore
+
   hanko:
     name: Hanko
     runs-on: ubuntu-latest

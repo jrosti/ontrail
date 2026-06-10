@@ -57,6 +57,7 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 - [x] CSV export via ProfilePage
 - [ ] HR zone analysis in analytics page (data is available via athlete profile + exercises)
 - [ ] Tag autocomplete in LogPage (API: `/api/users/:username/tags`)
+- [ ] Nightly Lighthouse performance reports against the live environment after release
 
 **Medium priority**
 - [ ] Profile page: show groups the user belongs to
