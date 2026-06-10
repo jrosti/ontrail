@@ -135,6 +135,11 @@ export const getAthleteProfile = (username: string) =>
 export const getPersonalRecords = (username: string) =>
   client.get<{ items: PersonalRecord[] }>(`/users/${username}/records`).then((r) => r.data.items);
 
+export const getUserTags = (username: string) =>
+  client
+    .get<{ items: { tag: string; useCount: number }[] }>(`/users/${username}/tags`)
+    .then((r) => r.data.items.map((i) => i.tag));
+
 export const getTagSummary = (username: string) =>
   client.get<{ items: TagSummary[] }>(`/users/${username}/summary/tags`).then((r) => r.data.items);
 

@@ -620,6 +620,33 @@ h4 {
   font: inherit;
   outline: none;
 }
+.ot-tag-suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  overflow: hidden;
+}
+.ot-tag-suggest-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.ot-tag-suggest-item:hover {
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+}
 .ot-tag-chip {
   display: inline-flex;
   align-items: center;

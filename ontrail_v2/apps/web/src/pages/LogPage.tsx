@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createExercise, getExercise, listSports, updateExercise } from '../api';
+import { createExercise, getExercise, getUserTags, listSports, updateExercise } from '../api';
 import { RichEditor } from '../components/editor/RichEditor';
 import { GpxDropzone } from '../components/exercise/GpxDropzone';
 import { Card } from '../components/ui/Card';
@@ -36,7 +36,7 @@ function formatDistanceInput(meters?: number): string {
 }
 
 export function LogPage() {
-  const { lang, favoriteSports, rememberSport } = useStore();
+  const { lang, favoriteSports, rememberSport, currentUser } = useStore();
   const t = I18N[lang];
   const nav = useNavigate();
   const qc = useQueryClient();
@@ -72,6 +72,21 @@ export function LogPage() {
     descHtml: existing?.body ?? '',
   });
   const [tagDraft, setTagDraft] = useState('');
+  const [tagSuggestOpen, setTagSuggestOpen] = useState(false);
+
+  const { data: userTags = [] } = useQuery({
+    queryKey: ['userTags', currentUser?.username],
+    queryFn: () => getUserTags(currentUser!.username),
+    enabled: !!currentUser?.username,
+    staleTime: 5 * 60_000,
+  });
+
+  const tagSuggestions = tagDraft.trim()
+    ? userTags.filter(
+        (t) => t.toLowerCase().startsWith(tagDraft.trim().toLowerCase()) && !form.tags.includes(t),
+      )
+    : [];
+
   const [editorMode, setEditorMode] = useState<'wysiwyg' | 'markdown'>('wysiwyg');
   const [gpxResult, setGpxResult] = useState<GpxResult | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -418,34 +433,69 @@ export function LogPage() {
               <span className="ot-field-label">
                 {t.keywords} <em className="ot-field-badge">{t.opt}</em>
               </span>
-              <div className="ot-tag-input">
-                {form.tags.map((tag) => (
-                  <span key={tag} className="ot-tag-chip">
-                    #{tag}
-                    <button
-                      type="button"
-                      onClick={() =>
-                        set(
-                          'tags',
-                          form.tags.filter((x) => x !== tag),
-                        )
+              <div style={{ position: 'relative' }}>
+                <div className="ot-tag-input">
+                  {form.tags.map((tag) => (
+                    <span key={tag} className="ot-tag-chip">
+                      #{tag}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          set(
+                            'tags',
+                            form.tags.filter((x) => x !== tag),
+                          )
+                        }
+                      >
+                        <Icon name="close" size={12} stroke={2.4} />
+                      </button>
+                    </span>
+                  ))}
+                  <input
+                    value={tagDraft}
+                    onChange={(e) => {
+                      setTagDraft(e.target.value);
+                      setTagSuggestOpen(true);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (tagSuggestions.length > 0 && tagSuggestOpen) {
+                          set('tags', [...form.tags, tagSuggestions[0]]);
+                          setTagDraft('');
+                          setTagSuggestOpen(false);
+                        } else {
+                          addTag();
+                          setTagSuggestOpen(false);
+                        }
+                      } else if (e.key === 'Escape') {
+                        setTagSuggestOpen(false);
                       }
-                    >
-                      <Icon name="close" size={12} stroke={2.4} />
-                    </button>
-                  </span>
-                ))}
-                <input
-                  value={tagDraft}
-                  onChange={(e) => setTagDraft(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addTag();
-                    }
-                  }}
-                  placeholder={form.tags.length ? '' : t.keywordsPh}
-                />
+                    }}
+                    onBlur={() => setTimeout(() => setTagSuggestOpen(false), 150)}
+                    onFocus={() => tagDraft.trim() && setTagSuggestOpen(true)}
+                    placeholder={form.tags.length ? '' : t.keywordsPh}
+                  />
+                </div>
+                {tagSuggestOpen && tagSuggestions.length > 0 && (
+                  <div className="ot-tag-suggest">
+                    {tagSuggestions.slice(0, 8).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        className="ot-tag-suggest-item"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          set('tags', [...form.tags, s]);
+                          setTagDraft('');
+                          setTagSuggestOpen(false);
+                        }}
+                      >
+                        #{s}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </label>
 
