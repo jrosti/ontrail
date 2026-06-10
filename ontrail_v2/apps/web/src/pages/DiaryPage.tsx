@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
+import { useState } from 'react';
+import { getUser, listExercises } from '../api';
 import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { sportName } from '../sports';
-import { listExercises, getUser } from '../api';
+import { useStore } from '../store';
 
 const TOP_SPORTS = ['run', 'bike', 'ski', 'walk', 'orient', 'gym'];
 

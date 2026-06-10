@@ -1,19 +1,19 @@
-import { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import { addCare, removeCare } from '../../api';
+import { I18N } from '../../i18n';
+import { SPORTS } from '../../sports';
+import { useStore } from '../../store';
+import type { ExerciseListItem } from '../../types';
+import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../../utils/format';
+import { downsample } from '../../utils/gpx';
+import { LeafletMap } from '../charts/LeafletMap';
 import { Avatar } from '../ui/Avatar';
 import { Card } from '../ui/Card';
 import { Icon } from '../ui/Icon';
 import { Metric } from '../ui/Metric';
 import { SportBadge } from '../ui/SportBadge';
-import { LeafletMap } from '../charts/LeafletMap';
-import { useStore } from '../../store';
-import { I18N } from '../../i18n';
-import { SPORTS } from '../../sports';
-import { durShort, fmtDistKm, calcPace, fmtPace, fmtSpeed, relDay } from '../../utils/format';
-import { downsample } from '../../utils/gpx';
-import type { ExerciseListItem } from '../../types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addCare, removeCare } from '../../api';
 
 interface ExerciseCardProps {
   exercise: ExerciseListItem;

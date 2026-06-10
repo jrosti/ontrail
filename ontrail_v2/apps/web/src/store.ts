@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { Lang } from './i18n';
 import type { ThemeSettings } from './theme';
 import { DEFAULT_THEME } from './theme';
-import type { Lang } from './i18n';
 import type { User } from './types';
 
 interface AppState {

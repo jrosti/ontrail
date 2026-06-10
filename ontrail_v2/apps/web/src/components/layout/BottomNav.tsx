@@ -1,9 +1,9 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Icon } from '../ui/Icon';
-import { useStore } from '../../store';
-import { I18N } from '../../i18n';
 import { getUnread, markAllRead } from '../../api';
+import { I18N } from '../../i18n';
+import { useStore } from '../../store';
+import { Icon } from '../ui/Icon';
 
 export function BottomNav() {
   const { lang, currentUser } = useStore();

@@ -1,17 +1,17 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useParams, useNavigate } from '@tanstack/react-router';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { useState } from 'react';
-import { Card } from '../components/ui/Card';
+import { addCare, addComment, deleteExercise, getExercise, removeCare } from '../api';
+import { LeafletMap } from '../components/charts/LeafletMap';
 import { Avatar } from '../components/ui/Avatar';
+import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportBadge } from '../components/ui/SportBadge';
-import { LeafletMap } from '../components/charts/LeafletMap';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
-import { getExercise, addComment, deleteExercise, addCare, removeCare } from '../api';
-import { durShort, fmtDistKm, calcPace, fmtSpeed, fmtPace, relDay } from '../utils/format';
+import { useStore } from '../store';
 import type { Comment } from '../types';
+import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../utils/format';
 
 export function ExercisePage() {
   const { id } = useParams({ from: '/exercise/$id' });

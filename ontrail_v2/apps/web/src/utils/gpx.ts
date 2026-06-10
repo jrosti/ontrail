@@ -57,7 +57,8 @@ export function parseGpx(xmlText: string): GpxResult {
   if (points.length >= 2 && points[0].time && points[points.length - 1].time) {
     startTime = points[0].time;
     durationSec = Math.round(
-      (new Date(points[points.length - 1].time ?? '').getTime() - new Date(points[0].time).getTime()) /
+      (new Date(points[points.length - 1].time ?? '').getTime() -
+        new Date(points[0].time).getTime()) /
         1000,
     );
   }

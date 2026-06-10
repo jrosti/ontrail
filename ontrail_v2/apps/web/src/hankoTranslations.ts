@@ -1,5 +1,5 @@
-import { en } from '@teamhanko/hanko-elements/i18n/en';
 import type { Translation } from '@teamhanko/hanko-elements';
+import { en } from '@teamhanko/hanko-elements/i18n/en';
 
 export const hankoFi: Translation = {
   ...en,

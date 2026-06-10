@@ -1,14 +1,14 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { getWeekSummaries, listExercises } from '../api';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS, sportName } from '../sports';
-import { listExercises, getWeekSummaries } from '../api';
-import { fmtDurLabel, fmtDist } from '../utils/format';
+import { useStore } from '../store';
 import type { ExerciseListItem, WeekSummary } from '../types';
+import { fmtDist, fmtDurLabel } from '../utils/format';
 
 const NOW = new Date();
 const CURRENT_YEAR = NOW.getFullYear();

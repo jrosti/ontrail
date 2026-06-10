@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
-import { Icon } from '../ui/Icon';
+import { downsample, type GpxResult, parseGpx } from '../../utils/gpx';
 import { LeafletMap } from '../charts/LeafletMap';
-import { parseGpx, downsample, type GpxResult } from '../../utils/gpx';
+import { Icon } from '../ui/Icon';
 
 interface Props {
   onLoaded: (result: GpxResult) => void;

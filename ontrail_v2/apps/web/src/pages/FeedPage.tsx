@@ -1,16 +1,16 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useRef, useState } from 'react';
-import { Link, useNavigate, useSearch } from '@tanstack/react-router';
-import { ExerciseCard } from '../components/exercise/ExerciseCard';
-import { Card } from '../components/ui/Card';
-import { Avatar } from '../components/ui/Avatar';
-import { Icon } from '../components/ui/Icon';
-import { useStore } from '../store';
-import { I18N } from '../i18n';
 import { listExercises, listGroups } from '../api';
+import { ExerciseCard } from '../components/exercise/ExerciseCard';
+import { Avatar } from '../components/ui/Avatar';
+import { Card } from '../components/ui/Card';
+import { Icon } from '../components/ui/Icon';
+import { I18N } from '../i18n';
 import type { FeedSearch } from '../router';
-import { parseDuration, parseDistance } from '../utils/format';
+import { useStore } from '../store';
+import { parseDistance, parseDuration } from '../utils/format';
 
 export function FeedPage() {
   const { lang, currentUser } = useStore();

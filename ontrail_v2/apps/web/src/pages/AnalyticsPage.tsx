@@ -1,16 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { getMonthSummaries, getSportSummary, getWeekSummaries, getYearSummary } from '../api';
+import { Donut, Heatmap, LineChart } from '../components/charts/Charts';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { Metric } from '../components/ui/Metric';
-import { Donut, Heatmap, LineChart } from '../components/charts/Charts';
 import { SportGlyph } from '../components/ui/SportGlyph';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS, sportName } from '../sports';
-import { getSportSummary, getYearSummary, getMonthSummaries, getWeekSummaries } from '../api';
-import { fmtDur, fmtDistKm, fmtInt } from '../utils/format';
-import type { YearSportSummary, MonthSummary, WeekSummary, SportSummary } from '../types';
+import { useStore } from '../store';
+import type { MonthSummary, SportSummary, WeekSummary, YearSportSummary } from '../types';
+import { fmtDistKm, fmtDur, fmtInt } from '../utils/format';
 
 const NOW = new Date();
 const CURRENT_YEAR = NOW.getFullYear();

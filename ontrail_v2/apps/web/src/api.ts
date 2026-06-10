@@ -1,22 +1,22 @@
 import axios from 'axios';
 import type {
+  AthleteProfile,
+  Comment,
   Exercise,
   ExerciseListItem,
-  Comment,
-  User,
-  YearSportSummary,
-  MonthSummary,
-  WeekSummary,
-  SportSummary,
-  AthleteProfile,
-  PersonalRecord,
+  Group,
   LeaderboardEntry,
+  MonthSummary,
+  PaginatedResponse,
+  PersonalRecord,
+  Sport,
+  SportSummary,
   TagSummary,
   TagSummaryMonth,
+  User,
   UserListItem,
-  Group,
-  PaginatedResponse,
-  Sport,
+  WeekSummary,
+  YearSportSummary,
 } from './types';
 
 const BASE = import.meta.env.VITE_API_URL || '/api';

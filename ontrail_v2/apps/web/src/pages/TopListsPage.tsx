@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react';
-import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { Card } from '../components/ui/Card';
-import { Avatar } from '../components/ui/Avatar';
-import { Icon } from '../components/ui/Icon';
-import { useStore } from '../store';
-import { I18N } from '../i18n';
+import { Link } from '@tanstack/react-router';
+import { useMemo, useState } from 'react';
 import { getLeaderboard, listSports } from '../api';
-import { fmtDur, fmtDistKm } from '../utils/format';
+import { Avatar } from '../components/ui/Avatar';
+import { Card } from '../components/ui/Card';
+import { Icon } from '../components/ui/Icon';
+import { I18N } from '../i18n';
+import { useStore } from '../store';
 import type { LeaderboardEntry } from '../types';
+import { fmtDistKm, fmtDur } from '../utils/format';
 
 type Period = 'month' | 'year';
 type SortKey = 'rank' | 'distance' | 'duration' | 'sessions';

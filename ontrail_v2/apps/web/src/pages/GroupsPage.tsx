@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { createGroup, joinGroup, leaveGroup, listGroups } from '../api';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
-import { listGroups, joinGroup, leaveGroup, createGroup } from '../api';
+import { useStore } from '../store';
 
 export function GroupsPage() {
   const { lang, currentUser } = useStore();

@@ -1,4 +1,4 @@
-import { register, type RegisterResult } from '@teamhanko/hanko-elements';
+import { type RegisterResult, register } from '@teamhanko/hanko-elements';
 import { en } from '@teamhanko/hanko-elements/i18n/en';
 import { hankoFi } from './hankoTranslations';
 

@@ -1,31 +1,31 @@
-import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { Card } from '../components/ui/Card';
+import { Link } from '@tanstack/react-router';
+import { useState } from 'react';
+import {
+  getMonthSummaries,
+  getSportSummary,
+  getTagSummary,
+  getTagSummaryByMonth,
+  getTagSummaryByYear,
+  getUser,
+  getYearSummary,
+  listExercises,
+} from '../api';
 import { Avatar } from '../components/ui/Avatar';
+import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { SPORTS, sportName } from '../sports';
-import {
-  getUser,
-  listExercises,
-  getSportSummary,
-  getYearSummary,
-  getMonthSummaries,
-  getTagSummary,
-  getTagSummaryByYear,
-  getTagSummaryByMonth,
-} from '../api';
-import { fmtDur, fmtDistSummary, fmtPaceSport } from '../utils/format';
+import { useStore } from '../store';
 import type {
-  SportSummary,
-  YearSportSummary,
   MonthSummary,
+  SportSummary,
   TagSummary,
   TagSummaryMonth,
+  YearSportSummary,
 } from '../types';
+import { fmtDistSummary, fmtDur, fmtPaceSport } from '../utils/format';
 
 const NOW = new Date();
 const CURRENT_YEAR = NOW.getFullYear();

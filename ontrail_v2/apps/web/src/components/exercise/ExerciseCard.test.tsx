@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
-import type { ExerciseListItem } from '../../types';
 import { useStore } from '../../store';
+import type { ExerciseListItem } from '../../types';
 
 mock.module('@tanstack/react-router', () => ({
   Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLSpanElement>) => (

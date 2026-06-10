@@ -1,12 +1,12 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Icon } from '../ui/Icon';
-import { Logo } from '../ui/Logo';
-import { Avatar } from '../ui/Avatar';
-import { useStore } from '../../store';
-import { I18N } from '../../i18n';
 import { useState } from 'react';
 import { getUnread, markAllRead } from '../../api';
+import { I18N } from '../../i18n';
+import { useStore } from '../../store';
+import { Avatar } from '../ui/Avatar';
+import { Icon } from '../ui/Icon';
+import { Logo } from '../ui/Logo';
 
 export function TopNav() {
   const { lang, setLang, currentUser, theme, setTheme } = useStore();

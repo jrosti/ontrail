@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from 'bun:test';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { GpxDropzone } from './GpxDropzone';
 import type { GpxResult } from '../../utils/gpx';
+import { GpxDropzone } from './GpxDropzone';
 
 const labels = {
   label: 'GPS-jälki (.gpx)',

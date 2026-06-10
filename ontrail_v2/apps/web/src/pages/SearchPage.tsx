@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { useSearch } from '@tanstack/react-router';
+import { search } from '../api';
 import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
-import { search } from '../api';
+import { useStore } from '../store';
 
 export function SearchPage() {
   const { lang } = useStore();

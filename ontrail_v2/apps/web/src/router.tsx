@@ -5,19 +5,19 @@ import {
   Outlet,
   redirect,
 } from '@tanstack/react-router';
-import { TopNav } from './components/layout/TopNav';
 import { BottomNav } from './components/layout/BottomNav';
-import { FeedPage } from './pages/FeedPage';
-import { ExercisePage } from './pages/ExercisePage';
-import { LogPage } from './pages/LogPage';
+import { TopNav } from './components/layout/TopNav';
 import { AnalyticsPage } from './pages/AnalyticsPage';
+import { AthletePage } from './pages/AthletePage';
 import { CalendarPage } from './pages/CalendarPage';
 import { DiaryPage } from './pages/DiaryPage';
-import { SearchPage } from './pages/SearchPage';
-import { LoginPage } from './pages/LoginPage';
-import { ProfilePage } from './pages/ProfilePage';
+import { ExercisePage } from './pages/ExercisePage';
+import { FeedPage } from './pages/FeedPage';
 import { GroupsPage } from './pages/GroupsPage';
-import { AthletePage } from './pages/AthletePage';
+import { LoginPage } from './pages/LoginPage';
+import { LogPage } from './pages/LogPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { SearchPage } from './pages/SearchPage';
 import { TopListsPage } from './pages/TopListsPage';
 
 const rootRoute = createRootRoute({

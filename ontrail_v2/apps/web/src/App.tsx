@@ -1,10 +1,10 @@
-import { RouterProvider } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RouterProvider } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { getMe } from './api';
+import { router } from './router';
 import { useStore } from './store';
 import { buildCSSVars } from './theme';
-import { router } from './router';
 
 const queryClient = new QueryClient({
   defaultOptions: {

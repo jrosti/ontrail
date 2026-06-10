@@ -1,6 +1,6 @@
+import type { Lang } from '../../i18n';
 import { SPORTS, sportName } from '../../sports';
 import { SportGlyph } from './SportGlyph';
-import type { Lang } from '../../i18n';
 
 interface SportBadgeProps {
   sport: string;

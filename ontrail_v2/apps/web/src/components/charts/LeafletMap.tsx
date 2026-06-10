@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
 import type { Map as LMap, Polyline } from 'leaflet';
+import { useEffect, useRef } from 'react';
 import type { GpxPoint } from '../../utils/gpx';
 
 // Leaflet CSS is imported globally in index.css (via @import)

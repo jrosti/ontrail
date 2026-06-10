@@ -1,26 +1,26 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { createExercise, getExercise, listSports, updateExercise } from '../api';
+import { RichEditor } from '../components/editor/RichEditor';
+import { GpxDropzone } from '../components/exercise/GpxDropzone';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
-import { RichEditor } from '../components/editor/RichEditor';
-import { GpxDropzone } from '../components/exercise/GpxDropzone';
-import { useStore } from '../store';
 import { I18N } from '../i18n';
 import { ALL_SPORTS, SPORTS } from '../sports';
+import { useStore } from '../store';
+import type { Sport } from '../types';
 import {
-  parseDuration,
-  parseDistance,
   calcPace,
   calcSpeed,
-  fmtPace,
   fmtDistKm,
   fmtDurLabel,
+  fmtPace,
+  parseDistance,
+  parseDuration,
 } from '../utils/format';
-import { createExercise, updateExercise, getExercise, listSports } from '../api';
 import type { GpxResult } from '../utils/gpx';
-import type { Sport } from '../types';
 
 function formatDurationInput(sec: number): string {
   const h = Math.floor(sec / 3600);

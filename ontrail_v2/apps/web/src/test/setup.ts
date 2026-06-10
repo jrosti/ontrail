@@ -1,5 +1,5 @@
-import { parseHTML } from 'linkedom';
 import { afterEach } from 'bun:test';
+import { parseHTML } from 'linkedom';
 
 const { window, document } = parseHTML('<!doctype html><html><body></body></html>');
 Object.defineProperty(window, 'location', {
