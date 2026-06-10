@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "bun test --coverage --preload ./src/test/setup.ts",
+    "test": "bun test src --coverage --preload ./src/test/setup.ts",
     "test:e2e": "playwright test",
     "build": "tsc -b && vite build",
     "lint": "biome check src",

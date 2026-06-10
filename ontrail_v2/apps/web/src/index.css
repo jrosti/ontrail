@@ -1344,6 +1344,14 @@ h4 {
   padding: 2px 6px;
   border-radius: 6px;
   font-family: var(--font-mono);
+  text-decoration: none;
+  transition:
+    filter 0.12s,
+    transform 0.12s;
+}
+.ot-cal-act:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
 }
 .ot-cal-total {
   font-family: var(--font-mono);

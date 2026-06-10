@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getWeekSummaries, listExercises } from '../api';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
 import { I18N } from '../i18n';
-import { SPORTS, sportName } from '../sports';
+import { SPORTS } from '../sports';
 import { useStore } from '../store';
 import type { ExerciseListItem, WeekSummary } from '../types';
 import { fmtDist, fmtDurLabel } from '../utils/format';
@@ -172,14 +173,16 @@ function MonthCard({
                     <span className="ot-cal-d">{day.d}</span>
                     <div className="ot-cal-acts">
                       {day.acts.map((a) => (
-                        <span
+                        <Link
                           key={a.id}
+                          to="/exercise/$id"
+                          params={{ id: a.id }}
                           className="ot-cal-act"
                           style={{
                             background: `color-mix(in oklab, ${SPORTS[a.sport]?.color ?? 'var(--accent)'} 18%, transparent)`,
                             color: SPORTS[a.sport]?.color ?? 'var(--accent)',
                           }}
-                          title={sportName(a.sport, lang)}
+                          title={a.title}
                         >
                           <SportGlyph sport={a.sport} size={11} />
                           {a.distanceM ? (
@@ -187,7 +190,7 @@ function MonthCard({
                           ) : a.durationSec ? (
                             <span>{fmtDurLabel(a.durationSec)}</span>
                           ) : null}
-                        </span>
+                        </Link>
                       ))}
                     </div>
                   </>

@@ -53,8 +53,8 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 **High priority (user-visible features)**
 - [ ] Personal records UI — backend exists (`/api/users/:username/records`), no display yet
 - [ ] XLSX export — user requested alongside CSV/JSON
-- [ ] Weekly summary widget in feed right rail (currently shows "no exercises")
-- [ ] CSV export via ProfilePage (currently only JSON; `exportCSV` in api.ts but no button)
+- [x] Weekly summary widget in feed right rail
+- [x] CSV export via ProfilePage
 - [ ] HR zone analysis in analytics page (data is available via athlete profile + exercises)
 - [ ] Tag autocomplete in LogPage (API: `/api/users/:username/tags`)
 

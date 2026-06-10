@@ -3,6 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import {
   getMonthSummaries,
+  getPersonalRecords,
   getSportSummary,
   getTagSummary,
   getTagSummaryByMonth,
@@ -20,12 +21,13 @@ import { SPORTS, sportName } from '../sports';
 import { useStore } from '../store';
 import type {
   MonthSummary,
+  PersonalRecord,
   SportSummary,
   TagSummary,
   TagSummaryMonth,
   YearSportSummary,
 } from '../types';
-import { fmtDistSummary, fmtDur, fmtPaceSport } from '../utils/format';
+import { fmtDistSummary, fmtDur, fmtPace, fmtPaceSport } from '../utils/format';
 
 const NOW = new Date();
 const CURRENT_YEAR = NOW.getFullYear();
@@ -58,7 +60,7 @@ const MONTH_NAMES_EN = [
   'December',
 ];
 
-type Tab = 'workouts' | 'sports' | 'tags';
+type Tab = 'workouts' | 'sports' | 'tags' | 'records';
 type Scope = 'all' | 'year' | 'month';
 
 type SummaryRow = {
@@ -299,6 +301,12 @@ export function AthletePage({ username }: { username: string }) {
     enabled: tab === 'tags' && scope === 'month' && !!username,
   });
 
+  const { data: records } = useQuery({
+    queryKey: ['personalRecords', username],
+    queryFn: () => getPersonalRecords(username),
+    enabled: tab === 'records' && !!username,
+  });
+
   if (!user)
     return (
       <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-faint)' }}>
@@ -346,7 +354,7 @@ export function AthletePage({ username }: { username: string }) {
 
       {/* Tab bar */}
       <div className="ot-scope" style={{ marginBottom: 16 }}>
-        {(['workouts', 'sports', 'tags'] as const).map((k) => (
+        {(['workouts', 'sports', 'tags', 'records'] as const).map((k) => (
           <button
             type="button"
             key={k}
@@ -359,7 +367,9 @@ export function AthletePage({ username }: { username: string }) {
                 : 'Workouts'
               : k === 'sports'
                 ? t.sportSummary
-                : t.keywords}
+                : k === 'tags'
+                  ? t.keywords
+                  : t.records}
           </button>
         ))}
       </div>
@@ -495,6 +505,150 @@ export function AthletePage({ username }: { username: string }) {
           )}
         </>
       )}
+
+      {/* Records tab */}
+      {tab === 'records' && <RecordsGrid records={records ?? []} lang={lang} />}
+    </div>
+  );
+}
+
+function RecordsGrid({ records, lang }: { records: PersonalRecord[]; lang: 'fi' | 'en' }) {
+  const t = I18N[lang];
+  if (records.length === 0) {
+    return (
+      <div
+        style={{ textAlign: 'center', color: 'var(--text-faint)', padding: '40px 0', fontSize: 14 }}
+      >
+        {t.noExercises}
+      </div>
+    );
+  }
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      {records.map((rec) => {
+        const sport = SPORTS[rec.sport];
+        const color = sport?.color ?? 'var(--accent)';
+        const rows: { label: string; value: string; id?: string }[] = [];
+        if (rec.bestDistanceM)
+          rows.push({
+            label: t.distance,
+            value: fmtDistSummary(rec.bestDistanceM, lang),
+            id: rec.bestDistanceExerciseId,
+          });
+        if (rec.bestDurationSec)
+          rows.push({
+            label: t.time,
+            value: fmtDur(rec.bestDurationSec),
+            id: rec.bestDurationExerciseId,
+          });
+        if (rec.bestPace) {
+          const minPerKm = 6000 / rec.bestPace; // pace stored as dist_m/dur_sec*360
+          rows.push({ label: t.pace, value: fmtPace(minPerKm), id: rec.bestPaceExerciseId });
+        }
+        if (rec.peakAvgHr) rows.push({ label: t.avgHr, value: `${rec.peakAvgHr} bpm` });
+        if (rows.length === 0) return null;
+        return (
+          <Card key={rec.sport} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: 8,
+                  flexShrink: 0,
+                  background: `color-mix(in oklab, ${color} 15%, transparent)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <SportGlyph sport={rec.sport} size={16} />
+              </div>
+              <span style={{ fontWeight: 600, fontSize: 15 }}>{sportName(rec.sport, lang)}</span>
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))',
+                gap: 8,
+              }}
+            >
+              {rows.map((r) =>
+                r.id ? (
+                  <Link
+                    key={r.label}
+                    to="/exercise/$id"
+                    params={{ id: r.id }}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <div
+                      style={{
+                        background: 'var(--surface-2)',
+                        borderRadius: 8,
+                        padding: '8px 12px',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: 'var(--text-faint)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                        }}
+                      >
+                        {r.label}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          fontWeight: 700,
+                          fontSize: 18,
+                          letterSpacing: '-0.02em',
+                          marginTop: 2,
+                        }}
+                      >
+                        {r.value}
+                      </div>
+                    </div>
+                  </Link>
+                ) : (
+                  <div
+                    key={r.label}
+                    style={{
+                      background: 'var(--surface-2)',
+                      borderRadius: 8,
+                      padding: '8px 12px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: 'var(--text-faint)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      {r.label}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 700,
+                        fontSize: 18,
+                        letterSpacing: '-0.02em',
+                        marginTop: 2,
+                      }}
+                    >
+                      {r.value}
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+          </Card>
+        );
+      })}
     </div>
   );
 }

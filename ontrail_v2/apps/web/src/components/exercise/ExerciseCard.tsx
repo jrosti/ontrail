@@ -129,17 +129,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
 
   if (compact) {
     return (
-      <Card hover>
+      <Card hover style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Link
           to="/exercise/$id"
           params={{ id: ex.id }}
-          style={{
-            textDecoration: 'none',
-            color: 'inherit',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 12,
-          }}
+          style={{ textDecoration: 'none', color: 'inherit' }}
         >
           <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
             <Avatar initials={ex.ownerInitials} color={ex.ownerColor} size={38} />
@@ -151,18 +145,18 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
             </div>
             <SportBadge sport={ex.sport} lang={lang} size="sm" />
           </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              gap: 12,
-            }}
-          >
-            {metricRow}
-            {actions}
-          </div>
         </Link>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            gap: 12,
+          }}
+        >
+          {metricRow}
+          {actions}
+        </div>
       </Card>
     );
   }
