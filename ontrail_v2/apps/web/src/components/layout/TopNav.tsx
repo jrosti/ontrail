@@ -79,13 +79,13 @@ export function TopNav() {
               <span>{t.calendar}</span>
             </Link>
             <Link
-              to="/groups"
+              to="/toplists"
               className="ot-nav-tab"
               activeProps={{ className: 'ot-nav-tab active' }}
               inactiveProps={{ className: 'ot-nav-tab' }}
             >
-              <Icon name="feed" size={18} stroke={2.2} />
-              <span>{t.groups}</span>
+              <Icon name="bolt" size={18} stroke={2.2} />
+              <span>{lang === 'fi' ? 'Top' : 'Top'}</span>
             </Link>
           </nav>
         </div>

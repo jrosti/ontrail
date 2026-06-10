@@ -235,6 +235,7 @@ function TopListRow({
     <Link
       to="/user/$username"
       params={{ username: entry.username }}
+      search={{ tab: undefined }}
       style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
     >
       <div className={`ot-toplists-row${even ? ' even' : ''}`}>

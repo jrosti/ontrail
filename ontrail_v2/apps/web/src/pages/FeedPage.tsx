@@ -738,6 +738,17 @@ function ProfileSidebar() {
           <span>{t.myDiary}</span>
         </Link>
         <Link
+          to="/user/$username"
+          params={{ username: currentUser.username }}
+          search={{ tab: 'records' }}
+          className="ot-pnav"
+          activeProps={{ className: 'ot-pnav active' }}
+          inactiveProps={{ className: 'ot-pnav' }}
+        >
+          <Icon name="flame" size={17} />
+          <span>{lang === 'fi' ? 'Ennätykset' : 'Records'}</span>
+        </Link>
+        <Link
           to="/toplists"
           className="ot-pnav"
           activeProps={{ className: 'ot-pnav active' }}
@@ -745,6 +756,15 @@ function ProfileSidebar() {
         >
           <Icon name="bolt" size={17} />
           <span>{lang === 'fi' ? 'Toplistat' : 'Top lists'}</span>
+        </Link>
+        <Link
+          to="/groups"
+          className="ot-pnav"
+          activeProps={{ className: 'ot-pnav active' }}
+          inactiveProps={{ className: 'ot-pnav' }}
+        >
+          <Icon name="feed" size={17} />
+          <span>{t.groups}</span>
         </Link>
       </div>
     </Card>

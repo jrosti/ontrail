@@ -247,10 +247,10 @@ function MonthAccordion({
   );
 }
 
-export function AthletePage({ username }: { username: string }) {
+export function AthletePage({ username, initialTab }: { username: string; initialTab?: Tab }) {
   const { lang, currentUser } = useStore();
   const t = I18N[lang];
-  const [tab, setTab] = useState<Tab>('workouts');
+  const [tab, setTab] = useState<Tab>(initialTab ?? 'workouts');
   const [scope, setScope] = useState<Scope>('all');
   const [year, setYear] = useState(CURRENT_YEAR);
 

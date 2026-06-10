@@ -87,7 +87,7 @@ export function ExercisePage() {
   return (
     <div className="ot-detail-wrap">
       <div className="ot-detail-hero">
-        <button type="button" className="ot-back" onClick={() => nav({ to: '/feed', search: {} })}>
+        <button type="button" className="ot-back" onClick={() => window.history.back()}>
           <Icon name="chevron" size={18} style={{ transform: 'rotate(180deg)' }} />
           {t.back}
         </button>

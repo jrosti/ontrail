@@ -147,12 +147,21 @@ const topListsRoute = createRoute({
 
 function AthletePageWrapper() {
   const { username } = athleteRoute.useParams();
-  return <AthletePage username={username} />;
+  const { tab } = athleteRoute.useSearch();
+  return (
+    <AthletePage
+      username={username}
+      initialTab={tab as 'workouts' | 'sports' | 'tags' | 'records' | undefined}
+    />
+  );
 }
 
 const athleteRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/user/$username',
+  validateSearch: (s: Record<string, unknown>) => ({
+    tab: s.tab as string | undefined,
+  }),
   component: AthletePageWrapper,
 });
 
