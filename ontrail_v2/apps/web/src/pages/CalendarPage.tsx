@@ -124,11 +124,11 @@ function MonthCard({
   const lastDay = new Date(year, month0 + 1, 0).getDate();
   const dateTo = `${monthKey}-${String(lastDay).padStart(2, '0')}`;
 
-  const { data } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: ['cal-exercises', username, monthKey],
-    queryFn: () => listExercises({ user: username, perPage: 200, dateFrom, dateTo }),
+    queryFn: () => listExercises({ user: username, perPage: 100, dateFrom, dateTo }),
     enabled: !!username,
-    staleTime: 5 * 60_000,
+    staleTime: 2 * 60_000,
   });
 
   const exercisesByDate = useMemo(() => {
@@ -153,6 +153,13 @@ function MonthCard({
       <h3 className="ot-cal-month">
         {names[month0]}{' '}
         <span style={{ color: 'var(--text-faint)', fontSize: 16, fontWeight: 400 }}>{year}</span>
+        {isFetching && (
+          <span
+            style={{ fontSize: 12, color: 'var(--text-faint)', fontWeight: 400, marginLeft: 8 }}
+          >
+            …
+          </span>
+        )}
       </h3>
       <div className="ot-cal-grid">
         <div className="ot-cal-row ot-cal-dow">
