@@ -124,7 +124,13 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
     gpxPoints?: { lat: number; lon: number; ele?: number }[];
     commentCount: number;
     careCount: number;
-    cares: { authorId: string; authorUsername: string; avatarInitials: string; avatarColor: string; emoji: string }[];
+    cares: {
+      authorId: string;
+      authorUsername: string;
+      avatarInitials: string;
+      avatarColor: string;
+      emoji: string;
+    }[];
   }
 
   function toListItem(row: ExerciseSearchRow): ExerciseListItemResult {
@@ -331,7 +337,15 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
       sql<{ count: number }[]>`
         select count(*)::int as count from cares where exercise_id = ${exerciseId}
       `,
-      sql<{ author_id: string; username: string; avatar_initials: string; avatar_color: string; emoji: string }[]>`
+      sql<
+        {
+          author_id: string;
+          username: string;
+          avatar_initials: string;
+          avatar_color: string;
+          emoji: string;
+        }[]
+      >`
         select ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
         from cares ca
         join users u on u.id = ca.author_id
