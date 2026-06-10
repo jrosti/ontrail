@@ -1,0 +1,88 @@
+name: Lighthouse Live
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Live base URL. Defaults to repository variable ONTRAIL_LIVE_URL.'
+        required: false
+        type: string
+      paths:
+        description: 'Comma-separated paths to audit.'
+        required: false
+        default: '/feed'
+        type: string
+      minimum_score:
+        description: 'Report-only minimum for accessibility and best practices.'
+        required: false
+        default: '0.9'
+        type: string
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  lighthouse-live:
+    name: Lighthouse Live
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ontrail_v2/apps/web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Resolve target
+        id: target
+        env:
+          DEFAULT_BASE_URL: ${{ vars.ONTRAIL_LIVE_URL }}
+          INPUT_BASE_URL: ${{ github.event.inputs.base_url }}
+          INPUT_PATHS: ${{ github.event.inputs.paths }}
+          INPUT_MINIMUM_SCORE: ${{ github.event.inputs.minimum_score }}
+        run: |
+          base_url="${INPUT_BASE_URL:-$DEFAULT_BASE_URL}"
+          if [ -z "$base_url" ]; then
+            echo "ONTRAIL_LIVE_URL is not configured; skipping live Lighthouse report."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "enabled=true" >> "$GITHUB_OUTPUT"
+          echo "base_url=$base_url" >> "$GITHUB_OUTPUT"
+          echo "paths=${INPUT_PATHS:-/feed}" >> "$GITHUB_OUTPUT"
+          echo "minimum_score=${INPUT_MINIMUM_SCORE:-0.9}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Bun
+        if: steps.target.outputs.enabled == 'true'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup pnpm
+        if: steps.target.outputs.enabled == 'true'
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.2 --activate
+
+      - name: Install dependencies
+        if: steps.target.outputs.enabled == 'true'
+        run: pnpm install --frozen-lockfile --config.minimum-release-age=0
+
+      - name: Lighthouse report
+        if: steps.target.outputs.enabled == 'true'
+        continue-on-error: true
+        env:
+          LIGHTHOUSE_BASE_URL: ${{ steps.target.outputs.base_url }}
+          LIGHTHOUSE_PATHS: ${{ steps.target.outputs.paths }}
+          LIGHTHOUSE_MIN_SCORE: ${{ steps.target.outputs.minimum_score }}
+          LIGHTHOUSE_OUT_DIR: reports/lighthouse-live
+        run: pnpm run lighthouse:report
+
+      - name: Upload Lighthouse reports
+        if: always() && steps.target.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-live-reports
+          path: ontrail_v2/apps/web/reports/lighthouse-live
+          if-no-files-found: ignore

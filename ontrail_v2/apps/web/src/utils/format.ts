@@ -146,10 +146,20 @@ export function calcSpeed(durationSec: number, distanceM: number): number {
   return distanceM / 1000 / (durationSec / 3600);
 }
 
+function parseLocalDate(isoDate: string): Date {
+  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return new Date(isoDate);
+  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+}
+
+function localDayIndex(date: Date): number {
+  return Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 864e5);
+}
+
 export function relDay(isoDate: string, lang: 'fi' | 'en'): string {
-  const date = new Date(isoDate);
+  const date = parseLocalDate(isoDate);
   const now = new Date();
-  const days = Math.round((now.getTime() - date.getTime()) / 864e5);
+  const days = localDayIndex(now) - localDayIndex(date);
   if (days === 0) return lang === 'fi' ? 'tänään' : 'today';
   if (days === 1) return lang === 'fi' ? 'eilen' : 'yesterday';
   if (days < 7) return lang === 'fi' ? `${days} pv sitten` : `${days}d ago`;
