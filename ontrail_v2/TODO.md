@@ -51,22 +51,22 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 ### To do 🔲
 
 **High priority (user-visible features)**
-- [ ] Personal records UI — backend exists (`/api/users/:username/records`), no display yet
-- [ ] XLSX export — user requested alongside CSV/JSON
+- [x] Personal records UI — records tab on `/user/:username`, grid of best results linking to exercise
+- [x] XLSX export — ProfilePage: export as XLSX alongside CSV/JSON
 - [x] Weekly summary widget in feed right rail
 - [x] CSV export via ProfilePage
-- [ ] HR zone analysis in analytics page (data is available via athlete profile + exercises)
-- [ ] Tag autocomplete in LogPage (API: `/api/users/:username/tags`)
+- [x] HR zone analysis in analytics page (Karvonen 5-zone bars from athlete profile + exercises)
+- [x] Tag autocomplete in LogPage (API: `/api/users/:username/tags`, prefix-filtered dropdown)
 - [x] Nightly Lighthouse performance reports against the live environment after release (`ONTRAIL_LIVE_URL`)
 
 **Medium priority**
-- [ ] Profile page: show groups the user belongs to
-- [ ] Athlete page: show personal records card
-- [ ] Feed: user filter dropdown in filter panel (currently free text)
+- [x] Profile page: show groups the user belongs to
+- [x] Athlete page: show personal records card
+- [x] Feed: user filter dropdown in filter panel (replaces free text, autocomplete from /api/users)
 - [ ] Exercise card: show group membership badge when not in group-filtered feed
-- [ ] Pagination on DiaryPage: accumulate pages (currently replaces, loses earlier results)
-- [ ] Exercise detail: show tags as clickable feed links
-- [ ] BottomNav: replace groups tab with top-lists tab (groups accessible via sidebar)
+- [x] Pagination on DiaryPage: accumulate pages (useInfiniteQuery)
+- [x] Exercise detail: show tags as clickable feed links
+- [x] BottomNav: replace groups tab with top-lists tab (groups accessible via sidebar)
 - [ ] Sport filter chips in DiaryPage should pull from actual sports in user's history
 
 **Data migration (Mongo → Postgres)**

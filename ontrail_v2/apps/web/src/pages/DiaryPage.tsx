@@ -1,7 +1,7 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
 import { useState } from 'react';
-import { getUser, listExercises } from '../api';
+import { getSportSummary, getUser, listExercises } from '../api';
 import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
@@ -10,8 +10,6 @@ import { SportGlyph } from '../components/ui/SportGlyph';
 import { I18N } from '../i18n';
 import { sportName } from '../sports';
 import { useStore } from '../store';
-
-const TOP_SPORTS = ['run', 'bike', 'ski', 'walk', 'orient', 'gym'];
 
 export function DiaryPage() {
   const { username } = useParams({ from: '/diary/$username' });
@@ -23,6 +21,16 @@ export function DiaryPage() {
     queryKey: ['user', username],
     queryFn: () => getUser(username),
   });
+
+  const { data: sportSummary } = useQuery({
+    queryKey: ['sportSummary', username],
+    queryFn: () => getSportSummary(username),
+  });
+
+  const userSports = (sportSummary ?? [])
+    .sort((a, b) => b.sessionCount - a.sessionCount)
+    .slice(0, 8)
+    .map((s) => s.sport);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['exercises', 'user', username, sportFilter],
@@ -74,7 +82,7 @@ export function DiaryPage() {
         >
           {t.all}
         </button>
-        {TOP_SPORTS.map((s) => (
+        {userSports.map((s) => (
           <button
             type="button"
             key={s}
