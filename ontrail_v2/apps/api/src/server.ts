@@ -124,6 +124,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
     gpxPoints?: { lat: number; lon: number; ele?: number }[];
     commentCount: number;
     careCount: number;
+    cares: { authorId: string; authorUsername: string; avatarInitials: string; avatarColor: string; emoji: string }[];
   }
 
   function toListItem(row: ExerciseSearchRow): ExerciseListItemResult {
@@ -144,6 +145,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
       gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
       commentCount: authenticated ? row.comment_count : 0,
       careCount: row.care_count,
+      cares: [],
     };
   }
 
@@ -306,30 +308,49 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   if (caresMatch) {
     const exerciseId = caresMatch[1];
     if (!isUuid(exerciseId)) return notFound();
-    if (req.method !== 'POST') return methodNotAllowed();
+    if (req.method !== 'POST' && req.method !== 'DELETE') return methodNotAllowed();
     const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
 
-    // Check if exercise exists
     const ex = await sql`select 1 from exercises where id = ${exerciseId}`;
     if (ex.length === 0) return notFound();
 
-    // Toggle care
-    const existing = await sql<{ author_id: string }[]>`
-      select author_id::text from cares where exercise_id = ${exerciseId} and author_id = ${user.id}
-    `;
-    if (existing[0]) {
+    if (req.method === 'DELETE') {
       await sql`delete from cares where exercise_id = ${exerciseId} and author_id = ${user.id}`;
     } else {
+      const body = (await req.json().catch(() => ({}))) as { emoji?: string };
+      const emoji = typeof body.emoji === 'string' && body.emoji.trim() ? body.emoji.trim() : '❤️';
       await sql`
-        insert into cares (exercise_id, author_id) values (${exerciseId}, ${user.id})
-        on conflict do nothing
+        insert into cares (exercise_id, author_id, emoji)
+        values (${exerciseId}, ${user.id}, ${emoji})
+        on conflict (exercise_id, author_id) do update set emoji = excluded.emoji
       `;
     }
-    const careCountRows = await sql<{ count: number }[]>`
-      select count(*)::int as count from cares where exercise_id = ${exerciseId}
-    `;
-    return json({ careCount: careCountRows[0]?.count ?? 0, cared: !existing[0] });
+
+    const [careCountRows, careRows] = await Promise.all([
+      sql<{ count: number }[]>`
+        select count(*)::int as count from cares where exercise_id = ${exerciseId}
+      `,
+      sql<{ author_id: string; username: string; avatar_initials: string; avatar_color: string; emoji: string }[]>`
+        select ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
+        from cares ca
+        join users u on u.id = ca.author_id
+        where ca.exercise_id = ${exerciseId}
+        order by ca.created_at asc
+      `,
+    ]);
+
+    return json({
+      careCount: careCountRows[0]?.count ?? 0,
+      cared: req.method === 'POST',
+      cares: careRows.map((r) => ({
+        authorId: r.author_id,
+        authorUsername: r.username,
+        avatarInitials: r.avatar_initials,
+        avatarColor: r.avatar_color,
+        emoji: r.emoji,
+      })),
+    });
   }
 
   // ── User profile ──────────────────────────────────────────────────────────

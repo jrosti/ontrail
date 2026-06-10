@@ -35,10 +35,11 @@ export interface Comment {
 }
 
 export interface Care {
-  id: string;
-  exerciseId: string;
+  authorId: string;
   authorUsername: string;
-  createdAt: string;
+  avatarInitials: string;
+  avatarColor: string;
+  emoji: string;
 }
 
 export interface Exercise {
@@ -87,6 +88,7 @@ export interface ExerciseListItem {
   gpxPoints?: { lat: number; lon: number; ele?: number }[];
   commentCount: number;
   careCount: number;
+  cares: Care[];
   isNew?: boolean;
 }
 

@@ -1723,3 +1723,118 @@ h4 {
 .ot-toplists-row.even:hover {
   background: var(--surface-2);
 }
+
+/* Care avatars — overlapping squircle stack */
+.ot-cares-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ot-care-btn-wrap {
+  position: relative;
+}
+.ot-care-avatars {
+  display: flex;
+  align-items: center;
+}
+.ot-care-avatar {
+  position: relative;
+  margin-left: -8px;
+  flex-shrink: 0;
+}
+.ot-care-avatars .ot-care-avatar:first-child {
+  margin-left: 0;
+}
+.ot-care-squircle {
+  width: 28px;
+  height: 28px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--surface);
+}
+.ot-care-initials {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.ot-care-emoji {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 11px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+.ot-care-more {
+  width: 28px;
+  height: 28px;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  background: var(--surface-2);
+  border: 2px solid var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+.ot-act-emoji {
+  font-size: 16px;
+  line-height: 1;
+}
+.ot-act-emoji-lg {
+  font-size: 26px;
+}
+.ot-act-lg {
+  padding: 10px 18px;
+  font-size: 16px;
+  gap: 10px;
+}
+
+/* Emoji picker popup */
+.ot-emoji-picker {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 200;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+  min-width: 220px;
+}
+.ot-emoji-defaults {
+  display: flex;
+  gap: 4px;
+}
+.ot-emoji-more {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.ot-emoji-btn {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 0.1s,
+    border-color 0.1s;
+}
+.ot-emoji-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border);
+}

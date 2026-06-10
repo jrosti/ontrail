@@ -10,9 +10,9 @@ import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { I18N } from '../i18n';
 import type { FeedSearch } from '../router';
-import { sportName } from '../sports';
+import { SPORTS, sportName } from '../sports';
 import { useStore } from '../store';
-import { parseDistance, parseDuration } from '../utils/format';
+import { durShort, fmtDistKm, parseDistance, parseDuration } from '../utils/format';
 
 export function FeedPage() {
   const { lang, currentUser } = useStore();
@@ -689,9 +689,42 @@ function ProfileSidebar() {
   );
 }
 
+function getWeekBounds() {
+  const now = new Date();
+  const dow = (now.getDay() + 6) % 7; // Monday=0
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - dow);
+  const sun = new Date(mon);
+  sun.setDate(mon.getDate() + 6);
+  return {
+    dateFrom: mon.toISOString().slice(0, 10),
+    dateTo: sun.toISOString().slice(0, 10),
+  };
+}
+
 function RightRail() {
-  const { lang } = useStore();
+  const { lang, currentUser } = useStore();
   const t = I18N[lang];
+  const { dateFrom, dateTo } = getWeekBounds();
+
+  const { data } = useQuery({
+    queryKey: ['exercises', 'thisWeek', currentUser?.username, dateFrom],
+    queryFn: () =>
+      listExercises({
+        user: currentUser?.username,
+        dateFrom,
+        dateTo,
+        perPage: 20,
+        sortBy: 'date',
+        sortDir: 'asc',
+      }),
+    enabled: Boolean(currentUser?.username),
+  });
+
+  const items = data?.items ?? [];
+  const totalDurSec = items.reduce((s, e) => s + e.durationSec, 0);
+  const totalDistM = items.reduce((s, e) => s + (e.distanceM ?? 0), 0);
+
   return (
     <div
       style={{
@@ -707,7 +740,55 @@ function RightRail() {
           <Icon name="bolt" size={16} stroke={2.2} style={{ color: 'var(--accent)' }} />
           {t.thisWeek}
         </div>
-        <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>{t.noExercises}</div>
+        {items.length === 0 ? (
+          <div style={{ color: 'var(--text-faint)', fontSize: 13 }}>
+            {currentUser ? t.noExercises : '—'}
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'flex', gap: 16, fontSize: 13, color: 'var(--text-dim)' }}>
+              <span>
+                <b>{items.length}</b> {t.sessions}
+              </span>
+              <span>
+                <b>{durShort(totalDurSec)}</b>
+              </span>
+              {totalDistM > 0 && (
+                <span>
+                  <b>{fmtDistKm(totalDistM, lang)}</b> km
+                </span>
+              )}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {items.map((ex) => {
+                const sport = SPORTS[ex.sport];
+                return (
+                  <div
+                    key={ex.id}
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}
+                  >
+                    <span style={{ fontSize: 16 }}>{sport?.glyph ?? '🏃'}</span>
+                    <span
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        color: 'var(--text)',
+                      }}
+                    >
+                      {ex.title}
+                    </span>
+                    <span style={{ color: 'var(--text-faint)', flexShrink: 0 }}>
+                      {durShort(ex.durationSec)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
       </Card>
     </div>
   );

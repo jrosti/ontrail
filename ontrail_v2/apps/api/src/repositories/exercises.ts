@@ -53,9 +53,27 @@ interface CommentRow {
   created_at: string;
 }
 
+interface CareRow {
+  author_id: string;
+  username: string;
+  avatar_initials: string;
+  avatar_color: string;
+  emoji: string;
+}
+
 const ANON_BODY = 'Rekisteröidy nähdäksesi harjoitukset';
 
-function toListItem(row: ExerciseRow, authenticated: boolean): ExerciseListItem {
+function toCare(row: CareRow): import('../../../web/src/types').Care {
+  return {
+    authorId: row.author_id,
+    authorUsername: row.username,
+    avatarInitials: row.avatar_initials,
+    avatarColor: row.avatar_color,
+    emoji: row.emoji,
+  };
+}
+
+function toListItem(row: ExerciseRow, cares: CareRow[], authenticated: boolean): ExerciseListItem {
   return {
     id: row.id,
     ownerUsername: row.owner_username,
@@ -73,6 +91,7 @@ function toListItem(row: ExerciseRow, authenticated: boolean): ExerciseListItem 
     gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
     commentCount: authenticated ? row.comment_count : 0,
     careCount: row.care_count,
+    cares: cares.map(toCare),
   };
 }
 
@@ -88,15 +107,19 @@ function toComment(row: CommentRow): Comment {
   };
 }
 
-function toExercise(row: ExerciseRow, comments: Comment[], authenticated: boolean): Exercise {
+function toExercise(
+  row: ExerciseRow,
+  cares: CareRow[],
+  comments: Comment[],
+  authenticated: boolean,
+): Exercise {
   return {
-    ...toListItem(row, authenticated),
+    ...toListItem(row, cares, authenticated),
     body: authenticated ? (row.body_html ?? undefined) : ANON_BODY,
     gpxPoints: authenticated ? (row.gpx_points ?? undefined) : undefined,
     feelRating: authenticated ? (row.feel_rating ?? undefined) : undefined,
     details: authenticated ? row.details : {},
     comments: authenticated ? comments : [],
-    cares: [],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -217,7 +240,29 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
     ${whereClause}
   `;
   const total = totals[0]?.total ?? 0;
-  return { items: rows.map((r) => toListItem(r, authenticated)), total, page, perPage };
+  const exerciseIds = rows.map((r) => r.id);
+  const careRows =
+    exerciseIds.length > 0
+      ? await sql<(CareRow & { exercise_id: string })[]>`
+          select ca.exercise_id::text, ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
+          from cares ca
+          join users u on u.id = ca.author_id
+          where ca.exercise_id = any(${exerciseIds}::uuid[])
+          order by ca.created_at asc
+        `
+      : [];
+  const caresByExercise = new Map<string, CareRow[]>();
+  for (const cr of careRows) {
+    const list = caresByExercise.get(cr.exercise_id) ?? [];
+    list.push(cr);
+    caresByExercise.set(cr.exercise_id, list);
+  }
+  return {
+    items: rows.map((r) => toListItem(r, caresByExercise.get(r.id) ?? [], authenticated)),
+    total,
+    page,
+    perPage,
+  };
 }
 
 export async function getExercise(id: string, authenticated: boolean): Promise<Exercise | null> {
@@ -229,17 +274,26 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
   const row = rows[0];
   if (!row) return null;
 
-  const commentRows = authenticated
-    ? await sql<CommentRow[]>`
-        select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, c.body, c.created_at::text
-        from comments c
-        join users u on u.id = c.author_id
-        where c.exercise_id = ${id}
-        order by c.created_at asc
-      `
-    : [];
+  const [commentRows, careRows] = await Promise.all([
+    authenticated
+      ? sql<CommentRow[]>`
+          select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, c.body, c.created_at::text
+          from comments c
+          join users u on u.id = c.author_id
+          where c.exercise_id = ${id}
+          order by c.created_at asc
+        `
+      : [],
+    sql<CareRow[]>`
+      select ca.author_id::text, u.username, u.avatar_initials, u.avatar_color, ca.emoji
+      from cares ca
+      join users u on u.id = ca.author_id
+      where ca.exercise_id = ${id}
+      order by ca.created_at asc
+    `,
+  ]);
 
-  return toExercise(row, commentRows.map(toComment), authenticated);
+  return toExercise(row, careRows, commentRows.map(toComment), authenticated);
 }
 
 export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { addCare, addComment, deleteExercise, getExercise, removeCare } from '../api';
 import { LeafletMap } from '../components/charts/LeafletMap';
 import { RichViewer } from '../components/editor/RichViewer';
+import { CareAvatars, EmojiPicker } from '../components/exercise/CareUI';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -11,7 +12,7 @@ import { SportBadge } from '../components/ui/SportBadge';
 import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
 import { useStore } from '../store';
-import type { Comment } from '../types';
+import type { Care, Comment } from '../types';
 import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../utils/format';
 
 export function ExercisePage() {
@@ -27,7 +28,10 @@ export function ExercisePage() {
   });
 
   const [commentText, setCommentText] = useState('');
-  const [liked, setLiked] = useState(false);
+  const [localCares, setLocalCares] = useState<Care[]>([]);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
+  const myUsername = currentUser?.username;
 
   const commentMut = useMutation({
     mutationFn: () => addComment(id, commentText),
@@ -43,9 +47,13 @@ export function ExercisePage() {
   });
 
   const careMut = useMutation({
-    mutationFn: () => (liked ? removeCare(id) : addCare(id)),
-    onMutate: () => setLiked((v) => !v),
-    onError: () => setLiked((v) => !v),
+    mutationFn: (emoji: string | null) => (emoji === null ? removeCare(id) : addCare(id, emoji)),
+    onSuccess: (data) => {
+      setLocalCares(data.cares);
+      setPickerOpen(false);
+      qc.invalidateQueries({ queryKey: ['exercise', id] });
+      qc.invalidateQueries({ queryKey: ['exercises'] });
+    },
   });
 
   if (isLoading)
@@ -70,7 +78,10 @@ export function ExercisePage() {
       ? fmtPace(pace)
       : '—';
   const paceUnit = showSpeed ? t.kmh : t.minkm;
-  const cares = ex.careCount + (liked ? 1 : 0);
+  const myCare = localCares.find((c) => c.authorUsername === myUsername);
+  const caresAll = localCares.length > 0 ? localCares : ex.cares;
+  const liked = Boolean(caresAll.find((c) => c.authorUsername === myUsername));
+  const careCount = caresAll.length;
   const isOwner = currentUser?.username === ex.ownerUsername;
 
   return (
@@ -157,15 +168,37 @@ export function ExercisePage() {
           )}
           {ex.avgHr && <StatPill icon="heart" label={t.avgHr} value={ex.avgHr} unit={t.bpm} />}
           {ex.climbM && <StatPill icon="arrowUp" label={t.climb} value={ex.climbM} unit="m" />}
-          <div style={{ marginLeft: 'auto', display: 'flex', gap: 10 }}>
-            <button
-              type="button"
-              className={`ot-act${liked ? ' liked' : ''}`}
-              onClick={() => careMut.mutate()}
-            >
-              <Icon name={liked ? 'heart-f' : 'heart'} size={18} />
-              <span>{cares}</span>
-            </button>
+          <div
+            style={{
+              marginLeft: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 12,
+              alignItems: 'flex-end',
+            }}
+          >
+            <div className="ot-care-btn-wrap">
+              <button
+                type="button"
+                className={`ot-act ot-act-lg${liked ? ' liked' : ''}`}
+                onClick={() => {
+                  if (liked) careMut.mutate(null);
+                  else setPickerOpen((v) => !v);
+                }}
+                aria-pressed={liked}
+                aria-label={liked ? `Poista kehusi (${myCare?.emoji})` : 'Kehui'}
+              >
+                <span className="ot-act-emoji ot-act-emoji-lg">{myCare?.emoji ?? '❤️'}</span>
+                <span>{careCount}</span>
+              </button>
+              {pickerOpen && (
+                <EmojiPicker
+                  onPick={(emoji) => careMut.mutate(emoji)}
+                  onClose={() => setPickerOpen(false)}
+                />
+              )}
+            </div>
+            <CareAvatars cares={caresAll} size={42} />
           </div>
         </Card>
 

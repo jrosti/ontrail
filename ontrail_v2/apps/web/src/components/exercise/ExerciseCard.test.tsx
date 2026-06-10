@@ -5,8 +5,23 @@ import type React from 'react';
 import { useStore } from '../../store';
 import type { ExerciseListItem } from '../../types';
 
-const addCare = mock(async () => ({ ok: true }));
-const removeCare = mock(async () => ({ ok: true }));
+const addCare = mock(async (_id: string, _emoji?: string) => ({
+  careCount: 4,
+  cared: true,
+  cares: [
+    { authorId: 'u1', authorUsername: 'a', avatarInitials: 'A', avatarColor: 'red', emoji: '❤️' },
+    { authorId: 'u2', authorUsername: 'b', avatarInitials: 'B', avatarColor: 'blue', emoji: '🔥' },
+    { authorId: 'u3', authorUsername: 'c', avatarInitials: 'C', avatarColor: 'green', emoji: '💪' },
+    {
+      authorId: 'u4',
+      authorUsername: 'me',
+      avatarInitials: 'ME',
+      avatarColor: 'purple',
+      emoji: '❤️',
+    },
+  ],
+}));
+const removeCare = mock(async (_id: string) => ({ careCount: 3, cared: false, cares: [] }));
 
 mock.module('@tanstack/react-router', () => ({
   Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLAnchorElement>) => (
@@ -43,6 +58,11 @@ const exercise: ExerciseListItem = {
   distanceM: 5000,
   commentCount: 2,
   careCount: 3,
+  cares: [
+    { authorId: 'u1', authorUsername: 'a', avatarInitials: 'A', avatarColor: 'red', emoji: '❤️' },
+    { authorId: 'u2', authorUsername: 'b', avatarInitials: 'B', avatarColor: 'blue', emoji: '🔥' },
+    { authorId: 'u3', authorUsername: 'c', avatarInitials: 'C', avatarColor: 'green', emoji: '💪' },
+  ],
 };
 
 function renderWithProviders(ui: React.ReactNode) {
@@ -84,14 +104,22 @@ describe('ExerciseCard', () => {
     expect(screen.queryByText('#polku')).toBeNull();
   });
 
-  test('optimistically toggles care state', async () => {
+  test('adds care via emoji picker and updates count', async () => {
     renderWithProviders(<ExerciseCard exercise={exercise} />);
 
     const careButton = document.querySelector('button.ot-act');
     expect(careButton).toBeTruthy();
 
+    // Click opens picker (not yet cared)
     fireEvent.click(careButton as HTMLButtonElement);
 
+    // Pick the first default emoji
+    const emojiBtn = document.querySelector('button.ot-emoji-btn');
+    expect(emojiBtn).toBeTruthy();
+    fireEvent.click(emojiBtn as HTMLButtonElement);
+
+    // After mutation resolves, count becomes 4
+    await new Promise((r) => setTimeout(r, 0));
     expect(screen.getByText('4')).toBeTruthy();
   });
 

@@ -78,10 +78,17 @@ export const deleteComment = (exerciseId: string, commentId: string) =>
   client.delete(`/exercises/${exerciseId}/comments/${commentId}`);
 
 // Cares/kudos
-export const addCare = (exerciseId: string) =>
-  client.post(`/exercises/${exerciseId}/cares`).then((r) => r.data);
+export type CareResponse = {
+  careCount: number;
+  cared: boolean;
+  cares: import('./types').Care[];
+};
 
-export const removeCare = (exerciseId: string) => client.delete(`/exercises/${exerciseId}/cares`);
+export const addCare = (exerciseId: string, emoji = '❤️') =>
+  client.post<CareResponse>(`/exercises/${exerciseId}/cares`, { emoji }).then((r) => r.data);
+
+export const removeCare = (exerciseId: string) =>
+  client.delete<CareResponse>(`/exercises/${exerciseId}/cares`).then((r) => r.data);
 
 // Sports
 export const listSports = () =>

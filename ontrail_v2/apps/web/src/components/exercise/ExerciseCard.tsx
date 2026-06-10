@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import type React from 'react';
 import { useState } from 'react';
 import { addCare, removeCare } from '../../api';
 import { I18N } from '../../i18n';
 import { SPORTS } from '../../sports';
 import { useStore } from '../../store';
-import type { ExerciseListItem } from '../../types';
+import type { Care, ExerciseListItem } from '../../types';
 import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../../utils/format';
 import { downsample } from '../../utils/gpx';
 import { LeafletMap } from '../charts/LeafletMap';
@@ -14,6 +15,7 @@ import { Card } from '../ui/Card';
 import { Icon } from '../ui/Icon';
 import { Metric } from '../ui/Metric';
 import { SportBadge } from '../ui/SportBadge';
+import { CareAvatars, EmojiPicker } from './CareUI';
 
 interface ExerciseCardProps {
   exercise: ExerciseListItem;
@@ -22,22 +24,45 @@ interface ExerciseCardProps {
 }
 
 export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: ExerciseCardProps) {
-  const { lang } = useStore();
+  const { lang, currentUser } = useStore();
   const t = I18N[lang];
   const compact = layout === 'compact';
   const sport = SPORTS[ex.sport];
   const color = sport?.color ?? 'var(--accent)';
   const qc = useQueryClient();
 
-  const [liked, setLiked] = useState(false);
-  const cares = ex.careCount + (liked ? 1 : 0);
+  const myUsername = currentUser?.username;
+  const [localCares, setLocalCares] = useState<Care[]>(ex.cares);
+  const myCare = localCares.find((c) => c.authorUsername === myUsername);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const careMut = useMutation({
-    mutationFn: () => (liked ? removeCare(ex.id) : addCare(ex.id)),
-    onMutate: () => setLiked((v) => !v),
-    onError: () => setLiked((v) => !v),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['exercises'] }),
+    mutationFn: (emoji: string | null) =>
+      emoji === null ? removeCare(ex.id) : addCare(ex.id, emoji),
+    onSuccess: (data) => {
+      setLocalCares(data.cares);
+      setPickerOpen(false);
+      qc.invalidateQueries({ queryKey: ['exercises'] });
+      qc.invalidateQueries({ queryKey: ['exercise', ex.id] });
+    },
   });
+
+  const handleCareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (myCare) {
+      careMut.mutate(null);
+    } else {
+      setPickerOpen((v) => !v);
+    }
+  };
+
+  const handleEmojiPick = (emoji: string) => {
+    careMut.mutate(emoji);
+  };
+
+  const careCount = localCares.length;
+  const liked = Boolean(myCare);
 
   const km = ex.distanceM ? ex.distanceM / 1000 : 0;
   const pace = ex.distanceM ? calcPace(ex.durationSec, ex.distanceM) : 0;
@@ -63,20 +88,30 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
     </div>
   );
 
+  const caresRow = (
+    <div className="ot-cares-row">
+      <div className="ot-care-btn-wrap">
+        <button
+          type="button"
+          className={`ot-act${liked ? ' liked' : ''}`}
+          onClick={handleCareClick}
+          aria-pressed={liked}
+          aria-label={liked ? `Poista kehusi (${myCare?.emoji})` : 'Kehui'}
+        >
+          <span className="ot-act-emoji">{myCare?.emoji ?? '❤️'}</span>
+          <span>{careCount}</span>
+        </button>
+        {pickerOpen && (
+          <EmojiPicker onPick={handleEmojiPick} onClose={() => setPickerOpen(false)} />
+        )}
+      </div>
+      <CareAvatars cares={localCares} />
+    </div>
+  );
+
   const actions = (
     <div className="ot-actions" style={{ gap: compact ? 14 : 22 }}>
-      <button
-        type="button"
-        className={`ot-act${liked ? ' liked' : ''}`}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          careMut.mutate();
-        }}
-      >
-        <Icon name={liked ? 'heart-f' : 'heart'} size={18} />
-        <span>{cares}</span>
-      </button>
+      {caresRow}
       <Link
         to="/exercise/$id"
         params={{ id: ex.id }}
