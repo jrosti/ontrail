@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import type React from 'react';
 import { useRef, useState } from 'react';
-import { listExercises, listGroups, listSports } from '../api';
+import { listExercises, listGroups, listSports, listUsers } from '../api';
 import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
@@ -324,6 +324,26 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const [dateTo, setDateTo] = useState(search.dateTo ?? '');
   const [sortBy, setSortBy] = useState<FeedSearch['sortBy']>(search.sortBy ?? 'date');
   const [sortDir, setSortDir] = useState<FeedSearch['sortDir']>(search.sortDir ?? 'desc');
+  const [userInput, setUserInput] = useState(search.user ?? '');
+  const [userSuggestOpen, setUserSuggestOpen] = useState(false);
+
+  const { data: userResults } = useQuery({
+    queryKey: ['users', 'suggest', userInput],
+    queryFn: () => listUsers(userInput, 1, 8).then((r) => r.items.map((u) => u.username)),
+    enabled: userInput.length > 0,
+    staleTime: 10_000,
+  });
+
+  const handleUserInput = (v: string) => {
+    setUserInput(v);
+    setUserSuggestOpen(true);
+  };
+
+  const pickUser = (username: string) => {
+    setUserInput(username);
+    setUserSuggestOpen(false);
+    nav({ to: '/feed', search: { ...search, user: username || undefined } });
+  };
 
   const toggleSport = (key: string) =>
     setSelectedSports((prev) =>
@@ -333,6 +353,7 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const apply = () => {
     const updates: Partial<FeedSearch> = {
       sports: selectedSports.length > 0 ? selectedSports : undefined,
+      user: userInput.trim() || undefined,
       minDistM: distMin ? parseDistance(`${distMin}km`) || undefined : undefined,
       maxDistM: distMax ? parseDistance(`${distMax}km`) || undefined : undefined,
       minDurSec: durMin ? parseDuration(`${durMin}min`) || undefined : undefined,
@@ -401,6 +422,47 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
           gap: 18,
         }}
       >
+        {/* User filter */}
+        <div style={{ position: 'relative' }}>
+          <label htmlFor="filter-user" style={labelStyle}>
+            {lang === 'fi' ? 'Käyttäjä' : 'User'}
+          </label>
+          <input
+            id="filter-user"
+            className="ot-input"
+            value={userInput}
+            onChange={(e) => handleUserInput(e.target.value)}
+            onFocus={() => {
+              if (userInput) setUserSuggestOpen(true);
+            }}
+            onBlur={() => setTimeout(() => setUserSuggestOpen(false), 150)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && (userResults?.length ?? 0) > 0)
+                pickUser(userResults?.[0] ?? '');
+              if (e.key === 'Escape') setUserSuggestOpen(false);
+            }}
+            placeholder={lang === 'fi' ? 'käyttäjätunnus' : 'username'}
+            autoComplete="off"
+          />
+          {userSuggestOpen && (userResults?.length ?? 0) > 0 && (
+            <div className="ot-tag-suggest">
+              {(userResults ?? []).map((u) => (
+                <button
+                  key={u}
+                  type="button"
+                  className="ot-tag-suggest-item"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    pickUser(u);
+                  }}
+                >
+                  @{u}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Group filter */}
         {(groups?.length ?? 0) > 0 && (
           <div>
