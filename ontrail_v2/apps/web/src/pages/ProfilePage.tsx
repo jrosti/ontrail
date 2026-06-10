@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { exportCSV, exportData, updateProfile } from '../api';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
-import { HANKO_URL, registerHankoElements } from '../hankoClient';
+import { registerHankoElements } from '../hankoClient';
 import { I18N } from '../i18n';
 import { useStore } from '../store';
 import { exportXlsx } from '../utils/exportXlsx';
@@ -255,16 +255,6 @@ export function ProfilePage() {
           {lang === 'fi' ? 'Kirjautumisasetukset' : 'Sign-in settings'}
         </h3>
         <hanko-profile style={{ width: '100%' }} lang={lang} />
-        <p
-          style={{
-            fontSize: 11,
-            color: 'var(--text-faint)',
-            textAlign: 'center',
-            margin: '18px 0 0',
-          }}
-        >
-          {lang === 'fi' ? `Hanko-profiili: ${HANKO_URL}` : `Hanko profile: ${HANKO_URL}`}
-        </p>
       </Card>
     </main>
   );
