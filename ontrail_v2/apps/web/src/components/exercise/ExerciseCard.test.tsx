@@ -33,11 +33,7 @@ const exercise: ExerciseListItem = {
 function renderWithProviders(ui: React.ReactNode) {
   const client = new QueryClient();
 
-  return render(
-    <QueryClientProvider client={client}>
-      {ui}
-    </QueryClientProvider>,
-  );
+  return render(<QueryClientProvider client={client}>{ui}</QueryClientProvider>);
 }
 
 describe('ExerciseCard', () => {
@@ -51,7 +47,7 @@ describe('ExerciseCard', () => {
     expect(screen.getByText('Aamulenkki')).toBeTruthy();
     expect(screen.getByText('Test User')).toBeTruthy();
     expect(screen.getByText('Juoksu')).toBeTruthy();
-    expect(screen.getByText('5,00')).toBeTruthy();
+    expect(screen.getByText('5,0')).toBeTruthy();
     expect(screen.getByText('30 min')).toBeTruthy();
     expect(screen.getByText('#polku')).toBeTruthy();
     expect(screen.getByText('#kevyt')).toBeTruthy();

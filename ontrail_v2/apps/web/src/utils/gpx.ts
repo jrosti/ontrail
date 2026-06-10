@@ -20,9 +20,7 @@ function haversineM(a: GpxPoint, b: GpxPoint): number {
   const dLon = ((b.lon - a.lon) * Math.PI) / 180;
   const s =
     Math.sin(dLat / 2) ** 2 +
-    Math.cos((a.lat * Math.PI) / 180) *
-      Math.cos((b.lat * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
+    Math.cos((a.lat * Math.PI) / 180) * Math.cos((b.lat * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
 }
 
@@ -32,18 +30,17 @@ export function parseGpx(xmlText: string): GpxResult {
   const parseError = doc.querySelector('parsererror');
   if (parseError) throw new Error('Invalid GPX file');
 
-  const name =
-    doc.querySelector('name')?.textContent?.trim() ?? undefined;
+  const name = doc.querySelector('name')?.textContent?.trim() ?? undefined;
 
   // collect all trackpoints (trkpt), route points (rtept), or waypoints (wpt)
-  const nodes = Array.from(
-    doc.querySelectorAll('trkpt, rtept, wpt')
-  );
+  const nodes = Array.from(doc.querySelectorAll('trkpt, rtept, wpt'));
 
   const points: GpxPoint[] = nodes.map((n) => ({
     lat: parseFloat(n.getAttribute('lat') ?? '0'),
     lon: parseFloat(n.getAttribute('lon') ?? '0'),
-    ele: n.querySelector('ele') ? parseFloat(n.querySelector('ele')!.textContent ?? '0') : undefined,
+    ele: n.querySelector('ele')
+      ? parseFloat(n.querySelector('ele')?.textContent ?? '0')
+      : undefined,
     time: n.querySelector('time')?.textContent ?? undefined,
   }));
 
@@ -60,9 +57,8 @@ export function parseGpx(xmlText: string): GpxResult {
   if (points.length >= 2 && points[0].time && points[points.length - 1].time) {
     startTime = points[0].time;
     durationSec = Math.round(
-      (new Date(points[points.length - 1].time!).getTime() -
-        new Date(points[0].time).getTime()) /
-        1000
+      (new Date(points[points.length - 1].time ?? '').getTime() - new Date(points[0].time).getTime()) /
+        1000,
     );
   }
 

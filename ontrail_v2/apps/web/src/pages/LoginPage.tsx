@@ -42,27 +42,34 @@ export function LoginPage() {
 
   return (
     <div style={{ maxWidth: 440, margin: '60px auto', padding: '0 16px' }}>
-      <Card style={{ display: 'flex', flexDirection: 'column', gap: 24, alignItems: 'center', padding: '32px 28px' }}>
+      <Card
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+          alignItems: 'center',
+          padding: '32px 28px',
+        }}
+      >
         <Logo size={44} withText />
         <div style={{ textAlign: 'center' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22, margin: 0 }}>
+          <h2
+            style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22, margin: 0 }}
+          >
             {lang === 'fi' ? 'Tervetuloa OnTrailiin' : 'Welcome to OnTrail'}
           </h2>
           <p style={{ color: 'var(--text-faint)', fontSize: 14, marginTop: 6, marginBottom: 0 }}>
-            {lang === 'fi' ? 'Kirjaudu passkey- tai sähköpostitodentamisella' : 'Sign in with passkey or email'}
+            {lang === 'fi'
+              ? 'Kirjaudu passkey- tai sähköpostitodentamisella'
+              : 'Sign in with passkey or email'}
           </p>
         </div>
 
         {/* Hanko auth web component — rendered after register() resolves */}
-        <hanko-auth
-          style={{ width: '100%' }}
-          lang={lang}
-        />
+        <hanko-auth style={{ width: '100%' }} lang={lang} />
 
         <p style={{ fontSize: 11, color: 'var(--text-faint)', textAlign: 'center', margin: 0 }}>
-          {lang === 'fi'
-            ? `Kirjautuminen: ${HANKO_URL}`
-            : `Auth endpoint: ${HANKO_URL}`}
+          {lang === 'fi' ? `Kirjautuminen: ${HANKO_URL}` : `Auth endpoint: ${HANKO_URL}`}
         </p>
       </Card>
     </div>

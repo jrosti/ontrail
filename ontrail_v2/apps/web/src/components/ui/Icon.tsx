@@ -5,18 +5,24 @@ const PATHS: Record<string, string> = {
   search: 'M11 11m-6 0a6 6 0 1 0 12 0a6 6 0 1 0-12 0M20 20l-4.5-4.5',
   bell: 'M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6M10 21h4',
   comment: 'M4 5h16v11H9l-4 3v-3H4z',
-  heart: 'M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.7 6 4.7c2 0 3.2 1.4 4 2.6.8-1.2 2-2.6 4-2.6 3.4 0 4.7 3.3 3.2 6.3C19 15.4 12 20 12 20z',
+  heart:
+    'M12 20s-7-4.6-9.2-9C1.3 8 2.6 4.7 6 4.7c2 0 3.2 1.4 4 2.6.8-1.2 2-2.6 4-2.6 3.4 0 4.7 3.3 3.2 6.3C19 15.4 12 20 12 20z',
   forward: 'M14 4l7 7-7 7M21 11H6a3 3 0 0 0-3 3v3',
   chevron: 'M9 6l6 6-6 6',
   chevronDown: 'M6 9l6 6 6-6',
   plus: 'M12 5v14M5 12h14',
-  location: 'M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10zM12 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
+  location:
+    'M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10zM12 11m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0',
   clock: 'M12 12l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18',
   bolt: 'M13 3L5 13h6l-1 8 8-10h-6z',
-  trophy: 'M7 4h10v3a5 5 0 0 1-10 0zM7 5H4v1a3 3 0 0 0 3 3M17 5h3v1a3 3 0 0 1-3 3M9 14h6M10 14v4M14 14v4M8 20h8',
-  settings: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6M12 2l1.6 2.2 2.6-.7.4 2.7 2.4 1.2-1.2 2.4 1.2 2.4-2.4 1.2-.4 2.7-2.6-.7L12 22l-1.6-2.2-2.6.7-.4-2.7L5 16.3l1.2-2.4L5 11.5l2.4-1.2.4-2.7 2.6.7z',
-  flame: 'M12 22c4 0 6-2.6 6-6 0-3-2-5-3-7-.5 2-2 2.5-2 1 0-2-1-4-3-6 0 3-2 4-3 6.5-.6 1.5-1 2.7-1 5.5 0 3.4 2 6 6 6z',
-  route: 'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 17h6a3 3 0 0 0 3-3V9',
+  trophy:
+    'M7 4h10v3a5 5 0 0 1-10 0zM7 5H4v1a3 3 0 0 0 3 3M17 5h3v1a3 3 0 0 1-3 3M9 14h6M10 14v4M14 14v4M8 20h8',
+  settings:
+    'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6M12 2l1.6 2.2 2.6-.7.4 2.7 2.4 1.2-1.2 2.4 1.2 2.4-2.4 1.2-.4 2.7-2.6-.7L12 22l-1.6-2.2-2.6.7-.4-2.7L5 16.3l1.2-2.4L5 11.5l2.4-1.2.4-2.7 2.6.7z',
+  flame:
+    'M12 22c4 0 6-2.6 6-6 0-3-2-5-3-7-.5 2-2 2.5-2 1 0-2-1-4-3-6 0 3-2 4-3 6.5-.6 1.5-1 2.7-1 5.5 0 3.4 2 6 6 6z',
+  route:
+    'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 17h6a3 3 0 0 0 3-3V9',
   arrowUp: 'M12 19V5M6 11l6-6 6 6',
   play: 'M7 5l12 7-12 7z',
   pause: 'M8 5v14M16 5v14',
@@ -47,10 +53,14 @@ export function Icon({ name, size = 20, stroke = 2, fill = false, style, classNa
   const key = name === 'heart-f' ? 'heart' : name;
   return (
     <svg
-      width={size} height={size} viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
       fill={filled ? 'currentColor' : 'none'}
       stroke={filled ? 'none' : 'currentColor'}
-      strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round"
+      strokeWidth={stroke}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       style={{ display: 'block', flexShrink: 0, ...style }}
       className={className}
     >

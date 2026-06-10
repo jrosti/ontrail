@@ -57,32 +57,41 @@ export const hankoFi: Translation = {
     ...en.texts,
     enterPasscode: 'Syötä sähköpostiisi lähetetty kertakäyttökoodi.',
     enterPasscodeNoEmail: 'Syötä ensisijaiseen sähköpostiisi lähetetty kertakäyttökoodi.',
-    setupPasskey: 'Kirjaudu tilillesi helposti ja turvallisesti passkeylla. Biometriset tiedot säilyvät vain omilla laitteillasi.',
+    setupPasskey:
+      'Kirjaudu tilillesi helposti ja turvallisesti passkeylla. Biometriset tiedot säilyvät vain omilla laitteillasi.',
     createAccount: 'Osoitteelle "{emailAddress}" ei löydy tiliä. Haluatko luoda uuden tilin?',
     noAccountExists: 'Osoitteelle "{emailAddress}" ei löydy tiliä.',
     otpEnterVerificationCode: 'Syötä tunnistussovelluksen näyttämä kertakäyttökoodi alle:',
     otpLogin: 'Avaa tunnistussovellus ja syötä kertakäyttökoodi alle.',
-    otpScanQRCode: 'Skannaa QR-koodi tunnistussovelluksella tai syötä salainen avain sovellukseen käsin.',
+    otpScanQRCode:
+      'Skannaa QR-koodi tunnistussovelluksella tai syötä salainen avain sovellukseen käsin.',
     otpSecretKey: 'OTP-salainen avain',
     passwordFormatHint: 'Pituuden täytyy olla {minLength}–{maxLength} merkkiä.',
-    securityKeyLogin: 'Yhdistä tai aktivoi turva-avain ja jatka kirjautumista seuraamalla selaimen ohjeita.',
-    trustDevice: 'Kun luotat tähän selaimeen, et tarvitse tunnistussovelluksen koodia tai turva-avainta seuraavalla kirjautumiskerralla.',
+    securityKeyLogin:
+      'Yhdistä tai aktivoi turva-avain ja jatka kirjautumista seuraamalla selaimen ohjeita.',
+    trustDevice:
+      'Kun luotat tähän selaimeen, et tarvitse tunnistussovelluksen koodia tai turva-avainta seuraavalla kirjautumiskerralla.',
     isPrimaryEmail: 'Tätä sähköpostiosoitetta käytetään tarvittaessa yhteydenottoihin.',
-    securityKeySetUp: 'Käytä erillistä turva-avainta USB:n, Bluetoothin tai NFC:n kautta tai matkapuhelintasi.',
+    securityKeySetUp:
+      'Käytä erillistä turva-avainta USB:n, Bluetoothin tai NFC:n kautta tai matkapuhelintasi.',
     setPrimaryEmail: 'Aseta tämä sähköpostiosoite ensisijaiseksi yhteydenottoja varten.',
     emailVerified: 'Tämä sähköpostiosoite on vahvistettu.',
     emailUnverified: 'Tätä sähköpostiosoitetta ei ole vahvistettu.',
     emailDelete: 'Jos poistat tämän sähköpostiosoitteen, sitä ei voi enää käyttää kirjautumiseen.',
     renamePasskey: 'Anna passkeylle nimi.',
     deletePasskey: 'Poista tämä passkey tililtasi.',
-    deleteAccount: 'Haluatko varmasti poistaa tämän tilin? Kaikki tiedot poistetaan heti eikä niitä voi palauttaa.',
+    deleteAccount:
+      'Haluatko varmasti poistaa tämän tilin? Kaikki tiedot poistetaan heti eikä niitä voi palauttaa.',
     selectLoginMethodForFutureLogins: 'Valitse kirjautumistapa tulevia kirjautumisia varten.',
     howDoYouWantToLogin: 'Miten haluat kirjautua?',
-    mfaSetUp: 'Suojaa tilisi kaksivaiheisella tunnistuksella. Se lisää kirjautumiseen ylimääräisen varmistusvaiheen.',
+    mfaSetUp:
+      'Suojaa tilisi kaksivaiheisella tunnistuksella. Se lisää kirjautumiseen ylimääräisen varmistusvaiheen.',
     renameSecurityKey: 'Anna turva-avaimelle nimi.',
     deleteSecurityKey: 'Poista tämä turva-avain tililtasi.',
-    authenticatorAppAlreadySetUp: 'Tilisi on suojattu tunnistussovelluksella, joka luo vaihtuvia kertakäyttökoodeja.',
-    authenticatorAppNotSetUp: 'Suojaa tilisi tunnistussovelluksella, joka luo vaihtuvia kertakäyttökoodeja.',
+    authenticatorAppAlreadySetUp:
+      'Tilisi on suojattu tunnistussovelluksella, joka luo vaihtuvia kertakäyttökoodeja.',
+    authenticatorAppNotSetUp:
+      'Suojaa tilisi tunnistussovelluksella, joka luo vaihtuvia kertakäyttökoodeja.',
   },
   labels: {
     ...en.labels,
@@ -153,19 +162,25 @@ export const hankoFi: Translation = {
     requestTimeout: 'Pyyntö aikakatkaistiin.',
     invalidPassword: 'Väärä sähköposti tai salasana.',
     invalidPasscode: 'Annettu kertakäyttökoodi ei ollut oikein.',
-    passcodeAttemptsReached: 'Kertakäyttökoodi syötettiin väärin liian monta kertaa. Pyydä uusi koodi.',
+    passcodeAttemptsReached:
+      'Kertakäyttökoodi syötettiin väärin liian monta kertaa. Pyydä uusi koodi.',
     tooManyRequests: 'Liian monta pyyntöä. Odota hetki ennen uutta yritystä.',
     unauthorized: 'Istuntosi on vanhentunut. Kirjaudu uudelleen.',
     invalidWebauthnCredential: 'Tätä passkeyta ei voi enää käyttää.',
     passcodeExpired: 'Kertakäyttökoodi on vanhentunut. Pyydä uusi.',
-    userVerification: 'Käyttäjän vahvistus vaaditaan. Varmista, että laitteessa on PIN tai biometrinen tunnistus.',
+    userVerification:
+      'Käyttäjän vahvistus vaaditaan. Varmista, että laitteessa on PIN tai biometrinen tunnistus.',
     emailAddressAlreadyExistsError: 'Sähköpostiosoite on jo käytössä.',
     maxNumOfEmailAddressesReached: 'Uusia sähköpostiosoitteita ei voi enää lisätä.',
-    thirdPartyAccessDenied: 'Pääsy evätty. Käyttäjä peruui pyynnön tai palveluntarjoaja esti pääsyn.',
-    thirdPartyMultipleAccounts: 'Tiliä ei voi tunnistaa. Sähköpostiosoite on käytössä usealla tilillä.',
-    thirdPartyUnverifiedEmail: 'Sähköpostin vahvistus vaaditaan. Vahvista sähköposti palveluntarjoajalla.',
+    thirdPartyAccessDenied:
+      'Pääsy evätty. Käyttäjä peruui pyynnön tai palveluntarjoaja esti pääsyn.',
+    thirdPartyMultipleAccounts:
+      'Tiliä ei voi tunnistaa. Sähköpostiosoite on käytössä usealla tilillä.',
+    thirdPartyUnverifiedEmail:
+      'Sähköpostin vahvistus vaaditaan. Vahvista sähköposti palveluntarjoajalla.',
     signupDisabled: 'Tilien rekisteröinti on poistettu käytöstä.',
-    handlerNotFoundError: 'Nykyistä vaihetta ei tueta tämän sovellusversion kanssa. Yritä myöhemmin uudelleen.',
+    handlerNotFoundError:
+      'Nykyistä vaihetta ei tueta tämän sovellusversion kanssa. Yritä myöhemmin uudelleen.',
   },
   flowErrors: {
     ...en.flowErrors,
@@ -174,7 +189,8 @@ export const hankoFi: Translation = {
     value_invalid_error: 'Syötetty arvo on virheellinen.',
     passcode_invalid: 'Annettu kertakäyttökoodi ei ollut oikein.',
     passkey_invalid: 'Tätä passkeyta ei voi enää käyttää.',
-    passcode_max_attempts_reached: 'Kertakäyttökoodi syötettiin väärin liian monta kertaa. Pyydä uusi koodi.',
+    passcode_max_attempts_reached:
+      'Kertakäyttökoodi syötettiin väärin liian monta kertaa. Pyydä uusi koodi.',
     rate_limit_exceeded: 'Liian monta pyyntöä. Odota hetki ennen uutta yritystä.',
     unknown_username_error: 'Käyttäjätunnusta ei tunneta.',
     unknown_email_error: 'Sähköpostiosoitetta ei tunneta.',
@@ -183,15 +199,20 @@ export const hankoFi: Translation = {
     email_already_exists: 'Sähköposti on jo käytössä.',
     not_found: 'Pyydettyä kohdetta ei löytynyt.',
     operation_not_permitted_error: 'Toiminto ei ole sallittu.',
-    flow_discontinuity_error: 'Prosessia ei voi jatkaa käyttäjä-asetusten tai palvelun asetusten vuoksi.',
+    flow_discontinuity_error:
+      'Prosessia ei voi jatkaa käyttäjä-asetusten tai palvelun asetusten vuoksi.',
     form_data_invalid_error: 'Lähetetyissä lomaketiedoissa on virheitä.',
     unauthorized: 'Istuntosi on vanhentunut. Kirjaudu uudelleen.',
     value_missing_error: 'Arvo puuttuu.',
     value_too_long_error: 'Arvo on liian pitkä.',
     value_too_short_error: 'Arvo on liian lyhyt.',
-    webauthn_credential_invalid_mfa_only: 'Tätä tunnistetta voi käyttää vain toisena tunnistusvaiheena.',
-    webauthn_credential_already_exists: 'Pyyntö aikakatkaistiin, peruutettiin tai laite on jo rekisteröity. Yritä uudelleen tai käytä toista laitetta.',
-    platform_authenticator_required: 'Tilisi vaatii laitteen oman tunnistimen, mutta nykyinen laite tai selain ei tue sitä.',
-    third_party_access_denied: 'Pääsy evätty. Käyttäjä peruui pyynnön tai palveluntarjoaja esti pääsyn.',
+    webauthn_credential_invalid_mfa_only:
+      'Tätä tunnistetta voi käyttää vain toisena tunnistusvaiheena.',
+    webauthn_credential_already_exists:
+      'Pyyntö aikakatkaistiin, peruutettiin tai laite on jo rekisteröity. Yritä uudelleen tai käytä toista laitetta.',
+    platform_authenticator_required:
+      'Tilisi vaatii laitteen oman tunnistimen, mutta nykyinen laite tai selain ei tue sitä.',
+    third_party_access_denied:
+      'Pääsy evätty. Käyttäjä peruui pyynnön tai palveluntarjoaja esti pääsyn.',
   },
 };

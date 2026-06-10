@@ -19,7 +19,18 @@ interface AppState {
   logout: () => void;
 }
 
-const DEFAULT_FAVORITE_SPORTS = ['run', 'bike', 'ski', 'walk', 'orient', 'gym', 'mtb', 'swim', 'floor', 'soutu'];
+const DEFAULT_FAVORITE_SPORTS = [
+  'run',
+  'bike',
+  'ski',
+  'walk',
+  'orient',
+  'gym',
+  'mtb',
+  'swim',
+  'floor',
+  'soutu',
+];
 
 export const useStore = create<AppState>()(
   persist(
@@ -33,11 +44,12 @@ export const useStore = create<AppState>()(
       setLang: (lang) => set({ lang }),
       setCurrentUser: (user) => set({ currentUser: user }),
       setToken: (token) => set({ token }),
-      rememberSport: (sport) => set((s) => ({
-        favoriteSports: [sport, ...s.favoriteSports.filter((key) => key !== sport)].slice(0, 10),
-      })),
+      rememberSport: (sport) =>
+        set((s) => ({
+          favoriteSports: [sport, ...s.favoriteSports.filter((key) => key !== sport)].slice(0, 10),
+        })),
       logout: () => set({ currentUser: null, token: null }),
     }),
-    { name: 'ontrail-app' }
-  )
+    { name: 'ontrail-app' },
+  ),
 );

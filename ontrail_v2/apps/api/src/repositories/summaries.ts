@@ -330,11 +330,19 @@ export async function getPersonalRecords(username: string): Promise<PersonalReco
 export async function getLeaderboard(
   period: 'month' | 'year',
   limit = 50,
+  sport?: string,
 ): Promise<LeaderboardEntry[]> {
-  const view = period === 'month' ? sql`v_leaderboard_month` : sql`v_leaderboard_year`;
+  const dateFilter =
+    period === 'month'
+      ? sql`e.exercise_date >= date_trunc('month', current_date)`
+      : sql`extract(year from e.exercise_date) = extract(year from current_date)`;
+  const sportFilter = sport
+    ? sql`and e.sport_key = ${sport}`
+    : sql`and e.sport_key not in (select sport_key from excluded_sports)`;
+
   const rows = await sql<
     {
-      rank: string;
+      rank: bigint;
       user_id: string;
       username: string;
       display_name: string;
@@ -345,10 +353,22 @@ export async function getLeaderboard(
       total_distance_m: string;
     }[]
   >`
-    select rank, user_id::text, username, display_name, avatar_initials, avatar_color,
-           session_count, total_duration_sec, total_distance_m
-    from ${view}
-    order by rank asc
+    select
+      rank() over (order by sum(e.duration_sec) desc) as rank,
+      u.id::text as user_id,
+      u.username,
+      u.display_name,
+      u.avatar_initials,
+      u.avatar_color,
+      count(e.id)::int as session_count,
+      sum(e.duration_sec)::bigint as total_duration_sec,
+      coalesce(sum(e.distance_m), 0)::bigint as total_distance_m
+    from users u
+    join exercises e on e.owner_id = u.id
+    where ${dateFilter}
+    ${sportFilter}
+    group by u.id
+    order by sum(e.duration_sec) desc
     limit ${limit}
   `;
   return rows.map((r) => ({

@@ -151,14 +151,56 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   const sport = params.get('sport');
   const user = params.get('user');
   const tag = params.get('tag');
+  const group = params.get('group'); // normalized group name
+  const minDistM = params.get('minDistM') ? Number(params.get('minDistM')) : null;
+  const maxDistM = params.get('maxDistM') ? Number(params.get('maxDistM')) : null;
+  const minDurSec = params.get('minDurSec') ? Number(params.get('minDurSec')) : null;
+  const maxDurSec = params.get('maxDurSec') ? Number(params.get('maxDurSec')) : null;
+  const minHr = params.get('minHr') ? Number(params.get('minHr')) : null;
+  const maxHr = params.get('maxHr') ? Number(params.get('maxHr')) : null;
+  const dateFrom = params.get('dateFrom'); // YYYY-MM-DD
+  const dateTo = params.get('dateTo');
+  const sortBy = params.get('sortBy') ?? 'date'; // date | distance | duration | hr
+  const sortDir = (params.get('sortDir') ?? 'desc') === 'asc' ? 'asc' : 'desc';
   const offset = (page - 1) * perPage;
 
-  const rows = await sql<ExerciseRow[]>`
-    ${exerciseSelect()}
+  const sortCol =
+    sortBy === 'distance'
+      ? sql`e.distance_m`
+      : sortBy === 'duration'
+        ? sql`e.duration_sec`
+        : sortBy === 'hr'
+          ? sql`e.avg_hr`
+          : sql`e.exercise_date`;
+
+  const orderClause =
+    sortDir === 'asc'
+      ? sql`${sortCol} asc nulls last, e.created_at asc`
+      : sql`${sortCol} desc nulls last, e.created_at desc`;
+
+  const whereClause = sql`
     where (${sport}::text is null or e.sport_key = ${sport})
       and (${user}::text is null or u.username = ${user})
       and (${tag}::text is null or ${tag} = any(e.tags))
-    order by e.exercise_date desc, e.created_at desc
+      and (${group}::text is null or u.id in (
+        select gm.user_id from group_members gm
+        join groups g on g.id = gm.group_id
+        where g.normalized_name = ${group}
+      ))
+      and (${minDistM}::float8 is null or e.distance_m >= ${minDistM})
+      and (${maxDistM}::float8 is null or e.distance_m <= ${maxDistM})
+      and (${minDurSec}::float8 is null or e.duration_sec >= ${minDurSec})
+      and (${maxDurSec}::float8 is null or e.duration_sec <= ${maxDurSec})
+      and (${minHr}::float8 is null or e.avg_hr >= ${minHr})
+      and (${maxHr}::float8 is null or e.avg_hr <= ${maxHr})
+      and (${dateFrom}::text is null or e.exercise_date >= ${dateFrom}::date)
+      and (${dateTo}::text is null or e.exercise_date <= ${dateTo}::date)
+  `;
+
+  const rows = await sql<ExerciseRow[]>`
+    ${exerciseSelect()}
+    ${whereClause}
+    order by ${orderClause}
     limit ${perPage}
     offset ${offset}
   `;
@@ -166,9 +208,7 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
     select count(*)::int as total
     from exercises e
     join users u on u.id = e.owner_id
-    where (${sport}::text is null or e.sport_key = ${sport})
-      and (${user}::text is null or u.username = ${user})
-      and (${tag}::text is null or ${tag} = any(e.tags))
+    ${whereClause}
   `;
   const total = totals[0]?.total ?? 0;
   return { items: rows.map((r) => toListItem(r, authenticated)), total, page, perPage };

@@ -28,7 +28,9 @@ export function SearchPage() {
         </div>
       </div>
 
-      {isLoading && <div style={{ color: 'var(--text-faint)', textAlign: 'center', padding: '40px 0' }}>…</div>}
+      {isLoading && (
+        <div style={{ color: 'var(--text-faint)', textAlign: 'center', padding: '40px 0' }}>…</div>
+      )}
 
       {!isLoading && data?.items.length === 0 && (
         <Card style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-faint)' }}>
@@ -38,7 +40,7 @@ export function SearchPage() {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-        {data?.items.map(ex => (
+        {data?.items.map((ex) => (
           <ExerciseCard key={ex.id} exercise={ex} />
         ))}
       </div>

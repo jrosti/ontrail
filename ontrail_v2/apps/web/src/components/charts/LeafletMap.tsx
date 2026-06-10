@@ -13,7 +13,13 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-export function LeafletMap({ points, height = 300, accent = '#e8602c', rounded = 14, style }: Props) {
+export function LeafletMap({
+  points,
+  height = 300,
+  accent = '#e8602c',
+  rounded = 14,
+  style,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LMap | null>(null);
   const polyRef = useRef<Polyline | null>(null);
@@ -44,7 +50,7 @@ export function LeafletMap({ points, height = 300, accent = '#e8602c', rounded =
         shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
       });
 
-      const latlngs = points.map(p => [p.lat, p.lon] as [number, number]);
+      const latlngs = points.map((p) => [p.lat, p.lon] as [number, number]);
 
       if (mapRef.current) {
         // Update existing map
@@ -75,14 +81,20 @@ export function LeafletMap({ points, height = 300, accent = '#e8602c', rounded =
 
       // Start marker
       L.circleMarker(latlngs[0], {
-        radius: 8, color: accent, fillColor: accent,
-        fillOpacity: 1, weight: 2,
+        radius: 8,
+        color: accent,
+        fillColor: accent,
+        fillOpacity: 1,
+        weight: 2,
       }).addTo(map);
 
       // End marker
       L.circleMarker(latlngs[latlngs.length - 1], {
-        radius: 6, color: accent, fillColor: '#fff',
-        fillOpacity: 1, weight: 3,
+        radius: 6,
+        color: accent,
+        fillColor: '#fff',
+        fillOpacity: 1,
+        weight: 3,
       }).addTo(map);
 
       map.fitBounds(poly.getBounds(), { padding: [24, 24] });
@@ -96,7 +108,6 @@ export function LeafletMap({ points, height = 300, accent = '#e8602c', rounded =
         polyRef.current = null;
       }
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Update polyline when points change after initial mount
@@ -104,7 +115,7 @@ export function LeafletMap({ points, height = 300, accent = '#e8602c', rounded =
     if (!mapRef.current || points.length < 2) return;
     import('leaflet').then((L) => {
       if (!mapRef.current) return;
-      const latlngs = points.map(p => [p.lat, p.lon] as [number, number]);
+      const latlngs = points.map((p) => [p.lat, p.lon] as [number, number]);
       polyRef.current?.setLatLngs(latlngs);
       mapRef.current.fitBounds(L.latLngBounds(latlngs), { padding: [24, 24] });
     });

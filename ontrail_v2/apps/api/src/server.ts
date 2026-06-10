@@ -453,14 +453,16 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   if (path === '/api/leaderboards/month') {
     if (req.method !== 'GET') return methodNotAllowed();
     const limit = Math.min(100, Number(url.searchParams.get('limit') ?? 50));
-    const items = await getLeaderboard('month', limit);
+    const sport = url.searchParams.get('sport') ?? undefined;
+    const items = await getLeaderboard('month', limit, sport);
     return json({ items });
   }
 
   if (path === '/api/leaderboards/year') {
     if (req.method !== 'GET') return methodNotAllowed();
     const limit = Math.min(100, Number(url.searchParams.get('limit') ?? 50));
-    const items = await getLeaderboard('year', limit);
+    const sport = url.searchParams.get('sport') ?? undefined;
+    const items = await getLeaderboard('year', limit, sport);
     return json({ items });
   }
 
@@ -481,6 +483,13 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
       return json(result, { status: 201 });
     }
     return methodNotAllowed();
+  }
+
+  const groupMembersMatch = path.match(/^\/api\/groups\/([^/]+)\/members$/);
+  if (groupMembersMatch) {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const result = await getGroupByName(groupMembersMatch[1]);
+    return result ? json({ members: result.members }) : notFound();
   }
 
   const groupJoinMatch = path.match(/^\/api\/groups\/([^/]+)\/join$/);

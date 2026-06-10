@@ -1,4 +1,10 @@
-import { createRootRoute, createRoute, createRouter, Outlet, redirect } from '@tanstack/react-router';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
+  redirect,
+} from '@tanstack/react-router';
 import { TopNav } from './components/layout/TopNav';
 import { BottomNav } from './components/layout/BottomNav';
 import { FeedPage } from './pages/FeedPage';
@@ -12,6 +18,7 @@ import { LoginPage } from './pages/LoginPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { GroupsPage } from './pages/GroupsPage';
 import { AthletePage } from './pages/AthletePage';
+import { TopListsPage } from './pages/TopListsPage';
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -32,12 +39,39 @@ const feedRoute = createRoute({
     tag: s.tag as string | undefined,
     sport: s.sport as string | undefined,
     user: s.user as string | undefined,
+    group: s.group as string | undefined,
     page: s.page ? Number(s.page) : undefined,
+    minDistM: s.minDistM ? Number(s.minDistM) : undefined,
+    maxDistM: s.maxDistM ? Number(s.maxDistM) : undefined,
+    minDurSec: s.minDurSec ? Number(s.minDurSec) : undefined,
+    maxDurSec: s.maxDurSec ? Number(s.maxDurSec) : undefined,
+    minHr: s.minHr ? Number(s.minHr) : undefined,
+    maxHr: s.maxHr ? Number(s.maxHr) : undefined,
+    dateFrom: s.dateFrom as string | undefined,
+    dateTo: s.dateTo as string | undefined,
+    sortBy: s.sortBy as FeedSearch['sortBy'],
+    sortDir: s.sortDir as FeedSearch['sortDir'],
   }),
   component: FeedPage,
 });
 
-export type FeedSearch = { tag?: string; sport?: string; user?: string; page?: number };
+export type FeedSearch = {
+  tag?: string;
+  sport?: string;
+  user?: string;
+  group?: string;
+  page?: number;
+  minDistM?: number;
+  maxDistM?: number;
+  minDurSec?: number;
+  maxDurSec?: number;
+  minHr?: number;
+  maxHr?: number;
+  dateFrom?: string;
+  dateTo?: string;
+  sortBy?: 'date' | 'distance' | 'duration' | 'hr';
+  sortDir?: 'asc' | 'desc';
+};
 
 const exerciseRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -101,6 +135,12 @@ const groupsRoute = createRoute({
   component: GroupsPage,
 });
 
+const topListsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/toplists',
+  component: TopListsPage,
+});
+
 function AthletePageWrapper() {
   const { username } = athleteRoute.useParams();
   return <AthletePage username={username} />;
@@ -115,7 +155,9 @@ const athleteRoute = createRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  beforeLoad: () => { throw redirect({ to: '/feed', search: {} }); },
+  beforeLoad: () => {
+    throw redirect({ to: '/feed', search: {} });
+  },
 });
 
 const routeTree = rootRoute.addChildren([
@@ -130,6 +172,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   profileRoute,
   groupsRoute,
+  topListsRoute,
   athleteRoute,
 ]);
 

@@ -1,9 +1,18 @@
 import type { Sport } from './types';
 
 const palette = [
-  'oklch(0.71 0.17 32)', 'oklch(0.70 0.15 150)', 'oklch(0.72 0.14 232)', 'oklch(0.68 0.15 300)',
-  'oklch(0.78 0.15 92)', 'oklch(0.73 0.12 205)', 'oklch(0.76 0.10 250)', 'oklch(0.70 0.13 212)',
-  'oklch(0.69 0.16 58)', 'oklch(0.68 0.09 135)', 'oklch(0.66 0.13 18)', 'oklch(0.70 0.12 285)',
+  'oklch(0.71 0.17 32)',
+  'oklch(0.70 0.15 150)',
+  'oklch(0.72 0.14 232)',
+  'oklch(0.68 0.15 300)',
+  'oklch(0.78 0.15 92)',
+  'oklch(0.73 0.12 205)',
+  'oklch(0.76 0.10 250)',
+  'oklch(0.70 0.13 212)',
+  'oklch(0.69 0.16 58)',
+  'oklch(0.68 0.09 135)',
+  'oklch(0.66 0.13 18)',
+  'oklch(0.70 0.12 285)',
 ];
 
 function sport(
@@ -96,7 +105,8 @@ export const SPORTS: Record<string, Sport> = Object.fromEntries(ALL_SPORTS.map((
 export const SPORT_GLYPHS: Record<string, string> = {
   run: 'M9 5a1.4 1.4 0 1 0 0-2.8M9 5l-3 4 3 2 1 5M9 11l-4 1M15 9l-3-1M13 15l3 3',
   bike: 'M6 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM18 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM9 14l3-5 3 5M9 9h3',
-  orient: 'M12 12m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0M12 12m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0',
+  orient:
+    'M12 12m-7 0a7 7 0 1 0 14 0a7 7 0 1 0-14 0M12 12m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0-5 0',
   gym: 'M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10',
   floor: 'M6 4l9 12M15 17a2.5 2.5 0 1 0 0.01 0z',
   snow: 'M5 16l14-8M7 17l1 1M16 6l1 1',

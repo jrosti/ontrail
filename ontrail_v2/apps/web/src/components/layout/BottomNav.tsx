@@ -27,24 +27,50 @@ export function BottomNav() {
 
   return (
     <nav className="ot-bottomnav">
-      <Link to="/feed" search={{}} activeProps={tab(true)} inactiveProps={tab(false)} className="ot-bottom-tab"
-        onClick={() => { if (hasUnread) markReadMutation.mutate(); }}
-        style={{ position: 'relative' }}>
+      <Link
+        to="/feed"
+        search={{}}
+        activeProps={tab(true)}
+        inactiveProps={tab(false)}
+        className="ot-bottom-tab"
+        onClick={() => {
+          if (hasUnread) markReadMutation.mutate();
+        }}
+        style={{ position: 'relative' }}
+      >
         <Icon name="feed" size={22} stroke={2.1} />
         <span>{t.feed}</span>
         {hasUnread && <span className="ot-nav-badge" />}
       </Link>
-      <Link to="/analytics" activeProps={tab(true)} inactiveProps={tab(false)} className="ot-bottom-tab">
-        <Icon name="analytics" size={22} stroke={2.1} /><span>{t.analytics}</span>
+      <Link
+        to="/analytics"
+        activeProps={tab(true)}
+        inactiveProps={tab(false)}
+        className="ot-bottom-tab"
+      >
+        <Icon name="analytics" size={22} stroke={2.1} />
+        <span>{t.analytics}</span>
       </Link>
       <Link to="/log" search={{}} className="ot-bottom-fab" aria-label={t.record}>
         <Icon name="plus" size={24} stroke={2.6} />
       </Link>
-      <Link to="/groups" activeProps={tab(true)} inactiveProps={tab(false)} className="ot-bottom-tab">
-        <Icon name="feed" size={22} stroke={2.1} /><span>{t.groups}</span>
+      <Link
+        to="/toplists"
+        activeProps={tab(true)}
+        inactiveProps={tab(false)}
+        className="ot-bottom-tab"
+      >
+        <Icon name="bolt" size={22} stroke={2.1} />
+        <span>{lang === 'fi' ? 'Top' : 'Top'}</span>
       </Link>
-      <Link to="/profile" activeProps={tab(true)} inactiveProps={tab(false)} className="ot-bottom-tab">
-        <Icon name="user" size={22} stroke={2.1} /><span>{t.profile}</span>
+      <Link
+        to="/profile"
+        activeProps={tab(true)}
+        inactiveProps={tab(false)}
+        className="ot-bottom-tab"
+      >
+        <Icon name="user" size={22} stroke={2.1} />
+        <span>{t.profile}</span>
       </Link>
     </nav>
   );

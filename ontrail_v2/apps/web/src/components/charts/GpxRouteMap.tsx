@@ -7,14 +7,19 @@ interface Props {
   rounded?: number;
 }
 
-export function GpxRouteMap({ points, height = 200, accent = 'var(--accent)', rounded = 14 }: Props) {
+export function GpxRouteMap({
+  points,
+  height = 200,
+  accent = 'var(--accent)',
+  rounded = 14,
+}: Props) {
   if (points.length < 2) return null;
 
   const W = 900;
   const H = height * (900 / 400); // keep proportional to viewBox width
 
-  const lats = points.map(p => p.lat);
-  const lons = points.map(p => p.lon);
+  const lats = points.map((p) => p.lat);
+  const lons = points.map((p) => p.lon);
   const minLat = Math.min(...lats);
   const maxLat = Math.max(...lats);
   const minLon = Math.min(...lons);
@@ -50,11 +55,23 @@ export function GpxRouteMap({ points, height = 200, accent = 'var(--accent)', ro
       viewBox={`0 0 ${W} ${H}`}
       width="100%"
       height={height}
-      style={{ display: 'block', borderRadius: rounded, background: 'var(--inset, var(--surface-2))' }}
+      style={{
+        display: 'block',
+        borderRadius: rounded,
+        background: 'var(--inset, var(--surface-2))',
+      }}
       aria-hidden="true"
     >
       {/* track */}
-      <path d={d} fill="none" stroke={accent} strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" opacity={0.85} />
+      <path
+        d={d}
+        fill="none"
+        stroke={accent}
+        strokeWidth={3.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity={0.85}
+      />
       {/* start dot */}
       <circle cx={sx} cy={sy} r={8} fill={accent} opacity={0.9} />
       {/* finish flag */}

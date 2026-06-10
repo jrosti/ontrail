@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test';
+import { describe, expect, mock, test } from 'bun:test';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { GpxDropzone } from './GpxDropzone';
 import type { GpxResult } from '../../utils/gpx';
@@ -33,7 +33,16 @@ describe('GpxDropzone', () => {
 
   test('parses selected GPX files', async () => {
     let loaded: GpxResult | null = null;
-    render(<GpxDropzone result={null} onLoaded={(result) => { loaded = result; }} onRemove={() => {}} {...labels} />);
+    render(
+      <GpxDropzone
+        result={null}
+        onLoaded={(result) => {
+          loaded = result;
+        }}
+        onRemove={() => {}}
+        {...labels}
+      />,
+    );
 
     const input = document.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File([gpx], 'test.gpx', { type: 'application/gpx+xml' });
@@ -42,9 +51,81 @@ describe('GpxDropzone', () => {
     await waitFor(() => expect(loaded?.name).toBe('Test GPX'));
     expect(loaded?.durationSec).toBe(300);
     expect(loaded?.points).toHaveLength(2);
+    expect(input.value).toBe('');
+  });
+
+  test('shows an error for non-GPX files selected from the picker', async () => {
+    render(
+      <GpxDropzone
+        result={null}
+        onLoaded={() => {
+          throw new Error('should not load');
+        }}
+        onRemove={() => {}}
+        {...labels}
+      />,
+    );
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const file = new File(['hello'], 'notes.txt', { type: 'text/plain' });
+    fireEvent.change(input, { target: { files: [file] } });
+
+    expect(await screen.findByText('Please drop a .gpx file')).toBeTruthy();
+    expect(input.value).toBe('');
+  });
+
+  test('supports drag-and-drop and resets the drag state', async () => {
+    let loaded: GpxResult | null = null;
+    render(
+      <GpxDropzone
+        result={null}
+        onLoaded={(result) => {
+          loaded = result;
+        }}
+        onRemove={() => {}}
+        {...labels}
+      />,
+    );
+
+    const dropzone = screen.getByRole('button', { name: labels.label });
+    fireEvent.dragOver(dropzone);
+    expect((dropzone as HTMLElement).style.border).toContain('var(--accent)');
+
+    fireEvent.drop(dropzone, {
+      dataTransfer: {
+        files: [new File([gpx], 'route.gpx', { type: 'application/gpx+xml' })],
+      },
+    });
+
+    await waitFor(() => expect(loaded?.points).toHaveLength(2));
+    expect((dropzone as HTMLElement).style.border).toContain('var(--border)');
+  });
+
+  test('clicking the visible dropzone opens the hidden input once', () => {
+    render(<GpxDropzone result={null} onLoaded={() => {}} onRemove={() => {}} {...labels} />);
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const click = mock(() => {});
+    input.click = click;
+
+    fireEvent.click(screen.getByRole('button', { name: labels.label }));
+    expect(click).toHaveBeenCalledTimes(1);
+  });
+
+  test('ignores clicks bubbling from the hidden input to avoid reopening the picker', () => {
+    render(<GpxDropzone result={null} onLoaded={() => {}} onRemove={() => {}} {...labels} />);
+
+    const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+    const click = mock(() => {});
+    input.click = click;
+
+    fireEvent.click(input);
+
+    expect(click).not.toHaveBeenCalled();
   });
 
   test('renders loaded state with remove action', () => {
+    const onRemove = mock(() => {});
     render(
       <GpxDropzone
         result={{
@@ -58,12 +139,13 @@ describe('GpxDropzone', () => {
           durationSec: 300,
         }}
         onLoaded={() => {}}
-        onRemove={() => {}}
+        onRemove={onRemove}
         {...labels}
       />,
     );
 
     expect(screen.getByText(labels.loadedLabel)).toBeTruthy();
-    expect(screen.getByRole('button', { name: new RegExp(labels.removeLabel) })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: new RegExp(labels.removeLabel) }));
+    expect(onRemove).toHaveBeenCalledTimes(1);
   });
 });

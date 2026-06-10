@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -46,7 +47,7 @@ export function GroupsPage() {
           <h1 className="ot-page-title">{t.groups}</h1>
         </div>
         {currentUser && (
-          <button className="ot-rec-btn" onClick={() => setShowCreate(s => !s)}>
+          <button className="ot-rec-btn" onClick={() => setShowCreate((s) => !s)}>
             <Icon name="plus" size={16} stroke={2.4} />
             <span>{t.createGroup}</span>
           </button>
@@ -54,19 +55,29 @@ export function GroupsPage() {
       </div>
 
       {showCreate && (
-        <Card style={{ marginBottom: 18, display: 'flex', flexDirection: 'column', gap: 12, padding: 20 }}>
-          <h4 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 600 }}>{t.createGroup}</h4>
+        <Card
+          style={{
+            marginBottom: 18,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+            padding: 20,
+          }}
+        >
+          <h4 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 600 }}>
+            {t.createGroup}
+          </h4>
           <input
             className="ot-input"
             placeholder={t.groupName}
             value={newName}
-            onChange={e => setNewName(e.target.value)}
+            onChange={(e) => setNewName(e.target.value)}
           />
           <textarea
             className="ot-input"
             placeholder={t.groupDesc}
             value={newDesc}
-            onChange={e => setNewDesc(e.target.value)}
+            onChange={(e) => setNewDesc(e.target.value)}
             rows={2}
             style={{ resize: 'vertical' }}
           />
@@ -78,14 +89,20 @@ export function GroupsPage() {
             >
               {t.createGroup}
             </button>
-            <button className="ot-iconbtn" style={{ width: 'auto', padding: '0 12px', fontSize: 14 }} onClick={() => setShowCreate(false)}>
+            <button
+              className="ot-iconbtn"
+              style={{ width: 'auto', padding: '0 12px', fontSize: 14 }}
+              onClick={() => setShowCreate(false)}
+            >
               {t.cancel}
             </button>
           </div>
         </Card>
       )}
 
-      {isLoading && <div style={{ color: 'var(--text-faint)', textAlign: 'center', padding: '40px 0' }}>…</div>}
+      {isLoading && (
+        <div style={{ color: 'var(--text-faint)', textAlign: 'center', padding: '40px 0' }}>…</div>
+      )}
 
       {!isLoading && (groups?.length ?? 0) === 0 && (
         <Card style={{ textAlign: 'center', padding: '40px 20px', color: 'var(--text-faint)' }}>
@@ -95,18 +112,34 @@ export function GroupsPage() {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {(groups ?? []).map(g => (
+        {(groups ?? []).map((g) => (
           <Card key={g.id} style={{ padding: '16px 20px' }}>
             <div className="ot-group-card">
               <div style={{ minWidth: 0 }}>
-                <div className="ot-group-name">{g.name}</div>
-                <div className="ot-group-meta">{g.memberCount} {t.members}{g.description ? ` · ${g.description}` : ''}</div>
+                <Link
+                  to="/feed"
+                  search={{ group: g.normalizedName }}
+                  className="ot-group-name"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  {g.name}
+                </Link>
+                <div className="ot-group-meta">
+                  {g.memberCount} {t.members}
+                  {g.description ? ` · ${g.description}` : ''}
+                </div>
               </div>
-              {currentUser && (
-                g.isMember ? (
+              {currentUser &&
+                (g.isMember ? (
                   <button
                     className="ot-iconbtn"
-                    style={{ width: 'auto', padding: '0 14px', fontSize: 13, fontWeight: 600, flexShrink: 0 }}
+                    style={{
+                      width: 'auto',
+                      padding: '0 14px',
+                      fontSize: 13,
+                      fontWeight: 600,
+                      flexShrink: 0,
+                    }}
                     onClick={() => leaveMutation.mutate(g.normalizedName)}
                     disabled={leaveMutation.isPending}
                   >
@@ -121,8 +154,7 @@ export function GroupsPage() {
                   >
                     {t.joinGroup}
                   </button>
-                )
-              )}
+                ))}
             </div>
           </Card>
         ))}

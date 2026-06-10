@@ -116,7 +116,12 @@ describe('API client', () => {
     expect(calls.slice(-4)).toEqual([
       { method: 'get', url: '/exercises/exercise-id', config: undefined },
       { method: 'post', url: '/exercises', data: { title: 'Run' }, config: undefined },
-      { method: 'patch', url: '/exercises/exercise-id', data: { title: 'Edited' }, config: undefined },
+      {
+        method: 'patch',
+        url: '/exercises/exercise-id',
+        data: { title: 'Edited' },
+        config: undefined,
+      },
       { method: 'delete', url: '/exercises/exercise-id', config: undefined },
     ]);
   });
@@ -139,10 +144,18 @@ describe('API client', () => {
     nextData = { items: [], total: 0, page: 1, perPage: 10 };
     await expect(api.listUsers('trail', 1, 10)).resolves.toEqual(nextData);
 
-    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('post /exercises/exercise-id/comments');
-    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('delete /exercises/exercise-id/comments/comment-id');
-    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('post /exercises/exercise-id/cares');
-    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('delete /exercises/exercise-id/cares');
+    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain(
+      'post /exercises/exercise-id/comments',
+    );
+    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain(
+      'delete /exercises/exercise-id/comments/comment-id',
+    );
+    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain(
+      'post /exercises/exercise-id/cares',
+    );
+    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain(
+      'delete /exercises/exercise-id/cares',
+    );
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /sports');
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /me');
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /users/trail_runner');
@@ -158,7 +171,9 @@ describe('API client', () => {
     await expect(api.getMonthSummaries('trail_runner', 2026)).resolves.toEqual([
       { sport: 'Juoksu' },
     ]);
-    await expect(api.getWeekSummaries('trail_runner', 2026)).resolves.toEqual([{ sport: 'Juoksu' }]);
+    await expect(api.getWeekSummaries('trail_runner', 2026)).resolves.toEqual([
+      { sport: 'Juoksu' },
+    ]);
     await expect(api.getPersonalRecords('trail_runner')).resolves.toEqual([{ sport: 'Juoksu' }]);
     await expect(api.getTagSummary('trail_runner')).resolves.toEqual([{ sport: 'Juoksu' }]);
     await expect(api.getLeaderboard('month')).resolves.toEqual([{ sport: 'Juoksu' }]);

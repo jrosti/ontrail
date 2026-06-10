@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'bun:test';
-import { forbidden, json, methodNotAllowed, notFound, unauthorized } from './http';
+import { describe, expect, mock, test } from 'bun:test';
+import { forbidden, handleError, json, methodNotAllowed, notFound, unauthorized } from './http';
 
 async function responseJson(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
@@ -28,5 +28,26 @@ describe('http helpers', () => {
 
     await expect(responseJson(forbidden())).resolves.toEqual({ error: 'forbidden' });
     expect(forbidden().status).toBe(403);
+  });
+
+  test('error helpers support custom error codes and internal error logging', async () => {
+    await expect(responseJson(unauthorized('login_required'))).resolves.toEqual({
+      error: 'login_required',
+    });
+    await expect(responseJson(forbidden('owner_required'))).resolves.toEqual({
+      error: 'owner_required',
+    });
+
+    const originalError = console.error;
+    const error = mock(() => {});
+    console.error = error;
+    try {
+      const response = await handleError(new Error('boom'));
+      expect(response.status).toBe(500);
+      await expect(responseJson(response)).resolves.toEqual({ error: 'internal_error' });
+      expect(error).toHaveBeenCalledTimes(1);
+    } finally {
+      console.error = originalError;
+    }
   });
 });
