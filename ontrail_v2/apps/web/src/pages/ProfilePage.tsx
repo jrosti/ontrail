@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { exportCSV, exportData, updateProfile } from '../api';
+import { exportCSV, exportData, listGroups, updateProfile } from '../api';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { registerHankoElements } from '../hankoClient';
@@ -11,6 +11,12 @@ import { exportXlsx } from '../utils/exportXlsx';
 
 export function ProfilePage() {
   const { lang, currentUser, setCurrentUser } = useStore();
+  const { data: allGroups = [] } = useQuery({
+    queryKey: ['groups'],
+    queryFn: listGroups,
+    enabled: !!currentUser,
+  });
+  const myGroups = allGroups.filter((g) => g.isMember);
   const t = I18N[lang];
   const registered = useRef(false);
   const queryClient = useQueryClient();
@@ -242,6 +248,47 @@ export function ProfilePage() {
           </div>
         </div>
       </Card>
+
+      {myGroups.length > 0 && (
+        <Card style={{ padding: 24 }}>
+          <h3
+            style={{
+              marginBottom: 16,
+              fontFamily: 'var(--font-display)',
+              fontWeight: 600,
+              fontSize: 17,
+            }}
+          >
+            {lang === 'fi' ? 'Omat ryhmät' : 'My groups'}
+          </h3>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+            {myGroups.map((g) => (
+              <Link
+                key={g.id}
+                to="/feed"
+                search={{ group: g.name }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  padding: '6px 14px',
+                  borderRadius: 10,
+                  background: 'color-mix(in oklab, var(--accent) 10%, transparent)',
+                  color: 'var(--accent)',
+                  fontWeight: 600,
+                  fontSize: 14,
+                  textDecoration: 'none',
+                }}
+              >
+                {g.name}
+                <span style={{ color: 'var(--text-faint)', fontWeight: 400, fontSize: 12 }}>
+                  {g.memberCount}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </Card>
+      )}
 
       <Card style={{ padding: 24 }}>
         <h3
