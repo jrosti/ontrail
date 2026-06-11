@@ -223,6 +223,8 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
         </div>
       </div>
 
+      {metricRow}
+
       <Link
         to="/exercise/$id"
         params={{ id: ex.id }}
@@ -254,8 +256,6 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
           )}
         </div>
       )}
-
-      {metricRow}
 
       {km > 0 &&
         ex.gpxPoints &&
