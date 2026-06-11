@@ -60,7 +60,7 @@ ALL_SPORTS.push(
   sport('lumikenkaily', 'Lumikenkäily', 'Snowshoeing', 'snow'),
   sport('snow', 'Lumilautailu', 'Snowboarding', 'snow', 'time'),
   sport('maantiepyoraily', 'Maantiepyöräily', 'Road cycling', 'bike', 'speed', 'km/h'),
-  sport('maastojuoksu', 'Maastojuoksu', 'Trail running', 'run'),
+  sport('maastojuoksu', 'Polkujuoksu', 'Trail running', 'run'),
   sport('mtb', 'Maastopyöräily', 'MTB', 'mtb', 'speed', 'km/h'),
   sport('melonta', 'Melonta', 'Paddling', 'swim', 'pace', 'min/500m'),
   sport('muu-laji', 'Muu laji', 'Other sport', 'run', 'time'),
