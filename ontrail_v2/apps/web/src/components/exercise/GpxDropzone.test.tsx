@@ -49,7 +49,7 @@ describe('GpxDropzone', () => {
     fireEvent.change(input, { target: { files: [file] } });
 
     await waitFor(() => expect(loaded?.name).toBe('Test GPX'));
-    expect(loaded?.durationSec).toBe(300);
+    expect(loaded?.durationCs).toBe(30000); // 5 min = 30000 cs
     expect(loaded?.points).toHaveLength(2);
     expect(input.value).toBe('');
   });
@@ -136,7 +136,7 @@ describe('GpxDropzone', () => {
           ],
           distanceM: 560,
           elevationGainM: 10,
-          durationSec: 300,
+          durationCs: 30000,
         }}
         onLoaded={() => {}}
         onRemove={onRemove}

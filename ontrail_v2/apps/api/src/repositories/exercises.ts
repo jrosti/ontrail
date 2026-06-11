@@ -16,7 +16,7 @@ interface ExerciseRow {
   body_html: string | null;
   tags: string[];
   exercise_date: string;
-  duration_sec: number;
+  duration_cs: number;
   distance_m: number | null;
   avg_hr: number | null;
   climb_m: number | null;
@@ -36,7 +36,7 @@ interface ExerciseUpdateRow {
   body_html: string | null;
   tags: string[];
   exercise_date: string;
-  duration_sec: number;
+  duration_cs: number;
   distance_m: number | null;
   avg_hr: number | null;
   climb_m: number | null;
@@ -88,9 +88,11 @@ function toListItem(row: ExerciseRow, cares: CareRow[], authenticated: boolean):
     ownerGravatarHash: gravatarHash(row.owner_email),
     sport: row.sport_key,
     title: row.title,
+    // Body included for the feed preview; hidden from anonymous viewers.
+    body: authenticated ? (row.body_html ?? undefined) : undefined,
     tags: row.tags,
     date: row.exercise_date,
-    durationSec: row.duration_sec,
+    durationCs: row.duration_cs,
     distanceM: row.distance_m ?? undefined,
     avgHr: row.avg_hr ?? undefined,
     climbM: row.climb_m ?? undefined,
@@ -160,7 +162,7 @@ function exerciseSelect() {
       e.body_html,
       e.tags,
       e.exercise_date::text,
-      e.duration_sec,
+      e.duration_cs,
       e.distance_m,
       e.avg_hr,
       e.climb_m,
@@ -178,7 +180,9 @@ function exerciseSelect() {
 
 export async function listExercises(params: URLSearchParams, authenticated: boolean) {
   const page = Math.max(1, Number(params.get('page') ?? 1));
-  const perPage = Math.min(100, Math.max(1, Number(params.get('perPage') ?? 20)));
+  // Cap at 1000: analytics fetches a full year of one user's exercises for the
+  // heatmap / HR-zone aggregates (the feed itself paginates at 20).
+  const perPage = Math.min(1000, Math.max(1, Number(params.get('perPage') ?? 20)));
   const singleSport = params.get('sport');
   const multiSports = params.get('sports'); // comma-separated, e.g. "juoksu,hiihto"
   const sportList = multiSports
@@ -191,24 +195,28 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   const group = params.get('group'); // normalized group name
   const minDistM = params.get('minDistM') ? Number(params.get('minDistM')) : null;
   const maxDistM = params.get('maxDistM') ? Number(params.get('maxDistM')) : null;
-  const minDurSec = params.get('minDurSec') ? Number(params.get('minDurSec')) : null;
-  const maxDurSec = params.get('maxDurSec') ? Number(params.get('maxDurSec')) : null;
+  const minDurCs = params.get('minDurCs') ? Number(params.get('minDurCs')) : null;
+  const maxDurCs = params.get('maxDurCs') ? Number(params.get('maxDurCs')) : null;
   const minHr = params.get('minHr') ? Number(params.get('minHr')) : null;
   const maxHr = params.get('maxHr') ? Number(params.get('maxHr')) : null;
   const dateFrom = params.get('dateFrom'); // YYYY-MM-DD
   const dateTo = params.get('dateTo');
-  const sortBy = params.get('sortBy') ?? 'date'; // date | distance | duration | hr
+  const sortBy = params.get('sortBy') ?? 'recent'; // recent | date | distance | duration | hr
   const sortDir = (params.get('sortDir') ?? 'desc') === 'asc' ? 'asc' : 'desc';
   const offset = (page - 1) * perPage;
 
+  // Default 'recent' = last modified (updated_at), the legacy feed sort key, so
+  // newly logged or edited exercises surface first. 'date' sorts by workout date.
   const sortCol =
     sortBy === 'distance'
       ? sql`e.distance_m`
       : sortBy === 'duration'
-        ? sql`e.duration_sec`
+        ? sql`e.duration_cs`
         : sortBy === 'hr'
           ? sql`e.avg_hr`
-          : sql`e.exercise_date`;
+          : sortBy === 'date'
+            ? sql`e.exercise_date`
+            : sql`e.updated_at`;
 
   const orderClause =
     sortDir === 'asc'
@@ -226,8 +234,8 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
       ))
       and (${minDistM}::float8 is null or e.distance_m >= ${minDistM})
       and (${maxDistM}::float8 is null or e.distance_m <= ${maxDistM})
-      and (${minDurSec}::float8 is null or e.duration_sec >= ${minDurSec})
-      and (${maxDurSec}::float8 is null or e.duration_sec <= ${maxDurSec})
+      and (${minDurCs}::float8 is null or e.duration_cs >= ${minDurCs})
+      and (${maxDurCs}::float8 is null or e.duration_cs <= ${maxDurCs})
       and (${minHr}::float8 is null or e.avg_hr >= ${minHr})
       and (${maxHr}::float8 is null or e.avg_hr <= ${maxHr})
       and (${dateFrom}::text is null or e.exercise_date >= ${dateFrom}::date)
@@ -273,6 +281,24 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   };
 }
 
+/**
+ * Etenemä (legacy bpmdist): metres advanced per heartbeat above rest =
+ * distance / ((avgHr - restHr) * duration_min). duration is centiseconds, so
+ * duration_min = duration_cs / 6000. Undefined unless distance/duration/avgHr
+ * and the owner's restHr are all positive and avgHr > restHr (matches legacy:
+ * blank when not computable, e.g. no HR or a non-distance sport).
+ */
+export function computeBpmDist(
+  distanceM: number | null,
+  durationCs: number | null,
+  avgHr: number | null,
+  restHr: number | null,
+): number | undefined {
+  if (!distanceM || distanceM <= 0 || !durationCs || durationCs <= 0) return undefined;
+  if (!avgHr || avgHr <= 0 || !restHr || restHr <= 0 || avgHr <= restHr) return undefined;
+  return distanceM / (((avgHr - restHr) * durationCs) / 6000);
+}
+
 export async function getExercise(id: string, authenticated: boolean): Promise<Exercise | null> {
   const rows = await sql<ExerciseRow[]>`
     ${exerciseSelect()}
@@ -282,7 +308,7 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
   const row = rows[0];
   if (!row) return null;
 
-  const [commentRows, careRows] = await Promise.all([
+  const [commentRows, careRows, ownerRows] = await Promise.all([
     authenticated
       ? sql<CommentRow[]>`
           select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, u.email as author_email, c.body, c.created_at::text
@@ -299,21 +325,30 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
       where ca.exercise_id = ${id}
       order by ca.created_at asc
     `,
+    sql<{ resthr: number | null }[]>`
+      select resthr from users where username = ${row.owner_username} limit 1
+    `,
   ]);
 
-  return toExercise(row, careRows, commentRows.map(toComment), authenticated);
+  const bpmdist = computeBpmDist(
+    row.distance_m,
+    row.duration_cs,
+    row.avg_hr,
+    ownerRows[0]?.resthr ?? null,
+  );
+  return { ...toExercise(row, careRows, commentRows.map(toComment), authenticated), bpmdist };
 }
 
 export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {
   const created = await sql<{ id: string }[]>`
     insert into exercises (
-      owner_id, sport_key, title, body_html, tags, exercise_date, duration_sec,
+      owner_id, sport_key, title, body_html, tags, exercise_date, duration_cs,
       distance_m, avg_hr, climb_m, feel_rating, details, gpx_points
     )
     values (
       ${owner.id}, ${body.sport ?? 'run'}, ${body.title ?? ''}, ${body.body ?? null},
       ${body.tags ?? []}, ${body.date ?? new Date().toISOString().slice(0, 10)},
-      ${body.durationSec ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
+      ${body.durationCs ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
       ${body.climbM ?? null}, ${body.feelRating ?? null},
       ${sql.json(body.details ?? {})},
       ${sql.json(normalizeGpxPoints(body.gpxPoints) ?? null)}
@@ -338,7 +373,7 @@ export async function updateExercise(
       body_html,
       tags,
       exercise_date::text,
-      duration_sec,
+      duration_cs,
       distance_m,
       avg_hr,
       climb_m,
@@ -364,7 +399,7 @@ export async function updateExercise(
       body_html = ${'body' in body ? (body.body ?? null) : existing.body_html},
       tags = ${body.tags ?? existing.tags},
       exercise_date = ${body.date ?? existing.exercise_date},
-      duration_sec = ${body.durationSec ?? existing.duration_sec},
+      duration_cs = ${body.durationCs ?? existing.duration_cs},
       distance_m = ${'distanceM' in body ? (body.distanceM ?? null) : existing.distance_m},
       avg_hr = ${'avgHr' in body ? (body.avgHr ?? null) : existing.avg_hr},
       climb_m = ${'climbM' in body ? (body.climbM ?? null) : existing.climb_m},

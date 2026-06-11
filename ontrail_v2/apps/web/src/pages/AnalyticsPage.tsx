@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  getAthleteProfile,
   getMonthSummaries,
   getSportSummary,
   getWeekSummaries,
@@ -82,8 +83,6 @@ const MONTH_SHORT_EN = [
 
 type Scope = 'all' | 'year' | 'month' | 'week';
 
-const PICK_YEARS = Array.from({ length: 12 }, (_, i) => CURRENT_YEAR - i);
-
 function PeriodPicker({
   scope,
   year,
@@ -93,6 +92,7 @@ function PeriodPicker({
   onMonth,
   onWeek,
   lang,
+  years,
 }: {
   scope: Scope;
   year: number;
@@ -102,6 +102,7 @@ function PeriodPicker({
   onMonth: (m: number) => void;
   onWeek: (w: number) => void;
   lang: string;
+  years: number[];
 }) {
   const [open, setOpen] = useState(false);
   const [pickYear, setPickYear] = useState(year);
@@ -179,7 +180,7 @@ function PeriodPicker({
 
           {(scope === 'year' || scope === 'all') && (
             <div className="ot-picker-year-grid">
-              {PICK_YEARS.map((y) => (
+              {years.map((y) => (
                 <button
                   type="button"
                   key={y}
@@ -241,9 +242,12 @@ function PeriodPicker({
   );
 }
 
-export function AnalyticsPage() {
+export function AnalyticsPage({ username: propUsername }: { username?: string } = {}) {
   const { lang, currentUser } = useStore();
   const t = I18N[lang];
+  // When a username is passed (viewing another athlete) use their profile;
+  // otherwise show the logged-in user's own analytics.
+  const isOwn = !propUsername;
   const [scope, setScope] = useState<Scope>('year');
   const [year, setYear] = useState(CURRENT_YEAR);
   const [month, setMonth] = useState(CURRENT_MONTH);
@@ -256,7 +260,7 @@ export function AnalyticsPage() {
       1 + Math.round(((d.getTime() - w1.getTime()) / 86400000 - 3 + ((w1.getDay() + 6) % 7)) / 7)
     );
   });
-  const username = currentUser?.username ?? '';
+  const username = propUsername ?? currentUser?.username ?? '';
   const monthShort = lang === 'fi' ? MONTH_SHORT_FI : MONTH_SHORT_EN;
   const [sportSortCol, setSportSortCol] = useState<SportSortCol>('sessions');
   const [sportSortDir, setSportSortDir] = useState<SortDir3>('desc');
@@ -285,13 +289,42 @@ export function AnalyticsPage() {
     enabled: !!username && scope !== 'all',
   });
 
-  // Per-day exercise data for the activity calendar heatmap
+  // Per-day exercise data for the activity calendar heatmap + HR zones — scoped
+  // to the displayed year so the full year is covered (not just the latest 100).
   const { data: calExercises } = useQuery({
-    queryKey: ['cal-exercises', username],
-    queryFn: () => listExercises({ user: username, perPage: 500 }),
+    queryKey: ['cal-exercises', username, year],
+    queryFn: () =>
+      listExercises({
+        user: username,
+        perPage: 1000,
+        dateFrom: `${year}-01-01`,
+        dateTo: `${year}-12-31`,
+        sortBy: 'date',
+      }),
     enabled: !!username,
     staleTime: 5 * 60_000,
   });
+
+  // Athlete profile gives the first active year so the picker can span the
+  // user's full history (legacy data goes back to the 1990s), not just 12 years.
+  const { data: athlete } = useQuery({
+    queryKey: ['athleteProfile', username],
+    queryFn: () => getAthleteProfile(username),
+    enabled: !!username,
+    staleTime: 5 * 60_000,
+  });
+  const years = useMemo(() => {
+    // Always offer at least the 12 most recent years, extending back to firstYear.
+    const start = Math.min(athlete?.firstYear ?? CURRENT_YEAR, CURRENT_YEAR - 11);
+    return Array.from({ length: CURRENT_YEAR - start + 1 }, (_, i) => CURRENT_YEAR - i);
+  }, [athlete?.firstYear]);
+
+  // HR profile + name of the viewed athlete (their profile, falling back to the
+  // logged-in user only when viewing one's own analytics).
+  const targetRestHr = athlete?.restHr ?? (isOwn ? currentUser?.restHr : undefined);
+  const targetMaxHr = athlete?.maxHr ?? (isOwn ? currentUser?.maxHr : undefined);
+  const targetName =
+    athlete?.displayName ?? (isOwn ? currentUser?.displayName : undefined) ?? username;
 
   const nav = useNavigate();
 
@@ -327,7 +360,7 @@ export function AnalyticsPage() {
             cmp = sportName(a.sport, lang).localeCompare(sportName(b.sport, lang));
           else if (sportSortCol === 'distance')
             cmp = (a.totalDistanceM ?? 0) - (b.totalDistanceM ?? 0);
-          else if (sportSortCol === 'time') cmp = a.totalDurationSec - b.totalDurationSec;
+          else if (sportSortCol === 'time') cmp = a.totalDurationCs - b.totalDurationCs;
           else if (sportSortCol === 'hr') cmp = (a.avgHr ?? 0) - (b.avgHr ?? 0);
           else if (sportSortCol === 'climb') cmp = (a.totalClimbM ?? 0) - (b.totalClimbM ?? 0);
           else cmp = a.sessionCount - b.sessionCount;
@@ -346,13 +379,13 @@ export function AnalyticsPage() {
     }
   };
 
-  const totalDurationSec = items.reduce((s, r) => s + r.totalDurationSec, 0);
+  const totalDurationCs = items.reduce((s, r) => s + r.totalDurationCs, 0);
   const totalDistanceM = items.reduce((s, r) => s + r.totalDistanceM, 0);
   const totalSessions = items.reduce((s, r) => s + r.sessionCount, 0);
   const totalClimbM = items.reduce((s, r) => s + r.totalClimbM, 0);
 
   const kmTotal = totalDistanceM > 0 ? fmtDistKm(totalDistanceM, lang, 0) : '—';
-  const hrTotal = totalDurationSec > 0 ? fmtDur(totalDurationSec) : '—';
+  const hrTotal = totalDurationCs > 0 ? fmtDur(totalDurationCs) : '—';
 
   const sportDonut = [...items]
     .map((sp) => ({
@@ -393,10 +426,10 @@ export function AnalyticsPage() {
   const byDate = new Map<string, number>();
   for (const ex of calExercises?.items ?? []) {
     const d = ex.date.slice(0, 10);
-    byDate.set(d, (byDate.get(d) ?? 0) + ex.durationSec);
+    byDate.set(d, (byDate.get(d) ?? 0) + ex.durationCs);
   }
 
-  const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
+  const hasHrProfile = !!(targetRestHr || targetMaxHr);
 
   // Karvonen 5-zone boundaries (% of HRR)
   const ZONE_PCT = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0] as const;
@@ -405,8 +438,8 @@ export function AnalyticsPage() {
   const ZONE_NAMES_EN = ['Z1 Recovery', 'Z2 Aerobic', 'Z3 Tempo', 'Z4 Threshold', 'Z5 Max'];
 
   const hrZoneData = (() => {
-    const restHr = currentUser.restHr ?? 60;
-    const maxHr = currentUser.maxHr ?? 190;
+    const restHr = targetRestHr ?? 60;
+    const maxHr = targetMaxHr ?? 190;
     const hrr = maxHr - restHr;
     const bounds = ZONE_PCT.map((p) => Math.round(restHr + hrr * p));
 
@@ -439,7 +472,7 @@ export function AnalyticsPage() {
       for (let i = 0; i < bounds.length - 1; i++) {
         if (hr >= bounds[i]) zone = i;
       }
-      zoneSec[zone] += ex.durationSec;
+      zoneSec[zone] += ex.durationCs;
     }
     const total = zoneSec.reduce((a, b) => a + b, 0);
     return { zoneSec, total, bounds };
@@ -450,7 +483,7 @@ export function AnalyticsPage() {
       <div className="ot-page-head">
         <div>
           <h1 className="ot-page-title">{t.analytics}</h1>
-          <div className="ot-page-sub">{currentUser.displayName}</div>
+          <div className="ot-page-sub">{targetName}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 }}>
           <div className="ot-scope">
@@ -474,6 +507,7 @@ export function AnalyticsPage() {
             onMonth={setMonth}
             onWeek={setWeek}
             lang={lang}
+            years={years}
           />
         </div>
       </div>
@@ -544,10 +578,10 @@ export function AnalyticsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ fontSize: 11, color: 'var(--text-faint)', display: 'flex', gap: 16 }}>
                 <span>
-                  {lang === 'fi' ? 'Lepo' : 'Rest'}: {currentUser.restHr ?? '—'} bpm
+                  {lang === 'fi' ? 'Lepo' : 'Rest'}: {targetRestHr ?? '—'} bpm
                 </span>
                 <span>
-                  {lang === 'fi' ? 'Maksimi' : 'Max'}: {currentUser.maxHr ?? '—'} bpm
+                  {lang === 'fi' ? 'Maksimi' : 'Max'}: {targetMaxHr ?? '—'} bpm
                 </span>
               </div>
               {hrZoneData.zoneSec.map((sec, i) => {
@@ -678,7 +712,7 @@ export function AnalyticsPage() {
                     {sportName(r.sport, lang)}
                   </span>
                   <span>{r.totalDistanceM ? `${fmtDistKm(r.totalDistanceM, lang)} km` : '—'}</span>
-                  <span>{r.totalDurationSec ? fmtDur(r.totalDurationSec) : '—'}</span>
+                  <span>{r.totalDurationCs ? fmtDur(r.totalDurationCs) : '—'}</span>
                   <span>{r.avgHr ?? '—'}</span>
                   <span>{r.totalClimbM ? `${r.totalClimbM} m` : '—'}</span>
                   <span style={{ fontWeight: 600 }}>{r.sessionCount}</span>
@@ -699,7 +733,7 @@ function aggregateMonthToSport(rows: MonthSummary[]): YearSportSummary[] {
     if (existing) {
       existing.sessionCount += r.sessionCount;
       existing.totalDistanceM += r.totalDistanceM;
-      existing.totalDurationSec += r.totalDurationSec;
+      existing.totalDurationCs += r.totalDurationCs;
       existing.totalClimbM += r.totalClimbM;
     } else {
       map.set(r.sport, {
@@ -707,7 +741,7 @@ function aggregateMonthToSport(rows: MonthSummary[]): YearSportSummary[] {
         sport: r.sport,
         sessionCount: r.sessionCount,
         totalDistanceM: r.totalDistanceM,
-        totalDurationSec: r.totalDurationSec,
+        totalDurationCs: r.totalDurationCs,
         totalClimbM: r.totalClimbM,
         totalKcal: 0,
         avgHr: r.avgHr,
@@ -724,7 +758,7 @@ function aggregateWeekToSport(rows: WeekSummary[]): YearSportSummary[] {
     if (existing) {
       existing.sessionCount += r.sessionCount;
       existing.totalDistanceM += r.totalDistanceM;
-      existing.totalDurationSec += r.totalDurationSec;
+      existing.totalDurationCs += r.totalDurationCs;
       existing.totalClimbM += r.totalClimbM;
     } else {
       map.set(r.sport, {
@@ -732,7 +766,7 @@ function aggregateWeekToSport(rows: WeekSummary[]): YearSportSummary[] {
         sport: r.sport,
         sessionCount: r.sessionCount,
         totalDistanceM: r.totalDistanceM,
-        totalDurationSec: r.totalDurationSec,
+        totalDurationCs: r.totalDurationCs,
         totalClimbM: r.totalClimbM,
         totalKcal: 0,
         avgHr: r.avgHr,

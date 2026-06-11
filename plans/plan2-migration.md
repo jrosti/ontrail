@@ -114,11 +114,11 @@ create table exercise (
   body            text,                      -- sanitized HTML
   created_at      timestamptz not null,      -- from creationDate (garbage/future clamped)
   last_modified_at timestamptz not null,
-  duration_sec    integer,                   -- seconds (÷100 from centiseconds); NULL allowed
+  duration_cs     integer not null,          -- centiseconds, verbatim from legacy (no ÷100)
   distance_m      integer,                   -- meters; NULL allowed; NULL'd on 898 dur=0&dist>0
   avghr           integer,                   -- bpm; 0→NULL + 12 outliers(>230)→NULL on load
   pace            integer generated always as
-                    (case when duration_sec > 0 then round(distance_m::numeric/duration_sec*360) end) stored,
+                    (case when duration_cs > 0 then round(distance_m::numeric/duration_cs*360000) end) stored,
   tags            text[] not null default '{}',
   detail_repeats   integer, detail_volume integer, detail_elevation integer,
   detail_kcal      integer,                  -- [audit] 252 docs
@@ -175,7 +175,7 @@ create table user_visit (                    -- replaces nccache last-visit trac
 | `exercise.user` (name) | `exercise.user_id` | Resolve via `app_user.username`. **[audit]** 2 orphan authors — alias/placeholder per §4 Q1. |
 | `creationDate` | `created_at` | **Already noon-shifted** — keep the shift. **[audit]** Clean the 10 garbage + 4 future dates (§4 Q5). |
 | `lastModifiedDate` | `last_modified_at` | Direct. **[audit]** 28 garbage cleaned. **Do not** touch the 28,371 `created_at > last_modified_at` rows — expected noon-shift artifact. |
-| `duration` (centiseconds) | `duration_sec` (seconds) | **Divide by 100**. Cast `(doc->>'duration')::bigint / 100`; null→SQL NULL. |
+| `duration` (centiseconds) | `duration_cs` (centiseconds) | **Copy verbatim** (decided 2026-06-11; keep the legacy unit for exact totals + sub-second precision). Cast `(doc->>'duration')::bigint`; null→0. |
 | `distance` | `distance_m` | Cast `(doc->>'distance')::bigint`; null→SQL NULL. **`distance`→NULL on the 898 `duration=0 & distance>0` docs.** |
 | `avghr` | `avghr` | Cast; **`0`→NULL and clamp the 12 `>230` outliers→NULL** (§4 Q3); keep the 364 in (0,30). |
 | `pace` | generated column | Don't copy; recompute. Formula verified exact (0/45,810 mismatches). |
@@ -229,7 +229,7 @@ Keep staging tables until acceptance passes — re-runnable, idempotent (truncat
 ## 6. Verification / acceptance
 
 - **Counts** match the measured source totals: exercises **374,182**, users **672** (+ `[deleted]` placeholder if created), comments **186,007**, cares **144,591**, tag instances **139,020**.
-- **Spot totals**: per-user `sum(duration_sec)`, `sum(distance_m)`, `count(*)` equal the legacy summary numbers for several users.
+- **Spot totals**: per-user `sum(duration_cs)`, `sum(distance_m)`, `count(*)` equal the legacy summary numbers for several users.
 - **Orphan reconciliation**: every one of the 375 authors + all comment/care users resolves to an `app_user.id` (0 unresolved).
 - **Permalinks**: a sample of `legacy_object_id`s resolve.
 - **Search**: known queries return the expected exercises.

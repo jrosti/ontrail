@@ -94,7 +94,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
     body_html: string | null;
     tags: string[];
     exercise_date: string;
-    duration_sec: number;
+    duration_cs: number;
     distance_m: number | null;
     avg_hr: number | null;
     climb_m: number | null;
@@ -117,7 +117,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
     title: string;
     tags: string[];
     date: string;
-    durationSec: number;
+    durationCs: number;
     distanceM?: number;
     avgHr?: number;
     climbM?: number;
@@ -144,7 +144,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
       title: row.title,
       tags: row.tags,
       date: row.exercise_date,
-      durationSec: row.duration_sec,
+      durationCs: row.duration_cs,
       distanceM: row.distance_m ?? undefined,
       avgHr: row.avg_hr ?? undefined,
       climbM: row.climb_m ?? undefined,
@@ -167,7 +167,7 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
       e.body_html,
       e.tags,
       e.exercise_date::text,
-      e.duration_sec,
+      e.duration_cs,
       e.distance_m,
       e.avg_hr,
       e.climb_m,
@@ -218,7 +218,15 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
 
 async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   const url = new URL(req.url);
-  const path = url.pathname;
+  // Decode percent-encoded path segments so route params (usernames, group
+  // names) match stored values — Finnish names often contain ö/ä/å, e.g.
+  // "Jörö" arrives as "J%C3%B6r%C3%B6". Guard against malformed encodings.
+  let path = url.pathname;
+  try {
+    path = decodeURIComponent(url.pathname);
+  } catch {
+    // keep the raw path if the encoding is invalid
+  }
 
   if (req.method === 'OPTIONS') return new Response(null, { status: 204 });
 

@@ -47,8 +47,8 @@ const feedRoute = createRoute({
     page: s.page ? Number(s.page) : undefined,
     minDistM: s.minDistM ? Number(s.minDistM) : undefined,
     maxDistM: s.maxDistM ? Number(s.maxDistM) : undefined,
-    minDurSec: s.minDurSec ? Number(s.minDurSec) : undefined,
-    maxDurSec: s.maxDurSec ? Number(s.maxDurSec) : undefined,
+    minDurCs: s.minDurCs ? Number(s.minDurCs) : undefined,
+    maxDurCs: s.maxDurCs ? Number(s.maxDurCs) : undefined,
     minHr: s.minHr ? Number(s.minHr) : undefined,
     maxHr: s.maxHr ? Number(s.maxHr) : undefined,
     dateFrom: s.dateFrom as string | undefined,
@@ -67,13 +67,13 @@ export type FeedSearch = {
   page?: number;
   minDistM?: number;
   maxDistM?: number;
-  minDurSec?: number;
-  maxDurSec?: number;
+  minDurCs?: number;
+  maxDurCs?: number;
   minHr?: number;
   maxHr?: number;
   dateFrom?: string;
   dateTo?: string;
-  sortBy?: 'date' | 'distance' | 'duration' | 'hr';
+  sortBy?: 'recent' | 'date' | 'distance' | 'duration' | 'hr';
   sortDir?: 'asc' | 'desc';
 };
 
@@ -165,6 +165,28 @@ const athleteRoute = createRoute({
   component: AthletePageWrapper,
 });
 
+function UserAnalyticsWrapper() {
+  const { username } = userAnalyticsRoute.useParams();
+  return <AnalyticsPage username={username} />;
+}
+
+const userAnalyticsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/user/$username/analytics',
+  component: UserAnalyticsWrapper,
+});
+
+function UserCalendarWrapper() {
+  const { username } = userCalendarRoute.useParams();
+  return <CalendarPage username={username} />;
+}
+
+const userCalendarRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/user/$username/calendar',
+  component: UserCalendarWrapper,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -187,6 +209,8 @@ const routeTree = rootRoute.addChildren([
   groupsRoute,
   topListsRoute,
   athleteRoute,
+  userAnalyticsRoute,
+  userCalendarRoute,
 ]);
 
 export const router = createRouter({ routeTree });

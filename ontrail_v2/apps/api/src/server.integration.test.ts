@@ -167,6 +167,31 @@ describe('API integration', () => {
     });
   });
 
+  test('decodes non-ASCII usernames in path params (summary)', async () => {
+    if (skipIfIntegrationUnavailable()) return;
+
+    // Finnish names contain ö/ä/å; the URL arrives percent-encoded and must be
+    // decoded before the username is matched against stored rows.
+    const { sql } = await import('./db/client');
+    const username = 'Tëörö';
+    const [u] = await sql<{ id: string }[]>`
+      insert into users (username, normalized_username, display_name, avatar_initials, avatar_color)
+      values (${username}, ${'teoro'}, ${username}, ${'TÖ'}, ${'oklch(60% .18 260)'})
+      returning id::text
+    `;
+    await sql`
+      insert into exercises (owner_id, sport_key, title, exercise_date, duration_cs)
+      values (${u.id}, 'run', 'Testilenkki', '2022-05-01', 360000)
+    `;
+
+    const response = await request(`/api/users/${encodeURIComponent(username)}/summary`);
+    const body = await jsonResponse<{ items: { sport: string; totalDurationCs: number }[] }>(
+      response,
+    );
+    expect(body.items.length).toBeGreaterThan(0);
+    expect(body.items.some((i) => i.sport === 'run' && i.totalDurationCs === 360000)).toBe(true);
+  });
+
   test('lists seeded sports from PostgreSQL', async () => {
     if (skipIfIntegrationUnavailable()) return;
 
@@ -198,7 +223,7 @@ describe('API integration', () => {
 
     const response = await request('/api/exercises', {
       method: 'POST',
-      body: JSON.stringify({ title: 'Anonymous run', sport: 'run', durationSec: 1800 }),
+      body: JSON.stringify({ title: 'Anonymous run', sport: 'run', durationCs: 1800 }),
     });
 
     expect(response.status).toBe(401);
@@ -217,7 +242,7 @@ describe('API integration', () => {
         body: '<p>Easy base run</p>',
         tags: ['base', 'forest'],
         date: '2026-06-09',
-        durationSec: 3600,
+        durationCs: 3600,
         distanceM: 10500,
         climbM: 120,
         gpxPoints: [
@@ -226,13 +251,13 @@ describe('API integration', () => {
         ],
       }),
     });
-    const created = await jsonResponse<{ id: string; distanceM: number; durationSec: number }>(
+    const created = await jsonResponse<{ id: string; distanceM: number; durationCs: number }>(
       createdResponse,
     );
 
     expect(createdResponse.status).toBe(201);
     expect(created.distanceM).toBe(10500);
-    expect(created.durationSec).toBe(3600);
+    expect(created.durationCs).toBe(3600);
 
     const commentResponse = await request(`/api/exercises/${created.id}/comments`, {
       method: 'POST',
@@ -279,7 +304,7 @@ describe('API integration', () => {
         sport: 'run',
         title: 'Owner run',
         date: '2026-06-10',
-        durationSec: 2400,
+        durationCs: 2400,
       }),
     });
     const created = await jsonResponse<{ id: string }>(createdResponse);

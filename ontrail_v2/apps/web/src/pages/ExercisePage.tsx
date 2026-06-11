@@ -13,7 +13,15 @@ import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
 import { useStore } from '../store';
 import type { Care, Comment } from '../types';
-import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../utils/format';
+import {
+  calcPace,
+  durShort,
+  fmtBpmDist,
+  fmtDistKm,
+  fmtPace,
+  fmtSpeed,
+  relDay,
+} from '../utils/format';
 
 export function ExercisePage() {
   const { id } = useParams({ from: '/exercise/$id' });
@@ -70,10 +78,10 @@ export function ExercisePage() {
   const sport = SPORTS[ex.sport];
   const color = sport?.color ?? 'var(--accent)';
   const km = ex.distanceM ? ex.distanceM / 1000 : 0;
-  const pace = ex.distanceM ? calcPace(ex.durationSec, ex.distanceM) : 0;
+  const pace = ex.distanceM ? calcPace(ex.durationCs, ex.distanceM) : 0;
   const showSpeed = sport?.metric === 'speed';
   const paceVal = showSpeed
-    ? fmtSpeed(ex.distanceM ?? 0, ex.durationSec, lang)
+    ? fmtSpeed(ex.distanceM ?? 0, ex.durationCs, lang)
     : pace
       ? fmtPace(pace)
       : '—';
@@ -167,11 +175,19 @@ export function ExercisePage() {
               unit="km"
             />
           )}
-          <StatPill icon="clock" label={t.time} value={durShort(ex.durationSec)} />
+          <StatPill icon="clock" label={t.time} value={durShort(ex.durationCs)} />
           {sport?.metric !== 'time' && sport?.metric !== 'reps' && (
             <StatPill icon="bolt" label={t.pace} value={paceVal} unit={paceUnit} accent />
           )}
           {ex.avgHr && <StatPill icon="heart" label={t.avgHr} value={ex.avgHr} unit={t.bpm} />}
+          {ex.bpmdist && (
+            <StatPill
+              icon="bolt"
+              label={t.etenema}
+              value={fmtBpmDist(ex.bpmdist, lang)}
+              unit="m/b"
+            />
+          )}
           {ex.climbM && <StatPill icon="arrowUp" label={t.climb} value={ex.climbM} unit="m" />}
           <div
             style={{

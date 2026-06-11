@@ -59,7 +59,7 @@ export interface Exercise {
   gpxPoints?: { lat: number; lon: number; ele?: number }[];
   tags: string[];
   date: string;
-  durationSec: number;
+  durationCs: number;
   distanceM?: number;
   avgHr?: number;
   feelRating?: 'easy' | 'ok' | 'hard';
@@ -73,6 +73,8 @@ export interface Exercise {
   createdAt: string;
   updatedAt: string;
   legacyId?: string;
+  /** Etenemä: metres per heartbeat above rest (computed server-side). */
+  bpmdist?: number;
 }
 
 export interface ExerciseListItem {
@@ -84,9 +86,10 @@ export interface ExerciseListItem {
   ownerGravatarHash?: string;
   sport: string;
   title: string;
+  body?: string;
   tags: string[];
   date: string;
-  durationSec: number;
+  durationCs: number;
   distanceM?: number;
   avgHr?: number;
   climbM?: number;
@@ -101,11 +104,11 @@ export interface SportSummary {
   sport: string;
   sessionCount: number;
   totalDistanceM: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalClimbM: number;
   totalKcal: number;
   avgHr?: number;
-  bestDurationSec?: number;
+  bestDurationCs?: number;
   bestDistanceM?: number;
   firstDate?: string;
   lastDate?: string;
@@ -116,11 +119,11 @@ export interface YearSportSummary {
   sport: string;
   sessionCount: number;
   totalDistanceM: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalClimbM: number;
   totalKcal: number;
   avgHr?: number;
-  bestDurationSec?: number;
+  bestDurationCs?: number;
   bestDistanceM?: number;
   firstDate?: string;
   lastDate?: string;
@@ -132,7 +135,7 @@ export interface MonthSummary {
   sport: string;
   sessionCount: number;
   totalDistanceM: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalClimbM: number;
   avgHr?: number;
 }
@@ -143,7 +146,7 @@ export interface WeekSummary {
   sport: string;
   sessionCount: number;
   totalDistanceM: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalClimbM: number;
   avgHr?: number;
 }
@@ -159,7 +162,7 @@ export interface AthleteProfile {
   zone2LowerBpm?: number;
   zone4LowerBpm?: number;
   totalSessions: number;
-  careerDurationSec: number;
+  careerDurationCs: number;
   careerDistanceM: number;
   careerClimbM: number;
   careerKcal: number;
@@ -172,13 +175,13 @@ export interface AthleteProfile {
   sessions30d: number;
   sessions90d: number;
   sessions365d: number;
-  durationSec30d: number;
-  durationSec90d: number;
+  durationCs30d: number;
+  durationCs90d: number;
 }
 
 export interface PersonalRecord {
   sport: string;
-  bestDurationSec?: number;
+  bestDurationCs?: number;
   bestDurationExerciseId?: string;
   bestDistanceM?: number;
   bestDistanceExerciseId?: string;
@@ -195,14 +198,14 @@ export interface LeaderboardEntry {
   avatarInitials: string;
   avatarColor: string;
   sessionCount: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalDistanceM: number;
 }
 
 export interface TagSummary {
   tag: string;
   sessionCount: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalDistanceM: number;
   totalClimbM: number;
   avgHr?: number;
@@ -215,7 +218,7 @@ export interface TagSummaryMonth {
   month: number;
   tag: string;
   sessionCount: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalDistanceM: number;
   totalClimbM: number;
   avgHr?: number;

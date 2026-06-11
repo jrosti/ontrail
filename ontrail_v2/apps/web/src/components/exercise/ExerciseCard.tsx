@@ -7,9 +7,18 @@ import { I18N } from '../../i18n';
 import { SPORTS } from '../../sports';
 import { useStore } from '../../store';
 import type { Care, ExerciseListItem } from '../../types';
-import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../../utils/format';
+import {
+  calcPace,
+  durShort,
+  fmtDistKm,
+  fmtPace,
+  fmtSpeed,
+  relDay,
+  stripHtml,
+} from '../../utils/format';
 import { downsample } from '../../utils/gpx';
 import { LeafletMap } from '../charts/LeafletMap';
+import { RichViewer } from '../editor/RichViewer';
 import { Avatar } from '../ui/Avatar';
 import { Card } from '../ui/Card';
 import { Icon } from '../ui/Icon';
@@ -35,6 +44,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const [localCares, setLocalCares] = useState<Care[]>(ex.cares);
   const myCare = localCares.find((c) => c.authorUsername === myUsername);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [bodyExpanded, setBodyExpanded] = useState(false);
+
+  const bodyText = ex.body ? stripHtml(ex.body) : '';
+  // Show the expand toggle only when the preview would actually be clipped.
+  const bodyClipped = bodyText.length > 140;
 
   const careMut = useMutation({
     mutationFn: (emoji: string | null) =>
@@ -65,11 +79,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const liked = Boolean(myCare);
 
   const km = ex.distanceM ? ex.distanceM / 1000 : 0;
-  const pace = ex.distanceM ? calcPace(ex.durationSec, ex.distanceM) : 0;
+  const pace = ex.distanceM ? calcPace(ex.durationCs, ex.distanceM) : 0;
   const showSpeed = sport?.metric === 'speed';
   const showDistance = sport?.metric !== 'reps';
   const paceVal = showSpeed
-    ? fmtSpeed(ex.distanceM ?? 0, ex.durationSec, lang)
+    ? fmtSpeed(ex.distanceM ?? 0, ex.durationCs, lang)
     : pace
       ? fmtPace(pace)
       : '—';
@@ -80,7 +94,7 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
       {showDistance && km > 0 && (
         <Metric value={fmtDistKm(ex.distanceM ?? 0, lang)} unit="km" label={t.distance} />
       )}
-      <Metric value={durShort(ex.durationSec)} label={t.time} />
+      <Metric value={durShort(ex.durationCs)} label={t.time} />
       {sport?.metric !== 'time' && sport?.metric !== 'reps' && (
         <Metric value={paceVal} unit={paceUnit} label={t.pace} accent />
       )}
@@ -178,8 +192,9 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
         <div style={{ minWidth: 0, flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Link
-              to="/diary/$username"
+              to="/user/$username"
               params={{ username: ex.ownerUsername }}
+              search={{ tab: undefined }}
               style={{ fontWeight: 600, color: 'var(--text)' }}
             >
               {ex.ownerDisplayName}
@@ -208,6 +223,8 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
         </div>
       </div>
 
+      {metricRow}
+
       <Link
         to="/exercise/$id"
         params={{ id: ex.id }}
@@ -221,7 +238,24 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
         {ex.title}
       </Link>
 
-      {metricRow}
+      {bodyText && (
+        <div className="ot-card-body">
+          {bodyExpanded ? (
+            <RichViewer html={ex.body ?? ''} className="ot-card-body-full" />
+          ) : (
+            <p className={`ot-card-body-preview${bodyClipped ? ' clipped' : ''}`}>{bodyText}</p>
+          )}
+          {bodyClipped && (
+            <button
+              type="button"
+              className="ot-card-body-toggle"
+              onClick={() => setBodyExpanded((v) => !v)}
+            >
+              {bodyExpanded ? t.showLess : t.showMore}
+            </button>
+          )}
+        </div>
+      )}
 
       {km > 0 &&
         ex.gpxPoints &&

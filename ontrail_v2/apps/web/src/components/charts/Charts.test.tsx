@@ -90,7 +90,7 @@ describe('chart components', () => {
     const { container: calendar } = render(
       <ActivityCalendar
         year={2026}
-        byDate={new Map([['2026-01-01', 3600]])}
+        byDate={new Map([['2026-01-01', 360000]])}
         cell={8}
         gap={2}
         onDayClick={onDayClick}

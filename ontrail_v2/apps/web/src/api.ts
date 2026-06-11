@@ -49,13 +49,13 @@ export const listExercises = (params?: {
   group?: string;
   minDistM?: number;
   maxDistM?: number;
-  minDurSec?: number;
-  maxDurSec?: number;
+  minDurCs?: number;
+  maxDurCs?: number;
   minHr?: number;
   maxHr?: number;
   dateFrom?: string;
   dateTo?: string;
-  sortBy?: 'date' | 'distance' | 'duration' | 'hr';
+  sortBy?: 'recent' | 'date' | 'distance' | 'duration' | 'hr';
   sortDir?: 'asc' | 'desc';
 }) => client.get<PaginatedResponse<ExerciseListItem>>('/exercises', { params }).then((r) => r.data);
 

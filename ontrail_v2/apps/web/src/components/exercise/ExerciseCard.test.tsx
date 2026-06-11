@@ -54,7 +54,7 @@ const exercise: ExerciseListItem = {
   title: 'Aamulenkki',
   tags: ['polku', 'kevyt'],
   date: new Date().toISOString().slice(0, 10),
-  durationSec: 30 * 60,
+  durationCs: 30 * 6000, // 30 min in centiseconds
   distanceM: 5000,
   commentCount: 2,
   careCount: 3,
@@ -165,5 +165,25 @@ describe('ExerciseCard', () => {
     expect(screen.queryByText('Matka')).toBeNull();
     expect(screen.queryByText('Vauhti')).toBeNull();
     expect(screen.getByText('30 min')).toBeTruthy();
+  });
+
+  test('shows a clamped body preview with an expand toggle for long bodies', () => {
+    const longBody =
+      '<td><p>Pitkä kuvaus harjoituksesta joka jatkuu useita rivejä ja on selvästi yli ' +
+      'sata neljäkymmentä merkkiä pitkä, jotta katkaisu ja näytä-lisää-painike tulevat näkyviin.</p></td>';
+    renderWithProviders(<ExerciseCard exercise={{ ...exercise, body: longBody }} />);
+
+    // Preview text is rendered as stripped plain text (no <td>/<p> tags).
+    // (The expanded RichViewer render is verified in a real browser, not here:
+    // the linkedom test DOM lacks the layout APIs ProseMirror needs to mount.)
+    expect(screen.getByText(/Pitkä kuvaus harjoituksesta/)).toBeTruthy();
+    expect(screen.getByText('Näytä lisää')).toBeTruthy();
+  });
+
+  test('omits the expand toggle for short bodies', () => {
+    renderWithProviders(<ExerciseCard exercise={{ ...exercise, body: '<p>Lyhyt.</p>' }} />);
+
+    expect(screen.getByText('Lyhyt.')).toBeTruthy();
+    expect(screen.queryByText('Näytä lisää')).toBeNull();
   });
 });

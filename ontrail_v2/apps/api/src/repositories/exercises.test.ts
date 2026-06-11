@@ -31,6 +31,7 @@ mock.module('../sse', () => ({
 
 const {
   addComment,
+  computeBpmDist,
   createExercise,
   deleteComment,
   deleteExercise,
@@ -38,6 +39,21 @@ const {
   listExercises,
   updateExercise,
 } = await import('./exercises');
+
+describe('computeBpmDist (Etenemä)', () => {
+  test('metres per heartbeat above rest', () => {
+    // 10 km, 60 min (360000 cs), avgHr 150, restHr 50 -> 10000 / (100 * 60) = 1.666…
+    expect(computeBpmDist(10000, 360000, 150, 50)).toBeCloseTo(10000 / (100 * 60), 5);
+  });
+
+  test('undefined when not computable (no HR / no resthr / no distance / avgHr<=resthr)', () => {
+    expect(computeBpmDist(10000, 360000, null, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 360000, 150, null)).toBeUndefined();
+    expect(computeBpmDist(null, 360000, 150, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 0, 150, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 360000, 40, 50)).toBeUndefined();
+  });
+});
 
 const owner: DbUser = {
   id: 'owner-id',
@@ -71,7 +87,7 @@ const exerciseRow = {
   body_html: '<p>Easy</p>',
   tags: ['base', 'trail'],
   exercise_date: '2026-06-09',
-  duration_sec: 3600,
+  duration_cs: 3600,
   distance_m: 10000,
   avg_hr: 140,
   climb_m: 120,
@@ -105,7 +121,7 @@ const updateRow = {
   body_html: '<p>Easy</p>',
   tags: ['base'],
   exercise_date: '2026-06-09',
-  duration_sec: 3600,
+  duration_cs: 3600,
   distance_m: 10000,
   avg_hr: 140,
   climb_m: 120,
@@ -135,8 +151,8 @@ describe('exercise repository reads', () => {
       group: 'trail-crew',
       minDistM: '5000',
       maxDistM: '20000',
-      minDurSec: '1200',
-      maxDurSec: '7200',
+      minDurCs: '1200',
+      maxDurCs: '7200',
       minHr: '120',
       maxHr: '170',
       dateFrom: '2026-06-01',
@@ -225,7 +241,7 @@ describe('exercise repository writes', () => {
       createExercise(owner, {
         sport: 'Juoksu',
         title: 'Created',
-        durationSec: 1800,
+        durationCs: 1800,
         details: { cadence: 90 },
         gpxPoints: [
           { lat: 60.1, lon: 24.9, ele: 10 },

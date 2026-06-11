@@ -12,6 +12,7 @@ import {
   getYearSummary,
   listExercises,
 } from '../api';
+import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -68,7 +69,7 @@ type SummaryRow = {
   label: string;
   sport?: string;
   sessionCount: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalDistanceM: number;
   totalClimbM: number;
   avgHr?: number;
@@ -82,12 +83,12 @@ function toSportRows(items: (SportSummary | YearSportSummary)[], lang: 'fi' | 'e
       label: sportName(r.sport, lang),
       sport: r.sport,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
     }))
-    .sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+    .sort((a, b) => b.totalDurationCs - a.totalDurationCs);
 }
 
 function toTagRows(items: TagSummary[]): SummaryRow[] {
@@ -96,12 +97,12 @@ function toTagRows(items: TagSummary[]): SummaryRow[] {
       key: r.tag,
       label: r.tag,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
     }))
-    .sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+    .sort((a, b) => b.totalDurationCs - a.totalDurationCs);
 }
 
 function totalRow(rows: SummaryRow[], lang: 'fi' | 'en'): SummaryRow {
@@ -109,7 +110,7 @@ function totalRow(rows: SummaryRow[], lang: 'fi' | 'en'): SummaryRow {
     key: 'TOTAL',
     label: lang === 'fi' ? 'YHTEENSÄ' : 'TOTAL',
     sessionCount: rows.reduce((s, r) => s + r.sessionCount, 0),
-    totalDurationSec: rows.reduce((s, r) => s + r.totalDurationSec, 0),
+    totalDurationCs: rows.reduce((s, r) => s + r.totalDurationCs, 0),
     totalDistanceM: rows.reduce((s, r) => s + r.totalDistanceM, 0),
     totalClimbM: rows.reduce((s, r) => s + r.totalClimbM, 0),
     isTotal: true,
@@ -120,10 +121,18 @@ function SummaryTable({
   rows,
   lang,
   showTotal,
+  linkUser,
+  dateFrom,
+  dateTo,
 }: {
   rows: SummaryRow[];
   lang: 'fi' | 'en';
   showTotal?: boolean;
+  // When set, each row links to that user's feed filtered by its sport or tag,
+  // constrained to [dateFrom, dateTo] (the period being viewed) and sorted by date.
+  linkUser?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }) {
   if (!rows.length)
     return <div style={{ color: 'var(--text-faint)', fontSize: 13, padding: '8px 0' }}>—</div>;
@@ -151,13 +160,29 @@ function SummaryTable({
                 <SportGlyph sport={r.sport} size={13} />
               </>
             )}
-            {r.label}
+            {linkUser && !r.isTotal ? (
+              <Link
+                to="/feed"
+                search={{
+                  user: linkUser,
+                  sortBy: 'date' as const,
+                  ...(dateFrom ? { dateFrom } : {}),
+                  ...(dateTo ? { dateTo } : {}),
+                  ...(r.sport ? { sports: [r.sport] } : { tag: r.key }),
+                }}
+                style={{ color: 'var(--accent)' }}
+              >
+                {r.label}
+              </Link>
+            ) : (
+              r.label
+            )}
           </span>
           <span>{fmtDistSummary(r.totalDistanceM, lang)}</span>
           <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12 }}>
-            {r.sport ? fmtPaceSport(r.totalDurationSec, r.totalDistanceM, r.sport, lang) : '—'}
+            {r.sport ? fmtPaceSport(r.totalDurationCs, r.totalDistanceM, r.sport, lang) : '—'}
           </span>
-          <span>{fmtDur(r.totalDurationSec)}</span>
+          <span>{fmtDur(r.totalDurationCs)}</span>
           <span>{r.avgHr ? `${r.avgHr} bpm` : '—'}</span>
           <span>{r.totalClimbM ? `${r.totalClimbM} m` : '—'}</span>
           <span style={{ fontWeight: 600 }}>{r.sessionCount}</span>
@@ -173,12 +198,14 @@ function MonthAccordion({
   lang,
   showTotals,
   isTag,
+  linkUser,
 }: {
   year: number;
   monthRows: (MonthSummary | TagSummaryMonth)[];
   lang: 'fi' | 'en';
   showTotals?: boolean;
   isTag?: boolean;
+  linkUser?: string;
 }) {
   const [open, setOpen] = useState<number | null>(NOW.getMonth() + 1);
   const monthNames = lang === 'fi' ? MONTH_NAMES_FI : MONTH_NAMES_EN;
@@ -191,7 +218,7 @@ function MonthAccordion({
       label: isTag ? (r as TagSummaryMonth).tag : sportName((r as MonthSummary).sport, lang),
       sport: isTag ? undefined : (r as MonthSummary).sport,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
@@ -201,10 +228,13 @@ function MonthAccordion({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {Array.from({ length: 12 }, (_, i) => 12 - i).map((m) => {
-        const rows = (byMonth[m] ?? []).sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+        const rows = (byMonth[m] ?? []).sort((a, b) => b.totalDurationCs - a.totalDurationCs);
         if (!rows.length) return null;
+        const mm = String(m).padStart(2, '0');
+        const monthFrom = `${year}-${mm}-01`;
+        const monthTo = `${year}-${mm}-${String(new Date(year, m, 0).getDate()).padStart(2, '0')}`;
         const isOpen = open === m;
-        const tot = rows.reduce((s, r) => s + r.totalDurationSec, 0);
+        const tot = rows.reduce((s, r) => s + r.totalDurationCs, 0);
         const dist = rows.reduce((s, r) => s + r.totalDistanceM, 0);
         const cnt = rows.reduce((s, r) => s + r.sessionCount, 0);
         return (
@@ -237,7 +267,14 @@ function MonthAccordion({
             </button>
             {isOpen && (
               <div style={{ paddingTop: 4 }}>
-                <SummaryTable rows={rows} lang={lang} showTotal={showTotals} />
+                <SummaryTable
+                  rows={rows}
+                  lang={lang}
+                  showTotal={showTotals}
+                  linkUser={linkUser}
+                  dateFrom={monthFrom}
+                  dateTo={monthTo}
+                />
               </div>
             )}
           </div>
@@ -331,6 +368,11 @@ export function AthletePage({ username, initialTab }: { username: string; initia
 
   const isOwnProfile = currentUser?.username === username;
 
+  // Period range for sport/tag drill-down links: year scope constrains to the
+  // year; all-time leaves it open. (Month scope is handled per-month in the accordion.)
+  const periodFrom = scope === 'year' ? `${year}-01-01` : undefined;
+  const periodTo = scope === 'year' ? `${year}-12-31` : undefined;
+
   return (
     <div className="ot-page">
       {/* Header */}
@@ -377,38 +419,19 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   : t.records}
           </button>
         ))}
+        <Link to="/user/$username/analytics" params={{ username }} className="ot-scope-btn">
+          {t.analytics}
+        </Link>
+        <Link to="/user/$username/calendar" params={{ username }} className="ot-scope-btn">
+          {t.calendar}
+        </Link>
       </div>
 
       {/* Workouts tab */}
       {tab === 'workouts' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {(exercisesData?.items ?? []).map((ex) => (
-            <Link key={ex.id} to="/exercise/$id" params={{ id: ex.id }}>
-              <Card hover style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
-                    background: `color-mix(in oklab, ${SPORTS[ex.sport]?.color ?? 'var(--accent)'} 15%, transparent)`,
-                    flexShrink: 0,
-                  }}
-                >
-                  <SportGlyph sport={ex.sport} size={18} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>{ex.title}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 2 }}>
-                    {ex.date.slice(0, 10)} · {sportName(ex.sport, lang)}
-                    {ex.durationSec ? ` · ${fmtDur(ex.durationSec)}` : ''}
-                    {ex.distanceM ? ` · ${fmtDistSummary(ex.distanceM, lang)}` : ''}
-                  </div>
-                </div>
-              </Card>
-            </Link>
+            <ExerciseCard key={ex.id} exercise={ex} />
           ))}
           {(exercisesData?.items?.length ?? 0) === 0 && (
             <div
@@ -486,9 +509,22 @@ export function AthletePage({ username, initialTab }: { username: string; initia
           {tab === 'sports' && (
             <Card>
               {scope === 'month' ? (
-                <MonthAccordion year={year} monthRows={monthSports ?? []} lang={lang} showTotals />
+                <MonthAccordion
+                  year={year}
+                  monthRows={monthSports ?? []}
+                  lang={lang}
+                  showTotals
+                  linkUser={username}
+                />
               ) : (
-                <SummaryTable rows={sportRows} lang={lang} showTotal />
+                <SummaryTable
+                  rows={sportRows}
+                  lang={lang}
+                  showTotal
+                  linkUser={username}
+                  dateFrom={periodFrom}
+                  dateTo={periodTo}
+                />
               )}
             </Card>
           )}
@@ -502,9 +538,16 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   monthRows={(monthTags ?? []) as TagSummaryMonth[]}
                   lang={lang}
                   isTag
+                  linkUser={username}
                 />
               ) : (
-                <SummaryTable rows={tagRows} lang={lang} />
+                <SummaryTable
+                  rows={tagRows}
+                  lang={lang}
+                  linkUser={username}
+                  dateFrom={periodFrom}
+                  dateTo={periodTo}
+                />
               )}
             </Card>
           )}
@@ -540,10 +583,10 @@ function RecordsGrid({ records, lang }: { records: PersonalRecord[]; lang: 'fi' 
             value: fmtDistSummary(rec.bestDistanceM, lang),
             id: rec.bestDistanceExerciseId,
           });
-        if (rec.bestDurationSec)
+        if (rec.bestDurationCs)
           rows.push({
             label: t.time,
-            value: fmtDur(rec.bestDurationSec),
+            value: fmtDur(rec.bestDurationCs),
             id: rec.bestDurationExerciseId,
           });
         if (rec.bestPace) {

@@ -1,5 +1,17 @@
 /**
- * Legacy user migration script.
+ * Legacy user migration script: MongoDB `onuser` -> Postgres `users` + Hanko.
+ *
+ * For each input doc it upserts a `users` row (profile flattened, scrypt
+ * `passwordHash` carried verbatim as a bridge), creates a verified Hanko
+ * account for the email, and records the mapping in `migration_users`.
+ * Idempotent: re-running skips users already in `migration_users`.
+ *
+ * Export the source from the running Mongo with `--jsonArray` (the script
+ * expects a JSON array, and Mongo 3.2 emits `_id` as `{"$oid": ...}`, matching
+ * MongoUser._id below). One user:
+ *   docker exec ontrailmongo mongoexport --db ontrail --collection onuser \
+ *     --query '{"_id":{"$oid":"<hex>"}}' --jsonArray 2>/dev/null > users.json
+ * All users: drop the --query.
  *
  * Usage:
  *   MONGO_USERS_JSON=/path/to/users.json bun run src/scripts/migrate-users.ts
@@ -8,6 +20,15 @@
  *   MONGO_USERS_JSON  - path to JSON file exported from MongoDB onuser collection
  *   HANKO_ADMIN_URL   - Hanko admin API base URL (default: http://localhost:8001)
  *   DATABASE_URL      - PostgreSQL connection string
+ *
+ * Known data hazards for the bulk run (not yet handled here):
+ *   - Duplicate emails: several legacy accounts can share one email (e.g. test
+ *     accounts). Hanko enforces a unique email, so only one can be created per
+ *     address; the rest get a 409 and are recorded with state 'pending'. Pick
+ *     the canonical account before bulk-running, or dedupe upstream.
+ *   - Mixed numeric encoding: some docs store profile.resthr/maxhr as extended
+ *     JSON ({"$numberLong":"42"}) rather than a plain number; those need
+ *     coercion before they hit the integer columns.
  */
 
 import { readFileSync } from 'node:fs';
@@ -31,12 +52,12 @@ interface MongoUser {
   };
 }
 
-interface HankoUser {
+export interface HankoUser {
   id: string;
-  email: string;
+  emails?: { address: string; is_primary?: boolean; is_verified?: boolean }[];
 }
 
-function normalizeUsername(input: string): string {
+export function normalizeUsername(input: string): string {
   const normalized = input
     .toLowerCase()
     .normalize('NFKD')
@@ -47,16 +68,31 @@ function normalizeUsername(input: string): string {
   return normalized || 'user';
 }
 
-function initials(username: string): string {
+export function initials(username: string): string {
   return username.slice(0, 2).toUpperCase();
 }
 
-async function createHankoUser(email: string): Promise<HankoUser | null> {
+/**
+ * Create a Hanko user for the given email via the admin API.
+ *
+ * Hanko's admin user-create route is `POST /users` (the admin server is
+ * already rooted at the admin port, there is no `/admin` path prefix), and the
+ * body is a `CreateUser` DTO carrying an `emails` array — not a flat `email`.
+ * We mark the migrated email primary + verified so the user can immediately
+ * request a login passcode without a separate verification step. This Hanko
+ * build has no user "status" concept, so no activation call is needed.
+ */
+export async function createHankoUser(
+  email: string,
+  adminUrl: string = HANKO_ADMIN_URL,
+): Promise<HankoUser | null> {
   try {
-    const resp = await fetch(`${HANKO_ADMIN_URL}/admin/users`, {
+    const resp = await fetch(`${adminUrl}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({
+        emails: [{ address: email, is_primary: true, is_verified: true }],
+      }),
     });
     if (!resp.ok) {
       const body = await resp.text();
@@ -67,21 +103,6 @@ async function createHankoUser(email: string): Promise<HankoUser | null> {
   } catch (err) {
     console.warn(`  Hanko admin API unreachable: ${err}`);
     return null;
-  }
-}
-
-async function activateHankoUser(hankoId: string): Promise<void> {
-  try {
-    const resp = await fetch(`${HANKO_ADMIN_URL}/admin/users/${hankoId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status: 'active' }),
-    });
-    if (!resp.ok) {
-      console.warn(`  Hanko activate failed (${resp.status})`);
-    }
-  } catch {
-    // non-fatal
   }
 }
 
@@ -164,7 +185,6 @@ async function main() {
       const hankoUser = await createHankoUser(email);
       if (hankoUser) {
         hankoSubject = hankoUser.id;
-        await activateHankoUser(hankoUser.id);
         // Store hanko_subject on users row
         await sql`
           update users set hanko_subject = ${hankoSubject}
@@ -204,7 +224,9 @@ async function main() {
   await sql.end({ timeout: 5 });
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (import.meta.main) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
