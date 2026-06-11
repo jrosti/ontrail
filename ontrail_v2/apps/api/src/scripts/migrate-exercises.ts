@@ -42,6 +42,9 @@ export const SPORT_OVERRIDES: Record<string, string> = {
   Lepo: 'muu-merkinta',
   // "Vesijumppa" (aqua aerobics) -> closest is plain aerobics.
   Vesijumppa: 'jumppa',
+  // The 'maastojuoksu' sport is now labelled "Polkujuoksu"; legacy data still
+  // uses the old display name, so keep mapping it to the same key.
+  Maastojuoksu: 'maastojuoksu',
 };
 
 type Long = number | { $numberLong: string } | null | undefined;
