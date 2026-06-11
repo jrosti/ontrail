@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build",
     "lint": "biome check src",
     "format": "biome format --write src",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc -b",
     "preview": "vite preview"
   },
   "dependencies": {
