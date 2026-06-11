@@ -72,10 +72,16 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 **Data migration (Mongo → Postgres)**
 - [ ] Scripts to load mongodump into staging JSONB tables
 - [ ] User normalization (username→id map, orphan aliases)
+- [x] Hanko account linking for migrated users — `migrate-users.ts` (fixed admin API
+      endpoint/body); verified end-to-end with the `Jörö` account
+- [ ] Duplicate-email handling: merge non-canonical accounts into canonical (most exercises)
+      per `docs/migration/duplicate-email-policy.md`. 34 emails span 76 accounts. Needs:
+      group-by-email pre-pass + canonical pick, dry-run merge report, manual exclusion list,
+      `'merged'` state in the `migration_users` CHECK constraint, and history reassignment
+      (exercises/comments/cares/group_members)
 - [ ] Exercise normalization (duration ÷100→seconds, sport mapping, date clamping)
 - [ ] Comment + care normalization from embedded arrays
 - [ ] Group normalization
-- [ ] Hanko account linking for migrated users
 - [ ] Acceptance test: spot totals match legacy output
 
 **Testing**
