@@ -73,6 +73,8 @@ export interface Exercise {
   createdAt: string;
   updatedAt: string;
   legacyId?: string;
+  /** Etenemä: metres per heartbeat above rest (computed server-side). */
+  bpmdist?: number;
 }
 
 export interface ExerciseListItem {

@@ -281,6 +281,24 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   };
 }
 
+/**
+ * Etenemä (legacy bpmdist): metres advanced per heartbeat above rest =
+ * distance / ((avgHr - restHr) * duration_min). duration is centiseconds, so
+ * duration_min = duration_cs / 6000. Undefined unless distance/duration/avgHr
+ * and the owner's restHr are all positive and avgHr > restHr (matches legacy:
+ * blank when not computable, e.g. no HR or a non-distance sport).
+ */
+export function computeBpmDist(
+  distanceM: number | null,
+  durationCs: number | null,
+  avgHr: number | null,
+  restHr: number | null,
+): number | undefined {
+  if (!distanceM || distanceM <= 0 || !durationCs || durationCs <= 0) return undefined;
+  if (!avgHr || avgHr <= 0 || !restHr || restHr <= 0 || avgHr <= restHr) return undefined;
+  return distanceM / (((avgHr - restHr) * durationCs) / 6000);
+}
+
 export async function getExercise(id: string, authenticated: boolean): Promise<Exercise | null> {
   const rows = await sql<ExerciseRow[]>`
     ${exerciseSelect()}
@@ -290,7 +308,7 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
   const row = rows[0];
   if (!row) return null;
 
-  const [commentRows, careRows] = await Promise.all([
+  const [commentRows, careRows, ownerRows] = await Promise.all([
     authenticated
       ? sql<CommentRow[]>`
           select c.id::text, u.username, u.display_name, u.avatar_initials, u.avatar_color, u.email as author_email, c.body, c.created_at::text
@@ -307,9 +325,13 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
       where ca.exercise_id = ${id}
       order by ca.created_at asc
     `,
+    sql<{ resthr: number | null }[]>`
+      select resthr from users where username = ${row.owner_username} limit 1
+    `,
   ]);
 
-  return toExercise(row, careRows, commentRows.map(toComment), authenticated);
+  const bpmdist = computeBpmDist(row.distance_m, row.duration_cs, row.avg_hr, ownerRows[0]?.resthr ?? null);
+  return { ...toExercise(row, careRows, commentRows.map(toComment), authenticated), bpmdist };
 }
 
 export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {

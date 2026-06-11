@@ -31,6 +31,7 @@ mock.module('../sse', () => ({
 
 const {
   addComment,
+  computeBpmDist,
   createExercise,
   deleteComment,
   deleteExercise,
@@ -38,6 +39,21 @@ const {
   listExercises,
   updateExercise,
 } = await import('./exercises');
+
+describe('computeBpmDist (Etenemä)', () => {
+  test('metres per heartbeat above rest', () => {
+    // 10 km, 60 min (360000 cs), avgHr 150, restHr 50 -> 10000 / (100 * 60) = 1.666…
+    expect(computeBpmDist(10000, 360000, 150, 50)).toBeCloseTo(10000 / (100 * 60), 5);
+  });
+
+  test('undefined when not computable (no HR / no resthr / no distance / avgHr<=resthr)', () => {
+    expect(computeBpmDist(10000, 360000, null, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 360000, 150, null)).toBeUndefined();
+    expect(computeBpmDist(null, 360000, 150, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 0, 150, 50)).toBeUndefined();
+    expect(computeBpmDist(10000, 360000, 40, 50)).toBeUndefined();
+  });
+});
 
 const owner: DbUser = {
   id: 'owner-id',
