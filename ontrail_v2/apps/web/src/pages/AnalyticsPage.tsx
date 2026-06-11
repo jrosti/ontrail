@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  getAthleteProfile,
   getMonthSummaries,
   getSportSummary,
   getWeekSummaries,
@@ -82,8 +83,6 @@ const MONTH_SHORT_EN = [
 
 type Scope = 'all' | 'year' | 'month' | 'week';
 
-const PICK_YEARS = Array.from({ length: 12 }, (_, i) => CURRENT_YEAR - i);
-
 function PeriodPicker({
   scope,
   year,
@@ -93,6 +92,7 @@ function PeriodPicker({
   onMonth,
   onWeek,
   lang,
+  years,
 }: {
   scope: Scope;
   year: number;
@@ -102,6 +102,7 @@ function PeriodPicker({
   onMonth: (m: number) => void;
   onWeek: (w: number) => void;
   lang: string;
+  years: number[];
 }) {
   const [open, setOpen] = useState(false);
   const [pickYear, setPickYear] = useState(year);
@@ -179,7 +180,7 @@ function PeriodPicker({
 
           {(scope === 'year' || scope === 'all') && (
             <div className="ot-picker-year-grid">
-              {PICK_YEARS.map((y) => (
+              {years.map((y) => (
                 <button
                   type="button"
                   key={y}
@@ -292,6 +293,20 @@ export function AnalyticsPage() {
     enabled: !!username,
     staleTime: 5 * 60_000,
   });
+
+  // Athlete profile gives the first active year so the picker can span the
+  // user's full history (legacy data goes back to the 1990s), not just 12 years.
+  const { data: athlete } = useQuery({
+    queryKey: ['athleteProfile', username],
+    queryFn: () => getAthleteProfile(username),
+    enabled: !!username,
+    staleTime: 5 * 60_000,
+  });
+  const years = useMemo(() => {
+    // Always offer at least the 12 most recent years, extending back to firstYear.
+    const start = Math.min(athlete?.firstYear ?? CURRENT_YEAR, CURRENT_YEAR - 11);
+    return Array.from({ length: CURRENT_YEAR - start + 1 }, (_, i) => CURRENT_YEAR - i);
+  }, [athlete?.firstYear]);
 
   const nav = useNavigate();
 
@@ -474,6 +489,7 @@ export function AnalyticsPage() {
             onMonth={setMonth}
             onWeek={setWeek}
             lang={lang}
+            years={years}
           />
         </div>
       </div>
