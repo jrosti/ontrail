@@ -40,6 +40,8 @@ import { sql } from '../db/client';
 export const SPORT_OVERRIDES: Record<string, string> = {
   // "Lepo" (rest day) has no sport in the new model; treat as a plain note.
   Lepo: 'muu-merkinta',
+  // "Vesijumppa" (aqua aerobics) -> closest is plain aerobics.
+  Vesijumppa: 'jumppa',
 };
 
 type Long = number | { $numberLong: string } | null | undefined;
