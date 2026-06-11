@@ -167,6 +167,31 @@ describe('API integration', () => {
     });
   });
 
+  test('decodes non-ASCII usernames in path params (summary)', async () => {
+    if (skipIfIntegrationUnavailable()) return;
+
+    // Finnish names contain ö/ä/å; the URL arrives percent-encoded and must be
+    // decoded before the username is matched against stored rows.
+    const { sql } = await import('./db/client');
+    const username = 'Tëörö';
+    const [u] = await sql<{ id: string }[]>`
+      insert into users (username, normalized_username, display_name, avatar_initials, avatar_color)
+      values (${username}, ${'teoro'}, ${username}, ${'TÖ'}, ${'oklch(60% .18 260)'})
+      returning id::text
+    `;
+    await sql`
+      insert into exercises (owner_id, sport_key, title, exercise_date, duration_cs)
+      values (${u.id}, 'run', 'Testilenkki', '2022-05-01', 360000)
+    `;
+
+    const response = await request(`/api/users/${encodeURIComponent(username)}/summary`);
+    const body = await jsonResponse<{ items: { sport: string; totalDurationCs: number }[] }>(
+      response,
+    );
+    expect(body.items.length).toBeGreaterThan(0);
+    expect(body.items.some((i) => i.sport === 'run' && i.totalDurationCs === 360000)).toBe(true);
+  });
+
   test('lists seeded sports from PostgreSQL', async () => {
     if (skipIfIntegrationUnavailable()) return;
 

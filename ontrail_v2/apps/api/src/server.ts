@@ -218,7 +218,15 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
 
 async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
   const url = new URL(req.url);
-  const path = url.pathname;
+  // Decode percent-encoded path segments so route params (usernames, group
+  // names) match stored values — Finnish names often contain ö/ä/å, e.g.
+  // "Jörö" arrives as "J%C3%B6r%C3%B6". Guard against malformed encodings.
+  let path = url.pathname;
+  try {
+    path = decodeURIComponent(url.pathname);
+  } catch {
+    // keep the raw path if the encoding is invalid
+  }
 
   if (req.method === 'OPTIONS') return new Response(null, { status: 204 });
 
