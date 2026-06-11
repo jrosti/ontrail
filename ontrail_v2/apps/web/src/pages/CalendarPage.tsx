@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { getWeekSummaries, listExercises } from '../api';
+import { getUser, getWeekSummaries, listExercises } from '../api';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
 import { SportGlyph } from '../components/ui/SportGlyph';
@@ -111,14 +111,15 @@ function MonthCard({
   lang,
   weekDurationMap,
   dows,
+  username,
 }: {
   year: number;
   month0: number;
   lang: 'fi' | 'en';
   weekDurationMap: Record<number, number>;
   dows: string[];
+  username: string;
 }) {
-  const username = useStore((s) => s.currentUser?.username ?? '');
   const monthKey = `${year}-${String(month0 + 1).padStart(2, '0')}`;
   const dateFrom = `${monthKey}-01`;
   const lastDay = new Date(year, month0 + 1, 0).getDate();
@@ -214,14 +215,23 @@ function MonthCard({
   );
 }
 
-export function CalendarPage() {
+export function CalendarPage({ username: propUsername }: { username?: string } = {}) {
   const { lang, currentUser } = useStore();
   const t = I18N[lang];
   const dows =
     lang === 'fi'
       ? ['Ma', 'Ti', 'Ke', 'To', 'Pe', 'La', 'Su']
       : ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
-  const username = currentUser?.username ?? '';
+  const isOwn = !propUsername;
+  const username = propUsername ?? currentUser?.username ?? '';
+
+  // When viewing another athlete's calendar, identify whose it is.
+  const { data: viewedUser } = useQuery({
+    queryKey: ['user', username],
+    queryFn: () => getUser(username),
+    enabled: !isOwn && !!username,
+    staleTime: 5 * 60_000,
+  });
 
   // The "anchor" year: determines which month to start from
   const [year, setYear] = useState(CURRENT_YEAR);
@@ -311,6 +321,11 @@ export function CalendarPage() {
       <div className="ot-page-head">
         <div>
           <h1 className="ot-page-title">{t.weeks}</h1>
+          {!isOwn && (
+            <div className="ot-page-sub">
+              {viewedUser?.displayName || username} · @{username}
+            </div>
+          )}
         </div>
         <div className="ot-cal-nav">
           <button type="button" className="ot-iconbtn" onClick={handlePrevYear}>
@@ -340,6 +355,7 @@ export function CalendarPage() {
             lang={lang}
             weekDurationMap={weekMapForYear(y)}
             dows={dows}
+            username={username}
           />
         ))}
         <div ref={sentinelRef} style={{ height: 1 }} />
