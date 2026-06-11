@@ -122,12 +122,17 @@ function SummaryTable({
   lang,
   showTotal,
   linkUser,
+  dateFrom,
+  dateTo,
 }: {
   rows: SummaryRow[];
   lang: 'fi' | 'en';
   showTotal?: boolean;
-  // When set, each row links to that user's feed filtered by its sport or tag.
+  // When set, each row links to that user's feed filtered by its sport or tag,
+  // constrained to [dateFrom, dateTo] (the period being viewed) and sorted by date.
   linkUser?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }) {
   if (!rows.length)
     return <div style={{ color: 'var(--text-faint)', fontSize: 13, padding: '8px 0' }}>—</div>;
@@ -158,9 +163,13 @@ function SummaryTable({
             {linkUser && !r.isTotal ? (
               <Link
                 to="/feed"
-                search={
-                  r.sport ? { user: linkUser, sports: [r.sport] } : { user: linkUser, tag: r.key }
-                }
+                search={{
+                  user: linkUser,
+                  sortBy: 'date' as const,
+                  ...(dateFrom ? { dateFrom } : {}),
+                  ...(dateTo ? { dateTo } : {}),
+                  ...(r.sport ? { sports: [r.sport] } : { tag: r.key }),
+                }}
                 style={{ color: 'var(--accent)' }}
               >
                 {r.label}
@@ -221,6 +230,9 @@ function MonthAccordion({
       {Array.from({ length: 12 }, (_, i) => 12 - i).map((m) => {
         const rows = (byMonth[m] ?? []).sort((a, b) => b.totalDurationCs - a.totalDurationCs);
         if (!rows.length) return null;
+        const mm = String(m).padStart(2, '0');
+        const monthFrom = `${year}-${mm}-01`;
+        const monthTo = `${year}-${mm}-${String(new Date(year, m, 0).getDate()).padStart(2, '0')}`;
         const isOpen = open === m;
         const tot = rows.reduce((s, r) => s + r.totalDurationCs, 0);
         const dist = rows.reduce((s, r) => s + r.totalDistanceM, 0);
@@ -255,7 +267,14 @@ function MonthAccordion({
             </button>
             {isOpen && (
               <div style={{ paddingTop: 4 }}>
-                <SummaryTable rows={rows} lang={lang} showTotal={showTotals} linkUser={linkUser} />
+                <SummaryTable
+                  rows={rows}
+                  lang={lang}
+                  showTotal={showTotals}
+                  linkUser={linkUser}
+                  dateFrom={monthFrom}
+                  dateTo={monthTo}
+                />
               </div>
             )}
           </div>
@@ -348,6 +367,11 @@ export function AthletePage({ username, initialTab }: { username: string; initia
         : [];
 
   const isOwnProfile = currentUser?.username === username;
+
+  // Period range for sport/tag drill-down links: year scope constrains to the
+  // year; all-time leaves it open. (Month scope is handled per-month in the accordion.)
+  const periodFrom = scope === 'year' ? `${year}-01-01` : undefined;
+  const periodTo = scope === 'year' ? `${year}-12-31` : undefined;
 
   return (
     <div className="ot-page">
@@ -493,7 +517,14 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   linkUser={username}
                 />
               ) : (
-                <SummaryTable rows={sportRows} lang={lang} showTotal linkUser={username} />
+                <SummaryTable
+                  rows={sportRows}
+                  lang={lang}
+                  showTotal
+                  linkUser={username}
+                  dateFrom={periodFrom}
+                  dateTo={periodTo}
+                />
               )}
             </Card>
           )}
@@ -510,7 +541,13 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   linkUser={username}
                 />
               ) : (
-                <SummaryTable rows={tagRows} lang={lang} linkUser={username} />
+                <SummaryTable
+                  rows={tagRows}
+                  lang={lang}
+                  linkUser={username}
+                  dateFrom={periodFrom}
+                  dateTo={periodTo}
+                />
               )}
             </Card>
           )}
