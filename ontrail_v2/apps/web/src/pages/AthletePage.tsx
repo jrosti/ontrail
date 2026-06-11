@@ -12,6 +12,7 @@ import {
   getYearSummary,
   listExercises,
 } from '../api';
+import { ExerciseCard } from '../components/exercise/ExerciseCard';
 import { Avatar } from '../components/ui/Avatar';
 import { Card } from '../components/ui/Card';
 import { Icon } from '../components/ui/Icon';
@@ -381,34 +382,9 @@ export function AthletePage({ username, initialTab }: { username: string; initia
 
       {/* Workouts tab */}
       {tab === 'workouts' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {(exercisesData?.items ?? []).map((ex) => (
-            <Link key={ex.id} to="/exercise/$id" params={{ id: ex.id }}>
-              <Card hover style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 36,
-                    height: 36,
-                    borderRadius: 10,
-                    background: `color-mix(in oklab, ${SPORTS[ex.sport]?.color ?? 'var(--accent)'} 15%, transparent)`,
-                    flexShrink: 0,
-                  }}
-                >
-                  <SportGlyph sport={ex.sport} size={18} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 15 }}>{ex.title}</div>
-                  <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 2 }}>
-                    {ex.date.slice(0, 10)} · {sportName(ex.sport, lang)}
-                    {ex.durationCs ? ` · ${fmtDur(ex.durationCs)}` : ''}
-                    {ex.distanceM ? ` · ${fmtDistSummary(ex.distanceM, lang)}` : ''}
-                  </div>
-                </div>
-              </Card>
-            </Link>
+            <ExerciseCard key={ex.id} exercise={ex} />
           ))}
           {(exercisesData?.items?.length ?? 0) === 0 && (
             <div
