@@ -181,7 +181,12 @@ export function ExercisePage() {
           )}
           {ex.avgHr && <StatPill icon="heart" label={t.avgHr} value={ex.avgHr} unit={t.bpm} />}
           {ex.bpmdist && (
-            <StatPill icon="bolt" label={t.etenema} value={fmtBpmDist(ex.bpmdist, lang)} unit="m/b" />
+            <StatPill
+              icon="bolt"
+              label={t.etenema}
+              value={fmtBpmDist(ex.bpmdist, lang)}
+              unit="m/b"
+            />
           )}
           {ex.climbM && <StatPill icon="arrowUp" label={t.climb} value={ex.climbM} unit="m" />}
           <div
