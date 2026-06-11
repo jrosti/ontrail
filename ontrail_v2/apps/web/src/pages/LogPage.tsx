@@ -616,12 +616,12 @@ export function LogPage() {
                     </div>
                   </div>
                 )}
-                {sec > 0 && (
+                {cs > 0 && (
                   <div>
                     <div
                       style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 22 }}
                     >
-                      {fmtDurLabel(sec)}
+                      {fmtDurLabel(cs)}
                     </div>
                     <div
                       style={{
