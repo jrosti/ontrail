@@ -734,7 +734,12 @@ function ProfileSidebar() {
           <Icon name="calendar" size={17} />
           <span>{t.calendar}</span>
         </Link>
-        <Link to="/diary/$username" params={{ username: currentUser.username }} className="ot-pnav">
+        <Link
+          to="/user/$username"
+          params={{ username: currentUser.username }}
+          search={{ tab: undefined }}
+          className="ot-pnav"
+        >
           <Icon name="user" size={17} />
           <span>{t.myDiary}</span>
         </Link>
