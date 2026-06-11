@@ -330,7 +330,12 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
     `,
   ]);
 
-  const bpmdist = computeBpmDist(row.distance_m, row.duration_cs, row.avg_hr, ownerRows[0]?.resthr ?? null);
+  const bpmdist = computeBpmDist(
+    row.distance_m,
+    row.duration_cs,
+    row.avg_hr,
+    ownerRows[0]?.resthr ?? null,
+  );
   return { ...toExercise(row, careRows, commentRows.map(toComment), authenticated), bpmdist };
 }
 

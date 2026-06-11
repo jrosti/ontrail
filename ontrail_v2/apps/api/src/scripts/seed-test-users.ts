@@ -8,15 +8,7 @@ import postgres from 'postgres';
 
 const sql = postgres('postgres://hanko:hanko@localhost:5432/ontrail', { max: 1 });
 
-const AVATAR_COLORS = [
-  '#e74c3c',
-  '#2980b9',
-  '#27ae60',
-  '#8e44ad',
-  '#f39c12',
-  '#16a085',
-  '#d35400',
-];
+const AVATAR_COLORS = ['#e74c3c', '#2980b9', '#27ae60', '#8e44ad', '#f39c12', '#16a085', '#d35400'];
 
 const TEST_USERS = [
   {
@@ -82,7 +74,14 @@ const SPORT_PROFILES: Record<
 };
 
 const TITLES: Record<string, string[]> = {
-  run: ['Aamuverryttely', 'Helppo hölkkä', 'Intervalli', 'Pitkäjuoksu', 'Iltajuoksu', 'Tempojuoksu'],
+  run: [
+    'Aamuverryttely',
+    'Helppo hölkkä',
+    'Intervalli',
+    'Pitkäjuoksu',
+    'Iltajuoksu',
+    'Tempojuoksu',
+  ],
   bike: ['Pyörälenkkii', 'Pitkä pyöräily', 'Kierros', 'Nopea pyöräily'],
   swim: ['Uintiharjoitus', 'Tekniikkauinti', 'Kestävyysuinti'],
   gym: ['Kuntosali', 'Voimaharjoittelu', 'Salitreeni'],
@@ -106,7 +105,8 @@ const TAGS: Record<string, string[]> = {
 };
 
 function randn() {
-  const u = Math.random(), v = Math.random();
+  const u = Math.random(),
+    v = Math.random();
   return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 function gauss(mean: number, std: number) {
