@@ -13,7 +13,15 @@ import { I18N } from '../i18n';
 import { SPORTS } from '../sports';
 import { useStore } from '../store';
 import type { Care, Comment } from '../types';
-import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../utils/format';
+import {
+  calcPace,
+  durShort,
+  fmtBpmDist,
+  fmtDistKm,
+  fmtPace,
+  fmtSpeed,
+  relDay,
+} from '../utils/format';
 
 export function ExercisePage() {
   const { id } = useParams({ from: '/exercise/$id' });
@@ -172,6 +180,9 @@ export function ExercisePage() {
             <StatPill icon="bolt" label={t.pace} value={paceVal} unit={paceUnit} accent />
           )}
           {ex.avgHr && <StatPill icon="heart" label={t.avgHr} value={ex.avgHr} unit={t.bpm} />}
+          {ex.bpmdist && (
+            <StatPill icon="bolt" label={t.etenema} value={fmtBpmDist(ex.bpmdist, lang)} unit="m/b" />
+          )}
           {ex.climbM && <StatPill icon="arrowUp" label={t.climb} value={ex.climbM} unit="m" />}
           <div
             style={{

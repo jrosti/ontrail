@@ -234,6 +234,15 @@ export function parseDuration(str: string): number {
   return Math.round(sec * 100) + fracCs;
 }
 
+/** Etenemä: "2,34 m/b" (metres per heartbeat) or '' when not computable. */
+export function fmtBpmDist(bpmdist: number | undefined, lang: string): string {
+  if (!bpmdist || bpmdist <= 0) return '';
+  return new Intl.NumberFormat(locale(lang), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(bpmdist);
+}
+
 /** Strip HTML tags + common entities to plain text, for clamped previews. */
 export function stripHtml(html: string): string {
   return html
