@@ -73,7 +73,7 @@ describe('buildExerciseRow', () => {
   test('maps a typical doc', () => {
     const row = buildExerciseRow(doc(), 'owner-1', sportMap);
     expect(row.sport_key).toBe('run');
-    expect(row.duration_sec).toBe(3540); // 354000 cs / 100
+    expect(row.duration_cs).toBe(354000); // centiseconds, stored verbatim
     expect(row.distance_m).toBe(10000);
     expect(row.avg_hr).toBe(150);
     expect(row.exercise_date).toBe('2016-03-08');
@@ -85,7 +85,7 @@ describe('buildExerciseRow', () => {
 
   test('null duration -> 0; null distance -> null; avghr 0 -> null', () => {
     const row = buildExerciseRow(doc({ duration: null, distance: null, avghr: 0 }), 'o', sportMap);
-    expect(row.duration_sec).toBe(0);
+    expect(row.duration_cs).toBe(0);
     expect(row.distance_m).toBeNull();
     expect(row.avg_hr).toBeNull();
   });

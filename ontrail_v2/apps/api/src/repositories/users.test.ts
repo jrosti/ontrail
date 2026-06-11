@@ -214,7 +214,7 @@ describe('getExercisesForExport', () => {
       body_html: '<p>Easy</p>',
       tags: ['base'],
       exercise_date: '2026-06-09',
-      duration_sec: 3600,
+      duration_cs: 3600,
       distance_m: 10000,
       avg_hr: 140,
       climb_m: 120,

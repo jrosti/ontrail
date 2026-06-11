@@ -436,7 +436,7 @@ export function Elevation({
 }
 
 // ── ActivityCalendar ────────────────────────────────────────────────────────────
-// GitHub-style year heatmap. byDate: dateStr ('2025-03-12') → durationSec.
+// GitHub-style year heatmap. byDate: dateStr ('2025-03-12') → durationCs.
 // onDayClick receives the date string.
 export function ActivityCalendar({
   year,
@@ -458,7 +458,7 @@ export function ActivityCalendar({
   const step = cell + gap;
   const LABEL_H = 18; // space for month labels above grid
 
-  // Build week columns: each entry is [dateStr | null, durationSec][]
+  // Build week columns: each entry is [dateStr | null, durationCs][]
   const jan1 = new Date(year, 0, 1);
   // ISO week starts Monday (0). getDay() is 0=Sun..6=Sat → convert to Mon=0
   const jan1Dow = (jan1.getDay() + 6) % 7;
@@ -601,7 +601,7 @@ export function ActivityCalendar({
                     onKeyDown: (e: KeyboardEvent) => {
                       if (e.key === 'Enter' || e.key === ' ') onDayClick?.(cell_.date);
                     },
-                    'aria-label': `${cell_.date}: ${Math.round(cell_.dur / 60)}min`,
+                    'aria-label': `${cell_.date}: ${Math.round(cell_.dur / 6000)}min`,
                   }
                 : {};
               return (
@@ -619,7 +619,7 @@ export function ActivityCalendar({
                 >
                   <title>
                     {cell_.date}
-                    {cell_.dur > 0 ? `: ${Math.round(cell_.dur / 60)} min` : ''}
+                    {cell_.dur > 0 ? `: ${Math.round(cell_.dur / 6000)} min` : ''}
                   </title>
                 </rect>
               );

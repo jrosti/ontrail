@@ -68,7 +68,7 @@ type SummaryRow = {
   label: string;
   sport?: string;
   sessionCount: number;
-  totalDurationSec: number;
+  totalDurationCs: number;
   totalDistanceM: number;
   totalClimbM: number;
   avgHr?: number;
@@ -82,12 +82,12 @@ function toSportRows(items: (SportSummary | YearSportSummary)[], lang: 'fi' | 'e
       label: sportName(r.sport, lang),
       sport: r.sport,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
     }))
-    .sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+    .sort((a, b) => b.totalDurationCs - a.totalDurationCs);
 }
 
 function toTagRows(items: TagSummary[]): SummaryRow[] {
@@ -96,12 +96,12 @@ function toTagRows(items: TagSummary[]): SummaryRow[] {
       key: r.tag,
       label: r.tag,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
     }))
-    .sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+    .sort((a, b) => b.totalDurationCs - a.totalDurationCs);
 }
 
 function totalRow(rows: SummaryRow[], lang: 'fi' | 'en'): SummaryRow {
@@ -109,7 +109,7 @@ function totalRow(rows: SummaryRow[], lang: 'fi' | 'en'): SummaryRow {
     key: 'TOTAL',
     label: lang === 'fi' ? 'YHTEENSÄ' : 'TOTAL',
     sessionCount: rows.reduce((s, r) => s + r.sessionCount, 0),
-    totalDurationSec: rows.reduce((s, r) => s + r.totalDurationSec, 0),
+    totalDurationCs: rows.reduce((s, r) => s + r.totalDurationCs, 0),
     totalDistanceM: rows.reduce((s, r) => s + r.totalDistanceM, 0),
     totalClimbM: rows.reduce((s, r) => s + r.totalClimbM, 0),
     isTotal: true,
@@ -155,9 +155,9 @@ function SummaryTable({
           </span>
           <span>{fmtDistSummary(r.totalDistanceM, lang)}</span>
           <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12 }}>
-            {r.sport ? fmtPaceSport(r.totalDurationSec, r.totalDistanceM, r.sport, lang) : '—'}
+            {r.sport ? fmtPaceSport(r.totalDurationCs, r.totalDistanceM, r.sport, lang) : '—'}
           </span>
-          <span>{fmtDur(r.totalDurationSec)}</span>
+          <span>{fmtDur(r.totalDurationCs)}</span>
           <span>{r.avgHr ? `${r.avgHr} bpm` : '—'}</span>
           <span>{r.totalClimbM ? `${r.totalClimbM} m` : '—'}</span>
           <span style={{ fontWeight: 600 }}>{r.sessionCount}</span>
@@ -191,7 +191,7 @@ function MonthAccordion({
       label: isTag ? (r as TagSummaryMonth).tag : sportName((r as MonthSummary).sport, lang),
       sport: isTag ? undefined : (r as MonthSummary).sport,
       sessionCount: r.sessionCount,
-      totalDurationSec: r.totalDurationSec,
+      totalDurationCs: r.totalDurationCs,
       totalDistanceM: r.totalDistanceM,
       totalClimbM: r.totalClimbM,
       avgHr: r.avgHr,
@@ -201,10 +201,10 @@ function MonthAccordion({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {Array.from({ length: 12 }, (_, i) => 12 - i).map((m) => {
-        const rows = (byMonth[m] ?? []).sort((a, b) => b.totalDurationSec - a.totalDurationSec);
+        const rows = (byMonth[m] ?? []).sort((a, b) => b.totalDurationCs - a.totalDurationCs);
         if (!rows.length) return null;
         const isOpen = open === m;
-        const tot = rows.reduce((s, r) => s + r.totalDurationSec, 0);
+        const tot = rows.reduce((s, r) => s + r.totalDurationCs, 0);
         const dist = rows.reduce((s, r) => s + r.totalDistanceM, 0);
         const cnt = rows.reduce((s, r) => s + r.sessionCount, 0);
         return (
@@ -403,7 +403,7 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   <div style={{ fontWeight: 600, fontSize: 15 }}>{ex.title}</div>
                   <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 2 }}>
                     {ex.date.slice(0, 10)} · {sportName(ex.sport, lang)}
-                    {ex.durationSec ? ` · ${fmtDur(ex.durationSec)}` : ''}
+                    {ex.durationCs ? ` · ${fmtDur(ex.durationCs)}` : ''}
                     {ex.distanceM ? ` · ${fmtDistSummary(ex.distanceM, lang)}` : ''}
                   </div>
                 </div>
@@ -540,10 +540,10 @@ function RecordsGrid({ records, lang }: { records: PersonalRecord[]; lang: 'fi' 
             value: fmtDistSummary(rec.bestDistanceM, lang),
             id: rec.bestDistanceExerciseId,
           });
-        if (rec.bestDurationSec)
+        if (rec.bestDurationCs)
           rows.push({
             label: t.time,
-            value: fmtDur(rec.bestDurationSec),
+            value: fmtDur(rec.bestDurationCs),
             id: rec.bestDurationExerciseId,
           });
         if (rec.bestPace) {

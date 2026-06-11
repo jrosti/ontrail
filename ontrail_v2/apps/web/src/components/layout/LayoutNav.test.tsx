@@ -108,7 +108,8 @@ describe('TopNav', () => {
     const search = screen.getByLabelText(/Hae/) as HTMLInputElement;
     expect(search.placeholder).toContain('Hae harjoituksia');
 
-    fireEvent.click(screen.getByLabelText('Language'));
+    // aria-label is prefixed with the current language, e.g. "FI Language".
+    fireEvent.click(screen.getByLabelText(/Language/));
     expect(useStore.getState().lang).toBe('en');
 
     fireEvent.click(screen.getByLabelText('Toggle theme'));

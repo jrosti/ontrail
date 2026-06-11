@@ -10,7 +10,7 @@ export interface GpxResult {
   points: GpxPoint[];
   distanceM: number;
   elevationGainM: number;
-  durationSec?: number;
+  durationCs?: number;
   startTime?: string;
 }
 
@@ -52,14 +52,15 @@ export function parseGpx(xmlText: string): GpxResult {
     if (dEle > 0) elevationGainM += dEle;
   }
 
-  let durationSec: number | undefined;
+  let durationCs: number | undefined;
   let startTime: string | undefined;
   if (points.length >= 2 && points[0].time && points[points.length - 1].time) {
     startTime = points[0].time;
-    durationSec = Math.round(
+    // Elapsed milliseconds -> centiseconds (1 cs = 10 ms).
+    durationCs = Math.round(
       (new Date(points[points.length - 1].time ?? '').getTime() -
         new Date(points[0].time).getTime()) /
-        1000,
+        10,
     );
   }
 
@@ -68,7 +69,7 @@ export function parseGpx(xmlText: string): GpxResult {
     points,
     distanceM: Math.round(distanceM),
     elevationGainM: Math.round(elevationGainM),
-    durationSec,
+    durationCs,
     startTime,
   };
 }

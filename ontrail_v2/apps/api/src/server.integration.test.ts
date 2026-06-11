@@ -198,7 +198,7 @@ describe('API integration', () => {
 
     const response = await request('/api/exercises', {
       method: 'POST',
-      body: JSON.stringify({ title: 'Anonymous run', sport: 'run', durationSec: 1800 }),
+      body: JSON.stringify({ title: 'Anonymous run', sport: 'run', durationCs: 1800 }),
     });
 
     expect(response.status).toBe(401);
@@ -217,7 +217,7 @@ describe('API integration', () => {
         body: '<p>Easy base run</p>',
         tags: ['base', 'forest'],
         date: '2026-06-09',
-        durationSec: 3600,
+        durationCs: 3600,
         distanceM: 10500,
         climbM: 120,
         gpxPoints: [
@@ -226,13 +226,13 @@ describe('API integration', () => {
         ],
       }),
     });
-    const created = await jsonResponse<{ id: string; distanceM: number; durationSec: number }>(
+    const created = await jsonResponse<{ id: string; distanceM: number; durationCs: number }>(
       createdResponse,
     );
 
     expect(createdResponse.status).toBe(201);
     expect(created.distanceM).toBe(10500);
-    expect(created.durationSec).toBe(3600);
+    expect(created.durationCs).toBe(3600);
 
     const commentResponse = await request(`/api/exercises/${created.id}/comments`, {
       method: 'POST',
@@ -279,7 +279,7 @@ describe('API integration', () => {
         sport: 'run',
         title: 'Owner run',
         date: '2026-06-10',
-        durationSec: 2400,
+        durationCs: 2400,
       }),
     });
     const created = await jsonResponse<{ id: string }>(createdResponse);

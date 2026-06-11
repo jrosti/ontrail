@@ -196,13 +196,13 @@ async function seedUser(u: (typeof TEST_USERS)[0], color: string) {
   for (const ex of exercises) {
     await sql`
       insert into exercises
-        (owner_id, sport_key, title, exercise_date, duration_sec, distance_m, avg_hr, climb_m, tags, details, feel_rating)
+        (owner_id, sport_key, title, exercise_date, duration_cs, distance_m, avg_hr, climb_m, tags, details, feel_rating)
       values (
         ${userId},
         ${ex.sport},
         ${ex.title},
         ${ex.date}::date,
-        ${ex.durSec},
+        ${ex.durSec * 100},
         ${ex.distM},
         ${ex.avgHr},
         ${ex.climbM},

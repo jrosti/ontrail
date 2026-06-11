@@ -65,11 +65,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const liked = Boolean(myCare);
 
   const km = ex.distanceM ? ex.distanceM / 1000 : 0;
-  const pace = ex.distanceM ? calcPace(ex.durationSec, ex.distanceM) : 0;
+  const pace = ex.distanceM ? calcPace(ex.durationCs, ex.distanceM) : 0;
   const showSpeed = sport?.metric === 'speed';
   const showDistance = sport?.metric !== 'reps';
   const paceVal = showSpeed
-    ? fmtSpeed(ex.distanceM ?? 0, ex.durationSec, lang)
+    ? fmtSpeed(ex.distanceM ?? 0, ex.durationCs, lang)
     : pace
       ? fmtPace(pace)
       : '—';
@@ -80,7 +80,7 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
       {showDistance && km > 0 && (
         <Metric value={fmtDistKm(ex.distanceM ?? 0, lang)} unit="km" label={t.distance} />
       )}
-      <Metric value={durShort(ex.durationSec)} label={t.time} />
+      <Metric value={durShort(ex.durationCs)} label={t.time} />
       {sport?.metric !== 'time' && sport?.metric !== 'reps' && (
         <Metric value={paceVal} unit={paceUnit} label={t.pace} accent />
       )}

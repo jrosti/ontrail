@@ -87,7 +87,7 @@ function buildMonthGrid(
     const dateObj = new Date(year, month0, d);
     const dateStr = `${year}-${String(month0 + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     const acts = exercisesByDate.get(dateStr) ?? [];
-    const dayDur = acts.reduce((s, a) => s + a.durationSec, 0);
+    const dayDur = acts.reduce((s, a) => s + a.durationCs, 0);
     weekTotalSec += dayDur;
     weekNum = isoWeek(dateObj);
     week.push({ d, date: dateStr, acts });
@@ -196,8 +196,8 @@ function MonthCard({
                           <SportGlyph sport={a.sport} size={11} />
                           {a.distanceM ? (
                             <span>{fmtDist(a.distanceM, lang)}</span>
-                          ) : a.durationSec ? (
-                            <span>{fmtDurLabel(a.durationSec)}</span>
+                          ) : a.durationCs ? (
+                            <span>{fmtDurLabel(a.durationCs)}</span>
                           ) : null}
                         </Link>
                       ))}
@@ -264,10 +264,10 @@ export function CalendarPage() {
   const weekDurationMap = useMemo(() => {
     const map: Record<string, number> = {};
     for (const w of weekSummaries ?? []) {
-      map[`${w.year}-${w.week}`] = (map[`${w.year}-${w.week}`] ?? 0) + w.totalDurationSec;
+      map[`${w.year}-${w.week}`] = (map[`${w.year}-${w.week}`] ?? 0) + w.totalDurationCs;
     }
     for (const w of prevWeekSummaries ?? []) {
-      map[`${w.year}-${w.week}`] = (map[`${w.year}-${w.week}`] ?? 0) + w.totalDurationSec;
+      map[`${w.year}-${w.week}`] = (map[`${w.year}-${w.week}`] ?? 0) + w.totalDurationCs;
     }
     return map;
   }, [weekSummaries, prevWeekSummaries]);

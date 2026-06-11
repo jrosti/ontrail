@@ -25,7 +25,7 @@ describe('parseGpx', () => {
     expect(result.name).toBe('Morning run');
     expect(result.points).toHaveLength(2);
     expect(result.startTime).toBe('2026-06-09T12:00:00Z');
-    expect(result.durationSec).toBe(300);
+    expect(result.durationCs).toBe(30000); // 5 min = 30000 cs
     expect(result.elevationGainM).toBe(10);
     expect(result.distanceM).toBeGreaterThan(500);
   });
@@ -35,7 +35,7 @@ describe('parseGpx', () => {
 
     expect(result.points).toEqual([]);
     expect(result.distanceM).toBe(0);
-    expect(result.durationSec).toBeUndefined();
+    expect(result.durationCs).toBeUndefined();
   });
 });
 

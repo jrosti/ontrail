@@ -30,8 +30,11 @@ Confirmed by the reverse in `formats/to-human-time`:
 Input parsing (`parse-duration`) accepts many human forms — `45`, `45 m`, `3h`, `3h31`,
 `3.31.28`, `1:23`, `5 min 4 s`, `2 h 5 min 3 s`, `5 min 4,15 s` — all normalized to centiseconds.
 
-> **Note:** the new PostgreSQL schema stores duration in **seconds** (`duration_sec`), not
-> centiseconds. The migration must divide by 100. The FE formatter must account for this.
+> **Note (decided 2026-06-11):** the new PostgreSQL schema **keeps centiseconds**
+> (`duration_cs`), matching the legacy unit. The migration copies the value verbatim — **no
+> ÷100** — so per-period totals match the legacy summaries exactly and sub-second precision is
+> preserved (an 800 m time of `2:31,76` stays distinct from `2:32`). Display conversion to
+> seconds happens in the FE formatters.
 
 ## distance — **meters**
 
@@ -59,8 +62,8 @@ With `distance` in meters and `duration` in centiseconds. Larger value = faster.
 what the UI shows — display pace is recomputed from `duration` + `distance` per sport, so
 `pace` exists purely for `ORDER BY`/range filtering. (Rewrite: a generated stored column.)
 
-> **Note:** with the new schema storing `duration_sec` (seconds), the pace formula becomes
-> `round(distance * 360 / duration_sec)` — same semantic, adjusted for seconds.
+> **Note:** the new schema keeps centiseconds (`duration_cs`), so the pace generated column
+> uses the original legacy formula `round(distance_m / duration_cs * 360000)` — identical value.
 
 ### display pace units (per sport — computed at display time in FE)
 - **min/km** (default): `(duration/6000) / (distance/1000)` → minutes per km
@@ -114,7 +117,7 @@ Stored as a plain integer beats-per-minute. `0`/absent = no HR. See `plan4-exerc
 | Field | Stored unit | 1 unit means | Example (stored → shown) |
 |---|---|---|---|
 | `duration` (Mongo) | centiseconds | 1/100 s | `366000` → `1 h 1 min` |
-| `duration_sec` (Postgres) | seconds | 1 s | `3660` → `1 h 1 min` |
+| `duration_cs` (Postgres) | centiseconds | 1/100 s | `366000` → `1 h 1 min` |
 | `distance` / `distance_m` | meters | 1 m | `5200` → `5,2 km` |
 | `pace` | int `dist/dur*360000` | sort key (higher = faster) | filter/sort only |
 | `avghr` | bpm | 1 beat/min | `145` → `145` |

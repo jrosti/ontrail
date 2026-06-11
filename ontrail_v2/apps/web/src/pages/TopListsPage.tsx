@@ -79,7 +79,7 @@ export function TopListsPage() {
     const mul = sortDir === 'asc' ? 1 : -1;
     list.sort((a, b) => {
       if (sortKey === 'distance') return (a.totalDistanceM - b.totalDistanceM) * mul;
-      if (sortKey === 'duration') return (a.totalDurationSec - b.totalDurationSec) * mul;
+      if (sortKey === 'duration') return (a.totalDurationCs - b.totalDurationCs) * mul;
       if (sortKey === 'sessions') return (a.sessionCount - b.sessionCount) * mul;
       return (a.rank - b.rank) * mul; // rank: asc = best first
     });
@@ -273,7 +273,7 @@ function TopListRow({
           {entry.totalDistanceM > 0 ? `${fmtDistKm(entry.totalDistanceM, lang)} km` : '—'}
         </span>
         <span style={{ textAlign: 'right', fontVariantNumeric: 'tabular-nums', fontSize: 13 }}>
-          {fmtDur(entry.totalDurationSec)}
+          {fmtDur(entry.totalDurationCs)}
         </span>
         <span style={{ textAlign: 'right', fontWeight: 600, fontSize: 14 }}>
           {entry.sessionCount}

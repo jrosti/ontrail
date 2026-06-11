@@ -5,7 +5,7 @@ interface ExerciseRow {
   sport: string;
   title: string;
   date: string;
-  durationSec: number;
+  durationCs: number;
   distanceM?: number;
   avgHr?: number;
   climbM?: number;
@@ -51,7 +51,7 @@ export function exportXlsx(exercises: ExerciseRow[], lang: 'fi' | 'en') {
     ex.date?.slice(0, 10) ?? '',
     ex.sport ?? '',
     ex.title ?? '',
-    ex.durationSec != null ? Math.round(ex.durationSec / 60) : '',
+    ex.durationCs != null ? Math.round(ex.durationCs / 6000) : '',
     ex.distanceM != null ? Number((ex.distanceM / 1000).toFixed(2)) : '',
     ex.avgHr ?? '',
     ex.climbM ?? '',

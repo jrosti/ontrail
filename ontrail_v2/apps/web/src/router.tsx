@@ -47,8 +47,8 @@ const feedRoute = createRoute({
     page: s.page ? Number(s.page) : undefined,
     minDistM: s.minDistM ? Number(s.minDistM) : undefined,
     maxDistM: s.maxDistM ? Number(s.maxDistM) : undefined,
-    minDurSec: s.minDurSec ? Number(s.minDurSec) : undefined,
-    maxDurSec: s.maxDurSec ? Number(s.maxDurSec) : undefined,
+    minDurCs: s.minDurCs ? Number(s.minDurCs) : undefined,
+    maxDurCs: s.maxDurCs ? Number(s.maxDurCs) : undefined,
     minHr: s.minHr ? Number(s.minHr) : undefined,
     maxHr: s.maxHr ? Number(s.maxHr) : undefined,
     dateFrom: s.dateFrom as string | undefined,
@@ -67,8 +67,8 @@ export type FeedSearch = {
   page?: number;
   minDistM?: number;
   maxDistM?: number;
-  minDurSec?: number;
-  maxDurSec?: number;
+  minDurCs?: number;
+  maxDurCs?: number;
   minHr?: number;
   maxHr?: number;
   dateFrom?: string;
