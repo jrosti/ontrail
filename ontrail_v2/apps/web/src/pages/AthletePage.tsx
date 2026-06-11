@@ -121,13 +121,13 @@ function SummaryTable({
   rows,
   lang,
   showTotal,
-  tagLinkUser,
+  linkUser,
 }: {
   rows: SummaryRow[];
   lang: 'fi' | 'en';
   showTotal?: boolean;
-  // When set, tag rows link to that user's feed filtered by the tag.
-  tagLinkUser?: string;
+  // When set, each row links to that user's feed filtered by its sport or tag.
+  linkUser?: string;
 }) {
   if (!rows.length)
     return <div style={{ color: 'var(--text-faint)', fontSize: 13, padding: '8px 0' }}>—</div>;
@@ -155,10 +155,12 @@ function SummaryTable({
                 <SportGlyph sport={r.sport} size={13} />
               </>
             )}
-            {tagLinkUser && !r.sport && !r.isTotal ? (
+            {linkUser && !r.isTotal ? (
               <Link
                 to="/feed"
-                search={{ user: tagLinkUser, tag: r.key }}
+                search={
+                  r.sport ? { user: linkUser, sports: [r.sport] } : { user: linkUser, tag: r.key }
+                }
                 style={{ color: 'var(--accent)' }}
               >
                 {r.label}
@@ -187,14 +189,14 @@ function MonthAccordion({
   lang,
   showTotals,
   isTag,
-  tagLinkUser,
+  linkUser,
 }: {
   year: number;
   monthRows: (MonthSummary | TagSummaryMonth)[];
   lang: 'fi' | 'en';
   showTotals?: boolean;
   isTag?: boolean;
-  tagLinkUser?: string;
+  linkUser?: string;
 }) {
   const [open, setOpen] = useState<number | null>(NOW.getMonth() + 1);
   const monthNames = lang === 'fi' ? MONTH_NAMES_FI : MONTH_NAMES_EN;
@@ -253,12 +255,7 @@ function MonthAccordion({
             </button>
             {isOpen && (
               <div style={{ paddingTop: 4 }}>
-                <SummaryTable
-                  rows={rows}
-                  lang={lang}
-                  showTotal={showTotals}
-                  tagLinkUser={tagLinkUser}
-                />
+                <SummaryTable rows={rows} lang={lang} showTotal={showTotals} linkUser={linkUser} />
               </div>
             )}
           </div>
@@ -488,9 +485,15 @@ export function AthletePage({ username, initialTab }: { username: string; initia
           {tab === 'sports' && (
             <Card>
               {scope === 'month' ? (
-                <MonthAccordion year={year} monthRows={monthSports ?? []} lang={lang} showTotals />
+                <MonthAccordion
+                  year={year}
+                  monthRows={monthSports ?? []}
+                  lang={lang}
+                  showTotals
+                  linkUser={username}
+                />
               ) : (
-                <SummaryTable rows={sportRows} lang={lang} showTotal />
+                <SummaryTable rows={sportRows} lang={lang} showTotal linkUser={username} />
               )}
             </Card>
           )}
@@ -504,10 +507,10 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   monthRows={(monthTags ?? []) as TagSummaryMonth[]}
                   lang={lang}
                   isTag
-                  tagLinkUser={username}
+                  linkUser={username}
                 />
               ) : (
-                <SummaryTable rows={tagRows} lang={lang} tagLinkUser={username} />
+                <SummaryTable rows={tagRows} lang={lang} linkUser={username} />
               )}
             </Card>
           )}
