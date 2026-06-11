@@ -41,7 +41,7 @@ cleanup() {
   [ -n "$HANKO_PID" ] && kill "$HANKO_PID" 2>/dev/null || true
   [ -n "$API_PID" ] && kill "$API_PID" 2>/dev/null || true
   [ -n "$WEB_PID" ] && kill "$WEB_PID" 2>/dev/null || true
-  docker-compose -f "$INFRA_DIR/docker-compose.yml" stop
+  docker compose -f "$INFRA_DIR/docker-compose.yml" stop
   echo "  Done."
 }
 
@@ -55,13 +55,13 @@ echo ""
 
 # ── 1. Start Docker infra (Postgres + MailSlurper) ────────────────────────────
 green "Starting Docker infra …"
-docker-compose -f "$INFRA_DIR/docker-compose.yml" up -d
+docker compose -f "$INFRA_DIR/docker-compose.yml" up -d
 wait_tcp localhost 5432  "Postgres"
 wait_tcp localhost 2525  "MailSlurper"
 
 green "Ensuring OnTrail database exists …"
-if [ -z "$(docker-compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd psql -U hanko -d postgres -tAc "select 1 from pg_database where datname = 'ontrail'")" ]; then
-  docker-compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd createdb -U hanko -O hanko ontrail
+if [ -z "$(docker compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd psql -U hanko -d postgres -tAc "select 1 from pg_database where datname = 'ontrail'")" ]; then
+  docker compose -f "$INFRA_DIR/docker-compose.yml" exec -T postgresd createdb -U hanko -O hanko ontrail
 fi
 
 # ── 2. Apply patches and build Hanko binary ───────────────────────────────────
