@@ -79,10 +79,12 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
       group-by-email pre-pass + canonical pick, dry-run merge report, manual exclusion list,
       `'merged'` state in the `migration_users` CHECK constraint, and history reassignment
       (exercises/comments/cares/group_members)
-- [~] Exercise normalization (duration ÷100→seconds, sport mapping, date clamping) —
-      `migrate-exercises.ts` done + verified for one author (Jörö: 4,149 rows, sums match
-      legacy). Remaining for bulk run: HTML body sanitizer (currently carried verbatim),
-      and revisit the truncate-and-reload once comments/cares reference exercise rows
+- [~] Exercise normalization (duration kept as centiseconds, sport mapping, date handling) —
+      `migrate-exercises.ts` done + verified for one author (Jörö: 4,149 rows, sum(duration_cs)
+      and generated pace match legacy exactly). Duration is stored in centiseconds
+      (`duration_cs`, migration 0006) app-wide, preserving sub-second precision; FE converts at
+      display. Remaining for bulk run: HTML body sanitizer (currently carried verbatim), and
+      revisit the truncate-and-reload once comments/cares reference exercise rows
 - [ ] Comment + care normalization from embedded arrays
 - [ ] Group normalization
 - [ ] Acceptance test: spot totals match legacy output

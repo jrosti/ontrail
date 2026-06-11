@@ -16,7 +16,7 @@ interface ExerciseRow {
   body_html: string | null;
   tags: string[];
   exercise_date: string;
-  duration_sec: number;
+  duration_cs: number;
   distance_m: number | null;
   avg_hr: number | null;
   climb_m: number | null;
@@ -36,7 +36,7 @@ interface ExerciseUpdateRow {
   body_html: string | null;
   tags: string[];
   exercise_date: string;
-  duration_sec: number;
+  duration_cs: number;
   distance_m: number | null;
   avg_hr: number | null;
   climb_m: number | null;
@@ -90,7 +90,7 @@ function toListItem(row: ExerciseRow, cares: CareRow[], authenticated: boolean):
     title: row.title,
     tags: row.tags,
     date: row.exercise_date,
-    durationSec: row.duration_sec,
+    durationCs: row.duration_cs,
     distanceM: row.distance_m ?? undefined,
     avgHr: row.avg_hr ?? undefined,
     climbM: row.climb_m ?? undefined,
@@ -160,7 +160,7 @@ function exerciseSelect() {
       e.body_html,
       e.tags,
       e.exercise_date::text,
-      e.duration_sec,
+      e.duration_cs,
       e.distance_m,
       e.avg_hr,
       e.climb_m,
@@ -191,8 +191,8 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   const group = params.get('group'); // normalized group name
   const minDistM = params.get('minDistM') ? Number(params.get('minDistM')) : null;
   const maxDistM = params.get('maxDistM') ? Number(params.get('maxDistM')) : null;
-  const minDurSec = params.get('minDurSec') ? Number(params.get('minDurSec')) : null;
-  const maxDurSec = params.get('maxDurSec') ? Number(params.get('maxDurSec')) : null;
+  const minDurCs = params.get('minDurCs') ? Number(params.get('minDurCs')) : null;
+  const maxDurCs = params.get('maxDurCs') ? Number(params.get('maxDurCs')) : null;
   const minHr = params.get('minHr') ? Number(params.get('minHr')) : null;
   const maxHr = params.get('maxHr') ? Number(params.get('maxHr')) : null;
   const dateFrom = params.get('dateFrom'); // YYYY-MM-DD
@@ -205,7 +205,7 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
     sortBy === 'distance'
       ? sql`e.distance_m`
       : sortBy === 'duration'
-        ? sql`e.duration_sec`
+        ? sql`e.duration_cs`
         : sortBy === 'hr'
           ? sql`e.avg_hr`
           : sql`e.exercise_date`;
@@ -226,8 +226,8 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
       ))
       and (${minDistM}::float8 is null or e.distance_m >= ${minDistM})
       and (${maxDistM}::float8 is null or e.distance_m <= ${maxDistM})
-      and (${minDurSec}::float8 is null or e.duration_sec >= ${minDurSec})
-      and (${maxDurSec}::float8 is null or e.duration_sec <= ${maxDurSec})
+      and (${minDurCs}::float8 is null or e.duration_cs >= ${minDurCs})
+      and (${maxDurCs}::float8 is null or e.duration_cs <= ${maxDurCs})
       and (${minHr}::float8 is null or e.avg_hr >= ${minHr})
       and (${maxHr}::float8 is null or e.avg_hr <= ${maxHr})
       and (${dateFrom}::text is null or e.exercise_date >= ${dateFrom}::date)
@@ -307,13 +307,13 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
 export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {
   const created = await sql<{ id: string }[]>`
     insert into exercises (
-      owner_id, sport_key, title, body_html, tags, exercise_date, duration_sec,
+      owner_id, sport_key, title, body_html, tags, exercise_date, duration_cs,
       distance_m, avg_hr, climb_m, feel_rating, details, gpx_points
     )
     values (
       ${owner.id}, ${body.sport ?? 'run'}, ${body.title ?? ''}, ${body.body ?? null},
       ${body.tags ?? []}, ${body.date ?? new Date().toISOString().slice(0, 10)},
-      ${body.durationSec ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
+      ${body.durationCs ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
       ${body.climbM ?? null}, ${body.feelRating ?? null},
       ${sql.json(body.details ?? {})},
       ${sql.json(normalizeGpxPoints(body.gpxPoints) ?? null)}
@@ -338,7 +338,7 @@ export async function updateExercise(
       body_html,
       tags,
       exercise_date::text,
-      duration_sec,
+      duration_cs,
       distance_m,
       avg_hr,
       climb_m,
@@ -364,7 +364,7 @@ export async function updateExercise(
       body_html = ${'body' in body ? (body.body ?? null) : existing.body_html},
       tags = ${body.tags ?? existing.tags},
       exercise_date = ${body.date ?? existing.exercise_date},
-      duration_sec = ${body.durationSec ?? existing.duration_sec},
+      duration_cs = ${body.durationCs ?? existing.duration_cs},
       distance_m = ${'distanceM' in body ? (body.distanceM ?? null) : existing.distance_m},
       avg_hr = ${'avgHr' in body ? (body.avgHr ?? null) : existing.avg_hr},
       climb_m = ${'climbM' in body ? (body.climbM ?? null) : existing.climb_m},

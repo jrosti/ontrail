@@ -28,29 +28,39 @@ function localIsoDate(daysFromToday = 0): string {
   return `${year}-${month}-${day}`;
 }
 
+// Durations are centiseconds (1 s = 100, 1 min = 6000, 1 h = 360000).
 describe('duration formatting and parsing', () => {
   test('formats short and long durations', () => {
-    expect(durShort(65 * 60)).toBe('1:05');
-    expect(durShort(45 * 60)).toBe('45 min');
-    expect(durLong(3665)).toBe('1 h 1 min');
-    expect(durLong(75)).toBe('1 min 15 s');
-    expect(durLong(42)).toBe('42 s');
+    expect(durShort(65 * 6000)).toBe('1:05');
+    expect(durShort(45 * 6000)).toBe('45 min');
+    expect(durLong(366500)).toBe('1 h 1 min'); // 1:01:05
+    expect(durLong(7500)).toBe('1 min 15 s');
+    expect(durLong(4200)).toBe('42 s');
     expect(fmtDur(0)).toBe('—');
-    expect(fmtDur(3660)).toBe('1h 1min');
-    expect(fmtDur(1800)).toBe('30min');
+    expect(fmtDur(366000)).toBe('1h 1min');
+    expect(fmtDur(180000)).toBe('30min');
     expect(fmtDurLabel(0)).toBe('0min');
-    expect(fmtDurLabel(7200)).toBe('2h 0min');
+    expect(fmtDurLabel(720000)).toBe('2h 0min');
   });
 
-  test('parses clock and text inputs', () => {
-    expect(parseDuration('1:02:03')).toBe(3723);
-    expect(parseDuration('45:30')).toBe(2730);
+  test('parses clock and text inputs into centiseconds', () => {
+    expect(parseDuration('1:02:03')).toBe(372300);
+    expect(parseDuration('45:30')).toBe(273000);
     expect(parseDuration('bad:input')).toBe(0);
-    expect(parseDuration('1,5 h')).toBe(5400);
-    expect(parseDuration('45min')).toBe(2700);
-    expect(parseDuration('1h 2min 3s')).toBe(3723);
-    expect(parseDuration('90')).toBe(5400);
+    expect(parseDuration('1,5 h')).toBe(540000);
+    expect(parseDuration('45min')).toBe(270000);
+    expect(parseDuration('1h 2min 3s')).toBe(372300);
+    expect(parseDuration('90')).toBe(540000);
     expect(parseDuration('')).toBe(0);
+  });
+
+  test('preserves sub-second (hundredths) precision', () => {
+    // A 800 m record time: 2:31.76 must stay distinct from 2:32.00.
+    expect(parseDuration('2.31,76')).toBe(15176);
+    expect(parseDuration('2:31,76')).toBe(15176);
+    expect(parseDuration('2.32')).toBe(15200);
+    expect(parseDuration('2.31,76')).not.toBe(parseDuration('2.32'));
+    expect(parseDuration('5 min 4,15 s')).toBe(30415);
   });
 });
 
@@ -75,17 +85,17 @@ describe('distance, pace, and speed', () => {
     expect(parseDistance('')).toBe(0);
   });
 
-  test('calculates pace and speed', () => {
-    expect(calcPace(30 * 60, 5000)).toBe(6);
+  test('calculates pace and speed (duration in centiseconds)', () => {
+    expect(calcPace(30 * 6000, 5000)).toBe(6); // 30 min over 5 km = 6 min/km
     expect(calcPace(0, 5000)).toBe(0);
     expect(fmtPace(4.5)).toBe('4.30');
-    expect(calcSpeed(3600, 30000)).toBe(30);
+    expect(calcSpeed(360000, 30000)).toBe(30); // 1 h over 30 km = 30 km/h
     expect(calcSpeed(0, 30000)).toBe(0);
-    expect(fmtSpeed(30000, 3600, 'fi')).toBe('30');
-    expect(fmtSpeed(0, 3600, 'fi')).toBe('—');
-    expect(fmtPaceSport(1800, 5000, 'run', 'fi')).toBe('6:00/km');
-    expect(fmtPaceSport(90, 100, 'uinti', 'fi')).toBe('1:30/100m');
-    expect(fmtPaceSport(3600, 30000, 'bike', 'fi')).toBe('30 km/h');
+    expect(fmtSpeed(30000, 360000, 'fi')).toBe('30');
+    expect(fmtSpeed(0, 360000, 'fi')).toBe('—');
+    expect(fmtPaceSport(180000, 5000, 'run', 'fi')).toBe('6:00/km');
+    expect(fmtPaceSport(9000, 100, 'uinti', 'fi')).toBe('1:30/100m');
+    expect(fmtPaceSport(360000, 30000, 'bike', 'fi')).toBe('30 km/h');
     expect(fmtPaceSport(0, 30000, 'run', 'fi')).toBe('—');
   });
 

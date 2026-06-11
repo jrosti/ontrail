@@ -18,7 +18,7 @@
  *   MONGO_EXERCISES_JSON=/path/to/exercises.json bun run src/scripts/migrate-exercises.ts
  *
  * Conversion rules (plan2-migration §3, reconciled with the live data):
- *   - duration: centiseconds -> seconds (÷100). null -> 0 (duration_sec is NOT NULL >= 0).
+ *   - duration: centiseconds, stored verbatim. null -> 0 (duration_cs is NOT NULL >= 0).
  *   - distance: meters. null -> NULL. negative -> NULL.
  *   - avghr: bpm tri-state. 0 -> NULL, >230 -> NULL, null -> NULL (avg_hr CHECK > 0).
  *   - sport: Finnish name -> sport_key via sports.name_fi, plus SPORT_OVERRIDES.
@@ -73,7 +73,7 @@ export interface ExerciseRow {
   body_markdown: null;
   tags: string[];
   exercise_date: string;
-  duration_sec: number;
+  duration_cs: number;
   distance_m: number | null;
   avg_hr: number | null;
   climb_m: number | null;
@@ -136,8 +136,8 @@ export function buildExerciseRow(
   if (!created) throw new Error(`missing/invalid creationDate on ${doc._id.$oid}`);
   const modified = coerceDate(doc.lastModifiedDate) ?? created;
 
-  const durationCs = coerceLong(doc.duration);
-  const durationSec = durationCs === null ? 0 : Math.round(durationCs / 100);
+  // Stored verbatim as centiseconds (the legacy unit); null -> 0 (NOT NULL >= 0).
+  const durationCs = coerceLong(doc.duration) ?? 0;
 
   const distance = coerceLong(doc.distance);
   const distanceM = distance !== null && distance >= 0 ? distance : null;
@@ -158,7 +158,7 @@ export function buildExerciseRow(
     tags: Array.isArray(doc.tags) ? doc.tags : [],
     // UTC date part; legacy creationDate is noon-shifted so it equals the local date.
     exercise_date: created.toISOString().slice(0, 10),
-    duration_sec: durationSec,
+    duration_cs: durationCs,
     distance_m: distanceM,
     avg_hr: normalizeAvgHr(doc.avghr),
     climb_m: climb !== null && climb >= 0 ? climb : null,
@@ -238,7 +238,7 @@ async function main() {
     'body_markdown',
     'tags',
     'exercise_date',
-    'duration_sec',
+    'duration_cs',
     'distance_m',
     'avg_hr',
     'climb_m',

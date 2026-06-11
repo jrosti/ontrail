@@ -22,13 +22,20 @@ import {
 } from '../utils/format';
 import type { GpxResult } from '../utils/gpx';
 
-function formatDurationInput(sec: number): string {
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  const s = Math.round(sec % 60);
-  return h > 0
-    ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-    : `${m}:${String(s).padStart(2, '0')}`;
+// Format a centisecond duration into an editable "h:mm:ss" / "m:ss" string.
+// Hundredths are shown (",cc") only when present, so editing and re-saving a
+// sub-second time (e.g. 2:31,76) round-trips through parseDuration losslessly.
+function formatDurationInput(cs: number): string {
+  const totalSec = cs / 100;
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const whole = Math.floor(totalSec % 60);
+  const frac = Math.round(cs % 100);
+  const ss =
+    frac > 0
+      ? `${String(whole).padStart(2, '0')},${String(frac).padStart(2, '0')}`
+      : String(whole).padStart(2, '0');
+  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`;
 }
 
 function formatDistanceInput(meters?: number): string {
@@ -132,7 +139,7 @@ export function LogPage() {
     setSport(existing.sport);
     setForm({
       title: existing.title,
-      duration: formatDurationInput(existing.durationSec),
+      duration: formatDurationInput(existing.durationCs),
       distance: formatDistanceInput(existing.distanceM),
       hr: existing.avgHr?.toString() ?? '',
       reps: existing.details?.reps?.toString() ?? '',
@@ -153,14 +160,8 @@ export function LogPage() {
     if (!form.title && result.name) updates.title = result.name;
     if (!form.distance && result.distanceM > 0)
       updates.distance = (result.distanceM / 1000).toFixed(2);
-    if (!form.duration && result.durationSec && result.durationSec > 0) {
-      const h = Math.floor(result.durationSec / 3600);
-      const m = Math.floor((result.durationSec % 3600) / 60);
-      const s = result.durationSec % 60;
-      updates.duration =
-        h > 0
-          ? `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-          : `${m}:${String(s).padStart(2, '0')}`;
+    if (!form.duration && result.durationCs && result.durationCs > 0) {
+      updates.duration = formatDurationInput(result.durationCs);
     }
     if (!form.climb && result.elevationGainM > 0)
       updates.climb = String(Math.round(result.elevationGainM));
@@ -171,17 +172,16 @@ export function LogPage() {
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
 
   const meta = selectedSport ?? SPORTS[sport];
-  const sec = parseDuration(form.duration);
+  const cs = parseDuration(form.duration); // centiseconds
   const distM = parseDistance(form.distance);
-  const effectiveSec = sec || existing?.durationSec || 0;
+  const effectiveCs = cs || existing?.durationCs || 0;
   const effectiveDistM = distM || existing?.distanceM || 0;
   const km = effectiveDistM / 1000;
-  const pace = effectiveDistM > 0 && effectiveSec > 0 ? calcPace(effectiveSec, effectiveDistM) : 0;
-  const speed =
-    effectiveDistM > 0 && effectiveSec > 0 ? calcSpeed(effectiveSec, effectiveDistM) : 0;
+  const pace = effectiveDistM > 0 && effectiveCs > 0 ? calcPace(effectiveCs, effectiveDistM) : 0;
+  const speed = effectiveDistM > 0 && effectiveCs > 0 ? calcSpeed(effectiveCs, effectiveDistM) : 0;
   const isReps = meta?.metric === 'reps';
   const isSpeed = meta?.metric === 'speed';
-  const canSave = form.title.trim() && effectiveSec > 0;
+  const canSave = form.title.trim() && effectiveCs > 0;
 
   const addTag = () => {
     const v = tagDraft.trim().replace(/^#/, '');
@@ -195,7 +195,7 @@ export function LogPage() {
       const payload = {
         sport,
         title: form.title,
-        durationSec: effectiveSec,
+        durationCs: effectiveCs,
         distanceM: effectiveDistM || undefined,
         avgHr: form.hr ? +form.hr : undefined,
         climbM: form.climb ? +form.climb : undefined,

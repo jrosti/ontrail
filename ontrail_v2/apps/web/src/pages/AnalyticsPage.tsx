@@ -327,7 +327,7 @@ export function AnalyticsPage() {
             cmp = sportName(a.sport, lang).localeCompare(sportName(b.sport, lang));
           else if (sportSortCol === 'distance')
             cmp = (a.totalDistanceM ?? 0) - (b.totalDistanceM ?? 0);
-          else if (sportSortCol === 'time') cmp = a.totalDurationSec - b.totalDurationSec;
+          else if (sportSortCol === 'time') cmp = a.totalDurationCs - b.totalDurationCs;
           else if (sportSortCol === 'hr') cmp = (a.avgHr ?? 0) - (b.avgHr ?? 0);
           else if (sportSortCol === 'climb') cmp = (a.totalClimbM ?? 0) - (b.totalClimbM ?? 0);
           else cmp = a.sessionCount - b.sessionCount;
@@ -346,13 +346,13 @@ export function AnalyticsPage() {
     }
   };
 
-  const totalDurationSec = items.reduce((s, r) => s + r.totalDurationSec, 0);
+  const totalDurationCs = items.reduce((s, r) => s + r.totalDurationCs, 0);
   const totalDistanceM = items.reduce((s, r) => s + r.totalDistanceM, 0);
   const totalSessions = items.reduce((s, r) => s + r.sessionCount, 0);
   const totalClimbM = items.reduce((s, r) => s + r.totalClimbM, 0);
 
   const kmTotal = totalDistanceM > 0 ? fmtDistKm(totalDistanceM, lang, 0) : '—';
-  const hrTotal = totalDurationSec > 0 ? fmtDur(totalDurationSec) : '—';
+  const hrTotal = totalDurationCs > 0 ? fmtDur(totalDurationCs) : '—';
 
   const sportDonut = [...items]
     .map((sp) => ({
@@ -393,7 +393,7 @@ export function AnalyticsPage() {
   const byDate = new Map<string, number>();
   for (const ex of calExercises?.items ?? []) {
     const d = ex.date.slice(0, 10);
-    byDate.set(d, (byDate.get(d) ?? 0) + ex.durationSec);
+    byDate.set(d, (byDate.get(d) ?? 0) + ex.durationCs);
   }
 
   const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
@@ -439,7 +439,7 @@ export function AnalyticsPage() {
       for (let i = 0; i < bounds.length - 1; i++) {
         if (hr >= bounds[i]) zone = i;
       }
-      zoneSec[zone] += ex.durationSec;
+      zoneSec[zone] += ex.durationCs;
     }
     const total = zoneSec.reduce((a, b) => a + b, 0);
     return { zoneSec, total, bounds };
@@ -678,7 +678,7 @@ export function AnalyticsPage() {
                     {sportName(r.sport, lang)}
                   </span>
                   <span>{r.totalDistanceM ? `${fmtDistKm(r.totalDistanceM, lang)} km` : '—'}</span>
-                  <span>{r.totalDurationSec ? fmtDur(r.totalDurationSec) : '—'}</span>
+                  <span>{r.totalDurationCs ? fmtDur(r.totalDurationCs) : '—'}</span>
                   <span>{r.avgHr ?? '—'}</span>
                   <span>{r.totalClimbM ? `${r.totalClimbM} m` : '—'}</span>
                   <span style={{ fontWeight: 600 }}>{r.sessionCount}</span>
@@ -699,7 +699,7 @@ function aggregateMonthToSport(rows: MonthSummary[]): YearSportSummary[] {
     if (existing) {
       existing.sessionCount += r.sessionCount;
       existing.totalDistanceM += r.totalDistanceM;
-      existing.totalDurationSec += r.totalDurationSec;
+      existing.totalDurationCs += r.totalDurationCs;
       existing.totalClimbM += r.totalClimbM;
     } else {
       map.set(r.sport, {
@@ -707,7 +707,7 @@ function aggregateMonthToSport(rows: MonthSummary[]): YearSportSummary[] {
         sport: r.sport,
         sessionCount: r.sessionCount,
         totalDistanceM: r.totalDistanceM,
-        totalDurationSec: r.totalDurationSec,
+        totalDurationCs: r.totalDurationCs,
         totalClimbM: r.totalClimbM,
         totalKcal: 0,
         avgHr: r.avgHr,
@@ -724,7 +724,7 @@ function aggregateWeekToSport(rows: WeekSummary[]): YearSportSummary[] {
     if (existing) {
       existing.sessionCount += r.sessionCount;
       existing.totalDistanceM += r.totalDistanceM;
-      existing.totalDurationSec += r.totalDurationSec;
+      existing.totalDurationCs += r.totalDurationCs;
       existing.totalClimbM += r.totalClimbM;
     } else {
       map.set(r.sport, {
@@ -732,7 +732,7 @@ function aggregateWeekToSport(rows: WeekSummary[]): YearSportSummary[] {
         sport: r.sport,
         sessionCount: r.sessionCount,
         totalDistanceM: r.totalDistanceM,
-        totalDurationSec: r.totalDurationSec,
+        totalDurationCs: r.totalDurationCs,
         totalClimbM: r.totalClimbM,
         totalKcal: 0,
         avgHr: r.avgHr,

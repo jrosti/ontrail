@@ -269,7 +269,7 @@ export async function getExercisesForExport(userId: string) {
       body_html: string | null;
       tags: string[];
       exercise_date: string;
-      duration_sec: number;
+      duration_cs: number;
       distance_m: number | null;
       avg_hr: number | null;
       climb_m: number | null;
@@ -287,7 +287,7 @@ export async function getExercisesForExport(userId: string) {
       body_html,
       tags,
       exercise_date::text,
-      duration_sec,
+      duration_cs,
       distance_m,
       avg_hr,
       climb_m,

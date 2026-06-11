@@ -49,8 +49,8 @@ export const listExercises = (params?: {
   group?: string;
   minDistM?: number;
   maxDistM?: number;
-  minDurSec?: number;
-  maxDurSec?: number;
+  minDurCs?: number;
+  maxDurCs?: number;
   minHr?: number;
   maxHr?: number;
   dateFrom?: string;

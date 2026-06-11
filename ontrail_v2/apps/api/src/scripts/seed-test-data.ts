@@ -202,13 +202,13 @@ async function main() {
     for (const ex of batch) {
       await sql`
         insert into exercises
-          (owner_id, sport_key, title, exercise_date, duration_sec, distance_m, avg_hr, climb_m, tags, details, feel_rating)
+          (owner_id, sport_key, title, exercise_date, duration_cs, distance_m, avg_hr, climb_m, tags, details, feel_rating)
         values (
           ${USER_ID},
           ${ex.sport},
           ${ex.title},
           ${ex.date}::date,
-          ${ex.durSec},
+          ${ex.durSec * 100},
           ${ex.distM},
           ${ex.avgHr},
           ${ex.climbM},

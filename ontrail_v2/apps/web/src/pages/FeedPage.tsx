@@ -34,8 +34,8 @@ export function FeedPage() {
         group: search.group,
         minDistM: search.minDistM,
         maxDistM: search.maxDistM,
-        minDurSec: search.minDurSec,
-        maxDurSec: search.maxDurSec,
+        minDurCs: search.minDurCs,
+        maxDurCs: search.maxDurCs,
         minHr: search.minHr,
         maxHr: search.maxHr,
         dateFrom: search.dateFrom,
@@ -63,8 +63,8 @@ export function FeedPage() {
     search.group ||
     search.minDistM ||
     search.maxDistM ||
-    search.minDurSec ||
-    search.maxDurSec ||
+    search.minDurCs ||
+    search.maxDurCs ||
     search.minHr ||
     search.maxHr ||
     search.dateFrom ||
@@ -131,13 +131,13 @@ export function FeedPage() {
                 }
               />
             )}
-            {(search.minDurSec || search.maxDurSec) && (
+            {(search.minDurCs || search.maxDurCs) && (
               <FilterChip
-                label={`${Math.round((search.minDurSec ?? 0) / 60)}–${search.maxDurSec ? Math.round(search.maxDurSec / 60) : '∞'} min`}
+                label={`${Math.round((search.minDurCs ?? 0) / 6000)}–${search.maxDurCs ? Math.round(search.maxDurCs / 6000) : '∞'} min`}
                 onRemove={() =>
                   nav({
                     to: '/feed',
-                    search: { ...search, minDurSec: undefined, maxDurSec: undefined },
+                    search: { ...search, minDurCs: undefined, maxDurCs: undefined },
                   })
                 }
               />
@@ -313,10 +313,10 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const [distMin, setDistMin] = useState(search.minDistM ? String(search.minDistM / 1000) : '');
   const [distMax, setDistMax] = useState(search.maxDistM ? String(search.maxDistM / 1000) : '');
   const [durMin, setDurMin] = useState(
-    search.minDurSec ? String(Math.round(search.minDurSec / 60)) : '',
+    search.minDurCs ? String(Math.round(search.minDurCs / 6000)) : '',
   );
   const [durMax, setDurMax] = useState(
-    search.maxDurSec ? String(Math.round(search.maxDurSec / 60)) : '',
+    search.maxDurCs ? String(Math.round(search.maxDurCs / 6000)) : '',
   );
   const [hrMin, setHrMin] = useState(search.minHr ? String(search.minHr) : '');
   const [hrMax, setHrMax] = useState(search.maxHr ? String(search.maxHr) : '');
@@ -356,8 +356,8 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
       user: userInput.trim() || undefined,
       minDistM: distMin ? parseDistance(`${distMin}km`) || undefined : undefined,
       maxDistM: distMax ? parseDistance(`${distMax}km`) || undefined : undefined,
-      minDurSec: durMin ? parseDuration(`${durMin}min`) || undefined : undefined,
-      maxDurSec: durMax ? parseDuration(`${durMax}min`) || undefined : undefined,
+      minDurCs: durMin ? parseDuration(`${durMin}min`) || undefined : undefined,
+      maxDurCs: durMax ? parseDuration(`${durMax}min`) || undefined : undefined,
       minHr: hrMin ? Number(hrMin) || undefined : undefined,
       maxHr: hrMax ? Number(hrMax) || undefined : undefined,
       dateFrom: dateFrom || undefined,
@@ -804,7 +804,7 @@ function RightRail() {
   });
 
   const items = data?.items ?? [];
-  const totalDurSec = items.reduce((s, e) => s + e.durationSec, 0);
+  const totalDurCs = items.reduce((s, e) => s + e.durationCs, 0);
   const totalDistM = items.reduce((s, e) => s + (e.distanceM ?? 0), 0);
 
   return (
@@ -833,7 +833,7 @@ function RightRail() {
                 <b>{items.length}</b> {t.sessions}
               </span>
               <span>
-                <b>{durShort(totalDurSec)}</b>
+                <b>{durShort(totalDurCs)}</b>
               </span>
               {totalDistM > 0 && (
                 <span>
@@ -863,7 +863,7 @@ function RightRail() {
                       {ex.title}
                     </span>
                     <span style={{ color: 'var(--text-faint)', flexShrink: 0 }}>
-                      {durShort(ex.durationSec)}
+                      {durShort(ex.durationCs)}
                     </span>
                   </div>
                 );

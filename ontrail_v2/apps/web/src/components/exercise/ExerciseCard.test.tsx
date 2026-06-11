@@ -54,7 +54,7 @@ const exercise: ExerciseListItem = {
   title: 'Aamulenkki',
   tags: ['polku', 'kevyt'],
   date: new Date().toISOString().slice(0, 10),
-  durationSec: 30 * 60,
+  durationCs: 30 * 6000, // 30 min in centiseconds
   distanceM: 5000,
   commentCount: 2,
   careCount: 3,
