@@ -176,6 +176,17 @@ const userAnalyticsRoute = createRoute({
   component: UserAnalyticsWrapper,
 });
 
+function UserCalendarWrapper() {
+  const { username } = userCalendarRoute.useParams();
+  return <CalendarPage username={username} />;
+}
+
+const userCalendarRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/user/$username/calendar',
+  component: UserCalendarWrapper,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -199,6 +210,7 @@ const routeTree = rootRoute.addChildren([
   topListsRoute,
   athleteRoute,
   userAnalyticsRoute,
+  userCalendarRoute,
 ]);
 
 export const router = createRouter({ routeTree });
