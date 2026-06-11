@@ -234,6 +234,20 @@ export function parseDuration(str: string): number {
   return Math.round(sec * 100) + fracCs;
 }
 
+/** Strip HTML tags + common entities to plain text, for clamped previews. */
+export function stripHtml(html: string): string {
+  return html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export function parseDistance(str: string): number {
   if (!str) return 0;
   const s = str.trim().toLowerCase().replace(',', '.');

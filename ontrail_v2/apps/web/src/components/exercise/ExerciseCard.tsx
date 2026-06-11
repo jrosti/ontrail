@@ -7,9 +7,18 @@ import { I18N } from '../../i18n';
 import { SPORTS } from '../../sports';
 import { useStore } from '../../store';
 import type { Care, ExerciseListItem } from '../../types';
-import { calcPace, durShort, fmtDistKm, fmtPace, fmtSpeed, relDay } from '../../utils/format';
+import {
+  calcPace,
+  durShort,
+  fmtDistKm,
+  fmtPace,
+  fmtSpeed,
+  relDay,
+  stripHtml,
+} from '../../utils/format';
 import { downsample } from '../../utils/gpx';
 import { LeafletMap } from '../charts/LeafletMap';
+import { RichViewer } from '../editor/RichViewer';
 import { Avatar } from '../ui/Avatar';
 import { Card } from '../ui/Card';
 import { Icon } from '../ui/Icon';
@@ -35,6 +44,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
   const [localCares, setLocalCares] = useState<Care[]>(ex.cares);
   const myCare = localCares.find((c) => c.authorUsername === myUsername);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [bodyExpanded, setBodyExpanded] = useState(false);
+
+  const bodyText = ex.body ? stripHtml(ex.body) : '';
+  // Show the expand toggle only when the preview would actually be clipped.
+  const bodyClipped = bodyText.length > 140;
 
   const careMut = useMutation({
     mutationFn: (emoji: string | null) =>
@@ -220,6 +234,25 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
       >
         {ex.title}
       </Link>
+
+      {bodyText && (
+        <div className="ot-card-body">
+          {bodyExpanded ? (
+            <RichViewer html={ex.body ?? ''} className="ot-card-body-full" />
+          ) : (
+            <p className={`ot-card-body-preview${bodyClipped ? ' clipped' : ''}`}>{bodyText}</p>
+          )}
+          {bodyClipped && (
+            <button
+              type="button"
+              className="ot-card-body-toggle"
+              onClick={() => setBodyExpanded((v) => !v)}
+            >
+              {bodyExpanded ? t.showLess : t.showMore}
+            </button>
+          )}
+        </div>
+      )}
 
       {metricRow}
 

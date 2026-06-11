@@ -84,6 +84,7 @@ export interface ExerciseListItem {
   ownerGravatarHash?: string;
   sport: string;
   title: string;
+  body?: string;
   tags: string[];
   date: string;
   durationCs: number;

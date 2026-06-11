@@ -88,6 +88,8 @@ function toListItem(row: ExerciseRow, cares: CareRow[], authenticated: boolean):
     ownerGravatarHash: gravatarHash(row.owner_email),
     sport: row.sport_key,
     title: row.title,
+    // Body included for the feed preview; hidden from anonymous viewers.
+    body: authenticated ? (row.body_html ?? undefined) : undefined,
     tags: row.tags,
     date: row.exercise_date,
     durationCs: row.duration_cs,

@@ -17,6 +17,7 @@ import {
   parseDistance,
   parseDuration,
   relDay,
+  stripHtml,
 } from './format';
 
 function localIsoDate(daysFromToday = 0): string {
@@ -97,6 +98,13 @@ describe('distance, pace, and speed', () => {
     expect(fmtPaceSport(9000, 100, 'uinti', 'fi')).toBe('1:30/100m');
     expect(fmtPaceSport(360000, 30000, 'bike', 'fi')).toBe('30 km/h');
     expect(fmtPaceSport(0, 30000, 'run', 'fi')).toBe('—');
+  });
+
+  test('strips html tags and entities to plain text', () => {
+    expect(stripHtml('<td><p>Hello&nbsp;world</p></td>')).toBe('Hello world');
+    expect(stripHtml('<p>a</p>\n<p>b</p>')).toBe('a b');
+    expect(stripHtml('Tom &amp; Jerry &lt;3')).toBe('Tom & Jerry <3');
+    expect(stripHtml('<p><br></p>')).toBe('');
   });
 
   test('formats relative dates in both languages', () => {
