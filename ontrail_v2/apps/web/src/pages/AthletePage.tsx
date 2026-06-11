@@ -121,10 +121,13 @@ function SummaryTable({
   rows,
   lang,
   showTotal,
+  tagLinkUser,
 }: {
   rows: SummaryRow[];
   lang: 'fi' | 'en';
   showTotal?: boolean;
+  // When set, tag rows link to that user's feed filtered by the tag.
+  tagLinkUser?: string;
 }) {
   if (!rows.length)
     return <div style={{ color: 'var(--text-faint)', fontSize: 13, padding: '8px 0' }}>—</div>;
@@ -152,7 +155,17 @@ function SummaryTable({
                 <SportGlyph sport={r.sport} size={13} />
               </>
             )}
-            {r.label}
+            {tagLinkUser && !r.sport && !r.isTotal ? (
+              <Link
+                to="/feed"
+                search={{ user: tagLinkUser, tag: r.key }}
+                style={{ color: 'var(--accent)' }}
+              >
+                {r.label}
+              </Link>
+            ) : (
+              r.label
+            )}
           </span>
           <span>{fmtDistSummary(r.totalDistanceM, lang)}</span>
           <span style={{ fontVariantNumeric: 'tabular-nums', fontSize: 12 }}>
@@ -174,12 +187,14 @@ function MonthAccordion({
   lang,
   showTotals,
   isTag,
+  tagLinkUser,
 }: {
   year: number;
   monthRows: (MonthSummary | TagSummaryMonth)[];
   lang: 'fi' | 'en';
   showTotals?: boolean;
   isTag?: boolean;
+  tagLinkUser?: string;
 }) {
   const [open, setOpen] = useState<number | null>(NOW.getMonth() + 1);
   const monthNames = lang === 'fi' ? MONTH_NAMES_FI : MONTH_NAMES_EN;
@@ -238,7 +253,12 @@ function MonthAccordion({
             </button>
             {isOpen && (
               <div style={{ paddingTop: 4 }}>
-                <SummaryTable rows={rows} lang={lang} showTotal={showTotals} />
+                <SummaryTable
+                  rows={rows}
+                  lang={lang}
+                  showTotal={showTotals}
+                  tagLinkUser={tagLinkUser}
+                />
               </div>
             )}
           </div>
@@ -484,9 +504,10 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   monthRows={(monthTags ?? []) as TagSummaryMonth[]}
                   lang={lang}
                   isTag
+                  tagLinkUser={username}
                 />
               ) : (
-                <SummaryTable rows={tagRows} lang={lang} />
+                <SummaryTable rows={tagRows} lang={lang} tagLinkUser={username} />
               )}
             </Card>
           )}
