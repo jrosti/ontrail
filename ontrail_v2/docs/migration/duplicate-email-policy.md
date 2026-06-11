@@ -33,8 +33,12 @@ For each email shared by >1 account:
    Record each merge in `migration_users` (`state = 'merged'`, pointing at the canonical
    `ontrail_user_id`) so the action is auditable.
 
-Singletons (one account per email) migrate normally. The lone no-email account →
-`state = 'pending'` (no Hanko login possible without an email).
+Singletons (one account per email) migrate normally. The lone no-email account
+(`jsatta`) → `state = 'pending'` (no Hanko login possible without an email), but it
+**must still get a `users` row**: it is the alias target for the orphan author `j.satta`
+(12 exercises, no `onuser` doc) per `../../../plans/plan2-migration.md` §4 Q1. Exercise
+normalization resolves `exercise.user = "j.satta"` to the `jsatta` `user_id`, so dropping
+the `jsatta` row would orphan those 12 exercises.
 
 ### Verification (`exercise.user` matches `username` exactly, case-sensitive)
 
