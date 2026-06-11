@@ -180,7 +180,9 @@ function exerciseSelect() {
 
 export async function listExercises(params: URLSearchParams, authenticated: boolean) {
   const page = Math.max(1, Number(params.get('page') ?? 1));
-  const perPage = Math.min(100, Math.max(1, Number(params.get('perPage') ?? 20)));
+  // Cap at 1000: analytics fetches a full year of one user's exercises for the
+  // heatmap / HR-zone aggregates (the feed itself paginates at 20).
+  const perPage = Math.min(1000, Math.max(1, Number(params.get('perPage') ?? 20)));
   const singleSport = params.get('sport');
   const multiSports = params.get('sports'); // comma-separated, e.g. "juoksu,hiihto"
   const sportList = multiSports

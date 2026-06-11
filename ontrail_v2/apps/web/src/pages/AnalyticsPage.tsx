@@ -289,10 +289,18 @@ export function AnalyticsPage({ username: propUsername }: { username?: string } 
     enabled: !!username && scope !== 'all',
   });
 
-  // Per-day exercise data for the activity calendar heatmap
+  // Per-day exercise data for the activity calendar heatmap + HR zones — scoped
+  // to the displayed year so the full year is covered (not just the latest 100).
   const { data: calExercises } = useQuery({
-    queryKey: ['cal-exercises', username],
-    queryFn: () => listExercises({ user: username, perPage: 500 }),
+    queryKey: ['cal-exercises', username, year],
+    queryFn: () =>
+      listExercises({
+        user: username,
+        perPage: 1000,
+        dateFrom: `${year}-01-01`,
+        dateTo: `${year}-12-31`,
+        sortBy: 'date',
+      }),
     enabled: !!username,
     staleTime: 5 * 60_000,
   });
