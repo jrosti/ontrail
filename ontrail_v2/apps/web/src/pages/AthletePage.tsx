@@ -378,6 +378,9 @@ export function AthletePage({ username, initialTab }: { username: string; initia
                   : t.records}
           </button>
         ))}
+        <Link to="/user/$username/analytics" params={{ username }} className="ot-scope-btn">
+          {t.analytics}
+        </Link>
       </div>
 
       {/* Workouts tab */}

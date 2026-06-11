@@ -242,9 +242,12 @@ function PeriodPicker({
   );
 }
 
-export function AnalyticsPage() {
+export function AnalyticsPage({ username: propUsername }: { username?: string } = {}) {
   const { lang, currentUser } = useStore();
   const t = I18N[lang];
+  // When a username is passed (viewing another athlete) use their profile;
+  // otherwise show the logged-in user's own analytics.
+  const isOwn = !propUsername;
   const [scope, setScope] = useState<Scope>('year');
   const [year, setYear] = useState(CURRENT_YEAR);
   const [month, setMonth] = useState(CURRENT_MONTH);
@@ -257,7 +260,7 @@ export function AnalyticsPage() {
       1 + Math.round(((d.getTime() - w1.getTime()) / 86400000 - 3 + ((w1.getDay() + 6) % 7)) / 7)
     );
   });
-  const username = currentUser?.username ?? '';
+  const username = propUsername ?? currentUser?.username ?? '';
   const monthShort = lang === 'fi' ? MONTH_SHORT_FI : MONTH_SHORT_EN;
   const [sportSortCol, setSportSortCol] = useState<SportSortCol>('sessions');
   const [sportSortDir, setSportSortDir] = useState<SortDir3>('desc');
@@ -307,6 +310,13 @@ export function AnalyticsPage() {
     const start = Math.min(athlete?.firstYear ?? CURRENT_YEAR, CURRENT_YEAR - 11);
     return Array.from({ length: CURRENT_YEAR - start + 1 }, (_, i) => CURRENT_YEAR - i);
   }, [athlete?.firstYear]);
+
+  // HR profile + name of the viewed athlete (their profile, falling back to the
+  // logged-in user only when viewing one's own analytics).
+  const targetRestHr = athlete?.restHr ?? (isOwn ? currentUser?.restHr : undefined);
+  const targetMaxHr = athlete?.maxHr ?? (isOwn ? currentUser?.maxHr : undefined);
+  const targetName =
+    athlete?.displayName ?? (isOwn ? currentUser?.displayName : undefined) ?? username;
 
   const nav = useNavigate();
 
@@ -411,7 +421,7 @@ export function AnalyticsPage() {
     byDate.set(d, (byDate.get(d) ?? 0) + ex.durationCs);
   }
 
-  const hasHrProfile = !!(currentUser.restHr || currentUser.maxHr);
+  const hasHrProfile = !!(targetRestHr || targetMaxHr);
 
   // Karvonen 5-zone boundaries (% of HRR)
   const ZONE_PCT = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0] as const;
@@ -420,8 +430,8 @@ export function AnalyticsPage() {
   const ZONE_NAMES_EN = ['Z1 Recovery', 'Z2 Aerobic', 'Z3 Tempo', 'Z4 Threshold', 'Z5 Max'];
 
   const hrZoneData = (() => {
-    const restHr = currentUser.restHr ?? 60;
-    const maxHr = currentUser.maxHr ?? 190;
+    const restHr = targetRestHr ?? 60;
+    const maxHr = targetMaxHr ?? 190;
     const hrr = maxHr - restHr;
     const bounds = ZONE_PCT.map((p) => Math.round(restHr + hrr * p));
 
@@ -465,7 +475,7 @@ export function AnalyticsPage() {
       <div className="ot-page-head">
         <div>
           <h1 className="ot-page-title">{t.analytics}</h1>
-          <div className="ot-page-sub">{currentUser.displayName}</div>
+          <div className="ot-page-sub">{targetName}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 10 }}>
           <div className="ot-scope">
@@ -560,10 +570,10 @@ export function AnalyticsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={{ fontSize: 11, color: 'var(--text-faint)', display: 'flex', gap: 16 }}>
                 <span>
-                  {lang === 'fi' ? 'Lepo' : 'Rest'}: {currentUser.restHr ?? '—'} bpm
+                  {lang === 'fi' ? 'Lepo' : 'Rest'}: {targetRestHr ?? '—'} bpm
                 </span>
                 <span>
-                  {lang === 'fi' ? 'Maksimi' : 'Max'}: {currentUser.maxHr ?? '—'} bpm
+                  {lang === 'fi' ? 'Maksimi' : 'Max'}: {targetMaxHr ?? '—'} bpm
                 </span>
               </div>
               {hrZoneData.zoneSec.map((sec, i) => {
