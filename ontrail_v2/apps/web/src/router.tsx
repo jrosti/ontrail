@@ -165,6 +165,17 @@ const athleteRoute = createRoute({
   component: AthletePageWrapper,
 });
 
+function UserAnalyticsWrapper() {
+  const { username } = userAnalyticsRoute.useParams();
+  return <AnalyticsPage username={username} />;
+}
+
+const userAnalyticsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/user/$username/analytics',
+  component: UserAnalyticsWrapper,
+});
+
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
@@ -187,6 +198,7 @@ const routeTree = rootRoute.addChildren([
   groupsRoute,
   topListsRoute,
   athleteRoute,
+  userAnalyticsRoute,
 ]);
 
 export const router = createRouter({ routeTree });
