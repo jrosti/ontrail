@@ -199,10 +199,12 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
   const maxHr = params.get('maxHr') ? Number(params.get('maxHr')) : null;
   const dateFrom = params.get('dateFrom'); // YYYY-MM-DD
   const dateTo = params.get('dateTo');
-  const sortBy = params.get('sortBy') ?? 'date'; // date | distance | duration | hr
+  const sortBy = params.get('sortBy') ?? 'recent'; // recent | date | distance | duration | hr
   const sortDir = (params.get('sortDir') ?? 'desc') === 'asc' ? 'asc' : 'desc';
   const offset = (page - 1) * perPage;
 
+  // Default 'recent' = last modified (updated_at), the legacy feed sort key, so
+  // newly logged or edited exercises surface first. 'date' sorts by workout date.
   const sortCol =
     sortBy === 'distance'
       ? sql`e.distance_m`
@@ -210,7 +212,9 @@ export async function listExercises(params: URLSearchParams, authenticated: bool
         ? sql`e.duration_cs`
         : sortBy === 'hr'
           ? sql`e.avg_hr`
-          : sql`e.exercise_date`;
+          : sortBy === 'date'
+            ? sql`e.exercise_date`
+            : sql`e.updated_at`;
 
   const orderClause =
     sortDir === 'asc'

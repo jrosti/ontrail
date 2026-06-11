@@ -322,7 +322,7 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
   const [hrMax, setHrMax] = useState(search.maxHr ? String(search.maxHr) : '');
   const [dateFrom, setDateFrom] = useState(search.dateFrom ?? '');
   const [dateTo, setDateTo] = useState(search.dateTo ?? '');
-  const [sortBy, setSortBy] = useState<FeedSearch['sortBy']>(search.sortBy ?? 'date');
+  const [sortBy, setSortBy] = useState<FeedSearch['sortBy']>(search.sortBy ?? 'recent');
   const [sortDir, setSortDir] = useState<FeedSearch['sortDir']>(search.sortDir ?? 'desc');
   const [userInput, setUserInput] = useState(search.user ?? '');
   const [userSuggestOpen, setUserSuggestOpen] = useState(false);
@@ -362,7 +362,7 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
       maxHr: hrMax ? Number(hrMax) || undefined : undefined,
       dateFrom: dateFrom || undefined,
       dateTo: dateTo || undefined,
-      sortBy: sortBy !== 'date' ? sortBy : undefined,
+      sortBy: sortBy !== 'recent' ? sortBy : undefined,
       sortDir: sortDir !== 'desc' ? sortDir : undefined,
     };
     nav({ to: '/feed', search: { ...search, ...updates } });
@@ -606,6 +606,7 @@ function FilterPanel({ search, lang }: { search: FeedSearch; lang: 'fi' | 'en' }
               onChange={(e) => setSortBy(e.target.value as FeedSearch['sortBy'])}
               style={{ flex: 1 }}
             >
+              <option value="recent">{lang === 'fi' ? 'Uusin' : 'Recent'}</option>
               <option value="date">{lang === 'fi' ? 'Päivämäärä' : 'Date'}</option>
               <option value="distance">{lang === 'fi' ? 'Matka' : 'Distance'}</option>
               <option value="duration">{lang === 'fi' ? 'Kesto' : 'Duration'}</option>

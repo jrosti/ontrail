@@ -73,7 +73,7 @@ export type FeedSearch = {
   maxHr?: number;
   dateFrom?: string;
   dateTo?: string;
-  sortBy?: 'date' | 'distance' | 'duration' | 'hr';
+  sortBy?: 'recent' | 'date' | 'distance' | 'duration' | 'hr';
   sortDir?: 'asc' | 'desc';
 };
 

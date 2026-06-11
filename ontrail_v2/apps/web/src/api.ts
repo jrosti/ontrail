@@ -55,7 +55,7 @@ export const listExercises = (params?: {
   maxHr?: number;
   dateFrom?: string;
   dateTo?: string;
-  sortBy?: 'date' | 'distance' | 'duration' | 'hr';
+  sortBy?: 'recent' | 'date' | 'distance' | 'duration' | 'hr';
   sortDir?: 'asc' | 'desc';
 }) => client.get<PaginatedResponse<ExerciseListItem>>('/exercises', { params }).then((r) => r.data);
 
