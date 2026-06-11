@@ -18,6 +18,8 @@ Object.defineProperty(window, 'history', {
 Object.defineProperty(window, 'devicePixelRatio', {
   value: 1,
 });
+Object.defineProperty(window, 'innerHeight', { value: 768, configurable: true });
+Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true });
 Object.defineProperty(window, 'screen', {
   value: {
     deviceXDPI: 1,
