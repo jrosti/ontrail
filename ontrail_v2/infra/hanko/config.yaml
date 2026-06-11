@@ -1,0 +1,108 @@
+database:
+  user: hanko
+  password: hanko
+  host: localhost
+  port: 5432
+  dialect: postgres
+  database: hanko
+
+email_delivery:
+  enabled: true
+  smtp:
+    host: localhost
+    port: "2525"
+  from_address: noreply@ontrail.local
+  from_name: OnTrail
+
+secrets:
+  keys:
+    # CHANGE THIS in production — 16+ chars, stable across restarts
+    - ontrail-local-dev-secret-key-32c
+
+service:
+  name: OnTrail Auth
+
+# ── Email ────────────────────────────────────────────────────────────────────
+email:
+  enabled: true
+  optional: false
+  acquire_on_registration: true
+  acquire_on_login: false
+  use_as_login_identifier: true
+  use_for_authentication: true
+  require_verification: true
+  passcode_ttl: 300
+
+# ── Passkey ──────────────────────────────────────────────────────────────────
+passkey:
+  enabled: true
+  optional: true
+  acquire_on_registration: always
+  acquire_on_login: always
+  user_verification: preferred
+
+webauthn:
+  relying_party:
+    id: localhost
+    display_name: OnTrail
+    origins:
+      - "http://localhost:5173"
+      - "http://localhost:3001"
+  timeout: 60000
+
+# ── MFA ──────────────────────────────────────────────────────────────────────
+mfa:
+  enabled: true
+  optional: true          # let users opt in; don't force it for dev
+  totp:
+    enabled: true
+  security_keys:
+    enabled: true
+    optional: true
+    user_verification: preferred
+
+# ── Password (disabled — passkey + email only) ────────────────────────────────
+password:
+  enabled: false
+
+# ── Username ─────────────────────────────────────────────────────────────────
+username:
+  enabled: true
+  optional: true
+  acquire_on_registration: true
+  acquire_on_login: false
+  use_as_login_identifier: false
+  min_length: 2
+  max_length: 32
+
+# ── Session ──────────────────────────────────────────────────────────────────
+session:
+  lifespan: "720h"          # 30 days
+  enable_auth_token_header: true   # also send token in X-Auth-Token header
+  cookie:
+    secure: false           # must be false on http://localhost
+    same_site: "lax"
+
+# ── Server ───────────────────────────────────────────────────────────────────
+server:
+  public:
+    address: ":8000"
+    cors:
+      allow_origins:
+        - "http://localhost:5173"
+        - "http://localhost:3001"
+      allow_credentials: true
+  admin:
+    address: ":8001"
+
+# ── Account ──────────────────────────────────────────────────────────────────
+account:
+  allow_signup: true
+  allow_deletion: true
+
+# ── Third-party redirects (for future OAuth) ──────────────────────────────────
+third_party:
+  allowed_redirect_urls:
+    - "http://localhost:5173/**"
+  default_redirect_url: "http://localhost:5173"
+  error_redirect_url: "http://localhost:5173/login"

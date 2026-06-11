@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  pull_request:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  api:
+    name: API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ontrail_v2/apps/api
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Lint
+        run: bun run lint
+
+      - name: Tests with coverage
+        run: bun run test
+
+      - name: Build server
+        run: bun run build
+
+  web:
+    name: Web
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ontrail_v2/apps/web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.33.2 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --config.minimum-release-age=0
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Tests with coverage
+        run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Install API dependencies for Lighthouse stack
+        working-directory: ontrail_v2/apps/api
+        run: bun install --frozen-lockfile
+
+      - name: Lighthouse report
+        continue-on-error: true
+        run: pnpm run lighthouse:stack
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-reports
+          path: ontrail_v2/apps/web/reports/lighthouse
+          if-no-files-found: ignore
+
+  hanko:
+    name: Hanko
+    runs-on: ubuntu-latest
+    env:
+      HANKO_REPOSITORY: teamhanko/hanko
+      HANKO_REF: main
+    steps:
+      - name: Checkout OnTrail
+        uses: actions/checkout@v6
+
+      - name: Checkout Hanko source
+        uses: actions/checkout@v6
+        with:
+          repository: ${{ env.HANKO_REPOSITORY }}
+          ref: ${{ env.HANKO_REF }}
+          path: _hanko
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: _hanko/backend/go.mod
+          cache-dependency-path: _hanko/backend/go.sum
+
+      - name: Apply OnTrail Hanko patches
+        run: ./ontrail_v2/infra/hanko/patches/apply.sh "$GITHUB_WORKSPACE/_hanko/backend"
+
+      - name: Seed Hanko build metadata
+        working-directory: _hanko/backend
+        run: |
+          mkdir -p build_info
+          git rev-parse --short HEAD > build_info/version.txt
+
+      - name: Build Hanko backend
+        working-directory: _hanko/backend
+        run: go build -o "$RUNNER_TEMP/hanko" .
