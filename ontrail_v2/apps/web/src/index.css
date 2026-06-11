@@ -831,7 +831,7 @@ h4 {
 }
 .ot-card-body-preview {
   margin: 0;
-  color: var(--text-muted, var(--text-faint));
+  color: var(--text);
   font-size: 14.5px;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -1149,7 +1149,7 @@ h4 {
   margin: 0;
   font-size: 16px;
   line-height: 1.7;
-  color: var(--text-dim);
+  color: var(--text);
   text-wrap: pretty;
   white-space: pre-line;
 }

@@ -192,8 +192,9 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
         <div style={{ minWidth: 0, flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
             <Link
-              to="/diary/$username"
+              to="/user/$username"
               params={{ username: ex.ownerUsername }}
+              search={{ tab: undefined }}
               style={{ fontWeight: 600, color: 'var(--text)' }}
             >
               {ex.ownerDisplayName}
