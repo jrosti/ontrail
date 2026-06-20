@@ -388,7 +388,7 @@ h4 {
   border-radius: 12px;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  color: var(--text-faint);
+  color: var(--text-dim);
   font-size: 14.5px;
 }
 .ot-composer-input:hover {

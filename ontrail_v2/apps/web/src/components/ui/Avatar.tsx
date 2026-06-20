@@ -25,7 +25,7 @@ export function Avatar({ initials, color, size = 40, ring = false, gravatarHash 
     return (
       <div style={style}>
         <img
-          src={`https://www.gravatar.com/avatar/${gravatarHash}?s=${size * 2}&d=404`}
+          src={`https://www.gravatar.com/avatar/${gravatarHash}?s=${size * 2}&d=mp`}
           alt={initials}
           width={size}
           height={size}

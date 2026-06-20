@@ -77,6 +77,7 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
 
   const careCount = localCares.length;
   const liked = Boolean(myCare);
+  const careEmoji = myCare?.emoji ?? '❤️';
 
   const km = ex.distanceM ? ex.distanceM / 1000 : 0;
   const pace = ex.distanceM ? calcPace(ex.durationCs, ex.distanceM) : 0;
@@ -110,9 +111,11 @@ export function ExerciseCard({ exercise: ex, layout = 'cards', groupFilter }: Ex
           className={`ot-act${liked ? ' liked' : ''}`}
           onClick={handleCareClick}
           aria-pressed={liked}
-          aria-label={liked ? `Poista kehusi (${myCare?.emoji})` : 'Kehui'}
+          aria-label={
+            liked ? `${careEmoji} ${careCount} Poista kehusi` : `${careEmoji} ${careCount} Kehui`
+          }
         >
-          <span className="ot-act-emoji">{myCare?.emoji ?? '❤️'}</span>
+          <span className="ot-act-emoji">{careEmoji}</span>
           <span>{careCount}</span>
         </button>
         {pickerOpen && (
