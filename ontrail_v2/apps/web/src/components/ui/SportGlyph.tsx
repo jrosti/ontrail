@@ -1,4 +1,4 @@
-import { SPORT_GLYPHS } from '../../sports';
+import { SPORT_GLYPHS, SPORTS } from '../../sports';
 
 interface SportGlyphProps {
   sport: string;
@@ -6,7 +6,8 @@ interface SportGlyphProps {
 }
 
 export function SportGlyph({ sport, size = 18 }: SportGlyphProps) {
-  const d = SPORT_GLYPHS[sport] ?? SPORT_GLYPHS.run;
+  // `sport` may be a sport key (resolved to its glyph) or a glyph name.
+  const d = SPORT_GLYPHS[SPORTS[sport]?.glyph ?? sport] ?? SPORT_GLYPHS[sport] ?? SPORT_GLYPHS.run;
   return (
     <svg
       width={size}
