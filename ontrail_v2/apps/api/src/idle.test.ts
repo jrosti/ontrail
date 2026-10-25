@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { IdleTracker, isDirectLoopback, keepsAwake, withIdle } from './idle';
+import { hasCredentials, IdleTracker, isDirectLoopback, keepsAwake, withIdle } from './idle';
 
 describe('idle', () => {
   test('tuomio syntyy graceMs:n jälkeen ja käyttö nollaa laskurin', () => {
@@ -18,6 +18,16 @@ describe('idle', () => {
     expect(keepsAwake('GET', '/wp-login.php', 404)).toBe(false);
   });
 
+  test('taustakysely ja kirjautumaton lukeminen eivät pidä hereillä', () => {
+    expect(keepsAwake('GET', '/api/unread', 200, true)).toBe(false); // välilehden minuuttikysely
+    expect(keepsAwake('GET', '/api/exercises', 200, false)).toBe(false); // botti / vieras
+    expect(keepsAwake('GET', '/api/exercises', 200, true)).toBe(true);
+    expect(keepsAwake('POST', '/api/exercises', 201, false)).toBe(true); // kirjoittaminen on aina käyttöä (validointi tapahtuu API:ssa)
+    expect(hasCredentials(new Headers({ authorization: 'Bearer x' }))).toBe(true);
+    expect(hasCredentials(new Headers({ cookie: 'theme=dark; hanko=abc' }))).toBe(true);
+    expect(hasCredentials(new Headers({ cookie: 'theme=dark' }))).toBe(false);
+  });
+
   test('/api/idle vastaa vain suoraan loopbackista', async () => {
     let now = 0;
     const tracker = new IdleTracker(1000, () => now);
@@ -28,7 +38,7 @@ describe('idle', () => {
     expect((await h(new Request('http://x/api/idle'), remote)).status).toBe(404);
     expect((await h(new Request('http://x/api/idle', { headers: { 'x-forwarded-for': '1.2.3.4' } }), local)).status).toBe(404);
     now = 5000; expect(tracker.status().idle).toBe(true);
-    await h(new Request('http://x/api/exercises'), local); // 200 → käyttöä
+    await h(new Request('http://x/api/exercises', { headers: { authorization: 'Bearer t' } }), local); // 200 + tunnistettu → käyttöä
     expect(tracker.status().idle).toBe(false);
     expect(isDirectLoopback('::1', new Headers())).toBe(true);
   });

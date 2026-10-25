@@ -11,11 +11,18 @@ export class IdleTracker {
   }
 }
 
-/** Pyynnöt, jotka eivät ole käyttäjän toimintaa (terveystarkistus, joutilaisuuskysely). */
-export const isPassive = (method: string, path: string) => method === 'GET' && (path === '/api/health' || path === '/api/idle');
+/** Pyynnöt, jotka eivät ole käyttäjän toimintaa: terveystarkistus, joutilaisuuskysely ja välilehden taustakysely (lukemattomat). */
+export const isPassive = (method: string, path: string) => method === 'GET' && (path === '/api/health' || path === '/api/idle' || path === '/api/unread');
 
-/** Onnistunut oikea käyttö pitää palvelimen hereillä; virheet (botit, 401, 404) eivät. */
-export const keepsAwake = (method: string, path: string, status: number) => status < 400 && path.startsWith('/api/') && !isPassive(method, path);
+/**
+ * Onnistunut oikea käyttö pitää palvelimen hereillä; virheet (401, 404) eivät. Kirjautumaton lukeminen (julkinen lista: botit, hakukoneet,
+ * satunnaiset kävijät) ei pidä hereillä, koska muuten yksi crawler estää sammutuksen; kirjautuneen käyttäjän pyynnöt (Authorization tai hanko-eväste) pitävät.
+ */
+export const keepsAwake = (method: string, path: string, status: number, authenticated = true) =>
+  status < 400 && path.startsWith('/api/') && !isPassive(method, path) && (authenticated || method !== 'GET');
+
+/** Onko pyynnöllä kirjautumistieto (Bearer-otsake tai Hankon istuntoeväste) */
+export const hasCredentials = (headers: Headers) => headers.has('authorization') || /(?:^|;\s*)hanko=/.test(headers.get('cookie') ?? '');
 
 /** Vain suoraan palvelimelta tehdyt pyynnöt: loopback ilman välityspalvelimen otsakkeita (nginx asettaa ne jokaiselle pyynnölle). */
 export function isDirectLoopback(remote: string | undefined, headers: Headers): boolean {
@@ -34,7 +41,7 @@ export function withIdle(handler: (req: Request) => Promise<Response>, tracker: 
       return Response.json(tracker.status());
     }
     const res = await handler(req);
-    if (keepsAwake(req.method, path, res.status)) tracker.touch();
+    if (keepsAwake(req.method, path, res.status, hasCredentials(req.headers))) tracker.touch();
     return res;
   };
 }
