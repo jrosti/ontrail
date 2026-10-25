@@ -12,7 +12,7 @@ echo "== web"
 (cd "$ROOT/apps/web" && { bun install --frozen-lockfile >/dev/null 2>&1 || { echo 'varoitus: bun.lockb ei vastaa package.json:ia; asennetaan ilman lukitusta' >&2; bun install >/dev/null; }; } && VITE_HANKO_URL="${VITE_HANKO_URL:-https://$SITE_HOST/hanko}" VITE_API_URL="${VITE_API_URL:-/api}" bun run build)
 mkdir -p "$STAGE/public" && cp -R "$ROOT/apps/web/dist/." "$STAGE/public/"
 # Herätyssivu (autostart): staattinen, Workerin tarjoama; sisältää julkisen Turnstile-avaimen
-if [ -f "$DEPLOY_DIR/edge/wake.html" ]; then sed "s#__TURNSTILE_SITE_KEY__#${TURNSTILE_SITE_KEY:-}#g" "$DEPLOY_DIR/edge/wake.html" > "$STAGE/public/wake.html"; fi
+if [ -f "$DEPLOY_DIR/edge/wake.html" ]; then mkdir -p "$STAGE/public/wake-up"; sed "s#__TURNSTILE_SITE_KEY__#${TURNSTILE_SITE_KEY:-}#g" "$DEPLOY_DIR/edge/wake.html" > "$STAGE/public/wake-up/index.html"; fi
 
 echo "== api"
 # Monorepon rakenne säilyy (API tuo tyyppejä ja lajit apps/web/src:stä): apps/api + apps/web/src (vain lähteet, ei testejä)
