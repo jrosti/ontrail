@@ -83,7 +83,7 @@ export function LogPage() {
 
   const { data: userTags = [] } = useQuery({
     queryKey: ['userTags', currentUser?.username],
-    queryFn: () => getUserTags(currentUser!.username),
+    queryFn: () => getUserTags(currentUser?.username ?? ''),
     enabled: !!currentUser?.username,
     staleTime: 5 * 60_000,
   });

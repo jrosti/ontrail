@@ -139,7 +139,7 @@ describe('API client', () => {
     nextData = { id: 'me' };
     await expect(api.getMe()).resolves.toEqual(nextData);
     await api.getUser('trail_runner');
-    await api.updateProfile({ displayName: 'Trail Runner' });
+    await api.updateProfile({ synopsis: 'Trail runner', restHr: 44, maxHr: null });
 
     nextData = { items: [], total: 0, page: 1, perPage: 10 };
     await expect(api.listUsers('trail', 1, 10)).resolves.toEqual(nextData);
@@ -159,7 +159,7 @@ describe('API client', () => {
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /sports');
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /me');
     expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('get /users/trail_runner');
-    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('patch /me');
+    expect(calls.map((call) => `${call.method} ${call.url}`)).toContain('patch /users/me');
     expect(calls.at(-1)?.config).toEqual({ params: { q: 'trail', page: 1, perPage: 10 } });
   });
 

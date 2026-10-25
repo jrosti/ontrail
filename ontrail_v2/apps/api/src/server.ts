@@ -3,6 +3,9 @@ import { loadConfig } from './config';
 import { IdleTracker, withIdle } from './idle';
 import { closeDb, sql } from './db/client';
 import { forbidden, handleError, json, methodNotAllowed, notFound, unauthorized } from './http';
+import { parseFinish } from './live/finish';
+import { parsePoints } from './live/geo';
+import { parseProfileUpdate } from './profile';
 import {
   addComment,
   createExercise,
@@ -19,6 +22,15 @@ import {
   leaveGroup,
   listGroups,
 } from './repositories/groups';
+import {
+  addLivePoints,
+  discardLiveSession,
+  finishLiveSession,
+  getActiveSession,
+  getPublicLive,
+  SHARE_TOKEN_PATTERN,
+  startLiveSession,
+} from './repositories/live';
 import { ensureSportsSeeded, listSports } from './repositories/sports';
 import {
   getAthleteProfile,
@@ -41,15 +53,17 @@ import {
   getExercisesForExport,
   getPublicProfile,
   listUsers,
+  UsernameTakenError,
   updateUserProfile,
 } from './repositories/users';
-import { emitToUser, registerSseClient } from './sse';
+import { emitToUser, liveChannel, registerSseClient } from './sse';
 import { isUuid } from './validation';
 
 // Re-export emitToUser so it can be used from exercises repo (kept here for clarity)
 export { emitToUser };
 
 const config = loadConfig();
+const INT32_MAX = 2_147_483_647;
 
 interface RequestDeps {
   verifyRequest?: typeof verifyHankoRequest;
@@ -58,12 +72,30 @@ interface RequestDeps {
 async function optionalUser(req: Request, deps: RequestDeps = {}): Promise<DbUser | null> {
   const verifyRequest = deps.verifyRequest ?? verifyHankoRequest;
   const claims = await verifyRequest(req).catch(() => null);
-  return claims ? findOrCreateUserFromClaims(claims) : null;
+  if (!claims) return null;
+  try {
+    return await findOrCreateUserFromClaims(claims);
+  } catch (error) {
+    // A Hanko account whose username is taken by another OnTrail user is treated as anonymous.
+    if (error instanceof UsernameTakenError) return null;
+    throw error;
+  }
 }
 
 async function requireUser(req: Request, deps: RequestDeps = {}): Promise<DbUser | Response> {
-  const user = await optionalUser(req, deps);
-  return user ?? unauthorized();
+  const verifyRequest = deps.verifyRequest ?? verifyHankoRequest;
+  const claims = await verifyRequest(req).catch(() => null);
+  if (!claims) return unauthorized();
+  try {
+    return await findOrCreateUserFromClaims(claims);
+  } catch (error) {
+    // The Hanko session is valid but its username belongs to someone else: tell the client to
+    // pick another one in the Hanko profile rather than silently creating a clashing user.
+    if (error instanceof UsernameTakenError) {
+      return json({ error: 'username_taken', username: error.username }, { status: 409 });
+    }
+    throw error;
+  }
 }
 
 // ── Search helper ────────────────────────────────────────────────────────────
@@ -213,6 +245,52 @@ async function searchExercises(params: URLSearchParams, authenticated: boolean) 
   }
 
   return { items: rows.map(toListItem), total, page, perPage };
+}
+
+// ── SSE helper ───────────────────────────────────────────────────────────────
+
+/** Open a text/event-stream registered under `key` (a user id or a live channel). */
+function sseResponse(key: string): Response {
+  let unregister: (() => void) | undefined;
+  let pingInterval: ReturnType<typeof setInterval> | undefined;
+
+  const stream = new ReadableStream({
+    start(controller) {
+      const encode = (s: string) => new TextEncoder().encode(s);
+
+      const sseController = {
+        enqueue: (data: string) => controller.enqueue(encode(data)),
+        close: () => controller.close(),
+      };
+
+      unregister = registerSseClient(key, sseController);
+
+      // Send initial ping
+      controller.enqueue(encode('event: ping\ndata: {}\n\n'));
+
+      // Keep-alive ping every 30s
+      pingInterval = setInterval(() => {
+        try {
+          controller.enqueue(encode('event: ping\ndata: {}\n\n'));
+        } catch {
+          if (pingInterval) clearInterval(pingInterval);
+          unregister?.();
+        }
+      }, 30_000);
+    },
+    cancel() {
+      if (pingInterval) clearInterval(pingInterval);
+      unregister?.();
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  });
 }
 
 // ── Router ───────────────────────────────────────────────────────────────────
@@ -381,16 +459,10 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
     if (req.method !== 'PATCH') return methodNotAllowed();
     const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
-    const body = (await req.json()) as {
-      displayName?: string;
-      synopsis?: string;
-      resthr?: number | null;
-      maxhr?: number | null;
-      aerk?: number | null;
-      anaerk?: number | null;
-      goals?: string | null;
-    };
-    const updated = await updateUserProfile(user.id, body);
+    // The display name is the Hanko username, so it is not an editable field.
+    const parsed = parseProfileUpdate(await req.json().catch(() => null));
+    if (!parsed.ok) return json({ error: parsed.error }, { status: 400 });
+    const updated = await updateUserProfile(user.id, parsed.value);
     return updated ? json(apiUser(updated)) : notFound();
   }
 
@@ -629,52 +701,103 @@ async function route(req: Request, deps: RequestDeps = {}): Promise<Response> {
     return json(exercises);
   }
 
+  // ── Live tracking ─────────────────────────────────────────────────────────
+  // Owner endpoints (Hanko bearer): start / resume / upload points / finish / discard.
+  if (path === '/api/live') {
+    if (req.method !== 'POST') return methodNotAllowed();
+    const user = await requireUser(req, deps);
+    if (user instanceof Response) return user;
+    const body = (await req.json().catch(() => ({}))) as { sport?: unknown; title?: unknown };
+    if (body.sport != null && typeof body.sport !== 'string') {
+      return json({ error: 'invalid_sport' }, { status: 400 });
+    }
+    if (body.title != null && (typeof body.title !== 'string' || body.title.length > 200)) {
+      return json({ error: 'invalid_title' }, { status: 400 });
+    }
+    const result = await startLiveSession(user, {
+      sport: body.sport as string | undefined,
+      title: (body.title as string | undefined)?.trim(),
+    });
+    if (result.kind === 'invalid_sport') return json({ error: 'invalid_sport' }, { status: 400 });
+    if (result.kind === 'active_exists') {
+      return json({ error: 'active_session_exists', session: result.session }, { status: 409 });
+    }
+    return json(result.session, { status: 201 });
+  }
+
+  if (path === '/api/live/active') {
+    if (req.method !== 'GET') return methodNotAllowed();
+    const user = await requireUser(req, deps);
+    if (user instanceof Response) return user;
+    const session = await getActiveSession(user);
+    return session ? json(session) : notFound();
+  }
+
+  const liveOwnerMatch = path.match(/^\/api\/live\/([^/]+)(?:\/(points|finish))?$/);
+  if (liveOwnerMatch && isUuid(liveOwnerMatch[1])) {
+    const [, id, action] = liveOwnerMatch;
+    const expected = action === 'points' || action === 'finish' ? 'POST' : 'DELETE';
+    if (req.method !== expected) return methodNotAllowed();
+    const user = await requireUser(req, deps);
+    if (user instanceof Response) return user;
+
+    if (action === 'points') {
+      const body = (await req.json().catch(() => null)) as { points?: unknown } | null;
+      const parsed = parsePoints(body?.points);
+      if (!parsed.ok) return json({ error: parsed.error }, { status: 400 });
+      const result = await addLivePoints(id, user, parsed.points);
+      if (result === 'not_found') return notFound();
+      if (result === 'forbidden') return forbidden();
+      if (result === 'not_active') return json({ error: 'session_not_active' }, { status: 409 });
+      if (result === 'session_full') return json({ error: 'session_full' }, { status: 413 });
+      return json(result);
+    }
+
+    if (action === 'finish') {
+      const raw = await req.text();
+      const parsed = parseFinish(raw.trim() ? JSON.parse(raw) : null);
+      if (!parsed.ok) return json({ error: parsed.error }, { status: 400 });
+      const result = await finishLiveSession(id, user, parsed.value);
+      if (result === 'not_found') return notFound();
+      if (result === 'forbidden') return forbidden();
+      if (result === 'not_active') return json({ error: 'session_not_active' }, { status: 409 });
+      return json(result);
+    }
+
+    const result = await discardLiveSession(id, user);
+    if (result === 'not_found') return notFound();
+    if (result === 'forbidden') return forbidden();
+    if (result === 'not_active') return json({ error: 'session_not_active' }, { status: 409 });
+    return json({ ok: true });
+  }
+
+  // Public endpoints: anyone holding the unguessable share token can watch.
+  const livePublicMatch = path.match(/^\/api\/live\/([^/]+)(\/stream)?$/);
+  if (livePublicMatch) {
+    const [, token, stream] = livePublicMatch;
+    if (!SHARE_TOKEN_PATTERN.test(token)) return notFound();
+    if (req.method !== 'GET') return methodNotAllowed();
+
+    if (stream) {
+      const live = await getPublicLive(token, INT32_MAX);
+      return live ? sseResponse(liveChannel(token)) : notFound();
+    }
+    // `seq` is a 32-bit column, so out-of-range cursors would be a database error.
+    const after = Number(url.searchParams.get('after') ?? -1);
+    const live = await getPublicLive(
+      token,
+      Number.isInteger(after) && Math.abs(after) <= INT32_MAX ? after : -1,
+    );
+    return live ? json(live, { headers: { 'cache-control': 'no-store' } }) : notFound();
+  }
+
   // ── SSE ───────────────────────────────────────────────────────────────────
   if (path === '/api/sse') {
     if (req.method !== 'GET') return methodNotAllowed();
     const user = await requireUser(req, deps);
     if (user instanceof Response) return user;
 
-    let unregister: (() => void) | undefined;
-    let pingInterval: ReturnType<typeof setInterval> | undefined;
-
-    const stream = new ReadableStream({
-      start(controller) {
-        const encode = (s: string) => new TextEncoder().encode(s);
-
-        const sseController = {
-          enqueue: (data: string) => controller.enqueue(encode(data)),
-          close: () => controller.close(),
-        };
-
-        unregister = registerSseClient(user.id, sseController);
-
-        // Send initial ping
-        controller.enqueue(encode('event: ping\ndata: {}\n\n'));
-
-        // Keep-alive ping every 30s
-        pingInterval = setInterval(() => {
-          try {
-            controller.enqueue(encode('event: ping\ndata: {}\n\n'));
-          } catch {
-            if (pingInterval) clearInterval(pingInterval);
-            unregister?.();
-          }
-        }, 30_000);
-      },
-      cancel() {
-        if (pingInterval) clearInterval(pingInterval);
-        unregister?.();
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
-    });
+    return sseResponse(user.id);
   }
 
   return notFound();

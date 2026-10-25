@@ -35,3 +35,8 @@ export function emitToUser(userId: string, event: string, data: unknown): void {
     }
   }
 }
+
+/** Channel key for viewers of a public live-tracking session (user ids are UUIDs, so no clash). */
+export function liveChannel(shareToken: string): string {
+  return `live:${shareToken}`;
+}

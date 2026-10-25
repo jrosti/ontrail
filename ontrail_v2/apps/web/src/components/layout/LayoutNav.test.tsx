@@ -10,18 +10,22 @@ const navigate = mock(() => {});
 const getUnread = mock(async () => ({ commentCount: 2, items: [] }));
 const markAllRead = mock(async () => ({ ok: true }));
 
-mock.module('@tanstack/react-router', () => ({
-  Link: ({
-    children,
-    className,
-    style,
-    onClick,
-    'aria-label': ariaLabel,
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement> & { to?: string; search?: unknown }) => (
+function MockLink({
+  children,
+  className,
+  style,
+  onClick,
+  'aria-label': ariaLabel,
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { to?: string; search?: unknown }) {
+  return (
     <a href="/mock" className={className} style={style} onClick={onClick} aria-label={ariaLabel}>
       {children}
     </a>
-  ),
+  );
+}
+
+mock.module('@tanstack/react-router', () => ({
+  Link: MockLink,
   useNavigate: () => navigate,
 }));
 

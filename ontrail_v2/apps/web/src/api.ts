@@ -109,8 +109,15 @@ export const getMe = () => client.get<User>('/me').then((r) => r.data);
 export const getUser = (username: string) =>
   client.get<User>(`/users/${username}`).then((r) => r.data);
 
-export const updateProfile = (body: Partial<User>) =>
-  client.patch<User>('/me', body).then((r) => r.data);
+/** The display name is the Hanko username, so only these fields are editable. `null` clears a value. */
+export interface ProfileUpdate {
+  synopsis?: string;
+  restHr?: number | null;
+  maxHr?: number | null;
+}
+
+export const updateProfile = (body: ProfileUpdate) =>
+  client.patch<User>('/users/me', body).then((r) => r.data);
 
 export const listUsers = (q?: string, page?: number, perPage?: number) =>
   client

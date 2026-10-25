@@ -68,9 +68,9 @@ password:
 # ── Username ─────────────────────────────────────────────────────────────────
 username:
   enabled: true
-  optional: true
+  optional: false           # the username is the OnTrail display name, so it is mandatory
   acquire_on_registration: true
-  acquire_on_login: false
+  acquire_on_login: true    # existing accounts without a username must set one at next login
   use_as_login_identifier: false
   min_length: 2
   max_length: 32

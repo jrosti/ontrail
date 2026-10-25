@@ -23,24 +23,31 @@ const addCare = mock(async (_id: string, _emoji?: string) => ({
 }));
 const removeCare = mock(async (_id: string) => ({ careCount: 3, cared: false, cares: [] }));
 
-mock.module('@tanstack/react-router', () => ({
-  Link: ({ children, className, style, onClick }: React.HTMLAttributes<HTMLAnchorElement>) => (
+function MockLink({
+  children,
+  className,
+  style,
+  onClick,
+}: React.HTMLAttributes<HTMLAnchorElement>) {
+  return (
     <a href="/mock" className={className} style={style} onClick={onClick}>
       {children}
     </a>
-  ),
-}));
+  );
+}
+
+function MockLeafletMap({ points }: { points: unknown[] }) {
+  return <div data-testid="leaflet-map">leaflet-map:{points.length}</div>;
+}
+
+mock.module('@tanstack/react-router', () => ({ Link: MockLink }));
 
 mock.module('../../api', () => ({
   addCare,
   removeCare,
 }));
 
-mock.module('../charts/LeafletMap', () => ({
-  LeafletMap: ({ points }: { points: unknown[] }) => (
-    <div data-testid="leaflet-map">leaflet-map:{points.length}</div>
-  ),
-}));
+mock.module('../charts/LeafletMap', () => ({ LeafletMap: MockLeafletMap }));
 
 const { ExerciseCard } = await import('./ExerciseCard');
 
