@@ -52,6 +52,15 @@ Collection constants are defined in `src/ontrail/mongodb.clj`:
 
 Exercises currently embed comments and reactions. New PostgreSQL design should normalize those into tables while preserving legacy ids during migration.
 
+## Working Scope
+
+**All new work happens in `ontrail_v2/` only.** The legacy code (`src`, `src-cljs`, `resources`, `test`, `s3`, `project.clj`, and the top-level scripts) is read-only reference material:
+
+- Do not modify, fix, refactor, or add features to legacy code.
+- Read legacy code only to understand behavior that `ontrail_v2/` must reproduce.
+- Bug fixes, features, tests, and migration scripts belong under `ontrail_v2/`.
+- Run `lein test` and other legacy tooling only if needed to confirm legacy behavior, never as part of delivering changes.
+
 ## Working Rules
 
 - Do not casually delete or rewrite legacy code. It is the behavior reference until migration parity is proven.
