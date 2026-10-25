@@ -5,8 +5,8 @@ STAGE="${1:?}"; REL="${2:?}"
 set -a; source "$STAGE/site.env"; set +a; source "$STAGE/server/defaults.sh"
 LOCK="/run/$APP-deploy.lock"; touch "$LOCK"; trap 'rm -f "$LOCK"' EXIT   # autostop ei sammuta kesken julkaisun
 D="$APP_DIR/releases/$REL"; mkdir -p "$D"
-cp -R "$STAGE/web" "$STAGE/api" "$STAGE/bin" "$D/"
-( cd "$D/api" && if [ -f bun.lockb ] || [ -f bun.lock ]; then bun install --production --frozen-lockfile; else bun install --production; fi ) >/dev/null
+cp -R "$STAGE/public" "$STAGE/apps" "$STAGE/bin" "$D/"
+( cd "$D/apps/api" && { [ -f bun.lockb ] || [ -f bun.lock ]; } && bun install --production --frozen-lockfile || bun install --production ) >/dev/null
 chown -R "$APP:$APP" "$D"
 ln -sfn "$D" "$APP_DIR/current"
 systemctl restart "$APP-hanko" "$APP-api"

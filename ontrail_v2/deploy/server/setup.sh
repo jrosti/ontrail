@@ -23,6 +23,7 @@ fi
 # ── käyttäjä ja hakemistot ──
 id "$APP" >/dev/null 2>&1 || useradd --system --home "$APP_DIR" --shell /usr/sbin/nologin "$APP"
 install -d -o "$APP" -g "$APP" -m 0750 "$APP_DIR" "$APP_DIR/releases"
+id -nG www-data 2>/dev/null | grep -qw "$APP" || { usermod -aG "$APP" www-data && NGINX_RESTART=1; }   # nginx lukee staattiset tiedostot ryhmän kautta
 install -d -m 0750 -o root -g "$APP" "$ETC_DIR"
 install -m 0644 "$STAGE/site.env" "$ETC_DIR/site.env"; install -m 0644 "$STAGE/server/defaults.sh" "$ETC_DIR/defaults.sh"
 
@@ -49,21 +50,22 @@ fi
 if [ ! -f "$ETC_DIR/hanko.yaml" ]; then
   umask 077
   source "$ETC_DIR/.hanko-db"
-  smtp=""
-  if [ -n "${SMTP_FROM_CONF:-}" ] && [ -f "$SMTP_FROM_CONF" ]; then
-    # Kopioidaan toisen Hanko-asetuksen email_delivery-lohko (salasanoja ei näytetä eikä kirjoiteta lokiin)
-    smtp="$(awk '/^email_delivery:/{f=1;print;next} /^[A-Za-z_]+:/{f=0} f' "$SMTP_FROM_CONF" | sed -E "s/^(\s*from_name:).*/\1 ${SMTP_FROM_NAME:-OnTrail}/")"
-  elif [ -n "${SMTP_HOST:-}" ]; then
-    smtp="email_delivery:
+  # Sähköposti (Hanko-kirjautumisviestit): SMTP_*-asetukset site.env:stä; salasana tiedostosta $SMTP_PASSWORD_FILE (oletus $ETC_DIR/smtp-password, vain root) tai ympäristöstä
+  SMTP_PASSWORD_FILE="${SMTP_PASSWORD_FILE:-$ETC_DIR/smtp-password}"
+  [ -n "${SMTP_PASSWORD:-}" ] || { [ -f "$SMTP_PASSWORD_FILE" ] && SMTP_PASSWORD="$(cat "$SMTP_PASSWORD_FILE")"; } || true
+  : "${SMTP_HOST:?SMTP_HOST puuttuu site.env:stä}" "${SMTP_FROM_ADDRESS:?SMTP_FROM_ADDRESS puuttuu site.env:stä}"
+  [ -n "${SMTP_USER:-}" ] && [ -z "${SMTP_PASSWORD:-}" ] && { echo "SMTP_USER on asetettu mutta salasanaa ei löydy ($SMTP_PASSWORD_FILE tai SMTP_PASSWORD)" >&2; exit 1; }
+  smtp="email_delivery:
   enabled: true
   smtp:
     host: $SMTP_HOST
-    port: \"${SMTP_PORT:-587}\"
-    user: ${SMTP_USER:-}
-    password: ${SMTP_PASSWORD:-}
-  from_address: ${SMTP_FROM_ADDRESS:?SMTP_FROM_ADDRESS puuttuu}
+    port: \"${SMTP_PORT:-587}\""
+  [ -n "${SMTP_USER:-}" ] && smtp="$smtp
+    user: '${SMTP_USER//\'/\'\'}'
+    password: '${SMTP_PASSWORD//\'/\'\'}'"
+  smtp="$smtp
+  from_address: $SMTP_FROM_ADDRESS
   from_name: ${SMTP_FROM_NAME:-OnTrail}"
-  else echo "Sähköpostiasetus puuttuu: aseta SMTP_FROM_CONF tai SMTP_HOST (ks. site.env.example)" >&2; exit 1; fi
   cat > "$ETC_DIR/hanko.yaml" <<YAML
 database:
   url: '$HANKO_DATABASE_URL'
@@ -168,7 +170,7 @@ Wants=network-online.target
 [Service]
 User=$APP
 Group=$APP
-WorkingDirectory=$APP_DIR/current/api
+WorkingDirectory=$APP_DIR/current/apps/api
 EnvironmentFile=$ETC_DIR/env
 ExecStartPre=/usr/local/bin/bun src/db/migrate.ts
 ExecStart=/usr/local/bin/bun src/server.ts
@@ -213,14 +215,14 @@ server {
         proxy_read_timeout 1h;
     }
     location / {
-        root $APP_DIR/current/web;
+        root $APP_DIR/current/public;
         try_files \$uri /index.html;
     }
 }
 $( [ "$ORIGIN_HOST" = "$SITE_HOST" ] && printf 'server { listen 80; server_name %s; return 301 https://$host$request_uri; }\n' "$SITE_HOST" )
 NGINX
 ln -sfn "/etc/nginx/sites-available/$APP" "/etc/nginx/sites-enabled/$APP"
-nginx -t && systemctl enable --now nginx >/dev/null && systemctl reload nginx
+nginx -t && systemctl enable --now nginx >/dev/null && { [ "${NGINX_RESTART:-0}" = 1 ] && systemctl restart nginx || systemctl reload nginx; }
 
 # ── autostop: 1 = oma ajastin, peers = toisen sovelluksen ajastin kysyy myös tämän tilaa ──
 case "$AUTOSTOP" in

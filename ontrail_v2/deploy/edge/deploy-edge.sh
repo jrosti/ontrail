@@ -7,7 +7,7 @@ source "$(dirname "$0")/../lib.sh"
 : "${EDGE_WORKER:?EDGE_WORKER puuttuu site.env:stä}"
 [ "$ORIGIN_HOST" != "$SITE_HOST" ] || { echo "ORIGIN_HOST pitää olla eri kuin SITE_HOST, kun reuna on käytössä" >&2; exit 1; }
 EDGE_DIR="$DEPLOY_DIR/edge"
-ASSETS_DIR="${ASSETS_DIR:-$ROOT/apps/web/dist}"
+ASSETS_DIR="${ASSETS_DIR:-$ROOT/apps/web/dist}"   # sama rakennettu käyttöliittymä kuin palvelimella
 [ -d "$ASSETS_DIR" ] || { echo "Puuttuu $ASSETS_DIR (aja web-build)" >&2; exit 1; }
 # Herätyssivu mukaan staattisiin tiedostoihin (Turnstile-avain täytetään)
 sed "s#__TURNSTILE_SITE_KEY__#${TURNSTILE_SITE_KEY:-}#g" "$EDGE_DIR/wake.html" > "$ASSETS_DIR/wake.html"
