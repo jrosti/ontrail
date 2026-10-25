@@ -3,6 +3,8 @@ import { loadConfig } from '../config';
 
 export interface AuthClaims extends JWTPayload {
   sub: string;
+  /** Hanko account username; present once the user has set one (required by OnTrail's config). */
+  username?: string;
   email?: string | { address?: string; is_primary?: boolean; is_verified?: boolean };
 }
 
@@ -33,6 +35,22 @@ export async function verifyHankoRequest(req: Request): Promise<AuthClaims | nul
 
   if (!payload.sub) return null;
   return payload as AuthClaims;
+}
+
+export function claimUsername(claims: AuthClaims): string | null {
+  const username = typeof claims.username === 'string' ? claims.username.trim() : '';
+  return username || null;
+}
+
+/**
+ * The session's email, only if Hanko vouches for it. The JWT carries `is_verified` when the email
+ * claim is an object; a bare string comes from a build that only issues sessions for verified
+ * emails (`email.require_verification: true`).
+ */
+export function claimVerifiedEmail(claims: AuthClaims): string | null {
+  if (typeof claims.email === 'string') return claims.email;
+  if (claims.email?.address && claims.email.is_verified === true) return claims.email.address;
+  return null;
 }
 
 export function claimEmail(claims: AuthClaims): string | null {

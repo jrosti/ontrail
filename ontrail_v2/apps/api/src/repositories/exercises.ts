@@ -1,3 +1,4 @@
+import type { Sql, TransactionSql } from 'postgres';
 import type { Comment, Exercise, ExerciseListItem } from '../../../web/src/types';
 import { sql } from '../db/client';
 import { gravatarHash } from '../gravatar';
@@ -339,8 +340,15 @@ export async function getExercise(id: string, authenticated: boolean): Promise<E
   return { ...toExercise(row, careRows, commentRows.map(toComment), authenticated), bpmdist };
 }
 
-export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {
-  const created = await sql<{ id: string }[]>`
+/** Insert an exercise row using `db` (the pool, or a transaction) and return its id. */
+export async function insertExercise(
+  conn: Sql | TransactionSql,
+  owner: DbUser,
+  body: Partial<Exercise>,
+): Promise<string> {
+  // TransactionSql is callable the same way as Sql but not assignable to it in the typings.
+  const db = conn as Sql;
+  const created = await db<{ id: string }[]>`
     insert into exercises (
       owner_id, sport_key, title, body_html, tags, exercise_date, duration_cs,
       distance_m, avg_hr, climb_m, feel_rating, details, gpx_points
@@ -350,12 +358,17 @@ export async function createExercise(owner: DbUser, body: Partial<Exercise>): Pr
       ${body.tags ?? []}, ${body.date ?? new Date().toISOString().slice(0, 10)},
       ${body.durationCs ?? 0}, ${body.distanceM ?? null}, ${body.avgHr ?? null},
       ${body.climbM ?? null}, ${body.feelRating ?? null},
-      ${sql.json(body.details ?? {})},
-      ${sql.json(normalizeGpxPoints(body.gpxPoints) ?? null)}
+      ${db.json(body.details ?? {})},
+      ${db.json(normalizeGpxPoints(body.gpxPoints) ?? null)}
     )
     returning id::text
   `;
-  const exercise = await getExercise(created[0].id, true);
+  return created[0].id;
+}
+
+export async function createExercise(owner: DbUser, body: Partial<Exercise>): Promise<Exercise> {
+  const id = await insertExercise(sql, owner, body);
+  const exercise = await getExercise(id, true);
   if (!exercise) throw new Error('created_exercise_not_found');
   return exercise;
 }

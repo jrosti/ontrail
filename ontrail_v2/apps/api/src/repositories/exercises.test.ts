@@ -64,6 +64,8 @@ const owner: DbUser = {
   avatarInitials: 'TR',
   avatarColor: 'oklch(60% .18 260)',
   synopsis: null,
+  restHr: null,
+  maxHr: null,
   createdAt: '2026-06-09T12:00:00.000Z',
 };
 

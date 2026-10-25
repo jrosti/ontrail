@@ -1,15 +1,17 @@
 import { useNavigate } from '@tanstack/react-router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getMe } from '../api';
 import { Card } from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
 import { HANKO_URL, registerHankoElements } from '../hankoClient';
 import { useStore } from '../store';
+import { usernameTakenFrom } from '../utils/apiErrors';
 
 export function LoginPage() {
   const { lang, setCurrentUser } = useStore();
   const nav = useNavigate();
   const registered = useRef(false);
+  const [takenUsername, setTakenUsername] = useState<string | null>(null);
 
   useEffect(() => {
     if (registered.current) return;
@@ -29,7 +31,13 @@ export function LoginPage() {
         const user = await getMe();
         setCurrentUser(user);
         nav({ to: '/feed', search: {} });
-      } catch {
+      } catch (error) {
+        // The Hanko username belongs to another OnTrail user: stay here and explain.
+        const taken = usernameTakenFrom(error);
+        if (taken !== null) {
+          setTakenUsername(taken);
+          return;
+        }
         // User authenticated with Hanko but doesn't have an OnTrail profile yet.
         // The real API will auto-create one on first login.
         nav({ to: '/feed', search: {} });
@@ -64,6 +72,22 @@ export function LoginPage() {
               : 'Sign in with passkey or email'}
           </p>
         </div>
+
+        {takenUsername !== null && (
+          <p
+            role="alert"
+            style={{
+              margin: 0,
+              fontSize: 14,
+              color: 'var(--danger, #c0392b)',
+              textAlign: 'center',
+            }}
+          >
+            {lang === 'fi'
+              ? `Käyttäjätunnus ${takenUsername} on jo toisen OnTrail-käyttäjän käytössä. Vaihda käyttäjätunnus Hankon profiilissa ja kirjaudu uudelleen.`
+              : `The username ${takenUsername} already belongs to another OnTrail user. Change your username in your Hanko profile and sign in again.`}
+          </p>
+        )}
 
         {/* Hanko auth web component — rendered after register() resolves */}
         <hanko-auth style={{ width: '100%' }} lang={lang} />

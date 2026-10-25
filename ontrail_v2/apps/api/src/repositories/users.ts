@@ -1,7 +1,8 @@
 import type { AuthClaims } from '../auth/hanko';
-import { claimEmail } from '../auth/hanko';
+import { claimEmail, claimUsername, claimVerifiedEmail } from '../auth/hanko';
 import { sql } from '../db/client';
 import { gravatarHash } from '../gravatar';
+import type { ProfileUpdate } from '../profile';
 
 export interface DbUser {
   id: string;
@@ -12,6 +13,8 @@ export interface DbUser {
   avatarInitials: string;
   avatarColor: string;
   synopsis: string | null;
+  restHr: number | null;
+  maxHr: number | null;
   createdAt: string;
 }
 
@@ -24,6 +27,8 @@ interface UserRow {
   avatar_initials: string;
   avatar_color: string;
   synopsis: string | null;
+  resthr: number | null;
+  maxhr: number | null;
   created_at: string;
 }
 
@@ -37,6 +42,8 @@ function toUser(row: UserRow): DbUser {
     avatarInitials: row.avatar_initials,
     avatarColor: row.avatar_color,
     synopsis: row.synopsis,
+    restHr: row.resthr ?? null,
+    maxHr: row.maxhr ?? null,
     createdAt: row.created_at,
   };
 }
@@ -66,26 +73,97 @@ async function uniqueUsername(base: string): Promise<string> {
   return `${base}_${crypto.randomUUID().slice(0, 8)}`;
 }
 
+/** A new Hanko account asked for a username that already belongs to another OnTrail user. */
+export class UsernameTakenError extends Error {
+  constructor(public readonly username: string) {
+    super(`username_taken: ${username}`);
+    this.name = 'UsernameTakenError';
+  }
+}
+
+/** Is `username` (case-insensitively, diacritics folded) already used by a user other than `exceptId`? */
+async function usernameBelongsToOther(username: string, exceptId: string | null): Promise<boolean> {
+  const rows = await sql`
+    select 1 from users
+    where (lower(display_name) = ${username.toLowerCase()}
+           or normalized_username = ${normalizeUsername(username)})
+      and (${exceptId}::uuid is null or id <> ${exceptId}::uuid)
+    limit 1
+  `;
+  return rows.length > 0;
+}
+
+/**
+ * Make the shown name follow the Hanko username. `users.username` stays the stable URL key; the
+ * name the user had before is kept in legacy_display_name (set once, never overwritten by renames).
+ */
+async function syncDisplayName(row: UserRow, hankoUsername: string | null): Promise<DbUser> {
+  if (!hankoUsername || row.display_name === hankoUsername) return toUser(row);
+  // Another user already has this name (Hanko only knows about Hanko accounts): keep the current one.
+  if (await usernameBelongsToOther(hankoUsername, row.id)) return toUser(row);
+
+  const synced = await sql<UserRow[]>`
+    update users set
+      legacy_display_name = coalesce(legacy_display_name, display_name),
+      display_name = ${hankoUsername},
+      updated_at = now()
+    where id = ${row.id}
+    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
+  `;
+  return toUser(synced[0]);
+}
+
 export async function findOrCreateUserFromClaims(claims: AuthClaims): Promise<DbUser> {
+  // The display name is the Hanko username when there is one; otherwise (no claim yet) the stored
+  // name, i.e. the user's old display name, stays in use.
+  const hankoUsername = claimUsername(claims);
+
   const existing = await sql<UserRow[]>`
-    select id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text
+    select id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
     from users
     where hanko_subject = ${claims.sub}
     limit 1
   `;
-  if (existing[0]) return toUser(existing[0]);
+  if (existing[0]) return syncDisplayName(existing[0], hankoUsername);
+
+  // First login of a Hanko account that has no OnTrail user yet. If a verified email matches
+  // exactly one not-yet-linked OnTrail user (e.g. a migrated legacy account), this is that person:
+  // link instead of creating a second, empty account. Ambiguous matches are left alone.
+  const verifiedEmail = claimVerifiedEmail(claims);
+  if (verifiedEmail) {
+    const matches = await sql<UserRow[]>`
+      select id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
+      from users
+      where hanko_subject is null and lower(email) = ${verifiedEmail.toLowerCase()}
+    `;
+    if (matches.length === 1) {
+      const linked = await sql<UserRow[]>`
+        update users set hanko_subject = ${claims.sub}, updated_at = now()
+        where id = ${matches[0].id} and hanko_subject is null
+        returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
+      `;
+      if (linked[0]) return syncDisplayName(linked[0], hankoUsername);
+    }
+  }
+
+  // A brand-new user must not take a name that belongs to someone else.
+  if (hankoUsername && (await usernameBelongsToOther(hankoUsername, null))) {
+    throw new UsernameTakenError(hankoUsername);
+  }
 
   const email = claimEmail(claims);
-  const base = normalizeUsername(email?.split('@')[0] ?? `user_${claims.sub.slice(0, 8)}`);
+  const base = normalizeUsername(
+    hankoUsername ?? email?.split('@')[0] ?? `user_${claims.sub.slice(0, 8)}`,
+  );
   const username = await uniqueUsername(base);
   const created = await sql<UserRow[]>`
     insert into users (
       hanko_subject, username, normalized_username, email, display_name, avatar_initials, avatar_color
     )
     values (
-      ${claims.sub}, ${username}, ${username}, ${email}, ${username}, ${initials(username)}, ${'oklch(60% .18 260)'}
+      ${claims.sub}, ${username}, ${username}, ${email}, ${hankoUsername ?? username}, ${initials(username)}, ${'oklch(60% .18 260)'}
     )
-    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text
+    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
   `;
 
   return toUser(created[0]);
@@ -98,6 +176,8 @@ export function apiUser(user: DbUser) {
     displayName: user.displayName,
     email: user.email ?? '',
     synopsis: user.synopsis ?? undefined,
+    restHr: user.restHr ?? undefined,
+    maxHr: user.maxHr ?? undefined,
     avatarInitials: user.avatarInitials,
     avatarColor: user.avatarColor,
     gravatarHash: gravatarHash(user.email),
@@ -168,16 +248,6 @@ export async function getPublicProfile(username: string): Promise<PublicProfile 
   };
 }
 
-export interface ProfileUpdate {
-  displayName?: string;
-  synopsis?: string;
-  resthr?: number | null;
-  maxhr?: number | null;
-  aerk?: number | null;
-  anaerk?: number | null;
-  goals?: string | null;
-}
-
 export async function updateUserProfile(
   userId: string,
   update: ProfileUpdate,
@@ -185,16 +255,15 @@ export async function updateUserProfile(
   // Build partial update — only set fields that are present in the update object
   const rows = await sql<UserRow[]>`
     update users set
-      display_name = case when ${'displayName' in update}::bool then ${update.displayName ?? null} else display_name end,
       synopsis = case when ${'synopsis' in update}::bool then ${update.synopsis ?? null} else synopsis end,
-      resthr = case when ${'resthr' in update}::bool then ${update.resthr ?? null} else resthr end,
-      maxhr = case when ${'maxhr' in update}::bool then ${update.maxhr ?? null} else maxhr end,
+      resthr = case when ${'restHr' in update}::bool then ${update.restHr ?? null} else resthr end,
+      maxhr = case when ${'maxHr' in update}::bool then ${update.maxHr ?? null} else maxhr end,
       aerk = case when ${'aerk' in update}::bool then ${update.aerk ?? null} else aerk end,
       anaerk = case when ${'anaerk' in update}::bool then ${update.anaerk ?? null} else anaerk end,
       goals = case when ${'goals' in update}::bool then ${update.goals ?? null} else goals end,
       updated_at = now()
     where id = ${userId}
-    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text
+    returning id, hanko_subject, username, display_name, email, avatar_initials, avatar_color, synopsis, created_at::text, resthr, maxhr
   `;
   return rows[0] ? toUser(rows[0]) : null;
 }

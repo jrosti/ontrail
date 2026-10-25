@@ -33,6 +33,9 @@
 
 import { readFileSync } from 'node:fs';
 import { sql } from '../db/client';
+import { createHankoAccount, createHankoAccountForUser, type HankoUser } from './hanko-admin';
+
+export type { HankoUser };
 
 const HANKO_ADMIN_URL = process.env.HANKO_ADMIN_URL ?? 'http://localhost:8001';
 
@@ -52,11 +55,6 @@ interface MongoUser {
   };
 }
 
-export interface HankoUser {
-  id: string;
-  emails?: { address: string; is_primary?: boolean; is_verified?: boolean }[];
-}
-
 export function normalizeUsername(input: string): string {
   const normalized = input
     .toLowerCase()
@@ -73,37 +71,20 @@ export function initials(username: string): string {
 }
 
 /**
- * Create a Hanko user for the given email via the admin API.
- *
- * Hanko's admin user-create route is `POST /users` (the admin server is
- * already rooted at the admin port, there is no `/admin` path prefix), and the
- * body is a `CreateUser` DTO carrying an `emails` array — not a flat `email`.
- * We mark the migrated email primary + verified so the user can immediately
- * request a login passcode without a separate verification step. This Hanko
- * build has no user "status" concept, so no activation call is needed.
+ * Create a Hanko user for the given email via the admin API (see `createHankoAccount`). With a
+ * `username` the name is reserved in Hanko at the same time. Returns null on any failure.
  */
 export async function createHankoUser(
   email: string,
   adminUrl: string = HANKO_ADMIN_URL,
+  username?: string,
 ): Promise<HankoUser | null> {
-  try {
-    const resp = await fetch(`${adminUrl}/users`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        emails: [{ address: email, is_primary: true, is_verified: true }],
-      }),
-    });
-    if (!resp.ok) {
-      const body = await resp.text();
-      console.warn(`  Hanko create failed (${resp.status}): ${body}`);
-      return null;
-    }
-    return (await resp.json()) as HankoUser;
-  } catch (err) {
-    console.warn(`  Hanko admin API unreachable: ${err}`);
+  const result = await createHankoAccount({ email, username }, adminUrl);
+  if (!result.ok) {
+    console.warn(`  Hanko create failed (${result.status}): ${result.body}`);
     return null;
   }
+  return result.user;
 }
 
 async function main() {
@@ -182,7 +163,14 @@ async function main() {
     // Create Hanko user if email is available
     let hankoSubject: string | null = null;
     if (email) {
-      const hankoUser = await createHankoUser(email);
+      // Reserve the user's name in Hanko at creation so nobody else can register it.
+      const created = await createHankoAccountForUser({
+        email,
+        displayName: profile.displayName ?? username,
+        username,
+      });
+      const hankoUser = created.ok ? created.user : null;
+      if (!created.ok) console.warn(`  Hanko create failed (${created.status}): ${created.body}`);
       if (hankoUser) {
         hankoSubject = hankoUser.id;
         // Store hanko_subject on users row

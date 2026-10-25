@@ -21,7 +21,6 @@ export function ProfilePage() {
   const registered = useRef(false);
   const queryClient = useQueryClient();
 
-  const [displayName, setDisplayName] = useState(currentUser?.displayName ?? '');
   const [synopsis, setSynopsis] = useState(currentUser?.synopsis ?? '');
   const [restHr, setRestHr] = useState(String(currentUser?.restHr ?? ''));
   const [maxHr, setMaxHr] = useState(String(currentUser?.maxHr ?? ''));
@@ -36,10 +35,10 @@ export function ProfilePage() {
   const saveMutation = useMutation({
     mutationFn: () =>
       updateProfile({
-        displayName,
         synopsis,
-        restHr: restHr ? Number(restHr) : undefined,
-        maxHr: maxHr ? Number(maxHr) : undefined,
+        // Empty means "not set": send null so a previously saved value can be cleared.
+        restHr: restHr ? Number(restHr) : null,
+        maxHr: maxHr ? Number(maxHr) : null,
       }),
     onSuccess: (user) => {
       setCurrentUser(user);
@@ -128,17 +127,6 @@ export function ProfilePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-dim)' }}>
-              {t.displayName}
-            </span>
-            <input
-              className="ot-input"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
-              placeholder={t.displayName}
-            />
-          </label>
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-dim)' }}>
               {t.synopsisField}
             </span>
             <textarea
@@ -188,6 +176,11 @@ export function ProfilePage() {
               </div>
             </label>
           </div>
+          {saveMutation.isError && (
+            <p role="alert" style={{ margin: 0, color: 'var(--danger, #c0392b)', fontSize: 13 }}>
+              {t.profileSaveFailed}
+            </p>
+          )}
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 4 }}>
             <button
               type="button"

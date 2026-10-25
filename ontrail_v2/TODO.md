@@ -27,6 +27,7 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 - User list/search, public profile
 - Export: JSON, CSV
 - SSE live feed
+- Live tracking API (sessions, idempotent point upload, public share link + SSE, finish → exercise); see `docs/api/live-tracking.md`
 - FTS search
 - Legacy permalink resolution (`/api/legacy/ex/:objectId`, `/api/legacy/user/:username`)
 - Sports seeded from FE constants on startup
@@ -40,7 +41,7 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 - Analytics page with year/month/week scope, period picker, trend chart, heatmap, sport breakdown
 - Calendar page: infinite scroll newest-first, year selector, week totals, sport chips with distance
 - Diary page (own + other users)
-- Profile page (edit name/synopsis/HR profile, JSON export)
+- Profile page (edit synopsis/HR profile, JSON export). The display name is the Hanko username (required, synced from the session JWT `username` claim; not editable in OnTrail). The previous display name is kept in `users.legacy_display_name` and stays shown until a Hanko username exists
 - Groups page (list, join/leave/create, group → feed link)
 - Athlete page (`/user/:username`): workouts / sport summary / tag summary tabs
 - Top lists page (`/toplists`): monthly/yearly leaderboard
@@ -49,6 +50,18 @@ PostgreSQL, Hanko authentication, TypeScript API, and Bun/Vite/React frontend.
 - Responsive layout, dark-mode support, Finnish + English i18n
 
 ### To do 🔲
+
+**Hanko provisioning** (see `docs/migration/hanko-provisioning.md`)
+- [x] Script to provision Hanko accounts (verified email + username set) for existing users; names reserved in Hanko
+- [x] Email linking and username protection in the API (`409 username_taken`)
+- [ ] Run `provision-hanko-users.ts --dry-run`, review the planned names, then apply on the real data
+- [ ] Web flow to recover from `username_taken` (change the username in the Hanko profile, re-login)
+
+**Live tracking follow-ups**
+- [ ] Web viewer page `/live/:token` (map + stats, snapshot + SSE) and a share-link button
+- [ ] Expire abandoned `active` sessions (no points for N hours)
+- [ ] Marathon app client: Hanko native login, batch uploader with retry, finish with moving time
+- [ ] Verify how the native client obtains/refreshes the Hanko session JWT
 
 **High priority (user-visible features)**
 - [x] Personal records UI — records tab on `/user/:username`, grid of best results linking to exercise
