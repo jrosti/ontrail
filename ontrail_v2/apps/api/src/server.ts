@@ -1,5 +1,6 @@
 import { verifyHankoRequest } from './auth/hanko';
 import { loadConfig } from './config';
+import { IdleTracker, withIdle } from './idle';
 import { closeDb, sql } from './db/client';
 import { forbidden, handleError, json, methodNotAllowed, notFound, unauthorized } from './http';
 import {
@@ -692,7 +693,7 @@ if (import.meta.main) {
 
   const server = Bun.serve({
     port: config.port,
-    fetch: (req) => handleRequest(req),
+    fetch: withIdle(handleRequest, new IdleTracker(Number(process.env.IDLE_GRACE_MS ?? 20 * 60_000))),
   });
 
   console.log(`OnTrail API listening on http://localhost:${server.port}`);

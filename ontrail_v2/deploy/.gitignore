@@ -1,0 +1,4 @@
+site.env
+*.generated.jsonc
+edge/node_modules/
+edge/package-lock.json

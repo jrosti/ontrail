@@ -1,0 +1,17 @@
+// Mallipohja: deploy-edge.sh täyttää __…__-kohdat site.env:stä ja kirjoittaa wrangler.generated.jsonc:n (ei versionhallintaan).
+// Salaisuudet (wrangler secret put … --name __WORKER__): UPCLOUD_API_TOKEN, UPCLOUD_SERVER_UUID, TURNSTILE_SECRET_KEY.
+{
+  "name": "__WORKER__",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-25",
+  "workers_dev": false,
+  "assets": {
+    "directory": "__ASSETS_DIR__",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/hanko/*", "/wake", "/wake/status"]
+  },
+  "vars": { "ORIGIN_URL": "__ORIGIN_URL__" },
+  "routes": [{ "pattern": "__SITE_HOST__", "custom_domain": true }],
+  "ratelimits": [{ "name": "WAKE_LIMITER", "namespace_id": "__LIMITER_ID__", "simple": { "limit": 1, "period": 60 } }]
+}

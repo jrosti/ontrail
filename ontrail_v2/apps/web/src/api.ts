@@ -37,6 +37,15 @@ client.interceptors.request.use((cfg) => {
   return cfg;
 });
 
+// Nukkuva palvelin (autostop): reuna vastaa 503 {asleep:true}; herätyssivu käynnistää palvelimen ja palauttaa takaisin
+client.interceptors.response.use(undefined, (err) => {
+  if (err?.response?.status === 503 && err.response.data?.asleep === true && location.pathname !== '/wake.html') {
+    location.assign(`/wake.html?next=${encodeURIComponent(location.pathname + location.search)}`);
+    return new Promise(() => {}); // sivu vaihtuu; ei virhenäkymää välissä
+  }
+  return Promise.reject(err);
+});
+
 // Exercises
 export const listExercises = (params?: {
   page?: number;

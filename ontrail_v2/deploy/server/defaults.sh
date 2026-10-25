@@ -1,0 +1,10 @@
+# Oletusarvot site.env:n puuttuville asetuksille (jaettu: paikallinen lib.sh ja palvelimen skriptit lataavat tämän)
+APP="${APP:-ontrail}"
+ORIGIN_HOST="${ORIGIN_HOST:-$SITE_HOST}"
+APP_DIR="${APP_DIR:-/opt/$APP}"; ETC_DIR="${ETC_DIR:-/etc/$APP}"
+DB_NAME="${DB_NAME:-$APP}"; HANKO_DB_NAME="${HANKO_DB_NAME:-${APP}_hanko}"; DB_USER="${DB_USER:-$APP}"
+API_PORT="${API_PORT:-3002}"; HANKO_PORT="${HANKO_PORT:-8000}"; HANKO_ADMIN_PORT="${HANKO_ADMIN_PORT:-8001}"
+SSL_CERT="${SSL_CERT:-/etc/ssl/$APP/origin.pem}"; SSL_KEY="${SSL_KEY:-/etc/ssl/$APP/origin.key}"
+BUN_VERSION="${BUN_VERSION:-1.3.14}"
+AUTOSTOP="${AUTOSTOP:-0}"; IDLE_GRACE_MS="${IDLE_GRACE_MS:-1200000}"
+HANKO_SRC="${HANKO_SRC:-$HOME/work/private/hanko/backend}"

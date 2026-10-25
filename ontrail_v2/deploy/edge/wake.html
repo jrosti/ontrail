@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waking up…</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; text-align: center; padding: 24px; }
+  main { max-width: 26rem; }
+  h1 { font-size: 1.4rem; margin: 0 0 .5rem; }
+  p { opacity: .8; line-height: 1.5; }
+  button { font: inherit; padding: .6rem 1.2rem; border-radius: 8px; border: 1px solid currentColor; background: none; color: inherit; cursor: pointer; }
+  .bar { height: 4px; width: 12rem; margin: 1.2rem auto; background: color-mix(in srgb, currentColor 20%, transparent); border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 40%; background: currentColor; animation: slide 1.4s ease-in-out infinite; }
+  @keyframes slide { 0% { margin-left: -40%; } 100% { margin-left: 100%; } }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">The server is waking up</h1>
+  <p id="text">It rests when nobody has used it for a while. This takes under a minute, and the page continues by itself.</p>
+  <div class="bar" id="bar"><i></i></div>
+  <div id="widget"></div>
+  <p id="error" role="alert" hidden></p>
+  <button id="retry" hidden>Try again</button>
+</main>
+<script>
+(function () {
+  var SITE_KEY = '__TURNSTILE_SITE_KEY__';
+  var params = new URLSearchParams(location.search);
+  var next = params.get('next') || '/';
+  if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\') next = '/';   // vain saman alkuperän polku
+  var token = null, started = false;
+  var $ = function (id) { return document.getElementById(id); };
+  function fail(msg) { $('error').textContent = msg; $('error').hidden = false; $('retry').hidden = false; $('bar').hidden = true; started = false; if (window.turnstile) { try { window.turnstile.reset(); } catch (e) {} } token = null; }
+  function poll() {
+    fetch('/wake/status', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (s) {
+      if (s && s.originHealthy) { location.assign(next); return; }
+      setTimeout(poll, 3000);
+    }).catch(function () { setTimeout(poll, 5000); });
+  }
+  function wake() {
+    if (started) return; started = true;
+    $('error').hidden = true; $('retry').hidden = true; $('bar').hidden = false;
+    fetch('/wake', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ turnstileToken: token || 'none' }) }).then(function (r) {
+      if (r.status === 501) return fail('Waking is not available yet. Please try again later.');
+      if (r.status === 429) return fail('Please wait a moment and try again.');
+      if (!r.ok) return fail('Could not start the server. Please try again.');
+      poll();
+    }).catch(function () { fail('Connection lost. Please try again.'); });
+  }
+  $('retry').addEventListener('click', function () { if (!SITE_KEY || token) wake(); });
+  // Jos joku muu ehti herättää palvelimen, jatketaan heti
+  fetch('/wake/status', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (s) { if (s && s.originHealthy) location.assign(next); }).catch(function () {});
+  if (!SITE_KEY) { wake(); return; }
+  var s = document.createElement('script');
+  s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'; s.async = true;
+  s.onload = function () {
+    window.turnstile.render($('widget'), { sitekey: SITE_KEY, appearance: 'interaction-only', callback: function (t) { token = t; wake(); }, 'expired-callback': function () { token = null; } });
+  };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
